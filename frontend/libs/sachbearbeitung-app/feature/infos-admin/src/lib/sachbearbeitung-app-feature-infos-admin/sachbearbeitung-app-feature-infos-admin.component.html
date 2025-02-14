@@ -31,7 +31,7 @@
         *dvMatCellDef="let verfuegung; dataSource: verfuegungenSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
       >
-        {{ verfuegung.pdf }}
+        <a [routerLink]="['/']">{{ verfuegung.documentName }}</a>
       </td>
     </ng-container>
 
@@ -50,7 +50,7 @@
   {{ 'sachbearbeitung-app.infos.admin.gesuch-abbrechen' | translate }}
 </h3>
 
-<button class="btn btn-primary" type="button" data-testid="button-gesuch-abbrechen">
+<button class="btn btn-primary" type="button" data-testid="button-gesuch-abbrechen" (click)="gesuchAbbrechen()">
   {{ 'sachbearbeitung-app.infos.admin.gesuch-abbrechen' | translate }}
 </button>
 
@@ -108,15 +108,113 @@
   {{ 'sachbearbeitung-app.infos.admin.gesuch-unterbrechen' | translate }}
 </h3>
 
-<button class="btn btn-primary" type="button" data-testid="button-gesuch-unterbrechen">
+<button class="btn btn-primary" type="button" data-testid="button-gesuch-unterbrechen" (click)="gesuchUnterbrechen()">
   {{ 'sachbearbeitung-app.infos.admin.gesuch-unterbrechen' | translate }}
 </button>
 
-<!-- Gesuch Beenden -->
+<!-- table for unterbrechen entries, with columns timestamp, user and kommentar  -->
+<div class="tw-dv-table tw-mb-6">
+  <table mat-table [dataSource]="gesuchUnterbrechenSig()">
+    <caption class="cdk-visually-hidden">
+      {{
+        'sachbearbeitung-app.infos.admin.gesuch-unterbrechen' | translate
+      }}
+    </caption>
+
+    <!-- Datum -->
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-whitespace-nowrap">
+        {{ unterbrechen.timestamp | date: 'dd.MM.yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- User -->
+    <ng-container matColumnDef="user">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.user' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-whitespace-nowrap">
+        {{ unterbrechen.user }}
+      </td>
+    </ng-container>
+
+    <!-- Kommentar -->
+    <ng-container matColumnDef="kommentar">
+      <th class="tw-min-w-80" mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-min-w-80">
+        {{ unterbrechen.kommentar }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="gesuchTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: gesuchTableColumns"></tr>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-p-3" [colSpan]="gesuchTableColumns.length">
+        {{ 'shared.table.noEntries' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Gesuch Abschliessen -->
 <h3 class="tw-mb-6 tw-mt-10">
-  {{ 'sachbearbeitung-app.infos.admin.gesuch-beenden' | translate }}
+  {{ 'sachbearbeitung-app.infos.admin.gesuch-abschliessen' | translate }}
 </h3>
 
-<button class="btn btn-primary" type="button" data-testid="button-gesuch-beenden">
-  {{ 'sachbearbeitung-app.infos.admin.gesuch-beenden' | translate }}
+<button class="btn btn-primary" type="button" data-testid="button-gesuch-abschliessen" (click)="gesuchAbschliessen()">
+  {{ 'sachbearbeitung-app.infos.admin.gesuch-abschliessen' | translate }}
 </button>
+
+<!-- table for abschliessen entries, with columns timestamp, user and kommentar  -->
+<div class="tw-dv-table tw-mb-6">
+  <table mat-table [dataSource]="gesuchAbschliessenSig()">
+    <caption class="cdk-visually-hidden">
+      {{
+        'sachbearbeitung-app.infos.admin.gesuch-abschliessen' | translate
+      }}
+    </caption>
+
+    <!-- Datum -->
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-whitespace-nowrap">
+        {{ abschliessen.timestamp | date: 'dd.MM.yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- User -->
+    <ng-container matColumnDef="user">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.user' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-whitespace-nowrap">
+        {{ abschliessen.user }}
+      </td>
+    </ng-container>
+
+    <!-- Kommentar -->
+    <ng-container matColumnDef="kommentar">
+      <th class="tw-min-w-80" mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-min-w-80">
+        {{ abschliessen.kommentar }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="gesuchTableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: gesuchTableColumns"></tr>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-p-3" [colSpan]="gesuchTableColumns.length">
+        {{ 'shared.table.noEntries' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>
