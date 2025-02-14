@@ -25,6 +25,7 @@ import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
@@ -118,6 +119,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
+  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   gotReenabled$ = new Subject<object>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
@@ -224,10 +226,11 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     effect(
       () => {
         const { gesuch, gesuchFormular } = this.viewSig();
+        const { trancheTyp } = this.cacheSig();
         if (
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(PARTNER, gesuch, this.appType)
+          isStepDisabled(PARTNER, trancheTyp, gesuch, this.appType)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormPartner.nextStepTriggered({
