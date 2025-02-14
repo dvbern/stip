@@ -154,7 +154,7 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         final var actualTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        if (Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(actualGesuch.getGesuchStatus())) {
+        if (Gesuchstatus.GS_RECEIVES_GESUCH_IN_STATUS_EINGEREICHT.contains(actualGesuch.getGesuchStatus())) {
             // eingereichtes gesuch (query envers)
             var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
                 .stream()

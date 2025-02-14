@@ -1607,6 +1607,15 @@ class GesuchServiceTest {
             gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
             is(initialWohnkostenValue)
         );
+        // test for the case that a gesuch is being rejected
+        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
+        gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         final var gesuchSB = gesuchService

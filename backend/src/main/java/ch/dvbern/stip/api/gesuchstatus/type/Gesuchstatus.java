@@ -51,13 +51,13 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
+    public static final Set<Gesuchstatus> GS_RECEIVES_GESUCH_IN_STATUS_EINGEREICHT =
         Collections.unmodifiableSet(
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
                 ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-                BEREIT_FUER_BEARBEITUNG
-
+                BEREIT_FUER_BEARBEITUNG,
+                IN_BEARBEITUNG_GS
             )
         );
 
