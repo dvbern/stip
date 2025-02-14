@@ -68,7 +68,10 @@
               {{ 'gesuch-app.dashboard.periode.einreichefrist.text' | translate }}
             </dt>
             <dd>
-              {{ periode.einreichefristNormal | date: 'dd.MM.yyyy' }}
+              {{
+                (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
+                  | date: 'dd.MM.yyyy'
+              }}
             </dd>
           } @else {
             <span class="tw-font-bold">
