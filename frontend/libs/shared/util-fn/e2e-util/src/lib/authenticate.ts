@@ -38,10 +38,12 @@ export const createTest = (
       async ({ browser }, use, workerInfo) => {
         // Use parallelIndex as a unique identifier for each worker.
         const id = test.info().parallelIndex + 1;
-        const testName = test.info().testId;
+        const optionalSuffix = options?.contextPerTest
+          ? `_${test.info().testId}`
+          : '';
         const fileName = path.resolve(
           test.info().project.outputDir,
-          `.auth/${id}${options?.contextPerTest ? `_${testName}` : ''}.json`,
+          `.auth/${id}${optionalSuffix}.json`,
         );
 
         if (fs.existsSync(fileName)) {
