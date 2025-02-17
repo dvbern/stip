@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { endOfDay, format, getMonth, isAfter } from 'date-fns';
+import { format, getMonth } from 'date-fns';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
@@ -24,12 +24,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
                 ? ('fruehling' as const)
                 : ('herbst' as const),
             year: format(Date.parse(periode?.gesuchsperiodeStart), 'yy'),
-            einreichefrist: isAfter(
-              new Date(),
-              endOfDay(new Date(periode?.einreichefristNormal)),
-            )
-              ? periode?.einreichefristReduziert
-              : periode?.einreichefristNormal,
+            einreichefrist: periode?.einreichefristNormal,
           }
         : undefined,
       gesuch: cache.gesuch,
