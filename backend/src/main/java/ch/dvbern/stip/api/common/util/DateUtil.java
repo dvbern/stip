@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -28,6 +29,8 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @UtilityClass
 public class DateUtil {
+    public final ZoneId ZUERICH_ZONE = ZoneId.of("Europe/Zurich");
+
     /**
      * Clamps the given {@param date} to be no less than {@param min} and no more that {@param max},
      * if the given value is already between the two dates it returns it.
@@ -103,5 +106,21 @@ public class DateUtil {
 
     public boolean afterOrEqual(final LocalDate left, final LocalDate right) {
         return left.isAfter(right) || left.isEqual(right);
+    }
+
+    public boolean between(final LocalDate left, final LocalDate right, final LocalDate date, final boolean inclusive) {
+        if (inclusive) {
+            return betweenInclusive(left, right, date);
+        } else {
+            return betweenExclusive(left, right, date);
+        }
+    }
+
+    private boolean betweenInclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
+        return beforeOrEqual(left, date) && afterOrEqual(right, date);
+    }
+
+    private boolean betweenExclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
+        return left.isBefore(date) && right.isAfter(date);
     }
 }

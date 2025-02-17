@@ -87,7 +87,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository
+            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository, null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
