@@ -97,6 +97,7 @@
   "shared.form.error.telefonnummer": "Le numéro de téléphone est invalide",
   "shared.weiterangaben": "Plus de détails",
   "shared.table.noData": "Aucune donnée disponible",
+  "shared.table.noEntries": "Aucune entrée",
   "shared.table.paginator.itemsPerPage": "Nombre d'éléments par page",
   "shared.table.paginator.nextPage": "Page suivante",
   "shared.table.paginator.lastPage": "Dernière page",
