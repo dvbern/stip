@@ -1,0 +1,7 @@
+{anrede} {nachname}
+
+Le délai de dépôt pour l'envoi ultérieur des documents requis a expiré. La demande est maintenant à nouveau en votre possession et est considérée comme non soumise. Vous pouvez, si les délais de dépôt le permettent, soumettre à nouveau la demande.
+
+Salutations amicales
+
+{sbVorname} {sbNachname}

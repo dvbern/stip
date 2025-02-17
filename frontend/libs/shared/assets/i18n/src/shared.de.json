@@ -97,6 +97,7 @@
   "shared.form.error.telefonnummer": "Die Telefonnummer ist ungültig",
   "shared.weiterangaben": "Weitere Angaben",
   "shared.table.noData": "Keine Daten verfügbar",
+  "shared.table.noEntries": "Keine Einträge",
   "shared.table.paginator.itemsPerPage": "Anzahl Elemente pro Seite",
   "shared.table.paginator.nextPage": "Nächste Seite",
   "shared.table.paginator.lastPage": "Letzte Seite",
@@ -167,6 +168,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Fehlende Dokumente wurden übermittelt",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Änderung abgelehnt",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Statusänderung mit Kommentar",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Fehlende Dokumente nicht eingereicht",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",

@@ -25,7 +25,10 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -37,8 +40,8 @@ import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
-import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +49,12 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchStatusService {
-    private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
     private final GesuchValidatorService validationService;
     private final MailService mailService;
     private final NotificationService notificationService;
     private final GesuchHistoryService gesuchHistoryService;
+
+    private final Instance<GesuchStatusStateChangeHandler> handlers;
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
@@ -64,12 +68,6 @@ public class GesuchStatusService {
         final KommentarDto kommentarDto,
         final boolean sendNotificationIfPossible
     ) {
-        StateMachineUtil.addExit(
-            config,
-            transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
-            Gesuchstatus.values()
-        );
-
         final var sm = createStateMachine(gesuch, kommentarDto);
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
@@ -84,14 +82,11 @@ public class GesuchStatusService {
         final GesuchStatusChangeEvent event
     ) {
         for (final Gesuch gesuch : gesuche) {
-            StateMachineUtil.addExit(
-                config,
-                transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
-                Gesuchstatus.values()
-            );
-
-            final var sm = createStateMachine(gesuch, null);
-            sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
+            try {
+                triggerStateMachineEvent(gesuch, event);
+            } catch (ValidationsException ignored) {
+                // ignored
+            }
         }
     }
 
@@ -136,6 +131,14 @@ public class GesuchStatusService {
         final Gesuch gesuch,
         final KommentarDto kommentarDto
     ) {
+        final var config = GesuchStatusConfigProducer.createStateMachineConfig(handlers);
+
+        StateMachineUtil.addExit(
+            config,
+            transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
+            Gesuchstatus.values()
+        );
+
         return new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,

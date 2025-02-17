@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.nullValue;
 class GesuchStatusConfigProducerTest {
     @Test
     void allGesuchstatusInConfig() {
-        final var config = new GesuchStatusConfigProducer(null).createStateMachineConfig();
+        final var config = GesuchStatusConfigProducer.createStateMachineConfig(null);
 
         for (final var status : Gesuchstatus.values()) {
             final var representation = config.getRepresentation(status);

@@ -39,7 +39,7 @@ export interface OptionalKommentarDialogResult {
 }
 
 @Component({
-  selector: 'lib-shared-ui-kommentar-dialog',
+  selector: 'dv-shared-ui-kommentar-dialog',
   standalone: true,
   imports: [
     CommonModule,
