@@ -388,6 +388,8 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Ausbildungskosten der/des Auszubildenden",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Fahrkosten der/des Auszubildenden",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Totaler Betrag des Budgets",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Pro Kopf Teilung",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Anrechenbares Budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Anrechenbarer Betrag des Budgets ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
 
