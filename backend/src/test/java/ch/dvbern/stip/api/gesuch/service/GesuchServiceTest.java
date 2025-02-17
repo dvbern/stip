@@ -89,6 +89,7 @@ import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -1607,25 +1608,75 @@ class GesuchServiceTest {
             gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
             is(initialWohnkostenValue)
         );
-        // test for the case that a gesuch is being rejected
-        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        gesuchGS = gesuchService
-            .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
-        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
-        assertThat(
-            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
-            is(initialWohnkostenValue)
-        );
+    }
 
+    /*
+     * Gesuch gets rejected by SB
+     * data of GesuchFormular should be reset entirely to the state of EINGEREICHT
+     * the gesuch shoudl be in state IN_BEARBEITUNG_GS
+     */
+    @Test
+    @Description("The whole gesuch should should be reset to snapshot of EINGEREICHT when rejected by SB")
+    void checkGesuchIsResetedAfterRejectionTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSB
+            )
+        );
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+
+        // gesuch gets rejected
+        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSB.getId(), new KommentarDto("test"));
         final var gesuchSB = gesuchService
             .getGesuchSB(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
-        assertThat(gesuchSB.getGesuchStatus(), is(gesuchInBearbeitungSB.getGesuchStatus()));
+        assertThat(gesuchSB.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertThat(
             gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
-            is(editedWohnkostenValue)
+            is(initialWohnkostenValue)
         );
-
     }
 
     @TestAsGesuchsteller
