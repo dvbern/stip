@@ -43,4 +43,20 @@ public class GeschwisterCopyUtil {
 
         return copy;
     }
+
+    public void overrideItem(Geschwister toBeReplaced, final Geschwister replacement) {
+        AbstractFamilieEntityCopyUtil.copy(replacement, toBeReplaced);
+        toBeReplaced.setAusbildungssituation(replacement.getAusbildungssituation());
+    }
+
+    public void doOverrideOfSet(Set<Geschwister> toBeReplaced, Set<Geschwister> replacement) {
+        for (var item : toBeReplaced) {
+            if (replacement.contains(item)) {
+                overrideItem(item, replacement.stream().filter(x -> x.equals(item)).findFirst().get());
+            } else {
+                // new item -> add to list
+                toBeReplaced.add(item);
+            }
+        }
+    }
 }

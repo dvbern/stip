@@ -45,4 +45,23 @@ public class KindCopyUtil {
 
         return copy;
     }
+
+    public void overrideItem(Kind toBeReplaced, final Kind replacement) {
+        AbstractPersonCopyUtil.copy(replacement, toBeReplaced);
+        toBeReplaced.setWohnsitzAnteilPia(replacement.getWohnsitzAnteilPia());
+        toBeReplaced.setAusbildungssituation(replacement.getAusbildungssituation());
+        toBeReplaced.setErhalteneAlimentebeitraege(replacement.getErhalteneAlimentebeitraege());
+        toBeReplaced.setAusbildungssituation(replacement.getAusbildungssituation());
+    }
+
+    public void doOverrideOfSet(Set<Kind> toBeReplaced, Set<Kind> replacement) {
+        for (var item : toBeReplaced) {
+            if (replacement.contains(item)) {
+                overrideItem(item, replacement.stream().filter(x -> x.equals(item)).findFirst().get());
+            } else {
+                // new item -> add to list
+                toBeReplaced.add(item);
+            }
+        }
+    }
 }

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.familiensituation.util;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import lombok.experimental.UtilityClass;
 
@@ -38,4 +40,32 @@ public class FamiliensituationCopyUtil {
 
         return copy;
     }
+
+    public void overrideItem(final Familiensituation replacement, Familiensituation toBeReplaced) {
+        if (Objects.isNull(replacement)) {
+            return;
+        }
+        if (Objects.nonNull(replacement.getElternVerheiratetZusammen()))
+            toBeReplaced.setElternVerheiratetZusammen(replacement.getElternVerheiratetZusammen());
+
+        if (Objects.nonNull(replacement.getElternteilUnbekanntVerstorben()))
+            toBeReplaced.setElternteilUnbekanntVerstorben(replacement.getElternteilUnbekanntVerstorben());
+
+        if (Objects.nonNull(replacement.getGerichtlicheAlimentenregelung()))
+            toBeReplaced.setGerichtlicheAlimentenregelung(replacement.getGerichtlicheAlimentenregelung());
+
+        if (Objects.nonNull(replacement.getMutterUnbekanntVerstorben()))
+            toBeReplaced.setMutterUnbekanntVerstorben(replacement.getMutterUnbekanntVerstorben());
+
+        toBeReplaced.setMutterUnbekanntGrund(replacement.getMutterUnbekanntGrund());
+        if (Objects.nonNull(replacement.getMutterWiederverheiratet()))
+            toBeReplaced.setMutterWiederverheiratet(replacement.getMutterWiederverheiratet());
+        if (Objects.nonNull(replacement.getVaterUnbekanntVerstorben()))
+            toBeReplaced.setVaterUnbekanntVerstorben(replacement.getVaterUnbekanntVerstorben());
+        toBeReplaced.setVaterUnbekanntGrund(replacement.getVaterUnbekanntGrund());
+        if (Objects.nonNull(replacement.getVaterWiederverheiratet()))
+            toBeReplaced.setVaterWiederverheiratet(replacement.getVaterWiederverheiratet());
+        toBeReplaced.setWerZahltAlimente(replacement.getWerZahltAlimente());
+    }
+
 }

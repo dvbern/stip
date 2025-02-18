@@ -50,4 +50,32 @@ public class LebenslaufItemCopyUtil {
 
         return copy;
     }
+
+    public void overrideItem(LebenslaufItem toBeReplaced, final LebenslaufItem replacement) {
+        toBeReplaced.setBildungsart(replacement.getBildungsart());
+        toBeReplaced.setVon(replacement.getVon());
+        toBeReplaced.setBis(replacement.getBis());
+        toBeReplaced.setTaetigkeitsart(replacement.getTaetigkeitsart());
+        toBeReplaced.setTaetigkeitsBeschreibung(replacement.getTaetigkeitsBeschreibung());
+        toBeReplaced.setBerufsbezeichnung(replacement.getBerufsbezeichnung());
+        toBeReplaced.setFachrichtung(replacement.getFachrichtung());
+        toBeReplaced.setTitelDesAbschlusses(replacement.getTitelDesAbschlusses());
+        toBeReplaced.setAusbildungAbgeschlossen(replacement.isAusbildungAbgeschlossen());
+        toBeReplaced.setWohnsitz(replacement.getWohnsitz());
+
+    }
+
+    public void doOverrideOfSet(Set<LebenslaufItem> toBeReplaced, Set<LebenslaufItem> replacement) {
+        for (var lebenslaufItem : toBeReplaced) {
+            if (replacement.contains(lebenslaufItem)) {
+                overrideItem(
+                    lebenslaufItem,
+                    replacement.stream().filter(x -> x.equals(lebenslaufItem)).findFirst().get()
+                );
+            } else {
+                // new item -> add to list
+                toBeReplaced.add(lebenslaufItem);
+            }
+        }
+    }
 }
