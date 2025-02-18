@@ -17,8 +17,10 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1580,6 +1582,7 @@ class GesuchServiceTest {
             .getEinnahmenKosten()
             .setWohnkosten(editedWohnkostenValue);
         gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+        gesuchInBearbeitungSB.setEinreichedatum(LocalDateTime.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
@@ -1617,7 +1620,8 @@ class GesuchServiceTest {
      */
     @Test
     @Description("The whole gesuch should should be reset to snapshot of EINGEREICHT when rejected by SB")
-    void checkGesuchIsResetedAfterRejectionTest() {
+    void checkGesuchIsResetedAfterRejectionTest()
+    throws InvocationTargetException, InstantiationException, IllegalAccessException {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
