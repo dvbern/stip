@@ -15,22 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.steuererklaerung.service;
+package ch.dvbern.stip.api.gesuchformular.validation;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
-import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-
-@Mapper(config = MappingConfig.class)
-public interface SteuererklaerungMapper {
-    Steuererklaerung toEntity(SteuererklaerungUpdateDto steuererklaerungDto);
-
-    Steuererklaerung partialUpdate(
-        SteuererklaerungUpdateDto steuererklaerungUpdateDto,
-        @MappingTarget Steuererklaerung steuererklaerung
-    );
-
-    SteuererklaerungUpdateDto toUpdateDto(Steuererklaerung steuererklaerung);
+public interface GesuchNachInBearbeitungSBValidationGroup {
 }

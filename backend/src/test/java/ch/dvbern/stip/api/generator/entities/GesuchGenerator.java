@@ -83,7 +83,7 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setSteuererklaerung(new ArrayList<>());
         gesuchFormularToWorkWith.getSteuererklaerung().add(new SteuererklaerungUpdateDtoSpec());
         // gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
-        // gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenUpdateDtoSpec());
+        // gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenDtoSpec());
 
         GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
         gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);

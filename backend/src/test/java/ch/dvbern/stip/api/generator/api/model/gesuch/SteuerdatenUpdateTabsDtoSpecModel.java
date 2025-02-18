@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
 public class SteuerdatenUpdateTabsDtoSpecModel {
-    public static SteuerdatenUpdateDtoSpec steuerdatenDtoSpec(final SteuerdatenTypDtoSpec steuerdatenTypDtoSpec) {
-        return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model) -> {
+    public static SteuerdatenDtoSpec steuerdatenDtoSpec(final SteuerdatenTypDtoSpec steuerdatenTypDtoSpec) {
+        return TestUtil.createUpdateDtoSpec(SteuerdatenDtoSpec::new, (model) -> {
             model.setSteuerdatenTyp(steuerdatenTypDtoSpec);
             model.setTotalEinkuenfte(TestUtil.getRandomInt(1, 10000));
             model.setEigenmietwert(TestUtil.getRandomInt(1, 10000));
@@ -46,10 +46,10 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
         });
     }
 
-    public static List<SteuerdatenUpdateDtoSpec> steuerdatenDtoSpecs(
+    public static List<SteuerdatenDtoSpec> steuerdatenDtoSpecs(
         final SteuerdatenTypDtoSpec... steuerdatenTypDtoSpecs
     ) {
-        final var list = new ArrayList<SteuerdatenUpdateDtoSpec>();
+        final var list = new ArrayList<SteuerdatenDtoSpec>();
         for (final var typ : steuerdatenTypDtoSpecs) {
             list.add(steuerdatenDtoSpec(typ));
         }

@@ -21,8 +21,10 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +34,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 public class SteuerdatenResourceImpl implements SteuerdatenResource {
+    private final SteuerdatenService steuerdatenService;
+    private final SteuerdatenMapper steuerdatenMapper;
+
     @Override
-    public List<SteuerdatenUpdateDto> getSteuerdaten(UUID gesuchTrancheId) {
-        return List.of();
+    public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
+        return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
     }
 
     @Override
-    public List<SteuerdatenUpdateDto> updateSteuerdaten(
+    public List<SteuerdatenDto> updateSteuerdaten(
         UUID gesuchTrancheId,
-        List<SteuerdatenUpdateDto> steuerdatenUpdateDto
+        List<SteuerdatenDto> steuerdatenDto
     ) {
-        return List.of();
+        return steuerdatenService.updateSteuerdaten(gesuchTrancheId, steuerdatenDto)
+            .stream()
+            .map(steuerdatenMapper::toDto)
+            .toList();
     }
 }
