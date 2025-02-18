@@ -48,7 +48,6 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
@@ -79,7 +78,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         KindMapper.class,
         EinnahmenKostenMapper.class,
         SteuererklaerungMapper.class,
-        SteuerdatenMapper.class,
         DarlehenMapper.class,
     }
 )
