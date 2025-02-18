@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,12 +61,12 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -1582,7 +1581,7 @@ class GesuchServiceTest {
             .getEinnahmenKosten()
             .setWohnkosten(editedWohnkostenValue);
         gesuchInBearbeitungSB.getAusbildung().setFall(fall);
-        gesuchInBearbeitungSB.setEinreichedatum(LocalDateTime.now());
+        gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
