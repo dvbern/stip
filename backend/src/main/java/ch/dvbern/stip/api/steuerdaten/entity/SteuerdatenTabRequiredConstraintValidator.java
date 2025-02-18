@@ -54,7 +54,7 @@ public class SteuerdatenTabRequiredConstraintValidator
 
         for (final var invalid : invalidSteuerdaten) {
             final var pagePostfix = switch (invalid.getSteuerdatenTyp()) {
-                case FAMILIE -> "Familie";
+                case FAMILIE -> "";
                 case VATER -> "Vater";
                 case MUTTER -> "Mutter";
             };
