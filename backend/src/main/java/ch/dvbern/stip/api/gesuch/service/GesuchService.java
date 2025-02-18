@@ -50,7 +50,6 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -68,7 +67,6 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
-import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
@@ -86,7 +84,6 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -202,74 +199,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateSteuerdatenUpdateLegality(
-        final List<SteuerdatenDto> steuerdatenDtos,
-        final GesuchTranche trancheToUpdate
-    ) {
-        final var gesuchsjahr = trancheToUpdate
-            .getGesuch()
-            .getGesuchsperiode()
-            .getGesuchsjahr();
-
-        final var steuerdatenList = trancheToUpdate.getGesuchFormular()
-            .getSteuerdaten()
-            .stream()
-            .filter(tab -> tab.getSteuerdatenTyp() != null)
-            .toList();
-
-        for (final var steuerdatenDto : steuerdatenDtos) {
-            setAndValidateSteuerdatenTabUpdateLegality(
-                steuerdatenDto,
-                steuerdatenList.stream()
-                    .filter(tab -> tab.getId().equals(steuerdatenDto.getId()))
-                    .findFirst()
-                    .orElse(null),
-                gesuchsjahr
-            );
-        }
-    }
-
-    private void setAndValidateSteuerdatenTabUpdateLegality(
-        final SteuerdatenDto steuerdatenDto,
-        final Steuerdaten steuerdatenTabs,
-        Gesuchsjahr gesuchsjahr
-    ) {
-        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
-        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
-
-        if (steuerdatenTabs != null) {
-            final Integer steuerjahrDtoValue = steuerdatenDto.getSteuerjahr();
-            final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
-            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                steuerjahrDtoValue,
-                steuerjahrExistingValue,
-                steuerjahrDefaultValue
-            );
-
-            final Integer veranlagungsCodeDtoValue = steuerdatenDto.getVeranlagungsCode();
-            final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
-            final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
-            );
-        }
-
-        steuerdatenDto.setSteuerjahr(steuerjahrToSet);
-        steuerdatenDto.setVeranlagungsCode(veranlagungsCodeToSet);
-    }
-
-    @Transactional
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
@@ -293,18 +222,6 @@ public class GesuchService {
                 trancheToUpdate
             );
         }
-        // if (
-        // gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-        // && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
-        // ) {
-        // setAndValidateSteuerdatenUpdateLegality(
-        // gesuchUpdateDto
-        // .getGesuchTrancheToWorkWith()
-        // .getGesuchFormular()
-        // .getSteuerdaten(),
-        // trancheToUpdate
-        // );
-        // }
 
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 

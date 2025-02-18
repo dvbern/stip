@@ -20,20 +20,9 @@ package ch.dvbern.stip.api.steuerdaten.service;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SteuerdatenRepository implements BaseRepository<Steuerdaten> {
-    private final EntityManager entityManager;
-
-    // public List<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
-    // final var steuerdaten = QSteuerdaten.steuerdaten;
-    //
-    // return new JPAQueryFactory(entityManager)
-    // .selectFrom(steuerdaten)
-    // .where()
-    //
-    // }
 }

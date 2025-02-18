@@ -99,6 +99,4 @@ public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenDt
             steuerdaten.setSaeule3a(null);
         }
     }
-
-    // public abstract SteuerdatenDto toUpdateDto(Steuerdaten steuerdaten);
 }
