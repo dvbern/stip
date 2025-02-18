@@ -207,4 +207,8 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public List<Gesuch> getAllWartenAufUnterschriftenblatt() {
         return addStatusFilter(getFindAlleQuery(), Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT).stream().toList();
     }
+
+    public List<Gesuch> getAllFehlendeDokumente() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.FEHLENDE_DOKUMENTE).stream().toList();
+    }
 }

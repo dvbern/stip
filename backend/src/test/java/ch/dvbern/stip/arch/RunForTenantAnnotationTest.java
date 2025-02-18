@@ -15,19 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.arch;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.arch.util.ArchTestUtil;
+import io.quarkus.scheduler.Scheduled;
+import org.junit.jupiter.api.Test;
 
-@Mapper(config = MappingConfig.class)
-public interface StatusprotokollMapper {
-    @Mapping(target = "timestamp", source = "timestampMutiert")
-    @Mapping(target = "status", source = "gesuchStatus")
-    @Mapping(target = "benutzer", source = "userMutiert")
-    @Mapping(target = "kommentar", source = "comment")
-    StatusprotokollEntryDto toDto(Gesuch gesuch);
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+
+class RunForTenantAnnotationTest {
+    @Test
+    void test_run_for_tenant_annotation_only_with_scheduled() {
+        var rule = methods().that().areAnnotatedWith(RunForTenant.class).should().beAnnotatedWith(Scheduled.class);
+
+        rule.check(ArchTestUtil.APP_CLASSES);
+    }
 }

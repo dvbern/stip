@@ -20,7 +20,10 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,9 +35,13 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -49,6 +56,7 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -56,7 +64,6 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -64,6 +71,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
@@ -73,6 +81,8 @@ import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -95,6 +105,7 @@ import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,6 +148,12 @@ public class GesuchService {
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final UnterschriftenblattService unterschriftenblattService;
+    private final BuchhaltungService buchhaltungService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
+
+    public Gesuch getGesuchById(final UUID gesuchId) {
+        return gesuchRepository.requireById(gesuchId);
+    }
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -477,6 +494,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuch.getGesuchTranchen()
             .forEach(
                 gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
@@ -798,5 +816,82 @@ public class GesuchService {
         }
 
         return notiz;
+    }
+
+    @Transactional
+    public void checkForFehlendeDokumenteOnAllGesuche() {
+        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
+        final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
+        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
+        gesuchsToCheck.forEach(
+            gesuch -> {
+                gesuchsperiodenGesucheMap.computeIfAbsent(gesuch.getGesuchsperiode().getId(), k -> new ArrayList<>());
+                gesuchsperiodenGesucheMap.get(gesuch.getGesuchsperiode().getId()).add(gesuch);
+            }
+        );
+
+        final var changedTooLongAgo = new HashSet<UUID>();
+
+        gesuchsperiodenGesucheMap.forEach(
+            (uuid, gesuchsperiodenGesuchs) -> {
+                final var nachfrist = gesuchsperiodenGesuchs.get(0).getGesuchsperiode().getFristNachreichenDokumente();
+                changedTooLongAgo.addAll(
+                    gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
+                        gesuchsperiodenGesuchs.stream().map(AbstractEntity::getId).toList(),
+                        Gesuchstatus.FEHLENDE_DOKUMENTE,
+                        LocalDateTime.now().minusDays(nachfrist)
+                    ).map(AbstractEntity::getId).toList()
+                );
+            }
+        );
+
+        final var toUpdate =
+            gesuchsToCheck.stream().filter(gesuch -> changedTooLongAgo.contains(gesuch.getId())).toList();
+        if (!toUpdate.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
+            );
+        }
+    }
+
+    @Transactional
+    public GesuchDto einreichedatumManuellAendern(
+        final UUID gesuchId,
+        final EinreichedatumAendernRequestDto dto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var gesuchsperiode = gesuch.getGesuchsperiode();
+        final var newEinreichedatum = dto.getNewEinreichedatum();
+        final var between = DateUtil.between(
+            gesuchsperiode.getGesuchsperiodeStart(),
+            gesuchsperiode.getGesuchsperiodeStopp(),
+            newEinreichedatum,
+            true
+        );
+
+        if (!between) {
+            throw new BadRequestException("New einreichedatum is outside of the Gesuchsperiode");
+        }
+
+        gesuch.setEinreichedatum(dto.getNewEinreichedatum());
+        gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
+
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public EinreichedatumStatusDto canUpdateEinreichedatum(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return new EinreichedatumStatusDto(canUpdateEinreichedatum(gesuch));
+    }
+
+    @Transactional
+    public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
     }
 }

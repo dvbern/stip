@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import jakarta.enterprise.util.Nonbinding;
 import jakarta.interceptor.InterceptorBinding;
 
 @InterceptorBinding
@@ -31,5 +32,6 @@ import jakarta.interceptor.InterceptorBinding;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface RunForTenant {
+    @Nonbinding
     MandantIdentifier value() default MandantIdentifier.GLOBAL;
 }

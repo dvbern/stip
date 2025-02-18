@@ -136,7 +136,7 @@ test.describe('Neues gesuch erstellen', () => {
     await darlehenPO.fillDarlehenForm(darlehen);
 
     const requiredDokumenteResponse = page.waitForResponse(
-      '**/api/v1/gesuchtranche/*/requiredDokumente',
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload',
     );
     await darlehenPO.elems.buttonSaveContinue.click();
 

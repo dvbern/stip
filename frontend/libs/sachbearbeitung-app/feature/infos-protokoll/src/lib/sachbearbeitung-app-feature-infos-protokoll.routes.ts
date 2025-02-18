@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
-import { PROTOKOLL } from '@dv/shared/model/gesuch-form';
+import { PROTOKOLL_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
 import { SachbearbeitungAppFeatureInfosProtokollComponent } from './sachbearbeitung-app-feature-infos-protokoll/sachbearbeitung-app-feature-infos-protokoll.component';
@@ -18,7 +18,7 @@ export const sachbearbeitungAppFeatureInfosProtokollRoutes: Route[] = [
     children: [
       ...idAndTrancheIdRoutes({
         data: {
-          option: PROTOKOLL,
+          option: PROTOKOLL_ROUTE,
         },
         pathMatch: 'prefix',
         component: SachbearbeitungAppFeatureInfosProtokollComponent,

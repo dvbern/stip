@@ -18,7 +18,6 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +47,7 @@ class BerechnungServiceTest {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         gesuch.getGesuchsperiode().setEinreichefristNormal(LocalDate.now());
 
-        final var eingereicht = LocalDateTime.now();
+        final var eingereicht = LocalDate.now();
         final var wasEingereichtAfterDueDate = berechnungService.wasEingereichtAfterDueDate(gesuch, eingereicht);
         assertThat(wasEingereichtAfterDueDate, is(false));
     }
@@ -58,7 +57,7 @@ class BerechnungServiceTest {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         gesuch.getGesuchsperiode().setEinreichefristNormal(LocalDate.now());
 
-        final var eingereicht = LocalDateTime.now().plusDays(1);
+        final var eingereicht = LocalDate.now().plusDays(1);
         final var wasEingereichtAfterDueDate = berechnungService.wasEingereichtAfterDueDate(gesuch, eingereicht);
         assertThat(wasEingereichtAfterDueDate, is(true));
     }
@@ -115,7 +114,7 @@ class BerechnungServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
-        final var eingereicht = LocalDateTime.now().withDayOfMonth(1);
+        final var eingereicht = LocalDate.now().withDayOfMonth(1);
 
         final var monthsBetween = berechnungService.getActualDuration(gesuch, eingereicht);
         assertThat(monthsBetween, equalTo(monthsToBeBetween));
@@ -173,7 +172,7 @@ class BerechnungServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
-        final var eingereicht = LocalDateTime.now().withDayOfMonth(27);
+        final var eingereicht = LocalDate.now().withDayOfMonth(27);
 
         final var monthsBetween = berechnungService.getActualDuration(gesuch, eingereicht);
         assertThat(monthsBetween, equalTo(monthsToBeBetween - 1));

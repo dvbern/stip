@@ -26,23 +26,20 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.Produces;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+@UtilityClass
 @Slf4j
-@Dependent
-@RequiredArgsConstructor
 public class GesuchTrancheStatusConfigProducer {
-    private final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
-        new StateMachineConfig<>();
 
-    private final Instance<GesuchTrancheStatusStateChangeHandler> handlers;
+    public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig(
+        Instance<GesuchTrancheStatusStateChangeHandler> handlers
+    ) {
+        final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
+            new StateMachineConfig<>();
 
-    @Produces
-    public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN);
 
@@ -59,7 +56,21 @@ public class GesuchTrancheStatusConfigProducer {
 
         for (final var status : GesuchTrancheStatus.values()) {
             final var state = config.getRepresentation(status);
-            state.addEntryAction(this::onStateEntry);
+            state.addEntryAction(
+                (transition, args) -> {
+                    final var gesuchTranche = extractGesuchFromStateMachineArgs(args);
+                    final var handler = getHandlerFor(handlers, transition);
+                    if (handler.isPresent()) {
+                        handler.get().handle(transition, gesuchTranche);
+                    } else {
+                        LOG.info(
+                            "No handler exists for GesuchTrancheStatus transition {} -> {}",
+                            transition.getSource(),
+                            transition.getDestination()
+                        );
+                    }
+                }
+            );
         }
 
         return config;
@@ -77,25 +88,9 @@ public class GesuchTrancheStatusConfigProducer {
     }
 
     private Optional<GesuchTrancheStatusStateChangeHandler> getHandlerFor(
+        Instance<GesuchTrancheStatusStateChangeHandler> handlers,
         final Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition
     ) {
         return handlers.stream().filter(handler -> handler.handles(transition)).findFirst();
-    }
-
-    private void onStateEntry(
-        final Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
-        final Object[] args
-    ) {
-        final var gesuchTranche = extractGesuchFromStateMachineArgs(args);
-        final var handler = getHandlerFor(transition);
-        if (handler.isPresent()) {
-            handler.get().handle(transition, gesuchTranche);
-        } else {
-            LOG.info(
-                "No handler exists for GesuchTrancheStatus transition {} -> {}",
-                transition.getSource(),
-                transition.getDestination()
-            );
-        }
     }
 }

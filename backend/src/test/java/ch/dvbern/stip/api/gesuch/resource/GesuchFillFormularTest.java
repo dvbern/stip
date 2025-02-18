@@ -56,6 +56,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
@@ -120,6 +121,12 @@ class GesuchFillFormularTest {
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+
+        assertThat(
+            "Newly created Gesuch is not IN_BEARBEITUNG_GS",
+            gesuch.getGesuchStatus(),
+            is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS)
+        );
     }
 
     @Test

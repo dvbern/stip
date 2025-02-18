@@ -2,6 +2,8 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -38,6 +40,11 @@ public interface GesuchResource {
     @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
     GesuchDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchId}/einreichedatum")
+    @Produces({ "application/json", "text/plain" })
+    EinreichedatumStatusDto canEinreichedatumAendern(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
@@ -80,6 +87,12 @@ public interface GesuchResource {
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })
     void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchId}/einreichedatum")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto einreichedatumManuellAendern(@PathParam("gesuchId") UUID gesuchId,@Valid EinreichedatumAendernRequestDto einreichedatumAendernRequestDto);
 
     @PATCH
     @Path("/{gesuchTrancheId}/einreichen")

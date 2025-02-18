@@ -11,7 +11,14 @@ export const PROTOKOLL_ROUTE: InfosOptions = {
   route: 'protokoll',
   translationKey: 'sachbearbeitung-app.infos.protokoll',
   titleTranslationKey: 'sachbearbeitung-app.infos.protokoll',
-  iconSymbolName: 'checklist',
+  iconSymbolName: 'history',
+};
+
+export const INFO_ADMIN_ROUTE: InfosOptions = {
+  route: 'admin',
+  translationKey: 'sachbearbeitung-app.infos.admin',
+  titleTranslationKey: 'sachbearbeitung-app.infos.admin',
+  iconSymbolName: 'admin_panel_settings',
 };
 
 export const NOTIZEN_ROUTE: InfosOptions = {
@@ -59,6 +66,7 @@ export const BESCHWERDEN_ROUTE: InfosOptions = {
 export const INFOS_OPTIONS = [
   PROTOKOLL_ROUTE,
   NOTIZEN_ROUTE,
+  INFO_ADMIN_ROUTE,
   BUCHHALTUNG_ROUTE,
   DARLEHEN_ROUTE,
   BESCHWERDEN_ROUTE,

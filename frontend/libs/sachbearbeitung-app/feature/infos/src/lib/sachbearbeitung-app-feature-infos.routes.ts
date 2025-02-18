@@ -4,6 +4,7 @@ import {
   BESCHWERDEN_ROUTE,
   BUCHHALTUNG_ROUTE,
   DARLEHEN_ROUTE,
+  INFO_ADMIN_ROUTE,
   NOTIZEN_ROUTE,
   PROTOKOLL_ROUTE,
 } from '@dv/sachbearbeitung-app/model/infos';
@@ -25,6 +26,13 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
             (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,
+          ),
+      },
+      {
+        path: INFO_ADMIN_ROUTE.route,
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/infos-admin').then(
+            (m) => m.sachbearbeitungAppFeatureInfosAdminRoutes,
           ),
       },
       {
