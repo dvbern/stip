@@ -302,12 +302,13 @@ export const isStepValid = (
 
   const isDefined = (value: unknown) => value !== null && value !== undefined;
 
+  // Todo: will probably need to be adjusted for GS and differently for SB
   if (isSteuerdatenStep(field)) {
     const [stepSteuerdatenTyp] =
       Object.entries(ELTERN_STEUER_STEPS).find(
         ([, s]) => s.route === step.route,
       ) ?? [];
-    const currentHasDaten = formular?.steuerdaten?.find(
+    const currentHasDaten = formular?.steuererklaerung?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
     return toStepState(field, isDefined(currentHasDaten), invalidProps);

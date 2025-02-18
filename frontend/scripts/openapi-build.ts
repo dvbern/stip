@@ -49,6 +49,7 @@ const generatedApis = [
   'Stammdaten',
   'StipDecision',
   'Tenant',
+  'Steuerdaten',
 ];
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');

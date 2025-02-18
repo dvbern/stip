@@ -122,8 +122,9 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   );
 
   hiddenFieldSet = this.formUtils.createHiddenFieldSet();
+  // Todo: will have to differ between GS and SB
   originalSteuerdatenSig = computed(() => {
-    return this.viewSig().gesuchFormular?.steuerdaten?.find(
+    return this.viewSig().gesuchFormular?.steuererklaerung?.find(
       (s) => s.steuerdatenTyp === this.stepSig().type,
     );
   });
@@ -177,13 +178,13 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     effect(() => {
       const steuerdaten = this.originalSteuerdatenSig();
 
-      if (steuerdaten) {
-        this.form.patchValue({
-          ...steuerdaten,
-          arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
-          ...this.numberConverter.toString(steuerdaten),
-        });
-      }
+      // if (steuerdaten) {
+      //   this.form.patchValue({
+      //     ...steuerdaten,
+      //     arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
+      //     ...this.numberConverter.toString(steuerdaten),
+      //   });
+      // }
     });
   }
 
@@ -257,6 +258,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   }
 }
 
+// Todo: will only be used for SB
 const upsertSteuerdaten = (
   steuerdaten: SteuerdatenUpdate,
   gesuchFormular?: SharedModelGesuchFormularUpdate | null,
@@ -265,7 +267,7 @@ const upsertSteuerdaten = (
   const result = [];
 
   const combinedSteuerdaten = [
-    ...(gesuchFormular?.steuerdaten ?? []),
+    // ...(gesuchFormular?.steuerdaten ?? []),
     steuerdaten,
   ];
 
