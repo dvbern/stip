@@ -277,6 +277,28 @@ export class SharedUtilFormService {
       : toSignal<R>(control.valueChanges);
   }
 
+  markControlAsTouchedIfValidationFails<T extends FormGroup>(
+    form: T,
+    expectedFields: KeysOfForm<T>[],
+    specialValidationErrors?: SpecialValidationError[],
+  ) {
+    if (!specialValidationErrors || specialValidationErrors.length === 0) {
+      return;
+    }
+
+    specialValidationErrors.forEach((error) => {
+      const field = error.field;
+      if (
+        expectedFields.findIndex((f) => f === field) >= 0 &&
+        field in form.controls
+      ) {
+        const control = form.get(field);
+
+        control?.markAllAsTouched();
+      }
+    });
+  }
+
   invalidateControlIfValidationFails<T extends FormGroup>(
     form: T,
     expectedFields: KeysOfForm<T>[],
