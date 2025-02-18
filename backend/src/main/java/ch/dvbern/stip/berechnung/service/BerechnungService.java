@@ -20,8 +20,6 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +35,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -574,20 +572,18 @@ public class BerechnungService {
         return new BerechnungResult(stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeList);
     }
 
-    boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
-        // TODO KSTIP-998: Use new einreichedatum instead of envers query here
+    boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDate eingereicht) {
         final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
-
-        return eingereicht.isAfter(einreichefrist.atTime(LocalTime.MAX));
+        return eingereicht.isAfter(einreichefrist);
     }
 
-    int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
+    int getActualDuration(final Gesuch gesuch, final LocalDate eingereicht) {
         final var lastTranche = gesuch.getTranchenTranchen()
             .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
             .orElseThrow(NotFoundException::new);
 
         final var roundedEingereicht = DateUtil.roundToStartOrEnd(
-            eingereicht.toLocalDate(),
+            eingereicht,
             14,
             true,
             false
