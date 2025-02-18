@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.lebenslauf.util;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import lombok.experimental.UtilityClass;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @UtilityClass
 public class LebenslaufItemCopyUtil {
@@ -72,7 +72,6 @@ public class LebenslaufItemCopyUtil {
                     replacement.stream().filter(lebenslaufItem -> lebenslaufItem.equals(item)).findFirst();
                 replacementOfItem.ifPresent(lebenslaufItem -> overrideItem(item, lebenslaufItem));
             } else {
-                // new item -> add to list
                 toBeReplaced.add(item);
             }
         }
