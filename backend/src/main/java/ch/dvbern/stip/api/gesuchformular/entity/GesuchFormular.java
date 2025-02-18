@@ -52,6 +52,7 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTabRequiredConstraint;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
@@ -197,6 +198,11 @@ import org.hibernate.envers.Audited;
     }
 )
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
+@SteuerdatenTabRequiredConstraint(
+    groups = {
+        SteuerdatenPageValidation.class
+    }, property = "steuerdaten"
+)
 @UniqueSvNumberConstraint
 @Entity
 @Table(

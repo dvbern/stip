@@ -20,11 +20,14 @@ package ch.dvbern.stip.api.steuerdaten.resource;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +41,15 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenMapper steuerdatenMapper;
 
     @Override
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @AllowAll
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
         return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
     }
 
     @Override
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @AllowAll
     public List<SteuerdatenDto> updateSteuerdaten(
         UUID gesuchTrancheId,
         List<SteuerdatenDto> steuerdatenDto

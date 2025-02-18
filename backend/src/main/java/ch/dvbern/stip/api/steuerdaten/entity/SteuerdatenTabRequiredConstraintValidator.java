@@ -19,43 +19,33 @@ package ch.dvbern.stip.api.steuerdaten.entity;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
-import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_TAB_INVALID_MESSAGE;
 
-public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
-    implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
+public class SteuerdatenTabRequiredConstraintValidator
+    implements ConstraintValidator<SteuerdatenTabRequiredConstraint, GesuchFormular> {
     private String property;
 
+    @Inject
+    SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
     @Override
-    public void initialize(SteuerdatenSteuerjahrInPastOrCurrentConstraint constraintAnnotation) {
+    public void initialize(SteuerdatenTabRequiredConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
     }
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
-        if (
-            gesuchFormular.getSteuerdaten() == null ||
-            gesuchFormular.getSteuerdaten().isEmpty()
-        ) {
-            return true;
-        }
+        final var requiredTabs =
+            steuerdatenTabBerechnungsService.calculateTabs(gesuchFormular.getFamiliensituation());
 
-        // This is fine, the @NotNull constraints on the properties will trigger
-        if (
-            gesuchFormular.getTranche() == null ||
-            gesuchFormular.getTranche().getGesuch() == null
-        ) {
-            return true;
-        }
-
-        final var gesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr();
         final var invalidSteuerdaten = gesuchFormular.getSteuerdaten()
             .stream()
-            .filter(steuerdaten -> !isSteuerjahrValid(steuerdaten, gesuchsjahr))
+            .filter(steuerdatum -> !requiredTabs.contains(steuerdatum.getSteuerdatenTyp()))
             .toList();
 
         if (invalidSteuerdaten.isEmpty()) {
@@ -71,16 +61,11 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
 
             GesuchValidatorUtil.addProperty(
                 constraintValidatorContext,
-                VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE,
+                VALIDATION_STEUERDATEN_TAB_INVALID_MESSAGE,
                 property + pagePostfix
             );
         }
 
         return false;
-    }
-
-    private boolean isSteuerjahrValid(Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr) {
-        return (steuerdaten.getSteuerjahr() != null)
-        && (steuerdaten.getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr));
     }
 }
