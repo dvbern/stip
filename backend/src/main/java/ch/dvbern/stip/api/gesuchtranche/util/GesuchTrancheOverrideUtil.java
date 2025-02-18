@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.util;
 
-import java.lang.reflect.InvocationTargetException;
-
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
@@ -32,9 +30,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchTrancheOverrideUtil {
-
-    public void overrideGesuchFormular(GesuchFormular toBeReplaced, final GesuchFormular replacement)
-    throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void overrideGesuchFormular(GesuchFormular toBeReplaced, final GesuchFormular replacement) {
         // PiA und PiA Adresse
         toBeReplaced.setPersonInAusbildung(
             PersonInAusbildungCopyUtil.createCopyIgnoreReferences(replacement.getPersonInAusbildung())
@@ -63,7 +59,7 @@ public class GesuchTrancheOverrideUtil {
         // Kinds
         KindCopyUtil.doOverrideOfSet(toBeReplaced.getKinds(), replacement.getKinds());
 
-        // Steuerdaten - are omitted at the moment...
+        // Steuerdaten - are omitted at the moment todo KSTIP-1850 ...
         // toBeReplaced.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(replacement.getSteuerdaten()));
 
     }

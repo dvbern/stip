@@ -57,7 +57,8 @@ public class KindCopyUtil {
     public void doOverrideOfSet(Set<Kind> toBeReplaced, Set<Kind> replacement) {
         for (var item : toBeReplaced) {
             if (replacement.contains(item)) {
-                overrideItem(item, replacement.stream().filter(x -> x.equals(item)).findFirst().get());
+                var replacementOfItem = replacement.stream().filter(kind -> kind.equals(item)).findFirst();
+                replacementOfItem.ifPresent(kind -> overrideItem(item, kind));
             } else {
                 // new item -> add to list
                 toBeReplaced.add(item);

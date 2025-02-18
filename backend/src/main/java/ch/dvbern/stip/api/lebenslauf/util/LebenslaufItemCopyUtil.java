@@ -66,15 +66,14 @@ public class LebenslaufItemCopyUtil {
     }
 
     public void doOverrideOfSet(Set<LebenslaufItem> toBeReplaced, Set<LebenslaufItem> replacement) {
-        for (var lebenslaufItem : toBeReplaced) {
-            if (replacement.contains(lebenslaufItem)) {
-                overrideItem(
-                    lebenslaufItem,
-                    replacement.stream().filter(x -> x.equals(lebenslaufItem)).findFirst().get()
-                );
+        for (var item : toBeReplaced) {
+            if (replacement.contains(item)) {
+                var replacementOfItem =
+                    replacement.stream().filter(lebenslaufItem -> lebenslaufItem.equals(item)).findFirst();
+                replacementOfItem.ifPresent(lebenslaufItem -> overrideItem(item, lebenslaufItem));
             } else {
                 // new item -> add to list
-                toBeReplaced.add(lebenslaufItem);
+                toBeReplaced.add(item);
             }
         }
     }

@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import java.lang.reflect.InvocationTargetException;
-
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -45,15 +43,10 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         gesuch.setEinreichedatum(null);
-        try {
-            resetGesuchFormular(gesuch);
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-        }
+        resetGesuchFormular(gesuch);
     }
 
-    private void resetGesuchFormular(Gesuch gesuch)
-    throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private void resetGesuchFormular(Gesuch gesuch) {
         GesuchFormular formularOfStateEingereicht =
             gesuchTrancheService.getLatestWhereGesuchWasEingereicht(gesuch.getId())
                 .getGesuchFormular();

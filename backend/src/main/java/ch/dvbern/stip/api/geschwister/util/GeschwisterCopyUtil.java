@@ -52,7 +52,9 @@ public class GeschwisterCopyUtil {
     public void doOverrideOfSet(Set<Geschwister> toBeReplaced, Set<Geschwister> replacement) {
         for (var item : toBeReplaced) {
             if (replacement.contains(item)) {
-                overrideItem(item, replacement.stream().filter(x -> x.equals(item)).findFirst().get());
+                var replacementOfItem =
+                    replacement.stream().filter(geschwister -> geschwister.equals(item)).findFirst();
+                replacementOfItem.ifPresent(geschwister -> overrideItem(item, geschwister));
             } else {
                 // new item -> add to list
                 toBeReplaced.add(item);
