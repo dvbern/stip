@@ -351,7 +351,8 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
             DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
-            DokumentTypDtoSpec.PERSON_MIETVERTRAG
+            DokumentTypDtoSpec.PERSON_MIETVERTRAG,
+            DokumentTypDtoSpec.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
         };
 
         var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()
