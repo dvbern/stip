@@ -435,4 +435,9 @@ public class GesuchTrancheService {
 
         return !trancheInDisallowedStates.isEmpty();
     }
+
+    public GesuchTranche getLatestWhereGesuchWasEingereicht(final UUID gesuchId) {
+        return gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId)
+            .orElseThrow();
+    }
 }
