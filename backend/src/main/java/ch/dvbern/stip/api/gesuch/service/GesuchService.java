@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -155,11 +156,7 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         final var actualTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        boolean wasOnceEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
-            .stream()
-            .anyMatch(
-                gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT)
-            );
+        boolean wasOnceEingereicht = Objects.nonNull(actualGesuch.getEinreichedatum());
 
         if (wasOnceEingereicht && GS_RECEIVES_GESUCH_IN_STATUS_EINGEREICHT.contains(actualGesuch.getGesuchStatus())) {
             // eingereichtes gesuch (query envers)
