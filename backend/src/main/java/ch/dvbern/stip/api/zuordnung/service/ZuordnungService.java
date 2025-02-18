@@ -62,8 +62,7 @@ public class ZuordnungService {
         update(fitered);
     }
 
-    public void updateZuordnungOnGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void updateZuordnungOnGesuch(final Gesuch gesuch) {
         update(List.of(gesuch));
     }
 

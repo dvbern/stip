@@ -331,7 +331,7 @@ public class GesuchService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         if (updatePia != null) {
-            zuordnungService.updateZuordnungOnGesuch(gesuchId);
+            zuordnungService.updateZuordnungOnGesuch(gesuch);
         }
     }
 
