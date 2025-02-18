@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -49,17 +50,19 @@ public class DocumentsRequiredConstraintValidator
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
         final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
-        final var dokumenteOfType = getRequiredDokumentTypes(formular);
-
+        final var existingDokumenteOfType = getExistingRequiredDokumentTypes(formular);
+        // when a required doc is not existing in existingDokumenteOfType, it is still missing...
         var filtered = requiredDocs.stream()
-            .filter(doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !dokumenteOfType.contains(dokumentTyp)))
+            .filter(
+                doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !existingDokumenteOfType.contains(dokumentTyp))
+            )
             .map(Pair::getLeft)
             .toList();
         Set<String> allFiltered = new HashSet<>(filtered);
 
         final var customFiltered =
             DokumentValidationUtils.getMissingCustomDocumentTypesByType(customProducers, formular.getTranche());
-        allFiltered.addAll(customFiltered);
+        customFiltered.forEach(missingCustomDok -> allFiltered.add("dokuments"));
 
         if (!allFiltered.isEmpty()) {
             return GesuchValidatorUtil.addProperties(
@@ -72,7 +75,7 @@ public class DocumentsRequiredConstraintValidator
         return true;
     }
 
-    private Set<DokumentTyp> getRequiredDokumentTypes(GesuchFormular formular) {
+    private Set<DokumentTyp> getExistingRequiredDokumentTypes(GesuchFormular formular) {
         final Function<String, Set<DokumentTyp>> logAndReturn = path -> {
             LOG.error(
                 "If this happens in testing it's OK: {} on GesuchFormular with id '{}' is null",
@@ -96,7 +99,20 @@ public class DocumentsRequiredConstraintValidator
         if (gesuchDokumente == null) {
             return logAndReturn.apply("GesuchTranche->GesuchDokumente");
         }
+        // todo: gesuchstatus fehlende dokumente && not accepted
+        if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
+            return gesuchDokumente.stream()
+                .filter(
+                    gesuchDokument ->
+                    // !gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND) &&
+                    !gesuchDokument.getDokumente().isEmpty()
+                )
+                .map(GesuchDokument::getDokumentTyp)
+                .collect(Collectors.toSet());
+        }
 
-        return gesuchDokumente.stream().map(GesuchDokument::getDokumentTyp).collect(Collectors.toSet());
+        return gesuchDokumente.stream()
+            .map(GesuchDokument::getDokumentTyp)
+            .collect(Collectors.toSet());
     }
 }
