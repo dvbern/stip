@@ -11,7 +11,7 @@ export const selectSharedFeatureGesuchFormSteuerdatenView = createSelector(
   (gesuchView) => {
     const { current, previous } = selectChangeForView(
       gesuchView,
-      'steuerdaten',
+      'steuererklaerung',
     );
 
     return {

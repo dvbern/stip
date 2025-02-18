@@ -29,7 +29,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint *dvZuvorHint="changes?.totalEinkuenfte"></mat-hint>
+          <!-- <mat-hint *dvZuvorHint="changes?.totalEinkuenfte"></mat-hint> -->
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -54,7 +54,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.eigenmietwert"></mat-hint>
+        <!-- <mat-hint *dvZuvorHint="changes?.eigenmietwert"></mat-hint> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -91,12 +91,12 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-radio-group>
-      <dv-shared-ui-form-zuvor-hint
+      <!-- <dv-shared-ui-form-zuvor-hint
         [changes]="
           changes?.isArbeitsverhaeltnisSelbstaendig
             | translateChange: 'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.$VALUE'
         "
-      ></dv-shared-ui-form-zuvor-hint>
+      ></dv-shared-ui-form-zuvor-hint> -->
     </div>
 
     @if (
@@ -114,7 +114,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
-            <mat-hint *dvZuvorHint="changes?.saeule3a"></mat-hint>
+            <!-- <mat-hint *dvZuvorHint="changes?.saeule3a"></mat-hint> -->
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -131,7 +131,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
-            <mat-hint *dvZuvorHint="changes?.saeule2"></mat-hint>
+            <!-- <mat-hint *dvZuvorHint="changes?.saeule2"></mat-hint> -->
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -152,7 +152,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint *dvZuvorHint="changes?.kinderalimente"></mat-hint>
+          <!-- <mat-hint *dvZuvorHint="changes?.kinderalimente"></mat-hint> -->
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -176,7 +176,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.vermoegen"></mat-hint>
+        <!-- <mat-hint *dvZuvorHint="changes?.vermoegen"></mat-hint> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -206,7 +206,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint *dvZuvorHint="changes?.steuernKantonGemeinde"></mat-hint>
+          <!-- <mat-hint *dvZuvorHint="changes?.steuernKantonGemeinde"></mat-hint> -->
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -232,7 +232,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint *dvZuvorHint="changes?.steuernBund"></mat-hint>
+          <!-- <mat-hint *dvZuvorHint="changes?.steuernBund"></mat-hint> -->
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -274,7 +274,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.fahrkosten"></mat-hint>
+        <!-- <mat-hint *dvZuvorHint="changes?.fahrkosten"></mat-hint> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -290,7 +290,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.fahrkostenPartner"></mat-hint>
+        <!-- <mat-hint *dvZuvorHint="changes?.fahrkostenPartner"></mat-hint> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -309,7 +309,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint *dvZuvorHint="changes?.verpflegung"></mat-hint>
+          <!-- <mat-hint *dvZuvorHint="changes?.verpflegung"></mat-hint> -->
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -334,7 +334,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.verpflegungPartner"></mat-hint>
+        <!-- <mat-hint *dvZuvorHint="changes?.verpflegungPartner"></mat-hint>_ -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -366,7 +366,7 @@
               [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
               type="number"
             />
-            <mat-hint *dvZuvorHint="changes?.steuerjahr"></mat-hint>
+            <!-- <mat-hint *dvZuvorHint="changes?.steuerjahr"></mat-hint> -->
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -389,7 +389,7 @@
               min="0"
               max="99"
             />
-            <mat-hint *dvZuvorHint="changes?.veranlagungsCode"></mat-hint>
+            <!-- <mat-hint *dvZuvorHint="changes?.veranlagungsCode"></mat-hint> -->
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>

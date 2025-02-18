@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Steuerdaten } from './steuerdaten';
 import { PersonInAusbildung } from './personInAusbildung';
 import { Familiensituation } from './familiensituation';
+import { SteuererklaerungUpdate } from './steuererklaerungUpdate';
 import { LebenslaufItem } from './lebenslaufItem';
 import { Eltern } from './eltern';
 import { Ausbildung } from './ausbildung';
@@ -34,7 +34,7 @@ export interface GesuchFormular {
     lebenslaufItems?: Array<LebenslaufItem>;
     kinds?: Array<Kind>;
     einnahmenKosten?: EinnahmenKosten;
-    steuerdaten?: Array<Steuerdaten>;
+    steuererklaerung?: Array<SteuererklaerungUpdate>;
     steuerdatenTabs?: Array<SteuerdatenTyp>;
     darlehen?: Darlehen;
 }

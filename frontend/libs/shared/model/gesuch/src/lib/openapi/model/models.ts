@@ -141,6 +141,7 @@ export * from './statusprotokollEntry';
 export * from './steuerdaten';
 export * from './steuerdatenTyp';
 export * from './steuerdatenUpdate';
+export * from './steuererklaerungUpdate';
 export * from './stipDecision';
 export * from './stipDecisionText';
 export * from './taetigkeitsart';

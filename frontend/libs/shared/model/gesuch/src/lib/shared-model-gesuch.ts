@@ -37,8 +37,13 @@ export type SharedModelGesuchFormularProps = Exclude<
   'steuerdatenTabs'
 >;
 
+export type SharedModelGesuchFormularPropsWithoutSteuererklaerung = Exclude<
+  SharedModelGesuchFormularProps,
+  'steuererklaerung'
+>;
+
 export type SharedModelGesuchFormularPropsSteuerdatenSteps =
-  | SharedModelGesuchFormularProps
+  | SharedModelGesuchFormularPropsWithoutSteuererklaerung
   | SteuerdatenSteps
   | 'dokuments';
 
