@@ -15,6 +15,8 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
@@ -76,6 +78,7 @@ public class GesuchApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 bearbeitungAbschliessen(),
+                canEinreichedatumAendern(),
                 changeGesuchStatusToBereitFuerBearbeitung(),
                 changeGesuchStatusToInBearbeitung(),
                 changeGesuchStatusToNegativeVerfuegung(),
@@ -84,6 +87,7 @@ public class GesuchApiSpec {
                 changeGesuchStatusToVersendet(),
                 createGesuch(),
                 deleteGesuch(),
+                einreichedatumManuellAendern(),
                 gesuchEinreichen(),
                 gesuchFehlendeDokumenteUebermitteln(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
@@ -107,6 +111,10 @@ public class GesuchApiSpec {
 
     public BearbeitungAbschliessenOper bearbeitungAbschliessen() {
         return new BearbeitungAbschliessenOper(createReqSpec());
+    }
+
+    public CanEinreichedatumAendernOper canEinreichedatumAendern() {
+        return new CanEinreichedatumAendernOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToBereitFuerBearbeitungOper changeGesuchStatusToBereitFuerBearbeitung() {
@@ -139,6 +147,10 @@ public class GesuchApiSpec {
 
     public DeleteGesuchOper deleteGesuch() {
         return new DeleteGesuchOper(createReqSpec());
+    }
+
+    public EinreichedatumManuellAendernOper einreichedatumManuellAendern() {
+        return new EinreichedatumManuellAendernOper(createReqSpec());
     }
 
     public GesuchEinreichenOper gesuchEinreichen() {
@@ -292,6 +304,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public BearbeitungAbschliessenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return EinreichedatumStatusDtoSpec
+     */
+    public static class CanEinreichedatumAendernOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/einreichedatum";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CanEinreichedatumAendernOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/einreichedatum
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/einreichedatum
+         * @param handler handler
+         * @return EinreichedatumStatusDtoSpec
+         */
+        public EinreichedatumStatusDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<EinreichedatumStatusDtoSpec> type = new TypeRef<EinreichedatumStatusDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CanEinreichedatumAendernOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CanEinreichedatumAendernOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CanEinreichedatumAendernOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -886,6 +971,90 @@ public class GesuchApiSpec {
          * @return operation
          */
         public DeleteGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (optional)
+     * return GesuchDtoSpec
+     */
+    public static class EinreichedatumManuellAendernOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/einreichedatum";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public EinreichedatumManuellAendernOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/einreichedatum
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/einreichedatum
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param einreichedatumAendernRequestDtoSpec (EinreichedatumAendernRequestDtoSpec)  (optional)
+         * @return operation
+         */
+        public EinreichedatumManuellAendernOper body(EinreichedatumAendernRequestDtoSpec einreichedatumAendernRequestDtoSpec) {
+            reqSpec.setBody(einreichedatumAendernRequestDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public EinreichedatumManuellAendernOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public EinreichedatumManuellAendernOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public EinreichedatumManuellAendernOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

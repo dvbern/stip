@@ -97,7 +97,7 @@ class GesuchAuthorizerCanDeleteTest {
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository
+            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository, null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -139,7 +139,7 @@ class GesuchAuthorizerCanDeleteTest {
         // arrange
         authorizer = new GesuchAuthorizer(
             benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null
+            null, null, null
         );
         final var uuid = UUID.randomUUID();
         // assert
@@ -152,7 +152,7 @@ class GesuchAuthorizerCanDeleteTest {
         currentBenutzer.setRollen(Set.of());
         final var authorizer = new GesuchAuthorizer(
             benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null
+            null, null, null
         );
         final var uuid = UUID.randomUUID();
         // assert
@@ -166,7 +166,7 @@ class GesuchAuthorizerCanDeleteTest {
         // arrange
         final var authorizer = new GesuchAuthorizer(
             benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null
+            null, null, null
         );
         final var uuid = UUID.randomUUID();
         // assert

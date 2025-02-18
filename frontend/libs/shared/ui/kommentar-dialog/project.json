@@ -2,7 +2,7 @@
   "name": "shared-ui-kommentar-dialog",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ui/kommentar-dialog/src",
-  "prefix": "lib",
+  "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
   "targets": {

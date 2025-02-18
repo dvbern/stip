@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
 
+import ch.dvbern.stip.api.common.util.providers.BetweenTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.GetMonthsBetweenTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.RoundToEndTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.RoundToStartTestArgumentsProvider;
@@ -48,5 +49,18 @@ class DateUtilTest {
     void getMonthsBetweenTest(final LocalDate start, final LocalDate end, final int expected) {
         final var monthsBetween = DateUtil.getMonthsBetween(start, end);
         assertThat(monthsBetween, is(expected));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(BetweenTestArgumentsProvider.class)
+    void betweenTest(
+        final LocalDate left,
+        final LocalDate right,
+        final LocalDate date,
+        final boolean inclusive,
+        final boolean expected
+    ) {
+        final var between = DateUtil.between(left, right, date, inclusive);
+        assertThat(between, is(expected));
     }
 }

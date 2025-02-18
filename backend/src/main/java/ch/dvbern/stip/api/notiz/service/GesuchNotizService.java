@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
@@ -84,6 +85,17 @@ public class GesuchNotizService {
         gesuchNotizRepository.persistAndFlush(notiz);
 
         return gesuchNotizMapper.toDto(notiz);
+    }
+
+    @Transactional
+    public void createGesuchNotiz(final Gesuch gesuch, final String betreff, final String text) {
+        final var notiz = new GesuchNotiz()
+            .setGesuch(gesuch)
+            .setNotizTyp(GesuchNotizTyp.GESUCH_NOTIZ)
+            .setBetreff(betreff)
+            .setText(text);
+
+        gesuchNotizRepository.persistAndFlush(notiz);
     }
 
     @Transactional
