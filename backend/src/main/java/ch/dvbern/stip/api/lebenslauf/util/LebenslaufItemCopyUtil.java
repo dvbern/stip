@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.lebenslauf.util;
 
-import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import lombok.experimental.UtilityClass;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class LebenslaufItemCopyUtil {
