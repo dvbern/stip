@@ -17,23 +17,31 @@
 
 package ch.dvbern.stip.api.steuerdaten.service;
 
-import ch.dvbern.stip.api.common.repo.BaseRepository;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class SteuerdatenRepository implements BaseRepository<Steuerdaten> {
-    private final EntityManager entityManager;
+public class SteuerdatenService {
+    private final GesuchTrancheRepository trancheRepository;
+    private final SteuerdatenMapper steuerdatenMapper;
 
-    // public List<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
-    // final var steuerdaten = QSteuerdaten.steuerdaten;
-    //
-    // return new JPAQueryFactory(entityManager)
-    // .selectFrom(steuerdaten)
-    // .where()
-    //
-    // }
+    public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
+        return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
+    }
+
+    public List<Steuerdaten> updateSteuerdaten(
+        UUID gesuchTrancheId,
+        List<SteuerdatenDto> steuerdatenDtos
+    ) {
+        final var formular = trancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
+        return steuerdatenMapper.map(steuerdatenDtos, formular.getSteuerdaten()).stream().toList();
+    }
 }

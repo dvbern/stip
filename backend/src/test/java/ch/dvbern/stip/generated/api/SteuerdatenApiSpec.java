@@ -13,7 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -86,7 +86,7 @@ public class SteuerdatenApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;SteuerdatenUpdateDtoSpec&gt;
+     * return List&lt;SteuerdatenDtoSpec&gt;
      */
     public static class GetSteuerdatenOper implements Oper {
 
@@ -116,10 +116,10 @@ public class SteuerdatenApiSpec {
         /**
          * GET /steuerdaten/{gesuchTrancheId}
          * @param handler handler
-         * @return List&lt;SteuerdatenUpdateDtoSpec&gt;
+         * @return List&lt;SteuerdatenDtoSpec&gt;
          */
-        public List<SteuerdatenUpdateDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<SteuerdatenUpdateDtoSpec>> type = new TypeRef<List<SteuerdatenUpdateDtoSpec>>(){};
+        public List<SteuerdatenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SteuerdatenDtoSpec>> type = new TypeRef<List<SteuerdatenDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
@@ -160,7 +160,7 @@ public class SteuerdatenApiSpec {
      *
      * @see #gesuchTrancheIdPath  (required)
      * @see #body  (required)
-     * return List&lt;SteuerdatenUpdateDtoSpec&gt;
+     * return List&lt;SteuerdatenDtoSpec&gt;
      */
     public static class UpdateSteuerdatenOper implements Oper {
 
@@ -191,19 +191,19 @@ public class SteuerdatenApiSpec {
         /**
          * PATCH /steuerdaten/{gesuchTrancheId}
          * @param handler handler
-         * @return List&lt;SteuerdatenUpdateDtoSpec&gt;
+         * @return List&lt;SteuerdatenDtoSpec&gt;
          */
-        public List<SteuerdatenUpdateDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<SteuerdatenUpdateDtoSpec>> type = new TypeRef<List<SteuerdatenUpdateDtoSpec>>(){};
+        public List<SteuerdatenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SteuerdatenDtoSpec>> type = new TypeRef<List<SteuerdatenDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param steuerdatenUpdateDtoSpec (List&lt;SteuerdatenUpdateDtoSpec&gt;)  (required)
+         * @param steuerdatenDtoSpec (List&lt;SteuerdatenDtoSpec&gt;)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenOper body(List<SteuerdatenUpdateDtoSpec> steuerdatenUpdateDtoSpec) {
-            reqSpec.setBody(steuerdatenUpdateDtoSpec);
+        public UpdateSteuerdatenOper body(List<SteuerdatenDtoSpec> steuerdatenDtoSpec) {
+            reqSpec.setBody(steuerdatenDtoSpec);
             return this;
         }
 

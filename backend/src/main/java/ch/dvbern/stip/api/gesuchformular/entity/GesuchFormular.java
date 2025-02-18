@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.FamiliensituationPageValidat
 import ch.dvbern.stip.api.gesuchformular.validation.GeschwisterPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
@@ -179,10 +180,15 @@ import org.hibernate.envers.Audited;
         GesuchEinreichenValidationGroup.class
     }
 )
-@SteuerdatenTabsRequiredConstraint(
+@SteuererklaerungTabsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
-        SteuerdatenPageValidation.class
+        SteuererklaerungPageValidation.class
+    }, property = "steuererklaerung"
+)
+@SteuerdatenTabsRequiredConstraint(
+    groups = {
+        GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "steuerdatenTabs"
 )
 @DocumentsAcceptedConstraint(

@@ -1785,7 +1785,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SteuerdatenUpdate'
+                  $ref: '#/components/schemas/Steuerdaten'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1804,7 +1804,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/SteuerdatenUpdate'
+                $ref: '#/components/schemas/Steuerdaten'
         required: true
       tags:
         - Steuerdaten
@@ -1815,7 +1815,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SteuerdatenUpdate'
+                  $ref: '#/components/schemas/Steuerdaten'
           description: Steuerdaten updated
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -4818,7 +4818,7 @@ components:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
-    SteuerdatenUpdate:
+    Steuerdaten:
       title: Root Type for Steuerdaten
       required:
         - steuernKantonGemeinde
@@ -4867,14 +4867,14 @@ components:
           type: integer
         vermoegen:
           type: integer
-    Steuerdaten:
-      title: Root Type for Steuerdaten
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SteuerdatenUpdate'
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
+    # Steuerdaten:
+    #   title: Root Type for Steuerdaten
+    #   type: object
+    #   allOf:
+    #     - $ref: '#/components/schemas/SteuerdatenUpdate'
+    #   properties:
+    #     id:
+    #       $ref: '#/components/schemas/UUID'
     SozialdienstBenutzerBase:
       required:
         - vorname

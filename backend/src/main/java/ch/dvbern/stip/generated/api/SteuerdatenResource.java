@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -23,10 +23,10 @@ public interface SteuerdatenResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    List<SteuerdatenUpdateDto> getSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    List<SteuerdatenDto> getSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    List<SteuerdatenUpdateDto> updateSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<SteuerdatenUpdateDto> steuerdatenUpdateDto);
+    List<SteuerdatenDto> updateSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<SteuerdatenDto> steuerdatenDto);
 }

@@ -18,14 +18,15 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -36,24 +37,25 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
-    private static final Map<GesuchTrancheStatus, Class<?>> statusToValidationGroup =
+    private static final Map<GesuchTrancheStatus, List<Class<?>>> statusToValidationGroups =
         new EnumMap<>(GesuchTrancheStatus.class);
 
     static {
-        statusToValidationGroup.put(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchEinreichenValidationGroup.class);
-        statusToValidationGroup.put(GesuchTrancheStatus.UEBERPRUEFEN, GesuchEinreichenValidationGroup.class);
-        statusToValidationGroup.put(GesuchTrancheStatus.AKZEPTIERT, GesuchEinreichenValidationGroup.class);
+        statusToValidationGroups
+            .put(GesuchTrancheStatus.IN_BEARBEITUNG_GS, List.of(GesuchEinreichenValidationGroup.class));
+        statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
+        statusToValidationGroups.put(
+            GesuchTrancheStatus.AKZEPTIERT,
+            List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
+        );
     }
 
     private final Validator validator;
-    private final GesuchRepository gesuchRepository;
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        final var validationGroup = statusToValidationGroup.getOrDefault(status, null);
-        if (validationGroup != null) {
-            ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroup);
-        }
+        final var validationGroups = statusToValidationGroups.getOrDefault(status, List.of());
+        ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
     }
 
     public void validateGesuchTrancheForEinreichen(final GesuchTranche toValidate) {
