@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import lombok.experimental.UtilityClass;
@@ -32,5 +34,16 @@ public class AbstractFamilieEntityCopyUtil {
         target.setWohnsitz(source.getWohnsitz());
         target.setWohnsitzAnteilMutter(source.getWohnsitzAnteilMutter());
         target.setWohnsitzAnteilVater(source.getWohnsitzAnteilVater());
+    }
+
+    public void doOverrideOfSet(Set<AbstractFamilieEntity> toBeReplaced, Set<AbstractFamilieEntity> replacement) {
+        for (var item : toBeReplaced) {
+            if (replacement.contains(item)) {
+                copy(item, replacement.stream().filter(x -> x.equals(item)).findFirst().get());
+            } else {
+                // new item -> add to list
+                toBeReplaced.add(item);
+            }
+        }
     }
 }
