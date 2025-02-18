@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
@@ -35,6 +36,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -47,13 +49,19 @@ public class AusbildungService {
     private final AusbildungMapper ausbildungMapper;
     private final GesuchService gesuchService;
     private final GesuchsperiodenService gesuchsperiodeService;
+    private final FallService fallService;
     private final Validator validator;
 
     @Transactional
     public AusbildungDto createAusbildung(final AusbildungUpdateDto ausbildungUpdateDto) {
+        if (fallService.hasAktiveAusbildung(ausbildungUpdateDto.getFallId())) {
+            throw new BadRequestException("Cannot create Ausbildung for Fall with Aktive Ausbildung");
+        }
+
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
-        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
+
+        final var violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
