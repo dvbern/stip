@@ -374,11 +374,6 @@ public class GesuchTrancheService {
                 .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
         }
 
-        // gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
-        // for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
-        // gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
-        // }
-
         gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
         if (aenderung.getGesuchFormular().getPartner() != null) {
             aenderung.getGesuchFormular().getPartner().getAdresse().setId(null);

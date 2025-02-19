@@ -20,9 +20,9 @@ package ch.dvbern.stip.api.steuerdaten.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
@@ -39,21 +39,22 @@ import lombok.extern.slf4j.Slf4j;
 public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenService steuerdatenService;
     private final SteuerdatenMapper steuerdatenMapper;
+    private final SteuerdatenAuthorizer steuerdatenAuthorizer;
 
     @Override
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
-    @AllowAll
+    @RolesAllowed(OidcPermissions.GESUCH_READ)
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
+        steuerdatenAuthorizer.canRead(gesuchTrancheId);
         return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
     }
 
     @Override
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
-    @AllowAll
+    @RolesAllowed(OidcPermissions.GESUCH_READ)
     public List<SteuerdatenDto> updateSteuerdaten(
         UUID gesuchTrancheId,
         List<SteuerdatenDto> steuerdatenDto
     ) {
+        steuerdatenAuthorizer.canUpdate(gesuchTrancheId);
         return steuerdatenService.updateSteuerdaten(gesuchTrancheId, steuerdatenDto)
             .stream()
             .map(steuerdatenMapper::toDto)

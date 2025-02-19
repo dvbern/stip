@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -39,7 +38,6 @@ public class SteuerdatenService {
     private final GesuchTrancheRepository trancheRepository;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenRepository steuerdatenRepository;
-    private final BenutzerService benutzerService;
 
     public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
         return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();

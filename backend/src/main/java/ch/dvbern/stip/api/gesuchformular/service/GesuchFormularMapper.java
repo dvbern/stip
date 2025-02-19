@@ -256,7 +256,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
         resetSteuererklaerungTabs(newFormular, targetFormular);
-        // resetSteuerdatenTabs(newFormular, targetFormular);
     }
 
     @AfterMapping
@@ -506,40 +505,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 );
         }
     }
-
-    // void resetSteuerdatenTabs(
-    // final GesuchFormularUpdateDto newFormular,
-    // final GesuchFormular targetFormular
-    // ) {
-    // if (newFormular.getSteuerdaten() == null || newFormular.getSteuerdaten().isEmpty()) {
-    // return;
-    // }
-    //
-    // if (newFormular.getFamiliensituation() == null) {
-    // newFormular.getSteuerdaten().clear();
-    // } else {
-    // if (targetFormular.getFamiliensituation() == null) {
-    // return;
-    // }
-    //
-    // final var targetFamsit = familiensituationMapper.partialUpdate(
-    // newFormular.getFamiliensituation(),
-    // targetFormular.getFamiliensituation()
-    // );
-    //
-    // final var requiredTabs = new HashSet<>(
-    // steuerdatenTabBerechnungsService.calculateTabs(targetFamsit)
-    // );
-    //
-    // newFormular.getSteuerdaten()
-    // .removeAll(
-    // newFormular.getSteuerdaten()
-    // .stream()
-    // .filter(newTab -> !requiredTabs.contains(newTab.getSteuerdatenTyp()))
-    // .toList()
-    // );
-    // }
-    // }
 
     void resetSteuerdatenAfterUpdate(
         final GesuchFormular gesuchFormular

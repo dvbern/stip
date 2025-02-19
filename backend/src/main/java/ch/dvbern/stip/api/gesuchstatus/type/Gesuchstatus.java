@@ -80,10 +80,10 @@ public enum Gesuchstatus {
             Gesuchstatus.VERSENDET,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.IN_FREIGABE,
-            // Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
+            Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH,
-            // Gesuchstatus.GESUCH_ABGELEHNT,
+            Gesuchstatus.GESUCH_ABGELEHNT,
             Gesuchstatus.NEGATIVE_VERFUEGUNG
         )
     );
