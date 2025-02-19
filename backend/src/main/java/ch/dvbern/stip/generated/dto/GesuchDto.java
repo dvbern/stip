@@ -34,7 +34,7 @@ public class GesuchDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
-  private @Valid String einreichedatum;
+  private @Valid LocalDate einreichedatum;
   private @Valid DelegierungDto delegierung;
 
   /**
@@ -229,19 +229,19 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
-  public GesuchDto einreichedatum(String einreichedatum) {
+  public GesuchDto einreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
     return this;
   }
 
   
   @JsonProperty("einreichedatum")
-  public String getEinreichedatum() {
+  public LocalDate getEinreichedatum() {
     return einreichedatum;
   }
 
   @JsonProperty("einreichedatum")
-  public void setEinreichedatum(String einreichedatum) {
+  public void setEinreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
   }
 

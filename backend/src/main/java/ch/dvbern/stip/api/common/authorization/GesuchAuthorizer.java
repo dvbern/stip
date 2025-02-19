@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -46,6 +47,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchStatusService gesuchStatusService;
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
+    private final GesuchService gesuchService;
 
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
@@ -184,6 +186,16 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             () -> isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB;
 
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
+            return;
+        }
+
+        throw new UnauthorizedException();
+    }
+
+    @Transactional
+    public void canUpdateEinreichedatum(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuchService.canUpdateEinreichedatum(gesuch)) {
             return;
         }
 

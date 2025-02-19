@@ -87,7 +87,7 @@ public class GesuchWithChangesDtoSpec {
   private GesuchTrancheDtoSpec gesuchTrancheToWorkWith;
 
   public static final String JSON_PROPERTY_EINREICHEDATUM = "einreichedatum";
-  private String einreichedatum;
+  private LocalDate einreichedatum;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
   private DelegierungDtoSpec delegierung;
@@ -389,7 +389,7 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
-  public GesuchWithChangesDtoSpec einreichedatum(String einreichedatum) {
+  public GesuchWithChangesDtoSpec einreichedatum(LocalDate einreichedatum) {
     
     this.einreichedatum = einreichedatum;
     return this;
@@ -403,14 +403,14 @@ public class GesuchWithChangesDtoSpec {
   @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getEinreichedatum() {
+  public LocalDate getEinreichedatum() {
     return einreichedatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinreichedatum(String einreichedatum) {
+  public void setEinreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
   }
 

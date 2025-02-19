@@ -40,6 +40,8 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -48,13 +50,13 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -62,7 +64,6 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -70,6 +71,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
@@ -79,6 +81,8 @@ import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -101,6 +105,7 @@ import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -848,5 +853,45 @@ public class GesuchService {
                 GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
             );
         }
+    }
+
+    @Transactional
+    public GesuchDto einreichedatumManuellAendern(
+        final UUID gesuchId,
+        final EinreichedatumAendernRequestDto dto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var gesuchsperiode = gesuch.getGesuchsperiode();
+        final var newEinreichedatum = dto.getNewEinreichedatum();
+        final var between = DateUtil.between(
+            gesuchsperiode.getGesuchsperiodeStart(),
+            gesuchsperiode.getGesuchsperiodeStopp(),
+            newEinreichedatum,
+            true
+        );
+
+        if (!between) {
+            throw new BadRequestException("New einreichedatum is outside of the Gesuchsperiode");
+        }
+
+        gesuch.setEinreichedatum(dto.getNewEinreichedatum());
+        gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
+
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public EinreichedatumStatusDto canUpdateEinreichedatum(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return new EinreichedatumStatusDto(canUpdateEinreichedatum(gesuch));
+    }
+
+    @Transactional
+    public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
     }
 }

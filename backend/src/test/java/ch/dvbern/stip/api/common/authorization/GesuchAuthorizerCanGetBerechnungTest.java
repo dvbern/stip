@@ -94,7 +94,8 @@ class GesuchAuthorizerCanGetBerechnungTest {
             gesuchTrancheRepository,
             gesuchStatusService,
             fallRepository,
-            sozialdienstService
+            sozialdienstService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);

@@ -90,7 +90,8 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchTrancheRepository,
             gesuchStatusService,
             fallRepository,
-            sozialdienstService
+            sozialdienstService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -105,6 +106,7 @@ class GesuchAuthorizerCanDeleteTest {
     void canUpdateOwnTest() {
         // arrange
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canUpdate(uuid));
     }
@@ -113,6 +115,7 @@ class GesuchAuthorizerCanDeleteTest {
     void canDeleteOwnTest() {
         // arrange
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
@@ -122,6 +125,7 @@ class GesuchAuthorizerCanDeleteTest {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
+
         // assert
         assertThrows(UnauthorizedException.class, () -> {
             authorizer.canDelete(uuid);
@@ -131,7 +135,9 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
+        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
