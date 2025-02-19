@@ -236,8 +236,17 @@ public class TestUtil {
         final GesuchApiSpec gesuchApiSpec
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
-        final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
-        final var gesuche = gesuchApiSpec.getGesucheGs()
+        var gesuche = getGesuche(gesuchApiSpec);
+
+        if (gesuche.length == 0) {
+            createAusbildung(ausbildungApiSpec, fall.getId());
+        }
+
+        return getGesuche(gesuchApiSpec)[0];
+    }
+
+    public static GesuchDtoSpec[] getGesuche(final GesuchApiSpec gesuchApiSpec) {
+        return gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -245,8 +254,6 @@ public class TestUtil {
             .extract()
             .body()
             .as(GesuchDtoSpec[].class);
-
-        return gesuche[0];
     }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
