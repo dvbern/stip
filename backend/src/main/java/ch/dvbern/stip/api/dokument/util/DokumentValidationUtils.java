@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -40,7 +41,7 @@ public class DokumentValidationUtils {
         final var existingByCustomDokumentTypId =
             DokumentValidationUtils.getExistingGesuchDokumentsOfCustomDokumentType(tranche.getGesuchFormular())
                 .stream()
-                .map(x -> x.getId())
+                .map(AbstractEntity::getId)
                 .toList();
 
         required.forEach(req -> {
@@ -58,7 +59,11 @@ public class DokumentValidationUtils {
         ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
         customProducers.stream()
             .map(producer -> producer.getRequiredDocuments(tranche))
-            .forEach(x -> customDokumentTypes.addAll(x.getValue()));
+            .forEach(pair -> {
+                if (pair != null) {
+                    customDokumentTypes.addAll(pair.getValue());
+                }
+            });
         return customDokumentTypes;
     }
 
