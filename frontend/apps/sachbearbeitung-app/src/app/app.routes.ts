@@ -5,6 +5,13 @@ import { hasRoles, isAllowedTo } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-infos-admin',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/infos-admin').then(
+        (m) => m.sachbearbeitungAppFeatureInfosAdminRoutes,
+      ),
+  },
+  {
     path: 'unauthorized',
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/unauthorized').then(

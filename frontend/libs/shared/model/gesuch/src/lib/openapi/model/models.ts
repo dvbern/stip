@@ -46,6 +46,8 @@ export * from './dokumenteToUpload';
 export * from './dokumentstatus';
 export * from './einnahmenKosten';
 export * from './einnahmenKostenUpdate';
+export * from './einreichedatumAendernRequest';
+export * from './einreichedatumStatus';
 export * from './eltern';
 export * from './elternAbwesenheitsGrund';
 export * from './elternTyp';
