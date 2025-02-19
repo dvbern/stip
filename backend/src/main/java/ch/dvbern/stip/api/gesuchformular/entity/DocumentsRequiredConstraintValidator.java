@@ -99,13 +99,11 @@ public class DocumentsRequiredConstraintValidator
         if (gesuchDokumente == null) {
             return logAndReturn.apply("GesuchTranche->GesuchDokumente");
         }
-        // todo: gesuchstatus fehlende dokumente && not accepted
+
         if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
             return gesuchDokumente.stream()
                 .filter(
-                    gesuchDokument ->
-                    // !gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND) &&
-                    !gesuchDokument.getDokumente().isEmpty()
+                    gesuchDokument -> !gesuchDokument.getDokumente().isEmpty()
                 )
                 .map(GesuchDokument::getDokumentTyp)
                 .collect(Collectors.toSet());
