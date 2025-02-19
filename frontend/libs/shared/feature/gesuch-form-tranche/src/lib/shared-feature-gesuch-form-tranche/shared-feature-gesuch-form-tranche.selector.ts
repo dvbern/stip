@@ -13,10 +13,20 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   selectSharedDataAccessConfigsView,
   (gesuchsView, { cache }, config) => {
     const periode = cache.gesuch?.gesuchsperiode;
+    const einreichedatum = cache.gesuch?.einreichedatum;
+    const minEinreichedatum = cache.gesuch?.gesuchTrancheToWorkWith?.gueltigAb;
     return {
       isEditingAenderung: gesuchsView.isEditingAenderung,
       loading: gesuchsView.loading,
       tranche: cache.gesuch?.gesuchTrancheToWorkWith,
+      einreichedatum:
+        minEinreichedatum && einreichedatum
+          ? {
+              current: einreichedatum,
+              min: minEinreichedatum,
+              max: new Date().toISOString(),
+            }
+          : undefined,
       periode: periode
         ? {
             semester:

@@ -15,6 +15,8 @@ import {
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
 import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
+  EinreichedatumAendernRequest,
+  EinreichedatumStatus,
   GesuchService,
   GesuchTrancheService,
   SharedModelGesuchFormular,
@@ -47,6 +49,8 @@ type EinreichenState = {
   einreichenValidationResult: CachedRemoteData<ValidationReport>;
   einreichungsResult: RemoteData<unknown>;
   trancheEinreichenResult: RemoteData<unknown>;
+  einreichedatumAendernStatus: CachedRemoteData<EinreichedatumStatus>;
+  einreichedatumAenderungsResult: RemoteData<unknown>;
 };
 
 const initialState: EinreichenState = {
@@ -54,6 +58,8 @@ const initialState: EinreichenState = {
   einreichenValidationResult: initial(),
   einreichungsResult: initial(),
   trancheEinreichenResult: initial(),
+  einreichedatumAendernStatus: initial(),
+  einreichedatumAenderungsResult: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -261,6 +267,60 @@ export class EinreichenStore extends signalStore(
             handleApiResponse(
               (einreichen) =>
                 patchState(this, { trancheEinreichenResult: einreichen }),
+              {
+                onSuccess: () => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.loadGesuch(),
+                  );
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  checkEinreichedatumAendern$ = rxMethod<{ gesuchId: string }>(
+    pipe(
+      tap(() =>
+        patchState(this, (state) => ({
+          einreichedatumAendernStatus: cachedPending(
+            state.einreichedatumAendernStatus,
+          ),
+        })),
+      ),
+      switchMap(({ gesuchId }) =>
+        this.gesuchService
+          .canEinreichedatumAendern$({ gesuchId })
+          .pipe(
+            handleApiResponse((einreichedatumAendernStatus) =>
+              patchState(this, { einreichedatumAendernStatus }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  einreichedatumManuellAendern$ = rxMethod<{
+    gesuchId: string;
+    change: EinreichedatumAendernRequest;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          einreichedatumAenderungsResult: pending(),
+        }));
+      }),
+      switchMap(({ gesuchId, change }) =>
+        this.gesuchService
+          .einreichedatumManuellAendern$({
+            gesuchId,
+            einreichedatumAendernRequest: change,
+          })
+          .pipe(
+            handleApiResponse(
+              (einreichedatumAenderungsResult) =>
+                patchState(this, { einreichedatumAenderungsResult }),
               {
                 onSuccess: () => {
                   this.store.dispatch(
