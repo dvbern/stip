@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,6 +33,7 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 
 @Component({
   standalone: true,
@@ -58,6 +60,7 @@ export class SozialdienstMitarbeiterDetailComponent
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private document = inject(DOCUMENT);
   private formBuilder = inject(NonNullableFormBuilder);
 
   store = inject(SozialdienstStore);
@@ -144,7 +147,7 @@ export class SozialdienstMitarbeiterDetailComponent
     this.store.createSozialdienstBenutzer$({
       sozialdienstBenutzerCreate: {
         ...values,
-        redirectUri: '',
+        redirectUri: getCurrentUrl(this.document),
       },
       onAfterSave: (sozialdienstBenutzerId) => {
         this.router.navigate(['..', 'edit', sozialdienstBenutzerId], {
