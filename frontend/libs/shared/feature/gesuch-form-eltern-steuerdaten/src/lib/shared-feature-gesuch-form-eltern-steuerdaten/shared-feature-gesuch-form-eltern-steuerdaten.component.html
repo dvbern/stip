@@ -4,12 +4,58 @@
 } @else {
   @let typ = stepSig().type;
   @let changes = view.listChanges?.changesByIdentifier?.[typ];
+
+  <div>{{ typ }}</div>
+
   <form
     [formGroup]="form"
     novalidate
     class="mt-4"
+    data-testid="form-eltern-steuererklaerung-form"
+    [dvSharedUiFormReadonly]="view.readonly"
+  >
+    <!-- steuererklaerungInBern -->
+    <mat-radio-group
+      class="col-12"
+      formControlName="steuererklaerungInBern"
+      data-testid="form-eltern-steuerdaten-steuererklaerungInBern"
+      dvSharedUiFormField
+    >
+      <label>{{ 'shared.form.eltern-steuerdaten.steuererklaerungInBern.label' | translate }}</label>
+      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+        <div class="d-flex flex-column">
+          <mat-radio-button data-testid="ja" [value]="true">{{
+            'shared.form.eltern-steuerdaten.steuererklaerungInBern.true' | translate
+          }}</mat-radio-button>
+          <mat-radio-button data-testid="nein" [value]="false">{{
+            'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | translate
+          }}</mat-radio-button>
+        </div>
+      </div>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-radio-group>
+
+    <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+      @if (!view.readonly) {
+        <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">
+          {{ 'shared.form.save-and-continue' | translate }}
+        </button>
+      } @else {
+        <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+          {{ 'shared.form.gonext' | translate }}
+        </button>
+      }
+    </dv-shared-ui-step-form-buttons>
+  </form>
+
+  <form
+    *dvIfSachbearbeiter
+    [formGroup]="steuerdatenForm"
+    novalidate
+    class="mt-4"
     data-testid="form-eltern-steuerdaten-form"
-    (ngSubmit)="handleSave()"
     [dvSharedUiFormReadonly]="view.readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
   >
@@ -100,11 +146,12 @@
     </div>
 
     @if (
-      !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
+      !hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.saeule3a) ||
+      !hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.saeule2)
     ) {
       <div class="row g-4 my-2">
         <!-- Saeule 3a-->
-        @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
+        @if (!hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.saeule3a)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | translate }}</mat-label>
             <input
@@ -121,7 +168,7 @@
           </mat-form-field>
         }
         <!-- Saeule 2-->
-        @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
+        @if (!hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.saeule2)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | translate }}</mat-label>
             <input
@@ -350,12 +397,12 @@
     </div>
 
     @if (
-      !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
-      !hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)
+      !hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.steuerjahr) ||
+      !hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.veranlagungsCode)
     ) {
       <div class="row g-4 my-2">
         <!-- Steuerjahr-->
-        @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
+        @if (!hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.steuerjahr)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | translate }}</mat-label>
             <input
@@ -378,7 +425,7 @@
           </mat-form-field>
         }
         <!-- VeranlagungsCode-->
-        @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)) {
+        @if (!hiddenFieldSet.valuesSig().has(steuerdatenForm.controls.veranlagungsCode)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
             <input
@@ -402,7 +449,12 @@
     }
     <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
-        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+        <button
+          type="submit"
+          (click)="handleSaveSachbearbeiter()"
+          class="btn btn-primary"
+          data-testid="button-save-continue"
+        >
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
       } @else {

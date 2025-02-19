@@ -446,6 +446,9 @@
   "shared.eltern-steuer.title.VATER": "Steuerdaten für Vater",
   "shared.form.shared.section.einnahmen": "Einnahmen",
 
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.label": "Steuererklärung im Kanton Bern?",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.true": "Ja",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.false": "Nein",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total der Einkünfte",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle": "Total der Einkünfte",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.info": "Geben Sie bitte das Total aller Einkünfte (Löhne, Arbeitslosengelder, Renten, Miet- und Zinserträge usw.) an.",
