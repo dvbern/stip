@@ -124,6 +124,8 @@
   "shared.dialog.gesuch-aenderung.ABGELEHNT.success": "Die Änderung wurde erfolgreich abgelehnt",
   "shared.dialog.gesuch-aenderung.MANUELLE_AENDERUNG.success": "Die Anpassungen der Änderung müssen nun manuell vorgenommen werden",
   "shared.dialog.gesuch.tranche.create.success": "Die Tranche wurde erfolgreich erstellt",
+  "shared.dialog.einreichedatum-aendern.title": "Einreichedatum ändern",
+  "shared.dialog.einreichedatum-aendern.einreichedatum.label": "Neues Einreichedatum",
   "shared.dokumente.title": "Dokumente",
   "shared.dokumente.reject.title": "Ablehnung eines Dokuments",
   "shared.dokumente.reject.message": "Um ein Dokument abzulehnen, müssen Sie eine Begründung angeben.",
