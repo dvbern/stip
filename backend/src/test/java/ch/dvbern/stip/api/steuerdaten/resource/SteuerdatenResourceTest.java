@@ -15,17 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.buchhaltung.resource;
+package ch.dvbern.stip.api.steuerdaten.resource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.api.common.i18n.translations.TL;
-import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -34,18 +30,14 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
-import ch.dvbern.stip.generated.api.BuchhaltungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
-import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
-import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -60,10 +52,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.oneOf;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -73,17 +62,12 @@ import static org.hamcrest.Matchers.oneOf;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class BuchhaltungResourceTest {
-    private final BuchhaltungApiSpec buchhaltungApiSpec = BuchhaltungApiSpec.buchhaltung(RequestSpecUtil.quarkusSpec());
+public class SteuerdatenResourceTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
-        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
-
-    private static final String ERSTGESUCH_TL_KEY = "stip.verfuegung.buchhaltung.erstgesuch";
 
     private GesuchDtoSpec gesuch;
 
@@ -148,80 +132,45 @@ class BuchhaltungResourceTest {
     @Test
     @TestAsSachbearbeiter
     @Order(6)
-    void gesuchDokumenteAkzeptieren() {
-        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumente()
+    void gesuchAddSteuerdatenBadType() {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.MUTTER);
+        final var validationReport = steuerdatenApiSpec.updateSteuerdaten()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(List.of(steuerdatenUpdateDto))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode())
+            .statusCode(Status.BAD_REQUEST.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
-
-        for (var dokument : gesuchdokuments) {
-            dokumentApiSpec.gesuchDokumentAkzeptieren()
-                .gesuchDokumentIdPath(dokument.getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.NO_CONTENT.getStatusCode());
-        }
-        gesuchApiSpec.bearbeitungAbschliessen()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .as(ValidationReportDtoSpec.class);
+        assertThat(
+            validationReport.getValidationErrors().get(0).getMessageTemplate(),
+            equalTo("{jakarta.validation.constraints.steuerdaten.tab.invalid.message}")
+        );
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(7)
-    void gesuchVerfuegen() {
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+    void gesuchAddSteuerdatenBadYear() {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenUpdateDto.setSteuerjahr(2099);
+        final var validationReport = steuerdatenApiSpec.updateSteuerdaten()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(List.of(steuerdatenUpdateDto))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(8)
-    void getBuchhaltung() {
-        final var buchhaltungEntrys = Arrays.stream(
-            buchhaltungApiSpec.getBuchhaltungEntrys()
-                .gesuchIdPath(gesuch.getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(
-                    BuchhaltungEntryDtoSpec[].class
-                )
-        ).toList();
-
-        assertThat(buchhaltungEntrys.size(), is(1));
-        assertThat(buchhaltungEntrys.get(0).getBuchhaltungType(), equalTo(BuchhaltungTypeDtoSpec.STIPENDIUM));
-        assertThat(buchhaltungEntrys.get(0).getSaldo(), greaterThan(0));
-        assertThat(buchhaltungEntrys.get(0).getSaldoAenderung(), greaterThan(0));
-        assertThat(buchhaltungEntrys.get(0).getSaldo(), equalTo(buchhaltungEntrys.get(0).getSaldoAenderung()));
-        assertThat(buchhaltungEntrys.get(0).getRueckforderung(), is(nullValue()));
-        assertThat(buchhaltungEntrys.get(0).getAuszahlung(), is(nullValue()));
-        assertThat(buchhaltungEntrys.get(0).getStipendienBetrag(), greaterThan(0));
-
-        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.DE);
-
+            .statusCode(Status.BAD_REQUEST.getStatusCode())
+            .extract()
+            .body()
+            .as(ValidationReportDtoSpec.class);
         assertThat(
-            buchhaltungEntrys.get(0).getComment(),
-            oneOf(
-                TLProducer.defaultBundle().forAppLanguage(AppLanguages.DE).translate(ERSTGESUCH_TL_KEY),
-                TLProducer.defaultBundle().forAppLanguage(AppLanguages.FR).translate(ERSTGESUCH_TL_KEY)
-            )
+            validationReport.getValidationErrors().get(0).getMessageTemplate(),
+            equalTo("{jakarta.validation.constraints.steuerdaten.steuerjahr.invalid.message}")
         );
     }
 
@@ -232,5 +181,4 @@ class BuchhaltungResourceTest {
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
-
 }
