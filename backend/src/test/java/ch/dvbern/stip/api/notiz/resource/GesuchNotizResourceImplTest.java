@@ -92,6 +92,7 @@ class GesuchNotizResourceImplTest {
     @TestAsSachbearbeiter
     @Order(2)
     void notizErstellen() {
+        // TODO KSTIP-2005: Create a second Gesuch
         // create notiz for gesuch1
         var gesuchNotizCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchNotizCreateDto.setGesuchId(gesuch.getId());
