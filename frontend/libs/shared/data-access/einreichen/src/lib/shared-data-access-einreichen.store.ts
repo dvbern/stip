@@ -111,6 +111,17 @@ export class EinreichenStore extends signalStore(
     };
   });
 
+  invalidFormularControlsSig = computed(() => {
+    const validationReport = this.validationResult.data();
+    return validationReport?.validationErrors
+      .filter((error) => error.propertyPath && !isSpecialValidationError(error))
+      .map(
+        (error) =>
+          error.messageTemplate.match(/([^.]+)\.(invalid|required)\./)?.[1],
+      )
+      .filter(isDefined);
+  });
+
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
     const { trancheSetting } = this.gesuchViewSig();

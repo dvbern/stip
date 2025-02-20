@@ -17,20 +17,41 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenVermoegenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenVermoegenRequiredConstraint, GesuchFormular> {
+    private String property = "";
+
     @Override
-    public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
+    public void initialize(EinnahmenKostenVermoegenRequiredConstraint constraintAnnotation) {
+        property = constraintAnnotation.property();
+    }
+
+    @Override
+    public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
         if (gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
+        final var hasVermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
         if (GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)) {
-            return gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
+            if (!hasVermoegen) {
+                return GesuchValidatorUtil.addProperty(
+                    context,
+                    property
+                );
+            }
+        } else {
+            if (hasVermoegen) {
+                return GesuchValidatorUtil.addProperty(
+                    context,
+                    property
+                );
+            }
         }
-        return gesuchFormular.getEinnahmenKosten().getVermoegen() == null;
+        return true;
     }
 }
