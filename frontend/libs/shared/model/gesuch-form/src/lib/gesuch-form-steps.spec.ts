@@ -60,9 +60,11 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           PARTNER,
+          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
+              status: 'IN_BEARBEITUNG_GS',
               gesuchFormular: {
                 personInAusbildung: {
                   zivilstand,
@@ -82,9 +84,11 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           ELTERN,
+          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
+              status: 'IN_BEARBEITUNG_GS',
               gesuchFormular: {
                 familiensituation: {
                   werZahltAlimente,

@@ -38,7 +38,7 @@ export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
         gesuchsView.gesuchFormular,
       ),
       readonly: gesuchsView.readonly,
-      gesuchPermissions: gesuchsView.gesuchPermissions,
+      permissions: gesuchsView.permissions,
     };
   },
 );

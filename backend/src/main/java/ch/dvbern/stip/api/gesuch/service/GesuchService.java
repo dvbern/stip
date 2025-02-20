@@ -77,6 +77,7 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -146,6 +147,7 @@ public class GesuchService {
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
+    private final ZuordnungService zuordnungService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
@@ -329,7 +331,7 @@ public class GesuchService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         if (updatePia != null) {
-            szsWorker.queueZuweisung(gesuch, tenantId);
+            zuordnungService.updateZuordnungOnGesuch(gesuch);
         }
     }
 

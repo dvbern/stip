@@ -1,5 +1,10 @@
 import { AppType } from '@dv/shared/model/config';
-import { GesuchTrancheStatus, Gesuchstatus } from '@dv/shared/model/gesuch';
+import {
+  GesuchTrancheStatus,
+  GesuchUrlType,
+  Gesuchstatus,
+  SharedModelGesuch,
+} from '@dv/shared/model/gesuch';
 import { capitalized } from '@dv/shared/model/type-util';
 
 const Permissions = {
@@ -93,7 +98,7 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'W    ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'W D  ', [sb]: '     ' },
   UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W    ' },
   AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
   ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
@@ -102,6 +107,24 @@ export const trancheReadWritestatusByAppType = {
   GesuchTrancheStatus,
   Record<AppType, PermissionFlags>
 >;
+
+export const preparePermissions = (
+  trancheTyp: GesuchUrlType | null,
+  gesuch: SharedModelGesuch | null,
+  appType: AppType | undefined,
+) => {
+  if (!gesuch || !appType) return { readonly: false, permissions: {} };
+  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
+  const tranchePermissions = getTranchePermissions(gesuch, appType);
+  const permissions =
+    trancheTyp === 'AENDERUNG' ? tranchePermissions : gesuchPermissions;
+  const canWrite = permissions.canWrite ?? true;
+
+  return {
+    readonly: trancheTyp === 'INITIAL' || !canWrite,
+    permissions,
+  };
+};
 
 /**
  * Get the permissions for the gesuch based on the status and the app type
