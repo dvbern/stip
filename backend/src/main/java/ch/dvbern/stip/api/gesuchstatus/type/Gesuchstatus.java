@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.gesuchstatus.type;
 
-import lombok.Getter;
-
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
+
+import lombok.Getter;
 
 @Getter
 public enum Gesuchstatus {
