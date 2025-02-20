@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -39,6 +35,10 @@ import io.quarkus.security.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -93,7 +93,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     }
 
     @Test
-    void canDeleteTypShouldFail() {
+    void canDeleteTypShouldFailAsAdmin() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
@@ -105,7 +105,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     }
 
     @Test
-    void canDeleteTypShouldSuccess() {
+    void canDeleteTypShouldSuccessAsSB() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
