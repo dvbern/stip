@@ -37,11 +37,11 @@ public class DokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
     private final Instance<DokumentstatusChangeHandler> handlers;
 
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchAndType(
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchDokumentId(
         UUID gesuchDokumentId
     ) {
         return dokumentKommentarService
-            .getAllKommentareForGesuchTrancheIdAndDokumentTyp(gesuchDokumentId);
+            .getAllKommentareForGesuchDokument(gesuchDokumentId);
     }
 
     public void triggerStatusChangeNoComment(

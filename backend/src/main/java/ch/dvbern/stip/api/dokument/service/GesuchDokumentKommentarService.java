@@ -69,7 +69,7 @@ public class GesuchDokumentKommentarService {
     }
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchTrancheIdAndDokumentTyp(
+    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokument(
         final UUID gesuchDokumentId
     ) {
         final var gesuchDokumentKommentars =
