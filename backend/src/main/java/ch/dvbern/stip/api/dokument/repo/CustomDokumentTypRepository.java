@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
-import java.util.List;
-
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +25,4 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class CustomDokumentTypRepository implements BaseRepository<CustomDokumentTyp> {
-    public List<CustomDokumentTyp> getAll() {
-        return findAll().stream().toList();
-    }
 }
