@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.dokument;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -49,9 +47,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.util.UUID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -63,10 +62,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-
-    public GesuchApiSpec getGesuchApiSpec() {
-        return gesuchApiSpec;
-    }
 
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
@@ -156,7 +151,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(result.getValue().getCustomDokumentTyp(), notNullValue());
+        assertThat(result.getValue().getCustomDokumentTyp().getType(), is("test"));
     }
 
     // testAsSB
