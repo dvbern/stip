@@ -173,9 +173,36 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     this.viewSig,
   );
 
+  private createSteuerDatenEffect() {
+    const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
+
+    if (isSachbearbeitungApp) {
+      effect(
+        () => {
+          const { trancheId: gesuchTrancheId } = this.viewSig();
+          if (!gesuchTrancheId) return;
+          this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
+        },
+        { allowSignalWrites: true },
+      );
+      effect(() => {
+        const steuerdaten = this.originalSteuerdatenSig();
+
+        // if (steuerdaten) {
+        //   this.form.patchValue({
+        //     ...steuerdaten,
+        //     arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
+        //     ...this.numberConverter.toString(steuerdaten),
+        //   });
+        // }
+      });
+    }
+  }
+
   constructor() {
     this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
 
+    this.createSteuerDatenEffect();
     this.steuerjahrValidation.createEffect();
 
     // betrifft sachbearbeiter
@@ -204,15 +231,12 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     );
 
     effect(() => {
-      const steuerdaten = this.originalSteuerdatenSig();
-
-      // if (steuerdaten) {
-      //   this.form.patchValue({
-      //     ...steuerdaten,
-      //     arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
-      //     ...this.numberConverter.toString(steuerdaten),
-      //   });
-      // }
+      const steuererklaerung = this.originalSteuererklaerungSig();
+      if (steuererklaerung) {
+        this.form.patchValue({
+          steuererklaerungInBern: steuererklaerung.steuererklaerungInBern,
+        });
+      }
     });
   }
 
