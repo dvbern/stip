@@ -25,6 +25,7 @@ import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
@@ -106,6 +107,7 @@ const MEDIUM_AGE_ADULT = 30;
 export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
@@ -185,6 +187,10 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     effect(
       () => {
         const { gesuchFormular } = this.viewSig();

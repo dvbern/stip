@@ -31,6 +31,7 @@ import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCacheView,
@@ -108,6 +109,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private einreichenStore = inject(EinreichenStore);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private languageSig = this.store.selectSignal(selectLanguage);
   private gesuchViewSig = this.store.selectSignal(
@@ -250,6 +252,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.ausbildungsstatteStore.loadAusbildungsstaetten$();
 
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     const controls = this.form.controls;
 
     // abhaengige Validierung zuruecksetzen on valueChanges

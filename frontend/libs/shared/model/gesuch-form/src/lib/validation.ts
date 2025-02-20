@@ -48,14 +48,6 @@ export const SPECIAL_VALIDATION_ERRORS: Record<
     validationErrorKey: 'shared.gesuch.validation.wohnsitz.message',
     linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
   }),
-  '{jakarta.validation.constraints.einnahmen.kosten.vermoegen.invalid.value.message}':
-    () => ({
-      step: gesuchFormSteps.EINNAHMEN_KOSTEN,
-      field: 'vermoegen',
-      fieldErrorKey: 'shared.form.error.required',
-      validationErrorKey: 'shared.form.error.required',
-      linkKey: 'shared.gesuch.validation.link.einnahmenKosten',
-    }),
 };
 
 export const isSpecialValidationError = (error: {

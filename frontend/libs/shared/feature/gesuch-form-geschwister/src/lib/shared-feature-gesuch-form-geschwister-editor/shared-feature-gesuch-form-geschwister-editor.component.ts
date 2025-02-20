@@ -99,6 +99,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private einreichenStore = inject(EinreichenStore);
 
   geschwisterSig = input.required<Partial<GeschwisterUpdate>>({
     alias: 'geschwister',
@@ -118,7 +119,6 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-  einreichenStore = inject(EinreichenStore);
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
 
@@ -177,6 +177,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       this.closeTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
 
     effect(
       () => {

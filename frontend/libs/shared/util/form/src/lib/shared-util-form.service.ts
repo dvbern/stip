@@ -3,6 +3,8 @@ import {
   ApplicationRef,
   ElementRef,
   Injectable,
+  Signal,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -277,25 +279,23 @@ export class SharedUtilFormService {
       : toSignal<R>(control.valueChanges);
   }
 
-  markControlAsTouchedIfValidationFails<T extends FormGroup>(
+  observeInvalidFieldsAndMarkControls<T extends FormGroup>(
+    validationErrorsSig: Signal<string[] | undefined>,
     form: T,
-    expectedFields: KeysOfForm<T>[],
-    specialValidationErrors?: SpecialValidationError[],
   ) {
-    if (!specialValidationErrors || specialValidationErrors.length === 0) {
-      return;
-    }
-
-    specialValidationErrors.forEach((error) => {
-      const field = error.field;
-      if (
-        expectedFields.findIndex((f) => f === field) >= 0 &&
-        field in form.controls
-      ) {
-        const control = form.get(field);
-
-        control?.markAllAsTouched();
+    effect(() => {
+      const validationErrors = validationErrorsSig();
+      if (!validationErrors || validationErrors.length === 0) {
+        return;
       }
+
+      validationErrors.forEach((field) => {
+        if (field in form.controls) {
+          const control = form.get(field);
+
+          control?.markAllAsTouched();
+        }
+      });
     });
   }
 

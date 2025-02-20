@@ -402,6 +402,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     effect(
       () => {
         this.gotReenabledSig();
@@ -497,22 +501,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             veranlagungsCode: einnahmenKosten.veranlagungsCode,
             steuerjahr: einnahmenKosten.steuerjahr,
           });
-        } else {
-          this.form.reset();
         }
       },
       { allowSignalWrites: true },
     );
-
-    effect(() => {
-      const { invalidFormularProps } = this.einreichenStore.validationViewSig();
-
-      this.formUtils.markControlAsTouchedIfValidationFails(
-        this.form,
-        ['vermoegen'],
-        invalidFormularProps.specialValidationErrors,
-      );
-    });
   }
 
   ngOnInit() {
