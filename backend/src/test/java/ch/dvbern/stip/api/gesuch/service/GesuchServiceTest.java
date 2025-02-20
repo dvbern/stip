@@ -17,6 +17,18 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -95,18 +107,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
@@ -1472,7 +1472,7 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
-        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        assertDoesNotThrow(() -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId()));
     }
 
     @Description("gesuchFehlendeDokumenteUebermitteln should also handle custom documents in state AUSSTEHEND")
