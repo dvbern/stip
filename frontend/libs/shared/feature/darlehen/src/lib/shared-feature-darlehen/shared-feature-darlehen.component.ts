@@ -24,6 +24,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import { DARLEHEN } from '@dv/shared/model/gesuch-form';
@@ -81,6 +82,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private einreichenStore = inject(EinreichenStore);
   private elementRef = inject(ElementRef);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormDarlehenView);
@@ -158,6 +160,10 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
 
     // set disabled state
     effect(

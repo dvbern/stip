@@ -25,6 +25,7 @@ import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -107,6 +108,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
   private config = inject(SharedModelCompileTimeConfig);
+  private einreichenStore = inject(EinreichenStore);
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -133,7 +135,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       [Validators.required, sharedUtilValidatorRange(0, 5)],
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
-    vermoegen: [<string | undefined>undefined, [Validators.required]],
+    vermoegen: [
+      <string | undefined>undefined,
+      [
+        Validators.required,
+        /* See `vermoegenValidator` bellow */
+      ],
+    ],
     veranlagungsCode: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 99)],
@@ -394,6 +402,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     effect(
       () => {
         this.gotReenabledSig();
@@ -489,8 +501,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             veranlagungsCode: einnahmenKosten.veranlagungsCode,
             steuerjahr: einnahmenKosten.steuerjahr,
           });
-        } else {
-          this.form.reset();
         }
       },
       { allowSignalWrites: true },

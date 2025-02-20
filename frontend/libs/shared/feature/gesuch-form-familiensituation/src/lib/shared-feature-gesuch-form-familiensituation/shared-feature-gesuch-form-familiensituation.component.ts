@@ -33,6 +33,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import {
@@ -130,6 +131,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
@@ -246,6 +248,10 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     Object.values(this.form.controls).forEach((control) => control.disable());
     const {
       elternVerheiratetZusammen,

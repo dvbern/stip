@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.einnahmen_kosten.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import lombok.experimental.UtilityClass;
@@ -31,7 +29,7 @@ public class EinnahmenKostenMappingUtil {
         }
         Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
         if (GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)) {
-            return Objects.requireNonNullElse(vermoegen, 0);
+            return vermoegen;
         }
         return null;
     }

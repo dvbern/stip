@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render } from '@testing-library/angular';
@@ -30,6 +31,7 @@ async function setup() {
       NoopAnimationsModule,
     ],
     providers: [
+      provideHttpClient(),
       {
         provide: AusbildungService,
         useValue: {
