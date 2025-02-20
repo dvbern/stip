@@ -44,7 +44,6 @@ export class BerechnungStore extends signalStore(
         monate: number;
         reduktionsBetrag: number;
         berechnungReduziert: number;
-        reducePercentage: number;
       };
     } = {
       year: berechnungRd.data?.year ?? 0,
@@ -74,7 +73,6 @@ export class BerechnungStore extends signalStore(
             byTrancheId.totalBetragStipendium - berechnungReduziert
           ),
           berechnungReduziert,
-          reducePercentage: 100 - (100 * verminderteBerechnungMonate) / 12,
         };
       }
     }

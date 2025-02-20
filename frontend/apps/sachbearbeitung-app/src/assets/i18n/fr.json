@@ -436,7 +436,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Détails du calcul réduit",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ reducePercentage }}%) pour dépôt tardif de la demande de bourse, {{ months }} mois après le début de la formation.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ months }}/12) pour dépôt tardif de la demande de bourse.",
   "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Montant effective",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
