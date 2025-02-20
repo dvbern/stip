@@ -41,7 +41,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
     private final EntityManager entityManager;
 
-    public List<GesuchDokument> findAllByCustomDokumentTypeId(UUID customDokumentTypeId) {
+    public List<GesuchDokument> findAllByCustomDokumentTypId(UUID customDokumentTypeId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
