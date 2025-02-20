@@ -45,27 +45,35 @@ public class FamiliensituationCopyUtil {
         if (Objects.isNull(replacement)) {
             return;
         }
-        if (Objects.nonNull(replacement.getElternVerheiratetZusammen()))
+        if (Objects.nonNull(replacement.getElternVerheiratetZusammen())) {
             toBeReplaced.setElternVerheiratetZusammen(replacement.getElternVerheiratetZusammen());
+        }
 
-        if (Objects.nonNull(replacement.getElternteilUnbekanntVerstorben()))
+        if (Objects.nonNull(replacement.getElternteilUnbekanntVerstorben())) {
             toBeReplaced.setElternteilUnbekanntVerstorben(replacement.getElternteilUnbekanntVerstorben());
+        }
 
-        if (Objects.nonNull(replacement.getGerichtlicheAlimentenregelung()))
+        if (Objects.nonNull(replacement.getGerichtlicheAlimentenregelung())) {
             toBeReplaced.setGerichtlicheAlimentenregelung(replacement.getGerichtlicheAlimentenregelung());
+        }
 
-        if (Objects.nonNull(replacement.getMutterUnbekanntVerstorben()))
+        if (Objects.nonNull(replacement.getMutterUnbekanntVerstorben())) {
             toBeReplaced.setMutterUnbekanntVerstorben(replacement.getMutterUnbekanntVerstorben());
+        }
 
         toBeReplaced.setMutterUnbekanntGrund(replacement.getMutterUnbekanntGrund());
-        if (Objects.nonNull(replacement.getMutterWiederverheiratet()))
-            toBeReplaced.setMutterWiederverheiratet(replacement.getMutterWiederverheiratet());
-        if (Objects.nonNull(replacement.getVaterUnbekanntVerstorben()))
-            toBeReplaced.setVaterUnbekanntVerstorben(replacement.getVaterUnbekanntVerstorben());
         toBeReplaced.setVaterUnbekanntGrund(replacement.getVaterUnbekanntGrund());
-        if (Objects.nonNull(replacement.getVaterWiederverheiratet()))
-            toBeReplaced.setVaterWiederverheiratet(replacement.getVaterWiederverheiratet());
         toBeReplaced.setWerZahltAlimente(replacement.getWerZahltAlimente());
+
+        if (Objects.nonNull(replacement.getMutterWiederverheiratet())) {
+            toBeReplaced.setMutterWiederverheiratet(replacement.getMutterWiederverheiratet());
+        }
+        if (Objects.nonNull(replacement.getVaterUnbekanntVerstorben())) {
+            toBeReplaced.setVaterUnbekanntVerstorben(replacement.getVaterUnbekanntVerstorben());
+        }
+        if (Objects.nonNull(replacement.getVaterWiederverheiratet())) {
+            toBeReplaced.setVaterWiederverheiratet(replacement.getVaterWiederverheiratet());
+        }
     }
 
 }
