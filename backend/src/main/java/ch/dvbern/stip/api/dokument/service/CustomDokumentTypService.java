@@ -58,7 +58,7 @@ public class CustomDokumentTypService {
 
     @Transactional
     public List<CustomDokumentTyp> getAllCustomDokumentTypsOfTranche(UUID gesuchTrancheId) {
-        final var gesuchDokuments = findByCustomDokumentTypId(gesuchTrancheId);
+        final var gesuchDokuments = gesuchDokumentRepository.findAllOfTypeCustomByGesuchTrancheId(gesuchTrancheId);
         return gesuchDokuments.stream().map(GesuchDokument::getCustomDokumentTyp).toList();
     }
 
@@ -68,16 +68,12 @@ public class CustomDokumentTypService {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehaenkt");
         } else {
             // clear all references to gesuchdokkument
-            final var gesuchDokumenteOfCustomType =
+            final var gesuchDokumenteOfCustomTyp =
                 gesuchDokumentRepository.findAllByCustomDokumentTypId(customDokumentTypId);
-            gesuchDokumenteOfCustomType.forEach(
+            gesuchDokumenteOfCustomTyp.forEach(
                 gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId())
             );
             customDocumentTypRepository.deleteById(customDokumentTypId);
         }
-    }
-
-    private List<GesuchDokument> findByCustomDokumentTypId(UUID gesuchTrancheId) {
-        return gesuchDokumentRepository.findAllOfTypeCustomByGesuchTrancheId(gesuchTrancheId);
     }
 }
