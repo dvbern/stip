@@ -11,7 +11,6 @@ export type PersoenlicheBerechnung = {
   verminderteBerechnung?: {
     monate: number;
     unreducedTotal: number;
-    reducePercentage: number;
   };
   einnahmen: {
     total: number;

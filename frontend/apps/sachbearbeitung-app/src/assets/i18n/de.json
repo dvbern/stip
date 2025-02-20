@@ -434,7 +434,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Details der verminderten Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Abzug ({{ reducePercentage }}%) wegen verspäteter Einreichung des Stipendiumantrags, {{ months }} Monate nach Ausbildungsbegin.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Kürzung ({{ months }}/12) wegen verspäteter Einreichung.",
   "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Effektiver Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
