@@ -44,7 +44,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     @Override
     @RolesAllowed(OidcPermissions.GESUCH_READ)
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
-        steuerdatenAuthorizer.canRead(gesuchTrancheId);
+        steuerdatenAuthorizer.canRead();
         return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
     }
 
