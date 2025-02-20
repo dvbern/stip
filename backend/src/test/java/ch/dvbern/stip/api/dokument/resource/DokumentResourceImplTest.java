@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -48,6 +49,8 @@ class DokumentResourceImplTest {
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
+    @InjectMock
+    DokumentAuthorizer dokumentAuthorizer;
 
     @BeforeEach
     void setUp() {
@@ -88,6 +91,7 @@ class DokumentResourceImplTest {
     @Test
     void sbShouldBeAbleToDenyDocumentTest() {
         doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(), any());
+        doNothing().when(dokumentAuthorizer).canUpdateGesuchDokument(any());
         assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 
@@ -95,6 +99,7 @@ class DokumentResourceImplTest {
     @Test
     void sbShouldBeAbleToAcceptDocumentTest() {
         doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
+        doNothing().when(dokumentAuthorizer).canUpdateGesuchDokument(any());
         assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 }

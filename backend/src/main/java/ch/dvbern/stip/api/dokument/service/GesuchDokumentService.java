@@ -35,7 +35,6 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -160,20 +159,10 @@ public class GesuchDokumentService {
             );
     }
 
-    private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
-        if (gesuch.getGesuchStatus() != statusToVerify) {
-            throw new IllegalStateException(
-                "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString()
-            );
-        }
-    }
-
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
@@ -184,7 +173,6 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChange(
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT

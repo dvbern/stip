@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
@@ -69,6 +70,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
+    private final DokumentAuthorizer dokumentAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -120,6 +122,7 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
     ) {
+        dokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
@@ -127,6 +130,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
+        dokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
