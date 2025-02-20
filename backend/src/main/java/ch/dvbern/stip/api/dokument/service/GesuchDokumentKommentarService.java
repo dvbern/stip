@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -32,12 +34,17 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentKommentarService {
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
 
     @Transactional
     public void deleteForGesuchTrancheId(final UUID gesuchTrancheId) {
-        gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
+        gesuchDokuments.forEach(dokument -> {
+            gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId());
+        });
     }
 
     @Transactional
@@ -52,23 +59,22 @@ public class GesuchDokumentKommentarService {
     public List<GesuchDokumentKommentar> getAllKommentareForGesuchTrancheId(
         final UUID gesuchTrancheId
     ) {
-        final var gesuchDokumentKommentars =
-            gesuchDokumentKommentarRepository.getByGesuchTrancheId(gesuchTrancheId);
-        if (gesuchDokumentKommentars != null) {
-            return gesuchDokumentKommentars.stream()
-                .toList();
-        }
-        return List.of();
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
+        ArrayList<GesuchDokumentKommentar> kommentars = new ArrayList<>();
+        gesuchDokuments.stream()
+            .map(dokument -> gesuchDokumentKommentarRepository.getByGesuchDokumentId(dokument.getId()))
+            .forEach(kommentars::addAll);
+        return kommentars;
     }
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchTrancheIdAndDokumentTyp(
-        final UUID gesuchTrancheId,
         final UUID gesuchDokumentId
     ) {
         final var gesuchDokumentKommentars =
             gesuchDokumentKommentarRepository
-                .getByGesuchDokumentIdAndGesuchTrancheId(gesuchDokumentId, gesuchTrancheId);
+                .getByGesuchDokumentId(gesuchDokumentId);
         if (gesuchDokumentKommentars != null) {
             return gesuchDokumentKommentars.stream()
                 .map(gesuchDokumentKommentarMapper::toDto)
@@ -87,7 +93,6 @@ public class GesuchDokumentKommentarService {
             createEmptyKommentarForGesuchDokument(gesuchDokument);
         } else {
             kommentar.setGesuchDokument(gesuchDokument);
-            kommentar.setGesuchTranche(gesuchDokument.getGesuchTranche());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
@@ -96,7 +101,6 @@ public class GesuchDokumentKommentarService {
     @Transactional
     public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument) {
         final var kommentar = new GesuchDokumentKommentar()
-            .setGesuchTranche(gesuchDokument.getGesuchTranche())
             .setDokumentstatus(gesuchDokument.getStatus())
             .setGesuchDokument(gesuchDokument)
             .setKommentar(null);
@@ -108,7 +112,6 @@ public class GesuchDokumentKommentarService {
         final GesuchDokumentKommentar gesuchDokumentKommentar
     ) {
         final var kommentar = new GesuchDokumentKommentar()
-            .setGesuchTranche(gesuchTranche)
             .setGesuchDokument(gesuchDokumentKommentar.getGesuchDokument())
             .setKommentar(gesuchDokumentKommentar.getKommentar())
             .setDokumentstatus(gesuchDokumentKommentar.getDokumentstatus());

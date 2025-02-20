@@ -68,7 +68,7 @@ class DokumentResourceImplTest {
     @BeforeEach
     void setUp() {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
-        when(dokumentKommentarRepository.getByGesuchDokumentIdAndGesuchTrancheId(any(), any()))
+        when(dokumentKommentarRepository.getByGesuchDokumentId(any()))
             .thenReturn(List.of(kommentar));
     }
 

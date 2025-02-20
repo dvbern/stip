@@ -84,10 +84,9 @@ public class GesuchDokumentService {
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
-        UUID gesuchTrancheId,
         UUID gesuchDokumentId
     ) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchTrancheId, gesuchDokumentId);
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId);
     }
 
     @Transactional
@@ -99,7 +98,7 @@ public class GesuchDokumentService {
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         GesuchDokument gesuchDokument =
             gesuchDokumentRepository
-                .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
+                .findByCustomDokumentType(customDokumentTypId)
                 .orElseGet(
                     () -> createGesuchDokument(
                         gesuchTranche,
@@ -191,7 +190,7 @@ public class GesuchDokumentService {
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         final var gesuchDokument =
             gesuchDokumentRepository
-                .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
+                .findByCustomDokumentType(customDokumentTypId)
                 .orElseGet(
                     () -> createGesuchDokument(
                         gesuchTranche,
@@ -215,11 +214,10 @@ public class GesuchDokumentService {
 
     @Transactional
     public NullableGesuchDokumentDto findGesuchDokumentForCustomTyp(
-        final UUID gesuchTrancheId,
         final UUID customDokumentTypId
     ) {
         final var gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
+            gesuchDokumentRepository.findByCustomDokumentType(customDokumentTypId);
 
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
@@ -244,10 +242,12 @@ public class GesuchDokumentService {
 
     @Transactional(TxType.REQUIRES_NEW)
     public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
-        gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTrancheId);
         gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .forEach(
-                gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
+                gesuchDokument -> {
+                    gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+                    removeGesuchDokument(gesuchDokument.getId());
+                }
             );
     }
 

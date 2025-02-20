@@ -68,14 +68,14 @@ class CustomGesuchDokumentTypAuthorizerTest {
         gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         authorizer = new CustomGesuchDokumentTypAuthorizer(
-            dokumentRepository, gesuchDokumentRepository, gesuchRepository, gesuchTrancheRepository, benutzerService
+            dokumentRepository, gesuchDokumentRepository, gesuchTrancheRepository, benutzerService
         );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         var gesuchDok = new GesuchDokument();
         gesuchDok.setDokumente(List.of());
-        when(gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(any(), any()))
+        when(gesuchDokumentRepository.findByCustomDokumentType(any()))
             .thenReturn(Optional.of(gesuchDok));
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
     }

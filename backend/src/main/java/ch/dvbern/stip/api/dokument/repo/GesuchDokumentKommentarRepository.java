@@ -43,36 +43,12 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
             .execute();
     }
 
-    @Transactional
-    public void deleteAllForGesuchTranche(final UUID gesuchTrancheId) {
-        new JPAQueryFactory(entityManager)
-            .delete(gesuchDokumentKommentar)
-            .where(gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId))
-            .execute();
-    }
-
-    public List<GesuchDokumentKommentar> getByGesuchDokumentIdAndGesuchTrancheId(
-        final UUID gesuchDokumentId,
-        final UUID gesuchTrancheId
+    public List<GesuchDokumentKommentar> getByGesuchDokumentId(
+        final UUID gesuchDokumentId
     ) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchDokumentKommentar)
-            .where(
-                gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
-                    .and(gesuchDokumentKommentar.gesuchDokument.id.eq(gesuchDokumentId))
-            )
-            .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
-            .fetch();
-    }
-
-    public List<GesuchDokumentKommentar> getByGesuchTrancheId(
-        final UUID gesuchTrancheId
-    ) {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuchDokumentKommentar)
-            .where(
-                gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
-            )
+            .where(gesuchDokumentKommentar.gesuchDokument.id.eq(gesuchDokumentId))
             .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
             .fetch();
     }

@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import io.quarkus.security.ForbiddenException;
@@ -39,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
 
@@ -57,7 +55,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     public void canDeleteTyp(final UUID gesuchTrancheId, final UUID gesuchDokumentTypId) {
         final var gesuch = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuch();
         final var customGesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, gesuchDokumentTypId)
+            gesuchDokumentRepository.findByCustomDokumentType(gesuchDokumentTypId)
                 .orElseThrow();
 
         final var isNotBeingEditedBySB = !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)

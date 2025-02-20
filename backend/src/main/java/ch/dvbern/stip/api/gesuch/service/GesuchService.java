@@ -495,10 +495,6 @@ public class GesuchService {
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
-        gesuch.getGesuchTranchen()
-            .forEach(
-                gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
-            );
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);

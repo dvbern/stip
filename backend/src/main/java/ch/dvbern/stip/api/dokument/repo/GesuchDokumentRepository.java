@@ -99,8 +99,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream();
     }
 
-    public Optional<GesuchDokument> findByGesuchTrancheAndCustomDokumentType(
-        UUID gesuchTrancheId,
+    public Optional<GesuchDokument> findByCustomDokumentType(
         UUID customDokumentTypeId
     ) {
         var queryFactory = new JPAQueryFactory(entityManager);
@@ -109,8 +108,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .select(gesuchDokument)
             .from(gesuchDokument)
             .where(
-                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
-                    .and(gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId)
             );
         return query.stream().findFirst();
     }

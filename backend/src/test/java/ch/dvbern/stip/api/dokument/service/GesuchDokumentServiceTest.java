@@ -189,9 +189,9 @@ class GesuchDokumentServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getKommentareWhenNoEntriesExist(){
-        when(gesuchDokumentKommentarRepository.getByGesuchDokumentIdAndGesuchTrancheId(any(), any())).thenReturn(null);
-        assertDoesNotThrow(() -> {gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID());});
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID()).size(), notNullValue());
+        when(gesuchDokumentKommentarRepository.getByGesuchDokumentId(any())).thenReturn(null);
+        assertDoesNotThrow(() -> gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()));
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()).size(), notNullValue());
     }
 
     @TestAsSachbearbeiter
@@ -232,6 +232,7 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new GesuchDokumentKommentarService(
+                    null,
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
                 ),
                 null
@@ -297,7 +298,7 @@ class GesuchDokumentServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        when(gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(any(), any()))
+        when(gesuchDokumentRepository.findByCustomDokumentType(any()))
             .thenReturn(Optional.of(customGesuchDokument));
 
         final UUID gesuchTrancheId = UUID.randomUUID();

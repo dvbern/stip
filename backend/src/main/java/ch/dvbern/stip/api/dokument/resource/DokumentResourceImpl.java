@@ -180,7 +180,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     @Override
     public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId, UUID gesuchTrancheId) {
-        return gesuchDokumentService.findGesuchDokumentForCustomTyp(gesuchTrancheId, customDokumentTypId);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId, UUID gesuchTrancheId) {
-        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchTrancheId, gesuchDokumentId);
+        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)
