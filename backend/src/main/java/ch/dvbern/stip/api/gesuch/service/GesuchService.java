@@ -112,7 +112,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
-import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.GS_RECEIVES_GESUCH_IN_STATUS_EINGEREICHT;
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SB_EDITS_GESUCH;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -159,25 +159,16 @@ public class GesuchService {
 
     @Transactional
     public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
-        final var actualGesuch = gesuchRepository.requireById(gesuchId);
         final var actualTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        boolean wasOnceEingereicht = Objects.nonNull(actualGesuch.getEinreichedatum());
+        boolean wasOnceEingereicht = Objects.nonNull(actualTranche.getGesuch().getEinreichedatum());
 
-        if (wasOnceEingereicht && GS_RECEIVES_GESUCH_IN_STATUS_EINGEREICHT.contains(actualGesuch.getGesuchStatus())) {
-            // eingereichtes gesuch (query envers)
-            var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
-                .stream()
-                .filter(
-                    gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT)
-                )
-                .findFirst()
-                .orElseThrow();
+        if (wasOnceEingereicht && SB_EDITS_GESUCH.contains(actualTranche.getGesuch().getGesuchStatus())) {
             var trancheInStatusEingereicht =
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId).orElseThrow();
-            return gesuchMapperUtil.mapWithTranche(gesuchInStatusEingereicht, trancheInStatusEingereicht);
+            return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
         } else {
             // atkuelles gesuch
-            return gesuchMapperUtil.mapWithTranche(actualGesuch, actualTranche);
+            return gesuchMapperUtil.mapWithGesuchOfTranche(actualTranche);
         }
     }
 

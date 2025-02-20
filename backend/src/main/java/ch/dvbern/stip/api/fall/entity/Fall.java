@@ -74,7 +74,7 @@ public class Fall extends AbstractMandantEntity {
         name = "sachbearbeiter_zuordnung_id",
         foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
     )
-    @OneToOne(mappedBy = "fall")
+    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER)
     private Zuordnung sachbearbeiterZuordnung;
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)

@@ -1489,6 +1489,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
@@ -1519,6 +1520,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
@@ -1584,6 +1586,7 @@ class GesuchServiceTest {
         gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),

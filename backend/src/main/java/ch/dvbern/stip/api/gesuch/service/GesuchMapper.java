@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -69,7 +70,7 @@ public abstract class GesuchMapper {
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
         final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
-        if (zuordnung == null) {
+        if (Objects.isNull(zuordnung) || Objects.isNull(zuordnung.getSachbearbeiter())) {
             return "";
         }
 
