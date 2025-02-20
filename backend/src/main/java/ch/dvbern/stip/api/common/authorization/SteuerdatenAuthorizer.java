@@ -40,7 +40,7 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository geuchTrancheRepository;
 
     @Transactional
-    public void canRead(UUID ignored) {
+    public void canRead() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isAdminOrSb(currentBenutzer)) {
             return;
