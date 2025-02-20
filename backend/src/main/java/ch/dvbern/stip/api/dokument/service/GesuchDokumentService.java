@@ -165,7 +165,7 @@ public class GesuchDokumentService {
             .orElseThrow(NotFoundException::new);
 
         final var gesuchDokument = gesuchDokumentRepository
-            .findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp)
+            .findByGesuchTrancheAndDokumentTyp(gesuchTranche.getId(), dokumentTyp)
             .orElseGet(() -> createGesuchDokument(gesuchTranche, dokumentTyp));
 
         final var dokument = new Dokument()
@@ -231,7 +231,7 @@ public class GesuchDokumentService {
         final DokumentTyp dokumentTyp
     ) {
         final var gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }

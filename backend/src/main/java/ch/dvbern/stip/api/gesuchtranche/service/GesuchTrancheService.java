@@ -225,7 +225,7 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         return gesuchDokumentMapper.toDto(
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp)
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp)
                 .orElseThrow(NotFoundException::new)
         );
     }
