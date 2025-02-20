@@ -233,7 +233,8 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new GesuchDokumentKommentarService(
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
-                )
+                ),
+                null
             ),
             null,
             null,

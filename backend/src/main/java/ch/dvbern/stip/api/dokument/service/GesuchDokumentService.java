@@ -361,7 +361,6 @@ public class GesuchDokumentService {
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
             .toList();
 
-        deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(abgelehnteGesuchDokumente);
         for (var gesuchdokument : abgelehnteGesuchDokumente) {
             dokumentstatusService.triggerStatusChangeNoComment(gesuchdokument, DokumentstatusChangeEvent.AUSSTEHEND);
         }
