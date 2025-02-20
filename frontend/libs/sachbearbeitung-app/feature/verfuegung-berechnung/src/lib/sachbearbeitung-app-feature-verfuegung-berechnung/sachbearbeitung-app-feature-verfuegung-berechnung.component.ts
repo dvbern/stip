@@ -101,6 +101,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
           total: p.persoenlichesbudgetBerechnet,
           totalEinnahmen: p.einnahmenPersoenlichesBudget,
           totalKosten: p.ausgabenPersoenlichesBudget,
+          totalVorTeilung: p.totalVorTeilung,
           geteilteBerechnung: geteilteBerechnungsArt
             ? {
                 berechnungsanteilKinder: Math.round(berechnungsanteilKinder),
