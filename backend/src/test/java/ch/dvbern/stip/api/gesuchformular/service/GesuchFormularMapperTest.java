@@ -378,9 +378,7 @@ class GesuchFormularMapperTest {
         GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
         assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() >= 0);
-
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
