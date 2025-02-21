@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.dokument;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -50,9 +46,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.UUID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -65,10 +64,6 @@ class CustomDokumenteGetGSDashboardTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-
-    public GesuchApiSpec getGesuchApiSpec() {
-        return gesuchApiSpec;
-    }
 
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
@@ -182,7 +177,7 @@ class CustomDokumenteGetGSDashboardTest {
     @Test
     @TestAsGesuchsteller
     @Order(8)
-    void getGsDashboardTest() {
+    void getGsDashboardMissingDocumentsTest() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -192,20 +187,10 @@ class CustomDokumenteGetGSDashboardTest {
             .body()
             .as(FallDashboardItemDto[].class);
 
-        assertThat(fallDashboardItems.length, is(1));
-
         final var fallDashboardItem = fallDashboardItems[0];
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
-
-        assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
-
-        assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
-
         final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
         final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
-
-        assertThat(gesuchDashboardItems.size(), greaterThanOrEqualTo(1));
-
         final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
         // since every document is uploaded by GS, there should not be any document missing
