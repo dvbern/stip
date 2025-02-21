@@ -399,7 +399,7 @@ export class UploadStore {
             ...serviceDefaultParams,
           );
         case 'CUSTOM_DOKUMENT':
-          return this.documentService.createCustomGesuchDokument$(
+          return this.documentService.uploadCustomGesuchDokument$(
             {
               ...action,
               gesuchTrancheId: dokument.trancheId,
