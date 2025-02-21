@@ -27,13 +27,15 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GeschwisterCopyUtil {
-    public Geschwister createCopy(final Geschwister other) {
+    public Geschwister createCopy(final Geschwister source) {
         final var copy = new Geschwister();
-
-        AbstractFamilieEntityCopyUtil.copy(other, copy);
-        copy.setAusbildungssituation(other.getAusbildungssituation());
-
+        copyValues(source, copy);
         return copy;
+    }
+
+    private void copyValues(final Geschwister source, final Geschwister target) {
+        AbstractFamilieEntityCopyUtil.copy(source, target);
+        target.setAusbildungssituation(source.getAusbildungssituation());
     }
 
     public Set<Geschwister> createCopyOfSet(final Set<Geschwister> geschwisters) {
@@ -49,7 +51,7 @@ public class GeschwisterCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetGeschwister,
             sourceGeschwister,
-            GeschwisterCopyUtil::createCopy
+            GeschwisterCopyUtil::copyValues
         );
     }
 }

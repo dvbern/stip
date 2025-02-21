@@ -71,14 +71,16 @@ public class GesuchTrancheOverrideUtil {
         }
 
         // Auszahlung
-        toBeReplaced.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(replacement.getAuszahlung()));
-        final var auszahlungAdresseCopy = switch (replacement.getAuszahlung().getKontoinhaber()) {
-            case GESUCHSTELLER -> piaAdresseCopy;
-            case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-            case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-            default -> AdresseCopyUtil.createCopy(replacement.getAuszahlung().getAdresse());
-        };
-        toBeReplaced.getAuszahlung().setAdresse(auszahlungAdresseCopy);
+        if (replacement.getAuszahlung() != null) {
+            toBeReplaced.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(replacement.getAuszahlung()));
+            final var auszahlungAdresseCopy = switch (replacement.getAuszahlung().getKontoinhaber()) {
+                case GESUCHSTELLER -> piaAdresseCopy;
+                case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
+                case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
+                default -> AdresseCopyUtil.createCopy(replacement.getAuszahlung().getAdresse());
+            };
+            toBeReplaced.getAuszahlung().setAdresse(auszahlungAdresseCopy);
+        }
 
         // Einnahmen Kosten
         toBeReplaced.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(replacement.getEinnahmenKosten()));

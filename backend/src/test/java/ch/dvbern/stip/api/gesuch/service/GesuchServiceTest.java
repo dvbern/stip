@@ -1718,6 +1718,9 @@ class GesuchServiceTest {
         )
             .thenReturn(Stream.of(gesuch));
 
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(Optional.ofNullable(gesuch.getGesuchTranchen().get(0)));
+
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertNull(gesuch.getEinreichedatum());

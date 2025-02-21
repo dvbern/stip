@@ -26,21 +26,23 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class LebenslaufItemCopyUtil {
-    public LebenslaufItem createCopy(final LebenslaufItem other) {
+    public LebenslaufItem createCopy(final LebenslaufItem source) {
         final LebenslaufItem copy = new LebenslaufItem();
-
-        copy.setBildungsart(other.getBildungsart());
-        copy.setVon(other.getVon());
-        copy.setBis(other.getBis());
-        copy.setTaetigkeitsart(other.getTaetigkeitsart());
-        copy.setTaetigkeitsBeschreibung(other.getTaetigkeitsBeschreibung());
-        copy.setBerufsbezeichnung(other.getBerufsbezeichnung());
-        copy.setFachrichtung(other.getFachrichtung());
-        copy.setTitelDesAbschlusses(other.getTitelDesAbschlusses());
-        copy.setAusbildungAbgeschlossen(other.isAusbildungAbgeschlossen());
-        copy.setWohnsitz(other.getWohnsitz());
-
+        copyValues(source, copy);
         return copy;
+    }
+
+    private void copyValues(final LebenslaufItem source, final LebenslaufItem target) {
+        target.setBildungsart(source.getBildungsart());
+        target.setVon(source.getVon());
+        target.setBis(source.getBis());
+        target.setTaetigkeitsart(source.getTaetigkeitsart());
+        target.setTaetigkeitsBeschreibung(source.getTaetigkeitsBeschreibung());
+        target.setBerufsbezeichnung(source.getBerufsbezeichnung());
+        target.setFachrichtung(source.getFachrichtung());
+        target.setTitelDesAbschlusses(source.getTitelDesAbschlusses());
+        target.setAusbildungAbgeschlossen(source.isAusbildungAbgeschlossen());
+        target.setWohnsitz(source.getWohnsitz());
     }
 
     public Set<LebenslaufItem> createCopyOfSet(final Set<LebenslaufItem> other) {
@@ -56,7 +58,7 @@ public class LebenslaufItemCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetItems,
             sourceItems,
-            LebenslaufItemCopyUtil::createCopy
+            LebenslaufItemCopyUtil::copyValues
         );
     }
 }

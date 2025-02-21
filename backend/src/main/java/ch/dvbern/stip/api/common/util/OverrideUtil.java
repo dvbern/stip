@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.common.util;
 
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import lombok.experimental.UtilityClass;
@@ -28,22 +28,14 @@ public class OverrideUtil {
     public <T extends AbstractEntity> void doOverrideOfSet(
         final Set<T> targetEntities,
         final Set<T> sourceEntities,
-        final Function<T, T> copy
+        final BiConsumer<T, T> reset
     ) {
         for (var source : sourceEntities) {
             if (targetEntities.contains(source)) {
-                // If target contains an entity with the same ID, remove it and add a copy of the source
-                // This effectively overrides all values on the targets
+                // If target contains an entity with the same ID, then copy the source values over
                 final var replacement =
                     targetEntities.stream().filter(entity -> source.getId().equals(entity.getId())).findFirst();
-                replacement.ifPresent(replacementItem -> {
-                    targetEntities.remove(replacementItem);
-
-                    final var entityCopy = copy.apply(source);
-                    entityCopy.setId(source.getId());
-
-                    targetEntities.add(entityCopy);
-                });
+                replacement.ifPresent(replacementItem -> reset.accept(source, replacementItem));
             } else {
                 sourceEntities.add(source);
             }
