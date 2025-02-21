@@ -1,6 +1,9 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-3">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-16">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_kommentar_gesuch_tranche_id"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-3">
         <createTable tableName="custom_dokument_typ">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typPK"/>
@@ -29,7 +32,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-4">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-4">
         <createTable tableName="custom_dokument_typ_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -47,61 +50,67 @@
             <column name="type" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-5">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-5">
         <addColumn tableName="gesuch_dokument">
             <column name="custom_dokument_typ_id" type="uuid"/>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-6">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-6">
         <addColumn tableName="gesuch_dokument_aud">
             <column name="custom_dokument_typ_id" type="uuid"/>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-7">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-7">
         <addColumn tableName="gesuch_dokument_kommentar">
             <column name="gesuch_dokument_id" type="uuid">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-8">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-8">
         <addColumn tableName="gesuch_dokument_kommentar_aud">
             <column name="gesuch_dokument_id" type="uuid"/>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-9">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-9">
         <addPrimaryKey columnNames="rev, id" constraintName="custom_dokument_typ_audPK" tableName="custom_dokument_typ_aud"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-10">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-10">
         <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-11">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-11">
         <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-12">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-12">
         <createIndex indexName="IX_custom_gesuch_dokument_mandant" tableName="custom_dokument_typ">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-13">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-13">
         <addForeignKeyConstraint baseColumnNames="custom_dokument_typ_id" baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_custom_dokument_typ_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="custom_dokument_typ" validate="true"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-14">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-14">
         <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-15">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-15">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="custom_dokument_typ_aud" constraintName="FKfrttrf3l1led7b8p7c0f3ry13" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-16">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-17">
         <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-17">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-18">
         <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar_aud"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-1">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-19">
+        <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-20">
+        <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar_aud"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-1">
         <dropUniqueConstraint constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1738318897888-2">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-2">
         <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
 </databaseChangeLog>
