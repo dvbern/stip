@@ -24,6 +24,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +52,7 @@ public class CustomDokumentTyp extends AbstractMandantEntity {
     @Column(name = "description", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String description;
 
+    @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "customDokumentTyp")
     private GesuchDokument gesuchDokument;
 }
