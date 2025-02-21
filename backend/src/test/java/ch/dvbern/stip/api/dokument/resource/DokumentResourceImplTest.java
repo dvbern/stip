@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.dokument.resource;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -144,13 +143,13 @@ class DokumentResourceImplTest {
         customGesuchDokument2.setDokumente(List.of());
         customGesuchDokument2.setCustomDokumentTyp(customDokumentTyp2);
 
-        Arrays.stream(DokumentTyp.values()).toList().forEach(dokumentType -> {
+        for (DokumentTyp dokumentTyp : DokumentTyp.values()) {
             var gesuchDokument = new GesuchDokument();
             gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
-            gesuchDokument.setDokumentTyp(dokumentType);
+            gesuchDokument.setDokumentTyp(dokumentTyp);
             gesuchDokument.setDokumente(List.of(new Dokument()));
             dokuments.add(gesuchDokument);
-        });
+        }
 
         dokuments.add(customGesuchDokument1);
         dokuments.add(customGesuchDokument2);
