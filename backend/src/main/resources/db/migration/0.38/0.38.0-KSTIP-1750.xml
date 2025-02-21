@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-16">
         <dropForeignKeyConstraint baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_kommentar_gesuch_tranche_id"/>
     </changeSet>
@@ -78,9 +80,6 @@
     <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-10">
         <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-11">
-        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
-    </changeSet>
     <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-12">
         <createIndex indexName="IX_custom_gesuch_dokument_mandant" tableName="custom_dokument_typ">
             <column name="mandant"/>
@@ -106,11 +105,5 @@
     </changeSet>
     <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-20">
         <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar_aud"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-1">
-        <dropUniqueConstraint constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-2">
-        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
 </databaseChangeLog>
