@@ -273,6 +273,7 @@ public class GesuchDokumentService {
     }
 
     private void dropGesuchDokumentIfNoDokumente(GesuchDokument gesuchDokument) {
+        gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
         gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
     }
 
