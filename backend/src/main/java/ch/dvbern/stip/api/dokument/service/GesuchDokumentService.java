@@ -42,7 +42,6 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -87,25 +86,6 @@ public class GesuchDokumentService {
         UUID gesuchDokumentId
     ) {
         return dokumentstatusService.getGesuchDokumentKommentareByGesuchDokumentId(gesuchDokumentId);
-    }
-
-    @Transactional
-    public GesuchDokumentDto createEmptyGesuchDokument(
-        final UUID gesuchTrancheId,
-        final UUID customDokumentTypId
-    ) {
-        GesuchTranche gesuchTranche =
-            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
-        GesuchDokument gesuchDokument =
-            gesuchDokumentRepository
-                .findByCustomDokumentType(customDokumentTypId)
-                .orElseGet(
-                    () -> createGesuchDokument(
-                        gesuchTranche,
-                        customDocumentTypRepository.requireById(customDokumentTypId)
-                    )
-                );
-        return gesuchDokumentMapper.toDto(gesuchDokument);
     }
 
     @Transactional
@@ -188,13 +168,14 @@ public class GesuchDokumentService {
     ) {
         final var gesuchTranche =
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
+        final var customDokumentTyp = customDocumentTypRepository.requireById(customDokumentTypId);
         final var gesuchDokument =
             gesuchDokumentRepository
                 .findByCustomDokumentType(customDokumentTypId)
                 .orElseGet(
                     () -> createGesuchDokument(
                         gesuchTranche,
-                        customDocumentTypRepository.requireById(customDokumentTypId)
+                        customDokumentTyp
                     )
                 );
         final var dokument = new Dokument();
@@ -406,7 +387,8 @@ public class GesuchDokumentService {
         return gesuchDokument;
     }
 
-    private GesuchDokument createGesuchDokument(
+    @Transactional
+    public GesuchDokument createGesuchDokument(
         final GesuchTranche gesuchTranche,
         final CustomDokumentTyp customDokumentTyp
     ) {

@@ -81,10 +81,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     @Override
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
-        final var createdCustomDokumentTyp =
-            customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
-        return gesuchDokumentService
-            .createEmptyGesuchDokument(customDokumentTypCreateDto.getTrancheId(), createdCustomDokumentTyp.getId());
+        final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(createdCustomTyp.getId()).getValue();
     }
 
     @Blocking

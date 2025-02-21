@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import io.quarkus.security.ForbiddenException;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestScoped
 @RequiredArgsConstructor
 public class CustomDokumentTypService {
+    private final GesuchTrancheRepository trancheRepository;
     private final CustomDokumentTypRepository customDocumentTypRepository;
     private final CustomDocumentTypMapper customDocumentTypMapper;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -43,7 +45,11 @@ public class CustomDokumentTypService {
 
     @Transactional
     public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
-        final var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
+        final var gesuchTranche = trancheRepository.requireById(dto.getTrancheId());
+        var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
+        var emptyGesuchDokument = gesuchDokumentService
+            .createGesuchDokument(gesuchTranche, customDokumentTyp);
+        customDokumentTyp.setGesuchDokument(emptyGesuchDokument);
         customDocumentTypRepository.persistAndFlush(customDokumentTyp);
         return customDocumentTypMapper.toDto(customDokumentTyp);
     }

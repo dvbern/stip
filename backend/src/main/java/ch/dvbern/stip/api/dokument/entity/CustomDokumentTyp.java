@@ -18,9 +18,11 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -48,4 +50,7 @@ public class CustomDokumentTyp extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "description", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String description;
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "customDokumentTyp")
+    private GesuchDokument gesuchDokument;
 }
