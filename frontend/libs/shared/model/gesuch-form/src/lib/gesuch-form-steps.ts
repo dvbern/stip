@@ -302,7 +302,6 @@ export const isStepValid = (
 
   const isDefined = (value: unknown) => value !== null && value !== undefined;
 
-  // Todo: will probably need to be adjusted for GS and differently for SB
   if (isSteuerdatenStep(field)) {
     const [stepSteuerdatenTyp] =
       Object.entries(ELTERN_STEUER_STEPS).find(
@@ -311,7 +310,11 @@ export const isStepValid = (
     const currentHasDaten = formular?.steuererklaerung?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
-    return toStepState(field, isDefined(currentHasDaten), invalidProps);
+    return toStepState(
+      'steuererklaerung',
+      isDefined(currentHasDaten),
+      invalidProps,
+    );
   }
 
   if (field === 'lebenslaufItems') {
@@ -335,6 +338,15 @@ export const getFormStepByDocumentType = (
   switch (dokumentTyp) {
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
       return gesuchFormSteps.DOKUMENTE;
+    }
+    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
+      return ELTERN_STEUER_FAMILIE;
+    }
+    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER: {
+      return ELTERN_STEUER_MUTTER;
+    }
+    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER: {
+      return ELTERN_STEUER_VATER;
     }
     default: {
       const step = (Object.keys(gesuchFormSteps) as GesuchFormStepKeys[]).find(
@@ -371,7 +383,7 @@ const toDocumentStepState = (
 };
 
 const toStepState = (
-  field: SharedModelGesuchFormularPropsSteuerdatenSteps,
+  field: SharedModelGesuchFormularPropsSteuerdatenSteps | 'steuererklaerung',
   isDefined: boolean,
   invalidProps?: StepValidation,
 ): StepState | undefined => {

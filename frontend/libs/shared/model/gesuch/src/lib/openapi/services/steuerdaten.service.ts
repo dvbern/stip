@@ -18,7 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { SteuerdatenUpdate } from '../model/steuerdatenUpdate';
+import { Steuerdaten } from '../model/steuerdaten';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,7 +31,7 @@ export interface SteuerdatenServiceGetSteuerdatenRequestParams {
 
 export interface SteuerdatenServiceUpdateSteuerdatenRequestParams {
     gesuchTrancheId: string;
-    steuerdatenUpdate: Array<SteuerdatenUpdate>;
+    steuerdaten: Array<Steuerdaten>;
 }
 
 
@@ -104,9 +104,9 @@ export class SteuerdatenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<SteuerdatenUpdate>>;
-     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<SteuerdatenUpdate>>>;
-     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<SteuerdatenUpdate>>>;
+     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Steuerdaten>>;
+     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Steuerdaten>>>;
+     public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Steuerdaten>>>;
      public getSteuerdaten$(requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
@@ -159,7 +159,7 @@ export class SteuerdatenService {
         }
 
         const localVarPath = `/steuerdaten/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<SteuerdatenUpdate>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<Steuerdaten>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -177,17 +177,17 @@ export class SteuerdatenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<SteuerdatenUpdate>>;
-     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<SteuerdatenUpdate>>>;
-     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<SteuerdatenUpdate>>>;
+     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Steuerdaten>>;
+     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Steuerdaten>>>;
+     public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Steuerdaten>>>;
      public updateSteuerdaten$(requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdaten$.');
         }
-        const steuerdatenUpdate = requestParameters.steuerdatenUpdate;
-        if (steuerdatenUpdate === null || steuerdatenUpdate === undefined) {
-            throw new Error('Required parameter steuerdatenUpdate was null or undefined when calling updateSteuerdaten$.');
+        const steuerdaten = requestParameters.steuerdaten;
+        if (steuerdaten === null || steuerdaten === undefined) {
+            throw new Error('Required parameter steuerdaten was null or undefined when calling updateSteuerdaten$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -245,10 +245,10 @@ export class SteuerdatenService {
         }
 
         const localVarPath = `/steuerdaten/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<SteuerdatenUpdate>>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<Steuerdaten>>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: steuerdatenUpdate,
+                body: steuerdaten,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

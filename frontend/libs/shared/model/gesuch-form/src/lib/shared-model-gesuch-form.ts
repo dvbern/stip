@@ -1,8 +1,14 @@
 import { SharedModelGesuchFormularPropsSteuerdatenSteps } from '@dv/shared/model/gesuch';
 
 export type StepValidation = {
-  errors?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
-  warnings?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
+  errors?: (
+    | SharedModelGesuchFormularPropsSteuerdatenSteps
+    | 'steuererklaerung'
+  )[];
+  warnings?: (
+    | SharedModelGesuchFormularPropsSteuerdatenSteps
+    | 'steuererklaerung'
+  )[];
   hasDocuments: boolean | null;
 };
 

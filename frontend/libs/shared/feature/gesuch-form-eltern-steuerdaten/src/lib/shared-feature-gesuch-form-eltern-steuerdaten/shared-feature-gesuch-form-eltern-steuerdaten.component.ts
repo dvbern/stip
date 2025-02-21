@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   computed,
   effect,
   inject,
   input,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -20,25 +21,28 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { Subject, merge } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
+  DokumentTyp,
   SharedModelGesuchFormularUpdate,
+  Steuerdaten,
   SteuerdatenTyp,
-  SteuerdatenUpdate,
   SteuererklaerungUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN_STEUER_STEPS } from '@dv/shared/model/gesuch-form';
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormZuvorHintComponent,
-  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import {
   SharedUiIfGesuchstellerDirective,
@@ -76,7 +80,6 @@ import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-g
     SharedUiStepFormButtonsComponent,
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
-    SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
@@ -90,7 +93,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private config = inject(SharedModelCompileTimeConfig);
   private steuerdatenStore = inject(SteuerdatenStore);
-
+  destroyRef = inject(DestroyRef);
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
@@ -100,8 +103,27 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   gotReenabled$ = new Subject<object>();
   maskitoNumber = maskitoNumber;
 
-  form = this.formBuilder.group({
+  hasUnsavedChanges = false;
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  steuererklaerungForm = this.formBuilder.group({
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
+  });
+
+  steuererklaerungInBernChangedSig = toSignal(
+    this.steuererklaerungForm.controls.steuererklaerungInBern.valueChanges,
+  );
+
+  steuererklaerungInBernDocumentSig = this.createUploadOptionsSig(() => {
+    const steuererklaerungInBern = this.steuererklaerungInBernChangedSig();
+    const type = this.stepSig().type;
+
+    // if in bern, no document is needed, explicit, so no document as long as
+    // no value is set!
+    return steuererklaerungInBern === false
+      ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${type}`]
+      : null;
   });
 
   steuerdatenForm = this.formBuilder.group({
@@ -138,10 +160,9 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   hiddenFieldSet = this.formUtils.createHiddenFieldSet();
 
   originalSteuerdatenSig = computed(() => {
-    // todo: return the steuerdaten from new store
-    return this.viewSig().gesuchFormular?.steuererklaerung?.find(
-      (s) => s.steuerdatenTyp === this.stepSig().type,
-    );
+    return this.steuerdatenStore
+      .cachedSteuerdatenListViewSig()
+      ?.find((s) => s.steuerdatenTyp === this.stepSig().type);
   });
 
   originalSteuererklaerungSig = computed(() => {
@@ -173,7 +194,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     this.viewSig,
   );
 
-  private createSteuerDatenEffect() {
+  private createSteuerDatenSBEffects() {
     const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
 
     if (isSachbearbeitungApp) {
@@ -188,52 +209,52 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       effect(() => {
         const steuerdaten = this.originalSteuerdatenSig();
 
-        // if (steuerdaten) {
-        //   this.form.patchValue({
-        //     ...steuerdaten,
-        //     arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
-        //     ...this.numberConverter.toString(steuerdaten),
-        //   });
-        // }
+        if (steuerdaten) {
+          this.steuerdatenForm.patchValue({
+            ...steuerdaten,
+            arbeitsverhaeltnis: steuerdaten.isArbeitsverhaeltnisSelbstaendig,
+            ...this.numberConverter.toString(steuerdaten),
+          });
+        }
       });
+      effect(
+        () => {
+          this.gotReenabledSig();
+          const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
+          this.hiddenFieldSet.setFieldVisibility(
+            this.steuerdatenForm.controls.saeule3a,
+            arbeitsverhaeltnis ?? false,
+          );
+          this.hiddenFieldSet.setFieldVisibility(
+            this.steuerdatenForm.controls.saeule2,
+            arbeitsverhaeltnis ?? false,
+          );
+        },
+        { allowSignalWrites: true },
+      );
     }
   }
 
   constructor() {
-    this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
+    this.formUtils.registerFormForUnsavedCheck(this);
+    merge(
+      this.steuererklaerungForm.valueChanges,
+      this.steuerdatenForm.valueChanges,
+    )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.hasUnsavedChanges =
+          this.steuerdatenForm.dirty || this.steuererklaerungForm.dirty;
+      });
 
-    this.createSteuerDatenEffect();
+    this.createSteuerDatenSBEffects();
     this.steuerjahrValidation.createEffect();
-
-    // betrifft sachbearbeiter
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
-        this.hiddenFieldSet.setFieldVisibility(
-          this.steuerdatenForm.controls.saeule3a,
-          arbeitsverhaeltnis ?? false,
-        );
-        this.hiddenFieldSet.setFieldVisibility(
-          this.steuerdatenForm.controls.saeule2,
-          arbeitsverhaeltnis ?? false,
-        );
-        this.hiddenFieldSet.setFieldVisibility(
-          this.steuerdatenForm.controls.veranlagungsCode,
-          this.config.isSachbearbeitungApp,
-        );
-        this.hiddenFieldSet.setFieldVisibility(
-          this.steuerdatenForm.controls.steuerjahr,
-          this.config.isSachbearbeitungApp,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
 
     effect(() => {
       const steuererklaerung = this.originalSteuererklaerungSig();
       if (steuererklaerung) {
-        this.form.patchValue({
+        this.steuererklaerungForm.patchValue({
           steuererklaerungInBern: steuererklaerung.steuererklaerungInBern,
         });
       }
@@ -241,14 +262,14 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   }
 
   handleSave(): void {
-    this.form.markAllAsTouched();
-
+    this.steuererklaerungForm.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
-
     const { gesuchId, trancheId, gesuchFormular } =
       this.buildUpdatedGesuchFromSteuererklaerungForm();
 
-    if (this.form.valid && gesuchId && trancheId) {
+    if (this.steuererklaerungForm.valid && gesuchId && trancheId) {
+      this.steuererklaerungForm.markAsPristine();
+      this.hasUnsavedChanges = false;
       this.store.dispatch(
         SharedEventGesuchFormElternSteuerdaten.saveTriggered({
           gesuchId,
@@ -257,28 +278,42 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
           origin: ELTERN_STEUER_STEPS[this.stepSig().type],
         }),
       );
-      this.form.markAsPristine();
     }
   }
 
   handleSaveSachbearbeiter(): void {
-    this.form.markAllAsTouched();
+    this.steuererklaerungForm.markAllAsTouched();
     this.steuerdatenForm.markAllAsTouched();
+    const { gesuchId, trancheId, gesuchFormular } =
+      this.buildUpdatedGesuchFromSteuererklaerungForm();
 
     this.formUtils.focusFirstInvalid(this.elementRef);
-    const { gesuchId, trancheId, gesuchFormular } =
-      this.buildUpdatedGesuchFromSteuerdatenForm();
+    const steuerdaten = this.buildUpdateSteuerdatenForm();
 
-    if (this.form.valid && gesuchId && trancheId) {
-      this.store.dispatch(
-        SharedEventGesuchFormElternSteuerdaten.saveTriggered({
-          gesuchId,
-          trancheId,
-          gesuchFormular,
-          origin: ELTERN_STEUER_STEPS[this.stepSig().type],
-        }),
-      );
-      this.form.markAsPristine();
+    if (
+      this.steuererklaerungForm.valid &&
+      this.steuerdatenForm.valid &&
+      gesuchId &&
+      trancheId
+    ) {
+      this.hasUnsavedChanges = false;
+      this.steuerdatenForm.markAsPristine();
+      this.steuererklaerungForm.markAsPristine();
+
+      this.steuerdatenStore.updateSteuerdaten$({
+        gesuchTrancheId: trancheId,
+        steuerdaten,
+        onSuccess: () => {
+          this.store.dispatch(
+            SharedEventGesuchFormElternSteuerdaten.saveTriggered({
+              gesuchId,
+              trancheId,
+              gesuchFormular,
+              origin: ELTERN_STEUER_STEPS[this.stepSig().type],
+            }),
+          );
+        },
+      });
     }
   }
 
@@ -296,13 +331,11 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
 
   private buildUpdatedGesuchFromSteuererklaerungForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
-    const formValues = convertTempFormToRealValues(this.form, [
+    const formValues = convertTempFormToRealValues(this.steuererklaerungForm, [
       'steuererklaerungInBern',
     ]);
 
-    const originalSteuererklaerung = this.originalSteuererklaerungSig();
     const steuererklaerung = {
-      id: originalSteuererklaerung?.id,
       ...formValues,
       steuerdatenTyp: this.stepSig().type,
     };
@@ -319,8 +352,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     };
   }
 
-  private buildUpdatedGesuchFromSteuerdatenForm() {
-    const { gesuch, gesuchFormular } = this.viewSig();
+  private buildUpdateSteuerdatenForm(): Steuerdaten[] {
     const formValues = convertTempFormToRealValues(this.steuerdatenForm, [
       'totalEinkuenfte',
       'eigenmietwert',
@@ -347,14 +379,10 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       isArbeitsverhaeltnisSelbstaendig: formValues.arbeitsverhaeltnis,
       ...this.numberConverter.toNumber(formValues),
     };
-    return {
-      gesuchId: gesuch?.id,
-      trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      gesuchFormular: {
-        ...gesuchFormular,
-        steuerdaten: upsertSteuerdaten(steuerdaten, gesuchFormular),
-      },
-    };
+    return upsertSteuerdaten(
+      steuerdaten,
+      this.steuerdatenStore.cachedSteuerdatenListViewSig(),
+    );
   }
 }
 
@@ -384,18 +412,14 @@ const upsertSteuererklaerung = (
   return result;
 };
 
-// Todo: will only be used for SB and will be different
 const upsertSteuerdaten = (
-  steuerdaten: SteuerdatenUpdate,
-  gesuchFormular?: SharedModelGesuchFormularUpdate | null,
+  steuerdaten: Steuerdaten,
+  originalSteuerdaten?: Steuerdaten[],
 ) => {
   const uniqueSteuerdaten = new Set<string>();
   const result = [];
 
-  const combinedSteuerdaten = [
-    // ...(gesuchFormular?.steuerdaten ?? []),
-    steuerdaten,
-  ];
+  const combinedSteuerdaten = [...(originalSteuerdaten ?? []), steuerdaten];
 
   for (const s of combinedSteuerdaten) {
     if (!uniqueSteuerdaten.has(s.steuerdatenTyp)) {

@@ -18,7 +18,7 @@ describe('SteuerdatenStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.steuerdaten()).toEqual({
+    expect(store.cachedSteuerdaten()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

@@ -448,7 +448,10 @@
   "shared.eltern-steuer.title.VATER": "Steuerdaten für Vater",
   "shared.form.shared.section.einnahmen": "Einnahmen",
 
-  "shared.form.eltern-steuerdaten.steuererklaerungInBern.label": "Steuererklärung im Kanton Bern?",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.FAMILIE": "Haben ihre Eltern",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.MUTTER": "Hat ihre Mutter",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.VATER": "Hat ihr Vater",
+  "shared.form.eltern-steuerdaten.steuererklaerungInBern.label": "{{ prefix }} eine Steuererklärung im Kanton Bern eingereicht?",
   "shared.form.eltern-steuerdaten.steuererklaerungInBern.true": "Ja",
   "shared.form.eltern-steuerdaten.steuererklaerungInBern.false": "Nein",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total der Einkünfte",
@@ -477,6 +480,9 @@
   "shared.form.eltern-steuerdaten.verpflegungPartner.label": "Verpflegung Partner:in",
   "shared.form.eltern-steuerdaten.steuerjahr.label": "Steuerjahr",
   "shared.form.eltern-steuerdaten.veranlagungscode.label": "Veranlagungscode",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER": "Bitte laden sie die Steuererklärung ihres Vaters hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER": "Bitte laden sie die Steuererklärung ihrer Mutter hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE": "Bitte laden sie die Steuererklärung ihrer Eltern hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
 
   "shared.geschwister.title": "Geschwister",
   "shared.form.geschwister.top.info": "Geben Sie nur vorschulpflichtige, schulpflichtige oder in Ausbildung stehende Geschwister an. Bitte geben Sie auch Ihre Halbgeschwister und Stiefgeschwister an.",

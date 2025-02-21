@@ -4909,14 +4909,6 @@ components:
           type: integer
         vermoegen:
           type: integer
-    # Steuerdaten:
-    #   title: Root Type for Steuerdaten
-    #   type: object
-    #   allOf:
-    #     - $ref: '#/components/schemas/SteuerdatenUpdate'
-    #   properties:
-    #     id:
-    #       $ref: '#/components/schemas/UUID'
     SozialdienstBenutzerBase:
       required:
         - vorname

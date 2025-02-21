@@ -4,25 +4,21 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { SteuerdatenService, SteuerdatenUpdate } from '@dv/shared/model/gesuch';
+import { Steuerdaten, SteuerdatenService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
-  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type SteuerdatenState = {
-  cachedSteuerdaten: CachedRemoteData<SteuerdatenUpdate[]>;
-  steuerdaten: RemoteData<SteuerdatenUpdate[]>;
+  cachedSteuerdaten: CachedRemoteData<Steuerdaten[]>;
 };
 
 const initialState: SteuerdatenState = {
   cachedSteuerdaten: initial(),
-  steuerdaten: initial(),
 };
 
 @Injectable()
@@ -35,10 +31,6 @@ export class SteuerdatenStore extends signalStore(
 
   cachedSteuerdatenListViewSig = computed(() => {
     return fromCachedDataSig(this.cachedSteuerdaten);
-  });
-
-  steuerdatenViewSig = computed(() => {
-    return this.steuerdaten.data();
   });
 
   getSteuerdaten$ = rxMethod<{ gesuchTrancheId: string }>(
@@ -54,8 +46,8 @@ export class SteuerdatenStore extends signalStore(
             gesuchTrancheId,
           })
           .pipe(
-            handleApiResponse((steuerdaten) =>
-              patchState(this, { steuerdaten }),
+            handleApiResponse((cachedSteuerdaten) =>
+              patchState(this, { cachedSteuerdaten }),
             ),
           ),
       ),
@@ -64,7 +56,8 @@ export class SteuerdatenStore extends signalStore(
 
   updateSteuerdaten$ = rxMethod<{
     gesuchTrancheId: string;
-    steuerdatenUpdate: SteuerdatenUpdate[];
+    steuerdaten: Steuerdaten[];
+    onSuccess?: () => void;
   }>(
     pipe(
       tap(() => {
@@ -72,19 +65,15 @@ export class SteuerdatenStore extends signalStore(
           cachedSteuerdaten: cachedPending(state.cachedSteuerdaten),
         }));
       }),
-      switchMap(({ gesuchTrancheId, steuerdatenUpdate }) =>
+      switchMap(({ gesuchTrancheId, steuerdaten, onSuccess }) =>
         this.steuerdatenService
-          .updateSteuerdaten$({ gesuchTrancheId, steuerdatenUpdate })
+          .updateSteuerdaten$({ gesuchTrancheId, steuerdaten })
           .pipe(
             handleApiResponse(
-              (steuerdaten) => {
-                patchState(this, { steuerdaten });
+              (cachedSteuerdaten) => {
+                patchState(this, { cachedSteuerdaten });
               },
-              {
-                // onSuccess: (steuerdaten) => {
-                //   // Do something after save, like showing a notification
-                // },
-              },
+              { onSuccess },
             ),
           ),
       ),
