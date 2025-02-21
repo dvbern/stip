@@ -77,7 +77,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
     @Override
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
@@ -134,7 +134,7 @@ public class DokumentResourceImpl implements DokumentResource {
         unterschriftenblattService.removeDokument(dokumentId);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
     @Blocking
@@ -169,10 +169,10 @@ public class DokumentResourceImpl implements DokumentResource {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
-    @AllowAll
     public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
+        customGesuchDokumentTypAuthorizer.canRead();
         return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
     }
 

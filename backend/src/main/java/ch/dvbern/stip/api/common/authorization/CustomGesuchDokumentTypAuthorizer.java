@@ -42,6 +42,14 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
 
     @Transactional
+    public void canRead() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!isAdminOrSb(currentBenutzer)) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Transactional
     public void canUpload(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
