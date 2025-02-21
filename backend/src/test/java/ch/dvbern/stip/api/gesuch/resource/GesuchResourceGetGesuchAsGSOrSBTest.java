@@ -133,6 +133,7 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
     @TestAsSachbearbeiter
     @Order(6)
     void updateGesuch() {
+        // Arrange
         gesuchId = gesuchWithChanges.getId();
         trancheId = gesuchWithChanges.getGesuchTrancheToWorkWith().getId();
         ekBeforeUpdate = gesuchWithChanges.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
@@ -151,6 +152,8 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setWohnkosten(wohnkostenChangeValue);
+
+        // Act
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
@@ -158,12 +161,8 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-    }
 
-    @Test
-    @TestAsSachbearbeiter
-    @Order(7)
-    void checkSBReceivesCurrentStateOfTranche() {
+        // Assert
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)

@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.util.AbstractPersonCopyUtil;
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import lombok.experimental.UtilityClass;
 
@@ -52,5 +53,13 @@ public class ElternCopyUtil {
         }
 
         return copy;
+    }
+
+    public void doOverrideOfSet(final Set<Eltern> targetEltern, final Set<Eltern> sourceEltern) {
+        OverrideUtil.doOverrideOfSet(
+            targetEltern,
+            sourceEltern,
+            ElternCopyUtil::createCopyWithoutReferences
+        );
     }
 }

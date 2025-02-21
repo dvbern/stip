@@ -112,7 +112,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
-import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SB_EDITS_GESUCH;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -158,17 +157,19 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
-        final var actualTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        boolean wasOnceEingereicht = Objects.nonNull(actualTranche.getGesuch().getEinreichedatum());
+    public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
 
-        if (wasOnceEingereicht && SB_EDITS_GESUCH.contains(actualTranche.getGesuch().getGesuchStatus())) {
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
             var trancheInStatusEingereicht =
-                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId).orElseThrow();
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
             return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
         } else {
             // atkuelles gesuch
-            return gesuchMapperUtil.mapWithGesuchOfTranche(actualTranche);
+            return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
         }
     }
 

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.lebenslauf.util;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import lombok.experimental.UtilityClass;
 
@@ -51,29 +52,11 @@ public class LebenslaufItemCopyUtil {
         return copy;
     }
 
-    public void overrideItem(LebenslaufItem toBeReplaced, final LebenslaufItem replacement) {
-        toBeReplaced.setBildungsart(replacement.getBildungsart());
-        toBeReplaced.setVon(replacement.getVon());
-        toBeReplaced.setBis(replacement.getBis());
-        toBeReplaced.setTaetigkeitsart(replacement.getTaetigkeitsart());
-        toBeReplaced.setTaetigkeitsBeschreibung(replacement.getTaetigkeitsBeschreibung());
-        toBeReplaced.setBerufsbezeichnung(replacement.getBerufsbezeichnung());
-        toBeReplaced.setFachrichtung(replacement.getFachrichtung());
-        toBeReplaced.setTitelDesAbschlusses(replacement.getTitelDesAbschlusses());
-        toBeReplaced.setAusbildungAbgeschlossen(replacement.isAusbildungAbgeschlossen());
-        toBeReplaced.setWohnsitz(replacement.getWohnsitz());
-
-    }
-
-    public void doOverrideOfSet(Set<LebenslaufItem> toBeReplaced, Set<LebenslaufItem> replacement) {
-        for (var item : toBeReplaced) {
-            if (replacement.contains(item)) {
-                var replacementOfItem =
-                    replacement.stream().filter(lebenslaufItem -> lebenslaufItem.equals(item)).findFirst();
-                replacementOfItem.ifPresent(lebenslaufItem -> overrideItem(item, lebenslaufItem));
-            } else {
-                toBeReplaced.add(item);
-            }
-        }
+    public void doOverrideOfSet(Set<LebenslaufItem> targetItems, Set<LebenslaufItem> sourceItems) {
+        OverrideUtil.doOverrideOfSet(
+            targetItems,
+            sourceItems,
+            LebenslaufItemCopyUtil::createCopy
+        );
     }
 }

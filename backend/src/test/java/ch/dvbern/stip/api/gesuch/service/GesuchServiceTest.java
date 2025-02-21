@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
@@ -1498,7 +1497,9 @@ class GesuchServiceTest {
             )
         );
 
-        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId(), gesuch.getGesuchTranchen().get(0).getId());
+        // act
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
     }
@@ -1532,7 +1533,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId(), gesuch.getGesuchTranchen().get(0).getId());
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
     }
@@ -1597,7 +1598,7 @@ class GesuchServiceTest {
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
         var gesuchGS = gesuchService
-            .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
         assertThat(
             gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
@@ -1607,7 +1608,7 @@ class GesuchServiceTest {
         // also test for other related states
         gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
         gesuchGS = gesuchService
-            .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
         assertThat(
             gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
@@ -1622,8 +1623,7 @@ class GesuchServiceTest {
      */
     @Test
     @Description("The whole gesuch should should be reset to snapshot of EINGEREICHT when rejected by SB")
-    void checkGesuchIsResetedAfterRejectionTest()
-    throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    void checkGesuchIsResetedAfterRejectionTest() {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(

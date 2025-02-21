@@ -105,9 +105,9 @@ public interface GesuchResource {
     GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
+    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/gesuchZurueckweisen")

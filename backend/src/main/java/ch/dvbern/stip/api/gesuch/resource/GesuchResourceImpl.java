@@ -374,7 +374,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
 
         gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.getGesuchGS(gesuchId, gesuchTrancheId);
+        return gesuchService.getGesuchGS(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -430,9 +430,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchId, UUID gesuchTrancheId) {
+    public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
-        return gesuchService.getGesuchGS(gesuchId, gesuchTrancheId);
+        return gesuchService.getGesuchGS(gesuchTrancheId);
     }
 }

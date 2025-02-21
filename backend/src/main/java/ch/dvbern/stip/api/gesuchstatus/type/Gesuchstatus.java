@@ -51,7 +51,7 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> SB_EDITS_GESUCH =
+    public static final Set<Gesuchstatus> SB_IS_EDITING_GESUCH =
         Collections.unmodifiableSet(
             EnumSet.of(
                 IN_BEARBEITUNG_SB,

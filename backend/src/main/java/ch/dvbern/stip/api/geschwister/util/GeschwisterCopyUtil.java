@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.util.AbstractFamilieEntityCopyUtil;
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import lombok.experimental.UtilityClass;
 
@@ -44,21 +45,11 @@ public class GeschwisterCopyUtil {
         return copy;
     }
 
-    public void overrideItem(Geschwister toBeReplaced, final Geschwister replacement) {
-        AbstractFamilieEntityCopyUtil.copy(replacement, toBeReplaced);
-        toBeReplaced.setAusbildungssituation(replacement.getAusbildungssituation());
-    }
-
-    public void doOverrideOfSet(Set<Geschwister> toBeReplaced, Set<Geschwister> replacement) {
-        for (var item : toBeReplaced) {
-            if (replacement.contains(item)) {
-                var replacementOfItem =
-                    replacement.stream().filter(geschwister -> geschwister.equals(item)).findFirst();
-                replacementOfItem.ifPresent(geschwister -> overrideItem(item, geschwister));
-            } else {
-                // new item -> add to list
-                toBeReplaced.add(item);
-            }
-        }
+    public void doOverrideOfSet(Set<Geschwister> targetGeschwister, Set<Geschwister> sourceGeschwister) {
+        OverrideUtil.doOverrideOfSet(
+            targetGeschwister,
+            sourceGeschwister,
+            GeschwisterCopyUtil::createCopy
+        );
     }
 }

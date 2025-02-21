@@ -1209,14 +1209,13 @@ public class GesuchApiSpec {
      * Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
      * 
      *
-     * @see #gesuchIdPath  (required)
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
      * return GesuchDtoSpec
      */
     public static class GesuchTrancheFehlendeDokumenteEinreichenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1228,7 +1227,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1239,7 +1238,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -1248,21 +1247,10 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
          * @return operation
          */
         public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchTrancheIdPath(Object gesuchTrancheId) {

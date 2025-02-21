@@ -100,7 +100,7 @@ public class GesuchStatusService {
             editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
         }
         if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(Gesuchstatus.SB_EDITS_GESUCH);
+            editStates.addAll(Gesuchstatus.SB_IS_EDITING_GESUCH);
         }
         if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
             editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);

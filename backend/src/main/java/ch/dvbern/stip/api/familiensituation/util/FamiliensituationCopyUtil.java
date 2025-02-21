@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.familiensituation.util;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,38 +42,43 @@ public class FamiliensituationCopyUtil {
         return copy;
     }
 
-    public void overrideItem(final Familiensituation replacement, Familiensituation toBeReplaced) {
-        if (Objects.isNull(replacement)) {
+    public void overrideItem(final GesuchFormular source, final GesuchFormular target) {
+        if (source.getFamiliensituation() == null) {
+            target.setFamiliensituation(null);
             return;
         }
-        if (Objects.nonNull(replacement.getElternVerheiratetZusammen())) {
-            toBeReplaced.setElternVerheiratetZusammen(replacement.getElternVerheiratetZusammen());
+
+        final var sourceFamsit = source.getFamiliensituation();
+        final var targetFamsit = target.getFamiliensituation();
+
+        if (Objects.nonNull(sourceFamsit.getElternVerheiratetZusammen())) {
+            targetFamsit.setElternVerheiratetZusammen(sourceFamsit.getElternVerheiratetZusammen());
         }
 
-        if (Objects.nonNull(replacement.getElternteilUnbekanntVerstorben())) {
-            toBeReplaced.setElternteilUnbekanntVerstorben(replacement.getElternteilUnbekanntVerstorben());
+        if (Objects.nonNull(sourceFamsit.getElternteilUnbekanntVerstorben())) {
+            targetFamsit.setElternteilUnbekanntVerstorben(sourceFamsit.getElternteilUnbekanntVerstorben());
         }
 
-        if (Objects.nonNull(replacement.getGerichtlicheAlimentenregelung())) {
-            toBeReplaced.setGerichtlicheAlimentenregelung(replacement.getGerichtlicheAlimentenregelung());
+        if (Objects.nonNull(sourceFamsit.getGerichtlicheAlimentenregelung())) {
+            targetFamsit.setGerichtlicheAlimentenregelung(sourceFamsit.getGerichtlicheAlimentenregelung());
         }
 
-        if (Objects.nonNull(replacement.getMutterUnbekanntVerstorben())) {
-            toBeReplaced.setMutterUnbekanntVerstorben(replacement.getMutterUnbekanntVerstorben());
+        if (Objects.nonNull(sourceFamsit.getMutterUnbekanntVerstorben())) {
+            targetFamsit.setMutterUnbekanntVerstorben(sourceFamsit.getMutterUnbekanntVerstorben());
         }
 
-        toBeReplaced.setMutterUnbekanntGrund(replacement.getMutterUnbekanntGrund());
-        toBeReplaced.setVaterUnbekanntGrund(replacement.getVaterUnbekanntGrund());
-        toBeReplaced.setWerZahltAlimente(replacement.getWerZahltAlimente());
+        targetFamsit.setMutterUnbekanntGrund(sourceFamsit.getMutterUnbekanntGrund());
+        targetFamsit.setVaterUnbekanntGrund(sourceFamsit.getVaterUnbekanntGrund());
+        targetFamsit.setWerZahltAlimente(sourceFamsit.getWerZahltAlimente());
 
-        if (Objects.nonNull(replacement.getMutterWiederverheiratet())) {
-            toBeReplaced.setMutterWiederverheiratet(replacement.getMutterWiederverheiratet());
+        if (Objects.nonNull(sourceFamsit.getMutterWiederverheiratet())) {
+            targetFamsit.setMutterWiederverheiratet(sourceFamsit.getMutterWiederverheiratet());
         }
-        if (Objects.nonNull(replacement.getVaterUnbekanntVerstorben())) {
-            toBeReplaced.setVaterUnbekanntVerstorben(replacement.getVaterUnbekanntVerstorben());
+        if (Objects.nonNull(sourceFamsit.getVaterUnbekanntVerstorben())) {
+            targetFamsit.setVaterUnbekanntVerstorben(sourceFamsit.getVaterUnbekanntVerstorben());
         }
-        if (Objects.nonNull(replacement.getVaterWiederverheiratet())) {
-            toBeReplaced.setVaterWiederverheiratet(replacement.getVaterWiederverheiratet());
+        if (Objects.nonNull(sourceFamsit.getVaterWiederverheiratet())) {
+            targetFamsit.setVaterWiederverheiratet(sourceFamsit.getVaterWiederverheiratet());
         }
     }
 

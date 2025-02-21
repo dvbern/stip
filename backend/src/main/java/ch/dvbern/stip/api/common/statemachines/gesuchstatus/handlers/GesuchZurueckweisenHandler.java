@@ -36,8 +36,13 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.IN_BEARBEITUNG_SB
-        && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
+        final var source = transition.getSource();
+        final var handlesSource = switch (source) {
+            case IN_BEARBEITUNG_SB, FEHLENDE_DOKUMENTE -> true;
+            default -> false;
+        };
+
+        return handlesSource && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
     }
 
     @Override
