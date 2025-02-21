@@ -129,7 +129,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const {
       allowTypes,
       gesuchId,
-      gesuchPermissions,
+      permissions,
       trancheSetting,
       trancheId,
       readonly,
@@ -145,7 +145,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     return {
       gesuchId,
       trancheId,
-      permissions: gesuchPermissions,
+      permissions,
       trancheSetting: trancheSetting ?? undefined,
       isSachbearbeitungApp,
       allowTypes,
