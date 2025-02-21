@@ -139,17 +139,25 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchStepsView.projector(state, {
-      deploymentConfig: undefined,
-      compileTimeConfig: {
-        appType: 'gesuch-app',
-        authClientId: 'stip-gesuch-app',
+    const result = selectSharedDataAccessGesuchStepsView.projector(
+      state,
+      {
+        deploymentConfig: undefined,
+        compileTimeConfig: {
+          appType: 'gesuch-app',
+          authClientId: 'stip-gesuch-app',
+        },
+        loading: false,
+        error: undefined,
+        isGesuchApp: true,
+        isSachbearbeitungApp: false,
       },
-      loading: false,
-      error: undefined,
-      isGesuchApp: true,
-      isSachbearbeitungApp: false,
-    });
+      {
+        rolesMap: {},
+        currentBenutzerRd: initial(),
+        lastFetchTs: null,
+      },
+    );
     const elternIndex = result.steps.findIndex(
       (step) => step.route === ELTERN.route,
     );
