@@ -51,7 +51,7 @@ export class SharedPatternDocumentUploadEntryComponent {
   private config = inject(SharedModelCompileTimeConfig);
   isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();
-    return isUploadable(this.config.appType, dokumentModel, permissions);
+    return isUploadable(dokumentModel, permissions);
   });
   checkForRemove$ = new EventEmitter<void>();
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();

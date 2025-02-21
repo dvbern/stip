@@ -395,6 +395,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
+        gesuchDokumentKommentarService.deleteForGesuchTrancheId(aenderungId);
         if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -309,9 +310,25 @@ class GesuchFillFormularTest {
         patchAndValidate();
     }
 
+    // make sure Bug KSTIP-1883 is fixed
     @Test
     @TestAsGesuchsteller
     @Order(16)
+    void validateResetOfEinnahmenKosten() {
+        final var minderjaehrigBirthDate = currentFormular.getPersonInAusbildung().getGeburtsdatum();
+        final var volljaehrigBirthDate = LocalDate.now().minusYears(19);
+        // set pia to volljaehrig
+        currentFormular.getPersonInAusbildung().setGeburtsdatum(volljaehrigBirthDate);
+        currentFormular.getEinnahmenKosten().setVermoegen(100);
+        patchGesuch();
+        // reset pia to minderjaehrig again
+        currentFormular.getPersonInAusbildung().setGeburtsdatum(minderjaehrigBirthDate);
+        patchAndValidate();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(17)
     void addDokumente() {
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
@@ -323,7 +340,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void removeSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
@@ -337,7 +354,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(19)
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
@@ -396,7 +413,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(19)
+    @Order(20)
     void gesuchEinreichenValidation() {
         final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -417,7 +434,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(20)
+    @Order(21)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuchTrancheId)

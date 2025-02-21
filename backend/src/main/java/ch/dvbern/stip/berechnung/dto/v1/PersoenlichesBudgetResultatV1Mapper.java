@@ -67,7 +67,11 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
         if (antragssteller.isVerheiratetKonkubinat() && anzahlPersonenImHaushalt > 0) {
             fahrkosten *= anzahlPersonenImHaushalt;
             ausbildungskosten *= anzahlPersonenImHaushalt;
+        }
 
+        Integer totalVorTeilung = null;
+        if ((einnahmenPersoenlichesBudget - ausgabenPersoenlichesBudget) != persoenlichesbudgetBerechnet) {
+            totalVorTeilung = einnahmenPersoenlichesBudget - ausgabenPersoenlichesBudget;
         }
 
         return new PersoenlichesBudgetresultatDto()
@@ -106,7 +110,8 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .fremdbetreuung(antragssteller.getFremdbetreuung())
             .ausbildungskosten(ausbildungskosten)
             .ausgabenPersoenlichesBudget(ausgabenPersoenlichesBudget)
-            .persoenlichesbudgetBerechnet(persoenlichesbudgetBerechnet);
+            .persoenlichesbudgetBerechnet(persoenlichesbudgetBerechnet)
+            .totalVorTeilung(totalVorTeilung);
     }
 
     private static int getAnteilFamilienBudget(

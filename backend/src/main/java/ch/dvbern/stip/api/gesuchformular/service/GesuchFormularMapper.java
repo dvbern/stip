@@ -330,6 +330,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
             }
         );
+
+        resetFieldIf(
+            () -> (newFormular.getEinnahmenKosten() != null &&
+            !GesuchFormularCalculationUtil
+                .isPersonInAusbildungVolljaehrig(newFormular)),
+            "Reset Vermoegen if Person in Ausbildung is < 18 years old",
+            () -> {
+                newFormular.getEinnahmenKosten().setVermoegen(null);
+            }
+        );
     }
 
     void resetDarlehen(

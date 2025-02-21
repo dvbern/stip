@@ -21,7 +21,7 @@ export const selectSharedFeatureGesuchFormDarlehenView = createSelector(
       gesuchFormular: gesuchsView.gesuchFormular,
       darlehen: gesuchsView.gesuchFormular?.darlehen,
       readonly: gesuchsView.readonly,
-      gesuchPermissions: gesuchsView.gesuchPermissions,
+      permissions: gesuchsView.permissions,
     };
   },
 );

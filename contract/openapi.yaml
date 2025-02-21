@@ -5244,6 +5244,8 @@ components:
       properties:
         anzahlPersonenImHaushalt:
           type: integer
+        totalVorTeilung:
+          type: integer
         eigenerHaushalt:
           type: boolean
         anteilFamilienbudget:

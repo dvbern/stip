@@ -72,15 +72,15 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() => {
-    const { gesuch } = this.cacheViewSig().cache;
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
+    const { cache, trancheTyp } = this.cacheViewSig();
     const steps = this.stepsViewSig().steps;
-    const validatedSteps = this.stepManager.getValidatedSteps(
+    return this.stepManager.getValidatedSteps(
       steps,
-      gesuch,
+      trancheTyp,
+      cache.gesuch,
       invalidFormularProps.validations,
     );
-    return validatedSteps;
   });
   currentStepProgressSig = computed(() => {
     const currentStep = this.stepSig();

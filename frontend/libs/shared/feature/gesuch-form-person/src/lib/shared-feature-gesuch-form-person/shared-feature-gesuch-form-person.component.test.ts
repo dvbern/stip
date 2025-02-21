@@ -107,7 +107,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
             adresse: {},
           } as PersonInAusbildung,
         } as GesuchFormular,
-        gesuchPermissions: {},
+        permissions: {},
         formChanges: null,
         benutzerEinstellungen: {
           digitaleKommunikation: undefined,

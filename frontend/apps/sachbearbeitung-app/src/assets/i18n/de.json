@@ -388,6 +388,8 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Ausbildungskosten der/des Auszubildenden",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Fahrkosten der/des Auszubildenden",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Totaler Betrag des Budgets",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Pro Kopf Teilung",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Anrechenbares Budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Anrechenbarer Betrag des Budgets ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
 
@@ -434,7 +436,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Details der verminderten Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Abzug ({{ reducePercentage }}%) wegen verspäteter Einreichung des Stipendiumantrags, {{ months }} Monate nach Ausbildungsbegin.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Kürzung ({{ months }}/12) wegen verspäteter Einreichung.",
   "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Effektiver Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
