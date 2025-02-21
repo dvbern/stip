@@ -61,7 +61,7 @@ public class DocumentsRequiredConstraintValidator
         Set<String> allFiltered = new HashSet<>(filtered);
 
         final var customFiltered =
-            DokumentValidationUtils.getMissingCustomDocumentTypesByType(customProducers, formular.getTranche());
+            DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
         customFiltered.forEach(missingCustomDok -> allFiltered.add("dokuments"));
 
         if (!allFiltered.isEmpty()) {

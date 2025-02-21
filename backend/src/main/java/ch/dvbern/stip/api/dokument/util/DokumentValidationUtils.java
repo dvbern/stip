@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -30,9 +26,13 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @UtilityClass
 public class DokumentValidationUtils {
-    public List<String> getMissingCustomDocumentTypesByType(
+    public List<String> getMissingCustomDocumentTypsByTranche(
         Instance<RequiredCustomDocumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
