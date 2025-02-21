@@ -68,7 +68,8 @@ class DokumentAuthorizerTest {
         gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
 
         // act/assert
-        assertDoesNotThrow(() -> dokumentAuthorizer.canUpdateGesuchDokument(UUID.randomUUID()));
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> dokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
     }
 
     @Test
@@ -78,7 +79,8 @@ class DokumentAuthorizerTest {
         gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
 
         // act/assert
-        assertThrows(IllegalStateException.class, () -> dokumentAuthorizer.canUpdateGesuchDokument(UUID.randomUUID()));
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> dokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
     }
 
     @Test
@@ -88,7 +90,8 @@ class DokumentAuthorizerTest {
         gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
 
         // act/assert
-        assertDoesNotThrow(() -> dokumentAuthorizer.canUpdateGesuchDokument(UUID.randomUUID()));
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> dokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
     }
 
     @Test
@@ -98,6 +101,7 @@ class DokumentAuthorizerTest {
         gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
 
         // act/assert
-        assertThrows(IllegalStateException.class, () -> dokumentAuthorizer.canUpdateGesuchDokument(UUID.randomUUID()));
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> dokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
     }
 }
