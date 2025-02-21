@@ -191,6 +191,7 @@
   "shared.gesuch.validation.wohnsitz.message": "Die Wohnsitz Angaben stimmen nicht mit den Angaben der Familiensituation überein. Bitte überprüfen Sie Ihre Eingaben bei:",
   "shared.gesuch.validation.link.personInAusbildung": "Person in Ausbildung",
   "shared.gesuch.validation.link.geschwisters": "Geschwister",
+  "shared.gesuch.validation.link.einnahmenKosten": "Einnahmen & Kosten",
 
   "shared.gesuch.periode.status.ENTWURF": "Entwurf",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publik - Aktiv",

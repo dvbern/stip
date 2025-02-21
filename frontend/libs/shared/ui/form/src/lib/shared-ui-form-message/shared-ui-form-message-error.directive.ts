@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Directive,
   Input,
   Renderer2,
@@ -16,6 +17,7 @@ export class SharedUiFormMessageErrorDirective {
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
   private renderer = inject(Renderer2);
+  private cd = inject(ChangeDetectorRef);
   private created = false;
 
   public show() {
@@ -26,6 +28,7 @@ export class SharedUiFormMessageErrorDirective {
       if (element) {
         this.renderer.addClass(element, 'invalid-feedback');
       }
+      this.cd.markForCheck();
     }
   }
   public hide() {

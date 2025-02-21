@@ -3,6 +3,7 @@ import { differenceInYears } from 'date-fns';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
+  GesuchUrlType,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularPropsSteuerdatenSteps,
@@ -10,7 +11,7 @@ import {
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
-import { getGesuchPermissions } from '@dv/shared/model/permission-state';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 
 import {
   SharedModelGesuchFormStep,
@@ -231,12 +232,13 @@ export const findStepIndex = (
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
+  trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
   appType: AppType,
 ) => {
   const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
-  const readonly = !gesuchPermissions?.canWrite;
+  const { permissions } = preparePermissions(trancheTyp, gesuch, appType);
+  const readonly = !permissions.canWrite;
 
   switch (step) {
     case PARTNER: {

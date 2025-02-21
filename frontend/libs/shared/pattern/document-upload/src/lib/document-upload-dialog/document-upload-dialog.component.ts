@@ -62,11 +62,7 @@ export class SharedPatternDocumentUploadDialogComponent {
   showUplaodSig = computed(() => {
     const { options } = this.data;
 
-    return isUploadable(
-      this.config.appType,
-      options.dokument,
-      options.permissions,
-    );
+    return isUploadable(options.dokument, options.permissions);
   });
 
   // @HostBinding('class') class = 'p-4 p-md-5';

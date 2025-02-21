@@ -1,4 +1,3 @@
-import { AppType } from '@dv/shared/model/config';
 import {
   CustomDokumentTyp,
   Dokument,
@@ -109,7 +108,6 @@ export interface UploadView {
 }
 
 export const isUploadable = (
-  appType: AppType,
   dokumentModel: SharedModelGesuchDokument,
   permission: PermissionMap,
 ) => {

@@ -15,6 +15,7 @@
  */
 export interface PersoenlichesBudgetresultat { 
     anzahlPersonenImHaushalt: number;
+    totalVorTeilung?: number;
     eigenerHaushalt: boolean;
     anteilFamilienbudget: number;
     einkommen: number;

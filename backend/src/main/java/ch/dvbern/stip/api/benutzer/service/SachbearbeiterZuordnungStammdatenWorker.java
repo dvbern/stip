@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.benutzer.service;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import io.quarkus.narayana.jta.QuarkusTransaction;
@@ -70,10 +69,6 @@ public class SachbearbeiterZuordnungStammdatenWorker {
             zuordnungService::updateZuordnungOnAllFaelle,
             () -> running.set(false)
         );
-    }
-
-    public void queueZuweisung(final Gesuch gesuch, final String tenantId) {
-        run(tenantId, () -> zuordnungService.updateZuordnungOnGesuch(gesuch));
     }
 
     private void run(final String tenantId, final Runnable runnable) {
