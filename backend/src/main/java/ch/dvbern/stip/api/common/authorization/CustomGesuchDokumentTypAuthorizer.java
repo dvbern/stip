@@ -58,14 +58,13 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             gesuchDokumentRepository.findByCustomDokumentType(gesuchDokumentTypId)
                 .orElseThrow();
 
-        final var isNotBeingEditedBySB = !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
-        || !isAdminOrSb(benutzerService.getCurrentBenutzer());
-        final var fehlendeDokumenteUebermitteltToGS = gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE);
         final var filesAttached = !customGesuchDokument.getDokumente().isEmpty();
 
+        // check if gesuch is being edited by SB
+        // or if GS has already attached a file to it
         if (
-            isNotBeingEditedBySB
-            || fehlendeDokumenteUebermitteltToGS && filesAttached
+            gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB
+            || gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_GS) && filesAttached
         ) {
             throw new ForbiddenException();
         }
