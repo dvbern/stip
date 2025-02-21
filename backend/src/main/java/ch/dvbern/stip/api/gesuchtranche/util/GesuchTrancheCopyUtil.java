@@ -273,9 +273,10 @@ public class GesuchTrancheCopyUtil {
         private Adresse vaterAdresse;
 
         public void setForTyp(final ElternTyp typ, final Adresse adresse) {
-            switch (typ) {
-                case VATER -> vaterAdresse = adresse;
-                case MUTTER -> mutterAdresse = adresse;
+            if (typ == ElternTyp.VATER) {
+                vaterAdresse = adresse;
+            } else if (typ == ElternTyp.MUTTER) {
+                mutterAdresse = adresse;
             }
         }
 

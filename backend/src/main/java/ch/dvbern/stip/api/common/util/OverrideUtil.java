@@ -37,7 +37,7 @@ public class OverrideUtil {
                     targetEntities.stream().filter(entity -> source.getId().equals(entity.getId())).findFirst();
                 replacement.ifPresent(replacementItem -> reset.accept(source, replacementItem));
             } else {
-                sourceEntities.add(source);
+                targetEntities.add(source);
             }
         }
     }
