@@ -304,9 +304,6 @@ public class GesuchDokumentService {
             gesuchDokument.getDokumente().remove(dokument);
             dropGesuchDokumentIfNoDokumente(gesuchDokument);
         }
-        if (dokument.getGesuchDokumente().isEmpty()) {
-            dokumentRepository.delete(dokument);
-        }
 
         return dokumentObjectId;
     }

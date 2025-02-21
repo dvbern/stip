@@ -136,7 +136,6 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
     @Blocking
     public void deleteCustomDokumentTyp(UUID gesuchTrancheId, UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchTrancheId, customDokumentTypId);
@@ -145,7 +144,6 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_DELETE)
     @Override
-    @AllowAll
     @Blocking
     public void deleteDokument(UUID dokumentId) {
         customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
