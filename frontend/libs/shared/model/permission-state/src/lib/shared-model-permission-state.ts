@@ -32,7 +32,7 @@ type P<T extends PermissionFlag> = T | ' ';
 type PermissionFlags = `${P<'W'>}${P<'V'>}${P<'D'>}${P<'F'>}${P<'U'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
-export type PermissionMap = Partial<ReturnType<typeof getPermissions>>;
+export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
   p.charAt(Permissions[perm].index) === perm;
@@ -51,7 +51,7 @@ const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
  * }
  * ```
  */
-const getPermissions = (permission: PermissionFlags) => {
+const parsePermissions = (permission: PermissionFlags) => {
   return (Object.keys(Permissions) as PermissionFlag[]).reduce(
     (acc, perm) => {
       acc[`can${capitalized(Permissions[perm].name)}`] = hasPermission(
@@ -118,7 +118,7 @@ export const preparePermissions = (
 ) => {
   if (!gesuch || !appType) return { readonly: false, permissions: {} };
   const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
-  const tranchePermissions = getTranchePermissions(gesuch, appType);
+  const tranchePermissions = getTranchePermissions(gesuch, appType, rolesMap);
   const permissions =
     trancheTyp === 'AENDERUNG' ? tranchePermissions : gesuchPermissions;
   const canWrite = permissions.canWrite ?? true;
@@ -143,22 +143,24 @@ export const getGesuchPermissions = (
   if (!gesuch || !appType) return {};
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
-  const permissions = { ...getPermissions(state) };
-
-  // The gesuch is not writable in the gesuch-app if the user is not a sozialdienst-mitarbeiter
-  // when the geusuch is delegated
-  if (!canCurrentlyEdit(permissions, appType, rolesMap, gesuch.delegierung)) {
-    permissions.canWrite = false;
-  }
-  return permissions;
+  return applyDelegatedPermission(
+    parsePermissions(state),
+    gesuch,
+    appType,
+    rolesMap,
+  );
 };
 
 /**
  * Get the permissions for the tranche based on the status and the app type
  */
 export const getTranchePermissions = (
-  gesuch: { gesuchTrancheToWorkWith: { status: GesuchTrancheStatus } } | null,
-  appType?: AppType,
+  gesuch: {
+    gesuchTrancheToWorkWith: { status: GesuchTrancheStatus };
+    delegierung?: Delegierung;
+  } | null,
+  appType: AppType | undefined,
+  rolesMap: RolesMap,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};
 
@@ -166,7 +168,12 @@ export const getTranchePermissions = (
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
     ];
-  return getPermissions(state);
+  return applyDelegatedPermission(
+    parsePermissions(state),
+    gesuch,
+    appType,
+    rolesMap,
+  );
 };
 
 /**
@@ -196,4 +203,25 @@ export const canCurrentlyEdit = (
     // OK if it is delegated and current user is a sozialdienst-mitarbeiter
     (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
   );
+};
+
+/**
+ * Revoke writability and document upload permissions if the gesuch is delegated
+ */
+const applyDelegatedPermission = (
+  permissions: PermissionMap,
+  gesuch: { delegierung?: Delegierung },
+  appType: AppType,
+  rolesMap: RolesMap,
+): PermissionMap => {
+  if (canCurrentlyEdit(permissions, appType, rolesMap, gesuch.delegierung)) {
+    return permissions;
+  }
+
+  return {
+    ...permissions,
+    canWrite: false,
+    canUploadDocuments: false,
+    canFreigeben: false,
+  };
 };
