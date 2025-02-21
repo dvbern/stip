@@ -327,7 +327,7 @@ public class TestUtil {
         UUID customDokumentTypId,
         File file
     ) {
-        dokumentApiSpec.createCustomGesuchDokument()
+        dokumentApiSpec.uploadCustomGesuchDokument()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {

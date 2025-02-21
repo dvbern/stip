@@ -90,7 +90,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Uni<Response> createCustomGesuchDokument(
+    public Uni<Response> uploadCustomGesuchDokument(
         UUID customDokumentTypId,
         UUID gesuchTrancheId,
         FileUpload fileUpload

@@ -808,7 +808,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createCustomGesuchDokument
+      operationId: uploadCustomGesuchDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare':
     get:
