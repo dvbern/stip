@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -30,6 +26,10 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -42,9 +42,8 @@ public class GesuchDokumentKommentarService {
     public void deleteForGesuchTrancheId(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
-        gesuchDokuments.forEach(dokument -> {
-            gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId());
-        });
+        gesuchDokuments.forEach(dokument ->
+            gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId()));
     }
 
     @Transactional
