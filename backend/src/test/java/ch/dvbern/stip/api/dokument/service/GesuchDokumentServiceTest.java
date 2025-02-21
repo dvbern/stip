@@ -305,15 +305,15 @@ class GesuchDokumentServiceTest {
         gesuch.getGesuchTranchen().get(0).setId(gesuchTrancheId);
 
         // Act
+        // should not throw, since there is no file attached
         assertDoesNotThrow(
             () -> customGesuchDokumentTypAuthorizer
                 .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
         );
+
+        // attach one file
         customGesuchDokument.getDokumente().add(new Dokument());
-        assertDoesNotThrow(
-            () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
-        );
+        // send missing files to GS
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertThrows(
             ForbiddenException.class,
