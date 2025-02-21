@@ -117,7 +117,6 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
-    @AllowAll
     public void gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
@@ -128,7 +127,6 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
-    @AllowAll
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         dokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
