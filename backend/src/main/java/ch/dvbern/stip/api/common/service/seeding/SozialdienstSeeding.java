@@ -43,7 +43,7 @@ public class SozialdienstSeeding extends Seeder {
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final ConfigService configService;
-    private static final String KEYCLOAK_ID = "fb72f602-f3fb-46c1-9de2-502e340150d4";
+    private static final String KEYCLOAK_ID = "7a72b682-f4dc-4b72-9d26-dbdc19246b7d";
 
     @Override
     public int getPriority() {
