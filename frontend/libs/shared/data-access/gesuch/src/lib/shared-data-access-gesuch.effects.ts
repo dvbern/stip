@@ -366,6 +366,7 @@ export const redirectToGesuchFormNextStep = createEffect(
             ...stepManager
               .getNextStepOf(
                 stepFlowSig,
+                trancheSetting.type,
                 origin,
                 gesuch,
                 permissionsStore.rolesMapSig(),

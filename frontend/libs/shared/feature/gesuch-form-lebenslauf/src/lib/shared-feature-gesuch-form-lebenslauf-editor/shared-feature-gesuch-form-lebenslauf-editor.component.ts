@@ -26,6 +26,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   LebenslaufAusbildungsArt,
@@ -85,6 +86,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private einreichenStore = inject(EinreichenStore);
   private translateService = inject(TranslateService);
 
   itemSig = input.required<Partial<SharedModelLebenslauf>>();
@@ -155,6 +157,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       this.deleteTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {

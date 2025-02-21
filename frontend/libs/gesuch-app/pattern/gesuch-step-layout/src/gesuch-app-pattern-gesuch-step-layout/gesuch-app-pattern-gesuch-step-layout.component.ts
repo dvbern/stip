@@ -87,13 +87,14 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() => {
-    const cachedGesuch = this.cacheViewSig().cache.gesuch;
+    const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
     const rolesMap = this.permissionStore.rolesMapSig();
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
-      cachedGesuch,
+      trancheTyp,
+      cache.gesuch,
       rolesMap,
       invalidFormularProps.validations,
     );

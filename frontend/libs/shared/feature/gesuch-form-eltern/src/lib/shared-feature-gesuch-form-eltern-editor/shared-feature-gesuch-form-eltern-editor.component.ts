@@ -27,6 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   ElternTyp,
@@ -110,6 +111,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private einreichenStore = inject(EinreichenStore);
   private store = inject(Store);
 
   gesuchFormularSig = input.required<SharedModelGesuchFormular>();
@@ -238,6 +240,10 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.deleteTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,

@@ -29,6 +29,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
@@ -110,6 +111,7 @@ const MEDIUM_AGE = 20;
 export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
+  private einreichenStore = inject(EinreichenStore);
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) kind!: Partial<KindUpdate>;
@@ -192,6 +194,10 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.closeTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
 
     effect(
       () => {

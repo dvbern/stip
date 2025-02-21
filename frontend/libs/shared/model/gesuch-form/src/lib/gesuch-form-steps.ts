@@ -4,6 +4,7 @@ import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
+  GesuchUrlType,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularPropsSteuerdatenSteps,
@@ -11,7 +12,7 @@ import {
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
-import { getGesuchPermissions } from '@dv/shared/model/permission-state';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 
 import {
   SharedModelGesuchFormStep,
@@ -232,13 +233,19 @@ export const findStepIndex = (
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
+  trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
   appType: AppType,
   rolesMap: RolesMap,
 ) => {
   const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
-  const readonly = !gesuchPermissions?.canWrite;
+  const { permissions } = preparePermissions(
+    trancheTyp,
+    gesuch,
+    appType,
+    rolesMap,
+  );
+  const readonly = !permissions.canWrite;
 
   switch (step) {
     case PARTNER: {

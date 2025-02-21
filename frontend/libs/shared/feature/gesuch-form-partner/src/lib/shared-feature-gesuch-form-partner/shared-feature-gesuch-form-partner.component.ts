@@ -25,6 +25,8 @@ import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
@@ -108,6 +110,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
   private permissionStore = inject(PermissionStore);
+  private einreichenStore = inject(EinreichenStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
@@ -120,6 +123,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
+  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   gotReenabled$ = new Subject<object>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
@@ -187,6 +191,10 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     effect(
       () => {
         const { gesuchFormular } = this.viewSig();
@@ -227,10 +235,11 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       () => {
         const { gesuch, gesuchFormular } = this.viewSig();
         const rolesMap = this.permissionStore.rolesMapSig();
+        const { trancheTyp } = this.cacheSig();
         if (
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(PARTNER, gesuch, this.appType, rolesMap)
+          isStepDisabled(PARTNER, trancheTyp, gesuch, this.appType, rolesMap)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormPartner.nextStepTriggered({

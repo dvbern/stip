@@ -23,7 +23,7 @@ export const selectSharedFeatureGesuchFormPartnerView = createSelector(
       gesuchFormular: gesuchsView.gesuchFormular,
       laender: stammdatenView.laender,
       readonly: gesuchsView.readonly,
-      gesuchPermissions: gesuchsView.gesuchPermissions,
+      permissions: gesuchsView.permissions,
     };
   },
 );
