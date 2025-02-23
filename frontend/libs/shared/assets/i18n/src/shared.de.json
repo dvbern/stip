@@ -481,9 +481,9 @@
   "shared.form.eltern-steuerdaten.verpflegungPartner.label": "Verpflegung Partner:in",
   "shared.form.eltern-steuerdaten.steuerjahr.label": "Steuerjahr",
   "shared.form.eltern-steuerdaten.veranlagungscode.label": "Veranlagungscode",
-  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER": "Bitte laden sie die Steuererklärung ihres Vaters hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
-  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER": "Bitte laden sie die Steuererklärung ihrer Mutter hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
-  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE": "Bitte laden sie die Steuererklärung ihrer Eltern hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes Dokument https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER": "Bitte laden sie die Steuererklärung Ihres Vaters hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">Dokument</a> aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER": "Bitte laden sie die Steuererklärung Ihrer Mutter hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">Dokument</a> aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
+  "shared.form.eltern-steuerdaten.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE": "Bitte laden sie die Steuererklärung Ihrer Eltern hoch. Falls sie keine Steuererklärung ausfüllt haben, dann füllen sie folgendes <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">Dokument</a> aus und laden das ausgefüllte Dokument anstelle der Steuererklärung hoch.",
 
   "shared.geschwister.title": "Geschwister",
   "shared.form.geschwister.top.info": "Geben Sie nur vorschulpflichtige, schulpflichtige oder in Ausbildung stehende Geschwister an. Bitte geben Sie auch Ihre Halbgeschwister und Stiefgeschwister an.",
@@ -499,7 +499,7 @@
   "shared.form.geschwister.edit": "Geschwister bearbeiten",
   "shared.form.geschwister.view": "Geschwister anzeigen",
   "shared.form.geschwister.delete": "Geschwister entfernen",
-  "shared.form.geschwister.file.AUSBILDUNGSSTAETTE": "Kopie aktuelle Bestätigung der Ausbildungsstätte, dass ihr Geschwister in einer nachobligatorischen Ausbildung steht, welche nach Ausbildungsbeginn datiert ist (bei Lehren eine aktuelle Bestätigung des Arbeitgebers)",
+  "shared.form.geschwister.file.AUSBILDUNGSSTAETTE": "Kopie aktuelle Bestätigung der Ausbildungsstätte, dass Ihr Geschwister in einer nachobligatorischen Ausbildung steht, welche nach Ausbildungsbeginn datiert ist (bei Lehren eine aktuelle Bestätigung des Arbeitgebers)",
 
   "shared.kinder.title": "Kinder",
   "shared.form.kinder.add": "Kind hinzufügen",

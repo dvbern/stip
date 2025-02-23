@@ -91,8 +91,8 @@ import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-g
 export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
-  private config = inject(SharedModelCompileTimeConfig);
   private steuerdatenStore = inject(SteuerdatenStore);
+  config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
