@@ -106,4 +106,7 @@
     <changeSet author="anna-lea.fuhrer (generated)" id="1740138193930-20">
         <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar_aud"/>
     </changeSet>
+    <changeSet author="fuju (generated)" id="1740319884112-3">
+        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+    </changeSet>
 </databaseChangeLog>
