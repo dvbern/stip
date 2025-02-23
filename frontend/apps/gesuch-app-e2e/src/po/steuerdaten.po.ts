@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-import { Steuerdaten } from '@dv/shared/model/gesuch';
+import { Steuerdaten, SteuererklaerungUpdate } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
   selectMatRadio,
@@ -9,8 +9,10 @@ import {
 export class SteuerdatenPO {
   public elems: {
     page: Page;
-    form: Locator;
+    steuererklaerungForm: Locator;
+    steuerdatenForm: Locator;
 
+    steuererklaerungInBernRadio: Locator;
     totalEinkuenfte: Locator;
     eigenmietwert: Locator;
     arbeitsverhaeltnis: Locator;
@@ -36,8 +38,13 @@ export class SteuerdatenPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      form: page.getByTestId('form-eltern-steuerdaten-form'),
-
+      steuerdatenForm: page.getByTestId('form-eltern-steuerdaten-form'),
+      steuererklaerungForm: page.getByTestId(
+        'form-eltern-steuererklaerung-form',
+      ),
+      steuererklaerungInBernRadio: page.getByTestId(
+        'form-eltern-steuererklaerung.steuererklaerungInBern',
+      ),
       totalEinkuenfte: page.getByTestId(
         'form-eltern-steuerdaten.totalEinkuenfte',
       ),
@@ -75,6 +82,17 @@ export class SteuerdatenPO {
     };
   }
 
+  async fillSteuererklaerung(
+    item: Omit<SteuererklaerungUpdate, 'steuerdatenTyp'>,
+  ) {
+    await selectMatRadio(
+      this.elems.steuererklaerungInBernRadio,
+      item.steuererklaerungInBern,
+    );
+
+    await expectFormToBeValid(this.elems.steuererklaerungForm);
+  }
+
   async fillSteuerdaten(item: Steuerdaten, options?: { isSB?: boolean }) {
     await this.elems.totalEinkuenfte.fill(`${item.totalEinkuenfte}`);
     await this.elems.eigenmietwert.fill(`${item.eigenmietwert}`);
@@ -103,6 +121,6 @@ export class SteuerdatenPO {
       await this.elems.veranlagungscode.fill(`${item.veranlagungsCode}`);
     }
 
-    await expectFormToBeValid(this.elems.form);
+    await expectFormToBeValid(this.elems.steuerdatenForm);
   }
 }

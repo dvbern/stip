@@ -9,6 +9,7 @@ import {
   LebenslaufItem,
   PersonInAusbildung,
   Steuerdaten,
+  SteuererklaerungUpdate,
 } from '@dv/shared/model/gesuch';
 import {
   generateSVN,
@@ -102,6 +103,11 @@ export const mutter = (seed: string): Eltern => ({
   elternTyp: 'MUTTER',
   id: '',
 });
+
+export const steuererklaerung: Omit<SteuererklaerungUpdate, 'steuerdatenTyp'> =
+  {
+    steuererklaerungInBern: true,
+  };
 
 export const steuerdaten: Steuerdaten = {
   steuerdatenTyp: 'MUTTER',

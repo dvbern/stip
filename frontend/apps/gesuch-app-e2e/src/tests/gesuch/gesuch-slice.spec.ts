@@ -26,7 +26,7 @@ import {
   familienlsituation,
   mutter,
   person,
-  steuerdaten,
+  steuererklaerung,
   taetigkeit,
 } from '../../test-data/slice-test-data';
 
@@ -79,12 +79,12 @@ test.describe('Neues gesuch erstellen', () => {
 
     await elternPO.elems.buttonContinue.click();
 
-    // Step 4.2: Steuerdaten Eltern =================================================
+    // Step 4.2: Steuerdaten Eltern (Steuererklaaerung) ============================
     await expectStepTitleToContainText('Steuerdaten', page);
     const steuerdatenPO = new SteuerdatenPO(page);
     await expect(steuerdatenPO.elems.loading).toBeHidden();
 
-    await steuerdatenPO.fillSteuerdaten(steuerdaten);
+    await steuerdatenPO.fillSteuererklaerung(steuererklaerung);
 
     await steuerdatenPO.elems.buttonSaveContinue.click();
 
