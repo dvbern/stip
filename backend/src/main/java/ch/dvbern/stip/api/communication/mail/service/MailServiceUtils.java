@@ -17,19 +17,35 @@
 
 package ch.dvbern.stip.api.communication.mail.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class MailServiceUtils {
-    public void sendStandardNotificationEmailForGesuch(MailService mailService, Gesuch gesuch) {
+    public void sendStandardNotificationEmailForGesuch(final MailService mailService, final Gesuch gesuch) {
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-        mailService.sendStandardNotificationEmail(
+        mailService.sendStandardNotificationEmails(
             pia.getNachname(),
             pia.getVorname(),
-            pia.getEmail(),
-            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
+            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale()),
+            gatherRecipients(gesuch)
         );
+    }
+
+    List<String> gatherRecipients(final Gesuch gesuch) {
+        final var result = new ArrayList<String>();
+
+        final var delegierung = gesuch.getAusbildung().getFall().getDelegierung();
+        if (delegierung != null) {
+            result.add(delegierung.getSozialdienst().getSozialdienstAdmin().getEmail());
+        }
+
+        result.add(gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung().getEmail());
+
+        return result;
     }
 }

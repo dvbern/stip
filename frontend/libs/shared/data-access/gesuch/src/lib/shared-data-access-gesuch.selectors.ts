@@ -2,6 +2,7 @@ import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
 import { IChange, diff } from 'json-diff-ts';
 
+import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -24,7 +25,10 @@ import {
   TRANCHE,
   gesuchFormBaseSteps,
 } from '@dv/shared/model/gesuch-form';
-import { preparePermissions } from '@dv/shared/model/permission-state';
+import {
+  PermissionMap,
+  preparePermissions,
+} from '@dv/shared/model/permission-state';
 import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -75,6 +79,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedGesuchAndGesuchFromular,
   sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
   sharedDataAccessGesuchsFeature.selectTrancheTyp,
+  selectSharedDataAccessBenutzersView,
   (
     config,
     { tranchenChanges },
@@ -83,6 +88,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     { gesuch, gesuchFormular },
     isEditingAenderung,
     trancheTyp,
+    { rolesMap },
   ) => {
     const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
     const trancheSetting = createTrancheSetting(trancheTyp, gesuchTranche);
@@ -99,6 +105,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
         trancheTyp,
         gesuch,
         config.compileTimeConfig?.appType,
+        rolesMap,
       ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
@@ -143,7 +150,8 @@ const createTrancheSetting = (
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessConfigsView,
-  (state, config) => {
+  selectSharedDataAccessBenutzersView,
+  (state, config, { rolesMap }) => {
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseSteps, [
           {
@@ -154,8 +162,18 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
           },
         ])
       : baseSteps;
+    const { permissions } = preparePermissions(
+      state.trancheTyp,
+      state.cache.gesuch,
+      config.compileTimeConfig?.appType,
+      rolesMap,
+    );
+    const steps = getStepsByAppType(
+      sharedSteps,
+      permissions,
+      config?.compileTimeConfig,
+    );
 
-    const steps = getStepsByAppType(sharedSteps, config?.compileTimeConfig);
     return {
       steps,
       stepsFlow: [...steps, RETURN_TO_HOME],
@@ -181,7 +199,8 @@ export const selectSharedDataAccessGesuchCache = createSelector(
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  ({ trancheTyp, ...cache }, config) => {
+  selectSharedDataAccessBenutzersView,
+  ({ trancheTyp, ...cache }, config, { rolesMap }) => {
     return {
       cache,
       trancheTyp,
@@ -189,6 +208,7 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
         trancheTyp,
         cache.gesuch,
         config.compileTimeConfig?.appType,
+        rolesMap,
       ),
     };
   },
@@ -235,11 +255,12 @@ const appendSteps = (
 
 function getStepsByAppType(
   sharedSteps: SharedModelGesuchFormStep[],
+  permissions: PermissionMap,
   compileTimeConfig?: CompileTimeConfig,
 ) {
   switch (compileTimeConfig?.appType) {
     case 'gesuch-app':
-      return [...sharedSteps, ABSCHLUSS];
+      return [...sharedSteps, ...(permissions.canFreigeben ? [ABSCHLUSS] : [])];
     case 'sachbearbeitung-app':
       return [...sharedSteps];
     default:

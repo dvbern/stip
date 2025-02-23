@@ -21,11 +21,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import javax.net.ssl.SSLContext;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
@@ -34,7 +36,6 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
@@ -49,6 +50,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.keycloak.admin.client.ClientBuilderWrapper;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -58,6 +60,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 @RequiredArgsConstructor
 @Slf4j
 public class SozialdienstBenutzerService {
+    private final JsonWebToken jsonWebToken;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstAdminMapper sozialdienstAdminMapper;
@@ -95,6 +98,16 @@ public class SozialdienstBenutzerService {
             .build();
     }
 
+    public Optional<SozialdienstBenutzer> getCurrentSozialdienstBenutzer() {
+        final var keycloakId = jsonWebToken.getSubject();
+
+        if (keycloakId == null) {
+            throw AppFailureMessage.missingSubject().create();
+        }
+
+        return sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
+    }
+
     @Transactional
     public SozialdienstBenutzer getSozialdienstBenutzerById(UUID id) {
         return sozialdienstBenutzerRepository.requireById(id);
@@ -106,29 +119,12 @@ public class SozialdienstBenutzerService {
     }
 
     @Transactional
-    public SozialdienstBenutzerDto updateSozialdienstAdminBenutzer(
-        final UUID sozialdienstAdminId,
-        SozialdienstAdminUpdateDto dto
-    ) {
-        var sozialdienstAdmin = sozialdienstBenutzerRepository.requireById(sozialdienstAdminId);
-        sozialdienstAdminMapper.partialUpdate(dto, sozialdienstAdmin);
-        return sozialdienstBenutzerMapper.toDto(sozialdienstAdmin);
-    }
-
-    @Transactional
     public SozialdienstBenutzer createSozialdienstAdminBenutzer(SozialdienstAdminDto dto) {
         final var sozialdienstAdmin = sozialdienstAdminMapper.toEntity(dto);
         sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdmin);
         return sozialdienstAdmin;
-    }
-
-    @Transactional
-    public void deleteSozialdienstAdminBenutzer(final String benutzerId) {
-        final var sozialdienstAdmin =
-            sozialdienstBenutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
-        sozialdienstBenutzerRepository.delete(sozialdienstAdmin);
     }
 
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzers(Sozialdienst sozialdienst) {
@@ -209,8 +205,8 @@ public class SozialdienstBenutzerService {
         var userRep = new UserRepresentation();
         userRep.setFirstName(sozialdienstBenutzerUpdateDto.getVorname());
         userRep.setLastName(sozialdienstBenutzerUpdateDto.getNachname());
-        userRep.setUsername(userRep.getEmail());
-        userRep.setEmail(userRep.getEmail());
+        userRep.setUsername(sozialdienstBenutzer.getEmail());
+        userRep.setEmail(sozialdienstBenutzer.getEmail());
         userRep.setEmailVerified(true);
         keycloakUsersResource.get(sozialdienstBenutzer.getKeycloakId()).update(userRep);
 
@@ -231,9 +227,16 @@ public class SozialdienstBenutzerService {
             if (response.getStatus() != Status.NO_CONTENT.getStatusCode()) {
                 throw new WebApplicationException(response);
             }
-            var sozialdienst =
-                sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzer)
-                    .orElseThrow(NotFoundException::new);
+            var sozialdienstOpt =
+                sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzer);
+            if (!sozialdienstOpt.isPresent()) {
+                sozialdienstOpt =
+                    sozialdienstBenutzerRepository.findSozialdienstBySozialdienstAdmin(sozialdienstBenutzer);
+            }
+            if (!sozialdienstOpt.isPresent()) {
+                throw new NotFoundException();
+            }
+            var sozialdienst = sozialdienstOpt.get();
             sozialdienst.getSozialdienstBenutzers().remove(sozialdienstBenutzer);
             sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
         }

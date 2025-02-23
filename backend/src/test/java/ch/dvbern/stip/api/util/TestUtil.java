@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -66,6 +67,7 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -170,7 +172,7 @@ public class TestUtil {
         }
     }
 
-    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+    public static Optional<FallDtoSpec> getFall(final FallApiSpec fallApiSpec) {
         final var response = fallApiSpec.getFallForGs()
             .execute(PEEK_IF_ENV_SET)
             .then()
@@ -178,21 +180,25 @@ public class TestUtil {
             .statusCode(Status.OK.getStatusCode());
 
         var stringBody = response.extract().body().asString();
-        FallDtoSpec fall;
         if (stringBody == null || stringBody.isEmpty()) {
-            fall = fallApiSpec.createFallForGs()
+            return Optional.empty();
+        }
+
+        return Optional.of(response.extract().body().as(FallDtoSpec.class));
+    }
+
+    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+        final var fall = getFall(fallApiSpec);
+        return fall.orElseGet(
+            () -> fallApiSpec.createFallForGs()
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .assertThat()
                 .statusCode(Status.OK.getStatusCode())
                 .extract()
                 .body()
-                .as(FallDtoSpec.class);
-        } else {
-            fall = response.extract().body().as(FallDtoSpec.class);
-        }
-
-        return fall;
+                .as(FallDtoSpec.class)
+        );
     }
 
     public static AusbildungDtoSpec createAusbildung(final AusbildungApiSpec ausbildungApiSpec, final UUID fallId) {
@@ -418,6 +424,25 @@ public class TestUtil {
         baseGesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().plusMonths(1));
         baseGesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
         return baseGesuch;
+    }
+
+    public static ValidatableResponse executeAndAssert(final Oper operation) {
+        return executeAndAssert(operation, Response.Status.OK.getStatusCode());
+    }
+
+    public static ValidatableResponse executeAndAssert(final Oper operation, final int expectedStatusCode) {
+        return operation.execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(expectedStatusCode);
+    }
+
+    public static <T> T executeAndExtract(Class<T> clazz, final Oper operation) {
+        return executeAndExtract(clazz, operation, Response.Status.OK.getStatusCode());
+    }
+
+    public static <T> T executeAndExtract(Class<T> clazz, final Oper operation, final int expectedStatusCode) {
+        return executeAndAssert(operation, expectedStatusCode).extract().body().as(clazz);
     }
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {

@@ -1413,28 +1413,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllSozialdienste
       summary: Returns all Sozialdienste
-  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
-    parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    patch:
+  /sozialdienst/delegation:
+    get:
       tags:
         - Sozialdienst
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SozialdienstAdminUpdate'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstBenutzer'
-          description: Updates data of a Sozialdienst admin
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstSlim'
+          description: Returns all Sozialdienste
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
@@ -1443,14 +1434,10 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: updateSozialdienstAdmin
+      operationId: getAllSozialdiensteForDelegation
   /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     patch:
       tags:
         - Sozialdienst
@@ -1477,11 +1464,7 @@ paths:
       operationId: replaceSozialdienstAdmin
   /sozialdienst/{sozialdienstId}:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     delete:
       tags:
         - Sozialdienst
@@ -1560,14 +1543,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Returns the created SozialdienstBenutzer
-        401:
-          $ref: '#/components/responses/Unauthorized'
-        403:
-          $ref: '#/components/responses/Forbidden'
-        404:
-          $ref: '#/components/responses/NotFound'
-        500:
-          $ref: '#/components/responses/ServerError'
       operationId: createSozialdienstBenutzer
     patch:
       description: update an exisitng SozialdienstBenutzer
@@ -1594,6 +1569,31 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: updateSozialdienstBenutzer
+  /sozialdienst/admin:
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
   /sozialdienst/benutzer/{sozialdienstBenutzerId}:
     parameters:
       - name: sozialdienstBenutzerId
@@ -1636,6 +1636,25 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
+  /delegieren/{fallId}/{sozialdienstId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/sozialdienstId'
+    post:
+      tags:
+      - Delegieren
+      responses:
+        204:
+          description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: fallDelegieren
   /stammdaten/land:
     get:
       tags:
@@ -3580,6 +3599,13 @@ components:
         einreichedatum:
           format: date
           type: string
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
+    Delegierung:
+      type: object
+      properties:
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
     GesuchInfo:
       required:
         - id
@@ -3616,6 +3642,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
     AusbildungDashboardItem:
       type: object
       properties:
@@ -5070,15 +5098,6 @@ components:
     #   type: object
     #   allOf:
     #     - $ref: '#/components/schemas/SozialdienstAdmin'
-    SozialdienstAdminUpdate:
-      required:
-        - vorname
-        - nachname
-      properties:
-        vorname:
-          type: string
-        nachname:
-          type: string
     SozialdienstCreate:
       required:
         - name
@@ -5109,13 +5128,10 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-    Sozialdienst:
+    SozialdienstSlim:
       required:
         - id
         - name
-        - adresse
-        - iban
-        - sozialdienstAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5123,10 +5139,23 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        iban:
-          type: string
-        sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstBenutzer'
+    Sozialdienst:
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstSlim'
+        - type: object
+          required:
+            - id
+            - name
+            - adresse
+            - iban
+            - sozialdienstAdmin
+          properties:
+            adresse:
+              $ref: '#/components/schemas/Adresse'
+            iban:
+              type: string
+            sozialdienstAdmin:
+              $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -5905,6 +5934,12 @@ components:
       required: true
       schema:
         type: integer
+    sozialdienstId:
+      name: sozialdienstId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:
@@ -5926,3 +5961,4 @@ tags:
   - name: Tenant
   - name: Ausbildungsgang
   - name: Mail
+  - name: Delegieren

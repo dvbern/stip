@@ -47,6 +47,7 @@ public abstract class GesuchMapper {
     @Mapping(target = "fallId", source = "ausbildung.fall.id")
     @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
     @Mapping(target = "ausbildungId", source = "ausbildung.id")
+    @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")

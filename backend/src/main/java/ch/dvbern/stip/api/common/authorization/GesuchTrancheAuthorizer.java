@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,8 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchRepository gesuchRepository;
+    private final SozialdienstService sozialdienstService;
 
     @Transactional
     public void canRead(final UUID gesuchTrancheId) {
@@ -51,6 +51,10 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
+            return;
+        }
+
         if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
             return;
         }
@@ -68,16 +72,21 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-        // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService) &&
+            gesuchTranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS
+        ) {
+            return;
+        } else if (
             isGesuchsteller(currentBenutzer) &&
             !isSachbearbeiter(currentBenutzer) &&
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+            AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch) &&
+            gesuchTranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS
         ) {
-            if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
-                throw new UnauthorizedException();
-            }
+            return;
         }
+
+        throw new UnauthorizedException();
     }
 
     @Transactional
@@ -95,8 +104,10 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
 
-        final var isAuthorizedForCurrentOperation = isGesuchsteller(currentBenutzer) &&
-        AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+        final var isAuthorizedForCurrentOperation =
+            (isGesuchsteller(currentBenutzer)
+            && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)) ||
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
 
         // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (!isAuthorizedForCurrentOperation) {

@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDtoSpec;
+import ch.dvbern.stip.generated.dto.DelegierungDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,7 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   FallDashboardItemDtoSpec.JSON_PROPERTY_FALL,
   FallDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS,
-  FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS
+  FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS,
+  FallDashboardItemDtoSpec.JSON_PROPERTY_DELEGIERUNG
 })
 @JsonTypeName("FallDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +50,9 @@ public class FallDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_NOTIFICATIONS = "notifications";
   private List<NotificationDtoSpec> notifications;
+
+  public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
+  private DelegierungDtoSpec delegierung;
 
   public FallDashboardItemDtoSpec() {
   }
@@ -145,6 +150,32 @@ public class FallDashboardItemDtoSpec {
     this.notifications = notifications;
   }
 
+
+  public FallDashboardItemDtoSpec delegierung(DelegierungDtoSpec delegierung) {
+    
+    this.delegierung = delegierung;
+    return this;
+  }
+
+   /**
+   * Get delegierung
+   * @return delegierung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DelegierungDtoSpec getDelegierung() {
+    return delegierung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierung(DelegierungDtoSpec delegierung) {
+    this.delegierung = delegierung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -156,12 +187,13 @@ public class FallDashboardItemDtoSpec {
     FallDashboardItemDtoSpec fallDashboardItem = (FallDashboardItemDtoSpec) o;
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
-        Objects.equals(this.notifications, fallDashboardItem.notifications);
+        Objects.equals(this.notifications, fallDashboardItem.notifications) &&
+        Objects.equals(this.delegierung, fallDashboardItem.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, delegierung);
   }
 
   @Override
@@ -171,6 +203,7 @@ public class FallDashboardItemDtoSpec {
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
+    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

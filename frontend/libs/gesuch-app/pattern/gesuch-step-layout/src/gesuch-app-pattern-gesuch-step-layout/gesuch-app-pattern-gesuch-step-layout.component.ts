@@ -33,6 +33,7 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
@@ -73,6 +74,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
+  private permissionStore = inject(PermissionStore);
   private router = inject(Router);
 
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -88,10 +90,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
+    const rolesMap = this.permissionStore.rolesMapSig();
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
       trancheTyp,
       cache.gesuch,
+      rolesMap,
       invalidFormularProps.validations,
     );
     return validatedSteps;

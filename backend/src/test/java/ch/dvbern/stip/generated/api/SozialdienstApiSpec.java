@@ -14,12 +14,12 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import java.util.UUID;
 
@@ -69,6 +69,7 @@ public class SozialdienstApiSpec {
                 deleteSozialdienst(),
                 deleteSozialdienstBenutzer(),
                 getAllSozialdienste(),
+                getAllSozialdiensteForDelegation(),
                 getSozialdienst(),
                 getSozialdienstBenutzer(),
                 getSozialdienstBenutzerList(),
@@ -97,6 +98,10 @@ public class SozialdienstApiSpec {
 
     public GetAllSozialdiensteOper getAllSozialdienste() {
         return new GetAllSozialdiensteOper(createReqSpec());
+    }
+
+    public GetAllSozialdiensteForDelegationOper getAllSozialdiensteForDelegation() {
+        return new GetAllSozialdiensteForDelegationOper(createReqSpec());
     }
 
     public GetSozialdienstOper getSozialdienst() {
@@ -478,6 +483,67 @@ public class SozialdienstApiSpec {
         }
     }
     /**
+     * 
+     * 
+     *
+     * return List&lt;SozialdienstSlimDtoSpec&gt;
+     */
+    public static class GetAllSozialdiensteForDelegationOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sozialdienst/delegation";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllSozialdiensteForDelegationOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sozialdienst/delegation
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sozialdienst/delegation
+         * @param handler handler
+         * @return List&lt;SozialdienstSlimDtoSpec&gt;
+         */
+        public List<SozialdienstSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SozialdienstSlimDtoSpec>> type = new TypeRef<List<SozialdienstSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllSozialdiensteForDelegationOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllSozialdiensteForDelegationOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Get a Sozialdienst by Id
      * 
      *
@@ -844,14 +910,13 @@ public class SozialdienstApiSpec {
      * 
      * 
      *
-     * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
      * return SozialdienstBenutzerDtoSpec
      */
     public static class UpdateSozialdienstAdminOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/sozialdienst/{sozialdienstId}/updateSozialdienstAdmin";
+        public static final String REQ_URI = "/sozialdienst/admin";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -864,7 +929,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
+         * PATCH /sozialdienst/admin
          * @param handler handler
          * @param <T> type
          * @return type
@@ -875,7 +940,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
+         * PATCH /sozialdienst/admin
          * @param handler handler
          * @return SozialdienstBenutzerDtoSpec
          */
@@ -885,22 +950,11 @@ public class SozialdienstApiSpec {
         }
 
          /**
-         * @param sozialdienstAdminUpdateDtoSpec (SozialdienstAdminUpdateDtoSpec)  (optional)
+         * @param sozialdienstBenutzerUpdateDtoSpec (SozialdienstBenutzerUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateSozialdienstAdminOper body(SozialdienstAdminUpdateDtoSpec sozialdienstAdminUpdateDtoSpec) {
-            reqSpec.setBody(sozialdienstAdminUpdateDtoSpec);
-            return this;
-        }
-
-        public static final String SOZIALDIENST_ID_PATH = "sozialdienstId";
-
-        /**
-         * @param sozialdienstId (UUID)  (required)
-         * @return operation
-         */
-        public UpdateSozialdienstAdminOper sozialdienstIdPath(Object sozialdienstId) {
-            reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
+        public UpdateSozialdienstAdminOper body(SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
+            reqSpec.setBody(sozialdienstBenutzerUpdateDtoSpec);
             return this;
         }
 
