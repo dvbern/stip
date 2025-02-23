@@ -36,6 +36,7 @@ import {
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { compareById } from '@dv/shared/model/type-util';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -75,6 +76,7 @@ export class GesuchAppFeatureCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  @Input({ required: true }) tranche?: GesuchTrancheSlim;
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -84,7 +86,6 @@ export class GesuchAppFeatureCockpitComponent {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
-  @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
@@ -94,7 +95,7 @@ export class GesuchAppFeatureCockpitComponent {
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
     this.fallStore.loadCurrentFall$();
-    this.sozialdienstStore.loadAllSozialdienste$();
+    this.sozialdienstStore.loadAvailableSozialdienste$();
 
     effect(
       () => {
@@ -116,6 +117,8 @@ export class GesuchAppFeatureCockpitComponent {
       { allowSignalWrites: true },
     );
   }
+
+  compareById = compareById;
 
   createAusbildung(fallId: string) {
     GesuchAppDialogCreateAusbildungComponent.open(
@@ -219,7 +222,7 @@ export class GesuchAppFeatureCockpitComponent {
       });
   }
 
-  delegiereSozialdienst(sozialdienst: Sozialdienst) {
+  delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'gesuch-app.dashboard.gesuch.delegieren',
       message: 'gesuch-app.dashboard.gesuch.delegieren.message',
@@ -228,7 +231,13 @@ export class GesuchAppFeatureCockpitComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // TODO KSTIP-1435: Implement
+          this.sozialdienstStore.fallDelegieren$({
+            sozialdienstId: sozialdienst.id,
+            fallId,
+            onSuccess: () => {
+              this.dashboardStore.loadDashboard$();
+            },
+          });
         }
       });
   }

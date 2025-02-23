@@ -29,6 +29,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { AppType } from '@dv/shared/model/config';
 import {
   GesuchFormularUpdate,
@@ -325,6 +326,7 @@ export const redirectToGesuchFormNextStep = createEffect(
     store = inject(Store),
     actions$ = inject(Actions),
     router = inject(Router),
+    permissionsStore = inject(PermissionStore),
     stepManager = inject(SharedUtilGesuchFormStepManagerService),
   ) => {
     return actions$.pipe(
@@ -362,7 +364,13 @@ export const redirectToGesuchFormNextStep = createEffect(
           router.navigate([
             'gesuch',
             ...stepManager
-              .getNextStepOf(stepFlowSig, trancheSetting.type, origin, gesuch)
+              .getNextStepOf(
+                stepFlowSig,
+                trancheSetting.type,
+                origin,
+                gesuch,
+                permissionsStore.rolesMapSig(),
+              )
               .route.split('/'),
             id,
             ...trancheSetting.routesSuffix,

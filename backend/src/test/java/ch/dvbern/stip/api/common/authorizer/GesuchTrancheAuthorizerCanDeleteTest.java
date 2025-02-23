@@ -33,7 +33,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,8 +53,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     private GesuchTranche gesuchTranche_inBearbeitungGS;
 
     private GesuchTrancheRepository gesuchTrancheRepository;
-    private GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private GesuchRepository gesuchRepository;
+    private SozialdienstService sozialdienstService;
 
     @BeforeEach
     void setup() {
@@ -78,7 +78,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
 
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
-        gesuchTrancheHistoryRepository = Mockito.mock(GesuchTrancheHistoryRepository.class);
+        sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -92,14 +92,15 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         authorizer = new GesuchTrancheAuthorizer(
             benutzerService,
             gesuchTrancheRepository,
-            gesuchTrancheHistoryRepository,
-            gesuchRepository
+            gesuchRepository,
+            sozialdienstService
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
     }
 
     @Test

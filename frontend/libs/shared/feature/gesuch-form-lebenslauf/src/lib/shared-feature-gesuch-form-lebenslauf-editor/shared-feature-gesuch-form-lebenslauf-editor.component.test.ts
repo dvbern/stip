@@ -29,6 +29,11 @@ async function setup(type: SharedModelLebenslauf['type']) {
       provideHttpClient(),
       provideMockStore({
         initialState: {
+          benutzers: {
+            rolesMap: {
+              Gesuchsteller: true,
+            },
+          },
           language: { language: 'de' },
           gesuchs: mockedGesuchAppWritableGesuchState({}),
           ausbildungsstaettes: { ausbildungsstaettes: [] },
