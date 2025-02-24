@@ -19,12 +19,15 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
@@ -33,7 +36,6 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.inject.Inject;
-import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -96,9 +98,14 @@ public abstract class GesuchMapper {
     @Named("getCanGetBerechnung")
     boolean getCanGetBerechnung(Gesuch gesuch) {
         boolean canGetBerechnung = true;
+
         try {
-            ValidatorUtil.validate(validator, gesuch.getLatestGesuchTranche(), SteuerdatenPageValidation.class);
-        } catch (ValidationException e) {
+            ValidatorUtil.validate(
+                validator,
+                gesuch.getLatestGesuchTranche().getGesuchFormular(),
+                List.of(SteuerdatenPageValidation.class, GesuchNachInBearbeitungSBValidationGroup.class)
+            );
+        } catch (ValidationsException e) {
             canGetBerechnung = false;
         }
 
