@@ -34,6 +34,9 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 @QuarkusTest
 class PersonInAusbildungRequiredDocumentsProducerTest {
     private PersonInAusbildungRequiredDocumentsProducer producer;
@@ -105,7 +108,9 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocsList = producer.getRequiredDocuments(formular);
+        assertThat(requiredDocsList.size(), is(1));
+        final var requiredDocs = requiredDocsList.get(0);
         RequiredDocsUtil.assertCount(requiredDocs, 1);
         RequiredDocsUtil.assertTypes(
             requiredDocs,

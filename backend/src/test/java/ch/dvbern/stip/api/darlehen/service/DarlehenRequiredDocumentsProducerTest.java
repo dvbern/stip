@@ -99,12 +99,13 @@ class DarlehenRequiredDocumentsProducerTest {
     void requiresNoneIfNotWillDarlehen() {
         darlehen.setWillDarlehen(false);
         formular.setDarlehen(darlehen);
-        Assertions.assertEquals(0, producer.getRequiredDocuments(formular).getRight().size());
+
+        Assertions.assertEquals(0, producer.getRequiredDocuments(formular).get(0).getRight().size());
     }
 
     List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
         final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
-        requiredTypes.add(producer.getRequiredDocuments(formular));
+        requiredTypes.add(producer.getRequiredDocuments(formular).get(0));
         return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();
     }
 }
