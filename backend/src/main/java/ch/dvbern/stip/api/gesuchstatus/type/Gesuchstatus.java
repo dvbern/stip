@@ -73,8 +73,9 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
         EnumSet.of(
+            Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.VERSANDBEREIT,
             Gesuchstatus.VERSENDET,

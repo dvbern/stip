@@ -3481,6 +3481,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canGetBerechnung
       type: object
       properties:
         id:
@@ -3493,6 +3494,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         endDate:
           $ref: '#/components/schemas/LocalDate'
+        canGetBerechnung:
+          type: boolean
     FallDashboardItem:
       required:
         - fall

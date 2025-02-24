@@ -22,14 +22,19 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
+import jakarta.validation.Validator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -42,6 +47,9 @@ import org.mapstruct.Named;
     }
 )
 public abstract class GesuchMapper {
+    @Inject
+    Validator validator;
+
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(target = "fallId", source = "ausbildung.fall.id")
@@ -51,6 +59,7 @@ public abstract class GesuchMapper {
 
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
+    @Mapping(source = ".", target = "canGetBerechnung", qualifiedByName = "getCanGetBerechnung")
     public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
@@ -82,6 +91,18 @@ public abstract class GesuchMapper {
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
         return getGesuchDateRange(gesuch).getGueltigBis();
+    }
+
+    @Named("getCanGetBerechnung")
+    boolean getCanGetBerechnung(Gesuch gesuch) {
+        boolean canGetBerechnung = true;
+        try {
+            ValidatorUtil.validate(validator, gesuch.getLatestGesuchTranche(), SteuerdatenPageValidation.class);
+        } catch (ValidationException e) {
+            canGetBerechnung = false;
+        }
+
+        return canGetBerechnung;
     }
 
     static DateRange getGesuchDateRange(Gesuch gesuch) {
