@@ -24,9 +24,6 @@ import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 class AuszahlungRequiredDocumentsProducerTest {
     private AuszahlungRequiredDocumentsProducer producer;
 
@@ -45,9 +42,7 @@ class AuszahlungRequiredDocumentsProducerTest {
                 .setKontoinhaber(Kontoinhaber.SOZIALDIENST_INSTITUTION)
         );
 
-        final var requiredDocsList = producer.getRequiredDocuments(formular);
-        assertThat(requiredDocsList.size(), is(1));
-        final var requiredDocs = requiredDocsList.get(0);
+        final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.assertCount(requiredDocs, 1);
         RequiredDocsUtil.assertType(requiredDocs, DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG);
     }
@@ -59,9 +54,7 @@ class AuszahlungRequiredDocumentsProducerTest {
                 .setKontoinhaber(Kontoinhaber.ANDERE)
         );
 
-        final var requiredDocsList = producer.getRequiredDocuments(formular);
-        assertThat(requiredDocsList.size(), is(1));
-        final var requiredDocs = requiredDocsList.get(0);
+        final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.assertCount(requiredDocs, 1);
         RequiredDocsUtil.assertType(requiredDocs, DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG);
     }

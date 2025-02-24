@@ -161,7 +161,7 @@ class ElternRequiredDocumentsProducerTest {
     List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
         final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
         for (final var producer : producers) {
-            requiredTypes.add(producer.getRequiredDocuments(formular).get(0));
+            requiredTypes.add(producer.getRequiredDocuments(formular));
         }
 
         return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();

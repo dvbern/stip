@@ -31,11 +31,6 @@ import static org.hamcrest.Matchers.is;
 
 @UtilityClass
 public class RequiredDocsUtil {
-    public void requiresOneAndType(final List<Pair<String, Set<DokumentTyp>>> requiredDocs, final DokumentTyp dokTyp) {
-        assertThat(requiredDocs.size(), is(1));
-        requiresOneAndType(requiredDocs.get(0), dokTyp);
-    }
-
     public void requiresOneAndType(final Pair<String, Set<DokumentTyp>> requiredDocs, final DokumentTyp dokTyp) {
         requiresOneAndType(requiredDocs.getRight(), dokTyp);
     }

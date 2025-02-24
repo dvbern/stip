@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.kind.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -33,10 +32,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @RequiredArgsConstructor
 public class KindRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var kinds = formular.getKinds();
         if (kinds == null) {
-            return List.of(ImmutablePair.of("", Set.of()));
+            return ImmutablePair.of("", Set.of());
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -47,6 +46,6 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentProducer {
         }
         );
 
-        return List.of(ImmutablePair.of("kinds", requiredDocs));
+        return ImmutablePair.of("kinds", requiredDocs);
     }
 }

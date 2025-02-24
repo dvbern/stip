@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,11 +31,11 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (
             Objects.isNull(formular.getDarlehen()) || Boolean.FALSE.equals(formular.getDarlehen().getWillDarlehen())
         ) {
-            return List.of(ImmutablePair.of("", Set.of()));
+            return ImmutablePair.of("", Set.of());
         }
         final var darlehen = formular.getDarlehen();
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -55,6 +54,6 @@ public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProduc
             requiredDocs.add(DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN);
         }
 
-        return List.of(ImmutablePair.of("darlehen", requiredDocs));
+        return ImmutablePair.of("darlehen", requiredDocs);
     }
 }

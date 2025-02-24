@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +53,6 @@ public class RequiredDokumentService {
         return requiredDocumentProducers
             .stream()
             .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
-            .flatMap(Collection::stream)
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )

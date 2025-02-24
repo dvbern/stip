@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -32,10 +31,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class FamiliensituationRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var famsit = formular.getFamiliensituation();
         if (famsit == null) {
-            return List.of(ImmutablePair.of("", Set.of()));
+            return ImmutablePair.of("", Set.of());
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -55,6 +54,6 @@ public class FamiliensituationRequiredDocumentsProducer implements RequiredDocum
             requiredDocs.add(DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN);
         }
 
-        return List.of(ImmutablePair.of("familiensituation", requiredDocs));
+        return ImmutablePair.of("familiensituation", requiredDocs);
     }
 }

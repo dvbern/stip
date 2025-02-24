@@ -175,6 +175,30 @@ class SteuerdatenResourceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(8)
+    void getAndSetAsGSShouldFail() {
+        steuerdatenApiSpec.getSteuerdaten()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(
+                Status.FORBIDDEN.getStatusCode()
+            );
+
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+    }
+
+    @Test
     @TestAsAdmin
     @AlwaysRun
     @Order(99)

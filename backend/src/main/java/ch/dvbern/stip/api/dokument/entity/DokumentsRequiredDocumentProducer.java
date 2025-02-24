@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -33,9 +32,9 @@ import org.apache.commons.lang3.tuple.Pair;
 public class DokumentsRequiredDocumentProducer implements RequiredDocumentProducer {
 
     @Override
-    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (formular == null) {
-            return List.of(ImmutablePair.of("", Set.of()));
+            return ImmutablePair.of("", Set.of());
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -46,6 +45,6 @@ public class DokumentsRequiredDocumentProducer implements RequiredDocumentProduc
             requiredDocs.add(DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
         }
 
-        return List.of(ImmutablePair.of("dokuments", requiredDocs));
+        return ImmutablePair.of("dokuments", requiredDocs);
     }
 }
