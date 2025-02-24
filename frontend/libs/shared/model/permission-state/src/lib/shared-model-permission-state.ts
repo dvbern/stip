@@ -143,12 +143,8 @@ export const getGesuchPermissions = (
   if (!gesuch || !appType) return {};
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
-  return applyDelegatedPermission(
-    parsePermissions(state),
-    gesuch,
-    appType,
-    rolesMap,
-  );
+  const permissions = parsePermissions(state);
+  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
 };
 
 /**
@@ -168,12 +164,8 @@ export const getTranchePermissions = (
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
     ];
-  return applyDelegatedPermission(
-    parsePermissions(state),
-    gesuch,
-    appType,
-    rolesMap,
-  );
+  const permissions = parsePermissions(state);
+  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
 };
 
 /**
@@ -191,10 +183,6 @@ export const canCurrentlyEdit = (
   // Only apply special rules for the gesuch-app
   if (appType !== 'gesuch-app') {
     return !!permissions.canWrite;
-  }
-  // If the gesuch is not writable anyway, return false
-  if (!permissions.canWrite) {
-    return false;
   }
 
   return (
