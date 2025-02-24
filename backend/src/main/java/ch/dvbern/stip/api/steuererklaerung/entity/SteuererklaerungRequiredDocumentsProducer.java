@@ -17,7 +17,8 @@
 
 package ch.dvbern.stip.api.steuererklaerung.entity;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -30,29 +31,35 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class SteuererklaerungRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
         final var steuererklarungen = formular.getSteuererklaerung();
 
         if (steuererklarungen == null) {
-            return ImmutablePair.of("", Set.of());
+            return List.of(ImmutablePair.of("", Set.of()));
         }
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
+        final var requiredDocsList = new ArrayList<Pair<String, Set<DokumentTyp>>>();
 
         for (var steuererklarung : steuererklarungen) {
             if (Boolean.TRUE.equals(steuererklarung.getSteuererklaerungInBern())) {
                 continue;
             }
 
-            requiredDocs.add(
+            requiredDocsList.add(
                 switch (steuererklarung.getSteuerdatenTyp()) {
-                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE;
-                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER;
-                    case VATER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER;
+                    case FAMILIE -> ImmutablePair
+                        .of(
+                            "steuererklaerungFamilie",
+                            Set.of(DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE)
+                        );
+                    case MUTTER -> ImmutablePair
+                        .of("steuererklaerungMutter", Set.of(DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER));
+                    case VATER -> ImmutablePair
+                        .of("steuererklaerungVater", Set.of(DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER));
                 }
             );
         }
 
-        return ImmutablePair.of("steuererklaerung", requiredDocs);
+        return requiredDocsList;
     }
 }

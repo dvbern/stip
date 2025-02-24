@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -31,10 +32,10 @@ import org.apache.commons.lang3.tuple.Pair;
 public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumentProducer {
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
         final var ek = formular.getEinnahmenKosten();
         if (ek == null) {
-            return ImmutablePair.of("", Set.of());
+            return List.of(ImmutablePair.of("", Set.of()));
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -85,7 +86,7 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
             requiredDocs.add(DokumentTyp.EK_VERMOEGEN);
         }
 
-        return ImmutablePair.of("einnahmenKosten", requiredDocs);
+        return List.of(ImmutablePair.of("einnahmenKosten", requiredDocs));
     }
 
     private boolean greaterThanZero(final Integer base) {

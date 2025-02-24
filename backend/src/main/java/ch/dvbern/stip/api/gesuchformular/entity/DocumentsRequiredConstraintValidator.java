@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ public class DocumentsRequiredConstraintValidator
         final var dokumenteOfType = getRequiredDokumentTypes(formular);
 
         final var filtered = requiredDocs.stream()
+            .flatMap(Collection::stream)
             .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
             .map(Pair::getLeft)
             .toList();

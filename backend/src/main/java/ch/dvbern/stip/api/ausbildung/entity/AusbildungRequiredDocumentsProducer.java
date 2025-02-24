@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -30,15 +31,15 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class AusbildungRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
         final var ausbildung = formular.getAusbildung();
         if (ausbildung == null) {
-            return ImmutablePair.of("", Set.of());
+            return List.of(ImmutablePair.of("", Set.of()));
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
         requiredDocs.add(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
 
-        return ImmutablePair.of("ausbildung", requiredDocs);
+        return List.of(ImmutablePair.of("ausbildung", requiredDocs));
     }
 }

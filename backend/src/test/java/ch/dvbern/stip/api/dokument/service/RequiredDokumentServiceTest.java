@@ -82,15 +82,15 @@ class RequiredDokumentServiceTest {
 
     static class MockDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
+        public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+            return List.of(ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
         }
     }
 
     static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("", Set.of());
+        public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
+            return List.of(ImmutablePair.of("", Set.of()));
         }
     }
 

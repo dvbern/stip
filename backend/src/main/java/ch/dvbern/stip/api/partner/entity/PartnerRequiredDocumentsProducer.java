@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.partner.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -30,10 +31,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class PartnerRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
         final var partner = formular.getPartner();
         if (partner == null) {
-            return ImmutablePair.of("", Set.of());
+            return List.of(ImmutablePair.of("", Set.of()));
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -47,6 +48,6 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentProduce
             requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
         }
 
-        return ImmutablePair.of("partner", requiredDocs);
+        return List.of(ImmutablePair.of("partner", requiredDocs));
     }
 }

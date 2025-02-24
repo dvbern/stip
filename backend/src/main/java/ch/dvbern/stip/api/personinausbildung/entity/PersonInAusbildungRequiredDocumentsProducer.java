@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,10 +50,10 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
     );
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(GesuchFormular formular) {
         final var pia = formular.getPersonInAusbildung();
         if (pia == null) {
-            return ImmutablePair.of("", Set.of());
+            return List.of(ImmutablePair.of("", Set.of()));
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
@@ -85,7 +86,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
             requiredDocs.add(DokumentTyp.PERSON_AUSWEIS);
         }
 
-        return ImmutablePair.of("personInAusbildung", requiredDocs);
+        return List.of(ImmutablePair.of("personInAusbildung", requiredDocs));
     }
 
     // Returns whether both parents live abroad or not
