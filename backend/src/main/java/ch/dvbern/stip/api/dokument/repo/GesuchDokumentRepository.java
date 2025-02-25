@@ -99,14 +99,14 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public Optional<GesuchDokument> findByCustomDokumentType(
-        UUID customDokumentTypeId
+        UUID customDokumentTypId
     ) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
             .selectFrom(gesuchDokument)
             .where(
-                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId)
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId)
             );
         return query.stream().findFirst();
     }
