@@ -36,8 +36,7 @@ public class DokumentAbgelehntToAusstehendStatusChangeHandler implements Dokumen
 
     @Override
     public boolean handles(Transition<Dokumentstatus, DokumentstatusChangeEvent> transition) {
-        return transition.getTrigger() == DokumentstatusChangeEvent.AUSSTEHEND
-        && transition.getSource() == Dokumentstatus.ABGELEHNT
+        return transition.getSource() == Dokumentstatus.ABGELEHNT
         && transition.getDestination() == Dokumentstatus.AUSSTEHEND;
     }
 
