@@ -168,14 +168,14 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
-        customGesuchDokumentTypAuthorizer.canRead();
+        customGesuchDokumentTypAuthorizer.canReadAllTyps();
         return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
     @Override
     public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
         return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
     }
 

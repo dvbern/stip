@@ -43,13 +43,23 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreateCustomDokumentTyp() {
-        canRead();
+        canReadAllTyps();
     }
 
     @Transactional
-    public void canRead() {
+    public void canReadAllTyps() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!isAdminOrSb(currentBenutzer)) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Transactional
+    public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
+        final var customDokuementTyp = customDokumentTypRepository.requireById(customDokumentTypId);
+        final var gesuch = customDokuementTyp.getGesuchDokument().getGesuchTranche().getGesuch();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!(isAdminOrSb(currentBenutzer) || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch))) {
             throw new ForbiddenException();
         }
     }
