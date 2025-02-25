@@ -56,8 +56,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.dokumentTyp.eq(dokumentTyp))
@@ -105,8 +104,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId)
             );
@@ -117,8 +115,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.customDokumentTyp.id.isNotNull())
