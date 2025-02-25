@@ -78,9 +78,9 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
     @Override
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
+        customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp();
         final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
         return gesuchDokumentService.findGesuchDokumentForCustomTyp(createdCustomTyp.getId()).getValue();
     }
