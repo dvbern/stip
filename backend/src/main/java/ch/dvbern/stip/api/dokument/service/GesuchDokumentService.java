@@ -91,9 +91,10 @@ public class GesuchDokumentService {
     @Transactional
     public Uni<Response> getUploadCustomDokumentUni(
         final UUID customDokumentTypId,
-        final UUID gesuchTrancheId,
         final FileUpload fileUpload
     ) {
+        final var customDokumentTyp = customDocumentTypRepository.findById(customDokumentTypId);
+        customDokumentTyp.getGesuchDokument().getGesuchTranche();
         return DokumentUploadUtil.validateScanUploadDokument(
             fileUpload,
             s3,
@@ -101,7 +102,6 @@ public class GesuchDokumentService {
             antivirus,
             GESUCH_DOKUMENT_PATH,
             objectId -> uploadCustomDokument(
-                gesuchTrancheId,
                 customDokumentTypId,
                 fileUpload,
                 objectId
@@ -161,14 +161,14 @@ public class GesuchDokumentService {
 
     @Transactional
     public void uploadCustomDokument(
-        final UUID gesuchTrancheId,
         final UUID customDokumentTypId,
         final FileUpload fileUpload,
         final String objectId
     ) {
+        final var customDokumentTyp = customDocumentTypRepository.requireById(customDokumentTypId);
+        final var gesuchTrancheId = customDokumentTyp.getGesuchDokument().getGesuchTranche().getId();
         final var gesuchTranche =
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
-        final var customDokumentTyp = customDocumentTypRepository.requireById(customDokumentTypId);
         final var gesuchDokument =
             gesuchDokumentRepository
                 .findByCustomDokumentType(customDokumentTypId)

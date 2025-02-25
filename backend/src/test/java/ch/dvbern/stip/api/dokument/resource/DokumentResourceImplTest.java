@@ -76,7 +76,7 @@ class DokumentResourceImplTest {
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID(), UUID.randomUUID())
+            dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID())
         );
     }
 

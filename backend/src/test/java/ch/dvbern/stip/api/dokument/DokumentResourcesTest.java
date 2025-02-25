@@ -230,7 +230,6 @@ class DokumentResourcesTest {
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
         final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -268,7 +267,7 @@ class DokumentResourcesTest {
     void test_upload_custom_gesuchdokuments() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_PNG_FILE_LOCATION);
-        TestUtil.uploadCustomDokumentFile(dokumentApiSpec, gesuchTrancheId, customDokumentId, file);
+        TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
     }
 
     // testAsGS
@@ -297,7 +296,6 @@ class DokumentResourcesTest {
     @Order(10)
     void test_delete_required_custom_gesuchdokument_typ_should_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -322,7 +320,6 @@ class DokumentResourcesTest {
     @Order(11)
     void test_read_custom_gesuchdokument() throws IOException {
         var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -379,7 +376,6 @@ class DokumentResourcesTest {
     @Order(13)
     void test_delete_required_custom_gesuchdokument_should_still_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()

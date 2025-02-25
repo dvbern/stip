@@ -22,10 +22,10 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -37,8 +37,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final DokumentRepository dokumentRepository;
+    private final CustomDokumentTypRepository customDokumentTypRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
 
     @Transactional
@@ -50,18 +50,20 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpload(final UUID gesuchTrancheId) {
+    public void canUpload(final UUID customDokumentTypId) {
+        final var customDokumentTyp = customDokumentTypRepository.findById(customDokumentTypId);
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
+        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
+
         if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
             throw new ForbiddenException();
         }
     }
 
     @Transactional
-    public void canDeleteTyp(final UUID gesuchTrancheId, final UUID gesuchDokumentTypId) {
-        final var gesuch = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuch();
+    public void canDeleteTyp(final UUID gesuchDokumentTypId) {
+        final var customDokumentTyp = customDokumentTypRepository.requireById(gesuchDokumentTypId);
+        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
         final var customGesuchDokument =
             gesuchDokumentRepository.findByCustomDokumentType(gesuchDokumentTypId)
                 .orElseThrow();

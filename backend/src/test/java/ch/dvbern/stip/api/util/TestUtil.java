@@ -329,12 +329,10 @@ public class TestUtil {
 
     public static void uploadCustomDokumentFile(
         DokumentApiSpec dokumentApiSpec,
-        UUID gesuchTrancheId,
         UUID customDokumentTypId,
         File file
     ) {
         dokumentApiSpec.uploadCustomGesuchDokument()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");

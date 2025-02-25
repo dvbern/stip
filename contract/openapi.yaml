@@ -655,13 +655,8 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createCustomDokumentTyp
-  '/gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: customDokumentTypId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -747,7 +742,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
+  '/customGesuchDokument/{customDokumentTypId}':
     get:
       tags:
         - Dokument
@@ -794,11 +789,6 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
           description: OK
@@ -810,17 +800,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: uploadCustomGesuchDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare':
+  '/gesuchDokument/{gesuchDokumentId}/kommentare':
     get:
       tags:
         - Dokument
       parameters:
         - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path

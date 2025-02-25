@@ -84,6 +84,9 @@ class GesuchDokumentServiceTest {
     GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     @InjectMock
+    CustomDokumentTypRepository customDokumentTypRepository;
+
+    @InjectMock
     DokumentRepository dokumentRepository;
 
     @InjectMock
@@ -287,19 +290,22 @@ class GesuchDokumentServiceTest {
          */
 
         // Arrange
+        Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
+        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
+        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+        customGesuchDokument.setGesuchTranche(gesuch.getGesuchTranchen().get(0));
+
         CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
         customDokumentTyp.setId(UUID.randomUUID());
         customDokumentTyp.setDescription("test");
         customDokumentTyp.setType("test");
-
-        Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
-        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
-        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+        customDokumentTyp.setGesuchDokument(customGesuchDokument);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchDokumentRepository.findByCustomDokumentType(any()))
             .thenReturn(Optional.of(customGesuchDokument));
+        when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);
 
         final UUID gesuchTrancheId = UUID.randomUUID();
         gesuch.getGesuchTranchen().get(0).setId(gesuchTrancheId);
@@ -308,7 +314,7 @@ class GesuchDokumentServiceTest {
         // should not throw, since there is no file attached
         assertDoesNotThrow(
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
 
         // attach one file
@@ -318,7 +324,7 @@ class GesuchDokumentServiceTest {
         assertThrows(
             ForbiddenException.class,
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
     }
 

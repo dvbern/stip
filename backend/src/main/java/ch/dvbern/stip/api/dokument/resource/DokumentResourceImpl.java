@@ -90,11 +90,11 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     public Uni<Response> uploadCustomGesuchDokument(
         UUID customDokumentTypId,
-        UUID gesuchTrancheId,
         FileUpload fileUpload
     ) {
-        customGesuchDokumentTypAuthorizer.canUpload(gesuchTrancheId);
-        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, gesuchTrancheId, fileUpload);
+
+        customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
+        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -135,8 +135,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @Blocking
-    public void deleteCustomDokumentTyp(UUID gesuchTrancheId, UUID customDokumentTypId) {
-        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchTrancheId, customDokumentTypId);
+    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(customDokumentTypId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
@@ -213,7 +213,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId, UUID gesuchTrancheId) {
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
         return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 

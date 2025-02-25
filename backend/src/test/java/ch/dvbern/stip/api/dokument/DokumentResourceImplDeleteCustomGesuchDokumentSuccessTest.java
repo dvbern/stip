@@ -143,7 +143,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
         final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -162,7 +161,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     @Order(6)
     void test_delete_required_custom_gesuchdokument_should_success() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()

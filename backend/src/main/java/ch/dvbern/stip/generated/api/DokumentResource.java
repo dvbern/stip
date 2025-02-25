@@ -48,9 +48,9 @@ public interface DokumentResource {
     io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @DELETE
-    @Path("/gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
+    @Path("/gesuchDokument/customGesuchDokument/{customDokumentTypId}")
     @Produces({ "text/plain" })
-    void deleteCustomDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("customDokumentTypId") UUID customDokumentTypId);
+    void deleteCustomDokumentTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @DELETE
     @Path("/dokument/{dokumentId}")
@@ -79,7 +79,7 @@ public interface DokumentResource {
     List<CustomDokumentTypDto> getAllCustomDokumentTypes(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
+    @Path("/customGesuchDokument/{customDokumentTypId}")
     @Produces({ "application/json", "text/plain" })
     NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
@@ -94,9 +94,9 @@ public interface DokumentResource {
     FileDownloadTokenDto getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare")
+    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
@@ -109,8 +109,8 @@ public interface DokumentResource {
     List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
-    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
+    @Path("/customGesuchDokument/{customDokumentTypId}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> uploadCustomGesuchDokument(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+    io.smallrye.mutiny.Uni<Response> uploadCustomGesuchDokument(@PathParam("customDokumentTypId") UUID customDokumentTypId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 }
