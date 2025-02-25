@@ -5,6 +5,13 @@ import { hasRoles, isAllowedTo } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-gesuch-form-steuerdaten',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/gesuch-form-steuerdaten').then(
+        (m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes,
+      ),
+  },
+  {
     path: 'sachbearbeitung-app-feature-infos-admin',
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/infos-admin').then(

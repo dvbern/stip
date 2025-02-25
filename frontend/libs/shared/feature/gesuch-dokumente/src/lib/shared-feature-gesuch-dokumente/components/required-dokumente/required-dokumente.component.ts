@@ -20,7 +20,7 @@ import {
   TrancheSetting,
 } from '@dv/shared/model/gesuch';
 import {
-  SharedModelGesuchFormStep,
+  GesuchFormStep,
   getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import { PermissionMap } from '@dv/shared/model/permission-state';
@@ -67,7 +67,7 @@ export class RequiredDokumenteComponent {
     trancheSetting: TrancheSetting | undefined;
     isSachbearbeitungApp: boolean;
     allowTypes: string | undefined;
-    stepsFlow: SharedModelGesuchFormStep[];
+    stepsFlow: GesuchFormStep[];
     dokuments: GesuchDokument[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];

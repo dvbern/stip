@@ -30,9 +30,7 @@
       {{ 'shared.dokumente.table.requiredDocuments' | translate }}
     </th>
     <td mat-cell class="tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-      <div class="tw-py-3">
-        {{ dokument.dokumentOptions.titleKey | translate }}
-      </div>
+      <div [innerHTML]="dokument.dokumentOptions.titleKey | translate" class="tw-py-3"></div>
     </td>
   </ng-container>
 

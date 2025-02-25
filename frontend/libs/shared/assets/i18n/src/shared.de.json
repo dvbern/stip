@@ -444,9 +444,12 @@
   "shared.form.eltern.ausweisbFluechtling.infoTitle": "Hat Ihr Elternteil einen Ausweis B oder ist er Flüchtling?",
   "shared.form.eltern.ausweisbFluechtling.info": "Wenn dieser Elternteil eine Aufenthaltsbewilligung B (Permis B) besitzt oder Flüchtling ist, markieren Sie bitte «Ja».",
 
-  "shared.eltern-steuer.title.FAMILIE": "Steuerdaten für Familie",
-  "shared.eltern-steuer.title.MUTTER": "Steuerdaten für Mutter",
-  "shared.eltern-steuer.title.VATER": "Steuerdaten für Vater",
+  "shared.eltern-steuerdaten.title.FAMILIE": "Steuerdaten Familie",
+  "shared.eltern-steuerdaten.title.MUTTER": "Steuerdaten Mutter",
+  "shared.eltern-steuerdaten.title.VATER": "Steuerdaten Vater",
+  "shared.eltern-steuererklaerung.title.FAMILIE": "Steuererklärung Familie",
+  "shared.eltern-steuererklaerung.title.MUTTER": "Steuererklärung Mutter",
+  "shared.eltern-steuererklaerung.title.VATER": "Steuererklärung Vater",
   "shared.form.shared.section.einnahmen": "Einnahmen",
 
   "shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.FAMILIE": "Haben ihre Eltern",

@@ -31,11 +31,11 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
 import {
+  GesuchFormularType,
   GesuchFormularUpdate,
   GesuchService,
   GesuchUpdate,
   GesuchUrlType,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { ifPropsAreDefined, isDefined } from '@dv/shared/model/type-util';
@@ -415,11 +415,11 @@ export const sharedDataAccessGesuchEffects = {
 
 const viewOnlyFields = [
   'steuerdatenTabs',
-] as const satisfies (keyof SharedModelGesuchFormular)[];
+] as const satisfies (keyof GesuchFormularType)[];
 
 const prepareFormularData = (
   id: string,
-  gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
+  gesuchFormular: GesuchFormularUpdate | Partial<GesuchFormularType>,
 ): GesuchUpdate => {
   const { ...formular } = gesuchFormular;
   if ('ausbildung' in formular) {

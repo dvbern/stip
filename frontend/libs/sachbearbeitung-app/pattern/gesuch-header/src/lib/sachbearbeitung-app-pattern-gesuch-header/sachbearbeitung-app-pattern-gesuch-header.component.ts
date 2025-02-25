@@ -26,9 +26,6 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchInfo } from '@dv/shared/model/gesuch';
-import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
@@ -67,7 +64,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
-  private config = inject(SharedModelCompileTimeConfig);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -80,16 +76,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
       filter(isDefined),
-      map(
-        (gesuch) =>
-          ({
-            id: gesuch.id,
-            startDate: gesuch.gesuchTrancheToWorkWith.gueltigAb,
-            endDate: gesuch.gesuchTrancheToWorkWith.gueltigBis,
-            gesuchStatus: gesuch.gesuchStatus,
-            gesuchNummer: gesuch.gesuchNummer,
-          }) satisfies GesuchInfo,
-      ),
     ),
   );
 
@@ -103,12 +89,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => url.includes('/aenderung/') || url.includes('/initial/')),
     ),
   );
-  gesuchPermissionsSig = computed(() => {
-    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    if (!gesuchStatus) {
-      return {};
-    }
-    return getGesuchPermissions({ gesuchStatus }, this.config.appType);
+  canViewBerechnungSig = computed(() => {
+    const canViewBerechnung =
+      this.gesuchStore.gesuchInfo().data?.canGetBerechnung;
+
+    return canViewBerechnung;
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());
@@ -148,10 +133,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     effect(
       () => {
-        const gesuchInfo = this.otherGesuchInfoSourceSig();
+        const gesuch = this.otherGesuchInfoSourceSig();
 
-        if (gesuchInfo) {
-          this.gesuchStore.setGesuchInfo(gesuchInfo);
+        if (gesuch?.id) {
+          this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
         }
       },
       { allowSignalWrites: true },

@@ -3,10 +3,10 @@ import { Injectable, inject } from '@angular/core';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
+  GesuchFormStep,
+  GesuchFormStepProgress,
   GesuchFormStepView,
   RETURN_TO_HOME,
-  SharedModelGesuchFormStep,
-  SharedModelGesuchFormStepProgress,
   StepValidation,
   findStepIndex,
   isStepDisabled,
@@ -23,9 +23,9 @@ export class SharedUtilGesuchFormStepManagerService {
    * Returns the progress of the current step compared to the total steps
    */
   getStepProgress(
-    steps: SharedModelGesuchFormStep[],
-    step?: SharedModelGesuchFormStep,
-  ): SharedModelGesuchFormStepProgress {
+    steps: GesuchFormStep[],
+    step?: GesuchFormStep,
+  ): GesuchFormStepProgress {
     if (!step) {
       return {
         step: undefined,
@@ -47,7 +47,7 @@ export class SharedUtilGesuchFormStepManagerService {
    * Adds valid and disabled properties to the steps depending on the formular state
    */
   getValidatedSteps(
-    steps: SharedModelGesuchFormStep[],
+    steps: GesuchFormStep[],
     trancheTyp: GesuchUrlType | null,
     gesuch: SharedModelGesuch | null,
     invalidProps?: StepValidation,
@@ -66,11 +66,11 @@ export class SharedUtilGesuchFormStepManagerService {
    * Returns the next step depending on the origin step
    */
   getNextStepOf(
-    stepsFlow: SharedModelGesuchFormStep[],
+    stepsFlow: GesuchFormStep[],
     trancheTyp: GesuchUrlType | null,
-    step: SharedModelGesuchFormStep,
+    step: GesuchFormStep,
     gesuch: SharedModelGesuch,
-  ): SharedModelGesuchFormStep {
+  ): GesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
 
     if (currentIndex === -1 || !stepsFlow[currentIndex + 1]) {
@@ -93,13 +93,10 @@ export class SharedUtilGesuchFormStepManagerService {
    * Compares two steps by their position in the flow
    */
   compareStepsByFlow(
-    stepsFlow: SharedModelGesuchFormStep[],
-    a: SharedModelGesuchFormStep,
-    b: SharedModelGesuchFormStep,
-    onEqual?: (
-      a: SharedModelGesuchFormStep,
-      b: SharedModelGesuchFormStep,
-    ) => number,
+    stepsFlow: GesuchFormStep[],
+    a: GesuchFormStep,
+    b: GesuchFormStep,
+    onEqual?: (a: GesuchFormStep, b: GesuchFormStep) => number,
   ) {
     const aIndex = findStepIndex(a, stepsFlow);
     const bIndex = findStepIndex(b, stepsFlow);

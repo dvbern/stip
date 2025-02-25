@@ -21,7 +21,7 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
@@ -58,7 +58,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
-  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+  stepSig = input<GesuchFormStep | undefined>(undefined, {
     alias: 'step',
   });
   navClicked$ = new EventEmitter();

@@ -5,13 +5,13 @@ import {
   ElternTyp,
   ElternUpdate,
   FamiliensituationUpdate,
+  FormPropsExcluded,
   GesuchFormular,
-  SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  GesuchFormularType,
 } from '@dv/shared/model/gesuch';
 import {
+  FormRoutesToPropsMap,
   GesuchFormStepView,
-  gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined, lowercased } from '@dv/shared/model/type-util';
 
@@ -23,7 +23,7 @@ export interface ElternSituation {
 }
 
 export function calculateElternSituationGesuch(
-  gesuch: SharedModelGesuchFormular | null,
+  gesuch: GesuchFormularType | null,
 ): ElternSituation {
   return calculateElternSituation(gesuch?.familiensituation, gesuch?.elterns);
 }
@@ -75,23 +75,20 @@ type Unpack<T> = T extends Array<infer U> ? U : T;
  * Extract the changeable properties of a GesuchFormular.
  */
 type ChangeableProperties = Exclude<
-  keyof SharedModelGesuchFormular,
+  keyof GesuchFormularType,
   'steuerdatenTabs'
 >;
 /**
  * Defines the values of a GesuchFormular which are not arrays.
  */
 type NonArrayForm = Exclude<
-  Unpack<SharedModelGesuchFormular[ChangeableProperties]>,
+  Unpack<GesuchFormularType[ChangeableProperties]>,
   unknown[] | undefined
 >;
 /**
  * Defines the values of a GesuchFormular which are arrays.
  */
-type ArrayForms = Extract<
-  SharedModelGesuchFormular[ChangeableProperties],
-  unknown[]
->;
+type ArrayForms = Extract<GesuchFormularType[ChangeableProperties], unknown[]>;
 
 /**
  * Keys to skip when calculating the changes between two versions of a form.
@@ -105,15 +102,17 @@ const keysToSkip = ['id'];
  * @param view The view containing the GesuchFormular and the changes.
  * @param key The key of the GesuchFormular property.
  */
-export const selectChangeForView = <K extends SharedModelGesuchFormularProps>(
+export const selectChangeForView = <
+  K extends FormPropsExcluded | 'steuererklaerung',
+>(
   view: {
     gesuchFormular: GesuchFormular | null;
     tranchenChanges: AppTrancheChange | null;
   },
   key: K,
 ): {
-  current: SharedModelGesuchFormular[K] | undefined;
-  previous: SharedModelGesuchFormular[K];
+  current: GesuchFormularType[K] | undefined;
+  previous: GesuchFormularType[K];
 } => {
   const changes = view.tranchenChanges;
   const currentFormular = view.gesuchFormular?.[key];
@@ -138,10 +137,10 @@ export const stepHasChanges = (
 ) => {
   return (
     tranchenChanges?.gs?.affectedSteps.includes(
-      gesuchFormStepsFieldMap[step.route] ?? -1,
+      FormRoutesToPropsMap[step.route] ?? -1,
     ) ||
     tranchenChanges?.sb?.affectedSteps.includes(
-      gesuchFormStepsFieldMap[step.route] ?? -1,
+      FormRoutesToPropsMap[step.route] ?? -1,
     )
   );
 };

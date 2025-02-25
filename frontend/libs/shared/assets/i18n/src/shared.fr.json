@@ -443,9 +443,12 @@
   "shared.form.eltern.ausweisbFluechtling.infoTitle": "Votre parent a-t-il un permis B ou est-il réfugié ?",
   "shared.form.eltern.ausweisbFluechtling.info": "Si votre père/mère est titulaire de l’autorisation de séjour B (ou permis B) ou a le statut de réfugié·e, veuillez cocher «oui».",
 
-  "shared.eltern-steuer.title.FAMILIE": "Données fiscales pour la famille",
-  "shared.eltern-steuer.title.MUTTER": "Données fiscales pour la mère",
-  "shared.eltern-steuer.title.VATER": "Données fiscales pour le père",
+  "shared.eltern-steuerdaten.title.FAMILIE": "Données fiscales famille",
+  "shared.eltern-steuerdaten.title.MUTTER": "Données fiscales mère",
+  "shared.eltern-steuerdaten.title.VATER": "Données fiscales père",
+  "shared.eltern-steuererklaerung.title.FAMILIE": "Déclaration fiscale famille",
+  "shared.eltern-steuererklaerung.title.MUTTER": "Déclaration fiscale mère",
+  "shared.eltern-steuererklaerung.title.VATER": "Déclaration fiscale père",
   "shared.form.shared.section.einnahmen": "Revenus",
 
   "shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.FAMILIE": "Vos parents ont-ils",

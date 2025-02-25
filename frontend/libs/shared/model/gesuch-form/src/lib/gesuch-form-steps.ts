@@ -3,166 +3,195 @@ import { differenceInYears } from 'date-fns';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
+  GSFormStepProps,
+  GSSteuererklaerungSteps,
+  GesuchFormularType,
   GesuchUrlType,
+  SBFormStepProps,
   SharedModelGesuch,
-  SharedModelGesuchFormular,
-  SharedModelGesuchFormularPropsSteuerdatenSteps,
-  SteuerdatenSteps,
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 
 import {
-  SharedModelGesuchFormStep,
+  GesuchFormStep,
   StepState,
   StepValidation,
 } from './shared-model-gesuch-form';
 
-export const TRANCHE: SharedModelGesuchFormStep = {
+export const TRANCHE: GesuchFormStep = {
   route: 'info',
   translationKey: 'shared.tranche.title',
   titleTranslationKey: 'shared.nothing',
   iconSymbolName: 'info',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
 export const PERSON = {
   route: 'person',
   translationKey: 'shared.person.title',
   titleTranslationKey: 'shared.person.title',
   iconSymbolName: 'person',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const AUSBILDUNG: SharedModelGesuchFormStep = {
+export const AUSBILDUNG: GesuchFormStep = {
   route: 'ausbildung',
   translationKey: 'shared.ausbildung.title',
   titleTranslationKey: 'shared.ausbildung.title',
   iconSymbolName: 'school',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const LEBENSLAUF: SharedModelGesuchFormStep = {
+export const LEBENSLAUF: GesuchFormStep = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
   titleTranslationKey: 'shared.lebenslauf.title',
   iconSymbolName: 'news',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const FAMILIENSITUATION: SharedModelGesuchFormStep = {
+export const FAMILIENSITUATION: GesuchFormStep = {
   route: 'familiensituation',
   translationKey: 'shared.familiensituation.title',
   titleTranslationKey: 'shared.familiensituation.title',
   iconSymbolName: 'family_restroom',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const ELTERN: SharedModelGesuchFormStep = {
+export const ELTERN: GesuchFormStep = {
   route: 'eltern',
   translationKey: 'shared.eltern.title',
   titleTranslationKey: 'shared.eltern.title',
   iconSymbolName: 'escalator_warning',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const GESCHWISTER: SharedModelGesuchFormStep = {
+export const GESCHWISTER: GesuchFormStep = {
   route: 'geschwister',
   translationKey: 'shared.geschwister.title',
   titleTranslationKey: 'shared.geschwister.title',
   iconSymbolName: 'group',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const PARTNER: SharedModelGesuchFormStep = {
+export const PARTNER: GesuchFormStep = {
   route: 'partner',
   translationKey: 'shared.partner.title',
   titleTranslationKey: 'shared.partner.page.title',
   iconSymbolName: 'favorite',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const KINDER: SharedModelGesuchFormStep = {
+export const KINDER: GesuchFormStep = {
   route: 'kinder',
   translationKey: 'shared.kinder.title',
   titleTranslationKey: 'shared.kinder.title',
   iconSymbolName: 'emoji_people',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const AUSZAHLUNG: SharedModelGesuchFormStep = {
+export const AUSZAHLUNG: GesuchFormStep = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
   titleTranslationKey: 'shared.auszahlung.title',
   iconSymbolName: 'payments',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const EINNAHMEN_KOSTEN: SharedModelGesuchFormStep = {
+export const EINNAHMEN_KOSTEN: GesuchFormStep = {
   route: 'einnahmenkosten',
   translationKey: 'shared.einnahmenkosten.title',
   titleTranslationKey: 'shared.einnahmenkosten.page.title',
   iconSymbolName: 'call_missed_outgoing',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const DOKUMENTE: SharedModelGesuchFormStep = {
+export const DOKUMENTE: GesuchFormStep = {
   route: 'dokumente',
   translationKey: 'shared.dokumente.title',
   titleTranslationKey: 'shared.dokumente.title',
   iconSymbolName: 'description',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const ABSCHLUSS: SharedModelGesuchFormStep = {
+export const ABSCHLUSS: GesuchFormStep = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
   titleTranslationKey: 'shared.abschluss.title',
   iconSymbolName: 'check_circle',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const RETURN_TO_HOME: SharedModelGesuchFormStep = {
+export const RETURN_TO_HOME: GesuchFormStep = {
   route: '/',
   translationKey: '',
   titleTranslationKey: '',
   iconSymbolName: '',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const PROTOKOLL: SharedModelGesuchFormStep = {
+export const PROTOKOLL: GesuchFormStep = {
   route: 'protokoll',
   translationKey: 'shared.protokoll.title',
   titleTranslationKey: 'shared.protokoll.title',
   iconSymbolName: 'history',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-export const DARLEHEN: SharedModelGesuchFormStep = {
+export const DARLEHEN: GesuchFormStep = {
   route: 'darlehen',
   translationKey: 'shared.darlehen.title',
   titleTranslationKey: 'shared.darlehen.title',
   iconSymbolName: 'account_balance',
-} satisfies SharedModelGesuchFormStep;
+} satisfies GesuchFormStep;
 
-// Dynamic steps
-export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
   FAMILIE: 'people',
   MUTTER: 'woman',
   VATER: 'man',
 };
+
+// Dynamic steps
+// Steuerdaten only for SB
+export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const createElternSteuerStep = (
   steuerdatenTyp: SteuerdatenTyp,
-): SharedModelGesuchFormStep & { type: SteuerdatenTyp } => {
+): GesuchFormStep & { type: SteuerdatenTyp } => {
   return {
     type: steuerdatenTyp,
     route: `eltern-steuerdaten/${steuerdatenTyp}`,
-    translationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
-    titleTranslationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
+    translationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
+    titleTranslationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
     iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
   };
 };
 export const ELTERN_STEUER_FAMILIE = createElternSteuerStep('FAMILIE');
 export const ELTERN_STEUER_MUTTER = createElternSteuerStep('MUTTER');
 export const ELTERN_STEUER_VATER = createElternSteuerStep('VATER');
-export const ELTERN_STEUER_STEPS: Record<
-  SteuerdatenTyp,
-  SharedModelGesuchFormStep
-> = {
+export const ELTERN_STEUER_STEPS: Record<SteuerdatenTyp, GesuchFormStep> = {
   FAMILIE: ELTERN_STEUER_FAMILIE,
   MUTTER: ELTERN_STEUER_MUTTER,
   VATER: ELTERN_STEUER_VATER,
 };
 
-export const gesuchFormBaseSteps = {
+// for GS
+export const ELTERN_STEUERERKLAERUNG_ROUTE = 'eltern-steuererklaerung';
+const createElternSteuererklaerungStep = (
+  steuerdatenTyp: SteuerdatenTyp,
+): GesuchFormStep & { type: SteuerdatenTyp } => {
+  return {
+    type: steuerdatenTyp,
+    route: `eltern-steuererklaerung/${steuerdatenTyp}`,
+    translationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
+    titleTranslationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
+    iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
+  };
+};
+export const ELTERN_STEUERERKLAERUNG_FAMILIE =
+  createElternSteuererklaerungStep('FAMILIE');
+export const ELTERN_STEUERERKLAERUNG_MUTTER =
+  createElternSteuererklaerungStep('MUTTER');
+export const ELTERN_STEUERERKLAERUNG_VATER =
+  createElternSteuererklaerungStep('VATER');
+export const ELTERN_STEUERERKLAERUNG_STEPS: Record<
+  SteuerdatenTyp,
+  GesuchFormStep
+> = {
+  FAMILIE: ELTERN_STEUERERKLAERUNG_FAMILIE,
+  MUTTER: ELTERN_STEUERERKLAERUNG_MUTTER,
+  VATER: ELTERN_STEUERERKLAERUNG_VATER,
+};
+
+export const BaseFormSteps = {
   AUSBILDUNG,
+  TRANCHE,
   PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
@@ -175,17 +204,17 @@ export const gesuchFormBaseSteps = {
   DARLEHEN,
   DOKUMENTE,
 };
-export type GesuchFormBaseStepKeys = keyof typeof gesuchFormBaseSteps;
+export type BaseStepKeys = keyof typeof BaseFormSteps;
 
-export const gesuchFormSteps = {
-  ...gesuchFormBaseSteps,
+export const GSFormSteps = {
+  ...BaseFormSteps,
   ABSCHLUSS,
 };
-export type GesuchFormStepKeys = keyof typeof gesuchFormSteps;
+export type GSFormStepKeys = keyof typeof GSFormSteps;
 
-export const gesuchPropFormStepsMap: Record<
-  SharedModelGesuchFormularPropsSteuerdatenSteps,
-  SharedModelGesuchFormStep
+export const FormPropsToStepsMap: Record<
+  GSFormStepProps | SBFormStepProps,
+  GesuchFormStep
 > = {
   ausbildung: AUSBILDUNG,
   familiensituation: FAMILIENSITUATION,
@@ -193,29 +222,37 @@ export const gesuchPropFormStepsMap: Record<
   personInAusbildung: PERSON,
   auszahlung: AUSZAHLUNG,
   elterns: ELTERN,
+  steuererklaerungFamilie: ELTERN_STEUERERKLAERUNG_FAMILIE,
+  steuererklaerungMutter: ELTERN_STEUERERKLAERUNG_MUTTER,
+  steuererklaerungVater: ELTERN_STEUERERKLAERUNG_VATER,
+  steuerdatenFamilie: ELTERN_STEUER_FAMILIE,
+  steuerdatenMutter: ELTERN_STEUER_MUTTER,
+  steuerdatenVater: ELTERN_STEUER_VATER,
   geschwisters: GESCHWISTER,
   lebenslaufItems: LEBENSLAUF,
   kinds: KINDER,
   einnahmenKosten: EINNAHMEN_KOSTEN,
   darlehen: DARLEHEN,
   dokuments: DOKUMENTE,
-  steuerdaten: ELTERN_STEUER_FAMILIE,
-  steuerdatenMutter: ELTERN_STEUER_MUTTER,
-  steuerdatenVater: ELTERN_STEUER_VATER,
+  abschluss: ABSCHLUSS,
 };
 
-export const gesuchFormStepsFieldMap: Record<
+// eventuell erweitern und fuer beide brauchen?
+export const FormRoutesToPropsMap: Record<
   string,
-  SharedModelGesuchFormularPropsSteuerdatenSteps
+  GSFormStepProps | SBFormStepProps
 > = {
   [AUSBILDUNG.route]: 'ausbildung',
   [PERSON.route]: 'personInAusbildung',
   [LEBENSLAUF.route]: 'lebenslaufItems',
   [FAMILIENSITUATION.route]: 'familiensituation',
   [ELTERN.route]: 'elterns',
+  [ELTERN_STEUERERKLAERUNG_MUTTER.route]: 'steuererklaerungMutter',
+  [ELTERN_STEUERERKLAERUNG_VATER.route]: 'steuererklaerungVater',
+  [ELTERN_STEUERERKLAERUNG_FAMILIE.route]: 'steuererklaerungFamilie',
+  [ELTERN_STEUER_FAMILIE.route]: 'steuerdatenFamilie',
   [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
   [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
-  [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
   [GESCHWISTER.route]: 'geschwisters',
   [PARTNER.route]: 'partner',
   [KINDER.route]: 'kinds',
@@ -225,13 +262,11 @@ export const gesuchFormStepsFieldMap: Record<
   [DOKUMENTE.route]: 'dokuments',
 };
 
-export const findStepIndex = (
-  step: SharedModelGesuchFormStep,
-  steps: SharedModelGesuchFormStep[],
-) => steps.findIndex((s) => s.route === step.route);
+export const findStepIndex = (step: GesuchFormStep, steps: GesuchFormStep[]) =>
+  steps.findIndex((s) => s.route === step.route);
 
 export const isStepDisabled = (
-  step: SharedModelGesuchFormStep,
+  step: GesuchFormStep,
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
   appType: AppType,
@@ -288,36 +323,53 @@ export const isStepDisabled = (
 };
 
 export const isStepValid = (
-  step: SharedModelGesuchFormStep,
-  formular: SharedModelGesuchFormular | null,
+  step: GesuchFormStep,
+  formular: GesuchFormularType | null,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
 
-  const field = gesuchFormStepsFieldMap[step.route];
+  const field = FormRoutesToPropsMap[step.route];
 
-  if (!field) {
+  // 'abschluss' only exists as step in the Frontend
+  if (!field || field === 'abschluss') {
     return undefined;
   }
 
   const isDefined = (value: unknown) => value !== null && value !== undefined;
 
-  if (isSteuerdatenStep(field)) {
+  if (isSteuererklaerungStep(field)) {
     const [stepSteuerdatenTyp] =
-      Object.entries(ELTERN_STEUER_STEPS).find(
+      Object.entries(ELTERN_STEUERERKLAERUNG_STEPS).find(
         ([, s]) => s.route === step.route,
       ) ?? [];
     const currentHasDaten = formular?.steuererklaerung?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
-    return toStepState(
-      'steuererklaerung',
-      isDefined(currentHasDaten),
-      invalidProps,
-    );
+    return toStepState(field, isDefined(currentHasDaten), invalidProps);
   }
+
+  // only temporarily to make it work!
+  if (
+    field === 'steuerdatenFamilie' ||
+    field === 'steuerdatenMutter' ||
+    field === 'steuerdatenVater'
+  ) {
+    return undefined;
+  }
+  // TODO: @scph implement logic for steuerdaten SB, if needed, but data is in stuerdaten store
+  // if (isSteuerdatenStep(field)) {
+  //   const [stepSteuerdatenTyp] =
+  //     Object.entries(ELTERN_STEUER_STEPS).find(
+  //       ([, s]) => s.route === step.route,
+  //     ) ?? [];
+  // const currentHasDaten = formular?.steuerdaten?.find(
+  //     (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
+  //   );
+  //   return toStepState(field, isDefined(currentHasDaten), invalidProps);
+  // }
 
   if (field === 'lebenslaufItems') {
     return toStepState(
@@ -336,10 +388,10 @@ export const isStepValid = (
 
 export const getFormStepByDocumentType = (
   dokumentTyp: DokumentTyp,
-): SharedModelGesuchFormStep => {
+): GesuchFormStep => {
   switch (dokumentTyp) {
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
-      return gesuchFormSteps.DOKUMENTE;
+      return GSFormSteps.DOKUMENTE;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
       return ELTERN_STEUER_FAMILIE;
@@ -351,7 +403,7 @@ export const getFormStepByDocumentType = (
       return ELTERN_STEUER_VATER;
     }
     default: {
-      const step = (Object.keys(gesuchFormSteps) as GesuchFormStepKeys[]).find(
+      const step = (Object.keys(GSFormSteps) as GSFormStepKeys[]).find(
         (key) => {
           if (key === 'EINNAHMEN_KOSTEN') {
             return dokumentTyp.startsWith('EK');
@@ -361,10 +413,10 @@ export const getFormStepByDocumentType = (
       );
       if (!step) {
         console.error(`No step found for document type "${dokumentTyp}"`);
-        return gesuchFormSteps.DOKUMENTE;
+        return GSFormSteps.DOKUMENTE;
       }
 
-      return gesuchFormSteps[step];
+      return GSFormSteps[step];
     }
   }
 };
@@ -385,7 +437,7 @@ const toDocumentStepState = (
 };
 
 const toStepState = (
-  field: SharedModelGesuchFormularPropsSteuerdatenSteps | 'steuererklaerung',
+  field: GSFormStepProps | SBFormStepProps,
   isDefined: boolean,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
@@ -402,6 +454,10 @@ const toStepState = (
   return isDefined ? 'VALID' : undefined;
 };
 
-const isSteuerdatenStep = (
-  step: SharedModelGesuchFormularPropsSteuerdatenSteps,
-): step is SteuerdatenSteps => step.startsWith('steuerdaten');
+export const isSteuererklaerungStep = (
+  step: GSFormStepProps | SBFormStepProps,
+): step is GSSteuererklaerungSteps => step.startsWith('steuererklaerung');
+
+// const isSteuerdatenStep = (
+//   step: GSFormStepProps | SBFormStepProps,
+// ): step is SBSteuerdatenSteps => step.startsWith('steuerdaten');

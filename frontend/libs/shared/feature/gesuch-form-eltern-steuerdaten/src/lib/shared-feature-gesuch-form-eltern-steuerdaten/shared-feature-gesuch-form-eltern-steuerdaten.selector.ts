@@ -6,6 +6,7 @@ import {
   selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 
+// @scph rename to selectSharedFeatureFormSteuererklaerungView
 export const selectSharedFeatureGesuchFormSteuerdatenView = createSelector(
   selectSharedDataAccessGesuchsView,
   (gesuchView) => {

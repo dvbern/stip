@@ -17,18 +17,19 @@ import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
   EinreichedatumAendernRequest,
   EinreichedatumStatus,
+  GSFormStepProps,
+  GesuchFormularType,
   GesuchService,
   GesuchTrancheService,
-  SharedModelGesuchFormular,
-  SharedModelGesuchFormularPropsSteuerdatenSteps,
+  SBFormStepProps,
   ValidationMessage,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
 import {
+  FormPropsToStepsMap,
+  FormRoutesToPropsMap,
+  GesuchFormStep,
   SPECIAL_VALIDATION_ERRORS,
-  SharedModelGesuchFormStep,
-  gesuchFormStepsFieldMap,
-  gesuchPropFormStepsMap,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -361,8 +362,8 @@ const transformValidationReportToFormSteps = (
   gesuchId: string | null,
   routeSuffix?: readonly string[],
   report?: ValidationReport,
-  currentForm?: SharedModelGesuchFormular | null,
-): (SharedModelGesuchFormStep & { routeParts: string[] | null })[] => {
+  currentForm?: GesuchFormularType | null,
+): (GesuchFormStep & { routeParts: string[] | null })[] => {
   if (!report || !gesuchId) {
     return [];
   }
@@ -370,16 +371,23 @@ const transformValidationReportToFormSteps = (
   const messages: (ValidationMessage | ValidationError)[] =
     report.validationErrors.concat(report.validationWarnings);
 
+  // @scph: not sure if sb steuerdaten are here validated as well
   const steps = messages.map((m) => {
-    if (m.propertyPath?.startsWith('steuerdaten')) {
+    if (
+      m.propertyPath?.startsWith('steuerdaten') ||
+      m.propertyPath?.startsWith('steuererklaerung')
+    ) {
+      const prefix = m.propertyPath.startsWith('steuerdaten')
+        ? 'steuerdaten'
+        : 'steuererklaerung';
       return currentForm?.steuerdatenTabs?.map((tab) => {
         switch (tab) {
           case 'FAMILIE':
-            return gesuchPropFormStepsMap['steuerdaten'];
+            return FormPropsToStepsMap[`${prefix}Familie`];
           case 'VATER':
-            return gesuchPropFormStepsMap['steuerdatenVater'];
+            return FormPropsToStepsMap[`${prefix}Vater`];
           case 'MUTTER':
-            return gesuchPropFormStepsMap['steuerdatenMutter'];
+            return FormPropsToStepsMap[`${prefix}Mutter`];
           default:
             return undefined;
         }
@@ -387,12 +395,12 @@ const transformValidationReportToFormSteps = (
     }
 
     if (m.messageTemplate?.includes('documents.required')) {
-      return gesuchPropFormStepsMap.dokuments;
+      return FormPropsToStepsMap.dokuments;
     }
 
     if (m.propertyPath) {
-      return gesuchPropFormStepsMap[
-        m.propertyPath as SharedModelGesuchFormularPropsSteuerdatenSteps
+      return FormPropsToStepsMap[
+        m.propertyPath as GSFormStepProps | SBFormStepProps
       ];
     }
 
@@ -407,9 +415,9 @@ const transformValidationReportToFormSteps = (
         acc.push(step);
       }
       return acc;
-    }, [] as SharedModelGesuchFormStep[])
+    }, [] as GesuchFormStep[])
     .sort((a, b) => {
-      const stepsArr = Object.keys(gesuchFormStepsFieldMap);
+      const stepsArr = Object.keys(FormRoutesToPropsMap);
 
       return stepsArr.indexOf(a.route) - stepsArr.indexOf(b.route);
     })
@@ -425,15 +433,19 @@ const transformValidationReportToFormSteps = (
 
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
-  currentForm?: SharedModelGesuchFormular | null,
+  currentForm?: GesuchFormularType | null,
 ) => {
-  const formKeys: SharedModelGesuchFormularPropsSteuerdatenSteps[] = [
-    ...(Object.keys(
-      currentForm ?? {},
-    ) as SharedModelGesuchFormularPropsSteuerdatenSteps[]),
-    'steuerdaten',
+  const formKeys: (GSFormStepProps | SBFormStepProps)[] = [
+    ...(Object.keys(currentForm ?? {}) as (
+      | GSFormStepProps
+      | SBFormStepProps
+    )[]),
+    'steuerdatenFamilie',
     'steuerdatenMutter',
     'steuerdatenVater',
+    'steuererklaerungFamilie',
+    'steuererklaerungMutter',
+    'steuererklaerungVater',
     'dokuments',
   ];
 

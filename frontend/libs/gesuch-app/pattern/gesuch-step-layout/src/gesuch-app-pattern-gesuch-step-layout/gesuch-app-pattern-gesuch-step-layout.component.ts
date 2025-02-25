@@ -33,7 +33,7 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
@@ -65,7 +65,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
-  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+  stepSig = input<GesuchFormStep | undefined>(undefined, {
     alias: 'step',
   });
 

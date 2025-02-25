@@ -27,7 +27,7 @@ type P<T extends PermissionFlag> = T | ' ';
  * * `F` - Freigeben
  * * `U` - Unterschriftenblatt hochladen
  */
-type PermissionFlags = `${P<'W'>}${P<'V'>}${P<'D'>}${P<'F'>}${P<'U'>}`;
+type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof getPermissions>>;
@@ -40,9 +40,8 @@ const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
  *
  * @example
  * ```ts
- * getPermissions('WV  ') === {
+ * getPermissions('W  ') === {
  *   canWrite: true,
- *   canViewVerfuegung: true,
  *   canUploadDocuments: false,
  *   canFreigeben: false,
  *   canUploadUnterschriftenblatt: false
@@ -71,25 +70,25 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W DF ', [sb]: '    U' },
-  EINGEREICHT /**                      */: { [gs]: '     ', [sb]: ' V  U' },
-  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: ' V  U' },
-  IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'WV  U' },
-  IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: ' V  U' },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'WV  U' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: ' V  U' },
-  FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF ', [sb]: ' V  U' },
-  GESUCH_ABGELEHNT /**                 */: { [gs]: '     ', [sb]: ' V  U' },
-  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '     ', [sb]: ' V  U' },
-  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: ' V   ' },
-  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '     ', [sb]: ' V  U' },
-  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '     ', [sb]: ' V  U' },
-  STIPENDIENANSPRUCH /**               */: { [gs]: '     ', [sb]: ' V   ' },
-  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '     ', [sb]: ' V  U' },
-  VERSANDBEREIT /**                    */: { [gs]: '     ', [sb]: ' V   ' },
-  VERFUEGT /**                         */: { [gs]: '     ', [sb]: ' V  U' },
-  VERSENDET /**                        */: { [gs]: '     ', [sb]: ' V   ' },
-  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: ' V  U' },
+  IN_BEARBEITUNG_GS /**                */: { [gs]: 'WDF ', [sb]: '   U' },
+  EINGEREICHT /**                      */: { [gs]: '    ', [sb]: '   U' },
+  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '    ', [sb]: '   U' },
+  IN_BEARBEITUNG_SB /**                */: { [gs]: '    ', [sb]: 'W  U' },
+  IN_FREIGABE /**                      */: { [gs]: '    ', [sb]: '   U' },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '    ', [sb]: 'W  U' },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '    ', [sb]: '   U' },
+  FEHLENDE_DOKUMENTE /**               */: { [gs]: ' DF ', [sb]: '   U' },
+  GESUCH_ABGELEHNT /**                 */: { [gs]: '    ', [sb]: '   U' },
+  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '    ', [sb]: '   U' },
+  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '    ', [sb]: '    ' },
+  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '    ', [sb]: '   U' },
+  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '    ', [sb]: '   U' },
+  STIPENDIENANSPRUCH /**               */: { [gs]: '    ', [sb]: '    ' },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '    ', [sb]: '   U' },
+  VERSANDBEREIT /**                    */: { [gs]: '    ', [sb]: '    ' },
+  VERFUEGT /**                         */: { [gs]: '    ', [sb]: '   U' },
+  VERSENDET /**                        */: { [gs]: '    ', [sb]: '    ' },
+  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '    ', [sb]: '   U' },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
 
 /**
@@ -98,11 +97,11 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'W D  ', [sb]: '     ' },
-  UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W    ' },
-  AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
-  ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
-  MANUELLE_AENDERUNG: /** */ { [gs]: '     ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WD  ', [sb]: '    ' },
+  UEBERPRUEFEN: /**       */ { [gs]: '    ', [sb]: 'W   ' },
+  AKZEPTIERT: /**         */ { [gs]: '    ', [sb]: '    ' },
+  ABGELEHNT: /**          */ { [gs]: 'W   ', [sb]: '    ' },
+  MANUELLE_AENDERUNG: /** */ { [gs]: '    ', [sb]: '    ' },
 } as const satisfies Record<
   GesuchTrancheStatus,
   Record<AppType, PermissionFlags>

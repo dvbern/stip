@@ -6,30 +6,32 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
+  GSFormStepProps,
   GesuchTranche,
   GesuchTrancheTyp,
   GesuchUrlType,
+  SBFormStepProps,
   SharedModelGesuch,
-  SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenTyp,
   TRANCHE_TYPE_INITIAL,
   TrancheSetting,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
+  BaseFormSteps,
   ELTERN,
+  ELTERN_STEUERERKLAERUNG_STEPS,
   ELTERN_STEUER_STEPS,
+  GesuchFormStep,
   RETURN_TO_HOME,
-  SharedModelGesuchFormStep,
-  TRANCHE,
-  gesuchFormBaseSteps,
+  isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
-import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
+import { capitalized, lowercased } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
-const baseSteps = [TRANCHE, ...Object.values(gesuchFormBaseSteps)];
+const baseFormStepsArray = Object.values(BaseFormSteps);
 
 const { selectRouteParam } = getRouterSelectors();
 
@@ -145,17 +147,21 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
   selectSharedDataAccessConfigsView,
   (state, config) => {
     const sharedSteps = state.steuerdatenTabs.data
-      ? appendSteps(baseSteps, [
+      ? appendSteps(baseFormStepsArray, [
           {
             after: ELTERN,
             steps: state.steuerdatenTabs.data?.map(
-              (typ) => ELTERN_STEUER_STEPS[typ],
+              (typ) => ELTERN_STEUERERKLAERUNG_STEPS[typ],
             ),
           },
         ])
-      : baseSteps;
+      : baseFormStepsArray;
 
-    const steps = getStepsByAppType(sharedSteps, config?.compileTimeConfig);
+    const steps = addStepsByAppType(
+      sharedSteps,
+      state.steuerdatenTabs.data,
+      config?.compileTimeConfig,
+    );
     return {
       steps,
       stepsFlow: [...steps, RETURN_TO_HOME],
@@ -199,21 +205,21 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
  */
 export const isGesuchFormularProp =
   (formKeys: string[]) =>
-  (prop?: string): prop is SharedModelGesuchFormularPropsSteuerdatenSteps => {
+  (prop?: string): prop is GSFormStepProps => {
     if (!prop) return false;
     return formKeys.includes(prop);
   };
 
 type AdditionalSteps = {
-  after: SharedModelGesuchFormStep;
-  steps: SharedModelGesuchFormStep[];
+  after: GesuchFormStep;
+  steps: GesuchFormStep[];
 };
 
 /**
  * Append additional steps after the given step
  */
 const appendSteps = (
-  steps: SharedModelGesuchFormStep[],
+  steps: GesuchFormStep[],
   additionalSteps: AdditionalSteps[],
 ) => {
   const afterMap = additionalSteps.reduce(
@@ -223,25 +229,42 @@ const appendSteps = (
       }
       return acc;
     },
-    {} as Record<string, SharedModelGesuchFormStep[]>,
+    {} as Record<string, GesuchFormStep[]>,
   );
   return steps.reduce((acc, step) => {
     if (afterMap[step.route]) {
       return [...acc, step, ...afterMap[step.route]];
     }
     return [...acc, step];
-  }, [] as SharedModelGesuchFormStep[]);
+  }, [] as GesuchFormStep[]);
 };
 
-function getStepsByAppType(
-  sharedSteps: SharedModelGesuchFormStep[],
+function addStepsByAppType(
+  sharedSteps: GesuchFormStep[],
+  steuerdatenTabs: SteuerdatenTyp[] | undefined,
   compileTimeConfig?: CompileTimeConfig,
 ) {
   switch (compileTimeConfig?.appType) {
     case 'gesuch-app':
       return [...sharedSteps, ABSCHLUSS];
-    case 'sachbearbeitung-app':
-      return [...sharedSteps];
+    case 'sachbearbeitung-app': {
+      const steuerdatenSteps = steuerdatenTabs?.map((typ) => ({
+        step: ELTERN_STEUER_STEPS[typ],
+        type: typ,
+      }));
+      return steuerdatenSteps
+        ? appendSteps(
+            sharedSteps,
+            steuerdatenSteps.map((s) => {
+              return {
+                after: ELTERN_STEUERERKLAERUNG_STEPS[s.type],
+                steps: [s.step],
+              };
+            }),
+          )
+        : sharedSteps;
+    }
+
     default:
       return [];
   }
@@ -285,10 +308,10 @@ export function prepareTranchenChanges(
           .filter(
             (c) =>
               // Ignore steuerdaten changes, they are handled separately
-              c.key !==
-                type<SharedModelGesuchFormularPropsSteuerdatenSteps>(
-                  'steuerdaten',
-                ) &&
+              // @scph: need to figure out how to handle steuererklaerung changes
+              !isSteuererklaerungStep(
+                c.key as GSFormStepProps | SBFormStepProps,
+              ) &&
               ((c.changes?.length ?? 0) > 0 ||
                 // Also mark the step as affected if a new entry has been added or removed
                 c.type !== 'UPDATE'),
@@ -315,15 +338,14 @@ export function prepareTranchenChanges(
  */
 export const hasSteuerdatenChanges = (
   changes: IChange[],
-): SharedModelGesuchFormularPropsSteuerdatenSteps[] => {
+): GSFormStepProps[] => {
+  // @scph: is this assumption correct?
   const steuerdatenChange = changes.find(
     (c) =>
-      c.key ===
-        type<SharedModelGesuchFormularPropsSteuerdatenSteps>('steuerdaten') &&
+      !isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
       c.type === 'UPDATE',
   );
-  const affectedSteps =
-    new Set<SharedModelGesuchFormularPropsSteuerdatenSteps>();
+  const affectedSteps = new Set<GSFormStepProps>();
 
   // Check if steuerdaten have changed
   (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
@@ -337,7 +359,7 @@ export const hasSteuerdatenChanges = (
           steuerdatenTypChange.type !== 'UPDATE')
       ) {
         affectedSteps.add(
-          `steuerdaten${steuerdatenTyp === 'FAMILIE' ? '' : capitalized(lowercased(steuerdatenTyp))}`,
+          `steuererklaerung${capitalized(lowercased(steuerdatenTyp))}`,
         );
       }
     },
