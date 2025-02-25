@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
@@ -29,9 +32,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Objects;
-import java.util.UUID;
-
 @Authorizer
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -40,6 +40,11 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final BenutzerService benutzerService;
+
+    @Transactional
+    public void canCreateCustomDokumentTyp() {
+        canRead();
+    }
 
     @Transactional
     public void canRead() {
@@ -86,7 +91,9 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     public void canDeleteDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var isCustomDokument =
-            dokument.getGesuchDokumente().stream().anyMatch(gesuchDokument -> Objects.nonNull(gesuchDokument.getCustomDokumentTyp()));
+            dokument.getGesuchDokumente()
+                .stream()
+                .anyMatch(gesuchDokument -> Objects.nonNull(gesuchDokument.getCustomDokumentTyp()));
 
         if (
             isAdminOrSb(benutzerService.getCurrentBenutzer())
