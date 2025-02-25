@@ -105,6 +105,17 @@ class CustomGesuchDokumentTypAuthorizerTest {
     }
 
     @Test
+    void canDeleteTypShouldFailAsGSWhenInBearbeitungSB() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canDeleteTyp(
+                UUID.randomUUID()
+            );
+        });
+    }
+
+    @Test
     void canDeleteTypShouldFailAsAdmin() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
