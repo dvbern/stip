@@ -807,7 +807,6 @@ public class DokumentApiSpec {
      * 
      *
      * @see #customDokumentTypIdPath  (required)
-     * @see #gesuchTrancheIdPath  (required)
      * return NullableGesuchDokumentDtoSpec
      */
     public static class GetCustomGesuchDokumenteForTypOper implements Oper {
@@ -853,17 +852,6 @@ public class DokumentApiSpec {
          */
         public GetCustomGesuchDokumenteForTypOper customDokumentTypIdPath(Object customDokumentTypId) {
             reqSpec.addPathParam(CUSTOM_DOKUMENT_TYP_ID_PATH, customDokumentTypId);
-            return this;
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GetCustomGesuchDokumenteForTypOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 

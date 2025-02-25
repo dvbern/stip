@@ -175,7 +175,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
     @Override
-    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId, UUID gesuchTrancheId) {
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
         return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
     }
 

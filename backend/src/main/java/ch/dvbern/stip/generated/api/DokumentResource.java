@@ -81,7 +81,7 @@ public interface DokumentResource {
     @GET
     @Path("/customGesuchDokument/{customDokumentTypId}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @GET
     @Path("/dokument/{dokumentArt}/download")
