@@ -1,5 +1,6 @@
 import { differenceInYears } from 'date-fns';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -270,9 +271,15 @@ export const isStepDisabled = (
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
   appType: AppType,
+  rolesMap: RolesMap,
 ) => {
   const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-  const { permissions } = preparePermissions(trancheTyp, gesuch, appType);
+  const { permissions } = preparePermissions(
+    trancheTyp,
+    gesuch,
+    appType,
+    rolesMap,
+  );
   const readonly = !permissions.canWrite;
 
   switch (step) {

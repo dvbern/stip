@@ -34,8 +34,18 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class SozialdienstAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    public final SozialdienstRepository sozialdienstRepository;
-    public final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private final SozialdienstRepository sozialdienstRepository;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+
+    @Transactional
+    public void canUpdateSozialdienstAdmin() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        throw new UnauthorizedException();
+    }
 
     @Transactional
     public void canUpdateSozialdienstBenutzer(final UUID sozialdienstBenutzerToUpdateID) {

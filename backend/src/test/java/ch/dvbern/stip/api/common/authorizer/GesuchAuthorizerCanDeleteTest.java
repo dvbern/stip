@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,18 +46,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class GesuchAuthorizerCanDeleteTest {
-    private BenutzerService benutzerService;
     private Benutzer currentBenutzer;
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
 
-    private GesuchRepository gesuchRepository;
-    private GesuchTrancheRepository gesuchTrancheRepository;
-
     @BeforeEach
     void setUp() {
         UUID currentBenutzerId = UUID.randomUUID();
-        benutzerService = Mockito.mock(BenutzerService.class);
+        BenutzerService benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
         currentBenutzer.setId(currentBenutzerId);
@@ -72,10 +69,11 @@ class GesuchAuthorizerCanDeleteTest {
 
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
-        gesuchRepository = Mockito.mock(GesuchRepository.class);
-        gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        GesuchRepository gesuchRepository = Mockito.mock(GesuchRepository.class);
+        GesuchTrancheRepository gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        final var sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -87,7 +85,13 @@ class GesuchAuthorizerCanDeleteTest {
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository, null
+            benutzerService,
+            gesuchRepository,
+            gesuchTrancheRepository,
+            gesuchStatusService,
+            fallRepository,
+            sozialdienstService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -102,6 +106,7 @@ class GesuchAuthorizerCanDeleteTest {
     void canUpdateOwnTest() {
         // arrange
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canUpdate(uuid));
     }
@@ -109,11 +114,8 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void canDeleteOwnTest() {
         // arrange
-        authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null, null
-        );
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
@@ -122,11 +124,8 @@ class GesuchAuthorizerCanDeleteTest {
     void cannotDeleteAnotherTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
-        final var authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null, null
-        );
         final var uuid = UUID.randomUUID();
+
         // assert
         assertThrows(UnauthorizedException.class, () -> {
             authorizer.canDelete(uuid);
@@ -136,11 +135,9 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
-        final var authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null, null, null
-        );
+        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
         final var uuid = UUID.randomUUID();
+
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }

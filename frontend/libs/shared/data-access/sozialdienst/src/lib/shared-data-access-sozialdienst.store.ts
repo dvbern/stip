@@ -4,7 +4,6 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
-  EMPTY,
   catchError,
   exhaustMap,
   map,
@@ -15,16 +14,17 @@ import {
 } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelBenutzerApi } from '@dv/shared/model/benutzer';
 import {
+  DelegierenService,
+  Delegierung,
   Sozialdienst,
   SozialdienstAdmin,
-  SozialdienstAdminUpdate,
   SozialdienstBenutzer,
   SozialdienstBenutzerCreate,
   SozialdienstBenutzerUpdate,
   SozialdienstCreate,
   SozialdienstService,
+  SozialdienstSlim,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
 import { handleUnauthorized } from '@dv/shared/util/http';
@@ -43,14 +43,18 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type SozialdienstState = {
+  delegierung: RemoteData<Delegierung>;
   sozialdienste: CachedRemoteData<Sozialdienst[]>;
+  availableSozialdienste: CachedRemoteData<SozialdienstSlim[]>;
   sozialdienst: RemoteData<Sozialdienst>;
   sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
   sozialdienstBenutzer: CachedRemoteData<SozialdienstBenutzer>;
 };
 
 const initialState: SozialdienstState = {
+  delegierung: initial(),
   sozialdienste: initial(),
+  availableSozialdienste: initial(),
   sozialdienst: initial(),
   sozialdienstBenutzerList: initial(),
   sozialdienstBenutzer: initial(),
@@ -68,6 +72,7 @@ export class SozialdienstStore extends signalStore(
 ) {
   private router = inject(Router);
   private sozialdienstService = inject(SozialdienstService);
+  private delegierenService = inject(DelegierenService);
   private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
@@ -108,6 +113,25 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
+  loadAvailableSozialdienste$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienste: cachedPending(state.sozialdienste),
+        }));
+      }),
+      switchMap(() =>
+        this.sozialdienstService
+          .getAllSozialdiensteForDelegation$()
+          .pipe(
+            handleApiResponse((availableSozialdienste) =>
+              patchState(this, { availableSozialdienste }),
+            ),
+          ),
+      ),
+    ),
+  );
+
   loadSozialdienst$ = rxMethod<{ sozialdienstId: string }>(
     pipe(
       tap(() => {
@@ -129,7 +153,7 @@ export class SozialdienstStore extends signalStore(
 
   createSozialdienst$ = rxMethod<{
     sozialdienstCreate: Omit<SozialdienstCreate, 'sozialdienstAdmin'> & {
-      sozialdienstAdmin: Omit<SozialdienstAdmin, 'keycloakId'>;
+      sozialdienstAdmin: Omit<SozialdienstAdmin, 'keycloakId' | 'id'>;
     };
     onAfterSave?: (sozialdienstId: string) => void;
   }>(
@@ -213,7 +237,8 @@ export class SozialdienstStore extends signalStore(
             ),
             catchError((error) => {
               patchState(this, { sozialdienst: failure(error) });
-              return EMPTY;
+
+              return throwError(() => error);
             }),
           );
       }),
@@ -228,13 +253,6 @@ export class SozialdienstStore extends signalStore(
         });
       }),
       exhaustMap(({ sozialdienst }) => {
-        const userUpdate: SharedModelBenutzerApi = {
-          id: sozialdienst.sozialdienstAdmin.id,
-          email: sozialdienst.sozialdienstAdmin.email,
-          firstName: sozialdienst.sozialdienstAdmin.nachname,
-          lastName: sozialdienst.sozialdienstAdmin.vorname,
-        };
-
         const sozialdienstUpdate: SozialdienstUpdate = {
           adresse: sozialdienst.adresse,
           iban: sozialdienst.iban,
@@ -242,59 +260,57 @@ export class SozialdienstStore extends signalStore(
           name: sozialdienst.name,
         };
 
-        const sozialdienstAdminUpdate: SozialdienstAdminUpdate = {
+        const sozialdienstBenutzerUpdate: SozialdienstBenutzerUpdate = {
+          id: sozialdienst.sozialdienstAdmin.id,
           nachname: sozialdienst.sozialdienstAdmin.nachname,
           vorname: sozialdienst.sozialdienstAdmin.vorname,
         };
 
-        return this.keycloak.updateUser$(userUpdate).pipe(
-          switchMap(() => {
-            return this.sozialdienstService.updateSozialdienstAdmin$({
-              sozialdienstId: sozialdienst.id,
-              sozialdienstAdminUpdate,
-            });
-          }),
-          switchMap(() =>
-            this.sozialdienstService
-              .updateSozialdienst$({
-                sozialdienstUpdate,
-              })
-              .pipe(
-                handleApiResponse(
-                  (sozialdienst) => {
-                    patchState(this, { sozialdienst });
-                  },
-                  {
-                    onSuccess: () => {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
-                      });
+        return this.sozialdienstService
+          .updateSozialdienstAdmin$({
+            sozialdienstBenutzerUpdate,
+          })
+          .pipe(
+            switchMap(() =>
+              this.sozialdienstService
+                .updateSozialdienst$({
+                  sozialdienstUpdate,
+                })
+                .pipe(
+                  handleApiResponse(
+                    (sozialdienst) => {
+                      patchState(this, { sozialdienst });
                     },
-                    onFailure: () => {
-                      this.loadSozialdienst$({
-                        sozialdienstId: sozialdienst.id,
-                      });
+                    {
+                      onSuccess: () => {
+                        this.globalNotificationStore.createSuccessNotification({
+                          messageKey:
+                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
+                        });
+                      },
+                      onFailure: () => {
+                        this.loadSozialdienst$({
+                          sozialdienstId: sozialdienst.id,
+                        });
+                      },
                     },
-                  },
+                  ),
                 ),
-              ),
-          ),
-          catchError(() => {
-            this.loadSozialdienst$({
-              sozialdienstId: sozialdienst.id,
-            });
+            ),
+            catchError((error) => {
+              this.loadSozialdienst$({
+                sozialdienstId: sozialdienst.id,
+              });
 
-            return EMPTY;
-          }),
-        );
+              return throwError(() => error);
+            }),
+          );
       }),
     ),
   );
 
   replaceSozialdienstAdmin$ = rxMethod<{
     sozialdienstId: string;
-    existingSozialdienstAdminKeycloakId: string;
     newUser: Omit<SozialdienstAdmin, 'keycloakId'>;
   }>(
     pipe(
@@ -303,66 +319,57 @@ export class SozialdienstStore extends signalStore(
           sozialdienst: pending(),
         });
       }),
-      exhaustMap(
-        ({ sozialdienstId, existingSozialdienstAdminKeycloakId, newUser }) => {
-          return this.keycloak
-            .createUserWithSozialDienstAdminRole$({
-              name: newUser.nachname,
-              vorname: newUser.vorname,
-              email: newUser.email,
-            })
-            .pipe(
-              switchMap((user) => {
-                if (!user.email) {
-                  throw new Error('User email not defined');
-                }
+      exhaustMap(({ sozialdienstId, newUser }) => {
+        return this.keycloak
+          .createUserWithSozialDienstAdminRole$({
+            name: newUser.nachname,
+            vorname: newUser.vorname,
+            email: newUser.email,
+          })
+          .pipe(
+            switchMap((user) => {
+              if (!user.email) {
+                throw new Error('User email not defined');
+              }
 
-                return this.sozialdienstService.replaceSozialdienstAdmin$({
-                  sozialdienstId,
-                  sozialdienstAdmin: {
-                    nachname: user.lastName,
-                    vorname: user.firstName,
-                    email: user.email,
-                    keycloakId: user.id,
-                  },
-                });
-              }),
-              switchMap((sozialdienstAdmin) =>
-                this.keycloak
-                  .deleteUser$(existingSozialdienstAdminKeycloakId)
-                  .pipe(map(() => sozialdienstAdmin)),
-              ),
-              switchMap((sozialdienstAdmin) =>
-                this.keycloak
-                  .notifyUser$({
-                    vorname: sozialdienstAdmin.vorname,
-                    name: sozialdienstAdmin.nachname,
-                    email: sozialdienstAdmin.email,
-                  })
-                  .pipe(
-                    handleApiResponse(() => undefined, {
-                      onSuccess: (wasSuccessfull) => {
-                        this.loadSozialdienst$({ sozialdienstId });
-                        if (wasSuccessfull) {
-                          this.globalNotificationStore.createSuccessNotification(
-                            {
-                              messageKey:
-                                'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
-                            },
-                          );
-                        }
-                      },
-                    }),
-                  ),
-              ),
-              catchError(() => {
-                this.loadSozialdienst$({ sozialdienstId });
+              return this.sozialdienstService.replaceSozialdienstAdmin$({
+                sozialdienstId,
+                sozialdienstAdmin: {
+                  nachname: user.lastName,
+                  vorname: user.firstName,
+                  email: user.email,
+                  keycloakId: user.id,
+                },
+              });
+            }),
+            switchMap((sozialdienstAdmin) =>
+              this.keycloak
+                .notifyUser$({
+                  vorname: sozialdienstAdmin.vorname,
+                  name: sozialdienstAdmin.nachname,
+                  email: sozialdienstAdmin.email,
+                })
+                .pipe(
+                  handleApiResponse(() => undefined, {
+                    onSuccess: (wasSuccessfull) => {
+                      this.loadSozialdienst$({ sozialdienstId });
+                      if (wasSuccessfull) {
+                        this.globalNotificationStore.createSuccessNotification({
+                          messageKey:
+                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
+                        });
+                      }
+                    },
+                  }),
+                ),
+            ),
+            catchError((error) => {
+              this.loadSozialdienst$({ sozialdienstId });
 
-                return EMPTY;
-              }),
-            );
-        },
-      ),
+              return throwError(() => error);
+            }),
+          );
+      }),
     ),
   );
 
@@ -402,6 +409,35 @@ export class SozialdienstStore extends signalStore(
         this.loadAllSozialdienste$();
         return throwError(() => error);
       }),
+    ),
+  );
+
+  fallDelegieren$ = rxMethod<{
+    fallId: string;
+    sozialdienstId: string;
+    onSuccess?: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          delegierung: pending(),
+        });
+      }),
+      exhaustMap(({ fallId, sozialdienstId, onSuccess }) =>
+        this.delegierenService
+          .fallDelegieren$({
+            fallId,
+            sozialdienstId,
+          })
+          .pipe(
+            handleApiResponse(
+              (delegierung) => patchState(this, { delegierung }),
+              {
+                onSuccess,
+              },
+            ),
+          ),
+      ),
     ),
   );
 

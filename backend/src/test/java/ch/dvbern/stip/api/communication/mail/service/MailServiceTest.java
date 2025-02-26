@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @QuarkusTest
 @Slf4j
@@ -197,5 +198,54 @@ class MailServiceTest {
                 .translate("stip.standard.notification")
         );
         assertThat(actual.getHtml()).doesNotContain(TEST_STANDARD_EMAIL_FR_STRING);
+    }
+
+    @Test
+    void sendStandardNotificationEmailsSingleRecipient() {
+        final var recipient = "test-mitarbeiter@bat.ch";
+        mailService.sendStandardNotificationEmails(
+            "Test",
+            "GS",
+            AppLanguages.DE,
+            List.of(recipient)
+        );
+
+        final var received = mailbox.getMailMessagesSentTo(recipient);
+        assertThat(received).hasSize(1);
+
+        final var message = received.get(0);
+        assertThat(message.getCc()).isEmpty();
+    }
+
+    @Test
+    void sendStandardNotificationEmailsMultipleRecipients() {
+        final var recipient = "test-mitarbeiter@bat.ch";
+        final var cc = "test-gs@bat.ch";
+        mailService.sendStandardNotificationEmails(
+            "Test",
+            "GS",
+            AppLanguages.DE,
+            List.of(recipient, cc)
+        );
+
+        final var received = mailbox.getMailMessagesSentTo(recipient);
+        assertThat(received).hasSize(1);
+
+        final var message = received.get(0);
+        assertThat(message.getCc()).hasSize(1);
+        assertThat(message.getCc().get(0)).isEqualTo(cc);
+    }
+
+    @Test
+    void sendStandardNotificationEmailsEmptyRecipient() {
+        final var recipients = List.<String>of();
+        assertThatThrownBy(
+            () -> mailService.sendStandardNotificationEmails(
+                "Test",
+                "GS",
+                AppLanguages.DE,
+                recipients
+            )
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 }

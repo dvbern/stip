@@ -2,7 +2,7 @@ import { importProvidersFrom } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideTranslateService } from '@ngx-translate/core';
-import { provideOAuthClient } from 'angular-oauth2-oidc';
+import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
 import {
@@ -84,6 +84,27 @@ export function provideSharedPatternJestTestSetup(
       },
     },
   ];
+}
+
+export function provideSharedOAuthServiceWithGesuchstellerJWT() {
+  return {
+    provide: OAuthService,
+    useValue: {
+      getAccessToken: () =>
+        /**
+         * {
+         *   ...
+         *   "name": "John Doe",
+         *   "realm_access": {
+         *     "roles": [
+         *       "Gesuchsteller"
+         *     ]
+         *   }
+         * }
+         */
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiR2VzdWNoc3RlbGxlciJdfX0.pW71nQV6d_VLc0a8R-4WxVkXOmega_z2RFZo7nTyYJI',
+    },
+  };
 }
 
 export function provideSharedPatternJestTestAusbildungstaetten() {

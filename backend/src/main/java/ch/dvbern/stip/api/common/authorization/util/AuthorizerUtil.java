@@ -19,16 +19,65 @@ package ch.dvbern.stip.api.common.authorization.util;
 
 import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AuthorizerUtil {
+    public boolean isGesuchstellerOfGesuchWithoutDelegierung(final Benutzer currentBenutzer, final Gesuch gesuch) {
+        return isGesuchstellerOfFallWithoutDelegierung(
+            currentBenutzer,
+            gesuch.getAusbildung().getFall()
+        );
+    }
+
+    public boolean isGesuchstellerOfFallWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
+        return isGesuchstellerOfFall(currentBenutzer, fall) && fall.getDelegierung() == null;
+    }
+
     public boolean isGesuchstellerOfGesuch(final Benutzer currentBenutzer, final Gesuch gesuch) {
+        return isGesuchstellerOfFall(
+            currentBenutzer,
+            gesuch.getAusbildung().getFall()
+        );
+    }
+
+    public boolean isGesuchstellerOfFall(final Benutzer currentBenutzer, final Fall fall) {
         return Objects.equals(
-            gesuch.getAusbildung().getFall().getGesuchsteller().getId(),
+            fall.getGesuchsteller().getId(),
             currentBenutzer.getId()
+        );
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+        final Gesuch gesuch,
+        final SozialdienstService sozialdienstService
+    ) {
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch.getAusbildung(), sozialdienstService);
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+        final Ausbildung ausbildung,
+        final SozialdienstService sozialdienstService
+    ) {
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(ausbildung.getFall(), sozialdienstService);
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+        final Fall fall,
+        final SozialdienstService sozialdienstService
+    ) {
+        final var delegierung = fall.getDelegierung();
+        if (delegierung == null) {
+            return false;
+        }
+
+        return sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
+            delegierung.getSozialdienst().getId()
         );
     }
 }

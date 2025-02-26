@@ -22,6 +22,7 @@ import {
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
@@ -57,15 +58,21 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   private store = inject(Store);
   private gesuchStore = inject(GesuchStore);
   private berechnungStore = inject(BerechnungStore);
+  private permissionStore = inject(PermissionStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchPermissionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return {};
     }
-    return getGesuchPermissions({ gesuchStatus }, this.config.appType);
+    return getGesuchPermissions(
+      { gesuchStatus },
+      this.config.appType,
+      rolesMap,
+    );
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());

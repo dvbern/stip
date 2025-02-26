@@ -19,11 +19,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import {
-  SharedModelRole,
-  SharedModelRoleList,
-} from '@dv/shared/model/benutzer';
+import { SharedModelRoleList } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import { compareById } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -107,6 +105,8 @@ export class BenutzeDetailComponent implements OnDestroy {
     );
   }
 
+  compareById = compareById;
+
   handleSubmit() {
     if (this.idSig()) {
       this.update();
@@ -157,10 +157,6 @@ export class BenutzeDetailComponent implements OnDestroy {
   trimEmail() {
     const email = this.form.controls.email;
     email.setValue(email.value?.trim() ?? null);
-  }
-
-  compareListFn(a: SharedModelRole, b: SharedModelRole) {
-    return a.id === b.id;
   }
 
   ngOnDestroy() {

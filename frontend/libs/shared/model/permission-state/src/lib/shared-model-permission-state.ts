@@ -1,5 +1,7 @@
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
+  Delegierung,
   GesuchTrancheStatus,
   GesuchUrlType,
   Gesuchstatus,
@@ -30,7 +32,7 @@ type P<T extends PermissionFlag> = T | ' ';
 type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
-export type PermissionMap = Partial<ReturnType<typeof getPermissions>>;
+export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
   p.charAt(Permissions[perm].index) === perm;
@@ -48,7 +50,7 @@ const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
  * }
  * ```
  */
-const getPermissions = (permission: PermissionFlags) => {
+const parsePermissions = (permission: PermissionFlags) => {
   return (Object.keys(Permissions) as PermissionFlag[]).reduce(
     (acc, perm) => {
       acc[`can${capitalized(Permissions[perm].name)}`] = hasPermission(
@@ -111,10 +113,11 @@ export const preparePermissions = (
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
   appType: AppType | undefined,
+  rolesMap: RolesMap,
 ) => {
   if (!gesuch || !appType) return { readonly: false, permissions: {} };
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
-  const tranchePermissions = getTranchePermissions(gesuch, appType);
+  const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
+  const tranchePermissions = getTranchePermissions(gesuch, appType, rolesMap);
   const permissions =
     trancheTyp === 'AENDERUNG' ? tranchePermissions : gesuchPermissions;
   const canWrite = permissions.canWrite ?? true;
@@ -129,21 +132,30 @@ export const preparePermissions = (
  * Get the permissions for the gesuch based on the status and the app type
  */
 export const getGesuchPermissions = (
-  gesuch: { gesuchStatus: Gesuchstatus } | null,
+  gesuch: {
+    gesuchStatus: Gesuchstatus;
+    delegierung?: Delegierung;
+  } | null,
   appType: AppType | undefined,
+  rolesMap: RolesMap,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
-  return getPermissions(state);
+  const permissions = parsePermissions(state);
+  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
 };
 
 /**
  * Get the permissions for the tranche based on the status and the app type
  */
 export const getTranchePermissions = (
-  gesuch: { gesuchTrancheToWorkWith: { status: GesuchTrancheStatus } } | null,
-  appType?: AppType,
+  gesuch: {
+    gesuchTrancheToWorkWith: { status: GesuchTrancheStatus };
+    delegierung?: Delegierung;
+  } | null,
+  appType: AppType | undefined,
+  rolesMap: RolesMap,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};
 
@@ -151,5 +163,52 @@ export const getTranchePermissions = (
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
     ];
-  return getPermissions(state);
+  const permissions = parsePermissions(state);
+  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
+};
+
+/**
+ * Special gesuch update check for the gesuch-app
+ *
+ * Currently it applies a check if the current user is allowed to update the gesuch
+ * depending on if it is delegated and the user roles of the current user.
+ */
+export const canCurrentlyEdit = (
+  permissions: PermissionMap,
+  appType: AppType,
+  rolesMap: RolesMap,
+  delegierung: Delegierung | undefined,
+) => {
+  // Only apply special rules for the gesuch-app
+  if (appType !== 'gesuch-app') {
+    return !!permissions.canWrite;
+  }
+
+  return (
+    // OK if it is not delegated and current user is not a sozialdienst-mitarbeiter
+    (!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] !== true) ||
+    // OK if it is delegated and current user is a sozialdienst-mitarbeiter
+    (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
+  );
+};
+
+/**
+ * Revoke writability and document upload permissions if the gesuch is delegated
+ */
+const applyDelegatedPermission = (
+  permissions: PermissionMap,
+  gesuch: { delegierung?: Delegierung },
+  appType: AppType,
+  rolesMap: RolesMap,
+): PermissionMap => {
+  if (canCurrentlyEdit(permissions, appType, rolesMap, gesuch.delegierung)) {
+    return permissions;
+  }
+
+  return {
+    ...permissions,
+    canWrite: false,
+    canUploadDocuments: false,
+    canFreigeben: false,
+  };
 };
