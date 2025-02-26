@@ -272,6 +272,15 @@ public class GesuchTrancheCopyUtil {
         private Adresse mutterAdresse;
         private Adresse vaterAdresse;
 
+        public static ElternAdressen fromGesuchFormular(final GesuchFormular gesuchFormular) {
+            final var elternAdressen = new ElternAdressen();
+            for (final var eltern : gesuchFormular.getElterns()) {
+                elternAdressen.setForTyp(eltern.getElternTyp(), eltern.getAdresse());
+            }
+
+            return elternAdressen;
+        }
+
         public void setForTyp(final ElternTyp typ, final Adresse adresse) {
             if (typ == ElternTyp.VATER) {
                 vaterAdresse = adresse;

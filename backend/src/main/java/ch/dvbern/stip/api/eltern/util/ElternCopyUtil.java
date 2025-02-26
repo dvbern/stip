@@ -71,7 +71,7 @@ public class ElternCopyUtil {
             source -> {
                 final var newTarget = new Eltern().setAdresse(new Adresse());
 
-                ElternCopyUtil.copyValues(source, newTarget);
+                ElternCopyUtil.copyValuesWithoutReferences(source, newTarget);
                 AdresseCopyUtil.copyValues(source.getAdresse(), newTarget.getAdresse());
 
                 return newTarget;
