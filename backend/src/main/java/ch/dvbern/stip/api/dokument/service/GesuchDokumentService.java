@@ -165,19 +165,10 @@ public class GesuchDokumentService {
         final FileUpload fileUpload,
         final String objectId
     ) {
-        final var customDokumentTyp = customDocumentTypRepository.requireById(customDokumentTypId);
-        final var gesuchTrancheId = customDokumentTyp.getGesuchDokument().getGesuchTranche().getId();
-        final var gesuchTranche =
-            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         final var gesuchDokument =
             gesuchDokumentRepository
                 .findByCustomDokumentType(customDokumentTypId)
-                .orElseGet(
-                    () -> createGesuchDokument(
-                        gesuchTranche,
-                        customDokumentTyp
-                    )
-                );
+                .orElseThrow(NotFoundException::new);
         final var dokument = new Dokument();
         dokument.getGesuchDokumente().add(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
