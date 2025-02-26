@@ -20,6 +20,7 @@ import { filter, map } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
   selectRouteTrancheId,
@@ -65,6 +66,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private einreichenStore = inject(EinreichenStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private config = inject(SharedModelCompileTimeConfig);
@@ -232,6 +234,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
                 gesuchTrancheId,
                 text: result.kommentar,
+                onSuccess: () => {
+                  this.einreichenStore.validateSteps$({ gesuchTrancheId });
+                },
               });
             }
           });
