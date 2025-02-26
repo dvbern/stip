@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -35,6 +30,11 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 
@@ -61,9 +61,8 @@ public class DocumentsRequiredConstraintValidator
             .toList();
         Set<String> allFiltered = new HashSet<>(filtered);
 
-        // compare if all required custom documents have an existing match
-        // (with a GesuchDokument that contains at least 1 file)
-        // if no match, these custom dokuments appear in the validation message
+        // add an entry (pointing to the documents page) for each missing custom document,
+        // so that the GS is informed about which he is required to upload
         final var customFiltered =
             DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
         customFiltered.forEach(missingCustomDok -> allFiltered.add(PAGENAME));
