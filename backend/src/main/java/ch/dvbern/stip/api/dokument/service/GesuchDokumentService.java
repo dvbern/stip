@@ -78,6 +78,7 @@ public class GesuchDokumentService {
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
+    private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
@@ -263,9 +264,11 @@ public class GesuchDokumentService {
         );
     }
 
-    private void dropGesuchDokumentIfNoDokumente(GesuchDokument gesuchDokument) {
-        gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
-        gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+    private void dropGesuchDokumentIfNotRequredAnymore(GesuchDokument gesuchDokument) {
+        if (!requiredDokumentService.isGesuchDokumentRequired(gesuchDokument)) {
+            gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+        }
     }
 
     @Transactional
@@ -274,7 +277,7 @@ public class GesuchDokumentService {
         final var dokumentObjectId = dokument.getObjectId();
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            dropGesuchDokumentIfNoDokumente(gesuchDokument);
+            dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
 
         return dokumentObjectId;
@@ -287,7 +290,7 @@ public class GesuchDokumentService {
 
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            dropGesuchDokumentIfNoDokumente(gesuchDokument);
+            dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
             executeDeleteDokumentsFromS3(List.of(dokumentObjectId));

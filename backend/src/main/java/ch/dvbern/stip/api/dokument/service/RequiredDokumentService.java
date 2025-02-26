@@ -80,6 +80,17 @@ public class RequiredDokumentService {
             .collect(Collectors.toSet());
     }
 
+    public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
+        final var tranche = gesuchDokument.getGesuchTranche();
+        final var requiredNormalDocuments = getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular());
+        final var requiredCustomDocuments = getRequiredCustomDokumentsForGesuchFormular(tranche);
+        if (Objects.isNull(gesuchDokument.getCustomDokumentTyp())) {
+            return requiredNormalDocuments.contains(gesuchDokument.getDokumentTyp());
+        }
+
+        return requiredCustomDocuments.contains(gesuchDokument.getCustomDokumentTyp());
+    }
+
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
         return requiredDocumentProducers
             .stream()

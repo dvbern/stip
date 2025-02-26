@@ -242,7 +242,7 @@ class GesuchDokumentServiceTest {
             ),
             null,
             null,
-            null
+            null, null
         );
 
         gesuchDokumente = new HashMap<>();
@@ -341,7 +341,8 @@ class GesuchDokumentServiceTest {
         DokumentstatusService dokumentstatusService,
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
-        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository
+        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
+        RequiredDokumentService requiredDokumentService
         ) {
             super(
                 gesuchDokumentMapper,
@@ -354,6 +355,7 @@ class GesuchDokumentServiceTest {
                 s3,
                 configService,
                 dokumentstatusService,
+                requiredDokumentService,
                 antivirus,
                 gesuchDokumentKommentarRepository
             );

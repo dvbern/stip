@@ -322,9 +322,7 @@ public class GesuchService {
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
-        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
-        }
+        gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
 
         final var updatePia = gesuchUpdateDto
             .getGesuchTrancheToWorkWith()
