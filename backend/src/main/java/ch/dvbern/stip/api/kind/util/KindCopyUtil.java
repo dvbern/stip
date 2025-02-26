@@ -54,11 +54,7 @@ public class KindCopyUtil {
             targetKinder,
             sourceKinder,
             KindCopyUtil::copyValues,
-            source -> {
-                final var newTarget = new Kind();
-                KindCopyUtil.copyValues(source, newTarget);
-                return newTarget;
-            }
+            KindCopyUtil::createCopy
         );
     }
 }

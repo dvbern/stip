@@ -59,11 +59,7 @@ public class LebenslaufItemCopyUtil {
             targetItems,
             sourceItems,
             LebenslaufItemCopyUtil::copyValues,
-            source -> {
-                final var newTarget = new LebenslaufItem();
-                LebenslaufItemCopyUtil.copyValues(source, newTarget);
-                return newTarget;
-            }
+            LebenslaufItemCopyUtil::createCopy
         );
     }
 }

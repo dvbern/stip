@@ -17,8 +17,10 @@
 
 package ch.dvbern.stip.api.gesuchtranche.util;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
@@ -28,8 +30,10 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil.ElternAdressen;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
+import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -50,6 +54,10 @@ public class GesuchTrancheOverrideUtil {
         if (source.getPartner() == null) {
             target.setPartner(null);
         } else {
+            if (target.getPartner() == null) {
+                target.setPartner(new Partner().setAdresse(new Adresse()));
+            }
+
             PartnerCopyUtil.copyValuesIgnoringReferences(source.getPartner(), target.getPartner());
             AdresseCopyUtil.copyValues(source.getPartner().getAdresse(), target.getPartner().getAdresse());
         }
@@ -90,8 +98,12 @@ public class GesuchTrancheOverrideUtil {
         // Kinds
         KindCopyUtil.doOverrideOfSet(target.getKinds(), source.getKinds());
 
-        // Steuerdaten - are omitted at the moment todo KSTIP-1850 ...
-        // toBeReplaced.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(replacement.getSteuerdaten()));
+        // Steuerdaten
+        SteuerdatenCopyUtil.doOverrideOfSet(target.getSteuerdaten(), source.getSteuerdaten());
+
+        target.getTranche()
+            .getGesuchDokuments()
+            .forEach(gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND));
 
         // TODO KSTIP-1998: Reset the Dokumente as well
     }

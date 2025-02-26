@@ -52,11 +52,7 @@ public class GeschwisterCopyUtil {
             targetGeschwister,
             sourceGeschwister,
             GeschwisterCopyUtil::copyValues,
-            source -> {
-                final var newTarget = new Geschwister();
-                GeschwisterCopyUtil.copyValues(source, newTarget);
-                return newTarget;
-            }
+            GeschwisterCopyUtil::createCopy
         );
     }
 }
