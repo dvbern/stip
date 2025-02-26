@@ -1,5 +1,5 @@
 {
-  "name": "sachbearbeitung-app-feature-gesuch-form-steuerdaten",
+  "name": "sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/sachbearbeitung-app/feature/gesuch-form-steuerdaten/src",
   "prefix": "dv",

@@ -13,6 +13,7 @@ import {
   isStepDisabled,
   isStepValid,
 } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 
 @Injectable({
   providedIn: 'root',
@@ -56,17 +57,17 @@ export class SharedUtilGesuchFormStepManagerService {
   ): GesuchFormStepView[] {
     const gesuchFormular =
       gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
+    const { permissions } = preparePermissions(
+      trancheTyp,
+      gesuch,
+      this.appType,
+      rolesMap,
+    );
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(
-        step,
-        trancheTyp,
-        gesuch,
-        this.appType,
-        rolesMap,
-      ),
+      disabled: isStepDisabled(step, gesuch, permissions),
     }));
   }
 
@@ -87,17 +88,15 @@ export class SharedUtilGesuchFormStepManagerService {
     }
 
     let nextIndex = 0;
+    const { permissions } = preparePermissions(
+      trancheTyp,
+      gesuch,
+      this.appType,
+      rolesMap,
+    );
 
     for (let i = currentIndex + 1; i < stepsFlow.length; i++) {
-      if (
-        !isStepDisabled(
-          stepsFlow[i],
-          trancheTyp,
-          gesuch,
-          this.appType,
-          rolesMap,
-        )
-      ) {
+      if (!isStepDisabled(stepsFlow[i], gesuch, permissions)) {
         nextIndex = i;
         break;
       }

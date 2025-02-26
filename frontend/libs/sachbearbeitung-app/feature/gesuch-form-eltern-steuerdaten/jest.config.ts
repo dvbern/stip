@@ -1,12 +1,11 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-feature-gesuch-form-eltern-steuerdaten',
+  displayName: 'sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/feature/gesuch-form-eltern-steuerdaten',
+    '../../../../coverage/libs/sachbearbeitung-app/feature/gesuch-form-steuerdaten',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

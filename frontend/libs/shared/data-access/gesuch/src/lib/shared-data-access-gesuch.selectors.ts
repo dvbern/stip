@@ -21,8 +21,8 @@ import {
   ABSCHLUSS,
   BaseFormSteps,
   ELTERN,
+  ELTERN_STEUERDATEN_STEPS,
   ELTERN_STEUERERKLAERUNG_STEPS,
-  ELTERN_STEUER_STEPS,
   GesuchFormStep,
   RETURN_TO_HOME,
   isSteuererklaerungStep,
@@ -268,7 +268,7 @@ function addStepsByAppType(
       return [...sharedSteps, ...(permissions.canFreigeben ? [ABSCHLUSS] : [])];
     case 'sachbearbeitung-app': {
       const steuerdatenSteps = steuerdatenTabs?.map((typ) => ({
-        step: ELTERN_STEUER_STEPS[typ],
+        step: ELTERN_STEUERDATEN_STEPS[typ],
         type: typ,
       }));
       return steuerdatenSteps

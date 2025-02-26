@@ -7,7 +7,8 @@ import {
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
-  ELTERN_STEUER_STEPS,
+  ELTERN_STEUERDATEN_STEPS,
+  ELTERN_STEUERERKLAERUNG_STEPS,
   FAMILIENSITUATION,
   GESCHWISTER,
   KINDER,
@@ -106,16 +107,28 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
         (m) => m.gesuchAppFeatureGesuchFormElternRoutes,
       ),
   },
-  ...Object.values(ELTERN_STEUER_STEPS).map((step) => ({
+  ...Object.values(ELTERN_STEUERERKLAERUNG_STEPS).map((step) => ({
     path: step.route,
     resolve: {
       step: () => step,
     },
     title: step.translationKey,
     loadChildren: () =>
-      import('@dv/shared/feature/gesuch-form-eltern-steuerdaten').then(
-        (m) => m.sharedFeatureGesuchFormElternSteuerdatenRoutes,
+      // TODO: @spse I wasn't able to look at the eslint error here yet and also not the following one
+      import('@dv/shared/feature/gesuch-form-eltern-steuererklaerung').then(
+        (m) => m.sharedFeatureGesuchFormElternSteuererklaerungRoutes,
       ),
+  })),
+  ...Object.values(ELTERN_STEUERDATEN_STEPS).map((step) => ({
+    path: step.route,
+    resolve: {
+      step: () => step,
+    },
+    title: step.translationKey,
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten'
+      ).then((m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes),
   })),
   {
     path: PERSON.route,

@@ -11,10 +11,9 @@ import { capitalized } from '@dv/shared/model/type-util';
 
 const Permissions = {
   W: { index: 0, name: 'write' },
-  V: { index: 1, name: 'viewVerfuegung' },
-  D: { index: 2, name: 'uploadDocuments' },
-  F: { index: 3, name: 'freigeben' },
-  U: { index: 4, name: 'uploadUnterschriftenblatt' },
+  D: { index: 1, name: 'uploadDocuments' },
+  F: { index: 2, name: 'freigeben' },
+  U: { index: 3, name: 'uploadUnterschriftenblatt' },
 } as const;
 type Permissions = typeof Permissions;
 type PermissionFlag = keyof typeof Permissions;
@@ -24,7 +23,6 @@ type P<T extends PermissionFlag> = T | ' ';
  * Permissions for the gesuch and tranche interactions
  *
  * * `W` - Write
- * * `V` - Verfuegung einsehen
  * * `D` - Dokumente hochladen
  * * `F` - Freigeben
  * * `U` - Unterschriftenblatt hochladen
@@ -174,14 +172,13 @@ export const getTranchePermissions = (
  * depending on if it is delegated and the user roles of the current user.
  */
 export const canCurrentlyEdit = (
-  permissions: PermissionMap,
   appType: AppType,
   rolesMap: RolesMap,
   delegierung: Delegierung | undefined,
 ) => {
   // Only apply special rules for the gesuch-app
   if (appType !== 'gesuch-app') {
-    return !!permissions.canWrite;
+    return true;
   }
 
   return (
@@ -201,7 +198,7 @@ const applyDelegatedPermission = (
   appType: AppType,
   rolesMap: RolesMap,
 ): PermissionMap => {
-  if (canCurrentlyEdit(permissions, appType, rolesMap, gesuch.delegierung)) {
+  if (canCurrentlyEdit(appType, rolesMap, gesuch.delegierung)) {
     return permissions;
   }
 

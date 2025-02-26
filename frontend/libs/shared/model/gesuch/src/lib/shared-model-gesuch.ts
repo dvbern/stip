@@ -53,6 +53,8 @@ export type SBFormStepProps =
   | SBSteuerdatenSteps
   | 'dokuments';
 
+export type AllFormSteps = GSFormStepProps | SBFormStepProps;
+
 export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
 export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;
 
