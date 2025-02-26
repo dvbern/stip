@@ -534,15 +534,13 @@ export class DokumentsStore extends signalStore(
   );
 
   deleteCustomDokumentTyp$ = rxMethod<{
-    gesuchTrancheId: string;
     customDokumentTypId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchTrancheId, customDokumentTypId, onSuccess }) =>
+      switchMap(({ customDokumentTypId, onSuccess }) =>
         this.dokumentService
           .deleteCustomDokumentTyp$({
-            gesuchTrancheId,
             customDokumentTypId,
           })
           .pipe(
