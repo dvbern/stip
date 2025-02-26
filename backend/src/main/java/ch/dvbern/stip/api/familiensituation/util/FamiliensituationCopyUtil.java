@@ -17,69 +17,27 @@
 
 package ch.dvbern.stip.api.familiensituation.util;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class FamiliensituationCopyUtil {
     public Familiensituation createCopy(final Familiensituation other) {
         final var copy = new Familiensituation();
-
-        copy.setElternVerheiratetZusammen(other.getElternVerheiratetZusammen());
-        copy.setElternteilUnbekanntVerstorben(other.getElternteilUnbekanntVerstorben());
-        copy.setGerichtlicheAlimentenregelung(other.getGerichtlicheAlimentenregelung());
-        copy.setMutterUnbekanntVerstorben(other.getMutterUnbekanntVerstorben());
-        copy.setMutterUnbekanntGrund(other.getMutterUnbekanntGrund());
-        copy.setMutterWiederverheiratet(other.getMutterWiederverheiratet());
-        copy.setVaterUnbekanntVerstorben(other.getVaterUnbekanntVerstorben());
-        copy.setVaterUnbekanntGrund(other.getVaterUnbekanntGrund());
-        copy.setVaterWiederverheiratet(other.getVaterWiederverheiratet());
-        copy.setWerZahltAlimente(other.getWerZahltAlimente());
-
+        copyValues(other, copy);
         return copy;
     }
 
-    public void overrideItem(final GesuchFormular source, final GesuchFormular target) {
-        if (source.getFamiliensituation() == null) {
-            target.setFamiliensituation(null);
-            return;
-        }
-
-        final var sourceFamsit = source.getFamiliensituation();
-        final var targetFamsit = target.getFamiliensituation();
-
-        if (Objects.nonNull(sourceFamsit.getElternVerheiratetZusammen())) {
-            targetFamsit.setElternVerheiratetZusammen(sourceFamsit.getElternVerheiratetZusammen());
-        }
-
-        if (Objects.nonNull(sourceFamsit.getElternteilUnbekanntVerstorben())) {
-            targetFamsit.setElternteilUnbekanntVerstorben(sourceFamsit.getElternteilUnbekanntVerstorben());
-        }
-
-        if (Objects.nonNull(sourceFamsit.getGerichtlicheAlimentenregelung())) {
-            targetFamsit.setGerichtlicheAlimentenregelung(sourceFamsit.getGerichtlicheAlimentenregelung());
-        }
-
-        if (Objects.nonNull(sourceFamsit.getMutterUnbekanntVerstorben())) {
-            targetFamsit.setMutterUnbekanntVerstorben(sourceFamsit.getMutterUnbekanntVerstorben());
-        }
-
-        targetFamsit.setMutterUnbekanntGrund(sourceFamsit.getMutterUnbekanntGrund());
-        targetFamsit.setVaterUnbekanntGrund(sourceFamsit.getVaterUnbekanntGrund());
-        targetFamsit.setWerZahltAlimente(sourceFamsit.getWerZahltAlimente());
-
-        if (Objects.nonNull(sourceFamsit.getMutterWiederverheiratet())) {
-            targetFamsit.setMutterWiederverheiratet(sourceFamsit.getMutterWiederverheiratet());
-        }
-        if (Objects.nonNull(sourceFamsit.getVaterUnbekanntVerstorben())) {
-            targetFamsit.setVaterUnbekanntVerstorben(sourceFamsit.getVaterUnbekanntVerstorben());
-        }
-        if (Objects.nonNull(sourceFamsit.getVaterWiederverheiratet())) {
-            targetFamsit.setVaterWiederverheiratet(sourceFamsit.getVaterWiederverheiratet());
-        }
+    public void copyValues(final Familiensituation source, final Familiensituation target) {
+        target.setElternVerheiratetZusammen(source.getElternVerheiratetZusammen());
+        target.setElternteilUnbekanntVerstorben(source.getElternteilUnbekanntVerstorben());
+        target.setGerichtlicheAlimentenregelung(source.getGerichtlicheAlimentenregelung());
+        target.setMutterUnbekanntVerstorben(source.getMutterUnbekanntVerstorben());
+        target.setMutterUnbekanntGrund(source.getMutterUnbekanntGrund());
+        target.setMutterWiederverheiratet(source.getMutterWiederverheiratet());
+        target.setVaterUnbekanntVerstorben(source.getVaterUnbekanntVerstorben());
+        target.setVaterUnbekanntGrund(source.getVaterUnbekanntGrund());
+        target.setVaterWiederverheiratet(source.getVaterWiederverheiratet());
+        target.setWerZahltAlimente(source.getWerZahltAlimente());
     }
-
 }

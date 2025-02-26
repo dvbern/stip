@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.eltern.util;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.common.util.AbstractPersonCopyUtil;
 import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -33,9 +35,13 @@ public class ElternCopyUtil {
         return copy;
     }
 
-    private void copyValues(final Eltern source, final Eltern target) {
-        AbstractPersonCopyUtil.copy(source, target);
+    public void copyValues(final Eltern source, final Eltern target) {
+        copyValuesWithoutReferences(source, target);
         target.setAdresse(source.getAdresse());
+    }
+
+    public void copyValuesWithoutReferences(final Eltern source, final Eltern target) {
+        AbstractPersonCopyUtil.copy(source, target);
         target.setSozialversicherungsnummer(source.getSozialversicherungsnummer());
         target.setSozialhilfebeitraege(source.isSozialhilfebeitraege());
         target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
@@ -61,7 +67,15 @@ public class ElternCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetEltern,
             sourceEltern,
-            ElternCopyUtil::copyValues
+            ElternCopyUtil::copyValuesWithoutReferences,
+            source -> {
+                final var newTarget = new Eltern().setAdresse(new Adresse());
+
+                ElternCopyUtil.copyValues(source, newTarget);
+                AdresseCopyUtil.copyValues(source.getAdresse(), newTarget.getAdresse());
+
+                return newTarget;
+            }
         );
     }
 }

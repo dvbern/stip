@@ -51,7 +51,12 @@ public class GeschwisterCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetGeschwister,
             sourceGeschwister,
-            GeschwisterCopyUtil::copyValues
+            GeschwisterCopyUtil::copyValues,
+            source -> {
+                final var newTarget = new Geschwister();
+                GeschwisterCopyUtil.copyValues(source, newTarget);
+                return newTarget;
+            }
         );
     }
 }

@@ -17,9 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.util;
 
-import java.util.Optional;
-import java.util.function.Function;
-
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
@@ -38,32 +36,48 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchTrancheOverrideUtil {
-    public void overrideGesuchFormular(final GesuchFormular toBeReplaced, final GesuchFormular replacement) {
+    public void overrideGesuchFormular(final GesuchFormular target, final GesuchFormular source) {
         // PiA und PiA Adresse
-        toBeReplaced.setPersonInAusbildung(
-            PersonInAusbildungCopyUtil.createCopyIgnoreReferences(replacement.getPersonInAusbildung())
+        PersonInAusbildungCopyUtil.copyValues(source.getPersonInAusbildung(), target.getPersonInAusbildung());
+
+        AdresseCopyUtil.copyValues(
+            source.getPersonInAusbildung().getAdresse(),
+            target.getPersonInAusbildung().getAdresse()
         );
-        final var piaAdresseCopy = AdresseCopyUtil.createCopy(replacement.getPersonInAusbildung().getAdresse());
-        toBeReplaced.getPersonInAusbildung().setAdresse(piaAdresseCopy);
 
         // Familiensituation
-        FamiliensituationCopyUtil.overrideItem(replacement, toBeReplaced);
+        FamiliensituationCopyUtil.copyValues(source.getFamiliensituation(), target.getFamiliensituation());
 
         // Partner und Partner Adresse
-        toBeReplaced.setPartner(PartnerCopyUtil.createCopyIgnoreReferences(replacement.getPartner()));
-        if (toBeReplaced.getPartner() != null) {
-            toBeReplaced.getPartner().setAdresse(AdresseCopyUtil.createCopy(replacement.getPartner().getAdresse()));
+        if (source.getPartner() == null) {
+            target.setPartner(null);
+        } else {
+            PartnerCopyUtil.copyValuesIgnoringReferences(source.getPartner(), target.getPartner());
+            AdresseCopyUtil.copyValues(source.getPartner().getAdresse(), target.getPartner().getAdresse());
         }
 
         // Eltern
-        ElternCopyUtil.doOverrideOfSet(toBeReplaced.getElterns(), replacement.getElterns());
-        final Function<ElternTyp, Optional<Eltern>> findOriginalElternOfTyp =
-            typ -> replacement.getElterns().stream().filter(eltern -> eltern.getElternTyp() == typ).findFirst();
+        for (final var sourceEltern : source.getElterns()) {
+            final var targetEltern = target.getElternteilOfTyp(sourceEltern.getElternTyp());
+            if (targetEltern.isPresent()) {
+                ElternCopyUtil.copyValues(sourceEltern, targetEltern.get());
+                AdresseCopyUtil.copyValues(sourceEltern.getAdresse(), targetEltern.get().getAdresse());
+            } else {
+                final var newTarget = new Eltern().setAdresse(new Adresse());
+
+                ElternCopyUtil.copyValues(sourceEltern, newTarget);
+                AdresseCopyUtil.copyValues(sourceEltern.getAdresse(), newTarget.getAdresse());
+            }
+        }
+
+        target.getElterns().removeIf(targetEntity -> !source.getElterns().contains(targetEntity));
+
+        ElternCopyUtil.doOverrideOfSet(target.getElterns(), source.getElterns());
 
         final var elternAdressen = new ElternAdressen();
-        for (final var eltern : toBeReplaced.getElterns()) {
+        for (final var eltern : target.getElterns()) {
             // get here is ok, as we already reset the set, it now only contains the original
-            final var original = findOriginalElternOfTyp.apply(eltern.getElternTyp()).get();
+            final var original = source.getElternteilOfTyp(eltern.getElternTyp()).get();
             final var resetAdresse = AdresseCopyUtil.createCopy(original.getAdresse());
             elternAdressen.setForTyp(original.getElternTyp(), resetAdresse);
 
@@ -71,31 +85,31 @@ public class GesuchTrancheOverrideUtil {
         }
 
         // Auszahlung
-        if (replacement.getAuszahlung() != null) {
-            toBeReplaced.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(replacement.getAuszahlung()));
-            final var auszahlungAdresseCopy = switch (replacement.getAuszahlung().getKontoinhaber()) {
-                case GESUCHSTELLER -> piaAdresseCopy;
-                case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-                case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-                default -> AdresseCopyUtil.createCopy(replacement.getAuszahlung().getAdresse());
-            };
-            toBeReplaced.getAuszahlung().setAdresse(auszahlungAdresseCopy);
-        }
+        AuszahlungCopyUtil.copyValues(source.getAuszahlung(), target.getAuszahlung());
+        final var auszahlungAdresseCopy = switch (source.getAuszahlung().getKontoinhaber()) {
+            case GESUCHSTELLER -> source.getAuszahlung().getAdresse();
+            case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
+            case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
+            default -> AdresseCopyUtil.createCopy(source.getAuszahlung().getAdresse());
+        };
+
+        target.getAuszahlung().setAdresse(auszahlungAdresseCopy);
 
         // Einnahmen Kosten
-        toBeReplaced.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(replacement.getEinnahmenKosten()));
+        EinnahmenKostenCopyUtil.copyValues(source.getEinnahmenKosten(), target.getEinnahmenKosten());
 
         // Lebenslauf
-        LebenslaufItemCopyUtil.doOverrideOfSet(toBeReplaced.getLebenslaufItems(), replacement.getLebenslaufItems());
+        LebenslaufItemCopyUtil.doOverrideOfSet(target.getLebenslaufItems(), source.getLebenslaufItems());
 
         // Geschwister
-        GeschwisterCopyUtil.doOverrideOfSet(toBeReplaced.getGeschwisters(), replacement.getGeschwisters());
+        GeschwisterCopyUtil.doOverrideOfSet(target.getGeschwisters(), source.getGeschwisters());
 
         // Kinds
-        KindCopyUtil.doOverrideOfSet(toBeReplaced.getKinds(), replacement.getKinds());
+        KindCopyUtil.doOverrideOfSet(target.getKinds(), source.getKinds());
 
         // Steuerdaten - are omitted at the moment todo KSTIP-1850 ...
         // toBeReplaced.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(replacement.getSteuerdaten()));
 
+        // TODO KSTIP-1998: Reset the Dokumente as well
     }
 }

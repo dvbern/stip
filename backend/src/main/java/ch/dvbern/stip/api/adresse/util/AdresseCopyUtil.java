@@ -24,14 +24,16 @@ import lombok.experimental.UtilityClass;
 public class AdresseCopyUtil {
     public Adresse createCopy(final Adresse other) {
         final var copy = new Adresse();
-
-        copy.setLand(other.getLand());
-        copy.setCoAdresse(other.getCoAdresse());
-        copy.setStrasse(other.getStrasse());
-        copy.setHausnummer(other.getHausnummer());
-        copy.setPlz(other.getPlz());
-        copy.setOrt(other.getOrt());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final Adresse source, final Adresse target) {
+        target.setLand(source.getLand());
+        target.setCoAdresse(source.getCoAdresse());
+        target.setStrasse(source.getStrasse());
+        target.setHausnummer(source.getHausnummer());
+        target.setPlz(source.getPlz());
+        target.setOrt(source.getOrt());
     }
 }

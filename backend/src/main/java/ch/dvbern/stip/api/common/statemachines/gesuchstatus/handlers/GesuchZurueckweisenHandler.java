@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -51,10 +50,10 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
         resetGesuchFormular(gesuch);
     }
 
-    private void resetGesuchFormular(Gesuch gesuch) {
-        GesuchFormular formularOfStateEingereicht =
-            gesuchTrancheService.getLatestWhereGesuchWasEingereicht(gesuch.getId())
-                .getGesuchFormular();
+    private void resetGesuchFormular(final Gesuch gesuch) {
+        final var formularOfStateEingereicht =
+            gesuchTrancheService.getLatestWhereGesuchWasEingereicht(gesuch.getId()).getGesuchFormular();
+
         GesuchTrancheOverrideUtil.overrideGesuchFormular(
             gesuch.getNewestGesuchTranche().orElseThrow().getGesuchFormular(),
             formularOfStateEingereicht

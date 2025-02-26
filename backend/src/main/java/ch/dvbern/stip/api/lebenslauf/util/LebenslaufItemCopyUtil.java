@@ -58,7 +58,12 @@ public class LebenslaufItemCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetItems,
             sourceItems,
-            LebenslaufItemCopyUtil::copyValues
+            LebenslaufItemCopyUtil::copyValues,
+            source -> {
+                final var newTarget = new LebenslaufItem();
+                LebenslaufItemCopyUtil.copyValues(source, newTarget);
+                return newTarget;
+            }
         );
     }
 }

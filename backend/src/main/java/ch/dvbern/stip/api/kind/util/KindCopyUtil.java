@@ -53,7 +53,12 @@ public class KindCopyUtil {
         OverrideUtil.doOverrideOfSet(
             targetKinder,
             sourceKinder,
-            KindCopyUtil::copyValues
+            KindCopyUtil::copyValues,
+            source -> {
+                final var newTarget = new Kind();
+                KindCopyUtil.copyValues(source, newTarget);
+                return newTarget;
+            }
         );
     }
 }
