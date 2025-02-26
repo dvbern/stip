@@ -277,7 +277,6 @@ public class GesuchDokumentService {
         final var dokumentObjectId = dokument.getObjectId();
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
 
         return dokumentObjectId;
