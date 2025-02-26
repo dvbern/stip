@@ -17,11 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranche.util;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
-import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
@@ -57,21 +55,6 @@ public class GesuchTrancheOverrideUtil {
         }
 
         // Eltern
-        for (final var sourceEltern : source.getElterns()) {
-            final var targetEltern = target.getElternteilOfTyp(sourceEltern.getElternTyp());
-            if (targetEltern.isPresent()) {
-                ElternCopyUtil.copyValues(sourceEltern, targetEltern.get());
-                AdresseCopyUtil.copyValues(sourceEltern.getAdresse(), targetEltern.get().getAdresse());
-            } else {
-                final var newTarget = new Eltern().setAdresse(new Adresse());
-
-                ElternCopyUtil.copyValues(sourceEltern, newTarget);
-                AdresseCopyUtil.copyValues(sourceEltern.getAdresse(), newTarget.getAdresse());
-            }
-        }
-
-        target.getElterns().removeIf(targetEntity -> !source.getElterns().contains(targetEntity));
-
         ElternCopyUtil.doOverrideOfSet(target.getElterns(), source.getElterns());
 
         final var elternAdressen = new ElternAdressen();
