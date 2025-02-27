@@ -51,22 +51,6 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
 
     }
 
-    private boolean isAnyGesuchdokumentAbgelehntOrAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
-        var anyAusstehend = false;
-        var anyAbgelehnt = false;
-        for (final var gesuchDokumentDto : gesuchDokumentDtos) {
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND) {
-                anyAusstehend = true;
-                break;
-            }
-
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.ABGELEHNT) {
-                anyAbgelehnt = true;
-            }
-        }
-        return !anyAusstehend && anyAbgelehnt;
-    }
-
     private boolean isAnyAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
         return gesuchDokumentDtos.stream()
             .anyMatch(gesuchDokumentDto -> gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND);
