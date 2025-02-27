@@ -86,14 +86,11 @@ class CopyUtilTest {
 
         final var expected = "{\"templateJson\":" + new ObjectMapper().writeValueAsString(trancheDto) + '}';
         final var actual = new ObjectMapper().writeValueAsString(copyDto);
-
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(expected, actual);
 
         assertTrue(result.isMatch(), result.getErrorMessage());
-
         assertThat(trancheDto.toString(), equalTo(copyDto.toString()));
-
     }
 }
