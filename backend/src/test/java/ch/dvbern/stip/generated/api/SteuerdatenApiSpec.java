@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.NeskoTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -59,7 +60,8 @@ public class SteuerdatenApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 getSteuerdaten(),
-                updateSteuerdaten()
+                updateSteuerdaten(),
+                updateSteuerdatenFromNesko()
         );
     }
 
@@ -69,6 +71,10 @@ public class SteuerdatenApiSpec {
 
     public UpdateSteuerdatenOper updateSteuerdaten() {
         return new UpdateSteuerdatenOper(createReqSpec());
+    }
+
+    public UpdateSteuerdatenFromNeskoOper updateSteuerdatenFromNesko() {
+        return new UpdateSteuerdatenFromNeskoOper(createReqSpec());
     }
 
     /**
@@ -234,6 +240,90 @@ public class SteuerdatenApiSpec {
          * @return operation
          */
         public UpdateSteuerdatenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Updates the Steuerdaten from Nesko
+     * 
+     *
+     * @see #steuerdatenIdPath  (required)
+     * @see #body  (optional)
+     * return SteuerdatenDtoSpec
+     */
+    public static class UpdateSteuerdatenFromNeskoOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/steuerdaten/nesko/{steuerdatenId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateSteuerdatenFromNeskoOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /steuerdaten/nesko/{steuerdatenId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /steuerdaten/nesko/{steuerdatenId}
+         * @param handler handler
+         * @return SteuerdatenDtoSpec
+         */
+        public SteuerdatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SteuerdatenDtoSpec> type = new TypeRef<SteuerdatenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param neskoTokenDtoSpec (NeskoTokenDtoSpec)  (optional)
+         * @return operation
+         */
+        public UpdateSteuerdatenFromNeskoOper body(NeskoTokenDtoSpec neskoTokenDtoSpec) {
+            reqSpec.setBody(neskoTokenDtoSpec);
+            return this;
+        }
+
+        public static final String STEUERDATEN_ID_PATH = "steuerdatenId";
+
+        /**
+         * @param steuerdatenId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateSteuerdatenFromNeskoOper steuerdatenIdPath(Object steuerdatenId) {
+            reqSpec.addPathParam(STEUERDATEN_ID_PATH, steuerdatenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateSteuerdatenFromNeskoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateSteuerdatenFromNeskoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -154,6 +154,21 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
+  nesko-base-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService'
+  cxf:
+#    client:
+#      stipendienAuskunftService:
+#        wsdl: '${nesko-base-url}?wsdl'
+#        client-endpoint-url: ${nesko-base-url}
+#        service-interface: 'ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice'
+    codegen:
+      wsdl2java:
+        nesko-params:
+          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+          bindings:
+            - 'src/main/resources/wsdl/nesko/binding.xml'
+
   rest-client:
     GeoCollection-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
@@ -167,6 +182,8 @@ quarkus:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
     AuszahlungSapBusinessPartnerReadEndpoint:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerRead&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
+    NeskoGetSteuerdatenEndpoint:
+      url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService'
 #   store-type: jdbc-tx
 '%dev':
   quarkus:

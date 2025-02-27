@@ -1810,6 +1810,40 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
+  /steuerdaten/nesko/{steuerdatenId}:
+    parameters:
+      - name: steuerdatenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeskoToken'
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSteuerdatenFromNesko
+      summary: Updates the Steuerdaten from Nesko
   /steuerdaten/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
@@ -4732,6 +4766,13 @@ components:
         - ABGEBROCHEN
         - ABGESCHLOSSEN
     FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
+    NeskoToken:
       required:
         - token
       type: object

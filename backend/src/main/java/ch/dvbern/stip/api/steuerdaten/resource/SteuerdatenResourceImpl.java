@@ -23,9 +23,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
+import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
+import ch.dvbern.stip.generated.dto.NeskoTokenDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -40,6 +43,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenService steuerdatenService;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
+    private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
 
     @Override
     @RolesAllowed(OidcPermissions.GESUCH_READ)
@@ -59,5 +63,12 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
             .stream()
             .map(steuerdatenMapper::toDto)
             .toList();
+    }
+
+    @Override
+    public SteuerdatenDto updateSteuerdatenFromNesko(UUID steuerdatenId, NeskoTokenDto neskoTokenDto) {
+        // var steuerdaten = steuerdatenService.getSteuerdatenById(steuerdatenId);
+        neskoGetSteuerdatenService.getSteuerdatenResponse(neskoTokenDto.getToken(), "756.1818.9627.80", 2023);
+        return steuerdatenMapper.toDto(new Steuerdaten());
     }
 }

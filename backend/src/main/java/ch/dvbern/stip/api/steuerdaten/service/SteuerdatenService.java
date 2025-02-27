@@ -39,6 +39,10 @@ public class SteuerdatenService {
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenRepository steuerdatenRepository;
 
+    public Steuerdaten getSteuerdatenById(UUID id) {
+        return steuerdatenRepository.requireById(id);
+    }
+
     public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
         return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
     }
