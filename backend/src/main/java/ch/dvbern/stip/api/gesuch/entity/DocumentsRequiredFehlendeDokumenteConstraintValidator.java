@@ -17,15 +17,15 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.util.List;
-import java.util.Objects;
-
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.List;
+import java.util.Objects;
 
 public class DocumentsRequiredFehlendeDokumenteConstraintValidator
     implements ConstraintValidator<DocumentsRequiredFehlendeDokumenteConstraint, Gesuch> {
@@ -41,7 +41,8 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
             return true;
         }
         // custom gesuch dokumente are in state AUSSTEHEND and are treated separately - thats why they are excluded
-        // in this check
+        // in this check.
+        // the separate check is done on site GS, in DocumentsRequiredConstraintValidator on page for documents
         final var nonCustomGesuchDokumente =
             gesuchDokumentDtos.stream()
                 .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
