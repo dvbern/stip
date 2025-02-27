@@ -17,15 +17,15 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.List;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import java.util.List;
-import java.util.Objects;
 
 public class DocumentsRequiredFehlendeDokumenteConstraintValidator
     implements ConstraintValidator<DocumentsRequiredFehlendeDokumenteConstraint, Gesuch> {
