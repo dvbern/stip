@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -25,6 +24,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import io.quarkus.security.ForbiddenException;
@@ -32,6 +32,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.GESUCHSTELLER_CAN_DELETE_DOKUMENTE;
 
 @Authorizer
 @ApplicationScoped
@@ -106,14 +108,18 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canDeleteDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var isCustomDokument =
-            dokument.getGesuchDokumente()
-                .stream()
-                .anyMatch(gesuchDokument -> Objects.nonNull(gesuchDokument.getCustomDokumentTyp()));
+        final var gesuch = dokument.getGesuchDokumente().get(0).getGesuchTranche().getGesuch();
+
+        final var isDeleteAuthorized =
+            AuthorizerUtil.isGesuchstellerOfGesuch(benutzerService.getCurrentBenutzer(), gesuch)
+            && GESUCHSTELLER_CAN_DELETE_DOKUMENTE.contains(gesuch.getGesuchStatus());
+        final var isDokumentAusstehend = dokument.getGesuchDokumente()
+            .stream()
+            .allMatch(gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND));
 
         if (
-            isAdminOrSb(benutzerService.getCurrentBenutzer())
-            && isCustomDokument
+            !isDeleteAuthorized
+            || !isDokumentAusstehend
         ) {
             throw new ForbiddenException();
         }
