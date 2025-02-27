@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -39,11 +40,16 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final DokumentRepository dokumentRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
 
     @Transactional
-    public void canCreateCustomDokumentTyp() {
+    public void canCreateCustomDokumentTyp(UUID trancheId) {
+        final var gesuch = gesuchTrancheRepository.requireById(trancheId).getGesuch();
         canReadAllTyps();
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
+            throw new ForbiddenException();
+        }
     }
 
     @Transactional

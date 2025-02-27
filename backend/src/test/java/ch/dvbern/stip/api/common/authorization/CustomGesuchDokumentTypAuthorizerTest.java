@@ -79,7 +79,8 @@ class CustomGesuchDokumentTypAuthorizerTest {
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         customDokumentTypRepository = Mockito.mock(CustomDokumentTypRepository.class);
         authorizer = new CustomGesuchDokumentTypAuthorizer(
-            dokumentRepository, customDokumentTypRepository, gesuchDokumentRepository, benutzerService
+            dokumentRepository, customDokumentTypRepository, gesuchDokumentRepository, gesuchTrancheRepository,
+            benutzerService
         );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
@@ -165,6 +166,24 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
         assertDoesNotThrow(() -> {
             authorizer.canDeleteDokument(UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void canCreateTypShouldFailWhenNotInBearbeitungSB() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });
     }
 
