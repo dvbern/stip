@@ -86,7 +86,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var customDokumentTyp = customDokumentTypRepository.requireById(gesuchDokumentTypId);
         final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
         final var customGesuchDokument =
-            gesuchDokumentRepository.findByCustomDokumentType(gesuchDokumentTypId)
+            gesuchDokumentRepository.findByCustomDokumentTyp(gesuchDokumentTypId)
                 .orElseThrow();
 
         final var notBeingEditedBySB = !(isAdminOrSb(benutzerService.getCurrentBenutzer()))

@@ -98,7 +98,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream();
     }
 
-    public Optional<GesuchDokument> findByCustomDokumentType(
+    public Optional<GesuchDokument> findByCustomDokumentTyp(
         UUID customDokumentTypId
     ) {
         var queryFactory = new JPAQueryFactory(entityManager);
