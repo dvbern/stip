@@ -4,6 +4,7 @@ import {
   DokumentArt,
   DokumentTyp,
   GesuchDokument,
+  GesuchDokumentKommentar,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
@@ -57,6 +58,8 @@ export interface SharedModelTableRequiredDokument {
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
 }
 
 export interface SharedModelTableCustomDokument {
@@ -65,6 +68,8 @@ export interface SharedModelTableCustomDokument {
   showUpload: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
 }
 
 export type SharedModelTableAdditionalDokument = {

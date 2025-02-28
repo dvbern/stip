@@ -3,14 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   SharedModelTableDokument,
   SharedModelTableRequiredDokument,
@@ -35,10 +38,9 @@ import {
 } from '@dv/shared/pattern/document-upload';
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { RemoteData } from '@dv/shared/util/remote-data';
+import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
@@ -53,7 +55,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
     DokumentStatusActionsComponent,
   ],
   templateUrl: './required-dokumente.component.html',
@@ -63,6 +64,8 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
 })
 export class RequiredDokumenteComponent {
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  dokumentStore = inject(DokumentsStore);
+
   dokumenteViewSig = input.required<{
     gesuchId: string | undefined;
     permissions: PermissionMap;
@@ -91,7 +94,8 @@ export class RequiredDokumenteComponent {
   ];
 
   DokumentStatus = Dokumentstatus;
-  expandedRowId: string | null = null;
+
+  expandedRowSig = signal<null | string>(null);
 
   dokumenteDataSourceSig = computed(() => {
     const {
@@ -102,6 +106,7 @@ export class RequiredDokumenteComponent {
       allowTypes,
       stepsFlow,
       dokuments,
+      kommentare,
       requiredDocumentTypes,
     } = this.dokumenteViewSig();
 
@@ -131,6 +136,8 @@ export class RequiredDokumenteComponent {
         return {
           dokumentTyp,
           gesuchDokument,
+          kommentare: [],
+          kommentarePending: false,
           formStep,
           titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
           dokumentOptions,
@@ -153,6 +160,8 @@ export class RequiredDokumenteComponent {
         return {
           formStep,
           dokumentTyp,
+          kommentare: [],
+          kommentarePending: false,
           titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
           dokumentOptions,
         };
@@ -170,6 +179,11 @@ export class RequiredDokumenteComponent {
         )
         .map((dokument) => ({
           ...dokument,
+          kommentarePending: isPending(kommentare),
+          kommentare:
+            kommentare.data?.filter(
+              (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
+            ) ?? [],
           formStep: {
             ...dokument.formStep,
             routes: gesuchId
@@ -186,15 +200,31 @@ export class RequiredDokumenteComponent {
     );
   });
 
+  constructor() {
+    effect(
+      () => {
+        const el = this.dokumentStore.expandedComponentList();
+
+        if (el !== 'required') {
+          this.expandedRowSig.set(null);
+        }
+      },
+      { allowSignalWrites: true },
+    );
+  }
+
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
     return item.dokumentTyp;
   }
 
   expandRow(dokument: SharedModelTableRequiredDokument) {
-    if (this.expandedRowId === dokument.dokumentTyp) {
-      this.expandedRowId = null;
+    const identifier = dokument.gesuchDokument?.id ?? dokument.dokumentTyp;
+
+    if (this.expandedRowSig() === identifier) {
+      this.expandedRowSig.set(null);
     } else {
-      this.expandedRowId = dokument.dokumentTyp;
+      this.dokumentStore.setExpandedList('required');
+      this.expandedRowSig.set(identifier);
       this.getGesuchDokumentKommentare.emit(dokument);
     }
   }

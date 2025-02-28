@@ -3,13 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
+  inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   SharedModelTableCustomDokument,
   SharedModelTableDokument,
@@ -28,9 +32,8 @@ import {
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { RemoteData } from '@dv/shared/util/remote-data';
+import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
@@ -44,7 +47,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
     MatTooltipModule,
     DokumentStatusActionsComponent,
     SharedUiIfSachbearbeiterDirective,
@@ -55,6 +57,9 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomDokumenteComponent {
+  dokumentStore = inject(DokumentsStore);
+  expandedRowSig = signal<string | null>(null);
+
   dokumenteViewSig = input.required<{
     trancheId: string | undefined;
     gesuchId: string | undefined;
@@ -84,7 +89,6 @@ export class CustomDokumenteComponent {
   ];
 
   DokumentStatus = Dokumentstatus;
-  expandedRowId: string | null = null;
 
   dokumenteDataSourceSig = computed(() => {
     const {
@@ -93,6 +97,7 @@ export class CustomDokumenteComponent {
       allowTypes,
       permissions,
       dokuments,
+      kommentare,
       requiredDocumentTypes,
       isSachbearbeitungApp,
       readonly,
@@ -113,6 +118,8 @@ export class CustomDokumenteComponent {
         dokumentTyp: gesuchDokument.customDokumentTyp,
         gesuchDokument,
         canDelete,
+        kommentare: [],
+        kommentarePending: false,
         showUpload: hasFiles || !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
@@ -131,6 +138,9 @@ export class CustomDokumenteComponent {
         dokumentTyp: dokumentTyp,
         canDelete: false,
         showUpload: !isSachbearbeitungApp,
+        gesuchDokument: undefined,
+        kommentare: [],
+        kommentarePending: false,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -139,15 +149,39 @@ export class CustomDokumenteComponent {
           permissions,
         }),
       })),
-    ];
+    ].map((dokument) => ({
+      ...dokument,
+      kommentarePending: isPending(kommentare),
+      kommentare:
+        kommentare.data?.filter(
+          (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
+        ) ?? [],
+    }));
     return new MatTableDataSource<SharedModelTableCustomDokument>(list);
   });
 
+  constructor() {
+    effect(
+      () => {
+        const el = this.dokumentStore.expandedComponentList();
+
+        if (el !== 'custom') {
+          this.expandedRowSig.set(null);
+        }
+      },
+      { allowSignalWrites: true },
+    );
+  }
+
   expandRow(dokument: SharedModelTableCustomDokument) {
-    if (this.expandedRowId === dokument.dokumentTyp.id) {
-      this.expandedRowId = null;
+    const gesuchDokumentId = dokument.gesuchDokument?.id;
+    if (!gesuchDokumentId) return;
+
+    if (this.expandedRowSig() === gesuchDokumentId) {
+      this.expandedRowSig.set(null);
     } else {
-      this.expandedRowId = dokument.dokumentTyp.id;
+      this.dokumentStore.setExpandedList('custom');
+      this.expandedRowSig.set(gesuchDokumentId);
       this.getGesuchDokumentKommentare.emit(dokument);
     }
   }
