@@ -15,7 +15,7 @@ const config = {
    *   }
    * },
    */
-  target: 'http://localhost:8080',
+  target: 'http://dv.local-stip.kibon.ch:8080',
   secure: false,
   changeOrigin: true,
 };

@@ -105,6 +105,18 @@ public class AppFailureMessage {
         return build(I18nMessage.of(APP_FAILURE + "MISSING_JWT_SUBJECT"));
     }
 
+    public static AppFailureMessage missingTenantConfig(final String path, final String tenant) {
+        return build(
+            I18nMessage.of(
+                APP_FAILURE + "MISSING_TENANT_CONFIG",
+                "path",
+                path,
+                "tenant",
+                tenant
+            )
+        );
+    }
+
     I18nMessage i18nMessage;
 
     ExceptionId id;

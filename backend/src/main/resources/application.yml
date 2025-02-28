@@ -6,6 +6,7 @@ keycloak:
 kstip:
   version: '0.1-SNAPSHOT'
   environment: 'local'
+  default-tenant: 'bern'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
   pre-signed-request:
@@ -79,6 +80,14 @@ kstip:
   pagination:
     max-allowed-page-size: 50
   should-clear-database: false
+  tenancy:
+    bern:
+      subdomains:
+        - 'dev-stip'
+        - 'dev-sb-stip'
+    dv:
+      subdomains:
+        - 'dv'
 
 quarkus:
   log:

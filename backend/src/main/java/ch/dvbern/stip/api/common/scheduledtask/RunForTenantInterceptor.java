@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.scheduledtask;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import jakarta.annotation.Priority;
@@ -28,7 +29,7 @@ import jakarta.interceptor.InvocationContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RunForTenant
+@RunForTenant(MandantIdentifier.BERN) // TODO DVSTIP-1: Check if this breaks the scheduled tasks
 @Interceptor
 @Priority(Interceptor.Priority.PLATFORM_AFTER + 10)
 public class RunForTenantInterceptor {
