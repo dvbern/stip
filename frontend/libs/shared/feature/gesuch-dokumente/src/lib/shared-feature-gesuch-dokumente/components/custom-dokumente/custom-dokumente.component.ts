@@ -149,14 +149,20 @@ export class CustomDokumenteComponent {
           permissions,
         }),
       })),
-    ].map((dokument) => ({
-      ...dokument,
-      kommentarePending: isPending(kommentare),
-      kommentare:
-        kommentare.data?.filter(
-          (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
-        ) ?? [],
-    }));
+    ]
+      .map((dokument) => ({
+        ...dokument,
+        kommentarePending: isPending(kommentare),
+        kommentare:
+          kommentare.data?.filter(
+            (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
+          ) ?? [],
+      }))
+      .sort((a, b) => {
+        const typeA = a.gesuchDokument?.customDokumentTyp?.type ?? 'none';
+        const typeB = b.gesuchDokument?.customDokumentTyp?.type ?? 'none';
+        return typeA.localeCompare(typeB);
+      });
     return new MatTableDataSource<SharedModelTableCustomDokument>(list);
   });
 
