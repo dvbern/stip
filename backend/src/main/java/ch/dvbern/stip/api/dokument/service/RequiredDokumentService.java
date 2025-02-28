@@ -125,10 +125,13 @@ public class RequiredDokumentService {
     }
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchTranche tranche) {
-        final var existingDokumentTypesHashSet = new HashSet<>(
-            tranche
-                .getGesuchDokuments()
-        );
+        final var existingDokumentTypesHashSet = tranche
+            .getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument -> !gesuchDokument.getDokumente().isEmpty())
+            .map(GesuchDokument::getCustomDokumentTyp)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toCollection(HashSet::new));
 
         final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(tranche);
 
