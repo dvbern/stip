@@ -107,6 +107,17 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
+
+    // const kommentare = mapData(
+    //   this.dokumentsStore.kommentareViewSig(),
+    //   (kommentare) =>
+    //     kommentare.filter(
+    //       (k) =>
+    //         !dokuments.find((d) => d.id === k.gesuchDokumentId)
+    //           ?.customDokumentTyp,
+    //     ),
+    // );
+
     const kommentare = this.dokumentsStore.kommentareViewSig();
 
     return {
@@ -141,6 +152,16 @@ export class SharedFeatureGesuchDokumenteComponent {
       this.dokumentsStore.customDokumenteViewSig();
 
     const kommentare = this.dokumentsStore.kommentareViewSig();
+
+    // const kommentare = mapData(
+    //   this.dokumentsStore.kommentareViewSig(),
+    //   (kommentare) =>
+    //     kommentare.filter(
+    //       (k) =>
+    //         dokuments.find((d) => d.id === k.gesuchDokumentId)
+    //           ?.customDokumentTyp,
+    //     ),
+    // );
 
     return {
       gesuchId,
