@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -34,6 +28,12 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -51,14 +51,6 @@ public class RequiredDokumentService {
                 && Objects.nonNull(dokument.getDokumentTyp())
             )
             .map(GesuchDokument::getDokumentTyp)
-            .toList();
-    }
-
-    private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return tranche.getGesuchDokuments()
-            .stream()
-            .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
-            .map(GesuchDokument::getCustomDokumentTyp)
             .toList();
     }
 
