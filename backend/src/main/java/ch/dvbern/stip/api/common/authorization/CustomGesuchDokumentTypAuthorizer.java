@@ -115,7 +115,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             && GESUCHSTELLER_CAN_DELETE_DOKUMENTE.contains(gesuch.getGesuchStatus());
         final var isDokumentAusstehend = dokument.getGesuchDokumente()
             .stream()
-            .allMatch(gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND));
+            .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND));
 
         if (
             !isDeleteAuthorized
