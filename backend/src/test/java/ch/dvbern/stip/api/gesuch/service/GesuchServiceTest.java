@@ -1421,6 +1421,7 @@ class GesuchServiceTest {
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.getAusbildung().setFall(fall);
+        gesuch.getAusbildung().setAusbildungsgang(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
