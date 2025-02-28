@@ -51,7 +51,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -194,7 +193,7 @@ class CustomDokumenteGetGSDashboardTest {
         final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
         // since every document is uploaded by GS, there should not be any document missing
-        assertThat(gesuchDashboardItem.getMissingDocuments().getCount(), is(greaterThan(0)));
+        assertThat(gesuchDashboardItem.getMissingDocuments().getCount(), is(1));
     }
 
     @Test

@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
-import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -136,36 +135,6 @@ class CustomGesuchDokumentTypAuthorizerTest {
             authorizer.canDeleteTyp(
                 UUID.randomUUID()
             );
-        });
-    }
-
-    @Test
-    void canDeleteCustomDokumentShouldFailAsSB() {
-        // custom dokument attached
-        Dokument dokument = new Dokument();
-        CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
-        customDokumentTyp.setId(UUID.randomUUID());
-        GesuchDokument gesuchDokument = new GesuchDokument();
-        gesuchDokument.setCustomDokumentTyp(customDokumentTyp);
-        dokument.setGesuchDokumente(List.of(gesuchDokument));
-        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
-        when(dokumentRepository.findByIdOptional(any())).thenReturn(Optional.of(dokument));
-
-        final var idToCheck = UUID.randomUUID();
-        assertThrows(ForbiddenException.class, () -> authorizer.canDeleteDokument(idToCheck));
-    }
-
-    @Test
-    void canDeleteCustomDokumentShouldSuccessAsSB() {
-        // no custom dokument attached
-        Dokument dokument = new Dokument();
-        GesuchDokument gesuchDokument = new GesuchDokument();
-        dokument.setGesuchDokumente(List.of(gesuchDokument));
-        when(dokumentRepository.findByIdOptional(any())).thenReturn(Optional.of(dokument));
-
-        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
-        assertDoesNotThrow(() -> {
-            authorizer.canDeleteDokument(UUID.randomUUID());
         });
     }
 

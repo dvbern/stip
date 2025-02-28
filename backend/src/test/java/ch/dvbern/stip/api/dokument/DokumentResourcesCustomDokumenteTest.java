@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.dokument;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -37,6 +39,7 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -282,11 +285,50 @@ class DokumentResourcesCustomDokumenteTest {
         assertThat(expectedFileContent, is(actualFileContent));
     }
 
+    @Test
+    @TestAsSachbearbeiter
+    @Order(12)
+    void dokument_ablehnen_or_akzeptieren() {
+        var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
+        var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
+        modifiableDokTypeList.forEach(dokType -> {
+            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTyp()
+                .dokumentTypPath(dokType)
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(NullableGesuchDokumentDto.class);
+
+            dokumentApiSpec.gesuchDokumentAkzeptieren()
+                .gesuchDokumentIdPath(dokToAccept.getValue().getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.NO_CONTENT.getStatusCode());
+        });
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Order(13)
+    void fehlendeDokumenteUebermitteln() {
+        gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
     // testAsGS
     // delete file
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(14)
     void test_delete_required_custom_gesuchdokuments() {
         dokumentApiSpec.deleteDokument()
             .dokumentIdPath(dokumentId)
