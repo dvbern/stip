@@ -168,7 +168,7 @@ public class GesuchDokumentService {
     ) {
         final var gesuchDokument =
             gesuchDokumentRepository
-                .findByCustomDokumentType(customDokumentTypId)
+                .findByCustomDokumentTyp(customDokumentTypId)
                 .orElseThrow(NotFoundException::new);
         final var dokument = new Dokument();
         dokument.getGesuchDokumente().add(gesuchDokument);
@@ -190,7 +190,7 @@ public class GesuchDokumentService {
         final UUID customDokumentTypId
     ) {
         final var gesuchDokument =
-            gesuchDokumentRepository.findByCustomDokumentType(customDokumentTypId);
+            gesuchDokumentRepository.findByCustomDokumentTyp(customDokumentTypId);
 
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);

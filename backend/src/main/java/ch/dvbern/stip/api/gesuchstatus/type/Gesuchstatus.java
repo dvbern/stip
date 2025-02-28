@@ -45,6 +45,9 @@ public enum Gesuchstatus {
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE =
+        EnumSet.of(IN_BEARBEITUNG_GS, FEHLENDE_DOKUMENTE);
+
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS

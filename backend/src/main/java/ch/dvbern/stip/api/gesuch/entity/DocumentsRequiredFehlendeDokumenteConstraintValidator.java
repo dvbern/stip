@@ -41,7 +41,8 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
             return true;
         }
         // custom gesuch dokumente are in state AUSSTEHEND and are treated separately - thats why they are excluded
-        // in this check
+        // in this check.
+        // the separate check is done on site GS, in DocumentsRequiredConstraintValidator on page for documents
         final var nonCustomGesuchDokumente =
             gesuchDokumentDtos.stream()
                 .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
@@ -49,22 +50,6 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
         // check if any document is unprocessed by SB
         return !isAnyAusstehend(nonCustomGesuchDokumente);
 
-    }
-
-    private boolean isAnyGesuchdokumentAbgelehntOrAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
-        var anyAusstehend = false;
-        var anyAbgelehnt = false;
-        for (final var gesuchDokumentDto : gesuchDokumentDtos) {
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND) {
-                anyAusstehend = true;
-                break;
-            }
-
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.ABGELEHNT) {
-                anyAbgelehnt = true;
-            }
-        }
-        return !anyAusstehend && anyAbgelehnt;
     }
 
     private boolean isAnyAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {

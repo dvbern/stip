@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -44,8 +44,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Getter
 @Setter
 public class CustomDokumentTyp extends AbstractMandantEntity {
-    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String type;
 
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)

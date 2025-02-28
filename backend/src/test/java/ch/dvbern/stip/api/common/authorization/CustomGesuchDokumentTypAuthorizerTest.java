@@ -87,7 +87,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         var gesuchDok = new GesuchDokument();
         gesuchDok.setDokumente(List.of());
-        when(gesuchDokumentRepository.findByCustomDokumentType(any()))
+        when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
             .thenReturn(Optional.of(gesuchDok));
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
         when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);

@@ -41,18 +41,10 @@ public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
 
-    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
+    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return formular
             .getTranche()
-            .getGesuchDokuments();
-    }
-
-    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchTranche tranche) {
-        return tranche.getGesuchDokuments();
-    }
-
-    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular)
+            .getGesuchDokuments()
             .stream()
             .filter(
                 dokument -> !dokument.getDokumente().isEmpty()
@@ -63,7 +55,7 @@ public class RequiredDokumentService {
     }
 
     private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return getExistingDokumentsForGesuch(tranche)
+        return tranche.getGesuchDokuments()
             .stream()
             .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
             .map(GesuchDokument::getCustomDokumentTyp)
@@ -71,7 +63,10 @@ public class RequiredDokumentService {
     }
 
     private Set<DokumentTyp> getDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular).stream()
+        return formular
+            .getTranche()
+            .getGesuchDokuments()
+            .stream()
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
                 && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
@@ -131,7 +126,8 @@ public class RequiredDokumentService {
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchTranche tranche) {
         final var existingDokumentTypesHashSet = new HashSet<>(
-            getExistingCustomDokumentTypesForGesuch(tranche)
+            tranche
+                .getGesuchDokuments()
         );
 
         final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(tranche);
@@ -159,7 +155,9 @@ public class RequiredDokumentService {
             .toList();
         final var superfluousDokumentTypesHashSet = new HashSet<>(superfluousDokumentTypes);
 
-        return getExistingDokumentsForGesuch(formular)
+        return formular
+            .getTranche()
+            .getGesuchDokuments()
             .stream()
             .filter(
                 existingDokument -> superfluousDokumentTypesHashSet.contains(existingDokument.getDokumentTyp())

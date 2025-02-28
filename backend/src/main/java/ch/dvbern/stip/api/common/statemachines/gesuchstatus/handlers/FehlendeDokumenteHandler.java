@@ -47,6 +47,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
+        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
         sendFehlendeDokumenteNotifications(gesuch);
     }
 

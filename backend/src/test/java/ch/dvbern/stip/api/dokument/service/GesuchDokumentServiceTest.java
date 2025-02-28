@@ -303,7 +303,7 @@ class GesuchDokumentServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        when(gesuchDokumentRepository.findByCustomDokumentType(any()))
+        when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
             .thenReturn(Optional.of(customGesuchDokument));
         when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);
 
