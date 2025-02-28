@@ -1,13 +1,14 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  ContentChildren,
+  DestroyRef,
   Directive,
   DoCheck,
-  QueryList,
+  contentChildren,
   effect,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControlName } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { Subject, combineLatest, of } from 'rxjs';
@@ -21,8 +22,9 @@ import { SharedUiFormReadonlyDirective } from '../shared-ui-form-readonly/shared
   standalone: true,
 })
 export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
-  @ContentChildren(SharedUiFormMessageErrorDirective, { descendants: true })
-  errorMessages!: QueryList<SharedUiFormMessageErrorDirective>;
+  errorMessagesSig = contentChildren(SharedUiFormMessageErrorDirective, {
+    descendants: true,
+  });
   touchedStateDuringCheck$ = new Subject<boolean | null>();
 
   // Can be used on a MatFormField or FormControlName component/directive, useful for radio-groups for example
@@ -31,6 +33,8 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
   readonlyChecker = inject(SharedUiFormReadonlyDirective, { optional: true });
   changeDetector = inject(ChangeDetectorRef);
 
+  private destroyRef = inject(DestroyRef);
+  private errorMessages$ = toObservable(this.errorMessagesSig);
   private get nullableControl() {
     return this.matFormField?._control?.ngControl ?? this.selfControl;
   }
@@ -71,22 +75,21 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
 
   ngAfterViewInit() {
     const touched$ = this.touchedStateDuringCheck$.pipe(
-      startWith(false),
+      startWith(null),
       distinctUntilChanged(),
-    );
-    const errorMessages$ = this.errorMessages.changes.pipe(
-      startWith({}),
-      map(() => this.errorMessages?.toArray() ?? []),
     );
     const validityHasChanged$ =
       this.control.statusChanges?.pipe(
         startWith(null),
         map(() => this.control.status),
       ) ?? of(null);
-    combineLatest([validityHasChanged$, errorMessages$, touched$])
-      .pipe(map((values) => [...values, this.control.touched] as const))
-      .subscribe(([, errorMesages, touched]) => {
-        if (!touched) {
+    combineLatest([validityHasChanged$, this.errorMessages$, touched$])
+      .pipe(
+        map((values) => [...values, this.control.touched] as const),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(([, errorMesages, touchedOnCheck, touched]) => {
+        if (touchedOnCheck === false || !touched) {
           errorMesages?.forEach((m) => m.hide());
         } else {
           errorMesages?.forEach((m) => {

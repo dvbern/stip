@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -37,6 +38,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
+  private @Valid DelegierungDto delegierung;
   private @Valid List<GesuchTrancheDto> changes;
 
   /**
@@ -249,6 +251,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
+  public GesuchWithChangesDto delegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierung")
+  public DelegierungDto getDelegierung() {
+    return delegierung;
+  }
+
+  @JsonProperty("delegierung")
+  public void setDelegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+  }
+
+  /**
+   **/
   public GesuchWithChangesDto changes(List<GesuchTrancheDto> changes) {
     this.changes = changes;
     return this;
@@ -302,12 +322,13 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.gesuchTrancheToWorkWith, gesuchWithChanges.gesuchTrancheToWorkWith) &&
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
+        Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.changes, gesuchWithChanges.changes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung, changes);
   }
 
   @Override
@@ -326,6 +347,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
+    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("}");
     return sb.toString();

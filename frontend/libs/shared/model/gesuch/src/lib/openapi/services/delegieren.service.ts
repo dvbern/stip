@@ -24,7 +24,7 @@ import { Configuration }                                     from '../configurat
 
 
 export interface DelegierenServiceFallDelegierenRequestParams {
-    /** Die ID vom Gesuch */
+    /** Die ID vom Fall */
     fallId: string;
     sozialdienstId: string;
 }

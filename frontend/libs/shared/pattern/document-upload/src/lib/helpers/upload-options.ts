@@ -116,7 +116,7 @@ export function createUploadOptionsFactory<
   T extends Signal<{
     trancheId: string | undefined;
     allowTypes: string | undefined;
-    gesuchPermissions: PermissionMap;
+    permissions: PermissionMap;
   }>,
 >(view: T) {
   /**
@@ -143,7 +143,7 @@ export function createUploadOptionsFactory<
     options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
-      const permissions = view().gesuchPermissions;
+      const permissions = view().permissions;
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = !(

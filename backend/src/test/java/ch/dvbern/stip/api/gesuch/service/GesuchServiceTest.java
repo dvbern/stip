@@ -38,9 +38,7 @@ import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -83,8 +81,8 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -168,12 +166,6 @@ class GesuchServiceTest {
     @InjectMock
     BerechnungService berechnungService;
 
-    @Inject
-    GesuchTrancheValidatorService gesuchTrancheValidatorService;
-
-    @Inject
-    ConfigService configService;
-
     @InjectMock
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
 
@@ -185,10 +177,6 @@ class GesuchServiceTest {
     NotificationRepository notificationRepository;
 
     static final String TENANT_ID = "bern";
-    @Inject
-    NotificationResource notificationResource;
-    @Inject
-    GesuchDokumentService gesuchDokumentService;
 
     @BeforeAll
     static void setup() {
@@ -200,6 +188,10 @@ class GesuchServiceTest {
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
         Mockito.when(ausbildungAuthorizerMock.canUpdateCheck(any())).thenReturn(false);
         QuarkusMock.installMockForType(ausbildungAuthorizerMock, AusbildungAuthorizer.class);
+
+        final var zuordnungServiceMock = Mockito.mock(ZuordnungService.class);
+        Mockito.doNothing().when(zuordnungServiceMock).updateZuordnungOnGesuch(any());
+        QuarkusMock.installMockForType(zuordnungServiceMock, ZuordnungService.class);
     }
 
     @Test

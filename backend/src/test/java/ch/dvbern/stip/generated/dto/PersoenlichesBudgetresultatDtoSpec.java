@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_TOTAL_VOR_TEILUNG,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EIGENER_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_FAMILIENBUDGET,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMEN,
@@ -60,6 +61,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT = "anzahlPersonenImHaushalt";
   private Integer anzahlPersonenImHaushalt;
+
+  public static final String JSON_PROPERTY_TOTAL_VOR_TEILUNG = "totalVorTeilung";
+  private Integer totalVorTeilung;
 
   public static final String JSON_PROPERTY_EIGENER_HAUSHALT = "eigenerHaushalt";
   private Boolean eigenerHaushalt;
@@ -165,6 +169,32 @@ public class PersoenlichesBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec totalVorTeilung(Integer totalVorTeilung) {
+    
+    this.totalVorTeilung = totalVorTeilung;
+    return this;
+  }
+
+   /**
+   * Get totalVorTeilung
+   * @return totalVorTeilung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_VOR_TEILUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalVorTeilung() {
+    return totalVorTeilung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TOTAL_VOR_TEILUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalVorTeilung(Integer totalVorTeilung) {
+    this.totalVorTeilung = totalVorTeilung;
   }
 
 
@@ -853,6 +883,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     }
     PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDtoSpec) o;
     return Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
+        Objects.equals(this.totalVorTeilung, persoenlichesBudgetresultat.totalVorTeilung) &&
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.anteilFamilienbudget, persoenlichesBudgetresultat.anteilFamilienbudget) &&
         Objects.equals(this.einkommen, persoenlichesBudgetresultat.einkommen) &&
@@ -883,7 +914,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
   }
 
   @Override
@@ -891,6 +922,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersoenlichesBudgetresultatDtoSpec {\n");
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
+    sb.append("    totalVorTeilung: ").append(toIndentedString(totalVorTeilung)).append("\n");
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    anteilFamilienbudget: ").append(toIndentedString(anteilFamilienbudget)).append("\n");
     sb.append("    einkommen: ").append(toIndentedString(einkommen)).append("\n");

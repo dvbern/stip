@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Delegierung } from './delegierung';
 import { GesuchTranche } from './gesuchTranche';
 import { Gesuchstatus } from './gesuchstatus';
 import { Gesuchsperiode } from './gesuchsperiode';
@@ -28,6 +29,7 @@ export interface Gesuch {
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
     einreichedatum?: string;
+    delegierung?: Delegierung;
 }
 
 

@@ -48,6 +48,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer ausbildungskosten;
   private @Valid Integer ausgabenPersoenlichesBudget;
   private @Valid Integer persoenlichesbudgetBerechnet;
+  private @Valid Integer totalVorTeilung;
 
   /**
    **/
@@ -562,6 +563,24 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     this.persoenlichesbudgetBerechnet = persoenlichesbudgetBerechnet;
   }
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto totalVorTeilung(Integer totalVorTeilung) {
+    this.totalVorTeilung = totalVorTeilung;
+    return this;
+  }
+
+  
+  @JsonProperty("totalVorTeilung")
+  public Integer getTotalVorTeilung() {
+    return totalVorTeilung;
+  }
+
+  @JsonProperty("totalVorTeilung")
+  public void setTotalVorTeilung(Integer totalVorTeilung) {
+    this.totalVorTeilung = totalVorTeilung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -598,12 +617,13 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.fremdbetreuung, persoenlichesBudgetresultat.fremdbetreuung) &&
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultat.ausbildungskosten) &&
         Objects.equals(this.ausgabenPersoenlichesBudget, persoenlichesBudgetresultat.ausgabenPersoenlichesBudget) &&
-        Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet);
+        Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet) &&
+        Objects.equals(this.totalVorTeilung, persoenlichesBudgetresultat.totalVorTeilung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung);
   }
 
   @Override
@@ -638,6 +658,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    ausgabenPersoenlichesBudget: ").append(toIndentedString(ausgabenPersoenlichesBudget)).append("\n");
     sb.append("    persoenlichesbudgetBerechnet: ").append(toIndentedString(persoenlichesbudgetBerechnet)).append("\n");
+    sb.append("    totalVorTeilung: ").append(toIndentedString(totalVorTeilung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

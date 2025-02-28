@@ -13,6 +13,6 @@ export const selectSharedFeatureGesuchFormLebenslaufVew = createSelector(
       (each) => each?.id,
     ),
     readonly: gesuchsView.readonly,
-    gesuchPermissions: gesuchsView.gesuchPermissions,
+    permissions: gesuchsView.permissions,
   }),
 );

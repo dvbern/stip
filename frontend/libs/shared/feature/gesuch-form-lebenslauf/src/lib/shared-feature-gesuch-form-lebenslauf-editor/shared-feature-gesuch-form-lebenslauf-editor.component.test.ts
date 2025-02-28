@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render, screen } from '@testing-library/angular';
@@ -25,8 +26,14 @@ async function setup(type: SharedModelLebenslauf['type']) {
       NoopAnimationsModule,
     ],
     providers: [
+      provideHttpClient(),
       provideMockStore({
         initialState: {
+          benutzers: {
+            rolesMap: {
+              Gesuchsteller: true,
+            },
+          },
           language: { language: 'de' },
           gesuchs: mockedGesuchAppWritableGesuchState({}),
           ausbildungsstaettes: { ausbildungsstaettes: [] },

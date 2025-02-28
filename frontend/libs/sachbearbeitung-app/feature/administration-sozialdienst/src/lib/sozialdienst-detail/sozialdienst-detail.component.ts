@@ -25,7 +25,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import { Land, MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import {
+  Land,
+  MASK_IBAN,
+  PATTERN_EMAIL,
+  Sozialdienst,
+} from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -167,7 +172,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
       this.form.controls.sozialdienstAdmin,
     );
 
-    const updateRequest = {
+    const updateRequest: Sozialdienst = {
       ...values,
       id: sozialdienst.id,
       iban: 'CH' + values.iban,
@@ -176,8 +181,8 @@ export class SozialdienstDetailComponent implements OnDestroy {
         ...addressFormValues,
       },
       sozialdienstAdmin: {
-        id: sozialdienst.sozialdienstAdmin.id,
         ...sozialdienstAdminFormValues,
+        id: sozialdienst.sozialdienstAdmin.id,
       },
     };
 
@@ -221,21 +226,16 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
   replaceSozialdienstAdmin() {
     const sozialdienstId = this.idSig();
-    const sozialdienstAdminId =
-      this.store.sozialdienst().data?.sozialdienstAdmin?.id;
 
-    if (!sozialdienstAdminId || !sozialdienstId) return;
+    if (!sozialdienstId) return;
 
-    ReplaceSozialdienstAdminDialogComponent.open(this.dialog, {
-      sozialdienstAdminId,
-    })
+    ReplaceSozialdienstAdminDialogComponent.open(this.dialog)
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
           this.store.replaceSozialdienstAdmin$({
             sozialdienstId,
-            existingSozialdienstAdminKeycloakId: sozialdienstAdminId,
             newUser: result,
           });
         }

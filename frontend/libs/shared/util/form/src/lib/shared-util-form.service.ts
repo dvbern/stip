@@ -3,6 +3,8 @@ import {
   ApplicationRef,
   ElementRef,
   Injectable,
+  Signal,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -275,6 +277,26 @@ export class SharedUtilFormService {
           initialValue: control.defaultValue,
         })
       : toSignal<R>(control.valueChanges);
+  }
+
+  observeInvalidFieldsAndMarkControls<T extends FormGroup>(
+    validationErrorsSig: Signal<string[] | undefined>,
+    form: T,
+  ) {
+    effect(() => {
+      const validationErrors = validationErrorsSig();
+      if (!validationErrors || validationErrors.length === 0) {
+        return;
+      }
+
+      validationErrors.forEach((field) => {
+        if (field in form.controls) {
+          const control = form.get(field);
+
+          control?.markAllAsTouched();
+        }
+      });
+    });
   }
 
   invalidateControlIfValidationFails<T extends FormGroup>(

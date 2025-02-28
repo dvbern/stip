@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -13,51 +14,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("SozialdienstAdminUpdate")
+@JsonTypeName("Delegierung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class SozialdienstAdminUpdateDto  implements Serializable {
-  private @Valid String vorname;
-  private @Valid String nachname;
+public class DelegierungDto  implements Serializable {
+  private @Valid SozialdienstSlimDto sozialdienst;
 
   /**
    **/
-  public SozialdienstAdminUpdateDto vorname(String vorname) {
-    this.vorname = vorname;
+  public DelegierungDto sozialdienst(SozialdienstSlimDto sozialdienst) {
+    this.sozialdienst = sozialdienst;
     return this;
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
-    return vorname;
+  @JsonProperty("sozialdienst")
+  public SozialdienstSlimDto getSozialdienst() {
+    return sozialdienst;
   }
 
-  @JsonProperty("vorname")
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
-  }
-
-  /**
-   **/
-  public SozialdienstAdminUpdateDto nachname(String nachname) {
-    this.nachname = nachname;
-    return this;
-  }
-
-  
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
-    return nachname;
-  }
-
-  @JsonProperty("nachname")
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
+  @JsonProperty("sozialdienst")
+  public void setSozialdienst(SozialdienstSlimDto sozialdienst) {
+    this.sozialdienst = sozialdienst;
   }
 
 
@@ -69,23 +49,21 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SozialdienstAdminUpdateDto sozialdienstAdminUpdate = (SozialdienstAdminUpdateDto) o;
-    return Objects.equals(this.vorname, sozialdienstAdminUpdate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname);
+    DelegierungDto delegierung = (DelegierungDto) o;
+    return Objects.equals(this.sozialdienst, delegierung.sozialdienst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname);
+    return Objects.hash(sozialdienst);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SozialdienstAdminUpdateDto {\n");
+    sb.append("class DelegierungDto {\n");
     
-    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("}");
     return sb.toString();
   }

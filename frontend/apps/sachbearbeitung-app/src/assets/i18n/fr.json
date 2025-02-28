@@ -388,6 +388,8 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Coûts de formation de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Frais de déplacement de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Montant total du budget",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Partage par tête",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Budget imputable",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Montant du budget imputable ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
 
@@ -434,7 +436,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Détails du calcul réduit",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ reducePercentage }}%) pour dépôt tardif de la demande de bourse, {{ months }} mois après le début de la formation.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ months }}/12) pour dépôt tardif de la demande de bourse.",
   "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Montant effective",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
