@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
@@ -12,6 +13,7 @@ import {
   isStepDisabled,
   isStepValid,
 } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 
 @Injectable({
   providedIn: 'root',
@@ -50,15 +52,22 @@ export class SharedUtilGesuchFormStepManagerService {
     steps: GesuchFormStep[],
     trancheTyp: GesuchUrlType | null,
     gesuch: SharedModelGesuch | null,
+    rolesMap: RolesMap,
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
     const gesuchFormular =
       gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
+    const { permissions } = preparePermissions(
+      trancheTyp,
+      gesuch,
+      this.appType,
+      rolesMap,
+    );
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, trancheTyp, gesuch, this.appType),
+      disabled: isStepDisabled(step, gesuch, permissions),
     }));
   }
 
@@ -70,6 +79,7 @@ export class SharedUtilGesuchFormStepManagerService {
     trancheTyp: GesuchUrlType | null,
     step: GesuchFormStep,
     gesuch: SharedModelGesuch,
+    rolesMap: RolesMap,
   ): GesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
 
@@ -78,9 +88,15 @@ export class SharedUtilGesuchFormStepManagerService {
     }
 
     let nextIndex = 0;
+    const { permissions } = preparePermissions(
+      trancheTyp,
+      gesuch,
+      this.appType,
+      rolesMap,
+    );
 
     for (let i = currentIndex + 1; i < stepsFlow.length; i++) {
-      if (!isStepDisabled(stepsFlow[i], trancheTyp, gesuch, this.appType)) {
+      if (!isStepDisabled(stepsFlow[i], gesuch, permissions)) {
         nextIndex = i;
         break;
       }

@@ -23,6 +23,7 @@ import java.util.List;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,9 +40,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
+@Audited
 @Getter
 @Setter
 @Entity
@@ -78,4 +81,8 @@ public class Sozialdienst extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "sozialdienst_id", referencedColumnName = "id")
     private List<SozialdienstBenutzer> sozialdienstBenutzers = new ArrayList<>();
+
+    @NotNull
+    @OneToMany(mappedBy = "sozialdienst")
+    private List<Delegierung> delegierungen = new ArrayList<>();
 }

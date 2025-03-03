@@ -51,4 +51,13 @@ public class SozialdienstBenutzerRepository implements BaseRepository<Sozialdien
             .where(qSozialdienst.sozialdienstBenutzers.contains(sozialdienstBenutzer));
         return query.stream().findFirst();
     }
+
+    public Optional<Sozialdienst> findSozialdienstBySozialdienstAdmin(SozialdienstBenutzer sozialdienstBenutzer) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var qSozialdienst = QSozialdienst.sozialdienst;
+        var query = queryFactory
+            .selectFrom(qSozialdienst)
+            .where(qSozialdienst.sozialdienstAdmin.eq(sozialdienstBenutzer));
+        return query.stream().findFirst();
+    }
 }

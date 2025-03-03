@@ -60,7 +60,6 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           PARTNER,
-          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
@@ -72,7 +71,7 @@ describe('GesuchFormSteps', () => {
               },
             },
           } as SharedModelGesuch,
-          'gesuch-app',
+          {},
         ),
       ).toBe(state);
     },
@@ -84,7 +83,6 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           ELTERN,
-          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
@@ -96,7 +94,7 @@ describe('GesuchFormSteps', () => {
               },
             },
           } as SharedModelGesuch,
-          'gesuch-app',
+          {},
         ),
       ).toBe(state);
     },

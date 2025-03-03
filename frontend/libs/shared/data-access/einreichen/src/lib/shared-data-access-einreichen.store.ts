@@ -15,13 +15,16 @@ import {
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
 import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
+  AllFormSteps,
   EinreichedatumAendernRequest,
   EinreichedatumStatus,
   GSFormStepProps,
+  GSSteuererklaerungSteps,
   GesuchFormularType,
   GesuchService,
   GesuchTrancheService,
   SBFormStepProps,
+  SBSteuerdatenSteps,
   ValidationMessage,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
@@ -371,27 +374,12 @@ const transformValidationReportToFormSteps = (
   const messages: (ValidationMessage | ValidationError)[] =
     report.validationErrors.concat(report.validationWarnings);
 
-  // @scph: not sure if sb steuerdaten are here validated as well
   const steps = messages.map((m) => {
-    if (
-      m.propertyPath?.startsWith('steuerdaten') ||
-      m.propertyPath?.startsWith('steuererklaerung')
-    ) {
-      const prefix = m.propertyPath.startsWith('steuerdaten')
-        ? 'steuerdaten'
-        : 'steuererklaerung';
-      return currentForm?.steuerdatenTabs?.map((tab) => {
-        switch (tab) {
-          case 'FAMILIE':
-            return FormPropsToStepsMap[`${prefix}Familie`];
-          case 'VATER':
-            return FormPropsToStepsMap[`${prefix}Vater`];
-          case 'MUTTER':
-            return FormPropsToStepsMap[`${prefix}Mutter`];
-          default:
-            return undefined;
-        }
-      });
+    const steuernValidtation = parseSteuernValidationError(m.propertyPath);
+    if (steuernValidtation) {
+      return currentForm?.steuerdatenTabs?.map(
+        () => FormPropsToStepsMap[steuernValidtation],
+      );
     }
 
     if (m.messageTemplate?.includes('documents.required')) {
@@ -399,9 +387,7 @@ const transformValidationReportToFormSteps = (
     }
 
     if (m.propertyPath) {
-      return FormPropsToStepsMap[
-        m.propertyPath as GSFormStepProps | SBFormStepProps
-      ];
+      return FormPropsToStepsMap[m.propertyPath as AllFormSteps];
     }
 
     return undefined;
@@ -435,7 +421,7 @@ const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
   currentForm?: GesuchFormularType | null,
 ) => {
-  const formKeys: (GSFormStepProps | SBFormStepProps)[] = [
+  const formKeys: AllFormSteps[] = [
     ...(Object.keys(currentForm ?? {}) as (
       | GSFormStepProps
       | SBFormStepProps
@@ -467,4 +453,20 @@ const transformValidationMessagesToFormKeys = (
     .filter(isDefined)
     .filter(isGesuchFormularProp(formKeys));
   return ers;
+};
+
+const parseSteuernValidationError = (
+  propertyPath?: string,
+): GSSteuererklaerungSteps | SBSteuerdatenSteps | undefined => {
+  if (
+    !propertyPath ||
+    (!propertyPath.startsWith('steuerdaten') &&
+      !propertyPath.startsWith('steuererklaerung'))
+  ) {
+    return undefined;
+  }
+
+  return (propertyPath.split('.')[0] ?? propertyPath) as
+    | GSSteuererklaerungSteps
+    | SBSteuerdatenSteps;
 };

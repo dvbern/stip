@@ -1,16 +1,9 @@
 import { Route } from '@angular/router';
 
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
-import { hasRoles, isAllowedTo } from '@dv/shared/pattern/status-guard';
+import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
-  {
-    path: 'sachbearbeitung-app-feature-gesuch-form-steuerdaten',
-    loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/gesuch-form-steuerdaten').then(
-        (m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes,
-      ),
-  },
   {
     path: 'sachbearbeitung-app-feature-infos-admin',
     loadChildren: () =>
@@ -98,7 +91,10 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'verfuegung',
-        canActivate: [hasBenutzer, isAllowedTo('viewVerfuegung')],
+        // TODO: @spse check what to do if the verfügung page is opened by a SB directly
+        // if everything is fine, remove the isAllowedTo Helper function as it is not needed anymore
+        // otherwise check how to change the guard function to cover the case
+        canActivate: [hasBenutzer],
         title: 'sachbearbeitung-app.verfuegung.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/verfuegung').then(

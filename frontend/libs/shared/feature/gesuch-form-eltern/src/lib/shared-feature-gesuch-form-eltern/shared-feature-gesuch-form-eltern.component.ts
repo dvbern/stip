@@ -12,6 +12,7 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   ElternTyp,
@@ -19,6 +20,7 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -44,6 +46,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 })
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
+  private permissionStore = inject(PermissionStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
 
   hasUnsavedChanges = false;
@@ -64,12 +67,19 @@ export class SharedFeatureGesuchFormElternComponent {
     effect(
       () => {
         const { loading, gesuch, gesuchFormular } = this.viewSig();
+        const rolesMap = this.permissionStore.rolesMapSig();
         const { trancheTyp } = this.cacheSig();
+        const { permissions } = preparePermissions(
+          trancheTyp,
+          gesuch,
+          this.appType,
+          rolesMap,
+        );
         if (
           !loading &&
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(ELTERN, trancheTyp, gesuch, this.appType)
+          isStepDisabled(ELTERN, gesuch, permissions)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormEltern.nextTriggered({

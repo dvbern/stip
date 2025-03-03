@@ -24,16 +24,17 @@ import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -63,10 +64,17 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     }
 
     @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_GESUCHSTELLER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public List<SozialdienstDto> getAllSozialdienste() {
         return sozialdienstService.getAllSozialdienst();
+    }
+
+    @AllowAll
+    @RolesAllowed({ OidcPermissions.STAMMDATEN_READ })
+    @Override
+    public List<SozialdienstSlimDto> getAllSozialdiensteForDelegation() {
+        return sozialdienstService.getAllSozialdiensteForDelegation();
     }
 
     @AllowAll
@@ -97,11 +105,10 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public SozialdienstBenutzerDto updateSozialdienstAdmin(
-        UUID sozialdienstId,
-        SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
+        SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
     ) {
-        final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
-        return sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
+        sozialdienstAuthorizer.canUpdateSozialdienstAdmin();
+        return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
     @AllowAll

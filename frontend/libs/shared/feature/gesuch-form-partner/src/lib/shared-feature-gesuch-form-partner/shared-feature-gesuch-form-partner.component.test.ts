@@ -10,6 +10,7 @@ import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
+  provideSharedOAuthServiceWithGesuchstellerJWT,
 } from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
@@ -25,6 +26,11 @@ async function setup() {
     providers: [
       provideMockStore({
         initialState: {
+          benutzers: {
+            rolesMap: {
+              Gesuchsteller: true,
+            },
+          },
           language: {
             language: 'de',
           },
@@ -42,6 +48,7 @@ async function setup() {
           configs: mockConfigsState(),
         },
       }),
+      provideSharedOAuthServiceWithGesuchstellerJWT(),
       provideMaterialDefaultOptions(),
       provideHttpClient(),
       provideHttpClientTesting(),

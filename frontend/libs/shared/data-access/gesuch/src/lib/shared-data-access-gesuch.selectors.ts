@@ -2,6 +2,7 @@ import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
 import { IChange, diff } from 'json-diff-ts';
 
+import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -20,13 +21,16 @@ import {
   ABSCHLUSS,
   BaseFormSteps,
   ELTERN,
+  ELTERN_STEUERDATEN_STEPS,
   ELTERN_STEUERERKLAERUNG_STEPS,
-  ELTERN_STEUER_STEPS,
   GesuchFormStep,
   RETURN_TO_HOME,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
-import { preparePermissions } from '@dv/shared/model/permission-state';
+import {
+  PermissionMap,
+  preparePermissions,
+} from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -77,6 +81,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedGesuchAndGesuchFromular,
   sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
   sharedDataAccessGesuchsFeature.selectTrancheTyp,
+  selectSharedDataAccessBenutzersView,
   (
     config,
     { tranchenChanges },
@@ -85,6 +90,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     { gesuch, gesuchFormular },
     isEditingAenderung,
     trancheTyp,
+    { rolesMap },
   ) => {
     const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
     const trancheSetting = createTrancheSetting(trancheTyp, gesuchTranche);
@@ -101,6 +107,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
         trancheTyp,
         gesuch,
         config.compileTimeConfig?.appType,
+        rolesMap,
       ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
@@ -145,7 +152,8 @@ const createTrancheSetting = (
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessConfigsView,
-  (state, config) => {
+  selectSharedDataAccessBenutzersView,
+  (state, config, { rolesMap }) => {
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseFormStepsArray, [
           {
@@ -157,9 +165,17 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
         ])
       : baseFormStepsArray;
 
+    const { permissions } = preparePermissions(
+      state.trancheTyp,
+      state.cache.gesuch,
+      config.compileTimeConfig?.appType,
+      rolesMap,
+    );
+
     const steps = addStepsByAppType(
       sharedSteps,
       state.steuerdatenTabs.data,
+      permissions,
       config?.compileTimeConfig,
     );
     return {
@@ -187,7 +203,8 @@ export const selectSharedDataAccessGesuchCache = createSelector(
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  ({ trancheTyp, ...cache }, config) => {
+  selectSharedDataAccessBenutzersView,
+  ({ trancheTyp, ...cache }, config, { rolesMap }) => {
     return {
       cache,
       trancheTyp,
@@ -195,6 +212,7 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
         trancheTyp,
         cache.gesuch,
         config.compileTimeConfig?.appType,
+        rolesMap,
       ),
     };
   },
@@ -242,14 +260,15 @@ const appendSteps = (
 function addStepsByAppType(
   sharedSteps: GesuchFormStep[],
   steuerdatenTabs: SteuerdatenTyp[] | undefined,
+  permissions: PermissionMap,
   compileTimeConfig?: CompileTimeConfig,
 ) {
   switch (compileTimeConfig?.appType) {
     case 'gesuch-app':
-      return [...sharedSteps, ABSCHLUSS];
+      return [...sharedSteps, ...(permissions.canFreigeben ? [ABSCHLUSS] : [])];
     case 'sachbearbeitung-app': {
       const steuerdatenSteps = steuerdatenTabs?.map((typ) => ({
-        step: ELTERN_STEUER_STEPS[typ],
+        step: ELTERN_STEUERDATEN_STEPS[typ],
         type: typ,
       }));
       return steuerdatenSteps
@@ -296,6 +315,9 @@ export function prepareTranchenChanges(
       {
         keysToSkip: ['id'],
         embeddedObjKeys: {
+          ['kinds']: 'id',
+          ['elterns']: 'id',
+          ['geschwisters']: 'id',
           /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
           ['steuerdaten']: 'steuerdatenTyp',
         },

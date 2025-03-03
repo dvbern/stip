@@ -31,3 +31,9 @@ export const ifPropsAreDefined = <T extends Record<string, unknown>>(
 ): value is { [K in keyof T]: Exclude<T[K], null | undefined> } => {
   return Object.values(value).every(isDefined);
 };
+
+/**
+ * A generic function comparing two objects by their id property
+ */
+export const compareById = <T extends { id: string | number }>(a: T, b: T) =>
+  a.id === b.id;

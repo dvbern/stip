@@ -5,11 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -20,10 +16,6 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-
-export interface ReplaceSozialdienstAdminDialogData {
-  sozialdienstAdminId: string;
-}
 
 export interface ReplaceSozialdienstAdminDialogResult {
   nachname: string;
@@ -56,7 +48,6 @@ export class ReplaceSozialdienstAdminDialogComponent {
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
-  dialogData = inject<ReplaceSozialdienstAdminDialogData>(MAT_DIALOG_DATA);
 
   form = this.formBuilder.group({
     nachname: [<string | null>null, [Validators.required]],
@@ -67,12 +58,11 @@ export class ReplaceSozialdienstAdminDialogComponent {
     ],
   });
 
-  static open(dialog: MatDialog, data: ReplaceSozialdienstAdminDialogData) {
+  static open(dialog: MatDialog) {
     return dialog.open<
       ReplaceSozialdienstAdminDialogComponent,
-      ReplaceSozialdienstAdminDialogData,
       ReplaceSozialdienstAdminDialogResult
-    >(ReplaceSozialdienstAdminDialogComponent, { data });
+    >(ReplaceSozialdienstAdminDialogComponent);
   }
 
   confirm() {

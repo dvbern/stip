@@ -1,5 +1,6 @@
 import { differenceInYears } from 'date-fns';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -12,7 +13,10 @@ import {
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
-import { preparePermissions } from '@dv/shared/model/permission-state';
+import {
+  PermissionMap,
+  preparePermissions,
+} from '@dv/shared/model/permission-state';
 
 import {
   GesuchFormStep,
@@ -139,36 +143,15 @@ const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
 };
 
 // Dynamic steps
-// Steuerdaten only for SB
-export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
-const createElternSteuerStep = (
-  steuerdatenTyp: SteuerdatenTyp,
-): GesuchFormStep & { type: SteuerdatenTyp } => {
-  return {
-    type: steuerdatenTyp,
-    route: `eltern-steuerdaten/${steuerdatenTyp}`,
-    translationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
-    titleTranslationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
-    iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
-  };
-};
-export const ELTERN_STEUER_FAMILIE = createElternSteuerStep('FAMILIE');
-export const ELTERN_STEUER_MUTTER = createElternSteuerStep('MUTTER');
-export const ELTERN_STEUER_VATER = createElternSteuerStep('VATER');
-export const ELTERN_STEUER_STEPS: Record<SteuerdatenTyp, GesuchFormStep> = {
-  FAMILIE: ELTERN_STEUER_FAMILIE,
-  MUTTER: ELTERN_STEUER_MUTTER,
-  VATER: ELTERN_STEUER_VATER,
-};
 
-// for GS
+// for GS and SB
 export const ELTERN_STEUERERKLAERUNG_ROUTE = 'eltern-steuererklaerung';
 const createElternSteuererklaerungStep = (
   steuerdatenTyp: SteuerdatenTyp,
 ): GesuchFormStep & { type: SteuerdatenTyp } => {
   return {
     type: steuerdatenTyp,
-    route: `eltern-steuererklaerung/${steuerdatenTyp}`,
+    route: `${ELTERN_STEUERERKLAERUNG_ROUTE}/${steuerdatenTyp}`,
     translationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
     titleTranslationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
     iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
@@ -189,9 +172,32 @@ export const ELTERN_STEUERERKLAERUNG_STEPS: Record<
   VATER: ELTERN_STEUERERKLAERUNG_VATER,
 };
 
+// Steuerdaten only for SB
+export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
+const createElternSteuerStep = (
+  steuerdatenTyp: SteuerdatenTyp,
+): GesuchFormStep & { type: SteuerdatenTyp } => {
+  return {
+    type: steuerdatenTyp,
+    route: `${ELTERN_STEUERDATEN_ROUTE}/${steuerdatenTyp}`,
+    translationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
+    titleTranslationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
+    iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
+  };
+};
+export const ELTERN_STEUERDATEN_FAMILIE = createElternSteuerStep('FAMILIE');
+export const ELTERN_STEUERDATEN_MUTTER = createElternSteuerStep('MUTTER');
+export const ELTERN_STEUERDATEN_VATER = createElternSteuerStep('VATER');
+export const ELTERN_STEUERDATEN_STEPS: Record<SteuerdatenTyp, GesuchFormStep> =
+  {
+    FAMILIE: ELTERN_STEUERDATEN_FAMILIE,
+    MUTTER: ELTERN_STEUERDATEN_MUTTER,
+    VATER: ELTERN_STEUERDATEN_VATER,
+  };
+
 export const BaseFormSteps = {
-  AUSBILDUNG,
   TRANCHE,
+  AUSBILDUNG,
   PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
@@ -225,9 +231,9 @@ export const FormPropsToStepsMap: Record<
   steuererklaerungFamilie: ELTERN_STEUERERKLAERUNG_FAMILIE,
   steuererklaerungMutter: ELTERN_STEUERERKLAERUNG_MUTTER,
   steuererklaerungVater: ELTERN_STEUERERKLAERUNG_VATER,
-  steuerdatenFamilie: ELTERN_STEUER_FAMILIE,
-  steuerdatenMutter: ELTERN_STEUER_MUTTER,
-  steuerdatenVater: ELTERN_STEUER_VATER,
+  steuerdatenFamilie: ELTERN_STEUERDATEN_FAMILIE,
+  steuerdatenMutter: ELTERN_STEUERDATEN_MUTTER,
+  steuerdatenVater: ELTERN_STEUERDATEN_VATER,
   geschwisters: GESCHWISTER,
   lebenslaufItems: LEBENSLAUF,
   kinds: KINDER,
@@ -250,9 +256,9 @@ export const FormRoutesToPropsMap: Record<
   [ELTERN_STEUERERKLAERUNG_MUTTER.route]: 'steuererklaerungMutter',
   [ELTERN_STEUERERKLAERUNG_VATER.route]: 'steuererklaerungVater',
   [ELTERN_STEUERERKLAERUNG_FAMILIE.route]: 'steuererklaerungFamilie',
-  [ELTERN_STEUER_FAMILIE.route]: 'steuerdatenFamilie',
-  [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
-  [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
+  [ELTERN_STEUERDATEN_FAMILIE.route]: 'steuerdatenFamilie',
+  [ELTERN_STEUERDATEN_MUTTER.route]: 'steuerdatenMutter',
+  [ELTERN_STEUERDATEN_VATER.route]: 'steuerdatenVater',
   [GESCHWISTER.route]: 'geschwisters',
   [PARTNER.route]: 'partner',
   [KINDER.route]: 'kinds',
@@ -267,12 +273,10 @@ export const findStepIndex = (step: GesuchFormStep, steps: GesuchFormStep[]) =>
 
 export const isStepDisabled = (
   step: GesuchFormStep,
-  trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
-  appType: AppType,
+  permissions: PermissionMap,
 ) => {
   const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-  const { permissions } = preparePermissions(trancheTyp, gesuch, appType);
   const readonly = !permissions.canWrite;
 
   switch (step) {
@@ -394,13 +398,13 @@ export const getFormStepByDocumentType = (
       return GSFormSteps.DOKUMENTE;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
-      return ELTERN_STEUER_FAMILIE;
+      return ELTERN_STEUERDATEN_FAMILIE;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER: {
-      return ELTERN_STEUER_MUTTER;
+      return ELTERN_STEUERDATEN_MUTTER;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER: {
-      return ELTERN_STEUER_VATER;
+      return ELTERN_STEUERDATEN_VATER;
     }
     default: {
       const step = (Object.keys(GSFormSteps) as GSFormStepKeys[]).find(
