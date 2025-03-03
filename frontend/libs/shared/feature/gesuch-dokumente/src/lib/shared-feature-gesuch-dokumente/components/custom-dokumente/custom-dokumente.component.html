@@ -79,6 +79,7 @@
           type="button"
           class="btn btn-outline-primary btn-sm"
           data-testid="dokumente-button-createCustomDokumentTyp"
+          [disabled]="!canCreateCustomDokumentTypSig()"
           (click)="createCustomDokumentTyp.emit()"
         >
           <i class="material-symbols-rounded fs-4">add</i>
