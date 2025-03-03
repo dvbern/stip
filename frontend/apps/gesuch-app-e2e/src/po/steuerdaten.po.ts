@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-import { Steuerdaten, SteuererklaerungUpdate } from '@dv/shared/model/gesuch';
+import { Steuerdaten } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
   selectMatRadio,
@@ -9,10 +9,8 @@ import {
 export class SteuerdatenPO {
   public elems: {
     page: Page;
-    steuererklaerungForm: Locator;
-    steuerdatenForm: Locator;
+    form: Locator;
 
-    steuererklaerungInBernRadio: Locator;
     totalEinkuenfte: Locator;
     eigenmietwert: Locator;
     arbeitsverhaeltnis: Locator;
@@ -27,7 +25,7 @@ export class SteuerdatenPO {
     verpflegung: Locator;
     verpflegungPartner: Locator;
     steuerjahr: Locator;
-    veranlagungscode: Locator;
+    veranlagungsCode: Locator;
 
     loading: Locator;
 
@@ -38,13 +36,8 @@ export class SteuerdatenPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      steuerdatenForm: page.getByTestId('form-eltern-steuerdaten-form'),
-      steuererklaerungForm: page.getByTestId(
-        'form-eltern-steuererklaerung-form',
-      ),
-      steuererklaerungInBernRadio: page.getByTestId(
-        'form-eltern-steuererklaerung.steuererklaerungInBern',
-      ),
+      form: page.getByTestId('form-eltern-steuerdaten-form'),
+
       totalEinkuenfte: page.getByTestId(
         'form-eltern-steuerdaten.totalEinkuenfte',
       ),
@@ -71,8 +64,8 @@ export class SteuerdatenPO {
         'form-eltern-steuerdaten.verpflegungPartner',
       ),
       steuerjahr: page.getByTestId('form-eltern-steuerdaten.steuerjahr'),
-      veranlagungscode: page.getByTestId(
-        'form-eltern-steuerdaten.veranlagungscode',
+      veranlagungsCode: page.getByTestId(
+        'form-eltern-steuerdaten.veranlagungsCode',
       ),
 
       loading: page.getByTestId('form-eltern-steuerdaten-loading'),
@@ -82,18 +75,7 @@ export class SteuerdatenPO {
     };
   }
 
-  async fillSteuererklaerung(
-    item: Omit<SteuererklaerungUpdate, 'steuerdatenTyp'>,
-  ) {
-    await selectMatRadio(
-      this.elems.steuererklaerungInBernRadio,
-      item.steuererklaerungInBern,
-    );
-
-    await expectFormToBeValid(this.elems.steuererklaerungForm);
-  }
-
-  async fillSteuerdaten(item: Steuerdaten, options?: { isSB?: boolean }) {
+  async fillSteuerdaten(item: Steuerdaten) {
     await this.elems.totalEinkuenfte.fill(`${item.totalEinkuenfte}`);
     await this.elems.eigenmietwert.fill(`${item.eigenmietwert}`);
     await selectMatRadio(
@@ -116,11 +98,9 @@ export class SteuerdatenPO {
     await this.elems.fahrkostenPartner.fill(`${item.fahrkostenPartner}`);
     await this.elems.verpflegung.fill(`${item.verpflegung}`);
     await this.elems.verpflegungPartner.fill(`${item.verpflegungPartner}`);
-    if (options?.isSB && item.steuerjahr) {
-      await this.elems.steuerjahr.fill(`${item.steuerjahr}`);
-      await this.elems.veranlagungscode.fill(`${item.veranlagungsCode}`);
-    }
+    await this.elems.steuerjahr.fill(`${item.steuerjahr}`);
+    await this.elems.veranlagungsCode.fill(`${item.veranlagungsCode}`);
 
-    await expectFormToBeValid(this.elems.steuerdatenForm);
+    await expectFormToBeValid(this.elems.form);
   }
 }
