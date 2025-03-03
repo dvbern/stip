@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
+import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 export const appRoutes: Route[] = [
   {
@@ -79,6 +80,7 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         canActivate: [hasBenutzer],
+        providers: [SteuerdatenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/gesuch-form').then(

@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, filter } from 'rxjs';
@@ -24,30 +23,26 @@ import {
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
-import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternGesuchStepNavComponent,
-    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiProgressBarComponent,
-    SharedUiSearchComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
   ],
   templateUrl:
@@ -67,6 +62,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
+  private steuerdatenStore = inject(SteuerdatenStore);
 
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
@@ -78,11 +74,14 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
     const rolesMap = this.permissionStore.rolesMapSig();
     const { cache, trancheTyp } = this.cacheViewSig();
     const steps = this.stepsViewSig().steps;
+    const steuerdaten = this.steuerdatenStore.cachedSteuerdatenListViewSig();
+
     return this.stepManager.getValidatedSteps(
       steps,
       trancheTyp,
       cache.gesuch,
       rolesMap,
+      steuerdaten,
       invalidFormularProps.validations,
     );
   });
@@ -105,6 +104,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
     ])
       .pipe(takeUntilDestroyed())
       .subscribe(([gesuchTrancheId]) => {
+        this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
   }

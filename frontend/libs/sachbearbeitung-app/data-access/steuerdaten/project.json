@@ -4,7 +4,7 @@
   "sourceRoot": "libs/sachbearbeitung-app/data-access/steuerdaten/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:shared"],
+  "tags": ["type:data-access", "scope:sachbearbeitung-app"],
   "targets": {
     "build": {
       "executor": "nx:noop",

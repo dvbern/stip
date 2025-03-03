@@ -5,7 +5,7 @@ export default {
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/feature/gesuch-form-steuerdaten',
+    '../../../../coverage/libs/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

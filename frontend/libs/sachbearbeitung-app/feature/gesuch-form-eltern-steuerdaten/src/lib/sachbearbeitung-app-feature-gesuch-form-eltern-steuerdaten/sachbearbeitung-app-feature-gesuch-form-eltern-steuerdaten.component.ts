@@ -24,7 +24,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { Steuerdaten, SteuerdatenTyp } from '@dv/shared/model/gesuch';
@@ -43,6 +42,7 @@ import {
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
+import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
@@ -212,7 +212,12 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   handleContinue() {
     const { gesuch } = this.viewSig();
     if (gesuch?.id) {
-      // TODO: continue without next step handling?
+      this.store.dispatch(
+        SharedEventGesuchFormElternSteuerdaten.nextTriggered({
+          id: gesuch.id,
+          origin: ELTERN_STEUERDATEN_STEPS[this.stepSig().type],
+        }),
+      );
     }
   }
 
