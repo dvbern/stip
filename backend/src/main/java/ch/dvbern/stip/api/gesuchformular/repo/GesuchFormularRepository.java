@@ -19,10 +19,26 @@ package ch.dvbern.stip.api.gesuchformular.repo;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchFormularRepository implements BaseRepository<GesuchFormular> {
+    private final EntityManager entityManager;
+
+    public GesuchFormular getBySteuerdaten(Steuerdaten steuerdaten) {
+        final var gesuchformular = QGesuchFormular.gesuchFormular;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchformular)
+            .where(gesuchformular.steuerdaten.contains(steuerdaten))
+            .stream()
+            .findFirst()
+            .orElseThrow();
+    }
 }

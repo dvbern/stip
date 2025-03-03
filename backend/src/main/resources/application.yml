@@ -79,6 +79,7 @@ kstip:
   pagination:
     max-allowed-page-size: 50
   should-clear-database: false
+  nesko-wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
 
 quarkus:
   log:
@@ -154,13 +155,7 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
-  nesko-base-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService'
   cxf:
-#    client:
-#      stipendienAuskunftService:
-#        wsdl: '${nesko-base-url}?wsdl'
-#        client-endpoint-url: ${nesko-base-url}
-#        service-interface: 'ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice'
     codegen:
       wsdl2java:
         nesko-params:
