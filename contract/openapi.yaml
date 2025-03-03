@@ -1847,6 +1847,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NeskoToken'
+        required: true
       tags:
         - Steuerdaten
       responses:
