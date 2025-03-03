@@ -318,8 +318,8 @@ export function prepareTranchenChanges(
           ['kinds']: 'id',
           ['elterns']: 'id',
           ['geschwisters']: 'id',
-          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
-          ['steuerdaten']: 'steuerdatenTyp',
+          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuererklaerungChanges} */
+          ['steuererklaerung']: 'steuerdatenTyp',
         },
       },
     );
@@ -330,7 +330,6 @@ export function prepareTranchenChanges(
           .filter(
             (c) =>
               // Ignore steuerdaten changes, they are handled separately
-              // @scph: need to figure out how to handle steuererklaerung changes
               !isSteuererklaerungStep(
                 c.key as GSFormStepProps | SBFormStepProps,
               ) &&
@@ -339,7 +338,7 @@ export function prepareTranchenChanges(
                 c.type !== 'UPDATE'),
           )
           .map((c) => c.key),
-        ...hasSteuerdatenChanges(changes),
+        ...hasSteuererklaerungChanges(changes),
       ],
     };
   });
@@ -358,13 +357,12 @@ export function prepareTranchenChanges(
  * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
  * or back to individual
  */
-export const hasSteuerdatenChanges = (
+export const hasSteuererklaerungChanges = (
   changes: IChange[],
 ): GSFormStepProps[] => {
-  // @scph: is this assumption correct?
-  const steuerdatenChange = changes.find(
+  const steuererklaerungChange = changes.find(
     (c) =>
-      !isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
+      isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
       c.type === 'UPDATE',
   );
   const affectedSteps = new Set<GSFormStepProps>();
@@ -372,7 +370,7 @@ export const hasSteuerdatenChanges = (
   // Check if steuerdaten have changed
   (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
     (steuerdatenTyp) => {
-      const steuerdatenTypChange = steuerdatenChange?.changes?.find(
+      const steuerdatenTypChange = steuererklaerungChange?.changes?.find(
         (c) => c.key === steuerdatenTyp,
       );
       if (

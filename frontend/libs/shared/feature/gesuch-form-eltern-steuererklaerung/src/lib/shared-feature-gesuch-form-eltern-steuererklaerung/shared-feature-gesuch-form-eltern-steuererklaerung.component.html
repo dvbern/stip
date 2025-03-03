@@ -18,7 +18,6 @@
       formControlName="steuererklaerungInBern"
       data-testid="form-eltern-steuererklaerung.steuererklaerungInBern"
       dvSharedUiFormField
-      [class.col-xl-4]="config.isSachbearbeitungApp"
     >
       <label>{{
         'shared.form.eltern-steuerdaten.steuererklaerungInBern.label'
@@ -52,7 +51,7 @@
       ></dv-shared-ui-form-zuvor-hint>
     </mat-radio-group>
 
-    <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+    <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
         <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}

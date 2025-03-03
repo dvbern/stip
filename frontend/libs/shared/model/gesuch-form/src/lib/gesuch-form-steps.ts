@@ -361,9 +361,9 @@ export const isStepValid = (
     field === 'steuerdatenMutter' ||
     field === 'steuerdatenVater'
   ) {
-    return undefined;
+    return 'INVALID';
   }
-  // TODO: @scph implement logic for steuerdaten SB, if needed, but data is in stuerdaten store
+  // @spse implement logic for steuerdaten SB, if needed, but data is in stuerdaten store
   // if (isSteuerdatenStep(field)) {
   //   const [stepSteuerdatenTyp] =
   //     Object.entries(ELTERN_STEUER_STEPS).find(
@@ -461,7 +461,3 @@ const toStepState = (
 export const isSteuererklaerungStep = (
   step: GSFormStepProps | SBFormStepProps,
 ): step is GSSteuererklaerungSteps => step.startsWith('steuererklaerung');
-
-// const isSteuerdatenStep = (
-//   step: GSFormStepProps | SBFormStepProps,
-// ): step is SBSteuerdatenSteps => step.startsWith('steuerdaten');

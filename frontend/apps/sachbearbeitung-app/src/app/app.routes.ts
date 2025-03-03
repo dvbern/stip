@@ -91,9 +91,6 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'verfuegung',
-        // TODO: @spse check what to do if the verfügung page is opened by a SB directly
-        // if everything is fine, remove the isAllowedTo Helper function as it is not needed anymore
-        // otherwise check how to change the guard function to cover the case
         canActivate: [hasBenutzer],
         title: 'sachbearbeitung-app.verfuegung.title',
         loadComponent: () =>

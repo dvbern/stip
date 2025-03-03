@@ -11,7 +11,6 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
     pathMatch: 'prefix',
     providers: [],
     children: [
-      // @scph brauchen wir hier wirklich die idAndTrancheIdRoutes?
       ...idAndTrancheIdRoutes({
         data: { option: INFO_ADMIN_ROUTE },
         pathMatch: 'prefix',

@@ -24,22 +24,18 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
+import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { Steuerdaten, SteuerdatenTyp } from '@dv/shared/model/gesuch';
 import { ELTERN_STEUERDATEN_STEPS } from '@dv/shared/model/gesuch-form';
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
-  SharedUiFormZuvorHintComponent,
 } from '@dv/shared/ui/form';
-import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -64,10 +60,6 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
-    SharedUiIfGesuchstellerDirective,
-    SharedUiFormZuvorHintComponent,
-    SharedUiTranslateChangePipe,
-    SharedPatternDocumentUploadComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
