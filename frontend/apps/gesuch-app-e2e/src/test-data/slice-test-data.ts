@@ -123,7 +123,6 @@ export const steuerdaten: Steuerdaten = {
   verpflegung: 0,
   verpflegungPartner: 0,
   steuerjahr: +specificYearsAgo(2),
-  // todo: parametrize
   veranlagungsCode: 23,
 };
 

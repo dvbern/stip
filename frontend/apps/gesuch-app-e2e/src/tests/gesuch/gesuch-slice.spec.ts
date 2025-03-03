@@ -195,12 +195,14 @@ test.describe('Neues gesuch erstellen', () => {
 
     // check if the i element in steuerdaten steps has the correct icon, by checking the text
     const stepsNavPO = new StepsNavPO(page);
-    // todo: fix later
-    // await expect(stepsNavPO.elems.steuerdatenMutter).toContainText('error');
+    const icon = stepsNavPO.elems.steuerdatenMutter
+      .locator('.text-danger')
+      .first();
+    await expect(icon).toContainText('error');
 
     // set to bearbeiten
     const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
-    // todo: why ist this gesuch alreay bereit fuer bearbeitung?
+    // @scph why ist this gesuch alreay bereit fuer bearbeitung?
     // await headerNavPO.elems.aktionMenu.click();
     // await headerNavPO.elems
     //   .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
@@ -213,7 +215,6 @@ test.describe('Neues gesuch erstellen', () => {
       .click();
 
     // create trancheInfoPO later
-    // todo: fix later
     const status = page.getByTestId('form-tranche-status');
     await expect(status).toHaveValue('In Bearbeitung');
 
