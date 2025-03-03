@@ -40,6 +40,7 @@ public class PersonInAusbildungCopyUtil {
         copy.setNationalitaet(other.getNationalitaet());
         copy.setHeimatort(other.getHeimatort());
         copy.setNiederlassungsstatus(other.getNiederlassungsstatus());
+        copy.setZustaendigerKanton(other.getZustaendigerKanton());
         copy.setEinreisedatum(other.getEinreisedatum());
         copy.setZivilstand(other.getZivilstand());
         copy.setSozialhilfebeitraege(other.isSozialhilfebeitraege());

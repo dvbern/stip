@@ -38,6 +38,7 @@ public class GesuchDokumentCopyUtil {
 
             copy.setGesuchTranche(targetTranche);
             copy.setDokumentTyp(original.getDokumentTyp());
+            copy.setCustomDokumentTyp(original.getCustomDokumentTyp());
             copy.setStatus(original.getStatus());
             original.getDokumente().forEach(copy::addDokument);
 
