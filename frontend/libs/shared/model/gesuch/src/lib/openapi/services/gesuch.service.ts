@@ -101,7 +101,7 @@ export interface GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams {
 }
 
 export interface GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams {
-    gesuchId: string;
+    /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
 }
 
@@ -1234,10 +1234,6 @@ export class GesuchService {
      public gesuchTrancheFehlendeDokumenteEinreichen$(requestParameters: GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public gesuchTrancheFehlendeDokumenteEinreichen$(requestParameters: GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public gesuchTrancheFehlendeDokumenteEinreichen$(requestParameters: GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchTrancheFehlendeDokumenteEinreichen$.');
-        }
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchTrancheFehlendeDokumenteEinreichen$.');
@@ -1288,7 +1284,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumenteEinreichen`;
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumenteEinreichen`;
         return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
