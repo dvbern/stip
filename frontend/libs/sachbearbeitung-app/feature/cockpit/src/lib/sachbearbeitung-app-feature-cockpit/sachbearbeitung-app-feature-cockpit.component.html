@@ -8,7 +8,8 @@
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-2xl"
+          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+          [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
           [class.btn-danger]="radio.checked"
           [class.btn-light]="!radio.checked"
         >
@@ -56,7 +57,12 @@
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  class="filtered tw-w-[8.75rem] tw-whitespace-nowrap"
+                >
                   <label class="pe-none" for="fallNummer">{{
                     'sachbearbeitung-app.cockpit.table.fall' | translate
                   }}</label>
@@ -82,9 +88,19 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-min-w-32 tw-whitespace-nowrap"
+                  class="tw-whitespace-n_owrap tw-w-[8.75rem]"
                 >
-                  {{ gesuch.fallNummer }}
+                  <a
+                    class="tw-flex tw-items-center tw-gap-1 tw-rounded-md tw-border tw-border-gray-300 tw-p-1 tw-no-underline hover:tw-bg-gray-300"
+                    [href]="'/gesuch/info/' + gesuch.id + '/tranche/' + gesuch.trancheId"
+                    target="_blank"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <span>
+                      {{ gesuch.fallNummer }}
+                    </span>
+                    <i class="icon material-symbols-rounded fs-6">open_in_new</i>
+                  </a>
                 </td>
               </ng-container>
 
