@@ -65,8 +65,6 @@ export class SharedPatternDocumentUploadDialogComponent {
     return isUploadable(options.dokument, options.permissions);
   });
 
-  // @HostBinding('class') class = 'p-4 p-md-5';
-
   private newDocuments$ = new Subject<File[]>();
 
   constructor() {
