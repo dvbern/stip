@@ -26,6 +26,10 @@ public class OneOfDocumentTypesRequiredConstraintValidator
     implements ConstraintValidator<OneOfDocumentTypesRequiredConstraint, GesuchDokument> {
     @Override
     public boolean isValid(GesuchDokument gesuchDokument, ConstraintValidatorContext context) {
+        // both custom typ & doc typ may be set to null when an AENDERUNG is being deleted
+        // if (gesuchDokument.getGesuchTranche().getTyp() == GesuchTrancheTyp.AENDERUNG) {
+        // return true;
+        // }
         return Objects.nonNull(gesuchDokument.getDokumentTyp()) && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
         || Objects.nonNull(gesuchDokument.getCustomDokumentTyp()) && Objects.isNull(gesuchDokument.getDokumentTyp());
     }
