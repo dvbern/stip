@@ -8,7 +8,6 @@ import { SharedFeatureGesuchFormElternSteuererklaerungComponent } from './shared
 export const sharedFeatureGesuchFormElternSteuererklaerungRoutes: Route[] = [
   ...idAndTrancheIdRoutes(
     routeWithUnsavedChangesGuard({
-      providers: [],
       pathMatch: 'prefix',
       component: SharedFeatureGesuchFormElternSteuererklaerungComponent,
     }),

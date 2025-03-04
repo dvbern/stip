@@ -8,7 +8,6 @@ import { SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent } from '.
 export const sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes: Route[] = [
   ...idAndTrancheIdRoutes(
     routeWithUnsavedChangesGuard({
-      providers: [],
       path: '',
       component: SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent,
     }),
