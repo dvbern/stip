@@ -469,6 +469,10 @@
 
   "sachbearbeitung-app.gesuch-form.title": "Gesuch",
 
+  "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Daten aus Nesko laden",
+  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
+  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label": "Authentifizierungstoken",
+
   "sachbearbeitung-app.unauthorized.title": "Zugriff verweigert",
   "sachbearbeitung-app.unauthorized.text": "Sie haben keine Berechtigung um diese Seite zu sehen."
 }

@@ -9,12 +9,13 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -23,6 +24,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
+import { SachbearbeitungAppDialogUpdateSteuerdatenComponent } from '@dv/sachbearbeitung-app/dialog/update-steuerdaten';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
@@ -74,6 +76,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
+  private dialog = inject(MatDialog);
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private steuerdatenStore = inject(SteuerdatenStore);
@@ -123,6 +126,13 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     return this.steuerdatenStore
       .cachedSteuerdatenListViewSig()
       ?.find((s) => s.steuerdatenTyp === this.stepSig().type);
+  });
+
+  canCheckNeskoSig = computed(() => {
+    const { gesuchFormular } = this.viewSig();
+    return gesuchFormular?.steuererklaerung?.find(
+      (s) => s.steuerdatenTyp === this.stepSig().type,
+    )?.steuererklaerungInBern;
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
@@ -190,6 +200,24 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         { allowSignalWrites: true },
       );
     }
+  }
+
+  updateSteuerdatenFromNesko(gesuchTrancheId: string) {
+    const steuerdatenTyp = this.stepSig().type;
+
+    SachbearbeitungAppDialogUpdateSteuerdatenComponent.open(this.dialog)
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        const token = result?.token;
+        if (token) {
+          this.steuerdatenStore.updateSteuerdatenFromNesko$({
+            gesuchTrancheId,
+            steuerdatenTyp,
+            token,
+          });
+        }
+      });
   }
 
   handleSave(): void {

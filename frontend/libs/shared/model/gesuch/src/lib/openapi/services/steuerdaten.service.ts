@@ -18,7 +18,9 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { NeskoToken } from '../model/neskoToken';
 import { Steuerdaten } from '../model/steuerdaten';
+import { SteuerdatenTyp } from '../model/steuerdatenTyp';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -32,6 +34,12 @@ export interface SteuerdatenServiceGetSteuerdatenRequestParams {
 export interface SteuerdatenServiceUpdateSteuerdatenRequestParams {
     gesuchTrancheId: string;
     steuerdaten: Array<Steuerdaten>;
+}
+
+export interface SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams {
+    gesuchTrancheId: string;
+    steuerdatenTyp: SteuerdatenTyp;
+    neskoToken?: NeskoToken;
 }
 
 
@@ -249,6 +257,94 @@ export class SteuerdatenService {
             {
                 context: localVarHttpContext,
                 body: steuerdaten,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updates the Steuerdaten from Nesko
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Steuerdaten>>;
+     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Steuerdaten>>>;
+     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Steuerdaten>>>;
+     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromNesko$.');
+        }
+        const steuerdatenTyp = requestParameters.steuerdatenTyp;
+        if (steuerdatenTyp === null || steuerdatenTyp === undefined) {
+            throw new Error('Required parameter steuerdatenTyp was null or undefined when calling updateSteuerdatenFromNesko$.');
+        }
+        const neskoToken = requestParameters.neskoToken;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "steuerdatenTyp", value: steuerdatenTyp, in: "path", style: "simple", explode: false, dataType: "SteuerdatenTyp", dataFormat: undefined})}`;
+        return this.httpClient.request<Array<Steuerdaten>>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: neskoToken,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

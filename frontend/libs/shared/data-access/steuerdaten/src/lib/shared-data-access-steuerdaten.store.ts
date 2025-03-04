@@ -4,7 +4,11 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { Steuerdaten, SteuerdatenService } from '@dv/shared/model/gesuch';
+import {
+  Steuerdaten,
+  SteuerdatenService,
+  SteuerdatenTyp,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -74,6 +78,28 @@ export class SteuerdatenStore extends signalStore(
                 patchState(this, { cachedSteuerdaten });
               },
               { onSuccess },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  updateSteuerdatenFromNesko$ = rxMethod<{
+    gesuchTrancheId: string;
+    steuerdatenTyp: SteuerdatenTyp;
+    token: string;
+  }>(
+    pipe(
+      switchMap(({ gesuchTrancheId, steuerdatenTyp, token }) =>
+        this.steuerdatenService
+          .updateSteuerdatenFromNesko$({
+            gesuchTrancheId,
+            steuerdatenTyp,
+            neskoToken: { token },
+          })
+          .pipe(
+            handleApiResponse((cachedSteuerdaten) =>
+              patchState(this, { cachedSteuerdaten }),
             ),
           ),
       ),
