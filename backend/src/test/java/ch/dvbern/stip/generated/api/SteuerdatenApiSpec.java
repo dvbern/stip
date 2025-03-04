@@ -13,7 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.NeskoTokenDtoSpec;
+import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -248,14 +248,14 @@ public class SteuerdatenApiSpec {
      * Updates the Steuerdaten from Nesko
      * 
      *
-     * @see #steuerdatenIdPath  (required)
-     * @see #body  (optional)
-     * return SteuerdatenDtoSpec
+     * @see #gesuchTrancheIdPath  (required)
+     * @see #body  (required)
+     * return List&lt;SteuerdatenDtoSpec&gt;
      */
     public static class UpdateSteuerdatenFromNeskoOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/steuerdaten/nesko/{steuerdatenId}";
+        public static final String REQ_URI = "/steuerdaten/nesko/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -268,7 +268,7 @@ public class SteuerdatenApiSpec {
         }
 
         /**
-         * POST /steuerdaten/nesko/{steuerdatenId}
+         * POST /steuerdaten/nesko/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -279,32 +279,32 @@ public class SteuerdatenApiSpec {
         }
 
         /**
-         * POST /steuerdaten/nesko/{steuerdatenId}
+         * POST /steuerdaten/nesko/{gesuchTrancheId}
          * @param handler handler
-         * @return SteuerdatenDtoSpec
+         * @return List&lt;SteuerdatenDtoSpec&gt;
          */
-        public SteuerdatenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<SteuerdatenDtoSpec> type = new TypeRef<SteuerdatenDtoSpec>(){};
+        public List<SteuerdatenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SteuerdatenDtoSpec>> type = new TypeRef<List<SteuerdatenDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param neskoTokenDtoSpec (NeskoTokenDtoSpec)  (optional)
+         * @param neskoGetSteuerdatenRequestDtoSpec (NeskoGetSteuerdatenRequestDtoSpec)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper body(NeskoTokenDtoSpec neskoTokenDtoSpec) {
-            reqSpec.setBody(neskoTokenDtoSpec);
+        public UpdateSteuerdatenFromNeskoOper body(NeskoGetSteuerdatenRequestDtoSpec neskoGetSteuerdatenRequestDtoSpec) {
+            reqSpec.setBody(neskoGetSteuerdatenRequestDtoSpec);
             return this;
         }
 
-        public static final String STEUERDATEN_ID_PATH = "steuerdatenId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param steuerdatenId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper steuerdatenIdPath(Object steuerdatenId) {
-            reqSpec.addPathParam(STEUERDATEN_ID_PATH, steuerdatenId);
+        public UpdateSteuerdatenFromNeskoOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 

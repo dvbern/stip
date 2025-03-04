@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.NeskoTokenDto;
+import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -34,8 +34,8 @@ public interface SteuerdatenResource {
     List<SteuerdatenDto> updateSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<SteuerdatenDto> steuerdatenDto);
 
     @POST
-    @Path("/nesko/{steuerdatenId}")
+    @Path("/nesko/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SteuerdatenDto updateSteuerdatenFromNesko(@PathParam("steuerdatenId") UUID steuerdatenId,@Valid NeskoTokenDto neskoTokenDto);
+    List<SteuerdatenDto> updateSteuerdatenFromNesko(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequestDto);
 }
