@@ -23,6 +23,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
+import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -42,7 +43,6 @@ import {
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
-import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',

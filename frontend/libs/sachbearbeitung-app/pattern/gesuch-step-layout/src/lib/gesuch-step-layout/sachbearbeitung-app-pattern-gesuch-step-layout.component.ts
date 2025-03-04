@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, filter } from 'rxjs';
 
+import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
@@ -30,7 +31,6 @@ import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',

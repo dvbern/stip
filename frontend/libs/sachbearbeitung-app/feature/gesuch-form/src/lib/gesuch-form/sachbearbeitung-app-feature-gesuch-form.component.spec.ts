@@ -2,9 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
+import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 import { initial } from '@dv/shared/util/remote-data';
-import { SteuerdatenStore } from '@dv/shared-data-access-steuerdaten';
 
 import { SachbearbeitungAppFeatureGesuchFormComponent } from './sachbearbeitung-app-feature-gesuch-form.component';
 
