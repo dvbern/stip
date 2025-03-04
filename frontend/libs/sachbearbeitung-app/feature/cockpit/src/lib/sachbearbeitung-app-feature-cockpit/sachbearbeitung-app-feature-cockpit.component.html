@@ -86,8 +86,11 @@
                   class="tw-whitespace-n_owrap tw-w-32"
                 >
                   <a
-                    [href]="'/gesuch/info/' + gesuch.id + '/tranche/' + gesuch.trancheId"
-                    target="_blank"
+                    [routerLink]="
+                      gesuch.typ === 'AENDERUNG'
+                        ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
+                        : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
+                    "
                     (click)="$event.stopPropagation()"
                   >
                     {{ gesuch.fallNummer }}
