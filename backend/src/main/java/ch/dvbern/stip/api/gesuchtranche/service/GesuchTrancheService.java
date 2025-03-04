@@ -413,9 +413,8 @@ public class GesuchTrancheService {
     public void deleteAenderung(final UUID aenderungId) {
         gesuchDokumentKommentarService.deleteForGesuchTrancheId(aenderungId);
         var aenderung = gesuchTrancheRepository.findById(aenderungId);
-        aenderung.getGesuchDokuments().forEach(gesuchDokument -> {
-            gesuchDokumentRepository.deleteById(gesuchDokument.getId());
-        });
+        aenderung.getGesuchDokuments()
+            .forEach(gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId()));
         if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }
