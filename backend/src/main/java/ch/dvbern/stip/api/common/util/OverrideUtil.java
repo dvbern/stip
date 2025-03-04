@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.common.util;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import lombok.experimental.UtilityClass;
@@ -30,7 +30,7 @@ public class OverrideUtil {
         final Set<T> targetEntities,
         final Set<T> sourceEntities,
         final BiConsumer<T, T> ifPresent,
-        final Function<T, T> ifAbsent
+        final UnaryOperator<T> ifAbsent
     ) {
         // Remove all entities that were added and now need to be reset
         targetEntities.removeIf(targetEntity -> !sourceEntities.contains(targetEntity));
