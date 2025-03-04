@@ -1829,16 +1829,11 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  /steuerdaten/nesko/{gesuchTrancheId}/{steuerdatenTyp}:
+  /steuerdaten/nesko/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: steuerdatenTyp
-        schema:
-          $ref: '#/components/schemas/SteuerdatenTyp'
         in: path
         required: true
     post:
@@ -1846,7 +1841,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NeskoToken'
+              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
         required: true
       tags:
         - Steuerdaten
@@ -4808,13 +4803,20 @@ components:
       properties:
         token:
           type: string
-    NeskoToken:
+    NeskoGetSteuerdatenRequest:
       required:
         - token
+        - steuerdatenTyp
+        - steuerjahr
       type: object
       properties:
         token:
           type: string
+        steuerdatenTyp:
+          schema:
+            $ref: '#/components/schemas/SteuerdatenTyp'
+        steuerjahr:
+          type: integer
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
