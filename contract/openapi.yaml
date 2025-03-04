@@ -4813,8 +4813,7 @@ components:
         token:
           type: string
         steuerdatenTyp:
-          schema:
-            $ref: '#/components/schemas/SteuerdatenTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         steuerjahr:
           type: integer
     GesuchTrancheStatus:
