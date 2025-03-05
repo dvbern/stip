@@ -17,66 +17,57 @@
 
 package ch.dvbern.stip.api.nesko.type;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.function.Function;
 
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.BusinessFault;
+import io.quarkus.logging.Log;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @Getter
+@RequiredArgsConstructor
 public enum NeskoSteuerdatenError {
     INVALID_TOKEN(
-    SOAPFaultException.class, "Invalid access token", UnauthorizedException.class, "Invalid access token"
+    SOAPFaultException.class, "Invalid access token", e -> new UnauthorizedException("Invalid access token", e)
     ),
     SSVN_NOT_FOUND(
     BusinessFault.class, "Die angefragte Person kann nicht oder nicht eindeutig ermittelt werden",
-    NotFoundException.class, "Keine Steuerdaten für die angegebene SSVN gefunden"
+    e -> new NotFoundException("Keine Steuerdaten für die angegebene SSVN gefunden", e)
     ),
     STEUERJAHR_NOT_READY(
     BusinessFault.class,
     "Die Steuerdaten der angefragten Person können für das angefragte Steuerjahr nicht ermittelt werden",
-    NotFoundException.class, "Keine Steuerdaten für das angegebene steuerjahr gefunden"
+    e -> new NotFoundException("Keine Steuerdaten für das angegebene steuerjahr gefunden", e)
     ),
     STEUERJAHR_PRESENT_OR_FUTURE(
     BusinessFault.class, "Für die angefragte Person kann in NESKO-VA-NP kein Dossier ermittelt werden",
-    BadRequestException.class, "Das angegebene Steuerjahr ist nicht valid"
-    );
+    e -> new BadRequestException("Das angegebene Steuerjahr ist nicht valid", e)
+    ),
+    STEUERJAHR_PAST_NOT_FOUND(
+    BusinessFault.class, "Für die angefragte Person kann im Register keine Haushaltstruktur ermittelt werden",
+    e -> new NotFoundException("Keine Steuerdaten für das angegebene steuerjahr gefunden", e)
+    ),
+    STEUERJAHR_NOT_PARSEABLE(
+    SOAPFaultException.class, "is not facet-valid with respect to pattern '[2-9][0-9][0-9][0-9]'",
+    e -> new BadRequestException("Das angegebene Steuerjahr ist nicht valid", e)
+    ),;
 
     private final Class<? extends Exception> exceptionClass;
     private final String errorStringNeedle;
-    private final Class<? extends Exception> exceptionToThrow;
-    private final String throwString;
-
-    NeskoSteuerdatenError(
-    Class<? extends Exception> exceptionClass, String errorStringNeedle,
-    Class<? extends Exception> exceptionToThrow,
-    String throwString
-    ) {
-        this.exceptionClass = exceptionClass;
-        this.errorStringNeedle = errorStringNeedle;
-        this.exceptionToThrow = exceptionToThrow;
-        this.throwString = throwString;
-    }
+    private final Function<Exception, Exception> exceptionSupplier;
 
     @SneakyThrows
-    public static void handleException(Exception e)
-    throws NotFoundException, BadRequestException, InternalServerErrorException {
+    public static void handleException(Exception e) {
         for (NeskoSteuerdatenError error : NeskoSteuerdatenError.values()) {
             if (e.getClass().equals(error.exceptionClass) && e.getMessage().contains(error.errorStringNeedle)) {
-                try {
-                    throw error.exceptionToThrow.getConstructor(String.class, Throwable.class)
-                        .newInstance(error.throwString, e);
-                } catch (
-                NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex
-                ) {
-                    throw new InternalServerErrorException(ex);
-                }
+                throw error.exceptionSupplier.apply(e);
             }
         }
+        Log.error(e.getMessage(), e);
     }
 }

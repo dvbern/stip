@@ -32,7 +32,6 @@ import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.Invali
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.PermissionDeniedFault;
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.StipendienAuskunftService;
 import ch.dvbern.stip.api.nesko.type.NeskoSteuerdatenError;
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.ws.BindingProvider;
@@ -73,7 +72,6 @@ public class NeskoGetSteuerdatenService {
         SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
         ) {
             NeskoSteuerdatenError.handleException(e);
-            Log.error(e.getMessage(), e);
             throw new InternalServerErrorException(e);
         }
     }
