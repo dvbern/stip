@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.generator.api;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.DarlehenDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel;
@@ -174,7 +175,7 @@ public class GesuchTestSpecGenerator {
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));
             model.getElterns().get(0).setElternTyp(ElternTypDtoSpec.VATER);
-            model.getElterns().get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+            model.getElterns().get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
             model.getElterns().get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
             model.getElterns().get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
             model.setSteuererklaerung(
@@ -184,6 +185,7 @@ public class GesuchTestSpecGenerator {
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
+            model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
         });
     }
 
