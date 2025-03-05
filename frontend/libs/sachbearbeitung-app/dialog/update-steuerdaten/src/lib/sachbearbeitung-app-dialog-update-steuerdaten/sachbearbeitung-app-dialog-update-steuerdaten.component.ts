@@ -8,6 +8,7 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MaskitoDirective } from '@maskito/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import {
@@ -15,8 +16,10 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { fromFormatedNumber, maskitoYear } from '@dv/shared/util/maskito-util';
 
 type UpdateSteuerdatenDialogResult = {
+  steuerjahr: number;
   token: string;
 };
 
@@ -25,6 +28,7 @@ type UpdateSteuerdatenDialogResult = {
   standalone: true,
   imports: [
     CommonModule,
+    MaskitoDirective,
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -44,8 +48,10 @@ export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
         UpdateSteuerdatenDialogResult
       >
     >(MatDialogRef);
+  maskitoYear = maskitoYear;
 
   form = this.formBuilder.group({
+    steuerjahr: [<string | null>null, [Validators.required]],
     token: this.formBuilder.control(<string | undefined>undefined, [
       Validators.required,
     ]),
@@ -68,9 +74,10 @@ export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
       return;
     }
 
-    const { token } = convertTempFormToRealValues(this.form);
+    const { steuerjahr, token } = convertTempFormToRealValues(this.form);
 
     this.dialogRef.close({
+      steuerjahr: fromFormatedNumber(steuerjahr),
       token,
     });
   }

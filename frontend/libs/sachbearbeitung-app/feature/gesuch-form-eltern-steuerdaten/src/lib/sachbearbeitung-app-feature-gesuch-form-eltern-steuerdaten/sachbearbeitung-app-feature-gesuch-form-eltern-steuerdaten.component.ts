@@ -201,11 +201,14 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        const token = result?.token;
+        if (!result) return;
+
+        const { token, steuerjahr } = result;
         if (token) {
           this.steuerdatenStore.updateSteuerdatenFromNesko$({
             gesuchTrancheId,
             steuerdatenTyp,
+            steuerjahr,
             token,
           });
         }

@@ -18,9 +18,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { NeskoToken } from '../model/neskoToken';
+import { NeskoGetSteuerdatenRequest } from '../model/neskoGetSteuerdatenRequest';
 import { Steuerdaten } from '../model/steuerdaten';
-import { SteuerdatenTyp } from '../model/steuerdatenTyp';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -38,8 +37,7 @@ export interface SteuerdatenServiceUpdateSteuerdatenRequestParams {
 
 export interface SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams {
     gesuchTrancheId: string;
-    steuerdatenTyp: SteuerdatenTyp;
-    neskoToken?: NeskoToken;
+    neskoGetSteuerdatenRequest: NeskoGetSteuerdatenRequest;
 }
 
 
@@ -280,11 +278,10 @@ export class SteuerdatenService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromNesko$.');
         }
-        const steuerdatenTyp = requestParameters.steuerdatenTyp;
-        if (steuerdatenTyp === null || steuerdatenTyp === undefined) {
-            throw new Error('Required parameter steuerdatenTyp was null or undefined when calling updateSteuerdatenFromNesko$.');
+        const neskoGetSteuerdatenRequest = requestParameters.neskoGetSteuerdatenRequest;
+        if (neskoGetSteuerdatenRequest === null || neskoGetSteuerdatenRequest === undefined) {
+            throw new Error('Required parameter neskoGetSteuerdatenRequest was null or undefined when calling updateSteuerdatenFromNesko$.');
         }
-        const neskoToken = requestParameters.neskoToken;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -340,11 +337,11 @@ export class SteuerdatenService {
             }
         }
 
-        const localVarPath = `/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "steuerdatenTyp", value: steuerdatenTyp, in: "path", style: "simple", explode: false, dataType: "SteuerdatenTyp", dataFormat: undefined})}`;
+        const localVarPath = `/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<Steuerdaten>>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: neskoToken,
+                body: neskoGetSteuerdatenRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

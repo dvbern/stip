@@ -3,6 +3,16 @@
 @if (view.loading) {
   <dv-shared-ui-loading data-testid="form-eltern-steuerdaten-loading"></dv-shared-ui-loading>
 } @else {
+  @if (canCheckNeskoSig() && gesuchTrancheId) {
+    <div class="row g-4 my-2">
+      <div class="col-12 col-md-6 col-xl-4">
+        <button class="btn btn-primary" type="button" (click)="updateSteuerdatenFromNesko(gesuchTrancheId)">
+          {{ 'sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
   <form
     [formGroup]="form"
     novalidate
@@ -14,14 +24,6 @@
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.einnahmen' | translate }}
     </h3>
-
-    @if (canCheckNeskoSig() && gesuchTrancheId) {
-      <div class="row g-4 my-2">
-        <button class="btn btn-primary" type="button" (click)="updateSteuerdatenFromNesko(gesuchTrancheId)">
-          {{ 'sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko' | translate }}
-        </button>
-      </div>
-    }
 
     <div class="row g-4 my-2">
       <!-- Total Einkünfte-->

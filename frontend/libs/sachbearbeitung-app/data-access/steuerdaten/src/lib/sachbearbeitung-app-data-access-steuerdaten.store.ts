@@ -87,15 +87,19 @@ export class SteuerdatenStore extends signalStore(
   updateSteuerdatenFromNesko$ = rxMethod<{
     gesuchTrancheId: string;
     steuerdatenTyp: SteuerdatenTyp;
+    steuerjahr: number;
     token: string;
   }>(
     pipe(
-      switchMap(({ gesuchTrancheId, steuerdatenTyp, token }) =>
+      switchMap(({ gesuchTrancheId, steuerjahr, steuerdatenTyp, token }) =>
         this.steuerdatenService
           .updateSteuerdatenFromNesko$({
             gesuchTrancheId,
-            steuerdatenTyp,
-            neskoToken: { token },
+            neskoGetSteuerdatenRequest: {
+              steuerjahr,
+              steuerdatenTyp,
+              token,
+            },
           })
           .pipe(
             handleApiResponse((cachedSteuerdaten) =>

@@ -1,23 +1,43 @@
-<h1 class="tw-mb-8 tw-text-xl">
-  {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title' | translate }}
-</h1>
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title' | translate }}
+  </h1>
 
-<form [formGroup]="form" data-testid="form-update-steuerdaten-form" class="tw-mt-5" (ngSubmit)="handleSave()">
-  <mat-form-field dvSharedUiFormField class="tw-w-full">
-    <mat-label>{{
-      'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label' | translate
-    }}</mat-label>
-    <textarea data-testid="steuerdaten-update-token" matInput formControlName="token" cols="4"></textarea>
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-  </mat-form-field>
-  <div class="tw-mt-5 tw-flex tw-justify-between">
-    <button type="button" class="btn btn-secondary" (click)="cancel()">
-      {{ 'shared.cancel' | translate }}
-    </button>
-    <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2">
-      {{ 'shared.accept' | translate }}
-    </button>
-  </div>
-</form>
+  <p [innerHTML]="'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description' | translate"></p>
+
+  <form [formGroup]="form" data-testid="form-update-steuerdaten-form" class="tw-mt-5" (ngSubmit)="handleSave()">
+    <mat-form-field dvSharedUiFormField class="tw-w-96">
+      <mat-label>{{
+        'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label' | translate
+      }}</mat-label>
+      <input
+        type="text"
+        [maskito]="maskitoYear"
+        matInput
+        data-testid="steuerdaten-update-token"
+        matInput
+        formControlName="steuerjahr"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field dvSharedUiFormField class="mt-4 tw-w-full">
+      <mat-label>{{
+        'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label' | translate
+      }}</mat-label>
+      <textarea data-testid="steuerdaten-update-token" matInput formControlName="token" cols="4"></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <div class="tw-mt-5 tw-flex tw-justify-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2">
+        {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

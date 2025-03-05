@@ -49,6 +49,7 @@ export const maskitoYear = maskitoNumberOptionsGenerator({
   min: 0,
   precision: 0,
   thousandSeparator: '',
+  max: 9999,
 });
 
 export function maskitoMaxNumber(max: number) {
