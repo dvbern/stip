@@ -72,8 +72,8 @@ public class NeskoGetSteuerdatenService {
         } catch (
         SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
         ) {
-            Log.error(e.getMessage(), e);
             NeskoSteuerdatenError.handleException(e);
+            Log.error(e.getMessage(), e);
             throw new InternalServerErrorException(e);
         }
     }
