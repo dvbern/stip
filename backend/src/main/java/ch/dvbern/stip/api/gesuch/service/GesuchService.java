@@ -95,6 +95,7 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
@@ -597,11 +598,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
+
+        // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
+        return new GesuchZurueckweisenResponseDto()
+            .gesuchId(gesuchId)
+            .gesuchTrancheId(gesuch.getGesuchTranchen().get(0).getId());
     }
 
     @Transactional

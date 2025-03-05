@@ -147,6 +147,19 @@ public class GesuchTrancheCopyUtil {
         return newTranche;
     }
 
+    public GesuchTranche createCopy(final GesuchTranche source) {
+        final var copy = new GesuchTranche();
+
+        copy.setGueltigkeit(source.getGueltigkeit());
+        copy.setGesuchFormular(source.getGesuchFormular());
+        copy.setStatus(source.getStatus());
+        copy.setComment(source.getComment());
+        copy.setGesuchDokuments(source.getGesuchDokuments());
+        copy.setTyp(source.getTyp());
+
+        return copy;
+    }
+
     /**
      * Copies a tranche
      */

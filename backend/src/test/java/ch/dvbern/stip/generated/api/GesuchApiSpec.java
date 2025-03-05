@@ -26,6 +26,7 @@ import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
@@ -1282,9 +1283,9 @@ public class GesuchApiSpec {
      * Gas Gesuch an den GS zurueckweisen
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
      * @see #body  (optional)
-     * return GesuchWithChangesDtoSpec
+     * return GesuchZurueckweisenResponseDtoSpec
      */
     public static class GesuchZurueckweisenOper implements Oper {
 
@@ -1315,10 +1316,10 @@ public class GesuchApiSpec {
         /**
          * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
          * @param handler handler
-         * @return GesuchWithChangesDtoSpec
+         * @return GesuchZurueckweisenResponseDtoSpec
          */
-        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+        public GesuchZurueckweisenResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchZurueckweisenResponseDtoSpec> type = new TypeRef<GesuchZurueckweisenResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1334,7 +1335,7 @@ public class GesuchApiSpec {
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
          * @return operation
          */
         public GesuchZurueckweisenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
