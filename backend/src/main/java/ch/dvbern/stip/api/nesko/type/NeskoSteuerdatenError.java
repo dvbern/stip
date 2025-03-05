@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.nesko.type;
 
 import java.util.function.Function;
 
-import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.BusinessFault;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.BusinessFault;
 import io.quarkus.logging.Log;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.BadRequestException;

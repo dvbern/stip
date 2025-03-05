@@ -155,14 +155,15 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
-  cxf:
-    codegen:
-      wsdl2java:
-        nesko-params:
-          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
-          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
-          bindings:
-            - 'src/main/resources/wsdl/nesko/binding.xml'
+  # For the generation of the classes fot the NESKO SOAP interface
+#  cxf:
+#    codegen:
+#      wsdl2java:
+#        nesko-params:
+#          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+#          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+#          bindings:
+#            - 'src/main/resources/wsdl/nesko/binding.xml'
 
   rest-client:
     GeoCollection-api:

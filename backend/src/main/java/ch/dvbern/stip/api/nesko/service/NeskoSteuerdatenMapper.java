@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.nesko.service;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.GetSteuerdatenResponse;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import lombok.experimental.UtilityClass;
