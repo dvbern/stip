@@ -68,6 +68,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -647,6 +648,17 @@ public class TestUtil {
             Set.of(
                 kind1,
                 kind2
+            )
+        );
+
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung()
+                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setSteuererklaerungInBern(true),
+                new Steuererklaerung()
+                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setSteuererklaerungInBern(true)
             )
         );
 
