@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
-import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
@@ -42,7 +41,6 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenService steuerdatenService;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
-    private final GesuchFormularRepository gesuchFormularRepository;
 
     @Override
     @RolesAllowed(OidcPermissions.GESUCH_READ)
