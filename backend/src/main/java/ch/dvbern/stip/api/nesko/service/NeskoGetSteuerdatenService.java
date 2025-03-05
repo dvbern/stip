@@ -31,8 +31,8 @@ import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.Infras
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.InvalidArgumentsFault;
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.PermissionDeniedFault;
 import ch.be.fin.sv.schemas.neskovanp._20190716.stipendienauskunftservice.StipendienAuskunftService;
+import ch.dvbern.stip.api.nesko.type.NeskoSteuerdatenError;
 import io.quarkus.logging.Log;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.ws.BindingProvider;
@@ -69,14 +69,11 @@ public class NeskoGetSteuerdatenService {
 
         try {
             return port.getSteuerdaten(request);
-        } catch (SOAPFaultException e) {
+        } catch (
+        SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
+        ) {
             Log.error(e.getMessage(), e);
-            if (e.getMessage().contains("Invalid access token")) {
-                throw new UnauthorizedException(e);
-            }
-            throw e;
-        } catch (InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e) {
-            Log.error(e.getMessage(), e);
+            NeskoSteuerdatenError.handleException(e);
             throw new InternalServerErrorException(e);
         }
     }
