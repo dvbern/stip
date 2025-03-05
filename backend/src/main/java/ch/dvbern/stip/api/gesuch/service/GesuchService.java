@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +35,6 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -836,14 +834,19 @@ public class GesuchService {
 
         gesuchsperiodenGesucheMap.forEach(
             (uuid, gesuchsperiodenGesuchs) -> {
-                final var nachfrist = gesuchsperiodenGesuchs.get(0).getGesuchsperiode().getFristNachreichenDokumente();
-                changedTooLongAgo.addAll(
-                    gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
-                        gesuchsperiodenGesuchs.stream().map(AbstractEntity::getId).toList(),
-                        Gesuchstatus.FEHLENDE_DOKUMENTE,
-                        LocalDateTime.now().minusDays(nachfrist)
-                    ).map(AbstractEntity::getId).toList()
+                gesuchsperiodenGesuchs.forEach(
+                    gesuch -> {
+                        var gesuchInStateFehlendeDokumente = gesuchHistoryRepository
+                            .getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.FEHLENDE_DOKUMENTE)
+                            .get();
+                        if (gesuchInStateFehlendeDokumente.getNachfristDokumente().isAfter(LocalDate.now())) {
+                            changedTooLongAgo.add(
+                                gesuchInStateFehlendeDokumente.getId()
+                            );
+                        }
+                    }
                 );
+
             }
         );
 

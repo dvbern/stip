@@ -1486,9 +1486,10 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
         when(
             gesuchHistoryRepository
-                .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
-        )
-            .thenReturn(Stream.of(gesuch));
+                .getLatestWhereStatusChangedTo(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE))
+        ).thenReturn(
+            Optional.of(gesuch)
+        );
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
