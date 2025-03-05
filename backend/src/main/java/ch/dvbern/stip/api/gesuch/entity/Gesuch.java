@@ -179,7 +179,7 @@ public class Gesuch extends AbstractMandantEntity {
 
     private Stream<GesuchTranche> gesuchTranchenValidOnDateStream(LocalDate date) {
         return gesuchTranchen.stream()
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.TRANCHE && tranche.getGueltigkeit().contains(date));
+            .filter(tranche -> tranche.getGueltigkeit().contains(date));
     }
 
     public GesuchTranche getCurrentGesuchTranche() {
