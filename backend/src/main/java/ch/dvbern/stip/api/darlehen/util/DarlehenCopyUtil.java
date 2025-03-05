@@ -27,18 +27,20 @@ public class DarlehenCopyUtil {
             return null;
         }
         final var copy = new Darlehen();
-
-        copy.setWillDarlehen(other.getWillDarlehen());
-        copy.setBetragDarlehen(other.getBetragDarlehen());
-        copy.setBetragBezogenKanton(other.getBetragBezogenKanton());
-        copy.setSchulden(other.getSchulden());
-        copy.setAnzahlBetreibungen(other.getAnzahlBetreibungen());
-        copy.setGrundNichtBerechtigt(other.getGrundNichtBerechtigt());
-        copy.setGrundAusbildungZwoelfJahre(other.getGrundAusbildungZwoelfJahre());
-        copy.setGrundHoheGebuehren(other.getGrundHoheGebuehren());
-        copy.setGrundAnschaffungenFuerAusbildung(other.getGrundAnschaffungenFuerAusbildung());
-        copy.setGrundZweitausbildung(other.getGrundZweitausbildung());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public static void copyValues(final Darlehen source, final Darlehen target) {
+        target.setWillDarlehen(source.getWillDarlehen());
+        target.setBetragDarlehen(source.getBetragDarlehen());
+        target.setBetragBezogenKanton(source.getBetragBezogenKanton());
+        target.setSchulden(source.getSchulden());
+        target.setAnzahlBetreibungen(source.getAnzahlBetreibungen());
+        target.setGrundNichtBerechtigt(source.getGrundNichtBerechtigt());
+        target.setGrundAusbildungZwoelfJahre(source.getGrundAusbildungZwoelfJahre());
+        target.setGrundHoheGebuehren(source.getGrundHoheGebuehren());
+        target.setGrundAnschaffungenFuerAusbildung(source.getGrundAnschaffungenFuerAusbildung());
+        target.setGrundZweitausbildung(source.getGrundZweitausbildung());
     }
 }
