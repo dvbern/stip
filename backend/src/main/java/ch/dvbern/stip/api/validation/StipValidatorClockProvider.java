@@ -17,15 +17,16 @@
 
 package ch.dvbern.stip.api.validation;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.validation.ClockProvider;
-
 import java.time.Clock;
 import java.time.ZoneId;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.ClockProvider;
+
 @ApplicationScoped
 public class StipValidatorClockProvider implements ClockProvider {
-    private final static String TIMEZONE_ID = "Europe/Zurich";
+    private static final String TIMEZONE_ID = "Europe/Zurich";
+
     @Override
     public Clock getClock() {
         return Clock.system(ZoneId.of(TIMEZONE_ID));
