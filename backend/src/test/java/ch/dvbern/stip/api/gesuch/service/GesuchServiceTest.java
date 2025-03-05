@@ -122,6 +122,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -1643,34 +1644,38 @@ class GesuchServiceTest {
         eingereichtesGesuch.getAusbildung().setFall(fall);
 
         Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
-        gesuchInBearbeitungSB.getGesuchTranchen()
+        final var gesuchInBearbeitungSpy = Mockito.spy(gesuchInBearbeitungSB);
+        gesuchInBearbeitungSpy.getGesuchTranchen()
             .get(0)
             .getGesuchFormular()
             .setEinnahmenKosten(new EinnahmenKosten());
-        gesuchInBearbeitungSB.getGesuchTranchen()
+        gesuchInBearbeitungSpy.getGesuchTranchen()
             .get(0)
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setWohnkosten(editedWohnkostenValue);
-        gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+        gesuchInBearbeitungSpy.getAusbildung().setFall(fall);
 
-        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        doReturn(gesuchInBearbeitungSpy.getGesuchTranchen().get(0)).when(gesuchInBearbeitungSpy)
+            .getLatestGesuchTranche();
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
                 eingereichtesGesuch,
-                gesuchInBearbeitungSB
+                gesuchInBearbeitungSpy
             )
         );
-        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
-            .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(eingereichtesGesuch));
 
         // gesuch gets rejected
-        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchInBearbeitungSpy.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
-        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSB.getId(), new KommentarDto("test"));
+        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSpy.getId(), new KommentarDto("test"));
         final var gesuchSB = gesuchService
-            .getGesuchSB(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+            .getGesuchSB(gesuchInBearbeitungSpy.getId(), gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());
         assertThat(gesuchSB.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertThat(
             gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
@@ -1711,8 +1716,8 @@ class GesuchServiceTest {
         )
             .thenReturn(Stream.of(gesuch));
 
-        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
-            .thenReturn(Optional.ofNullable(gesuch.getGesuchTranchen().get(0)));
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuch));
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));

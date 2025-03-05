@@ -32,6 +32,10 @@ public class DarlehenCopyUtil {
     }
 
     public static void copyValues(final Darlehen source, final Darlehen target) {
+        if (source == null || target == null) {
+            return;
+        }
+
         target.setWillDarlehen(source.getWillDarlehen());
         target.setBetragDarlehen(source.getBetragDarlehen());
         target.setBetragBezogenKanton(source.getBetragBezogenKanton());
