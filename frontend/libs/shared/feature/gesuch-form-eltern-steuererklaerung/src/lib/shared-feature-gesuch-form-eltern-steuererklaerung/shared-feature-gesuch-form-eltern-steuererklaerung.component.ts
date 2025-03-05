@@ -18,12 +18,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
 
-import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -43,11 +40,6 @@ import {
   SharedUiFormReadonlyDirective,
   SharedUiFormZuvorHintComponent,
 } from '@dv/shared/ui/form';
-import {
-  SharedUiIfGesuchstellerDirective,
-  SharedUiIfSachbearbeiterDirective,
-} from '@dv/shared/ui/if-app-type';
-import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -55,7 +47,6 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
 import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feature-gesuch-form-eltern-steuererklaerung.selector';
 
@@ -65,7 +56,6 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MaskitoDirective,
     TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
@@ -75,12 +65,9 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
-    SharedUiIfSachbearbeiterDirective,
-    SharedUiIfGesuchstellerDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
-    SharedUiInfoDialogDirective,
   ],
   templateUrl:
     './shared-feature-gesuch-form-eltern-steuererklaerung.component.html',
@@ -89,7 +76,6 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
 export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
-  private steuerdatenStore = inject(SteuerdatenStore);
   config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
@@ -98,8 +84,6 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormSteuererklaerungView,
   );
-  gotReenabled$ = new Subject<object>();
-  maskitoNumber = maskitoNumber;
 
   hasUnsavedChanges = false;
 
@@ -122,16 +106,6 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     return steuererklaerungInBern === false
       ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${type}`]
       : null;
-  });
-
-  private gotReenabledSig = toSignal(this.gotReenabled$);
-
-  hiddenFieldSet = this.formUtils.createHiddenFieldSet();
-
-  originalSteuerdatenSig = computed(() => {
-    return this.steuerdatenStore
-      .cachedSteuerdatenListViewSig()
-      ?.find((s) => s.steuerdatenTyp === this.stepSig().type);
   });
 
   originalSteuererklaerungSig = computed(() => {

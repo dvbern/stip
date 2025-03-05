@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -45,7 +46,7 @@ public class GesuchTrancheValidatorService {
         statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
-            List.of(GesuchEinreichenValidationGroup.class)
+            List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
         );
     }
 
@@ -59,7 +60,7 @@ public class GesuchTrancheValidatorService {
 
     public void validateGesuchTrancheForEinreichen(final GesuchTranche toValidate) {
         validateAdditionalEinreichenCriteria(toValidate);
-        validateGesuchTrancheForStatus(toValidate, GesuchTrancheStatus.AKZEPTIERT);
+        validateGesuchTrancheForStatus(toValidate, GesuchTrancheStatus.UEBERPRUEFEN);
     }
 
     public void validateAdditionalEinreichenCriteria(final GesuchTranche toValidate) {

@@ -2,7 +2,11 @@ import { Injectable, inject } from '@angular/core';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchUrlType,
+  SharedModelGesuch,
+  Steuerdaten,
+} from '@dv/shared/model/gesuch';
 import {
   GesuchFormStep,
   GesuchFormStepProgress,
@@ -53,6 +57,7 @@ export class SharedUtilGesuchFormStepManagerService {
     trancheTyp: GesuchUrlType | null,
     gesuch: SharedModelGesuch | null,
     rolesMap: RolesMap,
+    steuerdaten?: Steuerdaten[],
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
     const gesuchFormular =
@@ -66,7 +71,13 @@ export class SharedUtilGesuchFormStepManagerService {
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
-      status: isStepValid(step, gesuchFormular, invalidProps),
+      status: isStepValid(
+        step,
+        gesuchFormular,
+        this.appType,
+        steuerdaten,
+        invalidProps,
+      ),
       disabled: isStepDisabled(step, gesuch, permissions),
     }));
   }

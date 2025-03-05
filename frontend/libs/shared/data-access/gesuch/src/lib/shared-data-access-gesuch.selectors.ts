@@ -27,10 +27,7 @@ import {
   RETURN_TO_HOME,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
-import {
-  PermissionMap,
-  preparePermissions,
-} from '@dv/shared/model/permission-state';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -152,8 +149,7 @@ const createTrancheSetting = (
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessConfigsView,
-  selectSharedDataAccessBenutzersView,
-  (state, config, { rolesMap }) => {
+  (state, config) => {
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseFormStepsArray, [
           {
@@ -165,17 +161,9 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
         ])
       : baseFormStepsArray;
 
-    const { permissions } = preparePermissions(
-      state.trancheTyp,
-      state.cache.gesuch,
-      config.compileTimeConfig?.appType,
-      rolesMap,
-    );
-
     const steps = addStepsByAppType(
       sharedSteps,
       state.steuerdatenTabs.data,
-      permissions,
       config?.compileTimeConfig,
     );
     return {
@@ -260,12 +248,11 @@ const appendSteps = (
 function addStepsByAppType(
   sharedSteps: GesuchFormStep[],
   steuerdatenTabs: SteuerdatenTyp[] | undefined,
-  permissions: PermissionMap,
   compileTimeConfig?: CompileTimeConfig,
 ) {
   switch (compileTimeConfig?.appType) {
     case 'gesuch-app':
-      return [...sharedSteps, ...(permissions.canFreigeben ? [ABSCHLUSS] : [])];
+      return [...sharedSteps, ABSCHLUSS];
     case 'sachbearbeitung-app': {
       const steuerdatenSteps = steuerdatenTabs?.map((typ) => ({
         step: ELTERN_STEUERDATEN_STEPS[typ],
@@ -318,8 +305,8 @@ export function prepareTranchenChanges(
           ['kinds']: 'id',
           ['elterns']: 'id',
           ['geschwisters']: 'id',
-          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
-          ['steuerdaten']: 'steuerdatenTyp',
+          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuererklaerungChanges} */
+          ['steuererklaerung']: 'steuerdatenTyp',
         },
       },
     );
@@ -330,7 +317,6 @@ export function prepareTranchenChanges(
           .filter(
             (c) =>
               // Ignore steuerdaten changes, they are handled separately
-              // @scph: need to figure out how to handle steuererklaerung changes
               !isSteuererklaerungStep(
                 c.key as GSFormStepProps | SBFormStepProps,
               ) &&
@@ -339,7 +325,7 @@ export function prepareTranchenChanges(
                 c.type !== 'UPDATE'),
           )
           .map((c) => c.key),
-        ...hasSteuerdatenChanges(changes),
+        ...hasSteuererklaerungChanges(changes),
       ],
     };
   });
@@ -358,13 +344,12 @@ export function prepareTranchenChanges(
  * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
  * or back to individual
  */
-export const hasSteuerdatenChanges = (
+export const hasSteuererklaerungChanges = (
   changes: IChange[],
 ): GSFormStepProps[] => {
-  // @scph: is this assumption correct?
-  const steuerdatenChange = changes.find(
+  const steuererklaerungChange = changes.find(
     (c) =>
-      !isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
+      isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
       c.type === 'UPDATE',
   );
   const affectedSteps = new Set<GSFormStepProps>();
@@ -372,7 +357,7 @@ export const hasSteuerdatenChanges = (
   // Check if steuerdaten have changed
   (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
     (steuerdatenTyp) => {
-      const steuerdatenTypChange = steuerdatenChange?.changes?.find(
+      const steuerdatenTypChange = steuererklaerungChange?.changes?.find(
         (c) => c.key === steuerdatenTyp,
       );
       if (

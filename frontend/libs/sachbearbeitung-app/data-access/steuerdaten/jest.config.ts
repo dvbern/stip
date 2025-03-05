@@ -4,7 +4,8 @@ export default {
   displayName: 'shared-data-access-steuerdaten',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/data-access/steuerdaten',
+  coverageDirectory:
+    '../../../../coverage/libs/sachbearbeitung-app/data-access/steuerdaten',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

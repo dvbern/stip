@@ -114,7 +114,6 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     },
     title: step.translationKey,
     loadChildren: () =>
-      // TODO: @spse I wasn't able to look at the eslint error here yet and also not the following one
       import('@dv/shared/feature/gesuch-form-eltern-steuererklaerung').then(
         (m) => m.sharedFeatureGesuchFormElternSteuererklaerungRoutes,
       ),

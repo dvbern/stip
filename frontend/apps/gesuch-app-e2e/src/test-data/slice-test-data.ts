@@ -123,7 +123,7 @@ export const steuerdaten: Steuerdaten = {
   verpflegung: 0,
   verpflegungPartner: 0,
   steuerjahr: +specificYearsAgo(2),
-  veranlagungsCode: 91,
+  veranlagungsCode: 23,
 };
 
 export const bruder: Geschwister = {

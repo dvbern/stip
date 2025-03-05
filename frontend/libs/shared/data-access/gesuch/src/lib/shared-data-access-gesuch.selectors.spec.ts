@@ -225,151 +225,50 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
     );
   });
 
-  // @scph dieser test muss angepasst oder in den Sb gesetzt werden
-  // it('should identify the changed form steps for gs und sb', () => {
-  //   const originalAndChangedGS = [
-  //     // Original
-  //     {
-  //       gesuchFormular: {
-  //         personInAusbildung: { vorname: 'Max', nachname: 'Muster' },
-  //       },
-  //     },
-  //     // Changes GS
-  //     {
-  //       gesuchFormular: {
-  //         personInAusbildung: { vorname: 'Max', nachname: 'AlvarezGS' },
-  //       },
-  //     },
-  //   ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
+  it('should identify the changed form steps for gs und sb', () => {
+    const originalAndChangedGS = [
+      // Original
+      {
+        gesuchFormular: {
+          personInAusbildung: { vorname: 'Max', nachname: 'Muster' },
+        },
+      },
+      // Changes GS
+      {
+        gesuchFormular: {
+          personInAusbildung: { vorname: 'Max', nachname: 'AlvarezGS' },
+        },
+      },
+    ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
 
-  //   // changes SB
-  //   const currentTrancheSB = {
-  //     // SB
-  //     gesuchFormular: {
-  //       personInAusbildung: { vorname: 'Max', nachname: 'AlvarezSB' },
-  //       einnahmenKosten: { vermoegen: 1000 },
-  //     },
-  //   } as unknown as GesuchTranche;
+    // changes SB
+    const currentTrancheSB = {
+      // SB
+      gesuchFormular: {
+        personInAusbildung: { vorname: 'Max', nachname: 'AlvarezSB' },
+        einnahmenKosten: { vermoegen: 1000 },
+      },
+    } as unknown as GesuchTranche;
 
-  //   const changes = prepareTranchenChanges({
-  //     gesuchTrancheToWorkWith: currentTrancheSB,
-  //     changes: originalAndChangedGS,
-  //   } as SharedModelGesuch);
+    const changes = prepareTranchenChanges({
+      gesuchTrancheToWorkWith: currentTrancheSB,
+      changes: originalAndChangedGS,
+    } as SharedModelGesuch);
 
-  //   expect(changes).toEqual(
-  //     expect.objectContaining({
-  //       sb: {
-  //         affectedSteps: expect.arrayContaining(['personInAusbildung']),
-  //         tranche: expect.any(Object),
-  //       },
-  //       gs: {
-  //         affectedSteps: expect.arrayContaining([
-  //           'personInAusbildung',
-  //           'einnahmenKosten',
-  //         ]),
-  //         tranche: expect.any(Object),
-  //       },
-  //     }),
-  //   );
-  // });
-
-  // it.each([
-  //   [
-  //     'Simple Family Change',
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 2000 }],
-  //     ['steuerdaten'],
-  //   ],
-  //   [
-  //     'Simple Mother Change',
-  //     [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
-  //     [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 1000 }],
-  //     ['steuerdatenMutter'],
-  //   ],
-  //   [
-  //     'Simple Father Change',
-  //     [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
-  //     [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 600 }],
-  //     ['steuerdatenVater'],
-  //   ],
-  //   [
-  //     'From Family to Mother and Father',
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     [
-  //       { id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 },
-  //       { id: '2', steuerdatenTyp: 'VATER', eigenmietwert: 300 },
-  //     ],
-  //     ['steuerdatenVater', 'steuerdatenMutter'],
-  //   ],
-  //   [
-  //     'From Family to Mother',
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
-  //     ['steuerdatenMutter'],
-  //   ],
-  //   [
-  //     'From Family to Father',
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
-  //     ['steuerdatenVater'],
-  //   ],
-  //   [
-  //     'From Mother and Father to Family',
-  //     [
-  //       { id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 },
-  //       { id: '2', steuerdatenTyp: 'VATER', eigenmietwert: 300 },
-  //     ],
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     ['steuerdaten'],
-  //   ],
-  //   [
-  //     'From Mother to Family',
-  //     [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     ['steuerdaten'],
-  //   ],
-  //   [
-  //     'From Father to Family',
-  //     [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
-  //     [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
-  //     ['steuerdaten'],
-  //   ],
-  // ] satisfies [
-  //   string,
-  //   DeepPartial<Steuerdaten[]>,
-  //   DeepPartial<Steuerdaten[]>,
-  //   SBFormStepProps[],
-  // ][])(
-  //   'should identify correctly the steuerdaten changes: %s',
-  //   (_, steuerdatenA, steuerdatenB, affectedSteps) => {
-  //     const [original, changed] = [
-  //       {
-  //         gesuchFormular: {
-  //           steuerdaten: steuerdatenA,
-  //         },
-  //       },
-  //       {
-  //         gesuchFormular: {
-  //           steuerdaten: steuerdatenB,
-  //         },
-  //       },
-  //     ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
-
-  //     const changes = prepareTranchenChanges({
-  //       gesuchTrancheToWorkWith: original,
-  //       changes: [changed],
-  //     } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
-
-  //     // imporove test data to include sb changes
-  //     expect(changes).toEqual(
-  //       expect.objectContaining({
-  //         sb: undefined,
-  //         gs: {
-  //           affectedSteps: expect.arrayContaining(affectedSteps),
-  //           tranche: expect.any(Object),
-  //         },
-  //       }),
-  //     );
-  //   },
-  // );
+    expect(changes).toEqual(
+      expect.objectContaining({
+        sb: {
+          affectedSteps: expect.arrayContaining(['personInAusbildung']),
+          tranche: expect.any(Object),
+        },
+        gs: {
+          affectedSteps: expect.arrayContaining([
+            'personInAusbildung',
+            'einnahmenKosten',
+          ]),
+          tranche: expect.any(Object),
+        },
+      }),
+    );
+  });
 });

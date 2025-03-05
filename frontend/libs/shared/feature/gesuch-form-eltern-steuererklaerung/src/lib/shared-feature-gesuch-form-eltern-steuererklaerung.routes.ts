@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 
-import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -9,7 +8,6 @@ import { SharedFeatureGesuchFormElternSteuererklaerungComponent } from './shared
 export const sharedFeatureGesuchFormElternSteuererklaerungRoutes: Route[] = [
   ...idAndTrancheIdRoutes(
     routeWithUnsavedChangesGuard({
-      providers: [SteuerdatenStore],
       pathMatch: 'prefix',
       component: SharedFeatureGesuchFormElternSteuererklaerungComponent,
     }),

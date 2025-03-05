@@ -13,7 +13,7 @@
   "shared.ui.yes": "Ja",
   "shared.ui.no": "Nein",
   "shared.ui.clear": "Eingabe zurücksetzen",
-  "shared.ui.confirmDialog.title": "Akton bestätigen",
+  "shared.ui.confirmDialog.title": "Aktion bestätigen",
   "shared.ui.confirmDialog.message": "Sind Sie sicher, dass Sie diese Aktion durchführen möchten?",
   "shared.ui.confirmDialog.cancel": "Abbrechen",
   "shared.ui.confirmDialog.confirm": "Bestätigen",

@@ -1,22 +1,19 @@
 import { differenceInYears } from 'date-fns';
 
-import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
   GSFormStepProps,
   GSSteuererklaerungSteps,
   GesuchFormularType,
-  GesuchUrlType,
   SBFormStepProps,
+  SBSteuerdatenSteps,
   SharedModelGesuch,
+  Steuerdaten,
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
-import {
-  PermissionMap,
-  preparePermissions,
-} from '@dv/shared/model/permission-state';
+import { PermissionMap } from '@dv/shared/model/permission-state';
 
 import {
   GesuchFormStep,
@@ -243,7 +240,6 @@ export const FormPropsToStepsMap: Record<
   abschluss: ABSCHLUSS,
 };
 
-// eventuell erweitern und fuer beide brauchen?
 export const FormRoutesToPropsMap: Record<
   string,
   GSFormStepProps | SBFormStepProps
@@ -329,6 +325,8 @@ export const isStepDisabled = (
 export const isStepValid = (
   step: GesuchFormStep,
   formular: GesuchFormularType | null,
+  appType: AppType,
+  steuerdaten?: Steuerdaten[],
   invalidProps?: StepValidation,
 ): StepState | undefined => {
   if (invalidProps?.errors === undefined) {
@@ -355,25 +353,22 @@ export const isStepValid = (
     return toStepState(field, isDefined(currentHasDaten), invalidProps);
   }
 
-  // only temporarily to make it work!
-  if (
-    field === 'steuerdatenFamilie' ||
-    field === 'steuerdatenMutter' ||
-    field === 'steuerdatenVater'
-  ) {
-    return undefined;
+  if (isSteuerdatenStep(field)) {
+    if (appType === 'gesuch-app') {
+      return undefined;
+    }
+
+    const [stepSteuerdatenTyp] =
+      Object.entries(ELTERN_STEUERDATEN_STEPS).find(
+        ([, s]) => s.route === step.route,
+      ) ?? [];
+
+    const currentHasDaten = !!steuerdaten?.find(
+      (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
+    );
+
+    return currentHasDaten ? 'VALID' : 'INVALID';
   }
-  // TODO: @scph implement logic for steuerdaten SB, if needed, but data is in stuerdaten store
-  // if (isSteuerdatenStep(field)) {
-  //   const [stepSteuerdatenTyp] =
-  //     Object.entries(ELTERN_STEUER_STEPS).find(
-  //       ([, s]) => s.route === step.route,
-  //     ) ?? [];
-  // const currentHasDaten = formular?.steuerdaten?.find(
-  //     (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
-  //   );
-  //   return toStepState(field, isDefined(currentHasDaten), invalidProps);
-  // }
 
   if (field === 'lebenslaufItems') {
     return toStepState(
@@ -398,13 +393,13 @@ export const getFormStepByDocumentType = (
       return GSFormSteps.DOKUMENTE;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
-      return ELTERN_STEUERDATEN_FAMILIE;
+      return ELTERN_STEUERERKLAERUNG_FAMILIE;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER: {
-      return ELTERN_STEUERDATEN_MUTTER;
+      return ELTERN_STEUERERKLAERUNG_MUTTER;
     }
     case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER: {
-      return ELTERN_STEUERDATEN_VATER;
+      return ELTERN_STEUERERKLAERUNG_VATER;
     }
     default: {
       const step = (Object.keys(GSFormSteps) as GSFormStepKeys[]).find(
@@ -462,6 +457,6 @@ export const isSteuererklaerungStep = (
   step: GSFormStepProps | SBFormStepProps,
 ): step is GSSteuererklaerungSteps => step.startsWith('steuererklaerung');
 
-// const isSteuerdatenStep = (
-//   step: GSFormStepProps | SBFormStepProps,
-// ): step is SBSteuerdatenSteps => step.startsWith('steuerdaten');
+export const isSteuerdatenStep = (
+  step: GSFormStepProps | SBFormStepProps,
+): step is SBSteuerdatenSteps => step.startsWith('steuerdaten');
