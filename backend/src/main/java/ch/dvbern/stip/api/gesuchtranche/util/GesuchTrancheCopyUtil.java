@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -270,6 +271,9 @@ public class GesuchTrancheCopyUtil {
 
         // Steuerdaten
         copy.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(other.getSteuerdaten()));
+
+        // Darlehen
+        copy.setDarlehen(DarlehenCopyUtil.createCopy(other.getDarlehen()));
 
         return copy;
     }
