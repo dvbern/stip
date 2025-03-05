@@ -275,6 +275,7 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @OrderBy("geburtsdatum")
     @HasPageValidation(ElternPageValidation.class)
     private @Valid Set<Eltern> elterns = new LinkedHashSet<>();
 
