@@ -97,6 +97,8 @@ public class GesuchTrancheOverrideUtil {
         // Steuerdaten
         SteuerdatenCopyUtil.doOverrideOfSet(target.getSteuerdaten(), source.getSteuerdaten());
 
+        // TODO KSTIP-1850/ KSTIP-1976: Darlehen
+
         target.getTranche()
             .getGesuchDokuments()
             .forEach(gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND));

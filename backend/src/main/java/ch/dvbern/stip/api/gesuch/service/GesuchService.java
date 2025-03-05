@@ -920,4 +920,8 @@ public class GesuchService {
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
         && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
     }
+
+    public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
+        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
 }
