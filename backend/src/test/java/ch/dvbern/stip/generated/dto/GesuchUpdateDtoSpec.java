@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,16 +29,46 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchUpdateDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchUpdateDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
   GesuchUpdateDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH
 })
 @JsonTypeName("GesuchUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchUpdateDtoSpec {
+  public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
+  private LocalDate nachfristDokumente;
+
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH = "gesuchTrancheToWorkWith";
   private GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith;
 
   public GesuchUpdateDtoSpec() {
   }
+
+  public GesuchUpdateDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
+    
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+   /**
+   * Get nachfristDokumente
+   * @return nachfristDokumente
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
 
   public GesuchUpdateDtoSpec gesuchTrancheToWorkWith(GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith) {
     
@@ -73,18 +104,20 @@ public class GesuchUpdateDtoSpec {
       return false;
     }
     GesuchUpdateDtoSpec gesuchUpdate = (GesuchUpdateDtoSpec) o;
-    return Objects.equals(this.gesuchTrancheToWorkWith, gesuchUpdate.gesuchTrancheToWorkWith);
+    return Objects.equals(this.nachfristDokumente, gesuchUpdate.nachfristDokumente) &&
+        Objects.equals(this.gesuchTrancheToWorkWith, gesuchUpdate.gesuchTrancheToWorkWith);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheToWorkWith);
+    return Objects.hash(nachfristDokumente, gesuchTrancheToWorkWith);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchUpdateDtoSpec {\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("}");
     return sb.toString();
