@@ -25,10 +25,7 @@ import {
   TRANCHE,
   gesuchFormBaseSteps,
 } from '@dv/shared/model/gesuch-form';
-import {
-  PermissionMap,
-  preparePermissions,
-} from '@dv/shared/model/permission-state';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -150,8 +147,7 @@ const createTrancheSetting = (
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessConfigsView,
-  selectSharedDataAccessBenutzersView,
-  (state, config, { rolesMap }) => {
+  (state, config) => {
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseSteps, [
           {
@@ -162,17 +158,7 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
           },
         ])
       : baseSteps;
-    const { permissions } = preparePermissions(
-      state.trancheTyp,
-      state.cache.gesuch,
-      config.compileTimeConfig?.appType,
-      rolesMap,
-    );
-    const steps = getStepsByAppType(
-      sharedSteps,
-      permissions,
-      config?.compileTimeConfig,
-    );
+    const steps = getStepsByAppType(sharedSteps, config?.compileTimeConfig);
 
     return {
       steps,
@@ -255,12 +241,11 @@ const appendSteps = (
 
 function getStepsByAppType(
   sharedSteps: SharedModelGesuchFormStep[],
-  permissions: PermissionMap,
   compileTimeConfig?: CompileTimeConfig,
 ) {
   switch (compileTimeConfig?.appType) {
     case 'gesuch-app':
-      return [...sharedSteps, ...(permissions.canFreigeben ? [ABSCHLUSS] : [])];
+      return [...sharedSteps, ABSCHLUSS];
     case 'sachbearbeitung-app':
       return [...sharedSteps];
     default:
