@@ -1,1 +1,1 @@
-export * from './lib/shared-data-access-steuerdaten.store';
+export * from './lib/sachbearbeitung-app-data-access-steuerdaten.store';

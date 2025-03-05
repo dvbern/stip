@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { SteuerdatenStore } from './shared-data-access-steuerdaten.store';
+import { SteuerdatenStore } from './sachbearbeitung-app-data-access-steuerdaten.store';
 
 describe('SteuerdatenStore', () => {
   let store: SteuerdatenStore;
