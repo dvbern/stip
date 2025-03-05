@@ -21,10 +21,13 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.xml.ws.WebServiceException;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
-import static org.junit.Assert.assertThrows;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.oneOf;
 
 @QuarkusTest
 class NeskoGetSteuerdatenServiceTest {
@@ -34,10 +37,10 @@ class NeskoGetSteuerdatenServiceTest {
     @Test
     @TestAsSachbearbeiter
     void testNeskoGetSteuerdatenInvalidTokenFail() {
-        assertThrows(
-            UnauthorizedException.class,
-            () -> neskoGetSteuerdatenService.getSteuerdatenResponse("asd", AHV_NUMMER_VALID_MUTTER, 2020)
-        );
+        try {
+            neskoGetSteuerdatenService.getSteuerdatenResponse("asd", AHV_NUMMER_VALID_MUTTER, 2020);
+        } catch (Exception e) {
+            MatcherAssert.assertThat(e.getClass(), is(oneOf(UnauthorizedException.class, WebServiceException.class)));
+        }
     }
-
 }

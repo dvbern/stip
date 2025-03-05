@@ -23,7 +23,9 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.BusinessFaul
 import io.quarkus.logging.Log;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.xml.ws.WebServiceException;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +57,12 @@ public enum NeskoSteuerdatenError {
     STEUERJAHR_NOT_PARSEABLE(
     SOAPFaultException.class, "is not facet-valid with respect to pattern '[2-9][0-9][0-9][0-9]'",
     e -> new BadRequestException("Das angegebene Steuerjahr ist nicht valid", e)
-    ),;
+    ),
+    NESKO_SERVICE_UNAVAILABLE(
+    WebServiceException.class, "",
+    e -> new InternalServerErrorException("Das angegebene Steuerjahr ist nicht valid", e)
+    ),
+    ;
 
     private final Class<? extends Exception> exceptionClass;
     private final String errorStringNeedle;
