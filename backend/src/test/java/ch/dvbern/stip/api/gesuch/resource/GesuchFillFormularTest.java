@@ -243,7 +243,7 @@ class GesuchFillFormularTest {
     void addEltern() {
         final var eltern = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2);
         eltern.get(0).setElternTyp(ElternTypDtoSpec.VATER);
-        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
         eltern.get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
         eltern.get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
 
