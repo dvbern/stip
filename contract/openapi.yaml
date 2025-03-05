@@ -2029,11 +2029,7 @@ paths:
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
   '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2047,7 +2043,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchWithChanges'
+                $ref: '#/components/schemas/GesuchZurueckweisenResponse'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -5651,6 +5647,16 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchZurueckweisenResponse:
+      type: object
+      required:
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:

@@ -63,12 +63,11 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
 
         final var trancheOfStateEingereicht = gesuchOfStateEingereicht.getGesuchTranchen().get(0);
 
-        // TODO KSTIP-1850: If there if none is found, we need to restore an old Tranche
         final var trancheToReset = gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getId().equals(trancheOfStateEingereicht.getId()))
             .findFirst()
-            .orElseThrow(NotFoundException::new);
+            .orElseGet(gesuch::getLatestGesuchTranche);
 
         final var formularOfStateEingereicht = trancheOfStateEingereicht.getGesuchFormular();
 
