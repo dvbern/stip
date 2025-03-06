@@ -132,7 +132,7 @@ class V1StructureTest {
                         "eigenerHaushalt": true,
                         "halbierungElternbeitrag": false,
                         "anzahlPersonenImHaushalt": 2,
-                        "verheiratetKonkubinat": false
+                        "verheiratetKonkubinat": true
                     }
                 }
             }
