@@ -121,10 +121,14 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   });
 
   canCheckNeskoSig = computed(() => {
-    const { gesuchFormular } = this.viewSig();
-    return gesuchFormular?.steuererklaerung?.find(
-      (s) => s.steuerdatenTyp === this.stepSig().type,
-    )?.steuererklaerungInBern;
+    const { gesuchFormular, permissions } = this.viewSig();
+
+    return (
+      permissions.canApprove &&
+      gesuchFormular?.steuererklaerung?.find(
+        (s) => s.steuerdatenTyp === this.stepSig().type,
+      )?.steuererklaerungInBern
+    );
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
