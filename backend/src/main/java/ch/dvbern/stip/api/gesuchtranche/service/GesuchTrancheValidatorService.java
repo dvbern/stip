@@ -58,6 +58,11 @@ public class GesuchTrancheValidatorService {
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
     }
 
+    public void validateAenderungForAkzeptiert(final GesuchTranche toValidate) {
+        validateAdditionalEinreichenCriteria(toValidate);
+        validateGesuchTrancheForStatus(toValidate, GesuchTrancheStatus.AKZEPTIERT);
+    }
+
     public void validateGesuchTrancheForEinreichen(final GesuchTranche toValidate) {
         validateAdditionalEinreichenCriteria(toValidate);
         validateGesuchTrancheForStatus(toValidate, GesuchTrancheStatus.UEBERPRUEFEN);

@@ -416,7 +416,14 @@ public class GesuchTrancheService {
         final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
 
         try {
-            gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+            if (
+                gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                && gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
+            ) {
+                gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
+            } else {
+                gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+            }
         } catch (ValidationsException e) {
             return ValidationsExceptionMapper.toDto(e);
         } catch (CustomValidationsException e) {
