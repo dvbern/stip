@@ -358,7 +358,6 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @RolesAllowed(GESUCH_READ)
-    @AllowAll
     @Override
     public GesuchWithChangesDto getGesuchSB(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
@@ -402,7 +401,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
-        return getGesuchSB(gesuchTrancheId);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
     // TODO KSTIP-1247: roles allowed
