@@ -12,6 +12,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -51,6 +52,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     RouterLink,
     RouterLinkActive,
     MatMenuModule,
+    MatTooltipModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
   ],
