@@ -201,4 +201,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         throw new UnauthorizedException();
     }
+
+    @Transactional
+    public void canUpdateEinreichefrist(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB
+            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+        ) {
+            throw new UnauthorizedException();
+        }
+    }
 }
