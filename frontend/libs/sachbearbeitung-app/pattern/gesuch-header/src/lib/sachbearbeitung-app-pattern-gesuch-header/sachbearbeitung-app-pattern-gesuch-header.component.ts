@@ -141,6 +141,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
         if (gesuch?.id) {
           this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
+          this.einreichnenStore.validateSteps$({
+            gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
+          });
         }
       },
       { allowSignalWrites: true },
