@@ -1928,6 +1928,38 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchTrancheId}/nachfristDokumente':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalDate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateNachfristDokumente
+      summary: Nachfrist der nachzureichenden Dokumente anpassen
   '/gesuch/{gesuchTrancheId}/fehlendeDokumente':
     parameters:
       - name: gesuchTrancheId

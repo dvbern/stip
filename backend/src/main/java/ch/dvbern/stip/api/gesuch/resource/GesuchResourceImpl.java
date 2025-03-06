@@ -299,6 +299,11 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
     }
 
+    @Override
+    public GesuchDto updateNachfristDokumente(UUID gesuchTrancheId, LocalDate body) {
+        return null;
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
     public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
