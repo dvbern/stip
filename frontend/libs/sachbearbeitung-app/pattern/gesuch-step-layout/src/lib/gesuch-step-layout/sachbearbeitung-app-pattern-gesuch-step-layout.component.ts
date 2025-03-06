@@ -99,7 +99,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
-      .subscribe(([gesuchTrancheId]) => {
+      .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
         this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
       });
