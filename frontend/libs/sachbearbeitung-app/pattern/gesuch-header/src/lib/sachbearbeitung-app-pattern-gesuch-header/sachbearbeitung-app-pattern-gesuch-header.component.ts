@@ -20,6 +20,7 @@ import { filter, map } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
   selectRouteTrancheId,
@@ -64,6 +65,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
+  private einreichnenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -156,12 +158,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
+    const hasValidationErrors =
+      !!this.einreichnenStore.validationViewSig().invalidFormularProps
+        .validations.errors?.length;
+
     if (!gesuchStatus) {
       return {};
     }
 
     const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
-      StatusUebergaengeOptions[status]({ hasAcceptedAllDokuments }),
+      StatusUebergaengeOptions[status]({
+        hasAcceptedAllDokuments,
+        hasValidationErrors,
+      }),
     );
 
     return {

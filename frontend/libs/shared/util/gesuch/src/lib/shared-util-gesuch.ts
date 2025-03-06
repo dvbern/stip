@@ -143,15 +143,24 @@ export const StatusUebergaengeOptions = {
       typ: 'EINGEREICHT',
       disabledReason: undefined,
     }) as const,
-  BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
-    ({
+  BEARBEITUNG_ABSCHLIESSEN: (context?: {
+    hasAcceptedAllDokuments: boolean;
+    hasValidationErrors: boolean;
+  }) => {
+    let disabledReason = undefined;
+    if (!context?.hasAcceptedAllDokuments) {
+      disabledReason = 'DOKUMENTE_OFFEN';
+    }
+    if (context?.hasValidationErrors) {
+      disabledReason = 'VALIDIERUNG_FEHLER';
+    }
+    return {
       icon: 'check',
       titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
       typ: 'BEARBEITUNG_ABSCHLIESSEN',
-      disabledReason: context?.hasAcceptedAllDokuments
-        ? undefined
-        : 'DOKUMENTE_OFFEN',
-    }) as const,
+      disabledReason: disabledReason,
+    };
+  },
   ZURUECKWEISEN: () =>
     ({
       icon: 'undo',
