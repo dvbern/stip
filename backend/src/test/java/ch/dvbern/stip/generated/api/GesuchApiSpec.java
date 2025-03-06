@@ -2459,14 +2459,14 @@ public class GesuchApiSpec {
      * Nachfrist der nachzureichenden Dokumente anpassen
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchIdPath  (required)
      * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class UpdateNachfristDokumenteOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/nachfristDokumente";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/nachfristDokumente";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -2479,7 +2479,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/nachfristDokumente
+         * PATCH /gesuch/{gesuchId}/nachfristDokumente
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2490,7 +2490,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/nachfristDokumente
+         * PATCH /gesuch/{gesuchId}/nachfristDokumente
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -2508,14 +2508,14 @@ public class GesuchApiSpec {
             return this;
         }
 
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public UpdateNachfristDokumenteOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+        public UpdateNachfristDokumenteOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 

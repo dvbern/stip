@@ -182,8 +182,8 @@ public interface GesuchResource {
     void updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/nachfristDokumente")
+    @Path("/{gesuchId}/nachfristDokumente")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto updateNachfristDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid LocalDate body);
+    GesuchDto updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid LocalDate body);
 }

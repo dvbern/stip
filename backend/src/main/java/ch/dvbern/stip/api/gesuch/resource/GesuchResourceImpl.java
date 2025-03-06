@@ -17,14 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
@@ -72,6 +64,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -300,7 +300,8 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    public GesuchDto updateNachfristDokumente(UUID gesuchTrancheId, LocalDate body) {
+    public GesuchDto updateNachfristDokumente(UUID gesuchId, LocalDate body) {
+        gesuchAuthorizer.canUpdateEinreichefrist(gesuchId);
         return null;
     }
 

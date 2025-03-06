@@ -1928,9 +1928,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
-  '/gesuch/{gesuchTrancheId}/nachfristDokumente':
+  '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
