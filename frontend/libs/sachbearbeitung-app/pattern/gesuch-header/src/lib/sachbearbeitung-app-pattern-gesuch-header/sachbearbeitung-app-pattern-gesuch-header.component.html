@@ -201,7 +201,7 @@
               class="btn fw-normal px-2 shadow-none pe-auto"
               [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
               [disabled]="uebergang.disabledReason || !trancheId"
-              [attr.title]="
+              [matTooltip]="
                 uebergang.disabledReason
                   ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
                     | translate)

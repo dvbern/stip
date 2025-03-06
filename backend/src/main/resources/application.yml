@@ -82,6 +82,8 @@ kstip:
   nesko-wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
 
 quarkus:
+  live-reload:
+    instrumentation: true
   log:
     sentry:
       ~: 'true'

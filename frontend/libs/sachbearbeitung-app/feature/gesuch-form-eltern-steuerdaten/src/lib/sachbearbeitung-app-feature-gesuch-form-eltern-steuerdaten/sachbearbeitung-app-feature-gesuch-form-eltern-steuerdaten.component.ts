@@ -26,6 +26,7 @@ import { Subject } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { SachbearbeitungAppDialogUpdateSteuerdatenComponent } from '@dv/sachbearbeitung-app/dialog/update-steuerdaten';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -72,6 +73,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private steuerdatenStore = inject(SteuerdatenStore);
+  private einreichenStore = inject(EinreichenStore);
   config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
@@ -239,6 +241,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
               origin: ELTERN_STEUERDATEN_STEPS[this.stepSig().type],
             }),
           );
+          this.einreichenStore.validateSteps$({ gesuchTrancheId: trancheId });
         },
       });
     }
