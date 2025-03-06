@@ -100,6 +100,10 @@ public class DateUtil {
         return (int) ChronoUnit.YEARS.between(geburtsdatum, LocalDate.now());
     }
 
+    public int getDaysBetween(final LocalDate start, final LocalDate end) {
+        return (int) ChronoUnit.DAYS.between(start, end);
+    }
+
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
         return left.isBefore(right) || left.isEqual(right);
     }

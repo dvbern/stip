@@ -17,10 +17,12 @@
 
 package ch.dvbern.stip.api.notification.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
@@ -114,8 +116,11 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
+        final var numberOfDays =
+            String.valueOf(DateUtil.getDaysBetween(LocalDate.now(), gesuch.getNachfristDokumente()));
         String msg = Templates.getGesuchFehlendeDokumenteText(
             sprache,
+            numberOfDays,
             gesuch.getAusbildung()
                 .getFall()
                 .getSachbearbeiterZuordnung()
@@ -217,24 +222,27 @@ public class NotificationService {
         }
 
         public static native TemplateInstance gesuchFehlendeDokumenteDE(
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         );
 
         public static native TemplateInstance gesuchFehlendeDokumenteFR(
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         );
 
         public static TemplateInstance getGesuchFehlendeDokumenteText(
             final Sprache korrespondenzSprache,
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
+                return gesuchFehlendeDokumenteFR(numberOfDays, sbVorname, sbNachname);
             }
-            return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
+            return gesuchFehlendeDokumenteDE(numberOfDays, sbVorname, sbNachname);
         }
 
         public static native TemplateInstance aenderungAbgelehntDE(
