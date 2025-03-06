@@ -54,11 +54,31 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
+    public static final Set<Gesuchstatus> SB_IS_EDITING_GESUCH =
         Collections.unmodifiableSet(
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
-                ABKLAERUNG_DURCH_RECHSTABTEILUNG
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                BEREIT_FUER_BEARBEITUNG
+            )
+        );
+
+    /*
+     * Alle Gesuchstatus zwischen eingereicht bis verfügt
+     */
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_VIEW_CHANGES =
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                EINGEREICHT,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                JURISTISCHE_ABKLAERUNG,
+                NICHT_ANSPRUCHSBERECHTIGT,
+                ANSPRUCH_MANUELL_PRUEFEN,
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                FEHLENDE_DOKUMENTE,
+                NEGATIVE_VERFUEGUNG,
+                IN_BEARBEITUNG_SB
             )
         );
 

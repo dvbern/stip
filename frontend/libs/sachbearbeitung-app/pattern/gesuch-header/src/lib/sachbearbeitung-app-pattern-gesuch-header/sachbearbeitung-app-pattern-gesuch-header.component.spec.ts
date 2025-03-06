@@ -87,13 +87,23 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
     ['VERSENDET'],
-    ['ZURUECKWEISEN'],
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {
       component.setStatusUebergang(nextStatus, 'gesuchTrancheId');
       expect(setStatus$[nextStatus]).toHaveBeenCalledWith({
         gesuchTrancheId: 'gesuchTrancheId',
+      });
+    },
+  );
+
+  it.each([['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
+    'should call setStatus$[%s] when using setStatusUebergang with onSuccess',
+    (nextStatus) => {
+      component.setStatusUebergang(nextStatus, 'gesuchTrancheId');
+      expect(setStatus$[nextStatus]).toHaveBeenCalledWith({
+        gesuchTrancheId: 'gesuchTrancheId',
+        onSuccess: expect.any(Function),
       });
     },
   );

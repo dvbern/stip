@@ -458,4 +458,8 @@ public class GesuchTrancheService {
 
         return !trancheInDisallowedStates.isEmpty();
     }
+
+    public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
+        gesuchTrancheRepository.delete(gesuchTranche);
+    }
 }

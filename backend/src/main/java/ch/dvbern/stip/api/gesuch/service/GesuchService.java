@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -94,6 +95,7 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
@@ -149,23 +151,46 @@ public class GesuchService {
     private final StipDecisionService stipDecisionService;
     private final ZuordnungService zuordnungService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
     }
 
     @Transactional
-    public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
-        return gesuchRepository.findByIdOptional(gesuchId)
-            .map(
-                gesuch -> gesuchMapperUtil.mapWithTranche(
-                    gesuch,
-                    gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new)
-                )
-            );
+    public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            var trancheInStatusEingereicht =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
+            return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
+        } else {
+            // atkuelles gesuch
+            return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        }
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
+        final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        Optional<GesuchTranche> changes = Optional.empty();
+        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+        }
+        // bis eingereicht: changes: empty/null
+        // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
+        // ab verfügt: changes: empty/null
+        return gesuchMapperUtil.toWithChangesDto(
+            actualGesuch,
+            gesuchTrancheRepository.requireById(gesuchTrancheId),
+            changes.orElse(null)
+        );
     }
 
     @Transactional
@@ -567,11 +592,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
+
+        // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
+        return new GesuchZurueckweisenResponseDto()
+            .gesuchId(gesuchId)
+            .gesuchTrancheId(gesuch.getGesuchTranchen().get(0).getId());
     }
 
     @Transactional
@@ -889,5 +919,9 @@ public class GesuchService {
 
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
         && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
+    }
+
+    public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
+        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 }

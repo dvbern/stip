@@ -28,25 +28,27 @@ public class PersonInAusbildungCopyUtil {
      */
     public PersonInAusbildung createCopyIgnoreReferences(final PersonInAusbildung other) {
         final var copy = new PersonInAusbildung();
-        AbstractFamilieEntityCopyUtil.copy(other, copy);
-
-        copy.setSozialversicherungsnummer(other.getSozialversicherungsnummer());
-        copy.setAnrede(other.getAnrede());
-        copy.setIdentischerZivilrechtlicherWohnsitz(other.isIdentischerZivilrechtlicherWohnsitz());
-        copy.setIdentischerZivilrechtlicherWohnsitzOrt(other.getIdentischerZivilrechtlicherWohnsitzOrt());
-        copy.setIdentischerZivilrechtlicherWohnsitzPLZ(other.getIdentischerZivilrechtlicherWohnsitzPLZ());
-        copy.setEmail(other.getEmail());
-        copy.setTelefonnummer(other.getTelefonnummer());
-        copy.setNationalitaet(other.getNationalitaet());
-        copy.setHeimatort(other.getHeimatort());
-        copy.setNiederlassungsstatus(other.getNiederlassungsstatus());
-        copy.setZustaendigerKanton(other.getZustaendigerKanton());
-        copy.setEinreisedatum(other.getEinreisedatum());
-        copy.setZivilstand(other.getZivilstand());
-        copy.setSozialhilfebeitraege(other.isSozialhilfebeitraege());
-        copy.setVormundschaft(other.isVormundschaft());
-        copy.setKorrespondenzSprache(other.getKorrespondenzSprache());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final PersonInAusbildung source, final PersonInAusbildung target) {
+        AbstractFamilieEntityCopyUtil.copy(source, target);
+        target.setSozialversicherungsnummer(source.getSozialversicherungsnummer());
+        target.setAnrede(source.getAnrede());
+        target.setIdentischerZivilrechtlicherWohnsitz(source.isIdentischerZivilrechtlicherWohnsitz());
+        target.setIdentischerZivilrechtlicherWohnsitzOrt(source.getIdentischerZivilrechtlicherWohnsitzOrt());
+        target.setIdentischerZivilrechtlicherWohnsitzPLZ(source.getIdentischerZivilrechtlicherWohnsitzPLZ());
+        target.setEmail(source.getEmail());
+        target.setTelefonnummer(source.getTelefonnummer());
+        target.setNationalitaet(source.getNationalitaet());
+        target.setHeimatort(source.getHeimatort());
+        target.setNiederlassungsstatus(source.getNiederlassungsstatus());
+        target.setZustaendigerKanton(source.getZustaendigerKanton());
+        target.setEinreisedatum(source.getEinreisedatum());
+        target.setZivilstand(source.getZivilstand());
+        target.setSozialhilfebeitraege(source.isSozialhilfebeitraege());
+        target.setVormundschaft(source.isVormundschaft());
+        target.setKorrespondenzSprache(source.getKorrespondenzSprache());
     }
 }

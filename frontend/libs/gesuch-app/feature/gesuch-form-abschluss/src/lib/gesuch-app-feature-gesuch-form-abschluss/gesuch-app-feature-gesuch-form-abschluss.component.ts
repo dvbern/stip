@@ -104,9 +104,9 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { gesuchId, trancheId } = this.gesuchViewSig();
+    const { trancheId } = this.gesuchViewSig();
 
-    if (gesuchId && trancheId) {
+    if (trancheId) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         onSuccess: () => {
