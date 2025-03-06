@@ -214,6 +214,7 @@ public class GesuchTrancheService {
         );
 
         for (final var gesuchDokument : superfluousGesuchDokuments) {
+            gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
             formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
         }
 

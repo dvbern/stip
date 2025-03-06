@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -39,6 +40,11 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
 
     @Transactional
+    public void deleteForGesuchDokument(UUID gesuchDokumentId) {
+        gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokumentId);
+    }
+
+    @Transactional
     public void deleteForGesuchTrancheId(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
@@ -48,9 +54,36 @@ public class GesuchDokumentKommentarService {
 
     @Transactional
     public void copyKommentareFromTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
-        final var dokumentKommentars = getAllKommentareForGesuchTrancheId(fromTranche.getId());
-        for (final var kommentar : dokumentKommentars) {
-            createKommentarFromTrancheAndExisting(toTranche, kommentar);
+        final var fromDokumentKommentars = getAllKommentareForGesuchTrancheId(fromTranche.getId());
+        final var toGesuchDokuments = toTranche.getGesuchDokuments();
+
+        for (final var fromKommentar : fromDokumentKommentars) {
+            for (final var toGesuchDokument : toGesuchDokuments) {
+                if (Objects.nonNull(fromKommentar.getGesuchDokument().getDokumentTyp())) {
+                    if (fromKommentar.getGesuchDokument().getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
+                        final var newKommentar = new GesuchDokumentKommentar()
+                            .setGesuchDokument(toGesuchDokument)
+                            .setKommentar(fromKommentar.getKommentar())
+                            .setDokumentstatus(fromKommentar.getDokumentstatus());
+                        gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
+                    }
+                } else if (
+                    Objects.nonNull(fromKommentar.getGesuchDokument().getCustomDokumentTyp())
+                    && Objects.nonNull(toGesuchDokument.getCustomDokumentTyp())
+                ) {
+                    if (
+                        fromKommentar.getGesuchDokument().getCustomDokumentTyp().getType() == toGesuchDokument
+                            .getCustomDokumentTyp()
+                            .getType()
+                    ) {
+                        final var newKommentar = new GesuchDokumentKommentar()
+                            .setGesuchDokument(toGesuchDokument)
+                            .setKommentar(fromKommentar.getKommentar())
+                            .setDokumentstatus(fromKommentar.getDokumentstatus());
+                        gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
+                    }
+                }
+            }
         }
     }
 
@@ -104,17 +137,5 @@ public class GesuchDokumentKommentarService {
             .setGesuchDokument(gesuchDokument)
             .setKommentar(null);
         gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
-    }
-
-    public GesuchDokumentKommentar createKommentarFromTrancheAndExisting(
-        final GesuchTranche gesuchTranche,
-        final GesuchDokumentKommentar gesuchDokumentKommentar
-    ) {
-        final var kommentar = new GesuchDokumentKommentar()
-            .setGesuchDokument(gesuchDokumentKommentar.getGesuchDokument())
-            .setKommentar(gesuchDokumentKommentar.getKommentar())
-            .setDokumentstatus(gesuchDokumentKommentar.getDokumentstatus());
-        gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
-        return kommentar;
     }
 }
