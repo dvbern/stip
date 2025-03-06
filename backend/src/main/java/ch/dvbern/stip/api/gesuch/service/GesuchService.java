@@ -705,6 +705,12 @@ public class GesuchService {
             .toList();
     }
 
+    @Transactional
+    public void updateNachfristDokumente(final UUID gesuchId, LocalDate nachfristDokumente) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuch.setNachfristDokumente(nachfristDokumente);
+    }
+
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {

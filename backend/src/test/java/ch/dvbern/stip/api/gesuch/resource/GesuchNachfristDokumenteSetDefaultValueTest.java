@@ -77,7 +77,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GesuchNachfristDokumenteTest {
+class GesuchNachfristDokumenteSetDefaultValueTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
@@ -242,11 +242,6 @@ class GesuchNachfristDokumenteTest {
             is(notNullValue())
         );
     }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(26)
-    void accept_reuploaded_dokumente_of_both_categories() {}
 
     @Test
     @TestAsAdmin

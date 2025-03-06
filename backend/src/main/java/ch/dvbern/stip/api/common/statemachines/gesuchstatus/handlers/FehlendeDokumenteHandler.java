@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -45,8 +46,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        gesuch
-            .setNachfristDokumente(LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente()));
+        setDefaultNachfristDokumenteIfNecessary(gesuch);
         gesuchDokumentService.deleteAbgelehnteDokumenteForGesuch(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
@@ -58,5 +58,14 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
     private void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         notificationService.createMissingDocumentNotification(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+    }
+
+    private void setDefaultNachfristDokumenteIfNecessary(Gesuch gesuch) {
+        if (Objects.isNull(gesuch.getNachfristDokumente())) {
+            gesuch
+                .setNachfristDokumente(
+                    LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+                );
+        }
     }
 }

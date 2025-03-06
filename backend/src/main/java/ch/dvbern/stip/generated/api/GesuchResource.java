@@ -185,5 +185,5 @@ public interface GesuchResource {
     @Path("/{gesuchId}/nachfristDokumente")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid LocalDate body);
+    void updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid LocalDate body);
 }

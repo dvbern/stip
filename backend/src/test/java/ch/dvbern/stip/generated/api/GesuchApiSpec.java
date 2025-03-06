@@ -2461,7 +2461,6 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
      */
     public static class UpdateNachfristDokumenteOper implements Oper {
 
@@ -2487,16 +2486,6 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * PATCH /gesuch/{gesuchId}/nachfristDokumente
-         * @param handler handler
-         * @return GesuchDtoSpec
-         */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
-            return execute(handler).as(type);
         }
 
          /**
