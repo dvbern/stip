@@ -120,6 +120,7 @@
   <div class="tw-mt-8">
     @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
     @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
+    @let hasValidationErrors = !!einreichenStore.einreichenValidationResult().data?.validationErrors?.length;
     @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
       @switch (abschlussPhase) {
         @case ('READY_TO_SEND') {
@@ -136,6 +137,7 @@
               class="btn btn-primary flex-grow-1"
               data-testid="aenderung-accept"
               type="button"
+              [disabled]="hasValidationErrors"
               (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
             >
               {{ 'shared.form.aenderung.action.accept' | translate }}

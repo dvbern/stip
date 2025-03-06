@@ -16,6 +16,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
     const einreichedatum = cache.gesuch?.einreichedatum;
     const minEinreichedatum = cache.gesuch?.gesuchTrancheToWorkWith?.gueltigAb;
     return {
+      trancheId: gesuchsView.trancheId,
       isEditingAenderung: gesuchsView.isEditingAenderung,
       loading: gesuchsView.loading,
       tranche: cache.gesuch?.gesuchTrancheToWorkWith,

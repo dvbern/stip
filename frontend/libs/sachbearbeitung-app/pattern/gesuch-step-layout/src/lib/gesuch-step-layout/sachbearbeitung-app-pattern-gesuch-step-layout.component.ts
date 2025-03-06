@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { combineLatest, filter } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
@@ -97,15 +97,11 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   });
 
   constructor() {
-    combineLatest([
-      getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig).pipe(
-        filter(isDefined),
-      ),
-    ])
-      .pipe(takeUntilDestroyed())
+    getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
+      .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe(([gesuchTrancheId]) => {
-        this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
+        this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
       });
   }
 }
