@@ -5,7 +5,7 @@
 } @else if (editedGeschwister) {
   <dv-shared-feature-gesuch-form-geschwister-editor
     [geschwister]="editedGeschwister"
-    [changes]="view.listChanges?.changesByIdentifier?.[editedGeschwister.id ?? -1]"
+    [changes]="view.listChanges?.changesByIndex?.[editedGeschwisterIndex ?? -1]"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (formIsUnsaved)="hasUnsavedChanges = $event"
@@ -25,7 +25,7 @@
 
   <div class="row">
     <!-- Table -->
-    @if (sortedGeschwistersSig(); as geschwisters) {
+    @if (view.gesuchFormular?.geschwisters; as geschwisters) {
       <div class="col-12 col-xl-8">
         @if (geschwisters.length) {
           <table class="table" aria-describedby="List von Geschwister">
@@ -47,7 +47,7 @@
                 <tr>
                   @if (asGeschwister(geschwisterRaw); as geschwister) {
                     <td class="position-relative">
-                      @if (view.listChanges | dvZuvorListContains: geschwisterRaw) {
+                      @if (view.listChanges | dvZuvorListContains: $index) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
                       <i class="material-symbols-rounded align-middle" aria-hidden>done</i>
@@ -61,7 +61,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
+                          (click)="handleSelectGeschwister(geschwister, $index)"
                           [title]="'shared.form.geschwister.edit' | translate"
                         >
                           <i class="material-symbols-rounded">edit</i>
@@ -82,7 +82,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
+                          (click)="handleSelectGeschwister(geschwister, $index)"
                           [title]="'shared.form.geschwister.view' | translate"
                         >
                           <i class="material-symbols-rounded">visibility</i>
