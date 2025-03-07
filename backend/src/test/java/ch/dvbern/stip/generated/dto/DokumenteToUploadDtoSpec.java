@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,12 +33,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DokumenteToUploadDtoSpec
  */
 @JsonPropertyOrder({
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_REQUIRED,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER
 })
 @JsonTypeName("DokumenteToUpload")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DokumenteToUploadDtoSpec {
+  public static final String JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS = "customDokumentTyps";
+  private List<CustomDokumentTypDtoSpec> customDokumentTyps;
+
   public static final String JSON_PROPERTY_REQUIRED = "required";
   private List<DokumentTypDtoSpec> required;
 
@@ -46,6 +51,40 @@ public class DokumenteToUploadDtoSpec {
 
   public DokumenteToUploadDtoSpec() {
   }
+
+  public DokumenteToUploadDtoSpec customDokumentTyps(List<CustomDokumentTypDtoSpec> customDokumentTyps) {
+    
+    this.customDokumentTyps = customDokumentTyps;
+    return this;
+  }
+
+  public DokumenteToUploadDtoSpec addCustomDokumentTypsItem(CustomDokumentTypDtoSpec customDokumentTypsItem) {
+    if (this.customDokumentTyps == null) {
+      this.customDokumentTyps = new ArrayList<>();
+    }
+    this.customDokumentTyps.add(customDokumentTypsItem);
+    return this;
+  }
+
+   /**
+   * Get customDokumentTyps
+   * @return customDokumentTyps
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<CustomDokumentTypDtoSpec> getCustomDokumentTyps() {
+    return customDokumentTyps;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCustomDokumentTyps(List<CustomDokumentTypDtoSpec> customDokumentTyps) {
+    this.customDokumentTyps = customDokumentTyps;
+  }
+
 
   public DokumenteToUploadDtoSpec required(List<DokumentTypDtoSpec> required) {
     
@@ -123,19 +162,21 @@ public class DokumenteToUploadDtoSpec {
       return false;
     }
     DokumenteToUploadDtoSpec dokumenteToUpload = (DokumenteToUploadDtoSpec) o;
-    return Objects.equals(this.required, dokumenteToUpload.required) &&
+    return Objects.equals(this.customDokumentTyps, dokumenteToUpload.customDokumentTyps) &&
+        Objects.equals(this.required, dokumenteToUpload.required) &&
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(required, unterschriftenblaetter);
+    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DokumenteToUploadDtoSpec {\n");
+    sb.append("    customDokumentTyps: ").append(toIndentedString(customDokumentTyps)).append("\n");
     sb.append("    required: ").append(toIndentedString(required)).append("\n");
     sb.append("    unterschriftenblaetter: ").append(toIndentedString(unterschriftenblaetter)).append("\n");
     sb.append("}");

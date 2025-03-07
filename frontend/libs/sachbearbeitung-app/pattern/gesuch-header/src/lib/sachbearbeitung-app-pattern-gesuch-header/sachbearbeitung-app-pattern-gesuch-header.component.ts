@@ -65,6 +65,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private einreichenStore = inject(EinreichenStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
@@ -231,6 +232,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
                 gesuchTrancheId,
                 text: result.kommentar,
+                onSuccess: () => {
+                  this.einreichenStore.validateSteps$({ gesuchTrancheId });
+                },
               });
             }
           });

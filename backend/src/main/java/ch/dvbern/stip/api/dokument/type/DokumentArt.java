@@ -19,5 +19,6 @@ package ch.dvbern.stip.api.dokument.type;
 
 public enum DokumentArt {
     GESUCH_DOKUMENT,
-    UNTERSCHRIFTENBLATT
+    UNTERSCHRIFTENBLATT,
+    CUSTOM_DOKUMENT
 }

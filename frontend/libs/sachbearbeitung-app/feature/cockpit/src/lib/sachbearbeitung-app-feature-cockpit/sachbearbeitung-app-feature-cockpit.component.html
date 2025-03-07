@@ -8,7 +8,8 @@
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-2xl"
+          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+          [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
           [class.btn-danger]="radio.checked"
           [class.btn-light]="!radio.checked"
         >
@@ -82,9 +83,18 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-min-w-32 tw-whitespace-nowrap"
+                  class="tw-w-32 tw-whitespace-nowrap"
                 >
-                  {{ gesuch.fallNummer }}
+                  <a
+                    [routerLink]="
+                      gesuch.typ === 'AENDERUNG'
+                        ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
+                        : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
+                    "
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ gesuch.fallNummer }}
+                  </a>
                 </td>
               </ng-container>
 

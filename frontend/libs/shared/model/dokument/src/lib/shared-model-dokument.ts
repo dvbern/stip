@@ -1,8 +1,10 @@
 import {
+  CustomDokumentTyp,
   Dokument,
   DokumentArt,
   DokumentTyp,
   GesuchDokument,
+  GesuchDokumentKommentar,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
@@ -25,25 +27,49 @@ export type SharedModelAdditionalGesuchDokument = {
   gesuchDokument?: UnterschriftenblattDokument;
 };
 
+export type SharedModelCustomGesuchDokument = {
+  art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
+  dokumentTyp: CustomDokumentTyp;
+  gesuchId: string;
+  trancheId: string;
+  gesuchDokument?: GesuchDokument;
+};
+
 export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
-  | SharedModelAdditionalGesuchDokument;
+  | SharedModelAdditionalGesuchDokument
+  | SharedModelCustomGesuchDokument;
+
+export type SharedModelTableDokument =
+  | SharedModelTableRequiredDokument
+  | SharedModelTableCustomDokument;
 
 export interface DokumentOptions {
   permissions: PermissionMap;
-  singleUpload: boolean;
   titleKey: string;
+  descriptionKey?: string;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
-  readonly: boolean;
 }
 
-export interface SharedModelTableGesuchDokument {
+export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
+}
+
+export interface SharedModelTableCustomDokument {
+  dokumentTyp: CustomDokumentTyp;
+  canDelete: boolean;
+  showUpload: boolean;
+  gesuchDokument?: GesuchDokument;
+  dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
 }
 
 export type SharedModelTableAdditionalDokument = {
@@ -62,7 +88,7 @@ export interface DokumentUpload {
 export interface DokumentView extends DokumentUpload {
   state: 'uploading' | 'done' | 'error';
   theme:
-    | { icon: 'warning'; type: 'warn'; color: 'warn' }
+    | { icon: 'warning'; type: 'danger'; color: 'warn' }
     | { icon: 'sync'; type: 'info'; color: 'info' }
     | { icon: 'check'; type: 'success'; color: 'success' };
 }
@@ -79,7 +105,6 @@ export interface DokumentState {
 }
 
 export interface UploadView {
-  readonly: boolean;
   permissions: PermissionMap;
   dokumentModel: SharedModelGesuchDokument;
   initialDokuments?: Dokument[];
@@ -92,7 +117,8 @@ export const isUploadable = (
   permission: PermissionMap,
 ) => {
   switch (dokumentModel.art) {
-    case 'GESUCH_DOKUMENT': {
+    case 'GESUCH_DOKUMENT':
+    case 'CUSTOM_DOKUMENT': {
       return (
         permission.canUploadDocuments &&
         dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'

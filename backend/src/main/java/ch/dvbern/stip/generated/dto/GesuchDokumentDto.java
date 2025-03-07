@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
@@ -25,9 +26,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
   private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus status;
+  private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
+  private @Valid CustomDokumentTypDto customDokumentTyp;
 
   /**
    **/
@@ -46,25 +48,6 @@ public class GesuchDokumentDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public GesuchDokumentDto dokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
-    this.dokumentTyp = dokumentTyp;
-    return this;
-  }
-
-  
-  @JsonProperty("dokumentTyp")
-  @NotNull
-  public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
-    return dokumentTyp;
-  }
-
-  @JsonProperty("dokumentTyp")
-  public void setDokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
-    this.dokumentTyp = dokumentTyp;
   }
 
   /**
@@ -121,6 +104,42 @@ public class GesuchDokumentDto  implements Serializable {
     this.status = status;
   }
 
+  /**
+   **/
+  public GesuchDokumentDto dokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
+    this.dokumentTyp = dokumentTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("dokumentTyp")
+  public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
+    return dokumentTyp;
+  }
+
+  @JsonProperty("dokumentTyp")
+  public void setDokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
+    this.dokumentTyp = dokumentTyp;
+  }
+
+  /**
+   **/
+  public GesuchDokumentDto customDokumentTyp(CustomDokumentTypDto customDokumentTyp) {
+    this.customDokumentTyp = customDokumentTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("customDokumentTyp")
+  public CustomDokumentTypDto getCustomDokumentTyp() {
+    return customDokumentTyp;
+  }
+
+  @JsonProperty("customDokumentTyp")
+  public void setCustomDokumentTyp(CustomDokumentTypDto customDokumentTyp) {
+    this.customDokumentTyp = customDokumentTyp;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -132,14 +151,15 @@ public class GesuchDokumentDto  implements Serializable {
     }
     GesuchDokumentDto gesuchDokument = (GesuchDokumentDto) o;
     return Objects.equals(this.id, gesuchDokument.id) &&
-        Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
         Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
-        Objects.equals(this.status, gesuchDokument.status);
+        Objects.equals(this.status, gesuchDokument.status) &&
+        Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
+        Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumentTyp, dokumente, status);
+    return Objects.hash(id, dokumente, status, dokumentTyp, customDokumentTyp);
   }
 
   @Override
@@ -148,9 +168,10 @@ public class GesuchDokumentDto  implements Serializable {
     sb.append("class GesuchDokumentDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
+    sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

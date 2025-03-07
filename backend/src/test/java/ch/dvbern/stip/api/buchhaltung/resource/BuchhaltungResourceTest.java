@@ -44,6 +44,7 @@ import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -86,6 +87,7 @@ class BuchhaltungResourceTest {
     private static final String ERSTGESUCH_TL_KEY = "stip.verfuegung.buchhaltung.erstgesuch";
 
     private GesuchDtoSpec gesuch;
+    private GesuchWithChangesDtoSpec gesuchWithChanges;
 
     @Test
     @TestAsGesuchsteller
@@ -117,7 +119,7 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -125,9 +127,9 @@ class BuchhaltungResourceTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
-        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test

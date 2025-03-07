@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -57,7 +57,7 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
 
     private static UUID gesuchId;
-    private static GesuchWithChangesDtoSpec gesuch;
+    private static GesuchDtoSpec gesuch;
     private static UUID trancheId;
 
     @Test
@@ -73,14 +73,13 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
     @TestAsGesuchsteller
     @Order(2)
     void gesuchTrancheCreated() {
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchWithChangesDtoSpec.class);
+            .as(GesuchDtoSpec.class);
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
@@ -101,14 +100,13 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchWithChangesDtoSpec.class);
+            .as(GesuchDtoSpec.class);
         Integer vorjahrGesuchsjahr = gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1;
         assertThat(
             gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),

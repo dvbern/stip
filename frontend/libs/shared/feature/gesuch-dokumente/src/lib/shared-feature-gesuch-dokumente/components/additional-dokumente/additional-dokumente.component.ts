@@ -6,7 +6,6 @@ import {
   input,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelTableAdditionalDokument } from '@dv/shared/model/dokument';
@@ -19,10 +18,6 @@ import {
   SharedPatternDocumentUploadComponent,
   createAdditionalDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
@@ -30,15 +25,10 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
-    SharedUiLoadingComponent,
-    SharedUiIconBadgeComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiPrefixAppTypePipe,
   ],
   templateUrl: './additional-dokumente.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +39,6 @@ export class AdditionalDokumenteComponent {
     trancheId: string | undefined;
     allowTypes: string | undefined;
     unterschriftenblaetter: UnterschriftenblattDokument[];
-    singleUpload?: boolean;
     permissions: PermissionMap;
     readonly: boolean;
     requiredDocumentTypes: UnterschriftenblattDokumentTyp[];
@@ -64,8 +53,6 @@ export class AdditionalDokumenteComponent {
       unterschriftenblaetter,
       allowTypes,
       permissions,
-      readonly,
-      singleUpload,
       requiredDocumentTypes,
     } = this.dokumenteViewSig();
 
@@ -85,9 +72,7 @@ export class AdditionalDokumenteComponent {
             allowTypes,
             gesuchDokument,
             permissions,
-            readonly,
             initialDocuments: gesuchDokument?.dokumente,
-            singleUpload,
           }),
         }) satisfies SharedModelTableAdditionalDokument,
     );
@@ -101,8 +86,6 @@ export class AdditionalDokumenteComponent {
           allowTypes,
           dokumentTyp,
           permissions,
-          readonly,
-          singleUpload,
         }),
       })),
     ];

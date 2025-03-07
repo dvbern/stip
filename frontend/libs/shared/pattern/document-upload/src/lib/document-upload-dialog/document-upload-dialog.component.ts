@@ -53,7 +53,6 @@ export class SharedPatternDocumentUploadDialogComponent {
   uploadViewSig = computed<UploadView>(() => ({
     type: this.data.options.dokument.art,
     permissions: this.data.options.permissions,
-    readonly: this.data.options.readonly,
     dokumentModel: this.data.dokumentModel,
     initialDokuments: this.data.options.initialDokumente,
     hasEntries: this.data.store.hasEntriesSig(),
@@ -65,8 +64,6 @@ export class SharedPatternDocumentUploadDialogComponent {
 
     return isUploadable(options.dokument, options.permissions);
   });
-
-  // @HostBinding('class') class = 'p-4 p-md-5';
 
   private newDocuments$ = new Subject<File[]>();
 
@@ -89,10 +86,7 @@ export class SharedPatternDocumentUploadDialogComponent {
   }
 
   handleMultipleDocumentsAdded(documents: File[]) {
-    const files = this.data.options.singleUpload
-      ? documents.slice(0, 1)
-      : documents;
-    this.newDocuments$.next(files);
+    this.newDocuments$.next(documents);
   }
 
   handleFilInputEvent(target: EventTarget | null) {

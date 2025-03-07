@@ -49,5 +49,6 @@
 
   "gesuch-app.ausbildung.dialog.title": "Ausbildung für Stipendium erfassen",
 
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft"
+  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
+  "gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN": "Vorhanden"
 }

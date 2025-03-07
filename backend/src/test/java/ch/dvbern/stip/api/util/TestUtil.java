@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -44,6 +45,9 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -55,6 +59,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -332,6 +337,22 @@ public class TestUtil {
         dokumentApiSpec.createDokument()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
+            .reqSpec(req -> {
+                req.addMultiPart("fileUpload", file, "image/png");
+            })
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    public static void uploadCustomDokumentFile(
+        DokumentApiSpec dokumentApiSpec,
+        UUID customDokumentTypId,
+        File file
+    ) {
+        dokumentApiSpec.uploadCustomGesuchDokument()
+            .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");
             })
@@ -686,6 +707,29 @@ public class TestUtil {
                 .setGrundZweitausbildung(false)
         );
 
+        return gesuch;
+    }
+
+    public static GesuchDokument setupCustomGesuchDokument() {
+        CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
+        customDokumentTyp.setId(UUID.randomUUID());
+        customDokumentTyp.setDescription("test");
+        customDokumentTyp.setType("test");
+
+        var customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+            .setDokumente(new ArrayList<>())
+            .setCustomDokumentTyp(customDokumentTyp);
+        return customGesuchDokument;
+    }
+
+    public static Gesuch setupGesuchWithCustomDokument() {
+        GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setGesuchDokuments(List.of(setupCustomGesuchDokument()));
+        Gesuch gesuch = new Gesuch();
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.setGesuchTranchen(List.of(gesuchTranche));
         return gesuch;
     }
 }

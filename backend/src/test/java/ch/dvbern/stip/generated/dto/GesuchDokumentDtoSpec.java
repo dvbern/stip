@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchDokumentDtoSpec.JSON_PROPERTY_ID,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
+  GesuchDokumentDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYP,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE,
   GesuchDokumentDtoSpec.JSON_PROPERTY_STATUS
 })
@@ -47,6 +49,9 @@ public class GesuchDokumentDtoSpec {
 
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
   private DokumentTypDtoSpec dokumentTyp;
+
+  public static final String JSON_PROPERTY_CUSTOM_DOKUMENT_TYP = "customDokumentTyp";
+  private CustomDokumentTypDtoSpec customDokumentTyp;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
   private List<DokumentDtoSpec> dokumente;
@@ -93,9 +98,9 @@ public class GesuchDokumentDtoSpec {
    * Get dokumentTyp
    * @return dokumentTyp
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DokumentTypDtoSpec getDokumentTyp() {
     return dokumentTyp;
@@ -103,9 +108,35 @@ public class GesuchDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
+  }
+
+
+  public GesuchDokumentDtoSpec customDokumentTyp(CustomDokumentTypDtoSpec customDokumentTyp) {
+    
+    this.customDokumentTyp = customDokumentTyp;
+    return this;
+  }
+
+   /**
+   * Get customDokumentTyp
+   * @return customDokumentTyp
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public CustomDokumentTypDtoSpec getCustomDokumentTyp() {
+    return customDokumentTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCustomDokumentTyp(CustomDokumentTypDtoSpec customDokumentTyp) {
+    this.customDokumentTyp = customDokumentTyp;
   }
 
 
@@ -179,13 +210,14 @@ public class GesuchDokumentDtoSpec {
     GesuchDokumentDtoSpec gesuchDokument = (GesuchDokumentDtoSpec) o;
     return Objects.equals(this.id, gesuchDokument.id) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
+        Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp) &&
         Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
         Objects.equals(this.status, gesuchDokument.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumentTyp, dokumente, status);
+    return Objects.hash(id, dokumentTyp, customDokumentTyp, dokumente, status);
   }
 
   @Override
@@ -194,6 +226,7 @@ public class GesuchDokumentDtoSpec {
     sb.append("class GesuchDokumentDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
+    sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");

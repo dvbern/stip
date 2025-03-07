@@ -5,7 +5,7 @@
 } @else if (editedKind) {
   <dv-shared-feature-gesuch-form-kinder-editor
     [kind]="editedKind"
-    [changesSig]="view.listChanges?.changesByIdentifier?.[editedKind.id ?? -1]"
+    [changesSig]="view.listChanges?.changesByIndex?.[editedKindIndex ?? -1]"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (formIsUnsaved)="hasUnsavedChanges = $event"
@@ -13,7 +13,7 @@
 } @else {
   <div class="row g-4 my-2">
     <!-- Table -->
-    @if (sortedKinderSig(); as kinder) {
+    @if (view.gesuchFormular?.kinds; as kinder) {
       <div class="col-12 col-xl-8">
         @if (kinder.length) {
           <table class="table" aria-describedby="List von Kinder">
@@ -35,7 +35,7 @@
                 <tr>
                   @if (kindRaw; as kinder) {
                     <td class="position-relative">
-                      @if (view.listChanges | dvZuvorListContains: kindRaw) {
+                      @if (view.listChanges | dvZuvorListContains: $index) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
                       <i class="material-symbols-rounded align-middle" aria-hidden>done</i>
@@ -49,7 +49,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectKinder(kinder)"
+                          (click)="handleSelectKinder(kinder, $index)"
                           [title]="'shared.form.kinder.edit' | translate"
                         >
                           <i class="material-symbols-rounded">edit</i>
@@ -70,7 +70,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectKinder(kinder)"
+                          (click)="handleSelectKinder(kinder, $index)"
                           [title]="'shared.form.kinder.view' | translate"
                         >
                           <i class="material-symbols-rounded">visibility</i>

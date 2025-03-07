@@ -1,0 +1,176 @@
+@let view = dokumenteViewSig();
+@let expandedRowId = expandedRowSig();
+
+<h3>
+  {{ 'shared.dokumente.table.title.customDocuments' | translate }}
+</h3>
+
+<div class="tw-dv-table">
+  <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
+    <caption class="cdk-visually-hidden">
+      {{
+        'shared.dokumente.table.title.customDocuments' | translate
+      }}
+    </caption>
+
+    <!-- expander -->
+    <ng-container matColumnDef="expander">
+      <th mat-header-cell *matHeaderCellDef class="tw-w-11"></th>
+      <td class="!tw-px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <button class="btn btn-link tw-box-content tw-h-7 tw-w-7" type="button">
+          <i
+            class="material-symbols-rounded tw-rounded-full tw-bg-[--dv-blue-bg] tw-align-middle tw-text-2xl/none tw-text-white"
+          >
+            @if (expandedRowId === dokument.dokumentTyp.id) {
+              expand_less
+            } @else {
+              expand_more
+            }
+          </i>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- required document -->
+    <ng-container matColumnDef="documentName">
+      <th mat-header-cell *matHeaderCellDef class="tw-min-w-52">
+        {{ 'shared.dokumente.table.documentName' | translate }}
+      </th>
+      <td mat-cell class="tw-min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw-py-3">
+          {{ dokument.dokumentTyp.type }}
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- description -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
+        {{ 'shared.dokumente.table.description' | translate }}
+      </th>
+      <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw-py-3">
+          {{ dokument.dokumentTyp.description }}
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- status -->
+    <ng-container matColumnDef="status">
+      <th [title]="'shared.dokumente.table.status' | translate" mat-header-cell *matHeaderCellDef>
+        {{ 'shared.dokumente.table.status' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <dv-dokument-status-actions
+          [dokumentSig]="dokument"
+          [viewSig]="view"
+          (dokumentAkzeptieren)="dokumentAkzeptieren.emit($event)"
+          (dokumentAblehnen)="dokumentAblehnen.emit($event)"
+        ></dv-dokument-status-actions>
+      </td>
+    </ng-container>
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        <button
+          *dvIfSachbearbeiter
+          [matTooltip]="'shared.dokumente.createCustomDokumentTyp' | translate"
+          type="button"
+          class="btn btn-outline-primary btn-sm"
+          data-testid="dokumente-button-createCustomDokumentTyp"
+          [disabled]="!canCreateCustomDokumentTypSig()"
+          (click)="createCustomDokumentTyp.emit()"
+        >
+          <i class="material-symbols-rounded fs-4">add</i>
+        </button>
+      </th>
+      <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw-flex tw-justify-end">
+          <!-- delete custom documentType -->
+          @if (dokument.canDelete) {
+            <button
+              type="button"
+              class="dv-icon-button flex-shrink-0 delete-icon ms-2"
+              [attr.aria-label]="'shared.form.delete' | translate"
+              [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | translate"
+              (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded align-middle text-muted tw-text-3xl/none">delete</span>
+            </button>
+          }
+          @if (dokument.showUpload) {
+            <dv-shared-pattern-document-upload
+              class="tw-max-h-11"
+              (click)="$event.stopPropagation()"
+              [optionsSig]="dokument.dokumentOptions"
+            ></dv-shared-pattern-document-upload>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- detailColumns / Kommentare  -->
+    <ng-container matColumnDef="kommentar">
+      <td
+        mat-cell
+        [attr.colspan]="displayedColumns.length"
+        *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
+      >
+        <div
+          [@detailExpand]="
+            dokument.gesuchDokument?.id
+              ? dokument.gesuchDokument?.id === expandedRowId
+                ? 'expanded'
+                : 'collapsed'
+              : 'collapsed'
+          "
+        >
+          @if (dokument.kommentarePending) {
+            <dv-shared-ui-loading class="tw-pb-2" type="icon"></dv-shared-ui-loading>
+          } @else if (dokument.kommentare.length === 0) {
+            <div class="text-muted tw-py-2 tw-text-center">
+              {{ 'shared.dokumente.table.noComment' | translate }}
+            </div>
+          } @else {
+            <div class="tw-grid tw-grid-cols-[33px,1fr,1fr,3fr] tw-gap-4 tw-py-2">
+              @for (kommentar of dokument.kommentare; track $index) {
+                <i class="material-symbols-rounded text-gray">person</i>
+                <span>{{ kommentar.user_erstellt }}</span>
+                <div class="text-muted">
+                  {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}
+                </div>
+                <div>
+                  {{ kommentar.kommentar }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <tr
+      [ngClass]="{
+        'expanded-row': dokument.gesuchDokument?.id
+          ? dokument.gesuchDokument?.id === expandedRowId
+            ? true
+            : false
+          : false,
+        '!tw-bg-dv-warning': !dokument?.gesuchDokument?.id,
+      }"
+      mat-row
+      *matRowDef="let dokument; columns: displayedColumns"
+      (click)="expandRow(dokument)"
+    ></tr>
+    <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
+
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-px-3 tw-text-center" [colSpan]="displayedColumns.length">
+        {{ 'shared.dokumente.table.noData' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>

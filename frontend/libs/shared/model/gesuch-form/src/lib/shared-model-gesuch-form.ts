@@ -10,6 +10,7 @@ export type StepState = 'VALID' | 'INVALID' | 'WARNING';
 
 export interface GesuchFormStep {
   route: string;
+  routes?: string[];
   translationKey: string;
   titleTranslationKey: string;
   iconSymbolName: string;

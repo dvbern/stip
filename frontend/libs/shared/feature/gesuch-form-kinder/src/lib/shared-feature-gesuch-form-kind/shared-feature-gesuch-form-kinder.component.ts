@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  computed,
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -45,18 +44,8 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
-  sortedKinderSig = computed(() => {
-    const originalList = this.viewSig().gesuchFormular?.kinds;
-    return originalList
-      ? [...originalList].sort((a, b) =>
-          (a.vorname + ' ' + a.nachname).localeCompare(
-            b.vorname + ' ' + b.nachname,
-          ),
-        )
-      : undefined;
-  });
-
   editedKind?: Partial<KindUpdate>;
+  editedKindIndex: number | undefined;
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormKinder.init());
@@ -64,10 +53,12 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   public handleAddKinder(): void {
     this.editedKind = {};
+    this.editedKindIndex = undefined;
   }
 
-  public handleSelectKinder(ge: KindUpdate): void {
+  public handleSelectKinder(ge: KindUpdate, index: number): void {
     this.editedKind = ge;
+    this.editedKindIndex = index;
   }
 
   handleEditorSave(kind: KindUpdate) {

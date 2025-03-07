@@ -6,21 +6,16 @@ import {
   input,
 } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { UploadView } from '@dv/shared/model/dokument';
 
-import { SharedPatternDocumentUploadEntryComponent } from './document-upload-entry.component';
 import { UploadStore } from '../upload.store';
+import { SharedPatternDocumentUploadEntryComponent } from './document-upload-entry.component';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-list',
   standalone: true,
-  imports: [
-    TranslatePipe,
-    MatFormFieldModule,
-    SharedPatternDocumentUploadEntryComponent,
-  ],
+  imports: [MatFormFieldModule, SharedPatternDocumentUploadEntryComponent],
   templateUrl: './document-upload-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
