@@ -7,7 +7,7 @@ import { getChangesForList } from '@dv/shared/util-fn/gesuch-util';
  *
  * @example
  * <div>
- *  ＠if (listChanges | dvZuvorListContains: someEntryWithId) {
+ *  ＠if (listChanges | dvZuvorListContains: $index) {
  *    ...
  *  }
  * </div>
@@ -19,11 +19,10 @@ import { getChangesForList } from '@dv/shared/util-fn/gesuch-util';
 export class SharedUiFormZuvorHintListPipe implements PipeTransform {
   transform(
     value: ReturnType<typeof getChangesForList>,
-    entry: { id?: string },
+    index: number,
   ): boolean {
     return !!(
-      entry.id &&
-      (value?.changesByIdentifier?.[entry.id] || value?.newEntries?.[entry.id])
+      value?.changesByIndex[index] ?? value?.newEntriesByIdentifier[index]
     );
   }
 }

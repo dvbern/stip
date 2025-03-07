@@ -15,14 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.validation;
+package ch.dvbern.stip.api.dokument.service;
 
-import java.util.Set;
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
+import org.mapstruct.Mapper;
 
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import org.apache.commons.lang3.tuple.Pair;
+@Mapper(config = MappingConfig.class)
+public interface CustomDocumentTypMapper {
+    CustomDokumentTyp toEntity(CustomDokumentTypCreateDto dokumentTypDto);
 
-public interface RequiredDocumentProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular);
+    CustomDokumentTypDto toDto(CustomDokumentTyp entity);
 }

@@ -176,16 +176,31 @@ export const loadGesuch = createEffect(
             ),
         } satisfies Record<AppType, unknown>;
 
-        // Different services for different types of tranches
-        const services$ = {
-          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-          TRANCHE: () => (gesuchTrancheId: string) =>
-            gesuchService.getGesuch$(
-              { gesuchId: id, gesuchTrancheId },
+        const trancheServices$ = {
+          'gesuch-app': (gesuchTrancheId: string) =>
+            gesuchService.getGesuchGS$(
+              {
+                gesuchTrancheId,
+              },
               undefined,
               undefined,
               handle404And401,
             ),
+          'sachbearbeitung-app': (gesuchTrancheId: string) =>
+            gesuchService.getGesuchSB$(
+              {
+                gesuchTrancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            ),
+        } satisfies Record<AppType, unknown>;
+
+        // Different services for different types of tranches
+        const services$ = {
+          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
+          TRANCHE: (appType: AppType) => trancheServices$[appType],
           INITIAL: () => () =>
             gesuchService.getInitialTrancheChangesByGesuchId$(
               {

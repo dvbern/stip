@@ -10,14 +10,13 @@
  * Do not edit the class manually.
  */
 import { Dokumentstatus } from './dokumentstatus';
-import { DokumentTyp } from './dokumentTyp';
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 export interface GesuchDokumentKommentar { 
     gesuchTrancheId: string;
-    dokumentTyp: DokumentTyp;
+    gesuchDokumentId: string;
     dokumentStatus?: Dokumentstatus;
     kommentar?: string;
     user_erstellt?: string;

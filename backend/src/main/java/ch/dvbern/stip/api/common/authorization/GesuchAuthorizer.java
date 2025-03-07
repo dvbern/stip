@@ -58,6 +58,16 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canReadChanges(final UUID gesuchID) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (isAdminOrSb(currentBenutzer)) {
+            return;
+        }
+        throw new UnauthorizedException();
+    }
+
+    @Transactional
     public void canRead(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 

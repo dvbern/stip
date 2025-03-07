@@ -279,9 +279,6 @@ export function prepareTranchenChanges(
       {
         keysToSkip: ['id'],
         embeddedObjKeys: {
-          ['kinds']: 'id',
-          ['elterns']: 'id',
-          ['geschwisters']: 'id',
           /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
           ['steuerdaten']: 'steuerdatenTyp',
         },

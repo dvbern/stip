@@ -138,8 +138,20 @@ describe('calculate differences', () => {
           nachname: 'Sanchez',
           vorname: 'Laura',
         },
+        VATER: null,
       },
-      newEntries: {},
+      changesByIndex: [
+        {
+          geburtsdatum: '2000-01-01',
+          identischerZivilrechtlicherWohnsitz: true,
+          identischerZivilrechtlicherWohnsitzOrt: 'Musterort',
+          identischerZivilrechtlicherWohnsitzPLZ: '1234',
+          nachname: 'Sanchez',
+          vorname: 'Laura',
+        },
+        null,
+      ],
+      newEntriesByIdentifier: {},
     });
   });
 
@@ -157,7 +169,12 @@ describe('calculate differences', () => {
       changesByIdentifier: {
         MUTTER: { nachname: 'Sanchez' },
       },
-      newEntries: { VATER: true },
+      changesByIndex: [
+        {
+          nachname: 'Sanchez',
+        },
+      ],
+      newEntriesByIdentifier: { VATER: true },
     });
   });
 });

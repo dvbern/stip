@@ -18,7 +18,6 @@ import { filter } from 'rxjs';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { DokumentOptions } from '@dv/shared/model/dokument';
-import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
@@ -35,7 +34,6 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
     TranslatePipe,
     MatDialogModule,
     MatFormFieldModule,
-    SharedUiDropFileComponent,
     SharedUiIconChipComponent,
   ],
   templateUrl: './document-upload.component.html',
@@ -81,26 +79,29 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       .subscribe(() => {
         const { initialDokumente, dokument } = this.optionsSig();
 
-        if (dokument.art === 'GESUCH_DOKUMENT') {
-          this.einreichStore.validateSteps$({
-            gesuchTrancheId: dokument.trancheId,
-          });
+        switch (dokument.art) {
+          case 'GESUCH_DOKUMENT':
+          case 'CUSTOM_DOKUMENT':
+            this.einreichStore.validateSteps$({
+              gesuchTrancheId: dokument.trancheId,
+            });
 
-          if (initialDokumente) {
+            if (initialDokumente) {
+              this.dokumentsStore.getDokumenteAndRequired$({
+                gesuchTrancheId: dokument.trancheId,
+              });
+            }
+            break;
+
+          case 'UNTERSCHRIFTENBLATT':
+            this.dokumentsStore.getAdditionalDokumente$({
+              gesuchId: dokument.gesuchId,
+            });
+
             this.dokumentsStore.getDokumenteAndRequired$({
               gesuchTrancheId: dokument.trancheId,
             });
-          }
-        }
-
-        if (dokument.art === 'UNTERSCHRIFTENBLATT') {
-          this.dokumentsStore.getAdditionalDokumente$({
-            gesuchId: dokument.gesuchId,
-          });
-
-          this.dokumentsStore.getDokumenteAndRequired$({
-            gesuchTrancheId: dokument.trancheId,
-          });
+            break;
         }
       });
   }

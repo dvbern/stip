@@ -46,29 +46,29 @@ export class GesuchStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
-    <T, R extends SharedModelGesuch>(
-      handler$: (params: T) => Observable<R>,
-      onSuccess?: (data: R) => void,
-    ) =>
-    (source$: Observable<T>) => {
+    <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
+    (source$: Observable<T & { onSuccess?: (data?: R) => void }>) => {
       return source$.pipe(
         tap(() => patchState(this, { lastStatusChange: initial() })),
-        switchMap(handler$),
-        handleApiResponse(
-          () => {
-            patchState(this, { lastStatusChange: success(null) });
-          },
-          {
-            onSuccess: (data) => {
-              this.store.dispatch(
-                SharedDataAccessGesuchEvents.gesuchSetReturned({
-                  gesuch: data,
-                }),
-              );
-              this.loadGesuchInfo$({ gesuchId: data.id });
-              onSuccess?.(data);
-            },
-          },
+        switchMap(({ onSuccess, ...params }) =>
+          handler$(params as T).pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, { lastStatusChange: success(null) });
+              },
+              {
+                onSuccess: (data) => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.gesuchSetReturned({
+                      gesuch: data,
+                    }),
+                  );
+                  this.loadGesuchInfo$({ gesuchId: data.id });
+                  onSuccess?.(data);
+                },
+              },
+            ),
+          ),
         ),
       );
     };
@@ -177,7 +177,11 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    ZURUECKWEISEN: rxMethod<{ gesuchTrancheId: string; text: string }>(
+    ZURUECKWEISEN: rxMethod<{
+      gesuchTrancheId: string;
+      text: string;
+      onSuccess?: () => void;
+    }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId, text }) =>
           this.gesuchService.gesuchZurueckweisen$({

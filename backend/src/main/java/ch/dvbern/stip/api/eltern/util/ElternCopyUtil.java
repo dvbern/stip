@@ -20,7 +20,10 @@ package ch.dvbern.stip.api.eltern.util;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.common.util.AbstractPersonCopyUtil;
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import lombok.experimental.UtilityClass;
 
@@ -28,21 +31,27 @@ import lombok.experimental.UtilityClass;
 public class ElternCopyUtil {
     public Eltern createCopyWithoutReferences(final Eltern other) {
         final var copy = new Eltern();
-
-        AbstractPersonCopyUtil.copy(other, copy);
-        copy.setAdresse(other.getAdresse());
-        copy.setSozialversicherungsnummer(other.getSozialversicherungsnummer());
-        copy.setSozialhilfebeitraege(other.isSozialhilfebeitraege());
-        copy.setErgaenzungsleistungen(other.getErgaenzungsleistungen());
-        copy.setElternTyp(other.getElternTyp());
-        copy.setTelefonnummer(other.getTelefonnummer());
-        copy.setAusweisbFluechtling(other.getAusweisbFluechtling());
-        copy.setIdentischerZivilrechtlicherWohnsitz(other.isIdentischerZivilrechtlicherWohnsitz());
-        copy.setIdentischerZivilrechtlicherWohnsitzOrt(other.getIdentischerZivilrechtlicherWohnsitzOrt());
-        copy.setIdentischerZivilrechtlicherWohnsitzPLZ(other.getIdentischerZivilrechtlicherWohnsitzPLZ());
-        copy.setWohnkosten(other.getWohnkosten());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final Eltern source, final Eltern target) {
+        copyValuesWithoutReferences(source, target);
+        target.setAdresse(source.getAdresse());
+    }
+
+    public void copyValuesWithoutReferences(final Eltern source, final Eltern target) {
+        AbstractPersonCopyUtil.copy(source, target);
+        target.setSozialversicherungsnummer(source.getSozialversicherungsnummer());
+        target.setSozialhilfebeitraege(source.isSozialhilfebeitraege());
+        target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
+        target.setElternTyp(source.getElternTyp());
+        target.setTelefonnummer(source.getTelefonnummer());
+        target.setAusweisbFluechtling(source.getAusweisbFluechtling());
+        target.setIdentischerZivilrechtlicherWohnsitz(source.isIdentischerZivilrechtlicherWohnsitz());
+        target.setIdentischerZivilrechtlicherWohnsitzOrt(source.getIdentischerZivilrechtlicherWohnsitzOrt());
+        target.setIdentischerZivilrechtlicherWohnsitzPLZ(source.getIdentischerZivilrechtlicherWohnsitzPLZ());
+        target.setWohnkosten(source.getWohnkosten());
     }
 
     public Set<Eltern> createCopyOfSetWithoutReferences(final Set<Eltern> other) {
@@ -52,5 +61,21 @@ public class ElternCopyUtil {
         }
 
         return copy;
+    }
+
+    public void doOverrideOfSet(final Set<Eltern> targetEltern, final Set<Eltern> sourceEltern) {
+        OverrideUtil.doOverrideOfSet(
+            targetEltern,
+            sourceEltern,
+            ElternCopyUtil::copyValuesWithoutReferences,
+            source -> {
+                final var newTarget = new Eltern().setAdresse(new Adresse());
+
+                ElternCopyUtil.copyValuesWithoutReferences(source, newTarget);
+                AdresseCopyUtil.copyValues(source.getAdresse(), newTarget.getAdresse());
+
+                return newTarget;
+            }
+        );
     }
 }

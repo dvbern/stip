@@ -34,7 +34,7 @@
           (addTriggered)="handleAddElternteil($event)"
           (editTriggered)="handleEdit($event)"
         />
-        @if (changes?.changesByIdentifier?.['VATER'] || changes?.newEntries?.['VATER']) {
+        @if (changes?.changesByIdentifier?.['VATER'] || changes?.newEntriesByIdentifier?.['VATER']) {
           <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
         }
       </div>
@@ -49,7 +49,7 @@
           (addTriggered)="handleAddElternteil($event)"
           (editTriggered)="handleEdit($event)"
         />
-        @if (changes?.changesByIdentifier?.['MUTTER'] || changes?.newEntries?.['MUTTER']) {
+        @if (changes?.changesByIdentifier?.['MUTTER'] || changes?.newEntriesByIdentifier?.['MUTTER']) {
           <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
         }
       </div>

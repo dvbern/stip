@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.dokument.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class DokumentsRequiredDocumentProducer implements RequiredDocumentProducer {
+public class DokumentsRequiredDocumentProducer implements RequiredDocumentsProducer {
 
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {

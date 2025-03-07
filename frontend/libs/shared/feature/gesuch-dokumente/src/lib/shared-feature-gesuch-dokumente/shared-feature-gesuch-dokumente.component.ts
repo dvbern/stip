@@ -21,10 +21,12 @@ import {
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
   SharedModelGesuchDokument,
-  SharedModelTableGesuchDokument,
+  SharedModelTableCustomDokument,
+  SharedModelTableDokument,
 } from '@dv/shared/model/dokument';
-import { DokumentTyp, Dokumentstatus } from '@dv/shared/model/gesuch';
+import { Dokumentstatus } from '@dv/shared/model/gesuch';
 import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
@@ -42,6 +44,8 @@ import {
 } from '@dv/shared/util/gesuch';
 
 import { AdditionalDokumenteComponent } from './components/additional-dokumente/additional-dokumente.component';
+import { CreateCustomDokumentDialogComponent } from './components/create-custom-dokument-dialog/create-custom-dokument-dialog.component';
+import { CustomDokumenteComponent } from './components/custom-dokumente/custom-dokumente.component';
 import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
 @Component({
@@ -53,6 +57,7 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
     MatTableModule,
     RequiredDokumenteComponent,
     AdditionalDokumenteComponent,
+    CustomDokumenteComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiIfGesuchstellerDirective,
@@ -87,6 +92,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       requiredDocumentTypes,
     };
   });
+
   standardDokumenteViewSig = computed(() => {
     const {
       allowTypes,
@@ -96,10 +102,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheId,
       readonly,
       config: { isSachbearbeitungApp },
+      gesuch,
     } = this.gesuchViewSig();
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
+
     const kommentare = this.dokumentsStore.kommentareViewSig();
 
     return {
@@ -114,19 +122,65 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
+      gesuchStatus: gesuch?.gesuchStatus,
+    };
+  });
+
+  customDokumenteViewSig = computed(() => {
+    const {
+      allowTypes,
+      gesuchId,
+      permissions,
+      trancheSetting,
+      trancheId,
+      readonly,
+      gesuch,
+      config: { isSachbearbeitungApp },
+    } = this.gesuchViewSig();
+
+    const { dokuments, requiredDocumentTypes } =
+      this.dokumentsStore.customDokumenteViewSig();
+
+    const kommentare = this.dokumentsStore.kommentareViewSig();
+
+    return {
+      gesuchId,
+      trancheId,
+      permissions,
+      trancheSetting: trancheSetting ?? undefined,
+      isSachbearbeitungApp,
+      allowTypes,
+      dokuments,
+      kommentare,
+      requiredDocumentTypes,
+      readonly,
+      gesuchStatus: gesuch?.gesuchStatus,
+      showList:
+        dokuments.length > 0 ||
+        requiredDocumentTypes.length > 0 ||
+        isSachbearbeitungApp,
     };
   });
 
   DokumentStatus = Dokumentstatus;
 
   // inform the GS that documents are missing (or declined)
-  canSendMissingDocumentsSig = computed(() => {
-    const hasAbgelehnteDokuments =
-      this.dokumentsStore.hasAbgelehnteDokumentsSig();
+  // if true, the button is shown
+  canSBSendMissingDocumentsSig = computed(() => {
+    const hasDokumenteToUebermitteln =
+      this.dokumentsStore.hasDokumenteToUebermittelnSig();
+
     const isInCorrectState =
       this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
 
-    return hasAbgelehnteDokuments && isInCorrectState;
+    return hasDokumenteToUebermitteln && isInCorrectState;
+  });
+
+  canCreateCustomDokumentTypSig = computed(() => {
+    const isInCorrectState =
+      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+
+    return isInCorrectState;
   });
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
@@ -161,20 +215,20 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  dokumentAkzeptieren(dokument: SharedModelTableGesuchDokument) {
+  dokumentAkzeptieren(dokument: SharedModelTableDokument) {
     const gesuchTrancheId = this.gesuchViewSig().trancheId;
 
     if (!dokument?.gesuchDokument?.id || !gesuchTrancheId) return;
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: dokument?.gesuchDokument.id,
-      afterSuccess: () => {
+      onSuccess: () => {
         this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
       },
     });
   }
 
-  dokumentAblehnen(document: SharedModelTableGesuchDokument) {
+  dokumentAblehnen(document: SharedModelTableDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
     const gesuchDokumentId =
       document.dokumentOptions.dokument.gesuchDokument?.id;
@@ -195,29 +249,54 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId,
-            dokumentTyp: document.dokumentTyp,
-            afterSuccess: () => {
-              this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+            onSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
             },
           });
         }
       });
   }
 
-  getGesuchDokumentKommentare(dokument: SharedModelTableGesuchDokument) {
+  getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
     const { trancheId } = this.gesuchViewSig();
-    if (!trancheId) return;
+    const gesuchDokumentId = dokument.gesuchDokument?.id;
+    if (!trancheId || !gesuchDokumentId) return;
 
     this.dokumentsStore.getGesuchDokumentKommentare$({
-      dokumentTyp: dokument.gesuchDokument?.dokumentTyp as DokumentTyp,
+      gesuchDokumentId: gesuchDokumentId,
       gesuchTrancheId: trancheId,
     });
   }
 
-  fehlendeDokumenteEinreichen() {
+  deleteCustomDokumentTyp(dokument: SharedModelTableCustomDokument) {
     const { gesuchId, trancheId } = this.gesuchViewSig();
 
-    if (gesuchId && trancheId) {
+    if (!gesuchId || !trancheId) return;
+
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.dokumente.deleteCustomDokumentTyp.title',
+      message: 'shared.dokumente.deleteCustomDokumentTyp.message',
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.dokumentsStore.deleteCustomDokumentTyp$({
+            customDokumentTypId: dokument.dokumentTyp.id,
+            onSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$({
+                gesuchTrancheId: trancheId,
+              });
+            },
+          });
+        }
+      });
+  }
+
+  fehlendeDokumenteEinreichen() {
+    const { trancheId } = this.gesuchViewSig();
+
+    if (trancheId) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         onSuccess: () => {
@@ -254,6 +333,29 @@ export class SharedFeatureGesuchDokumenteComponent {
         this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
       },
     });
+  }
+
+  createCustomDokumentTyp() {
+    CreateCustomDokumentDialogComponent.open(this.dialog)
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          const { trancheId } = this.gesuchViewSig();
+          if (trancheId) {
+            this.dokumentsStore.createCustomDokumentTyp$({
+              trancheId,
+              type: result.name,
+              description: result.kommentar,
+              onSuccess: () => {
+                this.dokumentsStore.getDokumenteAndRequired$({
+                  gesuchTrancheId: trancheId,
+                });
+              },
+            });
+          }
+        }
+      });
   }
 
   handleContinue() {
