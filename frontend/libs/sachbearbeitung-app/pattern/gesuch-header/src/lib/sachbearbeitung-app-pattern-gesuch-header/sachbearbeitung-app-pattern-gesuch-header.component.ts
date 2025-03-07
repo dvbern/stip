@@ -20,12 +20,14 @@ import { filter, map } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchInfo } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -65,8 +67,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private einreichenStore = inject(EinreichenStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
+  private permissionStore = inject(PermissionStore);
   private config = inject(SharedModelCompileTimeConfig);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -105,10 +109,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   gesuchPermissionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return {};
     }
-    return getGesuchPermissions({ gesuchStatus }, this.config.appType);
+    return getGesuchPermissions(
+      { gesuchStatus },
+      this.config.appType,
+      rolesMap,
+    );
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());
@@ -232,6 +241,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
                 gesuchTrancheId,
                 text: result.kommentar,
+                onSuccess: () => {
+                  this.einreichenStore.validateSteps$({ gesuchTrancheId });
+                },
               });
             }
           });

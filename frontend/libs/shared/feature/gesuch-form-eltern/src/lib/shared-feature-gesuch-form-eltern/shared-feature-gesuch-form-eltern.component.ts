@@ -8,9 +8,11 @@ import {
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   ElternTyp,
@@ -43,6 +45,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 })
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
+  private permissionStore = inject(PermissionStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
 
   hasUnsavedChanges = false;
@@ -52,6 +55,7 @@ export class SharedFeatureGesuchFormElternComponent {
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
   editedElternteil?: Omit<Partial<ElternUpdate>, 'elternTyp'> &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
@@ -62,11 +66,13 @@ export class SharedFeatureGesuchFormElternComponent {
     effect(
       () => {
         const { loading, gesuch, gesuchFormular } = this.viewSig();
+        const rolesMap = this.permissionStore.rolesMapSig();
+        const { trancheTyp } = this.cacheSig();
         if (
           !loading &&
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(ELTERN, gesuch, this.appType)
+          isStepDisabled(ELTERN, trancheTyp, gesuch, this.appType, rolesMap)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormEltern.nextTriggered({

@@ -41,24 +41,22 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
     private final EntityManager entityManager;
 
-    public List<GesuchDokument> findAllByCustomDokumentTypeId(UUID customDokumentTypeId) {
+    public List<GesuchDokument> findAllByCustomDokumentTypId(UUID customDokumentTypId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
-                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId)
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId)
             );
         return query.stream().toList();
     }
 
-    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentType(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentTyp(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.dokumentTyp.eq(dokumentTyp))
@@ -100,18 +98,15 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream();
     }
 
-    public Optional<GesuchDokument> findByGesuchTrancheAndCustomDokumentType(
-        UUID gesuchTrancheId,
-        UUID customDokumentTypeId
+    public Optional<GesuchDokument> findByCustomDokumentTyp(
+        UUID customDokumentTypId
     ) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
-                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
-                    .and(gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId)
             );
         return query.stream().findFirst();
     }
@@ -120,8 +115,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.customDokumentTyp.id.isNotNull())
@@ -129,14 +123,13 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream().toList();
     }
 
-    public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypeId) {
+    public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
             .where(
-                (gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
+                (gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId))
                     .and(gesuchDokument.dokumente.isNotEmpty())
             );
         return query.stream().findAny().isPresent();

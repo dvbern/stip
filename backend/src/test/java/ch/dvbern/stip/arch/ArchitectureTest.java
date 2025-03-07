@@ -39,8 +39,6 @@ class ArchitectureTest {
         .definedBy("..service..")
         .layer("Repository")
         .definedBy("..repo..")
-        .layer("Entity")
-        .definedBy("..entity..")
         .optionalLayer("Generated")
         .definedBy("..generated..")
         .optionalLayer("Type")
@@ -63,19 +61,7 @@ class ArchitectureTest {
         var rule = LAYERS.whereLayer("Resource")
             .mayNotBeAccessedByAnyLayer()
             .whereLayer("Repository")
-            .mayOnlyBeAccessedByLayers("Service", "Authorization")
-            .whereLayer("Entity")
-            .mayOnlyBeAccessedByLayers(
-                "Service",
-                "Repository",
-                "Generated",
-                "Statemachines",
-                "Validation",
-                "Util",
-                "DTO",
-                "Authorization",
-                "Decider"
-            );
+            .mayOnlyBeAccessedByLayers("Service", "Authorization");
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }

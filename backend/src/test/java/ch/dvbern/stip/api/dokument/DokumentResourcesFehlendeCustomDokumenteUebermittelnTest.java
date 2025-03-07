@@ -44,14 +44,12 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -134,7 +132,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
@@ -270,7 +268,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
         var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -295,7 +292,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     void reupload_abgelehnte_dokumente() {
         var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -304,7 +300,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .body()
             .as(NullableGesuchDokumentDto.class);
 
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadFile(
             dokumentApiSpec,
@@ -323,7 +318,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
         TestUtil.uploadCustomDokumentFile(
             dokumentApiSpec,
-            gesuchTrancheId,
             customDok.getValue().getCustomDokumentTyp().getId(),
             file
         );
@@ -349,7 +343,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
         customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -366,14 +359,14 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @Order(23)
     void setToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
@@ -399,7 +392,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .as(NullableGesuchDokumentDto.class);
         var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -461,7 +453,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
         customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -516,7 +507,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .as(NullableGesuchDokumentDto.class);
         var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -564,7 +554,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
         customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

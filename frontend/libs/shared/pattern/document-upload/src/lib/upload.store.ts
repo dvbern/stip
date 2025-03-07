@@ -130,7 +130,6 @@ export class UploadStore {
                 return this.documentService
                   .getCustomGesuchDokumenteForTyp$({
                     customDokumentTypId: dokument.dokumentTyp.id,
-                    gesuchTrancheId: dokument.trancheId,
                   })
                   .pipe(
                     map(
@@ -399,10 +398,9 @@ export class UploadStore {
             ...serviceDefaultParams,
           );
         case 'CUSTOM_DOKUMENT':
-          return this.documentService.createCustomGesuchDokument$(
+          return this.documentService.uploadCustomGesuchDokument$(
             {
               ...action,
-              gesuchTrancheId: dokument.trancheId,
               customDokumentTypId: dokument.dokumentTyp.id,
             },
             ...serviceDefaultParams,

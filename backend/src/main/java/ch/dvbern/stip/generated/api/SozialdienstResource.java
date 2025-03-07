@@ -1,12 +1,12 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import java.util.UUID;
 
@@ -35,7 +35,7 @@ public interface SozialdienstResource {
     @POST
     @Path("/benutzer")
     @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
+    @Produces({ "application/json" })
     SozialdienstBenutzerDto createSozialdienstBenutzer(@Valid SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto);
 
     @DELETE
@@ -51,6 +51,11 @@ public interface SozialdienstResource {
     @GET
     @Produces({ "application/json", "text/plain" })
     List<SozialdienstDto> getAllSozialdienste();
+
+    @GET
+    @Path("/delegation")
+    @Produces({ "application/json", "text/plain" })
+    List<SozialdienstSlimDto> getAllSozialdiensteForDelegation();
 
     @GET
     @Path("/{sozialdienstId}")
@@ -79,10 +84,10 @@ public interface SozialdienstResource {
     SozialdienstDto updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);
 
     @PATCH
-    @Path("/{sozialdienstId}/updateSozialdienstAdmin")
+    @Path("/admin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstBenutzerDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+    SozialdienstBenutzerDto updateSozialdienstAdmin(@Valid SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto);
 
     @PATCH
     @Path("/benutzer")

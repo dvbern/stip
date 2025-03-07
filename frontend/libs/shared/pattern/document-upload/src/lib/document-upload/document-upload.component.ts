@@ -81,18 +81,11 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
         switch (dokument.art) {
           case 'GESUCH_DOKUMENT':
+          case 'CUSTOM_DOKUMENT':
             this.einreichStore.validateSteps$({
               gesuchTrancheId: dokument.trancheId,
             });
 
-            if (initialDokumente) {
-              this.dokumentsStore.getDokumenteAndRequired$({
-                gesuchTrancheId: dokument.trancheId,
-              });
-            }
-            break;
-
-          case 'CUSTOM_DOKUMENT':
             if (initialDokumente) {
               this.dokumentsStore.getDokumenteAndRequired$({
                 gesuchTrancheId: dokument.trancheId,

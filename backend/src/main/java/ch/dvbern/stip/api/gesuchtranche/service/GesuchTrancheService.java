@@ -52,12 +52,12 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -214,6 +214,7 @@ public class GesuchTrancheService {
         );
 
         for (final var gesuchDokument : superfluousGesuchDokuments) {
+            gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
             formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
         }
 
@@ -225,7 +226,7 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         return gesuchDokumentMapper.toDto(
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp)
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp)
                 .orElseThrow(NotFoundException::new)
         );
     }
@@ -411,6 +412,10 @@ public class GesuchTrancheService {
 
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
+        gesuchDokumentKommentarService.deleteForGesuchTrancheId(aenderungId);
+        var aenderung = gesuchTrancheRepository.findById(aenderungId);
+        aenderung.getGesuchDokuments()
+            .forEach(gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId()));
         if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }
@@ -453,5 +458,9 @@ public class GesuchTrancheService {
             .toList();
 
         return !trancheInDisallowedStates.isEmpty();
+    }
+
+    public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
+        gesuchTrancheRepository.delete(gesuchTranche);
     }
 }

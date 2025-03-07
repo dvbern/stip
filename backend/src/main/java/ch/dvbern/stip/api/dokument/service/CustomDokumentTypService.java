@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import io.quarkus.security.ForbiddenException;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestScoped
 @RequiredArgsConstructor
 public class CustomDokumentTypService {
+    private final GesuchTrancheRepository trancheRepository;
     private final CustomDokumentTypRepository customDocumentTypRepository;
     private final CustomDocumentTypMapper customDocumentTypMapper;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -43,7 +45,11 @@ public class CustomDokumentTypService {
 
     @Transactional
     public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
-        final var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
+        final var gesuchTranche = trancheRepository.requireById(dto.getTrancheId());
+        var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
+        var emptyGesuchDokument = gesuchDokumentService
+            .createGesuchDokument(gesuchTranche, customDokumentTyp);
+        customDokumentTyp.setGesuchDokument(emptyGesuchDokument);
         customDocumentTypRepository.persistAndFlush(customDokumentTyp);
         return customDocumentTypMapper.toDto(customDokumentTyp);
     }
@@ -58,7 +64,7 @@ public class CustomDokumentTypService {
 
     @Transactional
     public List<CustomDokumentTyp> getAllCustomDokumentTypsOfTranche(UUID gesuchTrancheId) {
-        final var gesuchDokuments = findByCustomDokumentTypId(gesuchTrancheId);
+        final var gesuchDokuments = gesuchDokumentRepository.findAllOfTypeCustomByGesuchTrancheId(gesuchTrancheId);
         return gesuchDokuments.stream().map(GesuchDokument::getCustomDokumentTyp).toList();
     }
 
@@ -68,16 +74,12 @@ public class CustomDokumentTypService {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehaenkt");
         } else {
             // clear all references to gesuchdokkument
-            final var gesuchDokumenteOfCustomType =
-                gesuchDokumentRepository.findAllByCustomDokumentTypeId(customDokumentTypId);
-            gesuchDokumenteOfCustomType.forEach(
+            final var gesuchDokumenteOfCustomTyp =
+                gesuchDokumentRepository.findAllByCustomDokumentTypId(customDokumentTypId);
+            gesuchDokumenteOfCustomTyp.forEach(
                 gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId())
             );
             customDocumentTypRepository.deleteById(customDokumentTypId);
         }
-    }
-
-    private List<GesuchDokument> findByCustomDokumentTypId(UUID gesuchTrancheId) {
-        return gesuchDokumentRepository.findAllOfTypeCustomByGesuchTrancheId(gesuchTrancheId);
     }
 }

@@ -308,6 +308,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
         invalidFormularProps: { specialValidationErrors },

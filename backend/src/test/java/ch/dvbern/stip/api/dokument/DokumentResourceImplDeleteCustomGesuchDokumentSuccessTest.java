@@ -36,6 +36,7 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -51,7 +52,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -114,7 +114,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
@@ -144,7 +144,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
         final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -152,7 +151,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(result.getValue().getCustomDokumentTyp(), notNullValue());
+        assertThat(result.getValue().getCustomDokumentTyp().getType(), is("test"));
     }
 
     // testAsSB
@@ -163,7 +162,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     @Order(6)
     void test_delete_required_custom_gesuchdokument_should_success() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()

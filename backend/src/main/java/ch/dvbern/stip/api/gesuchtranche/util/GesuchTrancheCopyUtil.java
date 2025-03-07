@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -43,6 +44,7 @@ import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import jakarta.ws.rs.NotFoundException;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -146,6 +148,19 @@ public class GesuchTrancheCopyUtil {
         return newTranche;
     }
 
+    public GesuchTranche createCopy(final GesuchTranche source) {
+        final var copy = new GesuchTranche();
+
+        copy.setGueltigkeit(source.getGueltigkeit());
+        copy.setGesuchFormular(source.getGesuchFormular());
+        copy.setStatus(source.getStatus());
+        copy.setComment(source.getComment());
+        copy.setGesuchDokuments(source.getGesuchDokuments());
+        copy.setTyp(source.getTyp());
+
+        return copy;
+    }
+
     /**
      * Copies a tranche
      */
@@ -229,15 +244,11 @@ public class GesuchTrancheCopyUtil {
 
         // Eltern
         copy.setElterns(ElternCopyUtil.createCopyOfSetWithoutReferences(other.getElterns()));
-        Adresse mutterAdresseCopy = null;
-        Adresse vaterAdresseCopy = null;
+
+        final var elternAdressen = new ElternAdressen();
         for (final var eltern : copy.getElterns()) {
             final var adresseCopy = AdresseCopyUtil.createCopy(eltern.getAdresse());
-            if (eltern.getElternTyp() == ElternTyp.MUTTER) {
-                mutterAdresseCopy = adresseCopy;
-            } else if (eltern.getElternTyp() == ElternTyp.VATER) {
-                vaterAdresseCopy = adresseCopy;
-            }
+            elternAdressen.setForTyp(eltern.getElternTyp(), adresseCopy);
 
             eltern.setAdresse(adresseCopy);
         }
@@ -246,8 +257,8 @@ public class GesuchTrancheCopyUtil {
         copy.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(other.getAuszahlung()));
         final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
             case GESUCHSTELLER -> piaAdresseCopy;
-            case MUTTER -> mutterAdresseCopy;
-            case VATER -> vaterAdresseCopy;
+            case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
+            case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
             default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
         };
         copy.getAuszahlung().setAdresse(auszahlungAdresseCopy);
@@ -267,6 +278,39 @@ public class GesuchTrancheCopyUtil {
         // Steuerdaten
         copy.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(other.getSteuerdaten()));
 
+        // Darlehen
+        copy.setDarlehen(DarlehenCopyUtil.createCopy(other.getDarlehen()));
+
         return copy;
+    }
+
+    @Getter
+    public class ElternAdressen {
+        private Adresse mutterAdresse;
+        private Adresse vaterAdresse;
+
+        public static ElternAdressen fromGesuchFormular(final GesuchFormular gesuchFormular) {
+            final var elternAdressen = new ElternAdressen();
+            for (final var eltern : gesuchFormular.getElterns()) {
+                elternAdressen.setForTyp(eltern.getElternTyp(), eltern.getAdresse());
+            }
+
+            return elternAdressen;
+        }
+
+        public void setForTyp(final ElternTyp typ, final Adresse adresse) {
+            if (typ == ElternTyp.VATER) {
+                vaterAdresse = adresse;
+            } else if (typ == ElternTyp.MUTTER) {
+                mutterAdresse = adresse;
+            }
+        }
+
+        public Adresse getForTyp(final ElternTyp typ) {
+            return switch (typ) {
+                case VATER -> vaterAdresse;
+                case MUTTER -> mutterAdresse;
+            };
+        }
     }
 }

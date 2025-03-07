@@ -156,7 +156,7 @@ public class Gesuch extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "einreichedatum")
-    private LocalDateTime einreichedatum;
+    private LocalDate einreichedatum;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
@@ -165,7 +165,7 @@ public class Gesuch extends AbstractMandantEntity {
     }
 
     public Optional<GesuchTranche> getTrancheValidOnDate(LocalDate date) {
-        return tranchenValidOnDateStream(date)
+        return gesuchTranchenValidOnDateStream(date)
             .filter(
                 tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
                 && (tranche.getTyp() == GesuchTrancheTyp.TRANCHE)
@@ -173,20 +173,21 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
-    public Optional<GesuchTranche> getAllTranchenValidOnDate(LocalDate date) {
-        return tranchenValidOnDateStream(date).findFirst();
+    public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
+        return gesuchTranchenValidOnDateStream(date).findFirst();
     }
 
-    private Stream<GesuchTranche> tranchenValidOnDateStream(LocalDate date) {
-        return gesuchTranchen.stream().filter(t -> t.getGueltigkeit().contains(date));
+    private Stream<GesuchTranche> gesuchTranchenValidOnDateStream(LocalDate date) {
+        return gesuchTranchen.stream()
+            .filter(tranche -> tranche.getGueltigkeit().contains(date));
     }
 
     public GesuchTranche getCurrentGesuchTranche() {
-        return getAllTranchenValidOnDate(LocalDate.now()).orElseThrow();
+        return getGesuchTrancheValidOnDate(LocalDate.now()).orElseThrow();
     }
 
     public Optional<GesuchTranche> getCurrentGesuchTrancheOptional() {
-        return getAllTranchenValidOnDate(LocalDate.now());
+        return getGesuchTrancheValidOnDate(LocalDate.now());
     }
 
     public Optional<GesuchTranche> getNewestGesuchTranche() {

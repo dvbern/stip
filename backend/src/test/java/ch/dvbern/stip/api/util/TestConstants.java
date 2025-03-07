@@ -46,7 +46,7 @@ public final class TestConstants {
     public static final String AHV_NUMMER_VALID = "756.9217.0769.85";
     public static final String AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG = "756.1111.1113.11";
     public static final String AHV_NUMMER_VALID_MUTTER = "756.1111.1111.13";
-    public static final String AHV_NUMMER_VALID_VATTER = "756.1111.1114.10";
+    public static final String AHV_NUMMER_VALID_VATER = "756.1111.1114.10";
     public static final String AHV_NUMMER_VALID_PARTNER = "756.1111.1112.12";
     public static final String IBAN_CH_NUMMER_VALID = "CH5604835012345678009";
     public static final String IBAN_CH_NUMMER_INVALID = "CH5004835012345678009";

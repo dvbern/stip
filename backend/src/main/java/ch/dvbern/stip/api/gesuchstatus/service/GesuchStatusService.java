@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchstatus.service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
@@ -50,6 +52,7 @@ public class GesuchStatusService {
     private final GesuchValidatorService validationService;
     private final MailService mailService;
     private final NotificationService notificationService;
+    private final GesuchHistoryService gesuchHistoryService;
 
     private final Instance<GesuchStatusStateChangeHandler> handlers;
 
@@ -97,13 +100,17 @@ public class GesuchStatusService {
             editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
         }
         if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+            editStates.addAll(Gesuchstatus.SB_IS_EDITING_GESUCH);
         }
         if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
             editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
         }
 
         return editStates.contains(gesuchstatus);
+    }
+
+    public boolean canChangeEinreichedatum(final UUID gesuchId, final Gesuchstatus gesuchstatus) {
+        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !gesuchHistoryService.wasVerfuegt(gesuchId);
     }
 
     public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.steuerdaten.util;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import lombok.experimental.UtilityClass;
 
@@ -27,25 +28,27 @@ import lombok.experimental.UtilityClass;
 public class SteuerdatenCopyUtil {
     public Steuerdaten createCopy(final Steuerdaten other) {
         final var copy = new Steuerdaten();
-
-        copy.setSteuerdatenTyp(other.getSteuerdatenTyp());
-        copy.setTotalEinkuenfte(other.getTotalEinkuenfte());
-        copy.setEigenmietwert(other.getEigenmietwert());
-        copy.setIsArbeitsverhaeltnisSelbstaendig(other.getIsArbeitsverhaeltnisSelbstaendig());
-        copy.setSaeule3a(other.getSaeule3a());
-        copy.setSaeule2(other.getSaeule2());
-        copy.setKinderalimente(other.getKinderalimente());
-        copy.setVermoegen(other.getVermoegen());
-        copy.setSteuernKantonGemeinde(other.getSteuernKantonGemeinde());
-        copy.setSteuernBund(other.getSteuernBund());
-        copy.setFahrkosten(other.getFahrkosten());
-        copy.setFahrkostenPartner(other.getFahrkostenPartner());
-        copy.setVerpflegung(other.getVerpflegung());
-        copy.setVerpflegungPartner(other.getVerpflegungPartner());
-        copy.setSteuerjahr(other.getSteuerjahr());
-        copy.setVeranlagungsCode(other.getVeranlagungsCode());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    private void copyValues(final Steuerdaten source, final Steuerdaten target) {
+        target.setSteuerdatenTyp(source.getSteuerdatenTyp());
+        target.setTotalEinkuenfte(source.getTotalEinkuenfte());
+        target.setEigenmietwert(source.getEigenmietwert());
+        target.setIsArbeitsverhaeltnisSelbstaendig(source.getIsArbeitsverhaeltnisSelbstaendig());
+        target.setSaeule3a(source.getSaeule3a());
+        target.setSaeule2(source.getSaeule2());
+        target.setKinderalimente(source.getKinderalimente());
+        target.setVermoegen(source.getVermoegen());
+        target.setSteuernKantonGemeinde(source.getSteuernKantonGemeinde());
+        target.setSteuernBund(source.getSteuernBund());
+        target.setFahrkosten(source.getFahrkosten());
+        target.setFahrkostenPartner(source.getFahrkostenPartner());
+        target.setVerpflegung(source.getVerpflegung());
+        target.setVerpflegungPartner(source.getVerpflegungPartner());
+        target.setSteuerjahr(source.getSteuerjahr());
+        target.setVeranlagungsCode(source.getVeranlagungsCode());
     }
 
     public Set<Steuerdaten> createCopySet(final Set<Steuerdaten> other) {
@@ -55,5 +58,14 @@ public class SteuerdatenCopyUtil {
         }
 
         return copy;
+    }
+
+    public void doOverrideOfSet(final Set<Steuerdaten> targetSteuerdaten, final Set<Steuerdaten> sourceSteuerdaten) {
+        OverrideUtil.doOverrideOfSet(
+            targetSteuerdaten,
+            sourceSteuerdaten,
+            SteuerdatenCopyUtil::copyValues,
+            SteuerdatenCopyUtil::createCopy
+        );
     }
 }

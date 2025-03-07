@@ -45,17 +45,26 @@ class CustomDocumentsRequiredDocumentProducerTest {
 
     @Test
     void noCustomDocumentsShouldBeRequiredTest(){
+        // arrange
         when(service.getAllCustomDokumentTypsOfTranche(any())).thenReturn(List.of());
+        // act
         final var requiredCustomDocuments = producer.getRequiredDocuments(tranche);
+        // assert
         assertThat(requiredCustomDocuments.getValue().isEmpty(),is(true));
         assertThat(requiredCustomDocuments.getKey().equals(""),is(true));
     }
 
     @Test
     void customDocumentsShouldBeRequiredTest() {
+        // arrange
         final var customDokumentTyp = new CustomDokumentTyp().setType("test").setDescription("description");
         when(service.getAllCustomDokumentTypsOfTranche(any())).thenReturn(List.of(customDokumentTyp));
-        assertThat(producer.getRequiredDocuments(tranche).getKey().equals("custom-documents"), is(true));
-        RequiredCustomDocsUtil.requiresOneAndType(producer.getRequiredDocuments(tranche), customDokumentTyp);
+
+        // act
+        final var requiredCustomDocuments = producer.getRequiredDocuments(tranche);
+
+        // assert
+        assertThat(requiredCustomDocuments.getKey().equals("custom-documents"), is(true));
+        RequiredCustomDocsUtil.requiresOneAndType(requiredCustomDocuments, customDokumentTyp);
     }
 }

@@ -18,10 +18,10 @@
 package ch.dvbern.stip.api.dokument.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -32,7 +32,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DokumentValidationUtils {
-    public List<String> getMissingCustomDocumentTypesByType(
+    public List<String> getMissingCustomDocumentTypsByTranche(
         Instance<RequiredCustomDocumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
@@ -41,7 +41,7 @@ public class DokumentValidationUtils {
         final var existingByCustomDokumentTypId =
             DokumentValidationUtils.getExistingGesuchDokumentsOfCustomDokumentType(tranche.getGesuchFormular())
                 .stream()
-                .map(customDokumentTyp -> customDokumentTyp.getId())
+                .map(AbstractEntity::getId)
                 .toList();
 
         required.forEach(req -> {
@@ -56,10 +56,17 @@ public class DokumentValidationUtils {
         Instance<RequiredCustomDocumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
-        return customProducers.stream()
-            .map(producer -> producer.getRequiredDocuments(tranche).getValue())
-            .flatMap(Collection::stream)
-            .toList();
+
+        ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
+        customProducers.stream()
+            .map(producer -> producer.getRequiredDocuments(tranche))
+            .forEach(pair -> {
+                if (pair != null) {
+                    customDokumentTypes.addAll(pair.getValue());
+                }
+            });
+
+        return customDokumentTypes;
     }
 
     public List<CustomDokumentTyp> getExistingGesuchDokumentsOfCustomDokumentType(GesuchFormular formular) {

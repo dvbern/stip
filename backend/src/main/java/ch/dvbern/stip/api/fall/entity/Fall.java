@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -74,7 +75,7 @@ public class Fall extends AbstractMandantEntity {
         name = "sachbearbeiter_zuordnung_id",
         foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
     )
-    @OneToOne(mappedBy = "fall")
+    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER)
     private Zuordnung sachbearbeiterZuordnung;
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
@@ -82,4 +83,8 @@ public class Fall extends AbstractMandantEntity {
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private List<Buchhaltung> buchhaltungs = new ArrayList<>();
+
+    @Nullable
+    @OneToOne(mappedBy = "delegierterFall")
+    private Delegierung delegierung;
 }

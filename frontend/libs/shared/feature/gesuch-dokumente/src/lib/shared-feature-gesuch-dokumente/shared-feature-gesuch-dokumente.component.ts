@@ -76,7 +76,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   additionalDokumenteViewSig = computed(() => {
-    const { allowTypes, gesuchId, gesuchPermissions, trancheId, readonly } =
+    const { allowTypes, gesuchId, permissions, trancheId, readonly } =
       this.gesuchViewSig();
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.additionalDokumenteViewSig();
@@ -86,7 +86,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheId,
       allowTypes,
       unterschriftenblaetter: dokuments,
-      permissions: gesuchPermissions,
+      permissions,
       readonly,
       showList: dokuments.length > 0 || requiredDocumentTypes.length > 0,
       requiredDocumentTypes,
@@ -97,7 +97,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const {
       allowTypes,
       gesuchId,
-      gesuchPermissions,
+      permissions,
       trancheSetting,
       trancheId,
       readonly,
@@ -107,12 +107,13 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
+
     const kommentare = this.dokumentsStore.kommentareViewSig();
 
     return {
       gesuchId,
       trancheId,
-      permissions: gesuchPermissions,
+      permissions,
       trancheSetting: trancheSetting ?? undefined,
       isSachbearbeitungApp,
       allowTypes,
@@ -129,7 +130,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const {
       allowTypes,
       gesuchId,
-      gesuchPermissions,
+      permissions,
       trancheSetting,
       trancheId,
       readonly,
@@ -145,7 +146,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     return {
       gesuchId,
       trancheId,
-      permissions: gesuchPermissions,
+      permissions,
       trancheSetting: trancheSetting ?? undefined,
       isSachbearbeitungApp,
       allowTypes,
@@ -184,16 +185,14 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
   canSetToAdditionalDokumenteErhaltenSig = computed(() => {
-    const { gesuchPermissions } = this.gesuchViewSig();
+    const { permissions } = this.gesuchViewSig();
     const { unterschriftenblaetter, requiredDocumentTypes } =
       this.additionalDokumenteViewSig();
 
     const hasUnterschriftenblatt =
       requiredDocumentTypes.length === 0 && unterschriftenblaetter.length > 0;
 
-    return (
-      gesuchPermissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt
-    );
+    return permissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt;
   });
 
   constructor() {
@@ -284,7 +283,6 @@ export class SharedFeatureGesuchDokumenteComponent {
         if (result) {
           this.dokumentsStore.deleteCustomDokumentTyp$({
             customDokumentTypId: dokument.dokumentTyp.id,
-            gesuchTrancheId: trancheId,
             onSuccess: () => {
               this.dokumentsStore.getDokumenteAndRequired$({
                 gesuchTrancheId: trancheId,
@@ -296,9 +294,9 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { gesuchId, trancheId } = this.gesuchViewSig();
+    const { trancheId } = this.gesuchViewSig();
 
-    if (gesuchId && trancheId) {
+    if (trancheId) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         onSuccess: () => {

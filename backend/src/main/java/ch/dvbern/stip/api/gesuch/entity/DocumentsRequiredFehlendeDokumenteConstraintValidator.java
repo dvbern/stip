@@ -22,7 +22,6 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -34,41 +33,23 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
     @Inject
     GesuchService gesuchService;
 
+    // this validation occurs only when SB sends missing documents to GS
     @Override
     public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
         final var gesuchDokumentDtos = gesuchService.getGesuchDokumenteForGesuch(gesuch.getId());
         if (gesuchDokumentDtos.isEmpty()) {
             return true;
         }
+        // custom gesuch dokumente are in state AUSSTEHEND and are treated separately - thats why they are excluded
+        // in this check.
+        // the separate check is done on site GS, in DocumentsRequiredConstraintValidator on page for documents
+        final var nonCustomGesuchDokumente =
+            gesuchDokumentDtos.stream()
+                .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
+                .toList();
+        // check if any document is unprocessed by SB
+        return !isAnyAusstehend(nonCustomGesuchDokumente);
 
-        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
-            // custom gesuch dokumente are in state AUSSTEHEND and are treated separately - thats why they are excluded
-            // in this check
-            final var nonCustomGesuchDokumente =
-                gesuchDokumentDtos.stream()
-                    .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
-                    .toList();
-            // check if any document is unprocessed by SB
-            return !isAnyAusstehend(nonCustomGesuchDokumente);
-        }
-
-        return isAnyGesuchdokumentAbgelehntOrAusstehend(gesuchDokumentDtos);
-    }
-
-    private boolean isAnyGesuchdokumentAbgelehntOrAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
-        var anyAusstehend = false;
-        var anyAbgelehnt = false;
-        for (final var gesuchDokumentDto : gesuchDokumentDtos) {
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND) {
-                anyAusstehend = true;
-                break;
-            }
-
-            if (gesuchDokumentDto.getStatus() == Dokumentstatus.ABGELEHNT) {
-                anyAbgelehnt = true;
-            }
-        }
-        return !anyAusstehend && anyAbgelehnt;
     }
 
     private boolean isAnyAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {

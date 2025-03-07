@@ -1,10 +1,10 @@
-import { AppType } from '@dv/shared/model/config';
 import {
   CustomDokumentTyp,
   Dokument,
   DokumentArt,
   DokumentTyp,
   GesuchDokument,
+  GesuchDokumentKommentar,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
@@ -58,6 +58,8 @@ export interface SharedModelTableRequiredDokument {
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
 }
 
 export interface SharedModelTableCustomDokument {
@@ -66,6 +68,8 @@ export interface SharedModelTableCustomDokument {
   showUpload: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
 }
 
 export type SharedModelTableAdditionalDokument = {
@@ -109,7 +113,6 @@ export interface UploadView {
 }
 
 export const isUploadable = (
-  appType: AppType,
   dokumentModel: SharedModelGesuchDokument,
   permission: PermissionMap,
 ) => {

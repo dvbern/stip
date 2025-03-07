@@ -38,7 +38,6 @@ import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
@@ -47,6 +46,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -57,10 +57,10 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -68,6 +68,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -85,12 +86,13 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -125,6 +127,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -169,29 +172,28 @@ class GesuchServiceTest {
     @InjectMock
     BerechnungService berechnungService;
 
-    @Inject
-    GesuchTrancheValidatorService gesuchTrancheValidatorService;
-
-    @Inject
-    ConfigService configService;
+    @InjectMock
+    GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
 
     @InjectSpy
     MailService mailService;
+
     @InjectSpy
     NotificationService notificationService;
+
     @InjectMock
     NotificationRepository notificationRepository;
 
-    static final String TENANT_ID = "bern";
-    @Inject
-    NotificationResource notificationResource;
-
     @InjectMock
     CustomDokumentTypRepository customDokumentTypRepository;
+
     @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
+
     @Inject
     GesuchDokumentService gesuchDokumentService;
+
+    static final String TENANT_ID = "bern";
 
     @BeforeAll
     static void setup() {
@@ -203,6 +205,10 @@ class GesuchServiceTest {
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
         Mockito.when(ausbildungAuthorizerMock.canUpdateCheck(any())).thenReturn(false);
         QuarkusMock.installMockForType(ausbildungAuthorizerMock, AusbildungAuthorizer.class);
+
+        final var zuordnungServiceMock = Mockito.mock(ZuordnungService.class);
+        Mockito.doNothing().when(zuordnungServiceMock).updateZuordnungOnGesuch(any());
+        QuarkusMock.installMockForType(zuordnungServiceMock, ZuordnungService.class);
     }
 
     @Test
@@ -1472,7 +1478,7 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
-        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        assertDoesNotThrow(() -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId()));
     }
 
     @Description("gesuchFehlendeDokumenteUebermitteln should also handle custom documents in state AUSSTEHEND")
@@ -1537,7 +1543,7 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
-        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        assertDoesNotThrow(() -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId()));
     }
 
     @TestAsGesuchsteller
@@ -1555,6 +1561,7 @@ class GesuchServiceTest {
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.getAusbildung().setFall(fall);
+        gesuch.getAusbildung().setAusbildungsgang(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
@@ -1607,6 +1614,224 @@ class GesuchServiceTest {
 
     @TestAsGesuchsteller
     @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status FEHLENDE_DOKUMENTE")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusFehlendeDokumente() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        // act
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status VERFUEGT")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusVerfuegt() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    /*
+     * Gesuch is in state IN_BEARBEITUNG_SB.
+     * GS receives Tranche of state when Gesuch was in state EINGEREICHT.
+     * the changes made to the tranche by SB (previous step) should not be visible
+     * changes is empty
+     * current gesuchtranche : state of eingereicht
+     */
+    @Test
+    @Description("GS should receive data of gesuch in state eingereicht when in bearbeitung by SB")
+    void checkGSReceivesTrancheInStateEingereicht() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+        gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSB
+            )
+        );
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+        var gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+
+        // also test for other related states
+        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+        gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+    }
+
+    /*
+     * Gesuch gets rejected by SB
+     * data of GesuchFormular should be reset entirely to the state of EINGEREICHT
+     * the gesuch shoudl be in state IN_BEARBEITUNG_GS
+     */
+    @Test
+    @Description("The whole gesuch should should be reset to snapshot of EINGEREICHT when rejected by SB")
+    void checkGesuchIsResetedAfterRejectionTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        final var gesuchInBearbeitungSpy = Mockito.spy(gesuchInBearbeitungSB);
+        gesuchInBearbeitungSpy.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSpy.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSpy.getAusbildung().setFall(fall);
+
+        doReturn(gesuchInBearbeitungSpy.getGesuchTranchen().get(0)).when(gesuchInBearbeitungSpy)
+            .getLatestGesuchTranche();
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSpy
+            )
+        );
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(eingereichtesGesuch));
+
+        // gesuch gets rejected
+        gesuchInBearbeitungSpy.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSpy.getId(), new KommentarDto("test"));
+        final var gesuchSB = gesuchService
+            .getGesuchSB(gesuchInBearbeitungSpy.getId(), gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchSB.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
+        assertThat(
+            gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+    }
+
+    @TestAsGesuchsteller
+    @Test
     @Description("Check that gesuch is moved to state IN_BEARBEITUNG_GS when the frist is done")
     void checkForFehlendeDokumenteOnAllGesucheTest() {
         // arrange
@@ -1637,6 +1862,9 @@ class GesuchServiceTest {
                 .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
         )
             .thenReturn(Stream.of(gesuch));
+
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuch));
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));

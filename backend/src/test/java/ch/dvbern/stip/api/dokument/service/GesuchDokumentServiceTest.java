@@ -84,6 +84,9 @@ class GesuchDokumentServiceTest {
     GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     @InjectMock
+    CustomDokumentTypRepository customDokumentTypRepository;
+
+    @InjectMock
     DokumentRepository dokumentRepository;
 
     @InjectMock
@@ -189,9 +192,9 @@ class GesuchDokumentServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getKommentareWhenNoEntriesExist(){
-        when(gesuchDokumentKommentarRepository.getByGesuchDokumentIdAndGesuchTrancheId(any(), any())).thenReturn(null);
-        assertDoesNotThrow(() -> {gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID());});
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID()).size(), notNullValue());
+        when(gesuchDokumentKommentarRepository.getByGesuchDokumentId(any())).thenReturn(null);
+        assertDoesNotThrow(() -> gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()));
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()).size(), notNullValue());
     }
 
     @TestAsSachbearbeiter
@@ -232,12 +235,14 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new GesuchDokumentKommentarService(
+                    null,
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
-                )
+                ),
+                null
             ),
             null,
             null,
-            null
+            null, null
         );
 
         gesuchDokumente = new HashMap<>();
@@ -285,38 +290,41 @@ class GesuchDokumentServiceTest {
          */
 
         // Arrange
+        Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
+        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
+        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+        customGesuchDokument.setGesuchTranche(gesuch.getGesuchTranchen().get(0));
+
         CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
         customDokumentTyp.setId(UUID.randomUUID());
         customDokumentTyp.setDescription("test");
         customDokumentTyp.setType("test");
-
-        Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
-        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
-        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+        customDokumentTyp.setGesuchDokument(customGesuchDokument);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        when(gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(any(), any()))
+        when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
             .thenReturn(Optional.of(customGesuchDokument));
+        when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);
 
         final UUID gesuchTrancheId = UUID.randomUUID();
         gesuch.getGesuchTranchen().get(0).setId(gesuchTrancheId);
 
         // Act
+        // should not throw, since there is no file attached
         assertDoesNotThrow(
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
+
+        // attach one file
         customGesuchDokument.getDokumente().add(new Dokument());
-        assertDoesNotThrow(
-            () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
-        );
+        // send missing files to GS
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertThrows(
             ForbiddenException.class,
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
     }
 
@@ -333,7 +341,8 @@ class GesuchDokumentServiceTest {
         DokumentstatusService dokumentstatusService,
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
-        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository
+        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
+        RequiredDokumentService requiredDokumentService
         ) {
             super(
                 gesuchDokumentMapper,
@@ -346,6 +355,7 @@ class GesuchDokumentServiceTest {
                 s3,
                 configService,
                 dokumentstatusService,
+                requiredDokumentService,
                 antivirus,
                 gesuchDokumentKommentarRepository
             );

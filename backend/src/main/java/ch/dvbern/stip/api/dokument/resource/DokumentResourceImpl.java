@@ -77,26 +77,24 @@ public class DokumentResourceImpl implements DokumentResource {
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
-    @AllowAll
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
-        final var createdCustomDokumentTyp =
-            customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
-        return gesuchDokumentService
-            .createEmptyGesuchDokument(customDokumentTypCreateDto.getTrancheId(), createdCustomDokumentTyp.getId());
+        customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
+        final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(createdCustomTyp.getId()).getValue();
     }
 
     @Blocking
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Uni<Response> createCustomGesuchDokument(
+    public Uni<Response> uploadCustomGesuchDokument(
         UUID customDokumentTypId,
-        UUID gesuchTrancheId,
         FileUpload fileUpload
     ) {
-        customGesuchDokumentTypAuthorizer.canUpload(gesuchTrancheId);
-        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, gesuchTrancheId, fileUpload);
+
+        customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
+        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -134,18 +132,16 @@ public class DokumentResourceImpl implements DokumentResource {
         unterschriftenblattService.removeDokument(dokumentId);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
     @Blocking
-    public void deleteCustomDokumentTyp(UUID gesuchTrancheId, UUID customDokumentTypId) {
-        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchTrancheId, customDokumentTypId);
+    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(customDokumentTypId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
     @RolesAllowed(GESUCH_DELETE)
     @Override
-    @AllowAll
     @Blocking
     public void deleteDokument(UUID dokumentId) {
         customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
@@ -169,18 +165,18 @@ public class DokumentResourceImpl implements DokumentResource {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
-    @AllowAll
     public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
+        customGesuchDokumentTypAuthorizer.canReadAllTyps();
         return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
     @Override
-    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId, UUID gesuchTrancheId) {
-        return gesuchDokumentService.findGesuchDokumentForCustomTyp(gesuchTrancheId, customDokumentTypId);
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
     }
 
     @Override
@@ -217,8 +213,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId, UUID gesuchTrancheId) {
-        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchTrancheId, gesuchDokumentId);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)

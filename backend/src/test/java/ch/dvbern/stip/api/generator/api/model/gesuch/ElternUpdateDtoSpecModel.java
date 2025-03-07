@@ -32,7 +32,7 @@ public class ElternUpdateDtoSpecModel {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setVorname("Test");
             model.setNachname("Elternteil");
-            model.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+            model.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
             model.setElternTyp(ElternTypDtoSpec.VATER);
             model.setWohnkosten(1);
             model.setSozialhilfebeitraege(true);

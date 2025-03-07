@@ -1,4 +1,5 @@
 @let view = dokumenteViewSig();
+@let expandedRowId = expandedRowSig();
 
 <h3>
   {{ 'shared.dokumente.table.title.requiredDocuments' | translate }}
@@ -85,8 +86,6 @@
       </td>
     </ng-container>
 
-    @let kommentareRd = dokumenteViewSig().kommentare;
-
     <!-- detailColumns / Kommentare  -->
     <ng-container matColumnDef="kommentar">
       <td
@@ -94,16 +93,26 @@
         [attr.colspan]="displayedColumns.length"
         *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
       >
-        <div [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'">
-          @if (kommentareRd | rdIsPending) {
+        <div
+          [@detailExpand]="
+            dokument.gesuchDokument?.id
+              ? expandedRowId === dokument.gesuchDokument?.id
+                ? 'expanded'
+                : 'collapsed'
+              : expandedRowId === dokument.dokumentTyp
+                ? 'expanded'
+                : 'collapsed'
+          "
+        >
+          @if (dokument.kommentarePending) {
             <dv-shared-ui-loading class="tw-pb-2" type="icon"></dv-shared-ui-loading>
-          } @else if (kommentareRd.data?.length === 0) {
+          } @else if (dokument.kommentare.length === 0) {
             <div class="text-muted tw-py-2 tw-text-center">
               {{ 'shared.dokumente.table.noComment' | translate }}
             </div>
           } @else {
             <div class="tw-grid tw-grid-cols-[33px,1fr,1fr,3fr] tw-gap-4 tw-py-2">
-              @for (kommentar of kommentareRd.data; track $index) {
+              @for (kommentar of dokument.kommentare; track $index) {
                 <i class="material-symbols-rounded text-gray">person</i>
                 <span>{{ kommentar.user_erstellt }}</span>
                 <div class="text-muted">
@@ -123,7 +132,9 @@
 
     <tr
       [ngClass]="{
-        'expanded-row': dokument.dokumentTyp === expandedRowId,
+        'expanded-row': dokument.gesuchDokument?.id
+          ? dokument.gesuchDokument?.id === expandedRowId
+          : dokument.dokumentTyp === expandedRowId,
         '!tw-bg-dv-warning': !dokument?.gesuchDokument?.id,
       }"
       mat-row

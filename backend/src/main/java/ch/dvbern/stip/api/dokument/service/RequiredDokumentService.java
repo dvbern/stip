@@ -41,18 +41,10 @@ public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
 
-    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
+    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return formular
             .getTranche()
-            .getGesuchDokuments();
-    }
-
-    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchTranche tranche) {
-        return tranche.getGesuchDokuments();
-    }
-
-    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular)
+            .getGesuchDokuments()
             .stream()
             .filter(
                 dokument -> !dokument.getDokumente().isEmpty()
@@ -62,22 +54,28 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return getExistingDokumentsForGesuch(tranche)
-            .stream()
-            .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
-            .map(GesuchDokument::getCustomDokumentTyp)
-            .toList();
-    }
-
     private Set<DokumentTyp> getDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular).stream()
+        return formular
+            .getTranche()
+            .getGesuchDokuments()
+            .stream()
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
                 && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
             )
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
+    }
+
+    public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
+        final var tranche = gesuchDokument.getGesuchTranche();
+        final var requiredNormalDocuments = getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular());
+        final var requiredCustomDocuments = getRequiredCustomDokumentsForGesuchFormular(tranche);
+        if (Objects.isNull(gesuchDokument.getCustomDokumentTyp())) {
+            return requiredNormalDocuments.contains(gesuchDokument.getDokumentTyp());
+        }
+
+        return requiredCustomDocuments.contains(gesuchDokument.getCustomDokumentTyp());
     }
 
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
@@ -119,9 +117,13 @@ public class RequiredDokumentService {
     }
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchTranche tranche) {
-        final var existingDokumentTypesHashSet = new HashSet<>(
-            getExistingCustomDokumentTypesForGesuch(tranche)
-        );
+        final var existingDokumentTypesHashSet = tranche
+            .getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument -> !gesuchDokument.getDokumente().isEmpty())
+            .map(GesuchDokument::getCustomDokumentTyp)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toCollection(HashSet::new));
 
         final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(tranche);
 
@@ -148,7 +150,9 @@ public class RequiredDokumentService {
             .toList();
         final var superfluousDokumentTypesHashSet = new HashSet<>(superfluousDokumentTypes);
 
-        return getExistingDokumentsForGesuch(formular)
+        return formular
+            .getTranche()
+            .getGesuchDokuments()
             .stream()
             .filter(
                 existingDokument -> superfluousDokumentTypesHashSet.contains(existingDokument.getDokumentTyp())

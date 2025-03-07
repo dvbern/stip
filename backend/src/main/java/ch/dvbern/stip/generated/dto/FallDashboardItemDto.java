@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -28,6 +29,7 @@ public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
   private @Valid List<NotificationDto> notifications = new ArrayList<>();
+  private @Valid DelegierungDto delegierung;
 
   /**
    **/
@@ -118,6 +120,24 @@ public class FallDashboardItemDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public FallDashboardItemDto delegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierung")
+  public DelegierungDto getDelegierung() {
+    return delegierung;
+  }
+
+  @JsonProperty("delegierung")
+  public void setDelegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -130,12 +150,13 @@ public class FallDashboardItemDto  implements Serializable {
     FallDashboardItemDto fallDashboardItem = (FallDashboardItemDto) o;
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
-        Objects.equals(this.notifications, fallDashboardItem.notifications);
+        Objects.equals(this.notifications, fallDashboardItem.notifications) &&
+        Objects.equals(this.delegierung, fallDashboardItem.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, delegierung);
   }
 
   @Override
@@ -146,6 +167,7 @@ public class FallDashboardItemDto  implements Serializable {
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
+    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

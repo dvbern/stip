@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   GesuchFormStepView,
   RETURN_TO_HOME,
@@ -48,7 +49,9 @@ export class SharedUtilGesuchFormStepManagerService {
    */
   getValidatedSteps(
     steps: SharedModelGesuchFormStep[],
+    trancheTyp: GesuchUrlType | null,
     gesuch: SharedModelGesuch | null,
+    rolesMap: RolesMap,
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
     const gesuchFormular =
@@ -57,7 +60,13 @@ export class SharedUtilGesuchFormStepManagerService {
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, gesuch, this.appType),
+      disabled: isStepDisabled(
+        step,
+        trancheTyp,
+        gesuch,
+        this.appType,
+        rolesMap,
+      ),
     }));
   }
 
@@ -66,8 +75,10 @@ export class SharedUtilGesuchFormStepManagerService {
    */
   getNextStepOf(
     stepsFlow: SharedModelGesuchFormStep[],
+    trancheTyp: GesuchUrlType | null,
     step: SharedModelGesuchFormStep,
     gesuch: SharedModelGesuch,
+    rolesMap: RolesMap,
   ): SharedModelGesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
 
@@ -78,7 +89,15 @@ export class SharedUtilGesuchFormStepManagerService {
     let nextIndex = 0;
 
     for (let i = currentIndex + 1; i < stepsFlow.length; i++) {
-      if (!isStepDisabled(stepsFlow[i], gesuch, this.appType)) {
+      if (
+        !isStepDisabled(
+          stepsFlow[i],
+          trancheTyp,
+          gesuch,
+          this.appType,
+          rolesMap,
+        )
+      ) {
         nextIndex = i;
         break;
       }

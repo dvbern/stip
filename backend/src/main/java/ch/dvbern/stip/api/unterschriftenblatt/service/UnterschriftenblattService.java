@@ -34,13 +34,13 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
@@ -51,6 +51,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -248,18 +249,19 @@ public class UnterschriftenblattService {
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
-        final var initialTranche = gesuchTrancheHistoryRepository
-            .findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-
-        GesuchTranche toGetFor;
-        if (initialTranche.isPresent()) {
-            toGetFor = initialTranche.get();
-        } else {
-            if (gesuch.getGesuchTranchen().size() != 1) {
-                throw new IllegalStateException("There are more than 1 Tranchen but none has been Verfuegt");
+        final var gesuchThatWasVerfuegt =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+        GesuchTranche toGetFor = null;
+        if (gesuchThatWasVerfuegt.isPresent()) {
+            final var found = gesuchThatWasVerfuegt.get();
+            final var tranche = found.getGesuchTrancheValidOnDate(found.getGesuchStatusAenderungDatum().toLocalDate());
+            if (tranche.isPresent()) {
+                toGetFor = tranche.get();
             }
+        }
 
-            toGetFor = gesuch.getGesuchTranchen().get(0);
+        if (toGetFor == null) {
+            toGetFor = gesuch.getCurrentGesuchTrancheOptional().orElseThrow(NotFoundException::new);
         }
 
         final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();

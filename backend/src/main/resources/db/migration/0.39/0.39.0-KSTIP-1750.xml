@@ -1,0 +1,107 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-16">
+    <dropForeignKeyConstraint baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_kommentar_gesuch_tranche_id"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-3">
+    <createTable tableName="custom_dokument_typ">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(2000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-4">
+    <createTable tableName="custom_dokument_typ_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="description" type="VARCHAR(2000)"/>
+      <column name="type" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-5">
+    <addColumn tableName="gesuch_dokument">
+      <column name="custom_dokument_typ_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-6">
+    <addColumn tableName="gesuch_dokument_aud">
+      <column name="custom_dokument_typ_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-7">
+    <addColumn tableName="gesuch_dokument_kommentar">
+      <column name="gesuch_dokument_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-8">
+    <addColumn tableName="gesuch_dokument_kommentar_aud">
+      <column name="gesuch_dokument_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-9">
+    <addPrimaryKey columnNames="rev, id" constraintName="custom_dokument_typ_audPK" tableName="custom_dokument_typ_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-12">
+    <createIndex indexName="IX_custom_gesuch_dokument_mandant" tableName="custom_dokument_typ">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-13">
+    <addForeignKeyConstraint baseColumnNames="custom_dokument_typ_id" baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_custom_dokument_typ_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="custom_dokument_typ" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-14">
+    <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-15">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="custom_dokument_typ_aud" constraintName="FKfrttrf3l1led7b8p7c0f3ry13" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-17">
+    <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-18">
+    <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-19">
+    <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1740667281199-20">
+    <dropColumn columnName="gesuch_tranche_id" tableName="gesuch_dokument_kommentar_aud"/>
+  </changeSet>
+  <changeSet author="Juri Furer" id="1740383692563-1">
+    <dropNotNullConstraint tableName="gesuch_dokument" columnName="dokument_typ" />
+  </changeSet>
+</databaseChangeLog>

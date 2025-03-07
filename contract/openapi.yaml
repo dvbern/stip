@@ -155,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -465,6 +465,48 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/{gesuchId}/einreichedatum':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EinreichedatumStatus'
+          description: Check ob einreichedatumManuellAendern aufrufbar ist oder nicht
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: canEinreichedatumAendern
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EinreichedatumAendernRequest'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Aendert das Einreichedatum des Gesuch manuell
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: einreichedatumManuellAendern
   /stip-decision/all:
     get:
       tags:
@@ -613,13 +655,8 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createCustomDokumentTyp
-  '/gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: customDokumentTypId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -705,17 +742,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
+  '/customGesuchDokument/{customDokumentTypId}':
     get:
       tags:
         - Dokument
       parameters:
         - name: customDokumentTypId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -752,11 +784,6 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
           description: OK
@@ -766,19 +793,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createCustomGesuchDokument
+      operationId: uploadCustomGesuchDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare':
+  '/gesuchDokument/{gesuchDokumentId}/kommentare':
     get:
       tags:
         - Dokument
       parameters:
         - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -1371,28 +1393,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllSozialdienste
       summary: Returns all Sozialdienste
-  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
-    parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    patch:
+  /sozialdienst/delegation:
+    get:
       tags:
         - Sozialdienst
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SozialdienstAdminUpdate'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstBenutzer'
-          description: Updates data of a Sozialdienst admin
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstSlim'
+          description: Returns all Sozialdienste
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
@@ -1401,14 +1414,10 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: updateSozialdienstAdmin
+      operationId: getAllSozialdiensteForDelegation
   /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     patch:
       tags:
         - Sozialdienst
@@ -1435,11 +1444,7 @@ paths:
       operationId: replaceSozialdienstAdmin
   /sozialdienst/{sozialdienstId}:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     delete:
       tags:
         - Sozialdienst
@@ -1518,14 +1523,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Returns the created SozialdienstBenutzer
-        401:
-          $ref: '#/components/responses/Unauthorized'
-        403:
-          $ref: '#/components/responses/Forbidden'
-        404:
-          $ref: '#/components/responses/NotFound'
-        500:
-          $ref: '#/components/responses/ServerError'
       operationId: createSozialdienstBenutzer
     patch:
       description: update an exisitng SozialdienstBenutzer
@@ -1552,6 +1549,31 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: updateSozialdienstBenutzer
+  /sozialdienst/admin:
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
   /sozialdienst/benutzer/{sozialdienstBenutzerId}:
     parameters:
       - name: sozialdienstBenutzerId
@@ -1594,6 +1616,25 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
+  /delegieren/{fallId}/{sozialdienstId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/sozialdienstId'
+    post:
+      tags:
+      - Delegieren
+      responses:
+        204:
+          description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: fallDelegieren
   /stammdaten/land:
     get:
       tags:
@@ -1851,13 +1892,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
       summary: Returns the inital tranche changes by GesuchId
-  '/gesuch/{gesuchId}/{gesuchTrancheId}':
+  '/gesuch/gs/{gesuchTrancheId}':
+        parameters:
+          - name: gesuchTrancheId
+            schema:
+              $ref: '#/components/schemas/UUID'
+            in: path
+            required: true
+        get:
+          tags:
+            - Gesuch
+          responses:
+            '200':
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Gesuch'
+              description: OK
+            '401':
+              $ref: '#/components/responses/Unauthorized'
+            '403':
+              $ref: '#/components/responses/Forbidden'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '500':
+              $ref: '#/components/responses/ServerError'
+          operationId: getGesuchGS
+          summary: Returns the Gesuch with the given Id
+  '/gesuch/sb/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -1871,7 +1934,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1881,7 +1944,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
+      operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
   '/gesuch/{gesuchId}/info':
     parameters:
@@ -2024,7 +2087,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2038,11 +2101,7 @@ paths:
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2078,7 +2137,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2092,11 +2151,7 @@ paths:
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
   '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2110,7 +2165,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchZurueckweisenResponse'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -3536,8 +3591,15 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
         einreichedatum:
-          format: dateTime
+          format: date
           type: string
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
+    Delegierung:
+      type: object
+      properties:
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
     GesuchInfo:
       required:
         - id
@@ -3574,6 +3636,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
     AusbildungDashboardItem:
       type: object
       properties:
@@ -5028,15 +5092,6 @@ components:
     #   type: object
     #   allOf:
     #     - $ref: '#/components/schemas/SozialdienstAdmin'
-    SozialdienstAdminUpdate:
-      required:
-        - vorname
-        - nachname
-      properties:
-        vorname:
-          type: string
-        nachname:
-          type: string
     SozialdienstCreate:
       required:
         - name
@@ -5067,13 +5122,10 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-    Sozialdienst:
+    SozialdienstSlim:
       required:
         - id
         - name
-        - adresse
-        - iban
-        - sozialdienstAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5081,10 +5133,23 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        iban:
-          type: string
-        sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstBenutzer'
+    Sozialdienst:
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstSlim'
+        - type: object
+          required:
+            - id
+            - name
+            - adresse
+            - iban
+            - sozialdienstAdmin
+          properties:
+            adresse:
+              $ref: '#/components/schemas/Adresse'
+            iban:
+              type: string
+            sozialdienstAdmin:
+              $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -5302,6 +5367,8 @@ components:
       type: object
       properties:
         anzahlPersonenImHaushalt:
+          type: integer
+        totalVorTeilung:
           type: integer
         eigenerHaushalt:
           type: boolean
@@ -5715,6 +5782,35 @@ components:
           type: integer
         comment:
           type: string
+    EinreichedatumAendernRequest:
+      type: object
+      required:
+        - newEinreichedatum
+      properties:
+        newEinreichedatum:
+          type: string
+          format: date
+        betreff:
+          type: string
+        text:
+          type: string
+    EinreichedatumStatus:
+      type: object
+      required:
+        - canAendern
+      properties:
+        canAendern:
+          type: boolean
+    GesuchZurueckweisenResponse:
+      type: object
+      required:
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
@@ -5842,6 +5938,12 @@ components:
       required: true
       schema:
         type: integer
+    sozialdienstId:
+      name: sozialdienstId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:
@@ -5863,3 +5965,4 @@ tags:
   - name: Tenant
   - name: Ausbildungsgang
   - name: Mail
+  - name: Delegieren

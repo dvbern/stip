@@ -16,7 +16,7 @@ export const selectSharedFeatureGesuchFormGeschwisterView = createSelector(
 
     return {
       ...gesuchsView,
-      listChanges: getChangesForList(current, previous, (g) => g.id),
+      listChanges: getChangesForList(current, previous),
     };
   },
 );

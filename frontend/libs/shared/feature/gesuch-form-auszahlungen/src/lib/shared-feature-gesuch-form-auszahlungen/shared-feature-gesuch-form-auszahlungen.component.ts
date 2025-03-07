@@ -23,6 +23,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject, distinctUntilChanged, shareReplay } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
@@ -96,6 +97,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
 export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
   private fb = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
@@ -153,6 +155,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    this.formUtils.observeInvalidFieldsAndMarkControls(
+      this.einreichenStore.invalidFormularControlsSig,
+      this.form,
+    );
     const kontoinhaberinChangesSig = toSignal(
       this.form.controls.kontoinhaber.valueChanges.pipe(
         distinctUntilChanged(),

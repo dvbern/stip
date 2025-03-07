@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -50,11 +51,11 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
@@ -119,6 +120,12 @@ class GesuchFillFormularTest {
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+
+        assertThat(
+            "Newly created Gesuch is not IN_BEARBEITUNG_GS",
+            gesuch.getGesuchStatus(),
+            is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS)
+        );
     }
 
     @Test
@@ -145,8 +152,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        final var gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -237,7 +243,7 @@ class GesuchFillFormularTest {
     void addEltern() {
         final var eltern = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2);
         eltern.get(0).setElternTyp(ElternTypDtoSpec.VATER);
-        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
         eltern.get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
         eltern.get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
 
@@ -301,9 +307,25 @@ class GesuchFillFormularTest {
         patchAndValidate();
     }
 
+    // make sure Bug KSTIP-1883 is fixed
     @Test
     @TestAsGesuchsteller
     @Order(16)
+    void validateResetOfEinnahmenKosten() {
+        final var minderjaehrigBirthDate = currentFormular.getPersonInAusbildung().getGeburtsdatum();
+        final var volljaehrigBirthDate = LocalDate.now().minusYears(19);
+        // set pia to volljaehrig
+        currentFormular.getPersonInAusbildung().setGeburtsdatum(volljaehrigBirthDate);
+        currentFormular.getEinnahmenKosten().setVermoegen(100);
+        patchGesuch();
+        // reset pia to minderjaehrig again
+        currentFormular.getPersonInAusbildung().setGeburtsdatum(minderjaehrigBirthDate);
+        patchAndValidate();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(17)
     void addDokumente() {
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
@@ -315,7 +337,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void removeSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
@@ -329,7 +351,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(19)
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
@@ -387,7 +409,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(19)
+    @Order(20)
     void gesuchEinreichenValidation() {
         final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -408,7 +430,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(20)
+    @Order(21)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -443,13 +465,13 @@ class GesuchFillFormularTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    private GesuchDtoSpec patchAndValidate() {
+    private GesuchWithChangesDtoSpec patchAndValidate() {
         final var returnedGesuch = patchGesuch();
         validatePage();
         return returnedGesuch;
     }
 
-    private GesuchDtoSpec patchGesuch() {
+    private GesuchWithChangesDtoSpec patchGesuch() {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);
 
@@ -461,14 +483,13 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        return gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        return gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheUpdateDtoSpec.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
     }
 
     private void validatePage() {

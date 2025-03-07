@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
@@ -40,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungService {
+    private final FallRepository fallRepository;
     private final AusbildungRepository ausbildungRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final AusbildungMapper ausbildungMapper;
@@ -50,6 +52,7 @@ public class AusbildungService {
     @Transactional
     public AusbildungDto createAusbildung(final AusbildungUpdateDto ausbildungUpdateDto) {
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
+        ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);

@@ -35,6 +35,11 @@ async function setup(formular: GesuchFormular) {
       provideHttpClient(),
       provideMockStore({
         initialState: {
+          benutzers: {
+            rolesMap: {
+              Gesuchsteller: true,
+            },
+          },
           gesuchs: mockedGesuchAppWritableGesuchState({
             tranche: { id: '1', typ: 'TRANCHE' },
             gesuch: {

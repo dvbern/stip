@@ -42,6 +42,7 @@ type DokumentsState = {
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
+  expandedComponentList: 'custom' | 'required' | undefined;
 };
 
 const initialState: DokumentsState = {
@@ -50,6 +51,7 @@ const initialState: DokumentsState = {
   documentsToUpload: initial(),
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
+  expandedComponentList: undefined,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -62,6 +64,10 @@ export class DokumentsStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+
+  setExpandedList(list: 'custom' | 'required' | undefined) {
+    patchState(this, { expandedComponentList: list });
+  }
 
   dokumenteViewSig = computed(() => {
     // only show standard documents
@@ -224,10 +230,20 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((req) =>
-        this.dokumentService.getGesuchDokumentKommentare$(req),
-      ),
-      handleApiResponse((gesuchDokumentKommentare) =>
-        patchState(this, { gesuchDokumentKommentare }),
+        this.dokumentService.getGesuchDokumentKommentare$(req).pipe(
+          handleApiResponse((gesuchDokumentKommentare) =>
+            patchState(this, {
+              gesuchDokumentKommentare: mapData(
+                gesuchDokumentKommentare,
+                (data) =>
+                  data.map((d) => ({
+                    ...d,
+                    gesuchDokumentId: req.gesuchDokumentId,
+                  })),
+              ),
+            }),
+          ),
+        ),
       ),
     ),
   );
@@ -534,15 +550,13 @@ export class DokumentsStore extends signalStore(
   );
 
   deleteCustomDokumentTyp$ = rxMethod<{
-    gesuchTrancheId: string;
     customDokumentTypId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchTrancheId, customDokumentTypId, onSuccess }) =>
+      switchMap(({ customDokumentTypId, onSuccess }) =>
         this.dokumentService
           .deleteCustomDokumentTyp$({
-            gesuchTrancheId,
             customDokumentTypId,
           })
           .pipe(

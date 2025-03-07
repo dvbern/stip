@@ -18,17 +18,20 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -41,11 +44,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Getter
 @Setter
 public class CustomDokumentTyp extends AbstractMandantEntity {
-    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String type;
 
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "description", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String description;
+
+    @NotNull
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "customDokumentTyp")
+    private GesuchDokument gesuchDokument;
 }

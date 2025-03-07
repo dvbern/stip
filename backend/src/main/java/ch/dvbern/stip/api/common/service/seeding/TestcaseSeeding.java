@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -165,7 +166,18 @@ public class TestcaseSeeding extends Seeder {
 
             // Create Gesuchsteller, Fall and Gesuch
             final var fall = createFall(String.format("BE.F.T%04d", index), createGesuchsteller(testcase));
-            final var ausbildung = createAusbildung(ausbildungDto);
+            final var ausbildungOpt = createAusbildung(ausbildungDto);
+            if (ausbildungOpt.isEmpty()) {
+                LOG.warn(
+                    String.format(
+                        "Skipping seeding testcase %s because Ausbildung end is not in the future",
+                        testcase
+                    )
+                );
+                continue;
+            }
+
+            final var ausbildung = ausbildungOpt.get();
             ausbildung.setId(null);
             final var gesuch = createGesuch(
                 gesuchperiodeToAttach,
@@ -369,12 +381,17 @@ public class TestcaseSeeding extends Seeder {
             .setGesuchsteller(gesuchsteller);
     }
 
-    Ausbildung createAusbildung(final AusbildungDto ausbildungDto) {
+    Optional<Ausbildung> createAusbildung(final AusbildungDto ausbildungDto) {
         var ausbildung = ausbildungMapper.toEntity(ausbildungDto);
         if (ausbildung.getStatus() == null) {
             ausbildung.setStatus(AusbildungsStatus.AKTIV);
         }
-        return ausbildung;
+
+        if (DateUtil.beforeOrEqual(ausbildung.getAusbildungEnd(), LocalDate.now())) {
+            return Optional.empty();
+        }
+
+        return Optional.of(ausbildung);
     }
 
     Gesuch createGesuch(final Gesuchsperiode gesuchsperiode, final String gesuchNummer, final GesuchTranche tranche) {
@@ -383,6 +400,6 @@ public class TestcaseSeeding extends Seeder {
             .setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .setGesuchNummer(gesuchNummer)
             .setGesuchTranchen(List.of(tranche))
-            .setEinreichedatum(LocalDateTime.now());
+            .setEinreichedatum(LocalDate.now());
     }
 }
