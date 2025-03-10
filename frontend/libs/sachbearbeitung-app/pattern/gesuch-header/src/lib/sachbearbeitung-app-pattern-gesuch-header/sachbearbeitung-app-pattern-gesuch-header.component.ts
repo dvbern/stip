@@ -75,8 +75,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  private hasAcceptedAllDocumentsSig =
-    this.dokumentsStore.hasAcceptedAllDokumentsSig;
   private otherGesuchInfoSourceSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
@@ -163,7 +161,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
+    const hasAcceptedAllDokuments =
+      this.dokumentsStore.hasAcceptedAllDokumentsSig() &&
+      !this.dokumentsStore.hasDokumenteToUebermittelnSig();
+
     const hasValidationErrors =
       !!this.einreichnenStore.validationViewSig().invalidFormularProps
         .validations.errors?.length;
