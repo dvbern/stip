@@ -12,9 +12,9 @@ import {
 import {
   Ausbildungsstaette,
   AusbildungsstaetteService,
+  GesuchFormularType,
   GesuchTranche,
   SharedModelGesuch,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
@@ -28,7 +28,7 @@ export type DeepPartial<T> = T extends object
 export const mockedGesuchAppWritableGesuchState = (overrides?: {
   gesuch?: DeepPartial<SharedModelGesuch>;
   tranche?: DeepPartial<GesuchTranche>;
-  formular?: DeepPartial<SharedModelGesuchFormular>;
+  formular?: DeepPartial<GesuchFormularType>;
 }) => {
   const gesuch = {
     id: '123',

@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormularType } from '@dv/shared/model/gesuch';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedEventGesuchFormPartner = createActionGroup({
   source: 'GesuchFormPartner Page',
@@ -10,18 +10,18 @@ export const SharedEventGesuchFormPartner = createActionGroup({
     prevStepTriggered: props<{
       gesuchId: string;
       trancheId: string;
-      gesuchFormular: Partial<SharedModelGesuchFormular>;
-      origin: SharedModelGesuchFormStep;
+      gesuchFormular: Partial<GesuchFormularType>;
+      origin: GesuchFormStep;
     }>(),
     nextStepTriggered: props<{
       gesuchId: string;
       trancheId: string;
-      gesuchFormular: Partial<SharedModelGesuchFormular>;
-      origin: SharedModelGesuchFormStep;
+      gesuchFormular: Partial<GesuchFormularType>;
+      origin: GesuchFormStep;
     }>(),
     nextTriggered: props<{
       id: string;
-      origin: SharedModelGesuchFormStep;
+      origin: GesuchFormStep;
     }>(),
   },
 });

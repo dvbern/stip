@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
@@ -133,13 +133,13 @@ public class GesuchTestSpecGenerator {
         });
     }
 
-    public static GesuchUpdateDtoSpec gesuchUpdateDtoSteuerdatenTabs() {
+    public static GesuchUpdateDtoSpec gesuchUpdateDtoSteuererklaerungTabs() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith()
                 .setGesuchFormular(
-                    SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten()
+                    SteuererklaerungUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuererklaerung()
                 );
         });
     }
@@ -178,7 +178,9 @@ public class GesuchTestSpecGenerator {
             model.getElterns().get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
             model.getElterns().get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
             model.getElterns().get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
-            model.setSteuerdaten(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
+            model.setSteuererklaerung(
+                SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE)
+            );
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec());

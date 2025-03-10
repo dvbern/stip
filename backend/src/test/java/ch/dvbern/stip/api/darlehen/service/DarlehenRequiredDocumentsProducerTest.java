@@ -99,6 +99,7 @@ class DarlehenRequiredDocumentsProducerTest {
     void requiresNoneIfNotWillDarlehen() {
         darlehen.setWillDarlehen(false);
         formular.setDarlehen(darlehen);
+
         Assertions.assertEquals(0, producer.getRequiredDocuments(formular).getRight().size());
     }
 

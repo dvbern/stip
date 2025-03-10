@@ -3,7 +3,7 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { Observable, pipe, switchMap, tap } from 'rxjs';
+import { Observable, exhaustMap, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
@@ -87,7 +87,7 @@ export class GesuchStore extends signalStore(
           gesuchInfo: cachedPending(state.gesuchInfo),
         }));
       }),
-      switchMap(({ gesuchId }) =>
+      exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getGesuchInfo$({ gesuchId })
           .pipe(
@@ -206,11 +206,4 @@ export class GesuchStore extends signalStore(
       ),
     ),
   } satisfies Record<StatusUebergang, unknown>;
-
-  /**
-   * Set the gesuchInfo in the store, for example when the gesuch was updated outside of this store.
-   */
-  setGesuchInfo(gesuchInfo: GesuchInfo) {
-    patchState(this, () => ({ gesuchInfo: success(gesuchInfo) }));
-  }
 }

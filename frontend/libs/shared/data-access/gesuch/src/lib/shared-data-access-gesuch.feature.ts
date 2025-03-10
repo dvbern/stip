@@ -3,7 +3,7 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
-import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
+import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
@@ -12,9 +12,9 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   FallDashboardItem,
+  GesuchFormularType,
   GesuchUrlType,
   SharedModelGesuch,
-  SharedModelGesuchFormular,
   SteuerdatenTyp,
 } from '@dv/shared/model/gesuch';
 import {
@@ -29,7 +29,7 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 
 export interface State {
   gesuch: SharedModelGesuch | null;
-  gesuchFormular: SharedModelGesuchFormular | null;
+  gesuchFormular: GesuchFormularType | null;
   isEditingAenderung: boolean | null;
   trancheTyp: GesuchUrlType | null;
   gesuchs: SharedModelGesuch[];
@@ -37,7 +37,7 @@ export interface State {
   cache: {
     gesuch: SharedModelGesuch | null;
     gesuchId: string | null;
-    gesuchFormular: SharedModelGesuchFormular | null;
+    gesuchFormular: GesuchFormularType | null;
   };
   steuerdatenTabs: CachedRemoteData<SteuerdatenTyp[]>;
   lastUpdate: string | null;
@@ -250,6 +250,6 @@ export const {
 
 const getGesuchFormular = (
   gesuch: SharedModelGesuch,
-): SharedModelGesuchFormular | null => {
+): GesuchFormularType | null => {
   return gesuch.gesuchTrancheToWorkWith.gesuchFormular ?? null;
 };

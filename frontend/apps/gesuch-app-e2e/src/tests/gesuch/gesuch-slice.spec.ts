@@ -16,7 +16,10 @@ import { GeschwisterPO } from '../../po/geschwister.po';
 import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PersonPO } from '../../po/person.po';
+import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
+import { StepsNavPO } from '../../po/steps-nav.po';
 import { SteuerdatenPO } from '../../po/steuerdaten.po';
+import { SteruererklaerungPO } from '../../po/steuererklaerung.po';
 import {
   ausbildung,
   auszahlung,
@@ -27,10 +30,14 @@ import {
   mutter,
   person,
   steuerdaten,
+  steuererklaerung,
   taetigkeit,
 } from '../../test-data/slice-test-data';
 
-const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
+const { test, getGesuchId, getTrancheId } = initializeTest(
+  'GESUCHSTELLER',
+  ausbildung,
+);
 
 test.describe('Neues gesuch erstellen', () => {
   test('Neues gesuch erstellen', async ({ page, cockpit }, testInfo) => {
@@ -79,14 +86,14 @@ test.describe('Neues gesuch erstellen', () => {
 
     await elternPO.elems.buttonContinue.click();
 
-    // Step 4.2: Steuerdaten Eltern =================================================
-    await expectStepTitleToContainText('Steuerdaten', page);
-    const steuerdatenPO = new SteuerdatenPO(page);
-    await expect(steuerdatenPO.elems.loading).toBeHidden();
+    // Step 4.2: Steuererklaerung Mutter  ==========================================
+    await expectStepTitleToContainText('Steuererklärung Mutter', page);
+    const steuererklaerungPO = new SteruererklaerungPO(page);
+    await expect(steuererklaerungPO.elems.loading).toBeHidden();
 
-    await steuerdatenPO.fillSteuerdaten(steuerdaten);
+    await steuererklaerungPO.fillSteuererklaerung(steuererklaerung);
 
-    await steuerdatenPO.elems.buttonSaveContinue.click();
+    await steuererklaerungPO.elems.buttonSaveContinue.click();
 
     // Step 5: Geschwister  ========================================================
     await expectStepTitleToContainText('Geschwister', page);
@@ -173,8 +180,56 @@ test.describe('Neues gesuch erstellen', () => {
     await page.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
-    // Go to Berechnung (SB-App) ===================================================
     const urls = getE2eUrls();
+
+    // Go to SB App ===============================================================
+    await page.goto(
+      `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
+    );
+
+    // add testid to dynamic title later
+    await expect(page.getByRole('heading').nth(1)).toContainText('Tranche 1', {
+      ignoreCase: true,
+      timeout: 10000,
+    });
+
+    // check if the i element in steuerdaten steps has the correct icon, by checking the text
+    const stepsNavPO = new StepsNavPO(page);
+    const icon = stepsNavPO.elems.steuerdatenMutter
+      .locator('.text-danger')
+      .first();
+    await expect(icon).toContainText('error');
+
+    // set to bearbeiten
+    const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
+    // @scph why ist this gesuch alreay bereit fuer bearbeitung?
+    // await headerNavPO.elems.aktionMenu.click();
+    // await headerNavPO.elems
+    //   .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
+    //   .click();
+    // await page.getByTestId('dialog-confirm').click();
+
+    await headerNavPO.elems.aktionMenu.click();
+    await headerNavPO.elems
+      .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
+      .click();
+
+    // create trancheInfoPO later
+    const status = page.getByTestId('form-tranche-status');
+    await expect(status).toHaveValue('In Bearbeitung');
+
+    await stepsNavPO.elems.steuerdatenMutter.first().click();
+
+    await expectStepTitleToContainText('Steuerdaten Mutter', page);
+    // fill steuerdaten ===========================================================
+
+    const steuerDatenPO = new SteuerdatenPO(page);
+    await steuerDatenPO.fillSteuerdaten(steuerdaten);
+
+    await steuerDatenPO.elems.buttonSaveContinue.click();
+
+    // Go to Berechnung ===========================================================
+    // will log the user out if verfuegung is not available yet!
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
 
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
@@ -192,7 +247,7 @@ test.describe('Neues gesuch erstellen', () => {
       "- 55'492",
     );
 
-    // Go to Gesuch infos (SB-App) ===================================================
+    // Go to Gesuch infos =========================================================
     await page.getByTestId('sb-gesuch-header-infos-link').click();
 
     await expect(page.getByTestId('step-title')).toContainText(

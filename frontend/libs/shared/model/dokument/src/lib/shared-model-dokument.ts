@@ -8,7 +8,7 @@ import {
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 import { Extends } from '@dv/shared/model/type-util';
 
@@ -54,7 +54,7 @@ export interface DokumentOptions {
 }
 
 export interface SharedModelTableRequiredDokument {
-  formStep: SharedModelGesuchFormStep;
+  formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;

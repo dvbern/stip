@@ -1973,6 +1973,67 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
+  /steuerdaten/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSteuerdaten
+      summary: Returniert die Steuerdaten der gegebenen gesuchTrancheId.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Steuerdaten'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSteuerdaten
+      summary: Updates the Steuerdaten of the given gesuchTrancheId
   '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
@@ -3143,6 +3204,9 @@ components:
         - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
         - DARLEHEN_BELEGE_ANSCHAFFUNGEN
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
       type: string
     DokumentArt:
       enum:
@@ -3637,6 +3701,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canGetBerechnung
       type: object
       properties:
         id:
@@ -3649,6 +3714,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         endDate:
           $ref: '#/components/schemas/LocalDate'
+        canGetBerechnung:
+          type: boolean
     FallDashboardItem:
       required:
         - fall
@@ -4170,10 +4237,10 @@ components:
             $ref: '#/components/schemas/Kind'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKosten'
-        steuerdaten:
+        steuererklaerung:
           type: array
           items:
-            $ref: '#/components/schemas/Steuerdaten'
+            $ref: '#/components/schemas/SteuererklaerungUpdate'
         steuerdatenTabs:
           type: array
           items:
@@ -4297,10 +4364,10 @@ components:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
         darlehen:
           $ref: '#/components/schemas/Darlehen'
-        steuerdaten:
+        steuererklaerung:
           type: array
           items:
-            $ref: '#/components/schemas/SteuerdatenUpdate'
+            $ref: '#/components/schemas/SteuererklaerungUpdate'
     FileUpload:
       format: binary
       type: string
@@ -5009,7 +5076,20 @@ components:
           type: string
         kantonskuerzel:
           type: string
-    SteuerdatenUpdate:
+    SteuererklaerungUpdate:
+      title: Root Type for Steuererklaerung
+      required:
+        - steuerdatenTyp
+        - steuererklaerungInBern
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuererklaerungInBern:
+          type: boolean
+    Steuerdaten:
       title: Root Type for Steuerdaten
       required:
         - steuernKantonGemeinde
@@ -5058,14 +5138,6 @@ components:
           type: integer
         vermoegen:
           type: integer
-    Steuerdaten:
-      title: Root Type for Steuerdaten
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SteuerdatenUpdate'
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
     SozialdienstBenutzerBase:
       required:
         - vorname
