@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -45,7 +47,8 @@ import org.mapstruct.Named;
     config = MappingConfig.class,
     uses = {
         FallMapper.class,
-        GesuchsperiodeMapper.class
+        GesuchsperiodeMapper.class,
+        GesuchTrancheMapper.class,
     }
 )
 public abstract class GesuchMapper {
@@ -79,7 +82,7 @@ public abstract class GesuchMapper {
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
         final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
-        if (zuordnung == null) {
+        if (Objects.isNull(zuordnung) || Objects.isNull(zuordnung.getSachbearbeiter())) {
             return "";
         }
 

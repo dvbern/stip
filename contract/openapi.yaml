@@ -155,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -605,6 +605,80 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
+  '/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomDokumentTyp'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllCustomDokumentTypes
+  '/gesuchDokument/customGesuchDokument/':
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomDokumentTypCreate'
+        required: true
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchDokument'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createCustomDokumentTyp
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
+    parameters:
+      - name: customDokumentTypId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: |
+            Custom Dokument Typ deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteCustomDokumentTyp
+      summary: delete a customDokumentTyp
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -668,17 +742,65 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare':
+  '/customGesuchDokument/{customDokumentTypId}':
     get:
       tags:
         - Dokument
       parameters:
-        - name: dokumentTyp
+        - name: customDokumentTypId
           schema:
-            $ref: '#/components/schemas/DokumentTyp'
+            $ref: '#/components/schemas/UUID'
           in: path
           required: true
-        - name: gesuchTrancheId
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns an Array of Dokumente for a given GesuchTrancheId and a CustomDokumentTyp
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getCustomGesuchDokumenteForTyp
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: uploadCustomGesuchDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchDokumentId}/kommentare':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: gesuchDokumentId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -1770,13 +1892,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
       summary: Returns the inital tranche changes by GesuchId
-  '/gesuch/{gesuchId}/{gesuchTrancheId}':
+  '/gesuch/gs/{gesuchTrancheId}':
+        parameters:
+          - name: gesuchTrancheId
+            schema:
+              $ref: '#/components/schemas/UUID'
+            in: path
+            required: true
+        get:
+          tags:
+            - Gesuch
+          responses:
+            '200':
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Gesuch'
+              description: OK
+            '401':
+              $ref: '#/components/responses/Unauthorized'
+            '403':
+              $ref: '#/components/responses/Forbidden'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '500':
+              $ref: '#/components/responses/ServerError'
+          operationId: getGesuchGS
+          summary: Returns the Gesuch with the given Id
+  '/gesuch/sb/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -1790,7 +1934,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1800,7 +1944,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
+      operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
   '/gesuch/{gesuchId}/info':
     parameters:
@@ -1954,6 +2098,12 @@ paths:
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/dokument/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Dokument
@@ -1993,12 +2143,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-    parameters:
-      - name: dokumentId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/{gesuchTrancheId}/einreichen':
     patch:
       tags:
@@ -2041,7 +2185,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2055,11 +2199,7 @@ paths:
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2095,7 +2235,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2109,11 +2249,7 @@ paths:
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
   '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2127,7 +2263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchZurueckweisenResponse'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2997,6 +3133,32 @@ components:
           type: string
         redirectUri:
           type: string
+    CustomDokumentTyp:
+      type: object
+      required:
+        - id
+        - type
+        - description
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+        description:
+          type: string
+    CustomDokumentTypCreate:
+      type: object
+      required:
+        - type
+        - description
+        - trancheId
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        trancheId:
+          $ref: '#/components/schemas/UUID'
     Anrede:
       enum:
         - HERR
@@ -3059,6 +3221,7 @@ components:
       enum:
         - GESUCH_DOKUMENT
         - UNTERSCHRIFTENBLATT
+        - CUSTOM_DOKUMENT
       type: string
     UnterschriftenblattDokumentTyp:
       type: string
@@ -3180,7 +3343,6 @@ components:
     GesuchDokument:
       required:
         - id
-        - dokumentTyp
         - dokumente
         - status
       type: object
@@ -3189,6 +3351,8 @@ components:
           $ref: '#/components/schemas/UUID'
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
+        customDokumentTyp:
+          $ref: '#/components/schemas/CustomDokumentTyp'
         dokumente:
           type: array
           items:
@@ -5136,12 +5300,12 @@ components:
       type: object
       required:
         - gesuchTrancheId
-        - dokumentTyp
+        - gesuchDokumentId
       properties:
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
-        dokumentTyp:
-          $ref: '#/components/schemas/DokumentTyp'
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
         dokumentStatus:
           $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
@@ -5674,6 +5838,10 @@ components:
     DokumenteToUpload:
       type: object
       properties:
+        customDokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDokumentTyp'
         required:
           type: array
           items:
@@ -5755,6 +5923,16 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchZurueckweisenResponse:
+      type: object
+      required:
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
@@ -5894,7 +6072,6 @@ components:
         $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
       in: path
       required: true
-
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

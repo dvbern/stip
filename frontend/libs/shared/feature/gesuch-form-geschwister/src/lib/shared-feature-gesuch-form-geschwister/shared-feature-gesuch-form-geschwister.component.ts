@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  computed,
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -49,18 +48,8 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
-  sortedGeschwistersSig = computed(() => {
-    const originalList = this.viewSig().gesuchFormular?.geschwisters;
-    return originalList
-      ? [...originalList].sort((a, b) =>
-          (a.vorname + ' ' + a.nachname).localeCompare(
-            b.vorname + ' ' + b.nachname,
-          ),
-        )
-      : undefined;
-  });
-
   editedGeschwister?: Partial<GeschwisterUpdate>;
+  editedGeschwisterIndex: number | undefined;
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormGeschwister.init());
@@ -68,10 +57,12 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   public handleAddGeschwister(): void {
     this.editedGeschwister = {};
+    this.editedGeschwisterIndex = undefined;
   }
 
-  public handleSelectGeschwister(ge: GeschwisterUpdate): void {
+  public handleSelectGeschwister(ge: GeschwisterUpdate, index: number): void {
     this.editedGeschwister = ge;
+    this.editedGeschwisterIndex = index;
   }
 
   handleEditorSave(geschwister: GeschwisterUpdate) {

@@ -29,14 +29,16 @@ public class PartnerCopyUtil {
         }
 
         final var copy = new Partner();
-
-        AbstractPersonCopyUtil.copy(other, copy);
-        copy.setSozialversicherungsnummer(other.getSozialversicherungsnummer());
-        copy.setAusbildungMitEinkommenOderErwerbstaetig(other.isAusbildungMitEinkommenOderErwerbstaetig());
-        copy.setJahreseinkommen(other.getJahreseinkommen());
-        copy.setVerpflegungskosten(other.getVerpflegungskosten());
-        copy.setFahrkosten(other.getFahrkosten());
-
+        copyValuesIgnoringReferences(other, copy);
         return copy;
+    }
+
+    public void copyValuesIgnoringReferences(final Partner source, final Partner target) {
+        AbstractPersonCopyUtil.copy(source, target);
+        target.setSozialversicherungsnummer(source.getSozialversicherungsnummer());
+        target.setAusbildungMitEinkommenOderErwerbstaetig(source.isAusbildungMitEinkommenOderErwerbstaetig());
+        target.setJahreseinkommen(source.getJahreseinkommen());
+        target.setVerpflegungskosten(source.getVerpflegungskosten());
+        target.setFahrkosten(source.getFahrkosten());
     }
 }

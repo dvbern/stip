@@ -20,6 +20,7 @@ import {
   DokumentOptions,
   DokumentState,
   SharedModelAdditionalGesuchDokument,
+  SharedModelCustomGesuchDokument,
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
@@ -125,6 +126,23 @@ export class UploadStore {
                     ),
                   );
               }
+              case 'CUSTOM_DOKUMENT':
+                return this.documentService
+                  .getCustomGesuchDokumenteForTyp$({
+                    customDokumentTypId: dokument.dokumentTyp.id,
+                  })
+                  .pipe(
+                    map(
+                      ({ value }) =>
+                        ({
+                          art: 'CUSTOM_DOKUMENT',
+                          gesuchDokument: value,
+                          dokumentTyp: dokument.dokumentTyp,
+                          gesuchId: dokument.gesuchId,
+                          trancheId: dokument.trancheId,
+                        }) satisfies SharedModelCustomGesuchDokument,
+                    ),
+                  );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService
                   .getUnterschriftenblaetterForGesuch$({
@@ -192,6 +210,7 @@ export class UploadStore {
           ] as const;
           const serviceCall$ = (() => {
             switch (action.dokument.art) {
+              case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
                 return this.documentService.deleteDokument$(
                   ...deleteCallParams,
@@ -375,6 +394,14 @@ export class UploadStore {
               ...action,
               gesuchTrancheId: dokument.trancheId,
               dokumentTyp: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
+        case 'CUSTOM_DOKUMENT':
+          return this.documentService.uploadCustomGesuchDokument$(
+            {
+              ...action,
+              customDokumentTypId: dokument.dokumentTyp.id,
             },
             ...serviceDefaultParams,
           );

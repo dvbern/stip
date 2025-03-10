@@ -24,18 +24,20 @@ import lombok.experimental.UtilityClass;
 public class FamiliensituationCopyUtil {
     public Familiensituation createCopy(final Familiensituation other) {
         final var copy = new Familiensituation();
-
-        copy.setElternVerheiratetZusammen(other.getElternVerheiratetZusammen());
-        copy.setElternteilUnbekanntVerstorben(other.getElternteilUnbekanntVerstorben());
-        copy.setGerichtlicheAlimentenregelung(other.getGerichtlicheAlimentenregelung());
-        copy.setMutterUnbekanntVerstorben(other.getMutterUnbekanntVerstorben());
-        copy.setMutterUnbekanntGrund(other.getMutterUnbekanntGrund());
-        copy.setMutterWiederverheiratet(other.getMutterWiederverheiratet());
-        copy.setVaterUnbekanntVerstorben(other.getVaterUnbekanntVerstorben());
-        copy.setVaterUnbekanntGrund(other.getVaterUnbekanntGrund());
-        copy.setVaterWiederverheiratet(other.getVaterWiederverheiratet());
-        copy.setWerZahltAlimente(other.getWerZahltAlimente());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final Familiensituation source, final Familiensituation target) {
+        target.setElternVerheiratetZusammen(source.getElternVerheiratetZusammen());
+        target.setElternteilUnbekanntVerstorben(source.getElternteilUnbekanntVerstorben());
+        target.setGerichtlicheAlimentenregelung(source.getGerichtlicheAlimentenregelung());
+        target.setMutterUnbekanntVerstorben(source.getMutterUnbekanntVerstorben());
+        target.setMutterUnbekanntGrund(source.getMutterUnbekanntGrund());
+        target.setMutterWiederverheiratet(source.getMutterWiederverheiratet());
+        target.setVaterUnbekanntVerstorben(source.getVaterUnbekanntVerstorben());
+        target.setVaterUnbekanntGrund(source.getVaterUnbekanntGrund());
+        target.setVaterWiederverheiratet(source.getVaterWiederverheiratet());
+        target.setWerZahltAlimente(source.getWerZahltAlimente());
     }
 }
