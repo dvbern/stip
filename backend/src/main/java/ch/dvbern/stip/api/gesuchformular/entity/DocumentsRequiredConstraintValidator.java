@@ -68,12 +68,8 @@ public class DocumentsRequiredConstraintValidator
             DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
         customFiltered.forEach(missingCustomDok -> allFiltered.add(PAGENAME));
 
-        final var isNOTBeingEditedBySB =
-            formular.getTranche().getGesuch().getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB;
-
         if (
             !allFiltered.isEmpty()
-            && isNOTBeingEditedBySB
         ) {
             return GesuchValidatorUtil.addProperties(
                 context,
