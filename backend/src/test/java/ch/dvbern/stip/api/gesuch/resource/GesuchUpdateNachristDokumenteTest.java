@@ -40,6 +40,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -95,8 +96,7 @@ public class GesuchUpdateNachristDokumenteTest {
     @Order(14)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
+        gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -121,7 +121,7 @@ public class GesuchUpdateNachristDokumenteTest {
     @TestAsSachbearbeiter
     @Order(16)
     void gesuchStatusChangeToInBearbeitungSB() {
-        gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        final var gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(this.gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -129,9 +129,9 @@ public class GesuchUpdateNachristDokumenteTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
-        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class GesuchUpdateNachristDokumenteTest {
         var gesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
-        kommentar.setDokumentTyp(DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
+        kommentar.setGesuchDokumentId(dok.getValue().getId());
         kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
@@ -207,14 +207,13 @@ public class GesuchUpdateNachristDokumenteTest {
     void updateGesuchShouldNotOverrideEingabefristTest() {
         TestUtil.updateGesuch(gesuchApiSpec, gesuch);
 
-        final var updatedGesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
+        final var updatedGesuch = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
         assertEquals(nachreichefrist, updatedGesuch.getNachfristDokumente());
     }
 
@@ -235,8 +234,7 @@ public class GesuchUpdateNachristDokumenteTest {
     @Test
     @Order(22)
     void gesuchEinreichefristDokumenteShouldNotBeOverwrittenTest() {
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
+        final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -244,8 +242,8 @@ public class GesuchUpdateNachristDokumenteTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getNachfristDokumente(), is(nachreichefrist));
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getNachfristDokumente(), is(nachreichefrist));
     }
 
     @TestAsGesuchsteller

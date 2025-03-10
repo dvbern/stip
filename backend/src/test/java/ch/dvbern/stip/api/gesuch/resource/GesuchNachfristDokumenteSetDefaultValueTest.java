@@ -55,6 +55,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -137,7 +138,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
@@ -182,7 +183,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
         var gesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
-        kommentar.setDokumentTyp(DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
+        kommentar.setGesuchDokumentId(dok.getValue().getId());
         kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
@@ -211,8 +212,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
     @Test
     @Order(20)
     void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsSB() {
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
+        gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -220,7 +220,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuch.getNachfristDokumente(), is(notNullValue()));
     }
 
