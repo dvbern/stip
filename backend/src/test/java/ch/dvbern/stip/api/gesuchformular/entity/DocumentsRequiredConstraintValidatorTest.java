@@ -77,7 +77,7 @@ class DocumentsRequiredConstraintValidatorTest {
      */
     @Description("IN_BEARBEITUNG_SB: Validation should not fail when some required documents are missing")
     @Test
-    void validationShoudWorkWithMissingDocuments_InBearbeitungSB() {
+    void validationShoudntWorkWithMissingDocuments_InBearbeitungSB() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -92,7 +92,7 @@ class DocumentsRequiredConstraintValidatorTest {
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
-        assertTrue(constraintValidator.isValid(formular, null));
+        assertFalse(constraintValidator.isValid(formular, null));
 
         var customTyp = new CustomDokumentTyp();
         customTyp.setId(UUID.randomUUID());
@@ -104,7 +104,7 @@ class DocumentsRequiredConstraintValidatorTest {
         customGesuchDokument.setCustomDokumentTyp(customTyp);
         customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().add(customGesuchDokument);
-        assertTrue(constraintValidator.isValid(formular, null));
+        assertFalse(constraintValidator.isValid(formular, null));
     }
 
     @Test
