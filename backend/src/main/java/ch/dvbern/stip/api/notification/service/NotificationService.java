@@ -61,6 +61,19 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createGesuchNachfristDokumenteChangedNotification(final Gesuch gesuch) {
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
+            .setGesuch(gesuch);
+    }
+
+    @Transactional
     public void createGesuchEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
@@ -317,6 +330,20 @@ public class NotificationService {
                 return gesuchFehlendeDokumenteNichtEingereichtFr(anrede, nachname, sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
+        }
+
+        public static native TemplateInstance nachfristDokumenteChangedDE(final LocalDate nachfristDokumente);
+
+        public static native TemplateInstance nachfristDokumenteChangedFR(final LocalDate nachfristDokumente);
+
+        public static TemplateInstance getNachfristDokumenteChangedText(
+            final Sprache korrespondenzSprache,
+            final LocalDate nachfristDokumente
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return nachfristDokumenteChangedFR(nachfristDokumente);
+            }
+            return nachfristDokumenteChangedDE(nachfristDokumente);
         }
     }
 }
