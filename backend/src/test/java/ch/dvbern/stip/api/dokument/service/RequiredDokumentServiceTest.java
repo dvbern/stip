@@ -103,7 +103,7 @@ class RequiredDokumentServiceTest {
         }
     }
 
-    static class MockInstance implements Instance<RequiredDocumentsProducer> {
+    public static class MockInstance implements Instance<RequiredDocumentsProducer> {
         private final List<RequiredDocumentsProducer> collection;
 
         MockInstance(List<RequiredDocumentsProducer> collection) {

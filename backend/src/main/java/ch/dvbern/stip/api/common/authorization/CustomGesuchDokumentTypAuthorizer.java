@@ -97,10 +97,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
         // check if gesuch is being edited by SB
         // or if GS has already attached a file to it
-        if (
-            notBeingEditedBySB
-            || isAnyFileAttached
-        ) {
+        if (notBeingEditedBySB || isAnyFileAttached) {
             throw new ForbiddenException();
         }
     }
