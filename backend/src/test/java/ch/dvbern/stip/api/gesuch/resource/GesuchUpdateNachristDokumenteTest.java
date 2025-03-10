@@ -69,7 +69,7 @@ import static org.junit.Assert.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GesuchUpdateNachristDokumenteTest {
+class GesuchUpdateNachristDokumenteTest {
     public final NotificationApiSpec notificationApiSpec =
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
