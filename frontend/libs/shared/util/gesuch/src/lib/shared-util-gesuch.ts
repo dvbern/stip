@@ -145,13 +145,13 @@ export const StatusUebergaengeOptions = {
     }) as const,
   BEARBEITUNG_ABSCHLIESSEN: (context?: {
     hasAcceptedAllDokuments: boolean;
-    hasValidationErrors: boolean;
+    isInvalid: boolean;
   }) => {
     let disabledReason = undefined;
     if (!context?.hasAcceptedAllDokuments) {
       disabledReason = 'DOKUMENTE_OFFEN';
     }
-    if (context?.hasValidationErrors) {
+    if (context?.isInvalid) {
       disabledReason = 'VALIDIERUNG_FEHLER';
     }
     return {
