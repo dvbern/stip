@@ -164,7 +164,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   DokumentStatus = Dokumentstatus;
 
-  // inform the GS that documents are missing (or declined)
+  // show button to inform the GS that documents are missing (or declined)
   // if true, the button is shown
   canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =

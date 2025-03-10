@@ -56,6 +56,7 @@ public class DokumentValidationUtils {
         Instance<RequiredCustomDocumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
+
         ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
         customProducers.stream()
             .map(producer -> producer.getRequiredDocuments(tranche))
@@ -64,6 +65,7 @@ public class DokumentValidationUtils {
                     customDokumentTypes.addAll(pair.getValue());
                 }
             });
+
         return customDokumentTypes;
     }
 

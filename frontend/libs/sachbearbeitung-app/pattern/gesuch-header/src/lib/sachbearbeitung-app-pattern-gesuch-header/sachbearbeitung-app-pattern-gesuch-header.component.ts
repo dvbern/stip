@@ -75,8 +75,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  private hasAcceptedAllDocumentsSig =
-    this.dokumentsStore.hasAcceptedAllDokumentsSig;
   private otherGesuchInfoSourceSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
@@ -163,10 +161,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
-    const hasValidationErrors =
-      !!this.einreichnenStore.validationViewSig().invalidFormularProps
-        .validations.errors?.length;
+    const hasAcceptedAllDokuments =
+      this.dokumentsStore.hasAcceptedAllDokumentsSig();
+
+    const validations =
+      this.einreichnenStore.validationViewSig().invalidFormularProps
+        .validations;
+    const hasValidationErrors = !!validations.errors?.length;
+    const hasValidationWarnings = !!validations.warnings?.length;
 
     if (!gesuchStatus) {
       return {};
@@ -175,7 +177,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
       StatusUebergaengeOptions[status]({
         hasAcceptedAllDokuments,
-        hasValidationErrors,
+        isInvalid: hasValidationErrors || hasValidationWarnings,
       }),
     );
 
