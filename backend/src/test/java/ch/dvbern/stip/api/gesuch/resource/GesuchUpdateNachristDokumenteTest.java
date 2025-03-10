@@ -25,6 +25,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -34,6 +35,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.NotificationApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
@@ -42,6 +44,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -55,6 +58,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -66,6 +70,8 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GesuchUpdateNachristDokumenteTest {
+    public final NotificationApiSpec notificationApiSpec =
+        NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
@@ -198,12 +204,37 @@ public class GesuchUpdateNachristDokumenteTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+    }
+
+    // verify that notification is present
+    @Test
+    @TestAsGesuchsteller
+    @Order(20)
+    void verifyNotification() {
+        final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDto[].class);
+
+        assertThat(notifications.length, greaterThan(0));
+        assertThat(
+            Arrays.stream(notifications)
+                .toList()
+                .stream()
+                .anyMatch(
+                    notification -> notification.getNotificationType() == NotificationType.NACHFRIST_DOKUMENTE_CHANGED
+                ),
+            is(true)
+        );
     }
 
     // check that einreichefrist doesnt get changed by updateGesuch operation
     @TestAsSachbearbeiter
     @Test
-    @Order(20)
+    @Order(21)
     void updateGesuchShouldNotOverrideEingabefristTest() {
         TestUtil.updateGesuch(gesuchApiSpec, gesuch);
 
@@ -219,7 +250,7 @@ public class GesuchUpdateNachristDokumenteTest {
 
     @TestAsSachbearbeiter
     @Test
-    @Order(21)
+    @Order(22)
     void fehlendeDokumenteUebermitteln() {
         gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -232,7 +263,7 @@ public class GesuchUpdateNachristDokumenteTest {
     // check that einreichefrist wont be overwritten by fehlende dokumente übermitteln
     @TestAsSachbearbeiter
     @Test
-    @Order(22)
+    @Order(23)
     void gesuchEinreichefristDokumenteShouldNotBeOverwrittenTest() {
         final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -248,7 +279,7 @@ public class GesuchUpdateNachristDokumenteTest {
 
     @TestAsGesuchsteller
     @Test
-    @Order(23)
+    @Order(24)
     void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
         final var items = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)

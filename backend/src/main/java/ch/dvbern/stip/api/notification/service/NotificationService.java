@@ -71,6 +71,9 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
             .setGesuch(gesuch);
+        String msg = Templates.getNachfristDokumenteChangedText(sprache, gesuch.getNachfristDokumente()).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
     }
 
     @Transactional

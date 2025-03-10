@@ -650,6 +650,7 @@ public class GesuchService {
     public void updateNachfristDokumente(final UUID gesuchId, LocalDate nachfristDokumente) {
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
+        notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
