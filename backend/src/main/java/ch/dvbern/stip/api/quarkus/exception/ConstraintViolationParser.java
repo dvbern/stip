@@ -107,6 +107,9 @@ class ConstraintViolationParser {
 
             if (next.isInIterable()) {
                 var prevIdx = i - 1;
+                if (prevIdx < 0) {
+                    continue;
+                }
                 String previous = pathEntries.get(prevIdx);
                 String prevIndexed = previous + '[' + next.getIndex() + ']';
                 pathEntries.set(prevIdx, prevIndexed);

@@ -1,7 +1,8 @@
 import { Route } from '@angular/router';
 
+import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
-import { hasRoles, isAllowedTo } from '@dv/shared/pattern/status-guard';
+import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
@@ -79,6 +80,7 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         canActivate: [hasBenutzer],
+        providers: [SteuerdatenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
@@ -91,7 +93,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'verfuegung',
-        canActivate: [hasBenutzer, isAllowedTo('viewVerfuegung')],
+        canActivate: [hasBenutzer],
         title: 'sachbearbeitung-app.verfuegung.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/verfuegung').then(

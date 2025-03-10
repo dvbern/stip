@@ -114,7 +114,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         assertThrows(UnauthorizedException.class, () -> {
             authorizer.canGetBerechnung(gesuch.getId());
         });
-        Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
+        Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
             gesuch.setGesuchStatus(gesuchstatus);
             assertDoesNotThrow(() -> authorizer.canGetBerechnung(gesuch.getId()));
 

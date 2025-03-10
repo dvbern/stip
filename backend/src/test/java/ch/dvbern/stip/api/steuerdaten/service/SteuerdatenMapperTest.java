@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +29,7 @@ class SteuerdatenMapperTest {
     @Test
     void resetSaeulenBecauseArbeitsverhaletnissChangedTest() {
         // Arrange
-        final var source = new SteuerdatenUpdateDto();
+        final var source = new SteuerdatenDto();
         source.setIsArbeitsverhaeltnisSelbstaendig(true);
         source.setSaeule2(10);
         source.setSaeule3a(10);

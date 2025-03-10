@@ -30,10 +30,10 @@ import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-au
 import {
   DokumentTyp,
   ElternUpdate,
+  GesuchFormularType,
   Kontoinhaber,
   MASK_IBAN,
   PersonInAusbildungUpdate,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -260,7 +260,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
   private handleKontoinhaberinChanged(
     kontoinhaberin: Kontoinhaber,
-    gesuchFormular: SharedModelGesuchFormular | null,
+    gesuchFormular: GesuchFormularType | null,
   ): void {
     switch (kontoinhaberin) {
       case Kontoinhaber.GESUCHSTELLER:

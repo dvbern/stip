@@ -81,6 +81,8 @@ kstip:
   should-clear-database: false
 
 quarkus:
+  live-reload:
+    instrumentation: true
   log:
     sentry:
       ~: 'true'

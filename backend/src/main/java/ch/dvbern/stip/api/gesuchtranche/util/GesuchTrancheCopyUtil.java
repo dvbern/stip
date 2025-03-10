@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
+import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import jakarta.ws.rs.NotFoundException;
 import lombok.Getter;
@@ -274,6 +275,9 @@ public class GesuchTrancheCopyUtil {
 
         // Kinds
         copy.setKinds(KindCopyUtil.createCopySet(other.getKinds()));
+
+        // Steuererklaerung
+        copy.setSteuererklaerung(SteuererklaerungCopyUtil.createCopySet(other.getSteuererklaerung()));
 
         // Steuerdaten
         copy.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(other.getSteuerdaten()));

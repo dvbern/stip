@@ -7,13 +7,12 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { stepHasChanges } from '@dv/shared/util-fn/gesuch-util';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
@@ -21,13 +20,7 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
 @Component({
   selector: 'dv-shared-pattern-gesuch-step-nav',
   standalone: true,
-  imports: [
-    RouterLink,
-    TranslatePipe,
-    SharedUiIconChipComponent,
-    SharedUiChangeIndicatorComponent,
-    RouterLinkActive,
-  ],
+  imports: [RouterLink, TranslatePipe, SharedUiChangeIndicatorComponent],
   templateUrl: './shared-pattern-gesuch-step-nav.component.html',
   styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

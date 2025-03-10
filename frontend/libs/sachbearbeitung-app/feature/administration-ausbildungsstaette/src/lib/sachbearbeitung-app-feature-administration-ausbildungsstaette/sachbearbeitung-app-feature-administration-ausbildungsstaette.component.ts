@@ -30,7 +30,6 @@ import {
   ConfirmDialogData,
   SharedUiConfirmDialogComponent,
 } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -45,7 +44,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     CommonModule,
     SharedUiLoadingComponent,
     MatFormFieldModule,
-    SharedUiFormFieldDirective,
     SharedUiMaxLengthDirective,
     TranslatePipe,
     MatInputModule,
@@ -122,7 +120,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     merge(this.gangForm.valueChanges, this.form.valueChanges)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.hasUnsavedChanges = true;
+        this.hasUnsavedChanges = this.gangForm.dirty || this.form.dirty;
       });
 
     effect(() => {
