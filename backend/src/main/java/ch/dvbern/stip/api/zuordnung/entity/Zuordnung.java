@@ -56,7 +56,7 @@ public class Zuordnung extends AbstractMandantEntity {
     private Fall fall;
 
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(
         name = "sachbearbeiter_id",
         foreignKey = @ForeignKey(name = "FK_zuordnung_sachbearbeiter_id"),

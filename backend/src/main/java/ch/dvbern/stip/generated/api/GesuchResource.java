@@ -12,6 +12,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
@@ -39,7 +40,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}/einreichedatum")
@@ -50,12 +51,12 @@ public interface GesuchResource {
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/negative-verfuegung/{gesuchTrancheId}")
@@ -102,7 +103,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
@@ -113,7 +114,7 @@ public interface GesuchResource {
     @Path("/{gesuchTrancheId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchZurueckweisenResponseDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")
@@ -131,14 +132,19 @@ public interface GesuchResource {
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/{gesuchTrancheId}")
+    @Path("/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}/info")
     @Produces({ "application/json", "text/plain" })
     GesuchInfoDto getGesuchInfo(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/sb/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto getGesuchSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/benutzer/me/gs")

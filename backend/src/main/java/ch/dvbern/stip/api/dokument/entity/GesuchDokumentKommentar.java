@@ -18,9 +18,7 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,7 +43,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Table(
     name = "gesuch_dokument_kommentar",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_gesuch_id", columnList = "gesuch_tranche_id"),
         @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
     }
 )
@@ -55,14 +52,10 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(
-        name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_tranche_id")
+        name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_id"),
+        nullable = false
     )
-    private GesuchTranche gesuchTranche;
-
-    @NotNull
-    @Column(name = "dokument_typ", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DokumentTyp dokumentTyp;
+    private GesuchDokument gesuchDokument;
 
     @NotNull
     @Column(name = "dokumentstatus")

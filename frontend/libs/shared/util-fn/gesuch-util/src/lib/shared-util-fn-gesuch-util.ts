@@ -13,7 +13,7 @@ import {
   GesuchFormStepView,
   gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
-import { isDefined, lowercased } from '@dv/shared/model/type-util';
+import { lowercased } from '@dv/shared/model/type-util';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -201,18 +201,13 @@ export function getChangesForList<
 >(
   changed: T[] | undefined,
   original: T[] | undefined,
-  getIdentifier: (value: T) => R | undefined,
+  getIdentifier?: (value: T) => R | undefined,
 ) {
   if (!original || !changed) {
     return null;
   }
   const _changes = diff(original, changed, {
     keysToSkip,
-    embeddedObjKeys: {
-      // Compare using generic 'id' property if available
-      // the getIdentifier is not used for the comparison
-      ['.']: 'id',
-    },
   }); // We only care about the first change because the dataset is just a list
   const changes = _changes[0];
 
@@ -221,40 +216,40 @@ export function getChangesForList<
   }
 
   // Identify new entries
-  let newEntries: Partial<Record<R, boolean>> = {};
+  let newEntriesByIdentifier: Partial<Record<R, boolean>> = {};
   if (changes.type === 'UPDATE') {
-    newEntries =
+    newEntriesByIdentifier =
       changes.changes
         ?.filter((c) => c.type === 'ADD')
-        .reduce<typeof newEntries>((entries, c) => {
-          const identifier = getIdentifier(c.value);
-          if (!identifier) {
-            return entries;
-          }
-          return { ...entries, [identifier]: true };
+        .reduce<Partial<Record<R, boolean>>>((entries, c) => {
+          const identifier = getIdentifier?.(c.value);
+          return { ...entries, [identifier ?? +c.key]: true };
         }, {}) ?? {};
   }
 
   // Collect all changes and associate them with the identifier
-  const collectedChanges = original
-    .map((c, i) => ({
-      identifier: getIdentifier(c),
-      values: getChangesForForm(
-        // Compare using the identifier
-        changed.find((cc) => getIdentifier(cc) === getIdentifier(c)) ??
-          // Otherwise fallback to index comparison
+  const collectedChanges = original.map((c, i) => ({
+    identifier: getIdentifier?.(c),
+    values: getChangesForForm(
+      // Compare using the identifier
+      getIdentifier
+        ? changed.find((cc) => getIdentifier(cc) === getIdentifier(c))
+        : // Otherwise fallback to index comparison
           changed[i],
-        c,
-      ),
-    }))
-    .filter((c) => isDefined(c.values));
+      c,
+    ),
+  }));
 
-  if (collectedChanges.length === 0 && Object.keys(newEntries).length === 0) {
+  if (
+    collectedChanges.length === 0 &&
+    Object.keys(newEntriesByIdentifier).length === 0
+  ) {
     return null;
   }
 
   return {
     // Group changes by identifier
+    changesByIndex: collectedChanges.map((c) => c.values),
     changesByIdentifier: collectedChanges.reduce(
       (acc, c) => ({
         ...acc,
@@ -262,6 +257,6 @@ export function getChangesForList<
       }),
       {} as Record<R, T>,
     ),
-    newEntries,
+    newEntriesByIdentifier,
   };
 }

@@ -10,12 +10,14 @@
  * Do not edit the class manually.
  */
 import { Dokumentstatus } from './dokumentstatus';
+import { CustomDokumentTyp } from './customDokumentTyp';
 import { DokumentTyp } from './dokumentTyp';
 import { Dokument } from './dokument';
 
 export interface GesuchDokument { 
     id: string;
-    dokumentTyp: DokumentTyp;
+    dokumentTyp?: DokumentTyp;
+    customDokumentTyp?: CustomDokumentTyp;
     dokumente: Array<Dokument>;
     status: Dokumentstatus;
 }

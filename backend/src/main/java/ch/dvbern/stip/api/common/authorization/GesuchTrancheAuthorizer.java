@@ -21,11 +21,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -117,6 +119,21 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)
         ) {
             throw new UnauthorizedException();
+        }
+    }
+
+    @Transactional
+    public void canFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        if (
+            gesuchTranche.getGesuchDokuments()
+                .stream()
+                .anyMatch(
+                    gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                    && gesuchDokument.getDokumente().isEmpty()
+                )
+        ) {
+            throw new ForbiddenException();
         }
     }
 }

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.validation.AusbildungPageValidation;
@@ -273,6 +275,7 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @OrderBy("geburtsdatum")
     @HasPageValidation(ElternPageValidation.class)
     private @Valid Set<Eltern> elterns = new LinkedHashSet<>();
 
@@ -289,4 +292,8 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
     private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
+
+    public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
+        return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();
+    }
 }

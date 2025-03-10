@@ -21,13 +21,18 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -40,7 +45,7 @@ public class GesuchTestUtil {
         Gesuch gesuch = GesuchGenerator.initGesuch();
         gesuch.setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        GesuchFormular gesuchFormular = new GesuchFormular();
+        GesuchFormular gesuchFormular = setupGesuchFormularWithChildEntities();
         gesuchFormular.setTranche(gesuch.getNewestGesuchTranche().get());
         gesuch.getNewestGesuchTranche().get().setGesuchFormular(gesuchFormular);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
@@ -79,5 +84,15 @@ public class GesuchTestUtil {
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 
         return personInAusbildung;
+    }
+
+    public GesuchFormular setupGesuchFormularWithChildEntities() {
+        return new GesuchFormular()
+            .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
+            .setFamiliensituation(new Familiensituation())
+            .setPartner(new Partner().setAdresse(new Adresse()))
+            .setAuszahlung(new Auszahlung().setAdresse(new Adresse()).setIban(""))
+            .setEinnahmenKosten(new EinnahmenKosten())
+            .setDarlehen(new Darlehen().setWillDarlehen(false));
     }
 }

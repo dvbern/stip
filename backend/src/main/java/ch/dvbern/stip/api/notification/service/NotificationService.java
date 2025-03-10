@@ -100,7 +100,7 @@ public class NotificationService {
             .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
             .setGesuch(gesuch);
 
-        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();

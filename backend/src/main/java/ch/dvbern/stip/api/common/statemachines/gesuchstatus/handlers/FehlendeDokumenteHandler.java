@@ -47,11 +47,11 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         setDefaultNachfristDokumenteIfNecessary(gesuch);
-        gesuchDokumentService.deleteAbgelehnteDokumenteForGesuch(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
+        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
         sendFehlendeDokumenteNotifications(gesuch);
     }
 

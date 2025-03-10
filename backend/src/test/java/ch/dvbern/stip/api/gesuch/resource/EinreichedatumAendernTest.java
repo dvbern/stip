@@ -91,8 +91,7 @@ class EinreichedatumAendernTest {
     @TestAsGesuchsteller
     @Order(2)
     void einreichedatumIsSet() {
-        gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
+        gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

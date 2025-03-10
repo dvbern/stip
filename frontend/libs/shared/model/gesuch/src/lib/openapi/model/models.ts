@@ -35,6 +35,8 @@ export * from './buchhaltungSaldokorrektur';
 export * from './buchhaltungType';
 export * from './createAenderungsantragRequest';
 export * from './createGesuchTrancheRequest';
+export * from './customDokumentTyp';
+export * from './customDokumentTypCreate';
 export * from './darlehen';
 export * from './delegierung';
 export * from './deploymentConfig';

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapperImpl;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -37,7 +39,8 @@ import static org.hamcrest.Matchers.is;
 
 class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     DokumentMapper dokumentMapper = new DokumentMapperImpl();
-    GesuchDokumentMapper gesuchDokumentMapper = new GesuchDokumentMapperImpl(dokumentMapper);
+    CustomDocumentTypMapper customDocumentTypMapper = new CustomDocumentTypMapperImpl();
+    GesuchDokumentMapper gesuchDokumentMapper = new GesuchDokumentMapperImpl(dokumentMapper, customDocumentTypMapper);
     final GesuchService gesuchServiceMock = Mockito.mock(GesuchService.class);
 
     @Test
@@ -61,28 +64,6 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     void dokumenteAusstehendNotValid() {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AUSSTEHEND);
-        final var gesuchDokumentDtos =
-            gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = GesuchGenerator.initGesuch();
-        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
-        final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
-
-        Mockito.doReturn(gesuchDokumentDtos)
-            .when(gesuchServiceMock)
-            .getGesuchDokumenteForGesuch(ArgumentMatchers.any());
-        validator.gesuchService = gesuchServiceMock;
-
-        // Act
-        final var isValid = validator.isValid(gesuch, null);
-
-        // Assert
-        assertThat(isValid, is(false));
-    }
-
-    @Test
-    void allAkzeptiertIsNotValid() {
-        // Arrange
-        final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT);
         final var gesuchDokumentDtos =
             gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
         final var gesuch = GesuchGenerator.initGesuch();
