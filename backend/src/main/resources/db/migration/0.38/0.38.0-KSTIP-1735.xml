@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1739870801456-3">
+        <createTable tableName="gesuchformular_steuererklaerung_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-4">
+        <createTable tableName="steuererklaerung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="steuererklaerungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="steuerdaten_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="steuererklaerung_in_bern" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-5">
+        <createTable tableName="steuererklaerung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="steuerdaten_typ" type="VARCHAR(255)"/>
+            <column name="steuererklaerung_in_bern" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-6">
+        <addPrimaryKey columnNames="gesuch_formular_id, rev, id" constraintName="gesuchformular_steuererklaerung_audPK" tableName="gesuchformular_steuererklaerung_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-7">
+        <addPrimaryKey columnNames="rev, id" constraintName="steuererklaerung_audPK" tableName="steuererklaerung_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_steuererklaerung_aud" constraintName="FK39yvmsry1lrwhtu02ol132oww" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-10">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="steuererklaerung" constraintName="FKh205iuisodxvba383pejtj3nd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1739870801456-11">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="steuererklaerung_aud" constraintName="FKsqxjcau1bscrs8icua9dir1y" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -13,8 +13,8 @@ import { ElternUpdate } from './elternUpdate';
 import { Darlehen } from './darlehen';
 import { EinnahmenKostenUpdate } from './einnahmenKostenUpdate';
 import { KindUpdate } from './kindUpdate';
-import { SteuerdatenUpdate } from './steuerdatenUpdate';
 import { FamiliensituationUpdate } from './familiensituationUpdate';
+import { SteuererklaerungUpdate } from './steuererklaerungUpdate';
 import { AuszahlungUpdate } from './auszahlungUpdate';
 import { PartnerUpdate } from './partnerUpdate';
 import { GeschwisterUpdate } from './geschwisterUpdate';
@@ -32,6 +32,6 @@ export interface GesuchFormularUpdate {
     kinds?: Array<KindUpdate>;
     einnahmenKosten?: EinnahmenKostenUpdate;
     darlehen?: Darlehen;
-    steuerdaten?: Array<SteuerdatenUpdate>;
+    steuererklaerung?: Array<SteuererklaerungUpdate>;
 }
 

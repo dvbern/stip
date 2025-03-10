@@ -26,21 +26,34 @@ export type AppTrancheChange = {
   sb: TrancheChange | undefined;
 };
 
-export type SharedModelGesuchFormular = GesuchFormular;
+export type GesuchFormularType = GesuchFormular;
 export type SharedModelGesuchFormularUpdate = GesuchFormularUpdate;
 
-export type SteuerdatenSteps =
-  `steuerdaten${Capitalize<Lowercase<Exclude<SteuerdatenTyp, 'FAMILIE'>>> | ''}`;
+// for sb
+export type SBSteuerdatenSteps =
+  `steuerdaten${Capitalize<Lowercase<SteuerdatenTyp>>}`;
 
-export type SharedModelGesuchFormularProps = Exclude<
-  keyof SharedModelGesuchFormular,
-  'steuerdatenTabs'
+// for gs
+export type GSSteuererklaerungSteps =
+  `steuererklaerung${Capitalize<Lowercase<SteuerdatenTyp>>}`;
+
+export type FormPropsExcluded = Exclude<
+  keyof GesuchFormularType,
+  'steuerdatenTabs' | 'steuererklaerung'
 >;
 
-export type SharedModelGesuchFormularPropsSteuerdatenSteps =
-  | SharedModelGesuchFormularProps
-  | SteuerdatenSteps
+export type GSFormStepProps =
+  | FormPropsExcluded
+  | GSSteuererklaerungSteps
+  | 'dokuments'
+  | 'abschluss';
+
+export type SBFormStepProps =
+  | FormPropsExcluded
+  | SBSteuerdatenSteps
   | 'dokuments';
+
+export type AllFormSteps = GSFormStepProps | SBFormStepProps;
 
 export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
 export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;

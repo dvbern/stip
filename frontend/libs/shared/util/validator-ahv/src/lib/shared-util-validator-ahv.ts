@@ -1,11 +1,11 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
+import { GesuchFormularType } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 
 const START_DIGITS = '756';
 type FieldsWithSV =
-  | Extract<keyof SharedModelGesuchFormular, 'personInAusbildung' | 'partner'>
+  | Extract<keyof GesuchFormularType, 'personInAusbildung' | 'partner'>
   | 'elternMutter'
   | 'elternVater';
 
@@ -39,7 +39,7 @@ export function sharedUtilIsValidAhv(ahv: string) {
 export function sharedUtilIsUniqueAhv(
   ahv: string,
   type: FieldsWithSV,
-  gesuchFormular: SharedModelGesuchFormular,
+  gesuchFormular: GesuchFormularType,
 ) {
   const elterns = gesuchFormular.elterns ?? [];
   const svNummers: Record<FieldsWithSV, string | undefined> = {
@@ -60,7 +60,7 @@ export function sharedUtilIsUniqueAhv(
 
 export function sharedUtilValidatorAhv(
   type: FieldsWithSV,
-  gesuchFormular: SharedModelGesuchFormular | null,
+  gesuchFormular: GesuchFormularType | null,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control?.value) {
