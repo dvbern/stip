@@ -212,7 +212,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
     @Test
     @Order(20)
     void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsSB() {
-        gesuchApiSpec.getGesuchSB()
+        final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -221,7 +221,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuch.getNachfristDokumente(), is(notNullValue()));
+        assertThat(gesuchWithChanges.getNachfristDokumente(), is(notNullValue()));
     }
 
     @TestAsGesuchsteller
