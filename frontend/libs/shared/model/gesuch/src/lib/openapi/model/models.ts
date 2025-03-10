@@ -87,6 +87,7 @@ export * from './gesuchTrancheUpdate';
 export * from './gesuchUpdate';
 export * from './gesuchWithChanges';
 export * from './gesuchWithChangesAllOf';
+export * from './gesuchZurueckweisenResponse';
 export * from './gesuchsjahr';
 export * from './gesuchsjahrCreate';
 export * from './gesuchsjahrUpdate';
