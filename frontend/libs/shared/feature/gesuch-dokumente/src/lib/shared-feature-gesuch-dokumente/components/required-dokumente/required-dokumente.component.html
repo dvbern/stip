@@ -37,9 +37,7 @@
         {{ 'shared.dokumente.table.documentName' | translate }}
       </th>
       <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-py-3">
-          {{ dokument.dokumentOptions.titleKey | translate }}
-        </div>
+        <div class="tw-py-3" [innerHTML]="dokument.dokumentOptions.titleKey | translate"></div>
       </td>
     </ng-container>
 
