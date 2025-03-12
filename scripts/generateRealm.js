@@ -1,19 +1,6 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 import { parseArgs } from "util";
 
-const copyWithNewName = (input, postfix) => {
-  const copy = structuredClone(input);
-  copy.name = `${filterDef.prefix}_${postfix}_${input.name}`;
-  return copy;
-};
-
-const copyCompositeWithNameAndRoles = (template, name, roles) => {
-  const copy = structuredClone(template);
-  copy.name = name;
-  copy.composites.realm = roles;
-  return copy;
-};
-
 const options = {
   filter: {
     type: "string",
@@ -32,6 +19,19 @@ const filters = filterDef.filters;
 
 const realmDump = JSON.parse(readFileSync(args.realm));
 const existingRoles = realmDump.roles.realm;
+
+const copyWithNewName = (input, postfix) => {
+  const copy = structuredClone(input);
+  copy.name = `${filterDef.prefix}_${postfix}_${input.name}`;
+  return copy;
+};
+
+const copyCompositeWithNameAndRoles = (template, name, roles) => {
+  const copy = structuredClone(template);
+  copy.name = `${filterDef.prefix}_${name}`;
+  copy.composites.realm = roles;
+  return copy;
+};
 
 const result = {
   roles: {
