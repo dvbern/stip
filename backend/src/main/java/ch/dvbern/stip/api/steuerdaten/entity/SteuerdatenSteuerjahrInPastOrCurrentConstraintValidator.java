@@ -64,7 +64,7 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
 
         for (final var invalid : invalidSteuerdaten) {
             final var pagePostfix = switch (invalid.getSteuerdatenTyp()) {
-                case FAMILIE -> "";
+                case FAMILIE -> "Familie";
                 case VATER -> "Vater";
                 case MUTTER -> "Mutter";
             };

@@ -53,7 +53,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
         // TODO KSTIP-1967: Check if the current Benutzer can get the Berechnung of the given Gesuch
-        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+        if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
             throw new UnauthorizedException();
         }
     }

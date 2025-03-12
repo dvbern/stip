@@ -39,6 +39,7 @@ import {
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -236,10 +237,16 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         const { gesuch, gesuchFormular } = this.viewSig();
         const rolesMap = this.permissionStore.rolesMapSig();
         const { trancheTyp } = this.cacheSig();
+        const { permissions } = preparePermissions(
+          trancheTyp,
+          gesuch,
+          this.appType,
+          rolesMap,
+        );
         if (
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(PARTNER, trancheTyp, gesuch, this.appType, rolesMap)
+          isStepDisabled(PARTNER, gesuch, permissions)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormPartner.nextStepTriggered({

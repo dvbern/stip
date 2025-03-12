@@ -45,6 +45,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import com.mchange.io.FileUtils;
@@ -336,6 +337,109 @@ class DokumentResourcesCustomDokumenteTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(15)
+    void delete_gesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+    }
+
+    // for the next tests, gesuch
+    // should be in state IN_BEARBEITUNG_SB
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(16)
+    void reset() {
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(17)
+    void fillGesuch_2() {
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(18)
+    void gesuchEinreichen_2() {
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(19)
+    void gesuchStatusChangeToInBearbeitungSB() {
+        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
+
+    // testAsSB
+    // delete custom
+    // b: no files -> ok
+    @Test
+    @TestAsSachbearbeiter
+    @Order(20)
+    void test_delete_required_custom_gesuchdokument_should_success() {
+        // first, prepare a new custom gesuch dokument type
+        test_create_custom_gesuchdokument();
+
+        dokumentApiSpec.deleteCustomDokumentTyp()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(CustomDokumentTypDto[].class);
+        assertThat(customDocumentTypes.length, is(0));
+    }
+
+    // testAsGS
+    // new document should appear in required documents
+    // upload
+    @Test
+    @TestAsGesuchsteller
+    @Order(21)
+    void test_get_required_custom_gesuchdokuments_should_be_empty() {
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDto.class);
+        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

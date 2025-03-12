@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { SachbearbeitungAppPatternGesuchStepLayoutComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-step-layout';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({
@@ -15,5 +15,5 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureGesuchFormComponent {
-  step?: SharedModelGesuchFormStep;
+  step?: GesuchFormStep;
 }

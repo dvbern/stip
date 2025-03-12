@@ -32,9 +32,9 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   ElternTyp,
   ElternUpdate,
+  GesuchFormularType,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
 import {
@@ -114,7 +114,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   private einreichenStore = inject(EinreichenStore);
   private store = inject(Store);
 
-  gesuchFormularSig = input.required<SharedModelGesuchFormular>();
+  gesuchFormularSig = input.required<GesuchFormularType>();
   elternteilSig = input.required<
     Omit<Partial<ElternUpdate>, 'elternTyp'> &
       Required<Pick<ElternUpdate, 'elternTyp'>>

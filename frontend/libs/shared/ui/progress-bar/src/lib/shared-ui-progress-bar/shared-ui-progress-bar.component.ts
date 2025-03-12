@@ -12,7 +12,7 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 
-import { SharedModelGesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 
 @Component({
@@ -27,7 +27,7 @@ export class SharedUiProgressBarComponent implements OnInit {
   private injector = inject(Injector);
   private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);
-  currentSig = input.required<SharedModelGesuchFormStepProgress>();
+  currentSig = input.required<GesuchFormStepProgress>();
 
   ngOnInit() {
     runInInjectionContext(this.injector, () => {

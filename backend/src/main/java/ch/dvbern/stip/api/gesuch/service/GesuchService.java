@@ -57,8 +57,11 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
-import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -76,7 +79,6 @@ import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryReposito
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
-import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -98,7 +100,6 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -240,74 +241,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateSteuerdatenUpdateLegality(
-        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
-        final GesuchTranche trancheToUpdate
-    ) {
-        final var gesuchsjahr = trancheToUpdate
-            .getGesuch()
-            .getGesuchsperiode()
-            .getGesuchsjahr();
-
-        final var steuerdatenList = trancheToUpdate.getGesuchFormular()
-            .getSteuerdaten()
-            .stream()
-            .filter(tab -> tab.getSteuerdatenTyp() != null)
-            .toList();
-
-        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos) {
-            setAndValidateSteuerdatenTabUpdateLegality(
-                steuerdatenUpdateDto,
-                steuerdatenList.stream()
-                    .filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId()))
-                    .findFirst()
-                    .orElse(null),
-                gesuchsjahr
-            );
-        }
-    }
-
-    private void setAndValidateSteuerdatenTabUpdateLegality(
-        final SteuerdatenUpdateDto steuerdatenUpdateDto,
-        final Steuerdaten steuerdatenTabs,
-        Gesuchsjahr gesuchsjahr
-    ) {
-        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
-        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
-
-        if (steuerdatenTabs != null) {
-            final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
-            final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
-            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                steuerjahrDtoValue,
-                steuerjahrExistingValue,
-                steuerjahrDefaultValue
-            );
-
-            final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
-            final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
-            final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
-            );
-        }
-
-        steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        steuerdatenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
-    }
-
-    @Transactional
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
@@ -328,18 +261,6 @@ public class GesuchService {
                     .getGesuchTrancheToWorkWith()
                     .getGesuchFormular()
                     .getEinnahmenKosten(),
-                trancheToUpdate
-            );
-        }
-        if (
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
-        ) {
-            setAndValidateSteuerdatenUpdateLegality(
-                gesuchUpdateDto
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getSteuerdaten(),
                 trancheToUpdate
             );
         }
@@ -570,6 +491,22 @@ public class GesuchService {
             kommentarDto,
             false
         );
+    }
+
+    @Transactional
+    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(DocumentsRequiredValidationGroup.class);
+        validationGroups.add(LebenslaufItemPageValidation.class);
+        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
+
+        Set<ConstraintViolation<GesuchFormular>> violations =
+            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
     }
 
     @Transactional

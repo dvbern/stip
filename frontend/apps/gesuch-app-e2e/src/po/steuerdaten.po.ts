@@ -25,7 +25,7 @@ export class SteuerdatenPO {
     verpflegung: Locator;
     verpflegungPartner: Locator;
     steuerjahr: Locator;
-    veranlagungscode: Locator;
+    veranlagungsCode: Locator;
 
     loading: Locator;
 
@@ -64,8 +64,8 @@ export class SteuerdatenPO {
         'form-eltern-steuerdaten.verpflegungPartner',
       ),
       steuerjahr: page.getByTestId('form-eltern-steuerdaten.steuerjahr'),
-      veranlagungscode: page.getByTestId(
-        'form-eltern-steuerdaten.veranlagungscode',
+      veranlagungsCode: page.getByTestId(
+        'form-eltern-steuerdaten.veranlagungsCode',
       ),
 
       loading: page.getByTestId('form-eltern-steuerdaten-loading'),
@@ -75,7 +75,7 @@ export class SteuerdatenPO {
     };
   }
 
-  async fillSteuerdaten(item: Steuerdaten, options?: { isSB?: boolean }) {
+  async fillSteuerdaten(item: Steuerdaten) {
     await this.elems.totalEinkuenfte.fill(`${item.totalEinkuenfte}`);
     await this.elems.eigenmietwert.fill(`${item.eigenmietwert}`);
     await selectMatRadio(
@@ -98,10 +98,8 @@ export class SteuerdatenPO {
     await this.elems.fahrkostenPartner.fill(`${item.fahrkostenPartner}`);
     await this.elems.verpflegung.fill(`${item.verpflegung}`);
     await this.elems.verpflegungPartner.fill(`${item.verpflegungPartner}`);
-    if (options?.isSB && item.steuerjahr) {
-      await this.elems.steuerjahr.fill(`${item.steuerjahr}`);
-      await this.elems.veranlagungscode.fill(`${item.veranlagungsCode}`);
-    }
+    await this.elems.steuerjahr.fill(`${item.steuerjahr}`);
+    await this.elems.veranlagungsCode.fill(`${item.veranlagungsCode}`);
 
     await expectFormToBeValid(this.elems.form);
   }

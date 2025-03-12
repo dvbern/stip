@@ -10,7 +10,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
   private @Valid List<KindUpdateDto> kinds;
   private @Valid EinnahmenKostenUpdateDto einnahmenKosten;
   private @Valid DarlehenDto darlehen;
-  private @Valid List<SteuerdatenUpdateDto> steuerdaten;
+  private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
 
   /**
    **/
@@ -291,34 +291,34 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchFormularUpdateDto steuerdaten(List<SteuerdatenUpdateDto> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  public GesuchFormularUpdateDto steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
     return this;
   }
 
   
-  @JsonProperty("steuerdaten")
-  public List<SteuerdatenUpdateDto> getSteuerdaten() {
-    return steuerdaten;
+  @JsonProperty("steuererklaerung")
+  public List<SteuererklaerungUpdateDto> getSteuererklaerung() {
+    return steuererklaerung;
   }
 
-  @JsonProperty("steuerdaten")
-  public void setSteuerdaten(List<SteuerdatenUpdateDto> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  @JsonProperty("steuererklaerung")
+  public void setSteuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
   }
 
-  public GesuchFormularUpdateDto addSteuerdatenItem(SteuerdatenUpdateDto steuerdatenItem) {
-    if (this.steuerdaten == null) {
-      this.steuerdaten = new ArrayList<>();
+  public GesuchFormularUpdateDto addSteuererklaerungItem(SteuererklaerungUpdateDto steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
     }
 
-    this.steuerdaten.add(steuerdatenItem);
+    this.steuererklaerung.add(steuererklaerungItem);
     return this;
   }
 
-  public GesuchFormularUpdateDto removeSteuerdatenItem(SteuerdatenUpdateDto steuerdatenItem) {
-    if (steuerdatenItem != null && this.steuerdaten != null) {
-      this.steuerdaten.remove(steuerdatenItem);
+  public GesuchFormularUpdateDto removeSteuererklaerungItem(SteuererklaerungUpdateDto steuererklaerungItem) {
+    if (steuererklaerungItem != null && this.steuererklaerung != null) {
+      this.steuererklaerung.remove(steuererklaerungItem);
     }
 
     return this;
@@ -343,12 +343,12 @@ public class GesuchFormularUpdateDto  implements Serializable {
         Objects.equals(this.kinds, gesuchFormularUpdate.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten) &&
         Objects.equals(this.darlehen, gesuchFormularUpdate.darlehen) &&
-        Objects.equals(this.steuerdaten, gesuchFormularUpdate.steuerdaten);
+        Objects.equals(this.steuererklaerung, gesuchFormularUpdate.steuererklaerung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuerdaten);
+    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuererklaerung);
   }
 
   @Override
@@ -366,7 +366,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
-    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
+    sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

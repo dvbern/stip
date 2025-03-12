@@ -24,8 +24,10 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Validator;
@@ -50,6 +52,9 @@ public class GesuchFormularService {
             !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
+        }
+        if (gesuchFormular.getTranche().getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
         }
 
         final var violations = new HashSet<>(

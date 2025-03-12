@@ -25,6 +25,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -59,29 +60,22 @@ public class GesuchDokumentKommentarService {
 
         for (final var fromKommentar : fromDokumentKommentars) {
             for (final var toGesuchDokument : toGesuchDokuments) {
-                if (Objects.nonNull(fromKommentar.getGesuchDokument().getDokumentTyp())) {
-                    if (fromKommentar.getGesuchDokument().getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
-                        final var newKommentar = new GesuchDokumentKommentar()
-                            .setGesuchDokument(toGesuchDokument)
-                            .setKommentar(fromKommentar.getKommentar())
-                            .setDokumentstatus(fromKommentar.getDokumentstatus());
+                final var fromGesuchDokument = fromKommentar.getGesuchDokument();
+
+                if (fromGesuchDokument.getDokumentTyp() != null) {
+                    if (fromGesuchDokument.getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
+                        final var newKommentar = GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar);
                         gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
                     }
                 } else if (
-                    Objects.nonNull(fromKommentar.getGesuchDokument().getCustomDokumentTyp())
-                    && Objects.nonNull(toGesuchDokument.getCustomDokumentTyp())
+                    fromGesuchDokument.getCustomDokumentTyp() != null && toGesuchDokument.getCustomDokumentTyp() != null
+                    && (Objects.equals(
+                        fromGesuchDokument.getCustomDokumentTyp().getType(),
+                        toGesuchDokument.getCustomDokumentTyp().getType()
+                    ))
                 ) {
-                    if (
-                        fromKommentar.getGesuchDokument().getCustomDokumentTyp().getType() == toGesuchDokument
-                            .getCustomDokumentTyp()
-                            .getType()
-                    ) {
-                        final var newKommentar = new GesuchDokumentKommentar()
-                            .setGesuchDokument(toGesuchDokument)
-                            .setKommentar(fromKommentar.getKommentar())
-                            .setDokumentstatus(fromKommentar.getDokumentstatus());
-                        gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
-                    }
+                    final var newKommentar = GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar);
+                    gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
                 }
             }
         }

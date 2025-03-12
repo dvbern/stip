@@ -1,35 +1,32 @@
 import { ValidationError } from '@dv/shared/model/error';
-import { SharedModelGesuchFormularProps } from '@dv/shared/model/gesuch';
+import { FormPropsExcluded } from '@dv/shared/model/gesuch';
 
 import {
   FAMILIENSITUATION,
   GESCHWISTER,
+  GSFormSteps,
   PERSON,
-  gesuchFormSteps,
 } from './gesuch-form-steps';
-import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
+import { GesuchFormStep } from './shared-model-gesuch-form';
 
 export type SpecialValidationError = {
-  step: SharedModelGesuchFormStep;
+  step: GesuchFormStep;
   field: string;
   fieldErrorKey: string;
   validationErrorKey: string;
   linkKey: string;
 };
 
-const wohnsitzFamiliensituationMap: Record<string, SharedModelGesuchFormStep> =
-  {
-    personInAusbildung: PERSON,
-    geschwisters: GESCHWISTER,
-  } satisfies Partial<
-    Record<SharedModelGesuchFormularProps, SharedModelGesuchFormStep>
-  >;
+const wohnsitzFamiliensituationMap: Record<string, GesuchFormStep> = {
+  personInAusbildung: PERSON,
+  geschwisters: GESCHWISTER,
+} satisfies Partial<Record<FormPropsExcluded, GesuchFormStep>>;
 export const SPECIAL_VALIDATION_ERRORS: Record<
   string,
   (error: ValidationError) => SpecialValidationError
 > = {
   'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message': () => ({
-    step: gesuchFormSteps.PERSON,
+    step: GSFormSteps.PERSON,
     field: 'sozialversicherungsnummer',
     fieldErrorKey: 'shared.form.person.validation.uniqueSvnummer',
     validationErrorKey: 'shared.gesuch.validation.uniqueSvnummer.message',

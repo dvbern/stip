@@ -59,7 +59,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
@@ -81,8 +81,10 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
         gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
-        gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
-        gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenUpdateDtoSpec());
+        gesuchFormularToWorkWith.setSteuererklaerung(new ArrayList<>());
+        gesuchFormularToWorkWith.getSteuererklaerung().add(new SteuererklaerungUpdateDtoSpec());
+        // gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
+        // gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenDtoSpec());
 
         GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
         gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);

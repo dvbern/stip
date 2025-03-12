@@ -54,6 +54,13 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                IN_BEARBEITUNG_SB
+            )
+        );
+
     public static final Set<Gesuchstatus> SB_IS_EDITING_GESUCH =
         Collections.unmodifiableSet(
             EnumSet.of(
@@ -96,21 +103,14 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
         EnumSet.of(
-            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.VERSANDBEREIT,
             Gesuchstatus.VERSENDET,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.IN_FREIGABE,
-            Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-            Gesuchstatus.EINGEREICHT,
-            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
-            Gesuchstatus.FEHLENDE_DOKUMENTE,
-            Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
             Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH,

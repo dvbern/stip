@@ -12,6 +12,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -27,10 +28,6 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { PermissionStore } from '@dv/shared/global/permission';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchInfo } from '@dv/shared/model/gesuch';
-import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
@@ -55,6 +52,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     RouterLink,
     RouterLinkActive,
     MatMenuModule,
+    MatTooltipModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
   ],
@@ -70,30 +68,17 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private einreichenStore = inject(EinreichenStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
-  private permissionStore = inject(PermissionStore);
-  private config = inject(SharedModelCompileTimeConfig);
+  private einreichnenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  private hasAcceptedAllDocumentsSig =
-    this.dokumentsStore.hasAcceptedAllDokumentsSig;
   private otherGesuchInfoSourceSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
       filter(isDefined),
-      map(
-        (gesuch) =>
-          ({
-            id: gesuch.id,
-            startDate: gesuch.gesuchTrancheToWorkWith.gueltigAb,
-            endDate: gesuch.gesuchTrancheToWorkWith.gueltigBis,
-            gesuchStatus: gesuch.gesuchStatus,
-            gesuchNummer: gesuch.gesuchNummer,
-          }) satisfies GesuchInfo,
-      ),
     ),
   );
 
@@ -107,17 +92,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => url.includes('/aenderung/') || url.includes('/initial/')),
     ),
   );
-  gesuchPermissionsSig = computed(() => {
-    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const rolesMap = this.permissionStore.rolesMapSig();
-    if (!gesuchStatus) {
-      return {};
-    }
-    return getGesuchPermissions(
-      { gesuchStatus },
-      this.config.appType,
-      rolesMap,
-    );
+  canViewBerechnungSig = computed(() => {
+    const canViewBerechnung =
+      this.gesuchStore.gesuchInfo().data?.canGetBerechnung;
+
+    return canViewBerechnung;
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());
@@ -157,10 +136,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     effect(
       () => {
-        const gesuchInfo = this.otherGesuchInfoSourceSig();
+        const gesuch = this.otherGesuchInfoSourceSig();
 
-        if (gesuchInfo) {
-          this.gesuchStore.setGesuchInfo(gesuchInfo);
+        if (gesuch?.id) {
+          this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
+          this.einreichnenStore.validateSteps$({
+            gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
+          });
         }
       },
       { allowSignalWrites: true },
@@ -179,13 +161,24 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
+    const hasAcceptedAllDokuments =
+      this.dokumentsStore.hasAcceptedAllDokumentsSig();
+
+    const validations =
+      this.einreichnenStore.validationViewSig().invalidFormularProps
+        .validations;
+    const hasValidationErrors = !!validations.errors?.length;
+    const hasValidationWarnings = !!validations.warnings?.length;
+
     if (!gesuchStatus) {
       return {};
     }
 
     const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
-      StatusUebergaengeOptions[status]({ hasAcceptedAllDokuments }),
+      StatusUebergaengeOptions[status]({
+        hasAcceptedAllDokuments,
+        isInvalid: hasValidationErrors || hasValidationWarnings,
+      }),
     );
 
     return {

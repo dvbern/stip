@@ -8,7 +8,7 @@ import {
   GetGesucheSBQueryType,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedDataAccessGesuchEvents = createActionGroup({
   source: 'Gesuch API',
@@ -37,13 +37,13 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchCreatedFailure: props<{ error: SharedModelError }>(),
     gesuchUpdatedSuccess: props<{
       id: string;
-      origin: SharedModelGesuchFormStep;
+      origin: GesuchFormStep;
     }>(),
 
     gesuchUpdatedFailure: props<{ error: SharedModelError }>(),
     gesuchUpdatedSubformSuccess: props<{
       id: string;
-      origin: SharedModelGesuchFormStep;
+      origin: GesuchFormStep;
     }>(),
     gesuchUpdatedSubformFailure: props<{ error: SharedModelError }>(),
     deleteGesuch: props<{ gesuchId: string }>(),

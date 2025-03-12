@@ -96,6 +96,9 @@ public class ApiClient {
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
     }
+    public SteuerdatenApiSpec steuerdaten() {
+        return SteuerdatenApiSpec.steuerdaten(config.reqSpecSupplier);
+    }
     public StipDecisionApiSpec stipDecision() {
         return StipDecisionApiSpec.stipDecision(config.reqSpecSupplier);
     }
