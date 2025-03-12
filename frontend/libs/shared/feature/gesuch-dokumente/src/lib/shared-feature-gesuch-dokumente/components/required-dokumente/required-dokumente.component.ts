@@ -111,6 +111,22 @@ export class RequiredDokumenteComponent {
 
   expandedRowSig = signal<null | string>(null);
 
+  canEditNachfristSig = computed(() => {
+    const { gesuchStatus } = this.dokumenteViewSig();
+
+    if (!gesuchStatus) {
+      return undefined;
+    }
+
+    const interactionMap: Partial<Record<Gesuchstatus, boolean | undefined>> = {
+      FEHLENDE_DOKUMENTE: true,
+      BEREIT_FUER_BEARBEITUNG: false,
+      IN_BEARBEITUNG_SB: true,
+    };
+
+    return interactionMap[gesuchStatus];
+  });
+
   dokumenteDataSourceSig = computed(() => {
     const {
       gesuchId,

@@ -12,9 +12,10 @@
         <dt>{{ 'shared.dokumente.nachfrist.label' | translate }}</dt>
         <dd>{{ view.nachfrist | date: 'dd.MM.yyyy' }}</dd>
       </dl>
-      @if (view.gesuchStatus === 'IN_BEARBEITUNG_SB') {
+      @if (canEditNachfristSig() !== undefined) {
         <button
           *dvIfSachbearbeiter
+          [disabled]="!canEditNachfristSig()"
           type="button"
           class="btn btn-outline-primary btn-sm tw-flex tw-p-2"
           (click)="editNachfrist(view.gesuchId, view.nachfrist)"
