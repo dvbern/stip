@@ -29,7 +29,9 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -65,6 +67,40 @@ public class RequiredDokumentService {
             )
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
+    }
+
+    public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
+            return false;
+        }
+        var isAnyDocumentStillRequired = gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
+
+            var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
+            var gesuchDokumenteStilRequired =
+                !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
+            if (customDokumentsStillRequired || gesuchDokumenteStilRequired) {
+                return false;
+            }
+            return true;
+        }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
+
+        return !isAnyDocumentStillRequired;
+    }
+
+    public boolean getSBCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
+            return false;
+        }
+        return gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
+
+            var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
+            var gesuchDokumenteStilRequired =
+                !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
+            if (customDokumentsStillRequired || gesuchDokumenteStilRequired) {
+                return false;
+            }
+            return true;
+        }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
