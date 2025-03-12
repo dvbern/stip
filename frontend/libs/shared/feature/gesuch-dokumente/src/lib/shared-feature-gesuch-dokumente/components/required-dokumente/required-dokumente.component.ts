@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   effect,
   inject,
@@ -9,11 +10,15 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { SharedDialogEditDokumentenNachfristComponent } from '@dv/shared/dialog/edit-dokumenten-nachfrist';
 import {
   SharedModelTableDokument,
   SharedModelTableRequiredDokument,
@@ -37,8 +42,10 @@ import {
   createGesuchDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { detailExpand } from '@dv/shared/ui/animations';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 
@@ -52,22 +59,28 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
     RouterLink,
     TranslatePipe,
     MatTableModule,
+    MatTooltipModule,
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
-    SharedUiLoadingComponent,
     DokumentStatusActionsComponent,
+    SharedUiLoadingComponent,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './required-dokumente.component.html',
   styleUrl: './required-dokumente.component.scss',
   animations: [detailExpand],
+  providers: [provideDvDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequiredDokumenteComponent {
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
   dokumentStore = inject(DokumentsStore);
 
   dokumenteViewSig = input.required<{
     gesuchId: string | undefined;
+    nachfrist: string | undefined;
     permissions: PermissionMap;
     trancheId: string | undefined;
     trancheSetting: TrancheSetting | undefined;
@@ -83,6 +96,7 @@ export class RequiredDokumenteComponent {
   getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
   dokumentAkzeptieren = output<SharedModelTableDokument>();
   dokumentAblehnen = output<SharedModelTableDokument>();
+  reloadGesuch = output<unknown>();
 
   detailColumns = ['kommentar'];
   displayedColumns = [
@@ -215,6 +229,22 @@ export class RequiredDokumenteComponent {
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
     return item.dokumentTyp;
+  }
+
+  editNachfrist(gesuchId: string, nachfrist: string) {
+    SharedDialogEditDokumentenNachfristComponent.open(this.dialog, nachfrist)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.dokumentStore.editNachfrist$({
+            gesuchId,
+            newNachfrist: result.newNachfrist,
+            onSuccess: () => {
+              this.reloadGesuch.emit({});
+            },
+          });
+        }
+      });
   }
 
   expandRow(dokument: SharedModelTableRequiredDokument) {

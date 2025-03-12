@@ -112,6 +112,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     return {
       gesuchId,
+      nachfrist: gesuch?.nachfristDokumente,
       trancheId,
       permissions,
       trancheSetting: trancheSetting ?? undefined,
@@ -356,6 +357,10 @@ export class SharedFeatureGesuchDokumenteComponent {
           }
         }
       });
+  }
+
+  reloadGesuch() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
   }
 
   handleContinue() {

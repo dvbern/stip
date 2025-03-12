@@ -55,6 +55,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.quarkus.security.UnauthorizedException;
@@ -293,9 +294,9 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    public void updateNachfristDokumente(UUID gesuchId, LocalDate body) {
+    public void updateNachfristDokumente(UUID gesuchId, NachfristAendernRequestDto nachfristAendernRequestDto) {
         gesuchAuthorizer.canUpdateEinreichefrist(gesuchId);
-        gesuchService.updateNachfristDokumente(gesuchId, body);
+        gesuchService.updateNachfristDokumente(gesuchId, nachfristAendernRequestDto.getNewNachfrist());
     }
 
     @RolesAllowed(GESUCH_READ)

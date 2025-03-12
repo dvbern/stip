@@ -15,6 +15,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
@@ -191,5 +192,5 @@ public interface GesuchResource {
     @Path("/{gesuchId}/nachfristDokumente")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    void updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid LocalDate body);
+    void updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid NachfristAendernRequestDto nachfristAendernRequestDto);
 }

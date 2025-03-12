@@ -9,10 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchTrancheUpdate } from './gesuchTrancheUpdate';
 
-export interface GesuchUpdate { 
-    nachfristDokumente?: string;
-    gesuchTrancheToWorkWith: GesuchTrancheUpdate;
+export interface NachfristAendernRequest { 
+    newNachfrist: string;
 }
 

@@ -44,6 +44,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -197,9 +198,11 @@ class GesuchUpdateNachristDokumenteTest {
     @Test
     @Order(19)
     void updateEinreichefrist() {
+        var nachfristAendern = new NachfristAendernRequestDtoSpec();
+        nachfristAendern.setNewNachfrist(nachreichefrist);
         gesuchApiSpec.updateNachfristDokumente()
             .gesuchIdPath(gesuch.getId())
-            .body(nachreichefrist)
+            .body(nachfristAendern)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

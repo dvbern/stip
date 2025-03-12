@@ -88,6 +88,7 @@
       "@dv/shared/data-access/plz-ort": ["libs/shared/data-access/plz-ort/src/index.ts"],
       "@dv/shared/data-access/sozialdienst": ["libs/shared/data-access/sozialdienst/src/index.ts"],
       "@dv/shared/data-access/stammdaten": ["libs/shared/data-access/stammdaten/src/index.ts"],
+      "@dv/shared/dialog/edit-dokumenten-nachfrist": ["libs/shared/dialog/edit-dokumenten-nachfrist/src/index.ts"],
       "@dv/shared/dialog/einreichedatum-aendern": ["libs/shared/dialog/einreichedatum-aendern/src/index.ts"],
       "@dv/shared/event/gesuch-dokumente": ["libs/shared/event/gesuch-dokumente/src/index.ts"],
       "@dv/shared/event/gesuch-form-abschluss": ["libs/shared/event/gesuch-form-abschluss/src/index.ts"],

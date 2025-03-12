@@ -15,6 +15,7 @@ import { Gesuchsperiode } from './gesuchsperiode';
 import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
 export interface GesuchDashboardItem { 
+    nachfristDokumente?: string;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     id: string;

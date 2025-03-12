@@ -30,6 +30,7 @@ import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDashboardColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
@@ -2556,11 +2557,11 @@ public class GesuchApiSpec {
         }
 
          /**
-         * @param body (LocalDate)  (optional)
+         * @param nachfristAendernRequestDtoSpec (NachfristAendernRequestDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateNachfristDokumenteOper body(LocalDate body) {
-            reqSpec.setBody(body);
+        public UpdateNachfristDokumenteOper body(NachfristAendernRequestDtoSpec nachfristAendernRequestDtoSpec) {
+            reqSpec.setBody(nachfristAendernRequestDtoSpec);
             return this;
         }
 

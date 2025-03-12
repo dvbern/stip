@@ -2184,7 +2184,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalDate'
+              $ref: '#/components/schemas/NachfristAendernRequest'
       responses:
         '204':
           description: nachfrist updated successfully
@@ -5957,6 +5957,14 @@ components:
       properties:
         canAendern:
           type: boolean
+    NachfristAendernRequest:
+      type: object
+      required:
+        - newNachfrist
+      properties:
+        newNachfrist:
+          type: string
+          format: date
     GesuchZurueckweisenResponse:
       type: object
       required:
