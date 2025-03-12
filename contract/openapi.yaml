@@ -5800,6 +5800,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        sbCanFehlendeDokumenteUebermitteln:
+          type: boolean
+        gsCanDokumenteUebermitteln:
+          type: boolean
+        sbCanBearbeitungAbschliessen:
+          type: boolean
     SapStatus:
       enum:
         - SUCCESS
