@@ -15,6 +15,7 @@ import {
   tap,
 } from 'rxjs/operators';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentListView,
   DokumentOptions,
@@ -23,7 +24,11 @@ import {
   SharedModelCustomGesuchDokument,
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
-import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
+import {
+  Dokument,
+  DokumentService,
+  DokumentTyp,
+} from '@dv/shared/model/gesuch';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -86,6 +91,7 @@ export class UploadStore {
   });
 
   private documentService = inject(DokumentService);
+  private config = inject(SharedModelCompileTimeConfig);
   private loadDocuments$ = new Subject<DokumentOptions>();
   private removeDocument$ = new Subject<
     { dokumentId: string } & DokumentOptions
@@ -101,6 +107,25 @@ export class UploadStore {
     } & DokumentOptions
   >();
 
+  private getRequiredGesuchDokumenteByAppType(params: {
+    dokumentTyp: DokumentTyp;
+    gesuchTrancheId: string;
+  }) {
+    if (this.config.appType === 'gesuch-app') {
+      return this.documentService.getGesuchDokumenteForTypGS$(params);
+    }
+    return this.documentService.getGesuchDokumenteForTypSB$(params);
+  }
+
+  private getCustomGesuchDokumenteByAppType$(params: {
+    customDokumentTypId: string;
+  }) {
+    if (this.config.appType === 'gesuch-app') {
+      return this.documentService.getCustomGesuchDokumenteForTypGS$(params);
+    }
+    return this.documentService.getCustomGesuchDokumenteForTypSB$(params);
+  }
+
   constructor() {
     this.loadDocuments$
       .pipe(
@@ -109,40 +134,36 @@ export class UploadStore {
             const dokument = options.dokument;
             switch (dokument.art) {
               case 'GESUCH_DOKUMENT': {
-                return this.documentService
-                  .getGesuchDokumenteForTyp$({
-                    dokumentTyp: dokument.dokumentTyp,
-                    gesuchTrancheId: dokument.trancheId,
-                  })
-                  .pipe(
-                    map(
-                      ({ value }) =>
-                        ({
-                          art: 'GESUCH_DOKUMENT',
-                          gesuchDokument: value,
-                          dokumentTyp: dokument.dokumentTyp,
-                          trancheId: dokument.trancheId,
-                        }) satisfies SharedModelStandardGesuchDokument,
-                    ),
-                  );
+                return this.getRequiredGesuchDokumenteByAppType({
+                  dokumentTyp: dokument.dokumentTyp,
+                  gesuchTrancheId: dokument.trancheId,
+                }).pipe(
+                  map(
+                    ({ value }) =>
+                      ({
+                        art: 'GESUCH_DOKUMENT',
+                        gesuchDokument: value,
+                        dokumentTyp: dokument.dokumentTyp,
+                        trancheId: dokument.trancheId,
+                      }) satisfies SharedModelStandardGesuchDokument,
+                  ),
+                );
               }
               case 'CUSTOM_DOKUMENT':
-                return this.documentService
-                  .getCustomGesuchDokumenteForTyp$({
-                    customDokumentTypId: dokument.dokumentTyp.id,
-                  })
-                  .pipe(
-                    map(
-                      ({ value }) =>
-                        ({
-                          art: 'CUSTOM_DOKUMENT',
-                          gesuchDokument: value,
-                          dokumentTyp: dokument.dokumentTyp,
-                          gesuchId: dokument.gesuchId,
-                          trancheId: dokument.trancheId,
-                        }) satisfies SharedModelCustomGesuchDokument,
-                    ),
-                  );
+                return this.getCustomGesuchDokumenteByAppType$({
+                  customDokumentTypId: dokument.dokumentTyp.id,
+                }).pipe(
+                  map(
+                    ({ value }) =>
+                      ({
+                        art: 'CUSTOM_DOKUMENT',
+                        gesuchDokument: value,
+                        dokumentTyp: dokument.dokumentTyp,
+                        gesuchId: dokument.gesuchId,
+                        trancheId: dokument.trancheId,
+                      }) satisfies SharedModelCustomGesuchDokument,
+                  ),
+                );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService
                   .getUnterschriftenblaetterForGesuch$({

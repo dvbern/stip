@@ -6,6 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentService,
   DokumentTyp,
@@ -64,6 +65,14 @@ export class DokumentsStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private config = inject(SharedModelCompileTimeConfig);
+
+  private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
+    if (this.config.appType === 'gesuch-app') {
+      return this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId });
+    }
+    return this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId });
+  }
 
   setExpandedList(list: 'custom' | 'required' | undefined) {
     patchState(this, { expandedComponentList: list });
@@ -202,7 +211,7 @@ export class DokumentsStore extends signalStore(
     return hasDokumenteWithoutDocuments || hasRequiredDokumenteWithoutDokument;
   });
 
-  getGesuchDokument$ = rxMethod<{
+  getRequiredGesuchDokument$ = rxMethod<{
     trancheId: string;
     dokumentTyp: DokumentTyp;
   }>(
@@ -212,13 +221,32 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, dokumentTyp }) =>
-        this.trancheService.getGesuchDokument$({
+      switchMap(({ trancheId, dokumentTyp }) => {
+        if (this.config.appType === 'gesuch-app') {
+          return this.dokumentService.getGesuchDokumenteForTypGS$({
+            gesuchTrancheId: trancheId,
+            dokumentTyp,
+          });
+        }
+        return this.dokumentService.getGesuchDokumenteForTypSB$({
           gesuchTrancheId: trancheId,
           dokumentTyp,
-        }),
-      ),
-      handleApiResponse((dokument) => patchState(this, { dokument })),
+        });
+      }),
+      handleApiResponse((res) => {
+        // res is Failure | Success<NullableGesuchDokument>
+        // how to update the state with the new data?
+        if (isSuccess(res) && res.data.value) {
+          const val = res.data.value;
+          patchState(this, () => ({
+            dokument: success(val),
+          }));
+        } else {
+          patchState(this, () => ({
+            dokument: failure(res.error),
+          }));
+        }
+      }),
     ),
   );
 
@@ -337,11 +365,7 @@ export class DokumentsStore extends signalStore(
                 dokuments: cachedPending(state.dokuments),
               }));
             }),
-            switchMap(() =>
-              this.trancheService.getGesuchDokumente$({
-                gesuchTrancheId: trancheId,
-              }),
-            ),
+            switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
             tapResponse({
               next: (dokuments) => {
                 patchState(this, { dokuments: success(dokuments) });
@@ -439,7 +463,7 @@ export class DokumentsStore extends signalStore(
       }),
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
-          this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
+          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
           this.trancheService.getDocumentsToUpload$({
             gesuchTrancheId,
           }),
@@ -482,7 +506,7 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
-        this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
+        this.getGesuchDokumenteByAppType$(gesuchTrancheId),
       ),
       handleApiResponse((dokuments) => patchState(this, { dokuments })),
     ),

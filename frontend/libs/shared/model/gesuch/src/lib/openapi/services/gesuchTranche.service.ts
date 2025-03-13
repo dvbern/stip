@@ -20,7 +20,6 @@ import { Observable }                                        from 'rxjs';
 
 import { CreateAenderungsantragRequest } from '../model/createAenderungsantragRequest';
 import { CreateGesuchTrancheRequest } from '../model/createGesuchTrancheRequest';
-import { DokumentTyp } from '../model/dokumentTyp';
 import { DokumenteToUpload } from '../model/dokumenteToUpload';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchTranche } from '../model/gesuchTranche';
@@ -80,12 +79,11 @@ export interface GesuchTrancheServiceGetDocumentsToUploadRequestParams {
     gesuchTrancheId: string;
 }
 
-export interface GesuchTrancheServiceGetGesuchDokumentRequestParams {
+export interface GesuchTrancheServiceGetGesuchDokumenteGSRequestParams {
     gesuchTrancheId: string;
-    dokumentTyp: DokumentTyp;
 }
 
-export interface GesuchTrancheServiceGetGesuchDokumenteRequestParams {
+export interface GesuchTrancheServiceGetGesuchDokumenteSBRequestParams {
     gesuchTrancheId: string;
 }
 
@@ -920,17 +918,13 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokument$(requestParameters: GesuchTrancheServiceGetGesuchDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchDokument>;
-     public getGesuchDokument$(requestParameters: GesuchTrancheServiceGetGesuchDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchDokument>>;
-     public getGesuchDokument$(requestParameters: GesuchTrancheServiceGetGesuchDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchDokument>>;
-     public getGesuchDokument$(requestParameters: GesuchTrancheServiceGetGesuchDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokument>>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokument>>>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokument>>>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokument$.');
-        }
-        const dokumentTyp = requestParameters.dokumentTyp;
-        if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokument$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumenteGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -978,8 +972,8 @@ export class GesuchTrancheService {
             }
         }
 
-        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
-        return this.httpClient.request<GesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente/gs`;
+        return this.httpClient.request<Array<GesuchDokument>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -996,13 +990,13 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumente$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokument>>;
-     public getGesuchDokumente$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokument>>>;
-     public getGesuchDokumente$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokument>>>;
-     public getGesuchDokumente$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokument>>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokument>>>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokument>>>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumente$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumenteSB$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1050,7 +1044,7 @@ export class GesuchTrancheService {
             }
         }
 
-        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente`;
+        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente/sb`;
         return this.httpClient.request<Array<GesuchDokument>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
