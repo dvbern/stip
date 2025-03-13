@@ -44,7 +44,7 @@ test.describe('Neues gesuch erstellen', () => {
     test.slow();
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
-    await cockpit.getGesuchEdit().click();
+    await cockpit.elems.gesuchEdit.click();
 
     // Step 1: Person ============================================================
     await expect(page.getByTestId('step-title')).toBeAttached({
@@ -202,6 +202,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     // set to bearbeiten
     const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
+
     // @scph why ist this gesuch alreay bereit fuer bearbeitung?
     // await headerNavPO.elems.aktionMenu.click();
     // await headerNavPO.elems

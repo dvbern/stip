@@ -30,7 +30,7 @@ test.describe('Dokument upload', () => {
   test.slow();
 
   test('Dokument upload', async ({ page, cockpit }) => {
-    await cockpit.getGesuchEdit().click();
+    await cockpit.elems.gesuchEdit.click();
 
     await expect(page.getByTestId('step-title')).toBeAttached({
       timeout: 10000,
