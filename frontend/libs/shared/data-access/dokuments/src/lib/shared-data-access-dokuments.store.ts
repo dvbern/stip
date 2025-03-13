@@ -135,13 +135,20 @@ export class DokumentsStore extends signalStore(
     );
   });
 
-  // has abgelehnte dokumente or new custom dokument types for SB to send to GS
+  /**
+   * check if there are any abgelehnte dokumente or new custom dokument types
+   * that the GS needs to upload. Also include documents, that become required through
+   * changes by the SB
+   */
   hasDokumenteToUebermittelnSig = computed(() => {
     const hasAbgelehnteDokumente =
       this.dokuments
         .data()
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
       false;
+
+    const hasDokumenteToUpload =
+      !!this.documentsToUpload().data?.required?.length;
 
     const newCustomDokumentTypes =
       this.dokuments.data()?.filter((dokument) => {
@@ -153,10 +160,14 @@ export class DokumentsStore extends signalStore(
         );
       }) ?? [];
 
-    return hasAbgelehnteDokumente || newCustomDokumentTypes?.length > 0;
+    return (
+      hasAbgelehnteDokumente ||
+      newCustomDokumentTypes?.length > 0 ||
+      hasDokumenteToUpload
+    );
   });
 
-  // SB has dokuments that have not been rejected or accepted by SB
+  // Gesuch has dokuments that have not been rejected or accepted by SB
   hasSBAusstehendeDokumentsSig = computed(() => {
     return (
       this.dokuments

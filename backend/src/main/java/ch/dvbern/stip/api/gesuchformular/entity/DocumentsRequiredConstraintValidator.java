@@ -51,6 +51,7 @@ public class DocumentsRequiredConstraintValidator
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
         final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
+
         final var existingDokumenteOfType = getExistingRequiredDokumentTypes(formular);
         // when a required doc is not existing in existingDokumenteOfType, it is still missing...
         var filtered = requiredDocs.stream()
@@ -67,7 +68,9 @@ public class DocumentsRequiredConstraintValidator
             DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
         customFiltered.forEach(missingCustomDok -> allFiltered.add(PAGENAME));
 
-        if (!allFiltered.isEmpty()) {
+        if (
+            !allFiltered.isEmpty()
+        ) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,

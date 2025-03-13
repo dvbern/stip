@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
+import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -59,5 +60,19 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
             .stream()
             .map(steuerdatenMapper::toDto)
             .toList();
+    }
+
+    @Override
+    public List<SteuerdatenDto> updateSteuerdatenFromNesko(
+        UUID gesuchTrancheId,
+        NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequestDto
+    ) {
+        steuerdatenAuthorizer.canUpdate(gesuchTrancheId);
+        return steuerdatenService.updateSteuerdatenFromNesko(
+            gesuchTrancheId,
+            neskoGetSteuerdatenRequestDto.getSteuerdatenTyp(),
+            neskoGetSteuerdatenRequestDto.getToken(),
+            neskoGetSteuerdatenRequestDto.getSteuerjahr()
+        ).stream().map(steuerdatenMapper::toDto).toList();
     }
 }
