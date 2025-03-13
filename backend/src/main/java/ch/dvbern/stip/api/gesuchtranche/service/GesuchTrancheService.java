@@ -158,12 +158,18 @@ public class GesuchTrancheService {
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+
+        // evaluate & set GsCanDokumenteUebermitteln flag
         dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
             requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch())
         );
+
+        // evaluate & set SbCanFehlendeDokumenteUebermitteln flag
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
-            requiredDokumentService.getSBCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch())
+            requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche.getGesuch())
         );
+
+        // evaluate & set SBCanBearbeitungAbschliessen flag
         dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
             requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuchTranche.getGesuch())
         );

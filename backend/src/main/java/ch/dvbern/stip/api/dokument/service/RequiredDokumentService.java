@@ -33,6 +33,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -91,20 +93,31 @@ public class RequiredDokumentService {
     }
 
     // true, when all gesuchdokuments in state AUSSTEHEND contain no files
-    public boolean getSBCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
+    public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
         if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
             return false;
         }
-        // check for ausstehende GesuchDokumente that still contain files
-        final var filesPerAusstehendesGesuchdokument =
-            gesuch.getGesuchTranchen().stream().map(this::containsAusstehendeDokumenteWithFiles).toList();
-        final var filesStillExistingInAusstehendeGesuchdokuments =
-            filesPerAusstehendesGesuchdokument.stream().anyMatch(count -> count > 0);
-        // if files are still existing (true) -> flag must be false
-        // todo: what about custom documents
-        // todo: ausstehend empty -> flag must be false
+        // check for AUSSTEHENDE GesuchDokumente with no files
+        final var containsAusstehendeGesuchDokumenteWithoutFiles =
+            gesuch.getGesuchTranchen()
+                .stream()
+                .map(this::containsAusstehendeDokumenteWithNoFiles)
+                .anyMatch(result -> result == true);
 
-        return !filesStillExistingInAusstehendeGesuchdokuments;
+        // check for GesuchDokumente in state ABGELEHNT
+        final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
+            .stream()
+            .map(this::containsAbgelehnteDokumente)
+            .anyMatch(result -> result == true);
+
+        // check for AENDERUNGEN that are NOT in state UEBERPRUEFEN
+        final var containsAenderungenNOTInStateUeberpruefen =
+            containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
+        if (containsAenderungenNOTInStateUeberpruefen) {
+            return false;
+        }
+
+        return containsAusstehendeGesuchDokumenteWithoutFiles || containsAbgelehnteGesuchDokumente;
     }
 
     // true when all (existing)gesuchdokuments over all tranchen are AKZEPTIERT
@@ -124,20 +137,39 @@ public class RequiredDokumentService {
         return allExistingDocumentsAccepted && noRequiredDocumentsExisting && noCustomRequiredDocumentsExisting;
     }
 
-    private int containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {
-        return (int) gesuchTranche.getGesuchDokuments()
+    private boolean containsAusstehendeDokumenteWithNoFiles(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
                 gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
-                && !gesuchDokument.getDokumente().isEmpty()
+                && gesuchDokument.getDokumente().isEmpty()
             )
-            .count();
+            .count() > 0;
+    }
+
+    private boolean containsAbgelehnteDokumente(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(
+                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.ABGELEHNT)
+            )
+            .count() > 0;
     }
 
     private boolean allGesuchDokumentsAreAcceptedInTranche(final GesuchTranche gesuchTranche) {
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT));
+    }
+
+    private boolean containsAenderungNOTInTrancheStatus(
+        final Gesuch gesuch,
+        final GesuchTrancheStatus trancheStatus
+    ) {
+        return gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG))
+            .anyMatch(tranche -> !tranche.getStatus().equals(trancheStatus));
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
