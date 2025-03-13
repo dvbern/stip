@@ -164,6 +164,9 @@ public class GesuchTrancheService {
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
             requiredDokumentService.getSBCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch())
         );
+        dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
+            requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuchTranche.getGesuch())
+        );
         return dokumenteToUploadDto;
     }
 
