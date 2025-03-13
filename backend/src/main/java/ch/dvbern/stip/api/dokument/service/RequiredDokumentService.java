@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -44,6 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
+    private final GesuchService gesuchService;
 
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return formular
@@ -134,7 +137,19 @@ public class RequiredDokumentService {
             .stream()
             .map(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty())
             .allMatch(result -> result == true);
+        try {
+            validateBearbeitungAbschliessenForAllTranchen(gesuch);
+
+        } catch (ValidationsException e) {
+            return false;
+        }
         return allExistingDocumentsAccepted && noRequiredDocumentsExisting && noCustomRequiredDocumentsExisting;
+    }
+
+    public void validateBearbeitungAbschliessenForAllTranchen(final Gesuch gesuch) {
+        gesuch.getGesuchTranchen().forEach(tranche -> {
+            gesuchService.validateBearbeitungAbschliessen(tranche.getId());
+        });
     }
 
     private boolean containsAusstehendeDokumenteWithNoFiles(final GesuchTranche gesuchTranche) {

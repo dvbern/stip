@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -39,6 +40,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -47,6 +49,7 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class GesuchServiceDokumenteToUploadFlagsTest {
+
     @InjectMock
     GesuchRepository gesuchRepository;
     private Gesuch gesuch;
@@ -106,6 +109,10 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         tranche1.setGesuchDokuments(List.of(gesuchDokumentOfTranche1));
         gesuchDokumentOfTranche2 = new GesuchDokument().setGesuchTranche(tranche2).setDokumentTyp(dokType);
         tranche2.setGesuchDokuments(List.of(gesuchDokumentOfTranche2));
+
+        // overall arrange
+        when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
+        when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
     }
 
     /*
@@ -160,9 +167,7 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // ignore behaviour of producers, since they are not required
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        // overall arrange
-        when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
-        when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
+
 
         /* condition 1:
         gesuchstatus is IN_BEARBEITUNG_SB
@@ -228,5 +233,65 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
+    }
+
+    /*
+     * all (existing)gesuchdokuments over all tranchen are AKZEPTIERT
+     * no gesuchdokument is required (e.g. after a change by SB)
+     * the logic used in pageValidation (endpoint bearbeitungAbschliessen) should also be considered during evaluation
+     * of this flag
+     */
+    @Test
+    void sbCanBearbeitungAbschliessenTest() {
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
+        when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
+        // ignore validation for the moment
+        Mockito.doNothing().when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
+
+        // case: no dokument required, all accepted (ignore page validation)
+        // arrange
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        // act
+        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(true));
+
+        // case: no dokument required, one not accepted (ignore page validation)
+        // arrange
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.ABGELEHNT);
+        // act
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
+
+        // case: one doc required,  (ignore page validation)
+        // arrange
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
+        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        // act
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
+
+        //test with pageValidation
+        Mockito.doThrow(ValidationsException.class).when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
+        // case: no dokument required, all accepted
+        // arrange
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        // act
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
     }
 }
