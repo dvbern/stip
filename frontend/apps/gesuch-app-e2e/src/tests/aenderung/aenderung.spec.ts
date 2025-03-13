@@ -111,6 +111,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     );
     await page.getByTestId('dokument-akzeptieren').first().click();
     await acceptCall;
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(200);
   }
 
