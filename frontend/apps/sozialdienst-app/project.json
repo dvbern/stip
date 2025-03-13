@@ -26,12 +26,18 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "allowedCommonJsDependencies": [
+          "core-js",
+          "dompurify",
+          "html2canvas",
+          "raf",
+          "rgbcolor"
+        ],
         "outputPath": "dist/apps/sozialdienst-app",
         "index": "apps/sozialdienst-app/src/index.html",
         "browser": "apps/sozialdienst-app/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": ["@angular/localize/init", "zone.js"],
         "tsConfig": "apps/sozialdienst-app/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
@@ -45,7 +51,8 @@
           },
           {
             "glob": "**/*",
-            "input": "apps/sozialdienst-app/public"
+            "input": "libs/shared/assets/auth/src",
+            "output": "assets/auth/"
           },
           "apps/sozialdienst-app/src/assets"
         ],
@@ -80,7 +87,8 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "namedChunks": true
         }
       },
       "defaultConfiguration": "production"
@@ -108,7 +116,8 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -120,7 +129,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "gesuch-app:build"
+        "buildTarget": "sozialdienst-app:build"
       }
     }
   }
