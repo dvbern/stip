@@ -184,6 +184,7 @@ export const specificMonthPlusYears = (month: number, years: number) =>
   `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
 export const specificYearsAgo = (years: number) =>
   format(addYears(new Date(), -years), 'yyyy');
+export const today = () => format(new Date(), 'dd.MM.yyyy');
 
 export type SetupFn = (args: {
   contexts: TestContexts;

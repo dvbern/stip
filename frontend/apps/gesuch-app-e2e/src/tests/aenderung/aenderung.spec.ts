@@ -4,10 +4,13 @@ import {
   SmallImageFile,
   expectStepTitleToContainText,
   getE2eUrls,
+  today,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
 import { setupGesuchWithApi } from '../../initialize-test-api';
+import { FreigabePO } from '../../po/freigabe.po';
+import { PersonPO } from '../../po/person.po';
 import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
 import { StepsNavPO } from '../../po/steps-nav.po';
 import {
@@ -108,6 +111,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     );
     await page.getByTestId('dokument-akzeptieren').first().click();
     await acceptCall;
+    await page.waitForTimeout(200);
   }
 
   // bearbeitung abschliessen ===============================================
@@ -121,22 +125,68 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await abschliesenPromise;
 
   const verfuegtPromise = page.waitForResponse(
-    '**/api/v1/gesuch/status/verfuegt',
+    '**/api/v1/gesuch/status/verfuegt/*',
   );
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems.getAktionStatusUebergangItem('VERFUEGT').click();
   await verfuegtPromise;
 
   const versendetPromise = page.waitForResponse(
-    '**/api/v1/gesuch/status/versendet',
+    '**/api/v1/gesuch/status/versendet/*',
   );
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems.getAktionStatusUebergangItem('VERSENDET').click();
   await versendetPromise;
 
-  // Go to GS App ===============================================================
+  // // Go to GS App ===============================================================
 
   await page.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
-
   await cockpit.elems.cereateAaederung.click();
+
+  await page.getByTestId('form-aenderung-melden-dialog-gueltig-ab').fill(
+    // today
+    today(),
+  );
+  await page
+    .getByTestId('form-aenderung-melden-dialog-kommentar')
+    .fill('E2E Testkommentar');
+
+  await page.getByTestId('dialog-confirm').click();
+
+  await expectStepTitleToContainText('Person in Ausbildung', page);
+
+  // make a change in the form
+  const personPO = new PersonPO(page);
+  await personPO.elems.nachname.fill('E2E-Changed');
+  await personPO.elems.buttonSaveContinue.click();
+
+  // verify the change
+  await stepsNavPO.elems.person.first().click();
+  await expectStepTitleToContainText('Person in Ausbildung', page);
+  await expect(personPO.elems.nachname).toHaveValue('E2E-Changed');
+  await expect(page.locator('.mat-mdc-form-field-hint').first()).toHaveText(
+    'Sanchez',
+  );
+
+  // check changes on stepNav
+  await expect(
+    stepsNavPO.elems.person.first().locator('dv-shared-ui-change-indicator'),
+  ).toBeVisible();
+
+  // could add more complex changes here, vater or mutter etc.
+
+  // submit the change
+  await stepsNavPO.elems.abschluss.first().click();
+  await expectStepTitleToContainText('Freigabe', page);
+  const freigapePO = new FreigabePO(page);
+
+  await freigapePO.elems.buttonAbschluss.click();
+  const freigabeAenderungResponse = page.waitForResponse(
+    '**/api/v1/gesuchtranche/*/aenderung/einreichen',
+  );
+  await page.getByTestId('dialog-confirm').click();
+  const response = await freigabeAenderungResponse;
+  expect(response.status()).toBe(204);
+
+  // could add switch to SB app and check and accept the change
 });
