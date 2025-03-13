@@ -1,10 +1,10 @@
 {
-  "name": "gesuch-app",
+  "name": "sozialdienst-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "dv",
-  "sourceRoot": "apps/gesuch-app/src",
-  "tags": ["type:app", "scope:gesuch-app"],
+  "sourceRoot": "apps/sozialdienst-app/src",
+  "tags": ["type:app", "scope:sozialdienst-app"],
   "implicitDependencies": [
     "libs/shared/assets/i18n",
     "libs/shared/assets/images",
@@ -26,18 +26,12 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "allowedCommonJsDependencies": [
-          "core-js",
-          "dompurify",
-          "html2canvas",
-          "raf",
-          "rgbcolor"
-        ],
-        "outputPath": "dist/apps/gesuch-app",
-        "index": "apps/gesuch-app/src/index.html",
-        "browser": "apps/gesuch-app/src/main.ts",
-        "polyfills": ["@angular/localize/init", "zone.js"],
-        "tsConfig": "apps/gesuch-app/tsconfig.app.json",
+        "outputPath": "dist/apps/sozialdienst-app",
+        "index": "apps/sozialdienst-app/src/index.html",
+        "browser": "apps/sozialdienst-app/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/sozialdienst-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
@@ -51,13 +45,12 @@
           },
           {
             "glob": "**/*",
-            "input": "libs/shared/assets/auth/src",
-            "output": "assets/auth/"
+            "input": "apps/sozialdienst-app/public"
           },
-          "apps/gesuch-app/src/assets"
+          "apps/sozialdienst-app/src/assets"
         ],
         "styles": [
-          "apps/gesuch-app/src/styles.scss",
+          "apps/sozialdienst-app/src/styles.scss",
           "libs/shared/styles/theme/src/tailwind.css"
         ],
         "scripts": [],
@@ -87,8 +80,7 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
@@ -96,15 +88,15 @@
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
-        "port": 4200,
+        "port": 4202,
         "proxyConfig": "proxy.conf.js"
       },
       "configurations": {
         "production": {
-          "buildTarget": "gesuch-app:build:production"
+          "buildTarget": "sozialdienst-app:build:production"
         },
         "development": {
-          "buildTarget": "gesuch-app:build:development"
+          "buildTarget": "sozialdienst-app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -112,18 +104,17 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "gesuch-app:build"
+        "buildTarget": "sozialdienst-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/gesuch-app/jest.config.ts"
+        "jestConfig": "apps/sozialdienst-app/jest.config.ts"
       }
     },
     "serve-static": {

@@ -231,6 +231,9 @@
       "@dv/shared/util/validator-range": ["libs/shared/util/validator-range/src/index.ts"],
       "@dv/shared/util/validator-steuerdaten": ["libs/shared/util/validator-steuerdaten/src/index.ts"],
       "@dv/shared/util/validator-telefon-nummer": ["libs/shared/util/validator-telefon-nummer/src/index.ts"],
+      "@dv/sozialdienst-app/feature/cockpit": ["libs/sozialdienst-app/feature/cockpit/src/index.ts"],
+      "@dv/sozialdienst-app/feature/gesuch-form": ["libs/sozialdienst-app/feature/gesuch-form/src/index.ts"],
+      "@dv/sozialdienst-app/pattern/gesuch-step-layout": ["libs/sozialdienst-app/pattern/gesuch-step-layout/src/index.ts"],
       "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
     }
   },
