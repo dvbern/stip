@@ -169,18 +169,15 @@ export class SharedFeatureGesuchDokumenteComponent {
   canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
       this.dokumentsStore.hasDokumenteToUebermittelnSig();
+    const { permissions } = this.gesuchViewSig();
 
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
-
-    return hasDokumenteToUebermitteln && isInCorrectState;
+    return hasDokumenteToUebermitteln && permissions.canWrite;
   });
 
   canCreateCustomDokumentTypSig = computed(() => {
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+    const { permissions } = this.gesuchViewSig();
 
-    return isInCorrectState;
+    return !!permissions.canWrite;
   });
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
