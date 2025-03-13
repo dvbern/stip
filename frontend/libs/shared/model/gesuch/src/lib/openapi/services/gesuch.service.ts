@@ -30,6 +30,7 @@ import { GesuchInfo } from '../model/gesuchInfo';
 import { GesuchTrancheTyp } from '../model/gesuchTrancheTyp';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
+import { GesuchZurueckweisenResponse } from '../model/gesuchZurueckweisenResponse';
 import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { Kommentar } from '../model/kommentar';
 import { PaginatedSbDashboard } from '../model/paginatedSbDashboard';
@@ -106,6 +107,7 @@ export interface GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestPar
 }
 
 export interface GesuchServiceGesuchZurueckweisenRequestParams {
+    /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
     kommentar?: Kommentar;
 }
@@ -1303,9 +1305,9 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
+     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchZurueckweisenResponse>;
+     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchZurueckweisenResponse>>;
+     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchZurueckweisenResponse>>;
      public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
@@ -1368,7 +1370,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
-        return this.httpClient.request<GesuchWithChanges>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchZurueckweisenResponse>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: kommentar,

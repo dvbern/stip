@@ -1,7 +1,24 @@
 @let view = viewSig();
+@let gesuchTrancheId = view.gesuch?.gesuchTrancheToWorkWith?.id;
 @if (view.loading) {
   <dv-shared-ui-loading data-testid="form-eltern-steuerdaten-loading"></dv-shared-ui-loading>
 } @else {
+  @if (gesuchTrancheId) {
+    <div class="row g-4 my-2">
+      <div class="col-12 col-md-6 col-xl-4">
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="updateSteuerdatenFromNesko(gesuchTrancheId)"
+          [disabled]="!canCheckNeskoSig()"
+          data-testid="button-update-from-nesko"
+        >
+          {{ 'sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
   <form
     [formGroup]="form"
     novalidate

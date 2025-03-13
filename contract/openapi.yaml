@@ -1973,6 +1973,43 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
+  /steuerdaten/nesko/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSteuerdatenFromNesko
+      summary: Updates the Steuerdaten from Nesko
   /steuerdaten/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
@@ -4930,6 +4967,19 @@ components:
       properties:
         token:
           type: string
+    NeskoGetSteuerdatenRequest:
+      required:
+        - token
+        - steuerdatenTyp
+        - steuerjahr
+      type: object
+      properties:
+        token:
+          type: string
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuerjahr:
+          type: integer
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS

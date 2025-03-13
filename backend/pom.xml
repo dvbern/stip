@@ -12,6 +12,9 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
     <contract.version>1.24.0</contract.version>
+    <itext.version>9.0.0</itext.version>
+    <kie.version>8.41.0.Final</kie.version>
+    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <lombok.version>1.18.28</lombok.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -20,31 +23,26 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkiverse.sentry.version>2.0.7</quarkiverse.sentry.version>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
+    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.6.4</quarkus.platform.version>
-    <quarkiverse.sentry.version>2.0.7</quarkiverse.sentry.version>
     <querydsl.version>5.0.0</querydsl.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <rest-assured.version>4.5.1</rest-assured.version>
     <revision>local</revision>
     <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
     <skipITs>true</skipITs>
-    <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-    <sonar.exclusions>
-      file:**/generated/**,
+    <sonar.exclusions>file:**/generated/**,
       file:**/.mvn/**,
-      file:**/.quarkus/**
-    </sonar.exclusions>
+      file:**/.quarkus/**</sonar.exclusions>
+    <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+    <spotless.eclipse.version>4.29</spotless.eclipse.version>
+    <spotless.version>2.43.0</spotless.version>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
-    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
-    <kie.version>8.41.0.Final</kie.version>
-    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
-    <spotless.version>2.43.0</spotless.version>
-    <spotless.eclipse.version>4.29</spotless.eclipse.version>
-    <itext.version>9.0.0</itext.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -66,6 +64,13 @@
         <groupId>io.quarkiverse.amazonservices</groupId>
         <artifactId>quarkus-amazon-services-bom</artifactId>
         <version>${quarkus-amazon-services.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-cxf-bom</artifactId>
+        <version>${quarkus.platform.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -231,6 +236,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-keycloak-admin-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkiverse.cxf</groupId>
+      <artifactId>quarkus-cxf</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -692,8 +701,7 @@
                     UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
                     DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
                     SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
-                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType
-                  </schemaMappings>
+                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType</schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
