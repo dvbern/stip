@@ -87,20 +87,31 @@ public class RequiredDokumentService {
         return !isAnyDocumentStillRequired;
     }
 
+    // true, when all gesuchdokuments in state AUSSTEHEND contain no files
     public boolean getSBCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
-        if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
             return false;
         }
-        return gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
+        // check for ausstehende GesuchDokumente that still contain files
+        final var filesPerAusstehendesGesuchdokument =
+            gesuch.getGesuchTranchen().stream().map(this::containsAusstehendeDokumenteWithFiles).toList();
+        final var filesStillExistingInAusstehendeGesuchdokuments =
+            filesPerAusstehendesGesuchdokument.stream().anyMatch(count -> count > 0);
+        // if files are still existing (true) -> flag must be false
+        // todo: what about custom documents
+        // todo: ausstehend empty -> flag must be false
 
-            var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
-            var gesuchDokumenteStilRequired =
-                !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
-            if (customDokumentsStillRequired || gesuchDokumenteStilRequired) {
-                return false;
-            }
-            return true;
-        }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
+        return !filesStillExistingInAusstehendeGesuchdokuments;
+    }
+
+    private int containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {
+        return (int) gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(
+                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                && !gesuchDokument.getDokumente().isEmpty()
+            )
+            .count();
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {

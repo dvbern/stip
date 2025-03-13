@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class RequiredDokumentServiceTest {
+public class RequiredDokumentServiceTest {
     @Test
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
@@ -89,7 +89,7 @@ class RequiredDokumentServiceTest {
         );
     }
 
-    static class MockDocumentProducer implements RequiredDocumentsProducer {
+    public static class MockDocumentProducer implements RequiredDocumentsProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
@@ -103,7 +103,7 @@ class RequiredDokumentServiceTest {
         }
     }
 
-    static class MockInstance implements Instance<RequiredDocumentsProducer> {
+    public static class MockInstance implements Instance<RequiredDocumentsProducer> {
         private final List<RequiredDocumentsProducer> collection;
 
         MockInstance(List<RequiredDocumentsProducer> collection) {
