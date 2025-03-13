@@ -26,8 +26,8 @@ import ch.dvbern.stip.generated.dto.KindDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -53,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_LEBENSLAUF_ITEMS,
   GesuchFormularDtoSpec.JSON_PROPERTY_KINDS,
   GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
-  GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN,
+  GesuchFormularDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG,
   GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN_TABS,
   GesuchFormularDtoSpec.JSON_PROPERTY_DARLEHEN
 })
@@ -90,8 +90,8 @@ public class GesuchFormularDtoSpec {
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN = "einnahmenKosten";
   private EinnahmenKostenDtoSpec einnahmenKosten;
 
-  public static final String JSON_PROPERTY_STEUERDATEN = "steuerdaten";
-  private List<SteuerdatenDtoSpec> steuerdaten;
+  public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
+  private List<SteuererklaerungUpdateDtoSpec> steuererklaerung;
 
   public static final String JSON_PROPERTY_STEUERDATEN_TABS = "steuerdatenTabs";
   private List<SteuerdatenTypDtoSpec> steuerdatenTabs;
@@ -394,37 +394,37 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  public GesuchFormularDtoSpec steuerdaten(List<SteuerdatenDtoSpec> steuerdaten) {
+  public GesuchFormularDtoSpec steuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     
-    this.steuerdaten = steuerdaten;
+    this.steuererklaerung = steuererklaerung;
     return this;
   }
 
-  public GesuchFormularDtoSpec addSteuerdatenItem(SteuerdatenDtoSpec steuerdatenItem) {
-    if (this.steuerdaten == null) {
-      this.steuerdaten = new ArrayList<>();
+  public GesuchFormularDtoSpec addSteuererklaerungItem(SteuererklaerungUpdateDtoSpec steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
     }
-    this.steuerdaten.add(steuerdatenItem);
+    this.steuererklaerung.add(steuererklaerungItem);
     return this;
   }
 
    /**
-   * Get steuerdaten
-   * @return steuerdaten
+   * Get steuererklaerung
+   * @return steuererklaerung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<SteuerdatenDtoSpec> getSteuerdaten() {
-    return steuerdaten;
+  public List<SteuererklaerungUpdateDtoSpec> getSteuererklaerung() {
+    return steuererklaerung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuerdaten(List<SteuerdatenDtoSpec> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  public void setSteuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
   }
 
 
@@ -506,14 +506,14 @@ public class GesuchFormularDtoSpec {
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
-        Objects.equals(this.steuerdaten, gesuchFormular.steuerdaten) &&
+        Objects.equals(this.steuererklaerung, gesuchFormular.steuererklaerung) &&
         Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs) &&
         Objects.equals(this.darlehen, gesuchFormular.darlehen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten, steuerdatenTabs, darlehen);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -530,7 +530,7 @@ public class GesuchFormularDtoSpec {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
-    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
+    sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("}");

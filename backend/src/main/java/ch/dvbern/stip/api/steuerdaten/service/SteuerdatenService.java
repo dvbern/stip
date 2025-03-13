@@ -1,0 +1,118 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.steuerdaten.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
+import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+public class SteuerdatenService {
+    private final Validator validator;
+    private final GesuchTrancheRepository trancheRepository;
+    private final SteuerdatenMapper steuerdatenMapper;
+    private final SteuerdatenRepository steuerdatenRepository;
+    private final GesuchFormularRepository gesuchFormularRepository;
+    private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
+
+    public Steuerdaten getSteuerdatenById(UUID id) {
+        return steuerdatenRepository.requireById(id);
+    }
+
+    public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
+        return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
+    }
+
+    @Transactional
+    public List<Steuerdaten> updateSteuerdaten(
+        UUID gesuchTrancheId,
+        List<SteuerdatenDto> steuerdatenDtos
+    ) {
+        final var formular = trancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
+
+        final var steuerdaten = steuerdatenMapper.map(steuerdatenDtos, formular.getSteuerdaten()).stream().toList();
+        ValidatorUtil.validate(validator, formular, SteuerdatenPageValidation.class);
+
+        steuerdaten.forEach(steuerdatenRepository::persistAndFlush);
+        return steuerdaten;
+    }
+
+    @Transactional
+    public Set<Steuerdaten> updateSteuerdatenFromNesko(
+        UUID gesuchTrancheId,
+        SteuerdatenTyp steuerdatenTyp,
+        String token,
+        int steuerjahr
+    ) {
+        final var gesuchtranche = trancheRepository.requireById(gesuchTrancheId);
+        final var gesuchFormular = gesuchtranche.getGesuchFormular();
+        final var steuerdatenOptional = gesuchFormular.getSteuerdaten()
+            .stream()
+            .filter(steuerdatum -> steuerdatum.getSteuerdatenTyp() == steuerdatenTyp)
+            .findFirst();
+        Steuerdaten steuerdaten = null;
+        if (steuerdatenOptional.isPresent()) {
+            steuerdaten = steuerdatenOptional.get();
+        } else {
+            steuerdaten = new Steuerdaten();
+            steuerdaten.setSteuerdatenTyp(steuerdatenTyp);
+        }
+
+        final Optional<Eltern> elternToUse = switch (steuerdatenTyp) {
+            case FAMILIE -> gesuchFormular.getElterns().stream().findFirst();
+            case MUTTER -> gesuchFormular.getElterns()
+                .stream()
+                .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
+                .findFirst();
+            case VATER -> gesuchFormular.getElterns()
+                .stream()
+                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
+                .findFirst();
+        };
+
+        String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
+
+        var getSteuerdatenResponse =
+            neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
+
+        steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
+        gesuchFormular.getSteuerdaten().add(steuerdaten);
+
+        steuerdatenRepository.persistAndFlush(steuerdaten);
+        return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
+    }
+}

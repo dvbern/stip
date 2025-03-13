@@ -111,6 +111,14 @@
                   <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
                 </button>
               }
+            } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+              <a
+                class="btn btn-primary"
+                data-testid="cockpit-gesuch-edit"
+                [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+              >
+                {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
+              </a>
             } @else if (missingDocTrancheId) {
               <a
                 class="btn btn-primary"

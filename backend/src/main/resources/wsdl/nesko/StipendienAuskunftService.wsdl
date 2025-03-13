@@ -1,0 +1,83 @@
+<wsdl:definitions name="StipendienAuskunft" targetNamespace="http://sv.fin.be.ch/schemas/NESKOVANP/20190716/StipendienAuskunftService" xmlns:exc="http://sv.fin.be.ch/schemas/base/20070131/ExceptionInfo" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://sv.fin.be.ch/schemas/NESKOVANP/20190716/StipendienAuskunftService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<wsdl:documentation>
+        Stipendien-Anfrage beantworten
+    </wsdl:documentation>
+  <wsdl:types>
+<xs:schema xmlns:exc="http://sv.fin.be.ch/schemas/base/20070131/ExceptionInfo" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://sv.fin.be.ch/schemas/NESKOVANP/20190716/StipendienAuskunftService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:import namespace="http://sv.fin.be.ch/schemas/NESKOVANP/20190716/StipendienAuskunftService" schemaLocation="https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?xsd=StipendienAuskunftService.xsd"/>
+            <xs:import namespace="http://sv.fin.be.ch/schemas/base/20070131/ExceptionInfo" schemaLocation="https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?xsd=../basis/ExceptionInfo.xsd"/>
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="InvalidArgumentsFault">
+    <wsdl:part element="exc:InvalidArgumentsFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InfrastructureFault">
+    <wsdl:part element="exc:InfrastructureFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="BusinessFault">
+    <wsdl:part element="exc:BusinessFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PermissionDeniedFault">
+    <wsdl:part element="exc:PermissionDeniedFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetSteuerdatenRequest">
+    <wsdl:part element="tns:GetSteuerdaten" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetSteuerdatenResponse">
+    <wsdl:part element="tns:GetSteuerdatenResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="StipendienAuskunftPort">
+    <wsdl:operation name="GetSteuerdaten">
+<wsdl:documentation>
+                Eine Stipendien-Anfrage wird mit der Lieferung von Steuerdaten beantwortet. Die Stipendien-Anfrage findet für jede Person einzeln statt.
+            </wsdl:documentation>
+      <wsdl:input message="tns:GetSteuerdatenRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:GetSteuerdatenResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentsFault" name="InvalidArgumentsFault">
+    </wsdl:fault>
+      <wsdl:fault message="tns:BusinessFault" name="BusinessFault">
+    </wsdl:fault>
+      <wsdl:fault message="tns:InfrastructureFault" name="InfrastructureFault">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionDeniedFault" name="PermissionDeniedFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="StipendienAuskunftSOAPBinding" type="tns:StipendienAuskunftPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetSteuerdaten">
+      <soap:operation style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentsFault">
+        <soap:fault name="InvalidArgumentsFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="BusinessFault">
+        <soap:fault name="BusinessFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InfrastructureFault">
+        <soap:fault name="InfrastructureFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StipendienAuskunftService">
+    <wsdl:port binding="tns:StipendienAuskunftSOAPBinding" name="StipendienAuskunft">
+      <soap:address location="https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

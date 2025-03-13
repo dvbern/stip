@@ -1,9 +1,10 @@
 import { Injectable, computed, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { Observable, pipe, switchMap, tap } from 'rxjs';
+import { Observable, exhaustMap, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
@@ -44,31 +45,33 @@ export class GesuchStore extends signalStore(
   withDevtools('GesuchStore'),
 ) {
   private store = inject(Store);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
-    <T, R extends SharedModelGesuch>(
-      handler$: (params: T) => Observable<R>,
-      onSuccess?: (data: R) => void,
-    ) =>
-    (source$: Observable<T>) => {
+    <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
+    (source$: Observable<T & { onSuccess?: (data?: R) => void }>) => {
       return source$.pipe(
         tap(() => patchState(this, { lastStatusChange: initial() })),
-        switchMap(handler$),
-        handleApiResponse(
-          () => {
-            patchState(this, { lastStatusChange: success(null) });
-          },
-          {
-            onSuccess: (data) => {
-              this.store.dispatch(
-                SharedDataAccessGesuchEvents.gesuchSetReturned({
-                  gesuch: data,
-                }),
-              );
-              this.loadGesuchInfo$({ gesuchId: data.id });
-              onSuccess?.(data);
-            },
-          },
+        switchMap(({ onSuccess, ...params }) =>
+          handler$(params as T).pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, { lastStatusChange: success(null) });
+              },
+              {
+                onSuccess: (data) => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.gesuchSetReturned({
+                      gesuch: data,
+                    }),
+                  );
+                  this.loadGesuchInfo$({ gesuchId: data.id });
+                  onSuccess?.(data);
+                },
+              },
+            ),
+          ),
         ),
       );
     };
@@ -87,7 +90,7 @@ export class GesuchStore extends signalStore(
           gesuchInfo: cachedPending(state.gesuchInfo),
         }));
       }),
-      switchMap(({ gesuchId }) =>
+      exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getGesuchInfo$({ gesuchId })
           .pipe(
@@ -177,17 +180,6 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    ZURUECKWEISEN: rxMethod<{ gesuchTrancheId: string; text: string }>(
-      pipe(
-        this.handleStatusChange(({ gesuchTrancheId, text }) =>
-          this.gesuchService.gesuchZurueckweisen$({
-            gesuchTrancheId,
-            kommentar: { text },
-          }),
-        ),
-      ),
-    ),
-
     NEGATIVE_VERFUEGUNG_ERSTELLEN: rxMethod<{
       gesuchTrancheId: string;
       grundId: string;
@@ -201,12 +193,42 @@ export class GesuchStore extends signalStore(
         ),
       ),
     ),
-  } satisfies Record<StatusUebergang, unknown>;
 
-  /**
-   * Set the gesuchInfo in the store, for example when the gesuch was updated outside of this store.
-   */
-  setGesuchInfo(gesuchInfo: GesuchInfo) {
-    patchState(this, () => ({ gesuchInfo: success(gesuchInfo) }));
-  }
+    ZURUECKWEISEN: rxMethod<{
+      gesuchTrancheId: string;
+      text: string;
+      onSuccess?: () => void;
+    }>(
+      pipe(
+        switchMap(({ gesuchTrancheId, text, onSuccess }) =>
+          this.gesuchService
+            .gesuchZurueckweisen$({
+              gesuchTrancheId,
+              kommentar: { text },
+            })
+            .pipe(
+              handleApiResponse(
+                () => {
+                  patchState(this, { lastStatusChange: success(null) });
+                },
+                {
+                  onSuccess: ({ gesuchTrancheId: newGesuchTrancheId }) => {
+                    if (gesuchTrancheId !== newGesuchTrancheId) {
+                      this.router.navigate(['..', gesuchTrancheId], {
+                        relativeTo: this.route,
+                      });
+                    } else {
+                      this.store.dispatch(
+                        SharedDataAccessGesuchEvents.loadGesuch(),
+                      );
+                    }
+                    onSuccess?.();
+                  },
+                },
+              ),
+            ),
+        ),
+      ),
+    ),
+  } satisfies Record<StatusUebergang, unknown>;
 }

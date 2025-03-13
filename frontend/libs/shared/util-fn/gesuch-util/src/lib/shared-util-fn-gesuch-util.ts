@@ -5,15 +5,15 @@ import {
   ElternTyp,
   ElternUpdate,
   FamiliensituationUpdate,
+  FormPropsExcluded,
   GesuchFormular,
-  SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  GesuchFormularType,
 } from '@dv/shared/model/gesuch';
 import {
+  FormRoutesToPropsMap,
   GesuchFormStepView,
-  gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
-import { isDefined, lowercased } from '@dv/shared/model/type-util';
+import { lowercased } from '@dv/shared/model/type-util';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -23,7 +23,7 @@ export interface ElternSituation {
 }
 
 export function calculateElternSituationGesuch(
-  gesuch: SharedModelGesuchFormular | null,
+  gesuch: GesuchFormularType | null,
 ): ElternSituation {
   return calculateElternSituation(gesuch?.familiensituation, gesuch?.elterns);
 }
@@ -75,23 +75,20 @@ type Unpack<T> = T extends Array<infer U> ? U : T;
  * Extract the changeable properties of a GesuchFormular.
  */
 type ChangeableProperties = Exclude<
-  keyof SharedModelGesuchFormular,
+  keyof GesuchFormularType,
   'steuerdatenTabs'
 >;
 /**
  * Defines the values of a GesuchFormular which are not arrays.
  */
 type NonArrayForm = Exclude<
-  Unpack<SharedModelGesuchFormular[ChangeableProperties]>,
+  Unpack<GesuchFormularType[ChangeableProperties]>,
   unknown[] | undefined
 >;
 /**
  * Defines the values of a GesuchFormular which are arrays.
  */
-type ArrayForms = Extract<
-  SharedModelGesuchFormular[ChangeableProperties],
-  unknown[]
->;
+type ArrayForms = Extract<GesuchFormularType[ChangeableProperties], unknown[]>;
 
 /**
  * Keys to skip when calculating the changes between two versions of a form.
@@ -105,15 +102,17 @@ const keysToSkip = ['id'];
  * @param view The view containing the GesuchFormular and the changes.
  * @param key The key of the GesuchFormular property.
  */
-export const selectChangeForView = <K extends SharedModelGesuchFormularProps>(
+export const selectChangeForView = <
+  K extends FormPropsExcluded | 'steuererklaerung',
+>(
   view: {
     gesuchFormular: GesuchFormular | null;
     tranchenChanges: AppTrancheChange | null;
   },
   key: K,
 ): {
-  current: SharedModelGesuchFormular[K] | undefined;
-  previous: SharedModelGesuchFormular[K];
+  current: GesuchFormularType[K] | undefined;
+  previous: GesuchFormularType[K];
 } => {
   const changes = view.tranchenChanges;
   const currentFormular = view.gesuchFormular?.[key];
@@ -138,10 +137,10 @@ export const stepHasChanges = (
 ) => {
   return (
     tranchenChanges?.gs?.affectedSteps.includes(
-      gesuchFormStepsFieldMap[step.route] ?? -1,
+      FormRoutesToPropsMap[step.route] ?? -1,
     ) ||
     tranchenChanges?.sb?.affectedSteps.includes(
-      gesuchFormStepsFieldMap[step.route] ?? -1,
+      FormRoutesToPropsMap[step.route] ?? -1,
     )
   );
 };
@@ -201,18 +200,13 @@ export function getChangesForList<
 >(
   changed: T[] | undefined,
   original: T[] | undefined,
-  getIdentifier: (value: T) => R | undefined,
+  getIdentifier?: (value: T) => R | undefined,
 ) {
   if (!original || !changed) {
     return null;
   }
   const _changes = diff(original, changed, {
     keysToSkip,
-    embeddedObjKeys: {
-      // Compare using generic 'id' property if available
-      // the getIdentifier is not used for the comparison
-      ['.']: 'id',
-    },
   }); // We only care about the first change because the dataset is just a list
   const changes = _changes[0];
 
@@ -221,40 +215,40 @@ export function getChangesForList<
   }
 
   // Identify new entries
-  let newEntries: Partial<Record<R, boolean>> = {};
+  let newEntriesByIdentifier: Partial<Record<R, boolean>> = {};
   if (changes.type === 'UPDATE') {
-    newEntries =
+    newEntriesByIdentifier =
       changes.changes
         ?.filter((c) => c.type === 'ADD')
-        .reduce<typeof newEntries>((entries, c) => {
-          const identifier = getIdentifier(c.value);
-          if (!identifier) {
-            return entries;
-          }
-          return { ...entries, [identifier]: true };
+        .reduce<Partial<Record<R, boolean>>>((entries, c) => {
+          const identifier = getIdentifier?.(c.value);
+          return { ...entries, [identifier ?? +c.key]: true };
         }, {}) ?? {};
   }
 
   // Collect all changes and associate them with the identifier
-  const collectedChanges = original
-    .map((c, i) => ({
-      identifier: getIdentifier(c),
-      values: getChangesForForm(
-        // Compare using the identifier
-        changed.find((cc) => getIdentifier(cc) === getIdentifier(c)) ??
-          // Otherwise fallback to index comparison
+  const collectedChanges = original.map((c, i) => ({
+    identifier: getIdentifier?.(c),
+    values: getChangesForForm(
+      // Compare using the identifier
+      getIdentifier
+        ? changed.find((cc) => getIdentifier(cc) === getIdentifier(c))
+        : // Otherwise fallback to index comparison
           changed[i],
-        c,
-      ),
-    }))
-    .filter((c) => isDefined(c.values));
+      c,
+    ),
+  }));
 
-  if (collectedChanges.length === 0 && Object.keys(newEntries).length === 0) {
+  if (
+    collectedChanges.length === 0 &&
+    Object.keys(newEntriesByIdentifier).length === 0
+  ) {
     return null;
   }
 
   return {
     // Group changes by identifier
+    changesByIndex: collectedChanges.map((c) => c.values),
     changesByIdentifier: collectedChanges.reduce(
       (acc, c) => ({
         ...acc,
@@ -262,6 +256,6 @@ export function getChangesForList<
       }),
       {} as Record<R, T>,
     ),
-    newEntries,
+    newEntriesByIdentifier,
   };
 }

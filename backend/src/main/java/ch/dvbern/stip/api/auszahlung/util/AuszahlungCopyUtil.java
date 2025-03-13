@@ -24,12 +24,14 @@ import lombok.experimental.UtilityClass;
 public class AuszahlungCopyUtil {
     public Auszahlung createCopyIgnoreReferences(final Auszahlung other) {
         final var copy = new Auszahlung();
-
-        copy.setKontoinhaber(other.getKontoinhaber());
-        copy.setVorname(other.getVorname());
-        copy.setNachname(other.getNachname());
-        copy.setIban(other.getIban());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final Auszahlung source, final Auszahlung target) {
+        target.setKontoinhaber(source.getKontoinhaber());
+        target.setVorname(source.getVorname());
+        target.setNachname(source.getNachname());
+        target.setIban(source.getIban());
     }
 }

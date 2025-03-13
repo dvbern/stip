@@ -35,10 +35,14 @@ import {
 
 type DokumentsState = {
   additionalDokumente: CachedRemoteData<UnterschriftenblattDokument[]>;
+  /**
+   * Contains all the uploaded required and custom documents
+   */
   dokuments: CachedRemoteData<GesuchDokument[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
+  expandedComponentList: 'custom' | 'required' | undefined;
 };
 
 const initialState: DokumentsState = {
@@ -47,6 +51,7 @@ const initialState: DokumentsState = {
   documentsToUpload: initial(),
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
+  expandedComponentList: undefined,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -60,8 +65,16 @@ export class DokumentsStore extends signalStore(
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
+  setExpandedList(list: 'custom' | 'required' | undefined) {
+    patchState(this, { expandedComponentList: list });
+  }
+
   dokumenteViewSig = computed(() => {
-    const dokuments = fromCachedDataSig(this.dokuments) ?? [];
+    // only show standard documents
+    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+      (d) => d.dokumentTyp,
+    );
+
     return {
       dokuments,
       requiredDocumentTypes:
@@ -70,6 +83,25 @@ export class DokumentsStore extends signalStore(
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
           // them out
           (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
+        ) ?? [],
+    };
+  });
+
+  customDokumenteViewSig = computed(() => {
+    // only show custom documents
+    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+      (d) => d.customDokumentTyp,
+    );
+
+    return {
+      dokuments,
+      requiredDocumentTypes:
+        fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
+          // A document can already be uploaded but later on get rejected. In this case the document list would contain
+          // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
+          // them out
+          (required) =>
+            !dokuments.map((d) => d.customDokumentTyp?.id === required.id),
         ) ?? [],
     };
   });
@@ -102,21 +134,72 @@ export class DokumentsStore extends signalStore(
       false
     );
   });
-  hasAbgelehnteDokumentsSig = computed(() => {
-    return (
+
+  /**
+   * check if there are any abgelehnte dokumente or new custom dokument types
+   * that the GS needs to upload. Also include documents, that become required through
+   * changes by the SB
+   */
+  hasDokumenteToUebermittelnSig = computed(() => {
+    const hasAbgelehnteDokumente =
       this.dokuments
         .data()
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
-      false
+      false;
+
+    const hasDokumenteToUpload =
+      !!this.documentsToUpload().data?.required?.length;
+
+    const newCustomDokumentTypes =
+      this.dokuments.data()?.filter((dokument) => {
+        const hasFiles = dokument.dokumente.length > 0;
+        return (
+          dokument.customDokumentTyp &&
+          ((hasFiles && dokument.status === 'ABGELEHNT') ||
+            (!hasFiles && dokument.status === 'AUSSTEHEND'))
+        );
+      }) ?? [];
+
+    return (
+      hasAbgelehnteDokumente ||
+      newCustomDokumentTypes?.length > 0 ||
+      hasDokumenteToUpload
     );
   });
-  hasAusstehendeDokumentsSig = computed(() => {
+
+  // Gesuch has dokuments that have not been rejected or accepted by SB
+  hasSBAusstehendeDokumentsSig = computed(() => {
     return (
       this.dokuments
         .data()
+        // Filter out custom dokument types that have no documents
+        ?.filter(
+          (dokument) =>
+            !(dokument.customDokumentTyp && dokument.dokumente.length === 0),
+        )
         ?.some((dokument) => dokument.status === Dokumentstatus.AUSSTEHEND) ??
       false
     );
+  });
+
+  // GS has not reuploaded all rejected documents
+  hasGSAussstehendeDokumentsSig = computed(() => {
+    // covers all custom dokument types that have no documents
+    const hasDokumenteWithoutDocuments = this.dokuments
+      .data()
+      ?.some((dokument) => dokument.dokumente.length === 0);
+
+    // Check if there are required dokumente that have not been uploaded
+    // necessary, since the required aussstehende dokumente will not be in the dokuments list, but show up in the documentsToUpload list
+    const hasRequiredDokumenteWithoutDokument =
+      this.documentsToUpload().data?.required?.some(
+        (dokumentTyp) =>
+          !this.dokuments
+            .data()
+            ?.some((dokument) => dokument.dokumentTyp === dokumentTyp),
+      );
+
+    return hasDokumenteWithoutDocuments || hasRequiredDokumenteWithoutDokument;
   });
 
   getGesuchDokument$ = rxMethod<{
@@ -148,7 +231,7 @@ export class DokumentsStore extends signalStore(
   );
 
   getGesuchDokumentKommentare$ = rxMethod<{
-    dokumentTyp: DokumentTyp;
+    gesuchDokumentId: string;
     gesuchTrancheId: string;
   }>(
     pipe(
@@ -158,10 +241,20 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((req) =>
-        this.dokumentService.getGesuchDokumentKommentare$(req),
-      ),
-      handleApiResponse((gesuchDokumentKommentare) =>
-        patchState(this, { gesuchDokumentKommentare }),
+        this.dokumentService.getGesuchDokumentKommentare$(req).pipe(
+          handleApiResponse((gesuchDokumentKommentare) =>
+            patchState(this, {
+              gesuchDokumentKommentare: mapData(
+                gesuchDokumentKommentare,
+                (data) =>
+                  data.map((d) => ({
+                    ...d,
+                    gesuchDokumentId: req.gesuchDokumentId,
+                  })),
+              ),
+            }),
+          ),
+        ),
       ),
     ),
   );
@@ -169,51 +262,43 @@ export class DokumentsStore extends signalStore(
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchTrancheId: string;
     gesuchDokumentId: string;
-    dokumentTyp: DokumentTyp;
     kommentar: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(
-        ({
-          gesuchTrancheId,
-          gesuchDokumentId,
-          dokumentTyp,
-          kommentar,
-          afterSuccess,
-        }) =>
-          this.dokumentService
-            .gesuchDokumentAblehnen$({
-              gesuchDokumentId,
-              gesuchDokumentAblehnenRequest: {
-                kommentar: {
-                  kommentar,
-                  dokumentTyp,
-                  gesuchTrancheId,
-                },
+      switchMap(({ gesuchTrancheId, gesuchDokumentId, kommentar, onSuccess }) =>
+        this.dokumentService
+          .gesuchDokumentAblehnen$({
+            gesuchDokumentId,
+            gesuchDokumentAblehnenRequest: {
+              kommentar: {
+                kommentar,
+                gesuchDokumentId,
+                gesuchTrancheId,
               },
-            })
-            .pipe(
-              tapResponse({
-                next: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dokumente.reject.success',
-                  });
-                  afterSuccess?.();
-                },
-                error: () => undefined,
-              }),
-            ),
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.reject.success',
+                });
+                onSuccess?.();
+              },
+              error: () => undefined,
+            }),
+          ),
       ),
     ),
   );
 
   gesuchDokumentAkzeptieren$ = rxMethod<{
     gesuchDokumentId: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, afterSuccess }) =>
+      switchMap(({ gesuchDokumentId, onSuccess }) =>
         this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
@@ -224,7 +309,7 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.accept.success',
                 });
-                afterSuccess?.();
+                onSuccess?.();
               },
               error: () => undefined,
             }),
@@ -368,6 +453,8 @@ export class DokumentsStore extends signalStore(
             documentsToUpload: success(documentsToUpload),
           }));
         },
+        // @scph dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
+        // vom combineLatest passiert. Wie koennen wir das beheben?
         error: (error) => {
           patchState(this, () => ({
             dokuments: failure(error),
@@ -436,6 +523,64 @@ export class DokumentsStore extends signalStore(
             handleApiResponse((documentsToUpload) =>
               patchState(this, { documentsToUpload }),
             ),
+          ),
+      ),
+    ),
+  );
+
+  createCustomDokumentTyp$ = rxMethod<{
+    trancheId: string;
+    type: string;
+    description: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ trancheId, type, description, onSuccess }) =>
+        this.dokumentService
+          .createCustomDokumentTyp$({
+            customDokumentTypCreate: {
+              description,
+              trancheId,
+              type,
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'shared.dokumente.createCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
+      ),
+    ),
+  );
+
+  deleteCustomDokumentTyp$ = rxMethod<{
+    customDokumentTypId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ customDokumentTypId, onSuccess }) =>
+        this.dokumentService
+          .deleteCustomDokumentTyp$({
+            customDokumentTypId,
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'shared.dokumente.deleteCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
           ),
       ),
     ),

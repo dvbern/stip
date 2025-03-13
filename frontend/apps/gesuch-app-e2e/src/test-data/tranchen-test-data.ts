@@ -81,6 +81,7 @@ export const gesuchFormularUpdateFn = (
     kontoinhaber: 'GESUCHSTELLER',
   },
   elterns: null,
+  steuererklaerung: null,
   geschwisters: null,
   lebenslaufItems: [
     {
@@ -118,7 +119,6 @@ export const gesuchFormularUpdateFn = (
     vermoegen: 20900,
     steuernKantonGemeinde: 0,
   },
-  steuerdaten: null,
   darlehen: {
     willDarlehen: false,
     betragDarlehen: null,

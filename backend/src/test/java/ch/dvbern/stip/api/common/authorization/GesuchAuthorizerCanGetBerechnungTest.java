@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        final var sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -87,7 +89,13 @@ class GesuchAuthorizerCanGetBerechnungTest {
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository, null
+            benutzerService,
+            gesuchRepository,
+            gesuchTrancheRepository,
+            gesuchStatusService,
+            fallRepository,
+            sozialdienstService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -106,7 +114,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         assertThrows(UnauthorizedException.class, () -> {
             authorizer.canGetBerechnung(gesuch.getId());
         });
-        Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
+        Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
             gesuch.setGesuchStatus(gesuchstatus);
             assertDoesNotThrow(() -> authorizer.canGetBerechnung(gesuch.getId()));
 

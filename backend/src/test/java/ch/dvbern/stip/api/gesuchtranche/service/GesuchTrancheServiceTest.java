@@ -136,6 +136,7 @@ class GesuchTrancheServiceTest {
         // arrange
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.deleteById(any())).thenReturn(true);
+        when(gesuchTrancheRepository.findById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());

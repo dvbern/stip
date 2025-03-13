@@ -19,17 +19,26 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import jakarta.inject.Inject;
+import jakarta.validation.Validator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -38,19 +47,25 @@ import org.mapstruct.Named;
     config = MappingConfig.class,
     uses = {
         FallMapper.class,
-        GesuchsperiodeMapper.class
+        GesuchsperiodeMapper.class,
+        GesuchTrancheMapper.class,
     }
 )
 public abstract class GesuchMapper {
+    @Inject
+    Validator validator;
+
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(target = "fallId", source = "ausbildung.fall.id")
     @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
     @Mapping(target = "ausbildungId", source = "ausbildung.id")
+    @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
+    @Mapping(source = ".", target = "canGetBerechnung", qualifiedByName = "getCanGetBerechnung")
     public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
@@ -67,7 +82,7 @@ public abstract class GesuchMapper {
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
         final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
-        if (zuordnung == null) {
+        if (Objects.isNull(zuordnung) || Objects.isNull(zuordnung.getSachbearbeiter())) {
             return "";
         }
 
@@ -82,6 +97,23 @@ public abstract class GesuchMapper {
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
         return getGesuchDateRange(gesuch).getGueltigBis();
+    }
+
+    @Named("getCanGetBerechnung")
+    boolean getCanGetBerechnung(Gesuch gesuch) {
+        boolean canGetBerechnung = true;
+
+        try {
+            ValidatorUtil.validate(
+                validator,
+                gesuch.getLatestGesuchTranche().getGesuchFormular(),
+                List.of(SteuerdatenPageValidation.class, GesuchNachInBearbeitungSBValidationGroup.class)
+            );
+        } catch (ValidationsException e) {
+            canGetBerechnung = false;
+        }
+
+        return canGetBerechnung;
     }
 
     static DateRange getGesuchDateRange(Gesuch gesuch) {

@@ -70,18 +70,57 @@ import { Berechnung } from '../../../models';
           </mat-accordion>
         </mat-card-content>
         <mat-card-footer class="px-3 py-4">
-          <div class="d-flex justify-content-between fs-3 h4">
-            {{
-              'sachbearbeitung-app.verfuegung.berechnung.' +
-                berechnung.typ +
-                '.total' | translate
-            }}
-            <span
-              class="text-nowrap"
-              [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
-              >{{ berechnung.total | formatChfNegative }}</span
-            >
-          </div>
+          @if (berechnung.typ === 'persoenlich' && berechnung.totalVorTeilung) {
+            <div class="d-flex justify-content-between fs-5 h4">
+              <div>
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.' +
+                    berechnung.typ +
+                    '.total' | translate
+                }}
+              </div>
+              <div>
+                {{ berechnung.totalVorTeilung | formatChfNegative }}
+              </div>
+            </div>
+            <div class="d-flex text-muted justify-content-between fs-5 tw-mb-2">
+              <div>
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.' +
+                    berechnung.typ +
+                    '.anzahlPersonen' | translate
+                }}
+              </div>
+              <div>
+                {{ berechnung.einnahmen.anzahlPersonenImHaushalt }}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between fs-4 h4">
+              <div>
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.' +
+                    berechnung.typ +
+                    '.totalVorTeilung' | translate
+                }}
+              </div>
+              <div>
+                {{ berechnung.total | formatChf }}
+              </div>
+            </div>
+          } @else {
+            <div class="d-flex justify-content-between fs-3 h4">
+              {{
+                'sachbearbeitung-app.verfuegung.berechnung.' +
+                  berechnung.typ +
+                  '.total' | translate
+              }}
+              <span
+                class="text-nowrap"
+                [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
+                >{{ berechnung.total | formatChfNegative }}</span
+              >
+            </div>
+          }
           @if (
             berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung
           ) {

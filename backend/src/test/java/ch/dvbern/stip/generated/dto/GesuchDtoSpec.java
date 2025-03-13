@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DelegierungDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -42,7 +43,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_AENDERUNGSDATUM,
   GesuchDtoSpec.JSON_PROPERTY_BEARBEITER,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH,
-  GesuchDtoSpec.JSON_PROPERTY_EINREICHEDATUM
+  GesuchDtoSpec.JSON_PROPERTY_EINREICHEDATUM,
+  GesuchDtoSpec.JSON_PROPERTY_DELEGIERUNG
 })
 @JsonTypeName("Gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -79,6 +81,9 @@ public class GesuchDtoSpec {
 
   public static final String JSON_PROPERTY_EINREICHEDATUM = "einreichedatum";
   private LocalDate einreichedatum;
+
+  public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
+  private DelegierungDtoSpec delegierung;
 
   public GesuchDtoSpec() {
   }
@@ -368,6 +373,32 @@ public class GesuchDtoSpec {
     this.einreichedatum = einreichedatum;
   }
 
+
+  public GesuchDtoSpec delegierung(DelegierungDtoSpec delegierung) {
+    
+    this.delegierung = delegierung;
+    return this;
+  }
+
+   /**
+   * Get delegierung
+   * @return delegierung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DelegierungDtoSpec getDelegierung() {
+    return delegierung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierung(DelegierungDtoSpec delegierung) {
+    this.delegierung = delegierung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -387,12 +418,13 @@ public class GesuchDtoSpec {
         Objects.equals(this.aenderungsdatum, gesuch.aenderungsdatum) &&
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
-        Objects.equals(this.einreichedatum, gesuch.einreichedatum);
+        Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
+        Objects.equals(this.delegierung, gesuch.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung);
   }
 
   @Override
@@ -410,6 +442,7 @@ public class GesuchDtoSpec {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
+    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

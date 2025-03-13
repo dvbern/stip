@@ -5,8 +5,8 @@ import { map, switchMap } from 'rxjs';
 
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { PermissionStore, RolesMap } from '@dv/shared/global/permission';
-import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchService } from '@dv/shared/model/gesuch';
 import {
@@ -30,49 +30,54 @@ export const isAllowedTo =
           return [false];
         }
 
-        return gesuchService
-          .getGesuchInfo$({ gesuchId })
-          .pipe(
-            map(({ gesuchStatus }) =>
-              getGesuchPermissions({ gesuchStatus }, config.appType)[
-                `can${capitalized(permission)}`
-              ]
-                ? true
-                : new RedirectCommand(router.parseUrl('/')),
-            ),
-          );
+        return gesuchService.getGesuchInfo$({ gesuchId }).pipe(
+          map(({ gesuchStatus }) =>
+            getGesuchPermissions({ gesuchStatus }, config.appType, {
+              Gesuchsteller: true,
+            })[`can${capitalized(permission)}`]
+              ? true
+              : new RedirectCommand(router.parseUrl('/')),
+          ),
+        );
       }),
     );
   };
 
 export const hasRoles =
   (roles: AvailableBenutzerRole[], redirectUrl?: string): CanActivateFn =>
-  () => {
+  async () => {
     const permissionStore = inject(PermissionStore);
+    const router = inject(Router);
+    const notification = inject(GlobalNotificationStore);
 
-    const roleMap = permissionStore.rolesMapSig();
+    const roleMap = await permissionStore.getRolesMap();
     if (!isDefined(roleMap)) {
       return false;
     }
     if (roles.some((role) => roleMap?.[role])) {
       return true;
     }
-    return failSafeSozialdienstAdmin(roleMap) || handleForbidden(redirectUrl);
+    return (
+      failSafeSozialdienstAdmin(roleMap, router) ||
+      handleForbidden(redirectUrl, notification, router)
+    );
   };
 
-const failSafeSozialdienstAdmin = (rolesMap: RolesMap) => {
+const failSafeSozialdienstAdmin = (rolesMap: RolesMap, router: Router) => {
   return rolesMap['Sozialdienst-Admin']
     ? new RedirectCommand(
-        inject(Router).parseUrl('/administration/sozialdienst-benutzer'),
+        router.parseUrl('/administration/sozialdienst-benutzer'),
       )
     : false;
 };
 
-const handleForbidden = (redirectUrl = '/') => {
-  const notification = inject(GlobalNotificationStore);
-
+const handleForbidden = (
+  redirectUrl: string | undefined,
+  notification: GlobalNotificationStore,
+  router: Router,
+) => {
   return (
     notification.handleForbiddenError(),
-    new RedirectCommand(inject(Router).parseUrl(redirectUrl))
+    new RedirectCommand(router.parseUrl(redirectUrl ?? '/'))
   );
 };

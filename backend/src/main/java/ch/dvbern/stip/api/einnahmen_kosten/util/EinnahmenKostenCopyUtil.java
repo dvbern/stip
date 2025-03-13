@@ -24,26 +24,28 @@ import lombok.experimental.UtilityClass;
 public class EinnahmenKostenCopyUtil {
     public EinnahmenKosten createCopy(final EinnahmenKosten other) {
         final var copy = new EinnahmenKosten();
-
-        copy.setNettoerwerbseinkommen(other.getNettoerwerbseinkommen());
-        copy.setFahrkosten(other.getFahrkosten());
-        copy.setWohnkosten(other.getWohnkosten());
-        copy.setWgWohnend(other.getWgWohnend());
-        copy.setVerdienstRealisiert(other.getVerdienstRealisiert());
-        copy.setAlimente(other.getAlimente());
-        copy.setZulagen(other.getZulagen());
-        copy.setRenten(other.getRenten());
-        copy.setEoLeistungen(other.getEoLeistungen());
-        copy.setErgaenzungsleistungen(other.getErgaenzungsleistungen());
-        copy.setBeitraege(other.getBeitraege());
-        copy.setAusbildungskostenSekundarstufeZwei(other.getAusbildungskostenSekundarstufeZwei());
-        copy.setAusbildungskostenTertiaerstufe(other.getAusbildungskostenTertiaerstufe());
-        copy.setAuswaertigeMittagessenProWoche(other.getAuswaertigeMittagessenProWoche());
-        copy.setBetreuungskostenKinder(other.getBetreuungskostenKinder());
-        copy.setVeranlagungsCode(other.getVeranlagungsCode());
-        copy.setSteuerjahr(other.getSteuerjahr());
-        copy.setVermoegen(other.getVermoegen());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    public void copyValues(final EinnahmenKosten source, final EinnahmenKosten target) {
+        target.setNettoerwerbseinkommen(source.getNettoerwerbseinkommen());
+        target.setFahrkosten(source.getFahrkosten());
+        target.setWohnkosten(source.getWohnkosten());
+        target.setWgWohnend(source.getWgWohnend());
+        target.setVerdienstRealisiert(source.getVerdienstRealisiert());
+        target.setAlimente(source.getAlimente());
+        target.setZulagen(source.getZulagen());
+        target.setRenten(source.getRenten());
+        target.setEoLeistungen(source.getEoLeistungen());
+        target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
+        target.setBeitraege(source.getBeitraege());
+        target.setAusbildungskostenSekundarstufeZwei(source.getAusbildungskostenSekundarstufeZwei());
+        target.setAusbildungskostenTertiaerstufe(source.getAusbildungskostenTertiaerstufe());
+        target.setAuswaertigeMittagessenProWoche(source.getAuswaertigeMittagessenProWoche());
+        target.setBetreuungskostenKinder(source.getBetreuungskostenKinder());
+        target.setVeranlagungsCode(source.getVeranlagungsCode());
+        target.setSteuerjahr(source.getSteuerjahr());
+        target.setVermoegen(source.getVermoegen());
     }
 }

@@ -21,7 +21,7 @@ import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-au
 import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
-import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
+import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
@@ -29,13 +29,14 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { AppType } from '@dv/shared/model/config';
 import {
+  GesuchFormularType,
   GesuchFormularUpdate,
   GesuchService,
   GesuchUpdate,
   GesuchUrlType,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { ifPropsAreDefined, isDefined } from '@dv/shared/model/type-util';
@@ -175,16 +176,31 @@ export const loadGesuch = createEffect(
             ),
         } satisfies Record<AppType, unknown>;
 
-        // Different services for different types of tranches
-        const services$ = {
-          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-          TRANCHE: () => (gesuchTrancheId: string) =>
-            gesuchService.getGesuch$(
-              { gesuchId: id, gesuchTrancheId },
+        const trancheServices$ = {
+          'gesuch-app': (gesuchTrancheId: string) =>
+            gesuchService.getGesuchGS$(
+              {
+                gesuchTrancheId,
+              },
               undefined,
               undefined,
               handle404And401,
             ),
+          'sachbearbeitung-app': (gesuchTrancheId: string) =>
+            gesuchService.getGesuchSB$(
+              {
+                gesuchTrancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            ),
+        } satisfies Record<AppType, unknown>;
+
+        // Different services for different types of tranches
+        const services$ = {
+          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
+          TRANCHE: (appType: AppType) => trancheServices$[appType],
           INITIAL: () => () =>
             gesuchService.getInitialTrancheChangesByGesuchId$(
               {
@@ -325,6 +341,7 @@ export const redirectToGesuchFormNextStep = createEffect(
     store = inject(Store),
     actions$ = inject(Actions),
     router = inject(Router),
+    permissionsStore = inject(PermissionStore),
     stepManager = inject(SharedUtilGesuchFormStepManagerService),
   ) => {
     return actions$.pipe(
@@ -362,7 +379,13 @@ export const redirectToGesuchFormNextStep = createEffect(
           router.navigate([
             'gesuch',
             ...stepManager
-              .getNextStepOf(stepFlowSig, trancheSetting.type, origin, gesuch)
+              .getNextStepOf(
+                stepFlowSig,
+                trancheSetting.type,
+                origin,
+                gesuch,
+                permissionsStore.rolesMapSig(),
+              )
               .route.split('/'),
             id,
             ...trancheSetting.routesSuffix,
@@ -415,11 +438,11 @@ export const sharedDataAccessGesuchEffects = {
 
 const viewOnlyFields = [
   'steuerdatenTabs',
-] as const satisfies (keyof SharedModelGesuchFormular)[];
+] as const satisfies (keyof GesuchFormularType)[];
 
 const prepareFormularData = (
   id: string,
-  gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
+  gesuchFormular: GesuchFormularUpdate | Partial<GesuchFormularType>,
 ): GesuchUpdate => {
   const { ...formular } = gesuchFormular;
   if ('ausbildung' in formular) {
@@ -430,6 +453,18 @@ const prepareFormularData = (
       delete formular[field];
     }
   });
+
+  if (
+    'steuererklaerung' in formular &&
+    Array.isArray(formular.steuererklaerung)
+  ) {
+    formular.steuererklaerung = formular.steuererklaerung.map((item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id: _, ...rest } = item;
+      return rest;
+    });
+  }
+
   return {
     gesuchTrancheToWorkWith: {
       id,

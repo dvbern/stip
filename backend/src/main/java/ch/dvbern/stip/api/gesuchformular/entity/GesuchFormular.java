@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.validation.AusbildungPageValidation;
@@ -40,6 +42,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.FamiliensituationPageValidat
 import ch.dvbern.stip.api.gesuchformular.validation.GeschwisterPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
@@ -51,7 +54,10 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTabRequiredConstraint;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -177,10 +183,15 @@ import org.hibernate.envers.Audited;
         GesuchEinreichenValidationGroup.class
     }
 )
-@SteuerdatenTabsRequiredConstraint(
+@SteuererklaerungTabsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
-        SteuerdatenPageValidation.class
+        SteuererklaerungPageValidation.class
+    }, property = "steuererklaerung"
+)
+@SteuerdatenTabsRequiredConstraint(
+    groups = {
+        GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "steuerdatenTabs"
 )
 @DocumentsAcceptedConstraint(
@@ -189,6 +200,11 @@ import org.hibernate.envers.Audited;
     }
 )
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
+@SteuerdatenTabRequiredConstraint(
+    groups = {
+        SteuerdatenPageValidation.class
+    }, property = "steuerdaten"
+)
 @UniqueSvNumberConstraint
 @Entity
 @Table(
@@ -273,6 +289,7 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @OrderBy("geburtsdatum")
     @HasPageValidation(ElternPageValidation.class)
     private @Valid Set<Eltern> elterns = new LinkedHashSet<>();
 
@@ -289,4 +306,13 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
     private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @HasPageValidation(SteuererklaerungPageValidation.class)
+    private @Valid Set<Steuererklaerung> steuererklaerung = new LinkedHashSet<>();
+
+    public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
+        return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();
+    }
 }

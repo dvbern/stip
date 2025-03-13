@@ -63,6 +63,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -215,6 +216,9 @@ class GesuchGetGesucheTest {
         final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
         assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+
+        // since every document is uploaded by GS, there should not be any document missing
+        assertThat(gesuchDashboardItem.getMissingDocuments(), is(nullValue()));
     }
 
     @Test

@@ -48,20 +48,34 @@ public class MailService {
     private final ConfigService configService;
     private final TenantService tenantService;
 
-    public void sendStandardNotificationEmail(
-        String name,
-        String vorname,
-        String receiver,
-        AppLanguages language
+    public void sendStandardNotificationEmails(
+        final String nachname,
+        final String vorname,
+        final AppLanguages language,
+        final List<String> recipients
     ) {
-        Templates.getStandardNotification(name, vorname, language)
-            .to(receiver)
+        if (recipients.isEmpty()) {
+            throw new IllegalArgumentException("recipients cannot be empty");
+        }
+
+        Templates.getStandardNotification(nachname, vorname, language)
+            .to(recipients.get(0))
+            .cc(recipients.stream().skip(1).toArray(String[]::new))
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send()
             .onFailure()
             .invoke(this::handleFailure)
             .subscribe()
             .asCompletionStage();
+    }
+
+    public void sendStandardNotificationEmail(
+        String name,
+        String vorname,
+        String receiver,
+        AppLanguages language
+    ) {
+        sendStandardNotificationEmails(name, vorname, language, List.of(receiver));
     }
 
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {

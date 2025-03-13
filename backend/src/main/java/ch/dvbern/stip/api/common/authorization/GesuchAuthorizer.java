@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,14 +46,25 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchStatusService gesuchStatusService;
     private final FallRepository fallRepository;
+    private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
 
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
-        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+        if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
             throw new UnauthorizedException();
         }
+    }
+
+    @Transactional
+    public void canReadChanges(final UUID gesuchID) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (isAdminOrSb(currentBenutzer)) {
+            return;
+        }
+        throw new UnauthorizedException();
     }
 
     @Transactional
@@ -63,9 +76,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        // Gesuchsteller can only read their own Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        final BooleanSupplier isGesuchsteller = () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+
+        // Gesuchsteller can only read their own Gesuch
+        if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
             return;
         }
 
@@ -88,15 +106,25 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canUpdate(final UUID gesuchId, final boolean aenderung) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
+        // TODO KSTIP-1967: Authorizer aktualisieren
         if (isAdminOrSb(currentBenutzer)) {
             return;
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            (gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung)
-        ) {
+
+        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
+            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -113,11 +141,16 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (
-            isGesuchstellerAndNotAdmin(currentBenutzer) &&
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
-        ) {
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchstellerAndNotAdmin(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -133,7 +166,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall.get(), sozialdienstService);
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId());
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -150,7 +189,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB;
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 

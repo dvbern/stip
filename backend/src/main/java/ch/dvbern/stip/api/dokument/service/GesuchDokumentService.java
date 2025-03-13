@@ -26,9 +26,12 @@ import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
@@ -68,19 +71,43 @@ public class GesuchDokumentService {
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final CustomDokumentTypRepository customDocumentTypRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
+    private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
-        UUID gesuchDokumentId,
-        DokumentTyp dokumentTyp
+        UUID gesuchDokumentId
     ) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId, dokumentTyp);
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchDokumentId(gesuchDokumentId);
+    }
+
+    @Transactional
+    public Uni<Response> getUploadCustomDokumentUni(
+        final UUID customDokumentTypId,
+        final FileUpload fileUpload
+    ) {
+        final var customDokumentTyp = customDocumentTypRepository.findById(customDokumentTypId);
+        customDokumentTyp.getGesuchDokument().getGesuchTranche();
+        return DokumentUploadUtil.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            GESUCH_DOKUMENT_PATH,
+            objectId -> uploadCustomDokument(
+                customDokumentTypId,
+                fileUpload,
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
     }
 
     @Transactional
@@ -117,7 +144,7 @@ public class GesuchDokumentService {
             .orElseThrow(NotFoundException::new);
 
         final var gesuchDokument = gesuchDokumentRepository
-            .findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp)
+            .findByGesuchTrancheAndDokumentTyp(gesuchTranche.getId(), dokumentTyp)
             .orElseGet(() -> createGesuchDokument(gesuchTranche, dokumentTyp));
 
         final var dokument = new Dokument()
@@ -133,12 +160,48 @@ public class GesuchDokumentService {
     }
 
     @Transactional
+    public void uploadCustomDokument(
+        final UUID customDokumentTypId,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        final var gesuchDokument =
+            gesuchDokumentRepository
+                .findByCustomDokumentTyp(customDokumentTypId)
+                .orElseThrow(NotFoundException::new);
+        final var dokument = new Dokument();
+        dokument.getGesuchDokumente().add(gesuchDokument);
+        gesuchDokument.getDokumente().add(dokument);
+        dokument.setFilename(fileUpload.fileName());
+        dokument.setObjectId(objectId);
+        dokument.setFilesize(String.valueOf(fileUpload.size()));
+        dokument.setFilepath(GESUCH_DOKUMENT_PATH);
+        dokumentRepository.persist(dokument);
+    }
+
+    @Transactional
+    public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypeId) {
+        return gesuchDokumentRepository.customDokumentHasGesuchDokuments(customDokumentTypeId);
+    }
+
+    @Transactional
+    public NullableGesuchDokumentDto findGesuchDokumentForCustomTyp(
+        final UUID customDokumentTypId
+    ) {
+        final var gesuchDokument =
+            gesuchDokumentRepository.findByCustomDokumentTyp(customDokumentTypId);
+
+        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
+    }
+
+    @Transactional
     public NullableGesuchDokumentDto findGesuchDokumentForTyp(
         final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp
     ) {
         final var gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
@@ -146,16 +209,17 @@ public class GesuchDokumentService {
     public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
         gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
-            .forEach(
-                gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId())
-            );
+            .forEach(gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId()));
     }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
         gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .forEach(
-                gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
+                gesuchDokument -> {
+                    gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+                    removeGesuchDokument(gesuchDokument.getId());
+                }
             );
     }
 
@@ -189,16 +253,19 @@ public class GesuchDokumentService {
         );
     }
 
+    private void dropGesuchDokumentIfNotRequredAnymore(GesuchDokument gesuchDokument) {
+        if (!requiredDokumentService.isGesuchDokumentRequired(gesuchDokument)) {
+            gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+        }
+    }
+
     @Transactional
     public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
-        }
-        if (dokument.getGesuchDokumente().isEmpty()) {
-            dokumentRepository.delete(dokument);
         }
 
         return dokumentObjectId;
@@ -208,12 +275,12 @@ public class GesuchDokumentService {
     public void removeDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
+
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+            dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
-            dokumentRepository.delete(dokument);
             executeDeleteDokumentsFromS3(List.of(dokumentObjectId));
         }
     }
@@ -247,15 +314,23 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void deleteAbgelehnteDokumenteForGesuch(final Gesuch gesuch) {
-        // Query for these instead of iterating "in memory" because gesuchDokumente are lazy loaded
+    public void setAbgelehnteDokumenteToAusstehendForGesuch(final Gesuch gesuch) {
+        // Query for these instead of iterating "in memory" because abgelehnteGesuchDokumente are lazy loaded
         // and this results in only loading the ones we need instead of all
-        final var gesuchDokumente = gesuchDokumentRepository
+        final var abgelehnteGesuchDokumente = gesuchDokumentRepository
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
             .toList();
 
+        for (var gesuchdokument : abgelehnteGesuchDokumente) {
+            dokumentstatusService.triggerStatusChangeNoComment(gesuchdokument, DokumentstatusChangeEvent.AUSSTEHEND);
+        }
+    }
+
+    public void deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List<GesuchDokument> abgelehnteGesuchDokumente) {
+        // Query for these instead of iterating "in memory" because filteredGesuchDokumente are lazy loaded
+        // and this results in only loading the ones we need instead of all
         final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (var gesuchdokument : gesuchDokumente) {
+        for (var gesuchdokument : abgelehnteGesuchDokumente) {
             final var dokumentList = gesuchdokument.getDokumente().stream().toList();
             for (var dokument : dokumentList) {
                 dokument.getGesuchDokumente().remove(gesuchdokument);
@@ -267,7 +342,6 @@ public class GesuchDokumentService {
                     dokumentRepository.delete(dokument);
                 }
             }
-            gesuchDokumentRepository.delete(gesuchdokument);
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
@@ -292,6 +366,17 @@ public class GesuchDokumentService {
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument =
             new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
+        gesuchDokumentRepository.persist(gesuchDokument);
+        return gesuchDokument;
+    }
+
+    @Transactional
+    public GesuchDokument createGesuchDokument(
+        final GesuchTranche gesuchTranche,
+        final CustomDokumentTyp customDokumentTyp
+    ) {
+        GesuchDokument gesuchDokument =
+            new GesuchDokument().setGesuchTranche(gesuchTranche).setCustomDokumentTyp(customDokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
     }

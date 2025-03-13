@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -43,7 +43,10 @@ import static org.hamcrest.core.Is.is;
 class RequiredDokumentServiceTest {
     @Test
     void getRequiredDokumentsForGesuchFormularTest() {
-        final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
+        final var service = new RequiredDokumentService(
+            new MockInstance(List.of(new MockDocumentProducer())),
+            null
+        );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(1));
@@ -52,15 +55,21 @@ class RequiredDokumentServiceTest {
 
     @Test
     void getEmptyListTest() {
-        final var service = new RequiredDokumentService(new MockInstance(List.of(new MockEmptyDocumentProducer())));
+        final var service = new RequiredDokumentService(
+            new MockInstance(List.of(new MockEmptyDocumentProducer())),
+            null
+        );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(0));
     }
 
     @Test
-    void noExistingTest() {
-        final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
+    void oneExistingTest() {
+        final var service = new RequiredDokumentService(
+            new MockInstance(List.of(new MockDocumentProducer())),
+            null
+        );
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
 
@@ -80,44 +89,44 @@ class RequiredDokumentServiceTest {
         );
     }
 
-    static class MockDocumentProducer implements RequiredDocumentProducer {
+    static class MockDocumentProducer implements RequiredDocumentsProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
         }
     }
 
-    static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
+    static class MockEmptyDocumentProducer implements RequiredDocumentsProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("", Set.of());
         }
     }
 
-    static class MockInstance implements Instance<RequiredDocumentProducer> {
-        private final List<RequiredDocumentProducer> collection;
+    public static class MockInstance implements Instance<RequiredDocumentsProducer> {
+        private final List<RequiredDocumentsProducer> collection;
 
-        MockInstance(List<RequiredDocumentProducer> collection) {
+        MockInstance(List<RequiredDocumentsProducer> collection) {
             this.collection = collection;
         }
 
         @Override
-        public Stream<RequiredDocumentProducer> stream() {
+        public Stream<RequiredDocumentsProducer> stream() {
             return collection.stream();
         }
 
         @Override
-        public Instance<RequiredDocumentProducer> select(Annotation... qualifiers) {
+        public Instance<RequiredDocumentsProducer> select(Annotation... qualifiers) {
             return null;
         }
 
         @Override
-        public <U extends RequiredDocumentProducer> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+        public <U extends RequiredDocumentsProducer> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
             return null;
         }
 
         @Override
-        public <U extends RequiredDocumentProducer> Instance<U> select(
+        public <U extends RequiredDocumentsProducer> Instance<U> select(
             TypeLiteral<U> subtype,
             Annotation... qualifiers
         ) {
@@ -135,28 +144,28 @@ class RequiredDokumentServiceTest {
         }
 
         @Override
-        public void destroy(RequiredDocumentProducer instance) {
+        public void destroy(RequiredDocumentsProducer instance) {
 
         }
 
         @Override
-        public Handle<RequiredDocumentProducer> getHandle() {
+        public Handle<RequiredDocumentsProducer> getHandle() {
             return null;
         }
 
         @Override
-        public Iterable<? extends Handle<RequiredDocumentProducer>> handles() {
+        public Iterable<? extends Handle<RequiredDocumentsProducer>> handles() {
             return null;
         }
 
         @Override
-        public RequiredDocumentProducer get() {
+        public RequiredDocumentsProducer get() {
             return null;
         }
 
         @NotNull
         @Override
-        public Iterator<RequiredDocumentProducer> iterator() {
+        public Iterator<RequiredDocumentsProducer> iterator() {
             return null;
         }
     }

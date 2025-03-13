@@ -19,7 +19,9 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -95,7 +97,8 @@ class NotificationServiceTest {
 
         Gesuch gesuch = new Gesuch()
             .setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS)
-            .setGesuchTranchen(List.of(gesuchTranche));
+            .setGesuchTranchen(List.of(gesuchTranche))
+            .setAusbildung(new Ausbildung().setFall(new Fall()));
 
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
 

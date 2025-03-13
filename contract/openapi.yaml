@@ -155,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -605,6 +605,80 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
+  '/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomDokumentTyp'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllCustomDokumentTypes
+  '/gesuchDokument/customGesuchDokument/':
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomDokumentTypCreate'
+        required: true
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchDokument'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createCustomDokumentTyp
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
+    parameters:
+      - name: customDokumentTypId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: |
+            Custom Dokument Typ deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteCustomDokumentTyp
+      summary: delete a customDokumentTyp
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -668,17 +742,65 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare':
+  '/customGesuchDokument/{customDokumentTypId}':
     get:
       tags:
         - Dokument
       parameters:
-        - name: dokumentTyp
+        - name: customDokumentTypId
           schema:
-            $ref: '#/components/schemas/DokumentTyp'
+            $ref: '#/components/schemas/UUID'
           in: path
           required: true
-        - name: gesuchTrancheId
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns an Array of Dokumente for a given GesuchTrancheId and a CustomDokumentTyp
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getCustomGesuchDokumenteForTyp
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: uploadCustomGesuchDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchDokumentId}/kommentare':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: gesuchDokumentId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -1271,28 +1393,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllSozialdienste
       summary: Returns all Sozialdienste
-  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
-    parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    patch:
+  /sozialdienst/delegation:
+    get:
       tags:
         - Sozialdienst
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SozialdienstAdminUpdate'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstBenutzer'
-          description: Updates data of a Sozialdienst admin
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstSlim'
+          description: Returns all Sozialdienste
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
@@ -1301,14 +1414,10 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: updateSozialdienstAdmin
+      operationId: getAllSozialdiensteForDelegation
   /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     patch:
       tags:
         - Sozialdienst
@@ -1335,11 +1444,7 @@ paths:
       operationId: replaceSozialdienstAdmin
   /sozialdienst/{sozialdienstId}:
     parameters:
-      - name: sozialdienstId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/sozialdienstId'
     delete:
       tags:
         - Sozialdienst
@@ -1418,14 +1523,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Returns the created SozialdienstBenutzer
-        401:
-          $ref: '#/components/responses/Unauthorized'
-        403:
-          $ref: '#/components/responses/Forbidden'
-        404:
-          $ref: '#/components/responses/NotFound'
-        500:
-          $ref: '#/components/responses/ServerError'
       operationId: createSozialdienstBenutzer
     patch:
       description: update an exisitng SozialdienstBenutzer
@@ -1452,6 +1549,31 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: updateSozialdienstBenutzer
+  /sozialdienst/admin:
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
   /sozialdienst/benutzer/{sozialdienstBenutzerId}:
     parameters:
       - name: sozialdienstBenutzerId
@@ -1494,6 +1616,25 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
+  /delegieren/{fallId}/{sozialdienstId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/sozialdienstId'
+    post:
+      tags:
+      - Delegieren
+      responses:
+        204:
+          description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: fallDelegieren
   /stammdaten/land:
     get:
       tags:
@@ -1751,13 +1892,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
       summary: Returns the inital tranche changes by GesuchId
-  '/gesuch/{gesuchId}/{gesuchTrancheId}':
+  '/gesuch/gs/{gesuchTrancheId}':
+        parameters:
+          - name: gesuchTrancheId
+            schema:
+              $ref: '#/components/schemas/UUID'
+            in: path
+            required: true
+        get:
+          tags:
+            - Gesuch
+          responses:
+            '200':
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Gesuch'
+              description: OK
+            '401':
+              $ref: '#/components/responses/Unauthorized'
+            '403':
+              $ref: '#/components/responses/Forbidden'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '500':
+              $ref: '#/components/responses/ServerError'
+          operationId: getGesuchGS
+          summary: Returns the Gesuch with the given Id
+  '/gesuch/sb/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -1771,7 +1934,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1781,7 +1944,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
+      operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
   '/gesuch/{gesuchId}/info':
     parameters:
@@ -1810,6 +1973,104 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
+  /steuerdaten/nesko/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSteuerdatenFromNesko
+      summary: Updates the Steuerdaten from Nesko
+  /steuerdaten/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSteuerdaten
+      summary: Returniert die Steuerdaten der gegebenen gesuchTrancheId.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Steuerdaten'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSteuerdaten
+      summary: Updates the Steuerdaten of the given gesuchTrancheId
   '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
@@ -1837,6 +2098,12 @@ paths:
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/dokument/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Dokument
@@ -1876,12 +2143,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-    parameters:
-      - name: dokumentId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/{gesuchTrancheId}/einreichen':
     patch:
       tags:
@@ -1924,7 +2185,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1938,11 +2199,7 @@ paths:
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -1978,7 +2235,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1992,11 +2249,7 @@ paths:
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
   '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
       tags:
         - Gesuch
@@ -2010,7 +2263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchZurueckweisenResponse'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2880,6 +3133,32 @@ components:
           type: string
         redirectUri:
           type: string
+    CustomDokumentTyp:
+      type: object
+      required:
+        - id
+        - type
+        - description
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+        description:
+          type: string
+    CustomDokumentTypCreate:
+      type: object
+      required:
+        - type
+        - description
+        - trancheId
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        trancheId:
+          $ref: '#/components/schemas/UUID'
     Anrede:
       enum:
         - HERR
@@ -2934,11 +3213,15 @@ components:
         - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
         - DARLEHEN_BELEGE_ANSCHAFFUNGEN
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
+        - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
       type: string
     DokumentArt:
       enum:
         - GESUCH_DOKUMENT
         - UNTERSCHRIFTENBLATT
+        - CUSTOM_DOKUMENT
       type: string
     UnterschriftenblattDokumentTyp:
       type: string
@@ -3060,7 +3343,6 @@ components:
     GesuchDokument:
       required:
         - id
-        - dokumentTyp
         - dokumente
         - status
       type: object
@@ -3069,6 +3351,8 @@ components:
           $ref: '#/components/schemas/UUID'
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
+        customDokumentTyp:
+          $ref: '#/components/schemas/CustomDokumentTyp'
         dokumente:
           type: array
           items:
@@ -3410,6 +3694,13 @@ components:
         einreichedatum:
           format: date
           type: string
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
+    Delegierung:
+      type: object
+      properties:
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
     GesuchInfo:
       required:
         - id
@@ -3417,6 +3708,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canGetBerechnung
       type: object
       properties:
         id:
@@ -3429,6 +3721,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         endDate:
           $ref: '#/components/schemas/LocalDate'
+        canGetBerechnung:
+          type: boolean
     FallDashboardItem:
       required:
         - fall
@@ -3446,6 +3740,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
     AusbildungDashboardItem:
       type: object
       properties:
@@ -3944,10 +4240,10 @@ components:
             $ref: '#/components/schemas/Kind'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKosten'
-        steuerdaten:
+        steuererklaerung:
           type: array
           items:
-            $ref: '#/components/schemas/Steuerdaten'
+            $ref: '#/components/schemas/SteuererklaerungUpdate'
         steuerdatenTabs:
           type: array
           items:
@@ -4071,10 +4367,10 @@ components:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
         darlehen:
           $ref: '#/components/schemas/Darlehen'
-        steuerdaten:
+        steuererklaerung:
           type: array
           items:
-            $ref: '#/components/schemas/SteuerdatenUpdate'
+            $ref: '#/components/schemas/SteuererklaerungUpdate'
     FileUpload:
       format: binary
       type: string
@@ -4671,6 +4967,19 @@ components:
       properties:
         token:
           type: string
+    NeskoGetSteuerdatenRequest:
+      required:
+        - token
+        - steuerdatenTyp
+        - steuerjahr
+      type: object
+      properties:
+        token:
+          type: string
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuerjahr:
+          type: integer
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -4783,7 +5092,20 @@ components:
           type: string
         kantonskuerzel:
           type: string
-    SteuerdatenUpdate:
+    SteuererklaerungUpdate:
+      title: Root Type for Steuererklaerung
+      required:
+        - steuerdatenTyp
+        - steuererklaerungInBern
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuererklaerungInBern:
+          type: boolean
+    Steuerdaten:
       title: Root Type for Steuerdaten
       required:
         - steuernKantonGemeinde
@@ -4832,14 +5154,6 @@ components:
           type: integer
         vermoegen:
           type: integer
-    Steuerdaten:
-      title: Root Type for Steuerdaten
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SteuerdatenUpdate'
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
     SozialdienstBenutzerBase:
       required:
         - vorname
@@ -4900,15 +5214,6 @@ components:
     #   type: object
     #   allOf:
     #     - $ref: '#/components/schemas/SozialdienstAdmin'
-    SozialdienstAdminUpdate:
-      required:
-        - vorname
-        - nachname
-      properties:
-        vorname:
-          type: string
-        nachname:
-          type: string
     SozialdienstCreate:
       required:
         - name
@@ -4939,13 +5244,10 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-    Sozialdienst:
+    SozialdienstSlim:
       required:
         - id
         - name
-        - adresse
-        - iban
-        - sozialdienstAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4953,10 +5255,23 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        iban:
-          type: string
-        sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstBenutzer'
+    Sozialdienst:
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstSlim'
+        - type: object
+          required:
+            - id
+            - name
+            - adresse
+            - iban
+            - sozialdienstAdmin
+          properties:
+            adresse:
+              $ref: '#/components/schemas/Adresse'
+            iban:
+              type: string
+            sozialdienstAdmin:
+              $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -4985,12 +5300,12 @@ components:
       type: object
       required:
         - gesuchTrancheId
-        - dokumentTyp
+        - gesuchDokumentId
       properties:
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
-        dokumentTyp:
-          $ref: '#/components/schemas/DokumentTyp'
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
         dokumentStatus:
           $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
@@ -5174,6 +5489,8 @@ components:
       type: object
       properties:
         anzahlPersonenImHaushalt:
+          type: integer
+        totalVorTeilung:
           type: integer
         eigenerHaushalt:
           type: boolean
@@ -5521,6 +5838,10 @@ components:
     DokumenteToUpload:
       type: object
       properties:
+        customDokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDokumentTyp'
         required:
           type: array
           items:
@@ -5602,6 +5923,16 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchZurueckweisenResponse:
+      type: object
+      required:
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
@@ -5729,13 +6060,18 @@ components:
       required: true
       schema:
         type: integer
+    sozialdienstId:
+      name: sozialdienstId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:
         $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
       in: path
       required: true
-
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
@@ -5751,3 +6087,4 @@ tags:
   - name: Tenant
   - name: Ausbildungsgang
   - name: Mail
+  - name: Delegieren

@@ -26,10 +26,10 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -76,6 +76,12 @@ public class SozialdienstService {
     }
 
     @Transactional
+    public List<SozialdienstSlimDto> getAllSozialdiensteForDelegation() {
+        final var entities = sozialdienstRepository.getSozialdiensteWithMitarbeiter();
+        return entities.map(sozialdienstMapper::toSlimDto).toList();
+    }
+
+    @Transactional
     public SozialdienstDto deleteSozialdienst(UUID id) {
         final var entity = sozialdienstRepository.requireById(id);
         sozialdienstRepository.delete(entity);
@@ -90,25 +96,22 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public SozialdienstBenutzerDto updateSozialdienstAdmin(
-        SozialdienstAdminUpdateDto dto,
-        SozialdienstDto sozialdienstDto
-    ) {
-        final var sozialdienst = sozialdienstRepository.requireById(sozialdienstDto.getId());
-        var sozialdienstAdmin =
-            sozialdienstBenutzerService.getSozialdienstBenutzerById(sozialdienst.getSozialdienstAdmin().getId());
-        var responseDto = sozialdienstBenutzerService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(), dto);
-        return responseDto;
-    }
-
-    @Transactional
     public SozialdienstBenutzerDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var benutzerToDelete = sozialdienst.getSozialdienstAdmin();
-        sozialdienstBenutzerService.deleteSozialdienstAdminBenutzer(benutzerToDelete.getKeycloakId());
+        sozialdienstBenutzerService.deleteSozialdienstBenutzer(benutzerToDelete.getId());
 
         final var newSozialdienstAdmin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto);
         sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
         return sozialdienstBenutzerService.getSozialdienstBenutzerDtoById(newSozialdienstAdmin.getId());
+    }
+
+    @Transactional
+    public boolean isCurrentBenutzerMitarbeiterOfSozialdienst(final UUID sozialdienstId) {
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
+        return currentBenutzer.map(benutzer -> {
+            final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
+            return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
+        }).orElse(false);
     }
 }

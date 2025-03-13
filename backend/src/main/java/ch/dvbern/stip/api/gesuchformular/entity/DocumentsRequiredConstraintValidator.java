@@ -17,14 +17,18 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -37,31 +41,47 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Slf4j
 public class DocumentsRequiredConstraintValidator
     implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
+    private static final String PAGENAME = "dokuments";
     @Inject
-    Instance<RequiredDocumentProducer> producers;
+    Instance<RequiredDocumentsProducer> producers;
+
+    @Inject
+    Instance<RequiredCustomDocumentsProducer> customProducers;
 
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var requiredDocs = producers.stream().map(x -> x.getRequiredDocuments(formular)).toList();
-        final var dokumenteOfType = getRequiredDokumentTypes(formular);
+        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
 
-        final var filtered = requiredDocs.stream()
-            .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
+        final var existingDokumenteOfType = getExistingRequiredDokumentTypes(formular);
+        // when a required doc is not existing in existingDokumenteOfType, it is still missing...
+        var filtered = requiredDocs.stream()
+            .filter(
+                doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !existingDokumenteOfType.contains(dokumentTyp))
+            )
             .map(Pair::getLeft)
             .toList();
+        Set<String> allFiltered = new HashSet<>(filtered);
 
-        if (!filtered.isEmpty()) {
+        // add an entry (pointing to the documents page) for each missing custom document,
+        // so that the GS is informed about which he is required to upload
+        final var customFiltered =
+            DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
+        customFiltered.forEach(missingCustomDok -> allFiltered.add(PAGENAME));
+
+        if (
+            !allFiltered.isEmpty()
+        ) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                filtered
+                allFiltered
             );
         }
 
         return true;
     }
 
-    private Set<DokumentTyp> getRequiredDokumentTypes(GesuchFormular formular) {
+    private Set<DokumentTyp> getExistingRequiredDokumentTypes(GesuchFormular formular) {
         final Function<String, Set<DokumentTyp>> logAndReturn = path -> {
             LOG.error(
                 "If this happens in testing it's OK: {} on GesuchFormular with id '{}' is null",
@@ -86,6 +106,17 @@ public class DocumentsRequiredConstraintValidator
             return logAndReturn.apply("GesuchTranche->GesuchDokumente");
         }
 
-        return gesuchDokumente.stream().map(GesuchDokument::getDokumentTyp).collect(Collectors.toSet());
+        if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
+            return gesuchDokumente.stream()
+                .filter(
+                    gesuchDokument -> !gesuchDokument.getDokumente().isEmpty()
+                )
+                .map(GesuchDokument::getDokumentTyp)
+                .collect(Collectors.toSet());
+        }
+
+        return gesuchDokumente.stream()
+            .map(GesuchDokument::getDokumentTyp)
+            .collect(Collectors.toSet());
     }
 }

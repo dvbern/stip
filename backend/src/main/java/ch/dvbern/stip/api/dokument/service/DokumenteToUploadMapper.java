@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
@@ -28,11 +29,12 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { CustomDocumentTypMapper.class })
 public abstract class DokumenteToUploadMapper {
     public abstract DokumenteToUploadDto toDto(
         final List<DokumentTyp> required,
-        final List<UnterschriftenblattDokumentTyp> unterschriftenblaetter
+        final List<UnterschriftenblattDokumentTyp> unterschriftenblaetter,
+        final List<CustomDokumentTyp> customDokumentTyps
     );
 
     @AfterMapping
@@ -45,6 +47,10 @@ public abstract class DokumenteToUploadMapper {
 
         if (dokumenteToUploadDto.getUnterschriftenblaetter() == null) {
             dokumenteToUploadDto.setUnterschriftenblaetter(new ArrayList<>());
+        }
+
+        if (dokumenteToUploadDto.getCustomDokumentTyps() == null) {
+            dokumenteToUploadDto.setCustomDokumentTyps(new ArrayList<>());
         }
     }
 }

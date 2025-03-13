@@ -23,20 +23,25 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
@@ -69,8 +74,30 @@ public class DokumentResourceImpl implements DokumentResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
+    private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
     private final DokumentAuthorizer dokumentAuthorizer;
+    private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
+        customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
+        final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(createdCustomTyp.getId()).getValue();
+    }
+
+    @Blocking
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Uni<Response> uploadCustomGesuchDokument(
+        UUID customDokumentTypId,
+        FileUpload fileUpload
+    ) {
+
+        customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
+        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
+    }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -107,11 +134,19 @@ public class DokumentResourceImpl implements DokumentResource {
         unterschriftenblattService.removeDokument(dokumentId);
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    @Blocking
+    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(customDokumentTypId);
+        customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
+    }
+
     @RolesAllowed(GESUCH_DELETE)
     @Override
-    @AllowAll
     @Blocking
     public void deleteDokument(UUID dokumentId) {
+        customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 
@@ -132,6 +167,20 @@ public class DokumentResourceImpl implements DokumentResource {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
+        customGesuchDokumentTypAuthorizer.canReadAllTyps();
+        return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
+    }
+
     @Override
     @AllowAll
     @Blocking
@@ -139,7 +188,7 @@ public class DokumentResourceImpl implements DokumentResource {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
 
         return switch (dokumentArt) {
-            case GESUCH_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
+            case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
         };
     }
@@ -166,8 +215,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
-        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)

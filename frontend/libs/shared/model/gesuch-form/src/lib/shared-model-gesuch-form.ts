@@ -1,28 +1,29 @@
-import { SharedModelGesuchFormularPropsSteuerdatenSteps } from '@dv/shared/model/gesuch';
+import { GSFormStepProps, SBFormStepProps } from '@dv/shared/model/gesuch';
 
 export type StepValidation = {
-  errors?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
-  warnings?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
+  errors?: (GSFormStepProps | SBFormStepProps)[];
+  warnings?: (GSFormStepProps | SBFormStepProps)[];
   hasDocuments: boolean | null;
 };
 
 export type StepState = 'VALID' | 'INVALID' | 'WARNING';
 
-export interface SharedModelGesuchFormStep {
+export interface GesuchFormStep {
   route: string;
+  routes?: string[];
   translationKey: string;
   titleTranslationKey: string;
   iconSymbolName: string;
 }
 
-export type SharedModelGesuchFormStepProgress = {
+export type GesuchFormStepProgress = {
   step?: number;
   total: number;
   percentage?: number;
 };
 
-export interface GesuchFormStepView extends SharedModelGesuchFormStep {
-  nextStep?: SharedModelGesuchFormStep;
+export interface GesuchFormStepView extends GesuchFormStep {
+  nextStep?: GesuchFormStep;
   status?: StepState;
   disabled: boolean;
 }

@@ -101,6 +101,7 @@
   <!--  </editor-fold> -->
   
   <!-- <editor-fold desc="v0.36" defaultstate="collapsed"> -->
+  <include file="/db/migration/0.36/0.36.0-KSTIP-1435.xml" />
   <include file="/db/migration/0.36/0.36.0-KSTIP-1605.xml" />
   <!--  </editor-fold> -->
 
@@ -109,5 +110,13 @@
   <include file="/db/migration/0.37/0.37.0-KSTIP-1907.xml" />
   <include file="/db/migration/0.37/0.37.0-KSTIP-1914.xml" />
   <include file="/db/migration/0.37/0.37.0-KSTIP-998.xml" />
+  <!--  </editor-fold> -->
+
+  <!-- <editor-fold desc="v0.38" defaultstate="collapsed"> -->
+  <include file="/db/migration/0.38/0.38.0-KSTIP-1735.xml" />
+  <!--  </editor-fold> -->
+  
+  <!-- <editor-fold desc="v0.39" defaultstate="collapsed"> -->
+    <include file="/db/migration/0.39/0.39.0-KSTIP-1750.xml" />
   <!--  </editor-fold> -->
 </databaseChangeLog>

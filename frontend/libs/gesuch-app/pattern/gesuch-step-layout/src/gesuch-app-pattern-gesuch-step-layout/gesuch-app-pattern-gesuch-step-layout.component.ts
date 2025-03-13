@@ -33,7 +33,8 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
@@ -65,7 +66,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
-  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+  stepSig = input<GesuchFormStep | undefined>(undefined, {
     alias: 'step',
   });
 
@@ -73,6 +74,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
+  private permissionStore = inject(PermissionStore);
   private router = inject(Router);
 
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -88,10 +90,13 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
+    const rolesMap = this.permissionStore.rolesMapSig();
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
       trancheTyp,
       cache.gesuch,
+      rolesMap,
+      undefined,
       invalidFormularProps.validations,
     );
     return validatedSteps;

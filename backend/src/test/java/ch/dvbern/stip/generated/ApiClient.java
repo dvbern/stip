@@ -57,6 +57,9 @@ public class ApiClient {
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }
+    public DelegierenApiSpec delegieren() {
+        return DelegierenApiSpec.delegieren(config.reqSpecSupplier);
+    }
     public DokumentApiSpec dokument() {
         return DokumentApiSpec.dokument(config.reqSpecSupplier);
     }
@@ -92,6 +95,9 @@ public class ApiClient {
     }
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
+    }
+    public SteuerdatenApiSpec steuerdaten() {
+        return SteuerdatenApiSpec.steuerdaten(config.reqSpecSupplier);
     }
     public StipDecisionApiSpec stipDecision() {
         return StipDecisionApiSpec.stipDecision(config.reqSpecSupplier);

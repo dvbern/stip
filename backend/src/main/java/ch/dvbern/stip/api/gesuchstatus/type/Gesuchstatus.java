@@ -45,6 +45,9 @@ public enum Gesuchstatus {
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE =
+        EnumSet.of(IN_BEARBEITUNG_GS, FEHLENDE_DOKUMENTE);
+
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS
@@ -54,8 +57,35 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.of(
+                IN_BEARBEITUNG_SB
+            )
+        );
+
+    public static final Set<Gesuchstatus> SB_IS_EDITING_GESUCH =
+        Collections.unmodifiableSet(
+            EnumSet.of(
                 IN_BEARBEITUNG_SB,
-                ABKLAERUNG_DURCH_RECHSTABTEILUNG
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                BEREIT_FUER_BEARBEITUNG
+            )
+        );
+
+    /*
+     * Alle Gesuchstatus zwischen eingereicht bis verfügt
+     */
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_VIEW_CHANGES =
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                EINGEREICHT,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                JURISTISCHE_ABKLAERUNG,
+                NICHT_ANSPRUCHSBERECHTIGT,
+                ANSPRUCH_MANUELL_PRUEFEN,
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                FEHLENDE_DOKUMENTE,
+                NEGATIVE_VERFUEGUNG,
+                IN_BEARBEITUNG_SB
             )
         );
 
@@ -73,21 +103,14 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
         EnumSet.of(
-            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.VERSANDBEREIT,
             Gesuchstatus.VERSENDET,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.IN_FREIGABE,
-            Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-            Gesuchstatus.EINGEREICHT,
-            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
-            Gesuchstatus.FEHLENDE_DOKUMENTE,
-            Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
             Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH,

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -56,8 +57,11 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
-import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -75,7 +79,6 @@ import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryReposito
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
-import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -94,9 +97,9 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -149,23 +152,46 @@ public class GesuchService {
     private final StipDecisionService stipDecisionService;
     private final ZuordnungService zuordnungService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
     }
 
     @Transactional
-    public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
-        return gesuchRepository.findByIdOptional(gesuchId)
-            .map(
-                gesuch -> gesuchMapperUtil.mapWithTranche(
-                    gesuch,
-                    gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new)
-                )
-            );
+    public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            var trancheInStatusEingereicht =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
+            return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
+        } else {
+            // atkuelles gesuch
+            return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        }
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
+        final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        Optional<GesuchTranche> changes = Optional.empty();
+        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+        }
+        // bis eingereicht: changes: empty/null
+        // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
+        // ab verfügt: changes: empty/null
+        return gesuchMapperUtil.toWithChangesDto(
+            actualGesuch,
+            gesuchTrancheRepository.requireById(gesuchTrancheId),
+            changes.orElse(null)
+        );
     }
 
     @Transactional
@@ -215,74 +241,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateSteuerdatenUpdateLegality(
-        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
-        final GesuchTranche trancheToUpdate
-    ) {
-        final var gesuchsjahr = trancheToUpdate
-            .getGesuch()
-            .getGesuchsperiode()
-            .getGesuchsjahr();
-
-        final var steuerdatenList = trancheToUpdate.getGesuchFormular()
-            .getSteuerdaten()
-            .stream()
-            .filter(tab -> tab.getSteuerdatenTyp() != null)
-            .toList();
-
-        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos) {
-            setAndValidateSteuerdatenTabUpdateLegality(
-                steuerdatenUpdateDto,
-                steuerdatenList.stream()
-                    .filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId()))
-                    .findFirst()
-                    .orElse(null),
-                gesuchsjahr
-            );
-        }
-    }
-
-    private void setAndValidateSteuerdatenTabUpdateLegality(
-        final SteuerdatenUpdateDto steuerdatenUpdateDto,
-        final Steuerdaten steuerdatenTabs,
-        Gesuchsjahr gesuchsjahr
-    ) {
-        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
-        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
-
-        if (steuerdatenTabs != null) {
-            final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
-            final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
-            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                steuerjahrDtoValue,
-                steuerjahrExistingValue,
-                steuerjahrDefaultValue
-            );
-
-            final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
-            final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
-            final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
-                benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
-            );
-        }
-
-        steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        steuerdatenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
-    }
-
-    @Transactional
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
@@ -306,25 +264,11 @@ public class GesuchService {
                 trancheToUpdate
             );
         }
-        if (
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
-        ) {
-            setAndValidateSteuerdatenUpdateLegality(
-                gesuchUpdateDto
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getSteuerdaten(),
-                trancheToUpdate
-            );
-        }
 
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
-        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
-        }
+        gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
 
         final var updatePia = gesuchUpdateDto
             .getGesuchTrancheToWorkWith()
@@ -497,10 +441,6 @@ public class GesuchService {
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
-        gesuch.getGesuchTranchen()
-            .forEach(
-                gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
-            );
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
@@ -554,6 +494,22 @@ public class GesuchService {
     }
 
     @Transactional
+    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(DocumentsRequiredValidationGroup.class);
+        validationGroups.add(LebenslaufItemPageValidation.class);
+        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
+
+        Set<ConstraintViolation<GesuchFormular>> violations =
+            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+    }
+
+    @Transactional
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -573,11 +529,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
+
+        // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
+        return new GesuchZurueckweisenResponseDto()
+            .gesuchId(gesuchId)
+            .gesuchTrancheId(gesuch.getGesuchTranchen().get(0).getId());
     }
 
     @Transactional
@@ -895,5 +856,9 @@ public class GesuchService {
 
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
         && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
+    }
+
+    public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
+        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 }

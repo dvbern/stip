@@ -34,6 +34,7 @@ const generatedApis = [
   'Bildungskategorie',
   'Buchhaltung',
   'Configuration',
+  'Delegieren',
   'Dokument',
   'Fall',
   'Gesuch',
@@ -49,6 +50,7 @@ const generatedApis = [
   'Stammdaten',
   'StipDecision',
   'Tenant',
+  'Steuerdaten',
 ];
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');

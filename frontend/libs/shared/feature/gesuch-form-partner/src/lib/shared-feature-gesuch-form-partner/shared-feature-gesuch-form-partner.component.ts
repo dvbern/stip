@@ -30,6 +30,7 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -38,6 +39,7 @@ import {
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -108,6 +110,7 @@ const MEDIUM_AGE_ADULT = 30;
 export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
+  private permissionStore = inject(PermissionStore);
   private einreichenStore = inject(EinreichenStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private formBuilder = inject(NonNullableFormBuilder);
@@ -232,11 +235,18 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     effect(
       () => {
         const { gesuch, gesuchFormular } = this.viewSig();
+        const rolesMap = this.permissionStore.rolesMapSig();
         const { trancheTyp } = this.cacheSig();
+        const { permissions } = preparePermissions(
+          trancheTyp,
+          gesuch,
+          this.appType,
+          rolesMap,
+        );
         if (
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(PARTNER, trancheTyp, gesuch, this.appType)
+          isStepDisabled(PARTNER, gesuch, permissions)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormPartner.nextStepTriggered({

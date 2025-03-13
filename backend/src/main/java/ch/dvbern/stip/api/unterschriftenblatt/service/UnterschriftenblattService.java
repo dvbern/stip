@@ -51,6 +51,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -248,18 +249,19 @@ public class UnterschriftenblattService {
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
-        final var initialTranche = gesuchTrancheHistoryRepository
-            .findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-
-        GesuchTranche toGetFor;
-        if (initialTranche.isPresent()) {
-            toGetFor = initialTranche.get();
-        } else {
-            if (gesuch.getGesuchTranchen().size() != 1) {
-                throw new IllegalStateException("There are more than 1 Tranchen but none has been Verfuegt");
+        final var gesuchThatWasVerfuegt =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+        GesuchTranche toGetFor = null;
+        if (gesuchThatWasVerfuegt.isPresent()) {
+            final var found = gesuchThatWasVerfuegt.get();
+            final var tranche = found.getGesuchTrancheValidOnDate(found.getGesuchStatusAenderungDatum().toLocalDate());
+            if (tranche.isPresent()) {
+                toGetFor = tranche.get();
             }
+        }
 
-            toGetFor = gesuch.getGesuchTranchen().get(0);
+        if (toGetFor == null) {
+            toGetFor = gesuch.getCurrentGesuchTrancheOptional().orElseThrow(NotFoundException::new);
         }
 
         final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();

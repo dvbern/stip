@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { GesuchStore } from './sachbearbeitung-app-data-access-gesuch.store';
@@ -11,6 +12,7 @@ describe('GesuchStore', () => {
     TestBed.configureTestingModule({
       providers: [
         GesuchStore,
+        provideRouter([]),
         provideHttpClient(),
         provideMockStore({
           initialState: {},

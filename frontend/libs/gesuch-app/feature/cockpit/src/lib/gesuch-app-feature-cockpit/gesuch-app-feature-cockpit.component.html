@@ -10,6 +10,7 @@
 
     @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
       @let fall = dashboard.fall;
+      @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
       <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
         <!-- main column -->
         <div class="tw-flex tw-flex-col tw-gap-8">
@@ -23,7 +24,7 @@
                 (deleteAenderung)="deleteAenderung($event)"
               ></dv-gesuch-app-ui-dashboard-ausbildung>
             }
-          } @else {
+          } @else if (!delegierterSozialdienst) {
             <button
               data-testid="cockpit-create-ausbildung"
               type="button"
@@ -45,7 +46,7 @@
 
         <!-- side column -->
         <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
-          @let sozialdienste = sozialdienstStore.sozialdienste().data;
+          @let sozialdienste = sozialdienstStore.availableSozialdienste().data;
           @if (sozialdienste && sozialdienste.length > 0) {
             <!-- SOZIALDIENST DELEGIEREN -->
             <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
@@ -61,22 +62,29 @@
                     <mat-select
                       #sozialdienst
                       [placeholder]="'gesuch-app.dashboard.gesuch.sozialdienst-waehlen' | translate"
+                      [disabled]="delegierterSozialdienst"
+                      [value]="delegierterSozialdienst"
+                      [compareWith]="compareById"
                     >
-                      @for (sozialdienst of sozialdienstStore.sozialdienste().data; track sozialdienst.id) {
+                      @for (sozialdienst of sozialdienstStore.availableSozialdienste().data; track sozialdienst.id) {
                         <mat-option [value]="sozialdienst">{{ sozialdienst.name }}</mat-option>
                       }
                     </mat-select>
                   </mat-form-field>
-                  @if (sozialdienst.value) {
+                  @if (sozialdienst.value && !delegierterSozialdienst) {
                     <dv-shared-ui-clear-button
                       class="tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center tw-rounded-full tw-bg-[--dv-overridden-body-bg] tw-text-white"
-                      [valueSig]="sozialdienst.value.name"
-                      (clear)="sozialdienst.value = ''"
+                      [valueSig]="sozialdienst.value.id"
+                      (clear)="sozialdienst.value = null"
                     ></dv-shared-ui-clear-button>
                   }
                 </div>
-                @if (sozialdienst.value) {
-                  <button type="button" (click)="delegiereSozialdienst(sozialdienst.value)" class="btn btn-primary">
+                @if (sozialdienst.value && !delegierterSozialdienst) {
+                  <button
+                    type="button"
+                    (click)="delegiereSozialdienst(fall.id, sozialdienst.value)"
+                    class="btn btn-primary"
+                  >
                     {{ 'gesuch-app.dashboard.gesuch.delegieren' | translate }}
                   </button>
                 }

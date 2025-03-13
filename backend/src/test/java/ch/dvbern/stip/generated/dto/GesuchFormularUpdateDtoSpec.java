@@ -25,7 +25,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -51,7 +51,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_KINDS,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_DARLEHEN,
-  GesuchFormularUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN
+  GesuchFormularUpdateDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG
 })
 @JsonTypeName("GesuchFormularUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -86,8 +86,8 @@ public class GesuchFormularUpdateDtoSpec {
   public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
   private DarlehenDtoSpec darlehen;
 
-  public static final String JSON_PROPERTY_STEUERDATEN = "steuerdaten";
-  private List<SteuerdatenUpdateDtoSpec> steuerdaten;
+  public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
+  private List<SteuererklaerungUpdateDtoSpec> steuererklaerung;
 
   public GesuchFormularUpdateDtoSpec() {
   }
@@ -384,37 +384,37 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
 
-  public GesuchFormularUpdateDtoSpec steuerdaten(List<SteuerdatenUpdateDtoSpec> steuerdaten) {
+  public GesuchFormularUpdateDtoSpec steuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     
-    this.steuerdaten = steuerdaten;
+    this.steuererklaerung = steuererklaerung;
     return this;
   }
 
-  public GesuchFormularUpdateDtoSpec addSteuerdatenItem(SteuerdatenUpdateDtoSpec steuerdatenItem) {
-    if (this.steuerdaten == null) {
-      this.steuerdaten = new ArrayList<>();
+  public GesuchFormularUpdateDtoSpec addSteuererklaerungItem(SteuererklaerungUpdateDtoSpec steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
     }
-    this.steuerdaten.add(steuerdatenItem);
+    this.steuererklaerung.add(steuererklaerungItem);
     return this;
   }
 
    /**
-   * Get steuerdaten
-   * @return steuerdaten
+   * Get steuererklaerung
+   * @return steuererklaerung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<SteuerdatenUpdateDtoSpec> getSteuerdaten() {
-    return steuerdaten;
+  public List<SteuererklaerungUpdateDtoSpec> getSteuererklaerung() {
+    return steuererklaerung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuerdaten(List<SteuerdatenUpdateDtoSpec> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  public void setSteuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
   }
 
   @Override
@@ -436,12 +436,12 @@ public class GesuchFormularUpdateDtoSpec {
         Objects.equals(this.kinds, gesuchFormularUpdate.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten) &&
         Objects.equals(this.darlehen, gesuchFormularUpdate.darlehen) &&
-        Objects.equals(this.steuerdaten, gesuchFormularUpdate.steuerdaten);
+        Objects.equals(this.steuererklaerung, gesuchFormularUpdate.steuererklaerung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuerdaten);
+    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuererklaerung);
   }
 
   @Override
@@ -458,7 +458,7 @@ public class GesuchFormularUpdateDtoSpec {
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
-    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
+    sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

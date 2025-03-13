@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -39,12 +41,22 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
     private final EntityManager entityManager;
 
-    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentType(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+    public List<GesuchDokument> findAllByCustomDokumentTypId(UUID customDokumentTypId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
-            .select(gesuchDokument)
-            .from(gesuchDokument)
+            .selectFrom(gesuchDokument)
+            .where(
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId)
+            );
+        return query.stream().toList();
+    }
+
+    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentTyp(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.dokumentTyp.eq(dokumentTyp))
@@ -65,8 +77,9 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     public void dropGesuchDokumentIfNoDokumente(final UUID gesuchDokumentId) {
         final var gesuchDokument = requireById(gesuchDokumentId);
         final var hasNoDokuments = gesuchDokument.getDokumente().isEmpty();
+        final var isCustomGesuchDokument = Objects.nonNull(gesuchDokument.getCustomDokumentTyp());
 
-        if (hasNoDokuments) {
+        if (hasNoDokuments && !isCustomGesuchDokument) {
             gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
             deleteById(gesuchDokumentId);
         }
@@ -83,5 +96,42 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
                 ).and(gesuchDokument.status.eq(dokumentstatus))
             )
             .stream();
+    }
+
+    public Optional<GesuchDokument> findByCustomDokumentTyp(
+        UUID customDokumentTypId
+    ) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .selectFrom(gesuchDokument)
+            .where(
+                gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId)
+            );
+        return query.stream().findFirst();
+    }
+
+    public List<GesuchDokument> findAllOfTypeCustomByGesuchTrancheId(UUID gesuchTrancheId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .selectFrom(gesuchDokument)
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
+                    .and(gesuchDokument.customDokumentTyp.id.isNotNull())
+            );
+        return query.stream().toList();
+    }
+
+    public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .selectFrom(gesuchDokument)
+            .where(
+                (gesuchDokument.customDokumentTyp.id.eq(customDokumentTypId))
+                    .and(gesuchDokument.dokumente.isNotEmpty())
+            );
+        return query.stream().findAny().isPresent();
     }
 }

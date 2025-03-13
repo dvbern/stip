@@ -17,6 +17,7 @@ export interface GesuchInfo {
     gesuchStatus: Gesuchstatus;
     startDate: string;
     endDate: string;
+    canGetBerechnung: boolean;
 }
 
 

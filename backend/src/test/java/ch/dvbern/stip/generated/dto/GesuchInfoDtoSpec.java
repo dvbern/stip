@@ -34,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
-  GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE
+  GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -53,6 +54,9 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
+
+  public static final String JSON_PROPERTY_CAN_GET_BERECHNUNG = "canGetBerechnung";
+  private Boolean canGetBerechnung;
 
   public GesuchInfoDtoSpec() {
   }
@@ -186,6 +190,32 @@ public class GesuchInfoDtoSpec {
     this.endDate = endDate;
   }
 
+
+  public GesuchInfoDtoSpec canGetBerechnung(Boolean canGetBerechnung) {
+    
+    this.canGetBerechnung = canGetBerechnung;
+    return this;
+  }
+
+   /**
+   * Get canGetBerechnung
+   * @return canGetBerechnung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_GET_BERECHNUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanGetBerechnung() {
+    return canGetBerechnung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_GET_BERECHNUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanGetBerechnung(Boolean canGetBerechnung) {
+    this.canGetBerechnung = canGetBerechnung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -199,12 +229,13 @@ public class GesuchInfoDtoSpec {
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.gesuchStatus, gesuchInfo.gesuchStatus) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
-        Objects.equals(this.endDate, gesuchInfo.endDate);
+        Objects.equals(this.endDate, gesuchInfo.endDate) &&
+        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung);
   }
 
   @Override
@@ -216,6 +247,7 @@ public class GesuchInfoDtoSpec {
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

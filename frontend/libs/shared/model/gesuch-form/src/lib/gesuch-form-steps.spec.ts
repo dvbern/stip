@@ -18,7 +18,7 @@ import {
   isStepDisabled,
   isStepValid,
 } from './gesuch-form-steps';
-import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
+import { GesuchFormStep } from './shared-model-gesuch-form';
 
 const partnerCases = [
   ['disable', 'LEDIG', true],
@@ -36,9 +36,7 @@ const alimentAufteilungCases = [
   ['disable', Elternschaftsteilung.GEMEINSAM, true],
 ] as const;
 
-const validationCases = type<
-  [SharedModelGesuchFormStep, keyof GesuchFormularUpdate][]
->([
+const validationCases = type<[GesuchFormStep, keyof GesuchFormularUpdate][]>([
   [PERSON, 'personInAusbildung'],
   [FAMILIENSITUATION, 'familiensituation'],
   [ELTERN, 'elterns'],
@@ -60,7 +58,6 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           PARTNER,
-          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
@@ -72,7 +69,7 @@ describe('GesuchFormSteps', () => {
               },
             },
           } as SharedModelGesuch,
-          'gesuch-app',
+          {},
         ),
       ).toBe(state);
     },
@@ -84,7 +81,6 @@ describe('GesuchFormSteps', () => {
       expect(
         isStepDisabled(
           ELTERN,
-          'TRANCHE',
           {
             gesuchStatus: 'IN_BEARBEITUNG_GS',
             gesuchTrancheToWorkWith: {
@@ -96,7 +92,7 @@ describe('GesuchFormSteps', () => {
               },
             },
           } as SharedModelGesuch,
-          'gesuch-app',
+          {},
         ),
       ).toBe(state);
     },
@@ -106,7 +102,7 @@ describe('GesuchFormSteps', () => {
     'route %s should be valid if %s is set',
     (step, field) => {
       expect(
-        isStepValid(step, { [field]: {} } as any, {
+        isStepValid(step, { [field]: {} } as any, 'gesuch-app', [], {
           errors: [],
           hasDocuments: null,
         }),
@@ -119,6 +115,8 @@ describe('GesuchFormSteps', () => {
       isStepValid(
         LEBENSLAUF,
         { personInAusbildung: {} as any, ausbildung: {} as any },
+        'gesuch-app',
+        [],
         { errors: [], hasDocuments: null },
       ),
     ).toBe('VALID');
@@ -128,7 +126,7 @@ describe('GesuchFormSteps', () => {
     'route %s validity should be undefined if %s is not set',
     (step, field) => {
       expect(
-        isStepValid(step, { [field]: null } as any, {
+        isStepValid(step, { [field]: null } as any, 'gesuch-app', [], {
           errors: [],
           hasDocuments: null,
         }),
@@ -141,6 +139,8 @@ describe('GesuchFormSteps', () => {
       isStepValid(
         LEBENSLAUF,
         { personInAusbildung: undefined, ausbildung: {} as any },
+        'gesuch-app',
+        [],
         { errors: [], hasDocuments: null },
       ),
     ).toBe(undefined);

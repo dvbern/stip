@@ -21,20 +21,23 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.util.AbstractPersonCopyUtil;
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class KindCopyUtil {
-    public Kind createCopy(final Kind other) {
-        final Kind copy = new Kind();
-
-        AbstractPersonCopyUtil.copy(other, copy);
-        copy.setWohnsitzAnteilPia(other.getWohnsitzAnteilPia());
-        copy.setAusbildungssituation(other.getAusbildungssituation());
-        copy.setErhalteneAlimentebeitraege(other.getErhalteneAlimentebeitraege());
-
+    public Kind createCopy(final Kind source) {
+        final var copy = new Kind();
+        copyValues(source, copy);
         return copy;
+    }
+
+    private void copyValues(final Kind source, final Kind target) {
+        AbstractPersonCopyUtil.copy(source, target);
+        target.setWohnsitzAnteilPia(source.getWohnsitzAnteilPia());
+        target.setAusbildungssituation(source.getAusbildungssituation());
+        target.setErhalteneAlimentebeitraege(source.getErhalteneAlimentebeitraege());
     }
 
     public Set<Kind> createCopySet(final Set<Kind> other) {
@@ -44,5 +47,14 @@ public class KindCopyUtil {
         }
 
         return copy;
+    }
+
+    public void doOverrideOfSet(Set<Kind> targetKinder, Set<Kind> sourceKinder) {
+        OverrideUtil.doOverrideOfSet(
+            targetKinder,
+            sourceKinder,
+            KindCopyUtil::copyValues,
+            KindCopyUtil::createCopy
+        );
     }
 }
