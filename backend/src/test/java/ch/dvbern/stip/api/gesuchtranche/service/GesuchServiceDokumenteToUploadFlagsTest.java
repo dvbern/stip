@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -168,7 +169,6 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
 
-
         /* condition 1:
         gesuchstatus is IN_BEARBEITUNG_SB
         or tranche of typ AENDERUNG is in tranchestatus UEBERPRUEFEN
@@ -179,7 +179,6 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
-        // todo: add tests for in_bearbeitung & tranche status
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
 
@@ -229,6 +228,15 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // change status of aenderung
         // arrange
         tranche2.setStatus(GesuchTrancheStatus.AKZEPTIERT);
+        // act
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
+
+        // check that all files have been processed
+        // arrange
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentOfTranche2.setDokumente(List.of(new Dokument()));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert

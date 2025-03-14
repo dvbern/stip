@@ -107,6 +107,12 @@ public class RequiredDokumentService {
                 .map(this::containsAusstehendeDokumenteWithNoFiles)
                 .anyMatch(result -> result == true);
 
+        // check that all GesuchDokuments have been processed
+        final var doesNOTContainAusstehendeGesuchDokumenteWithFiles = gesuch.getGesuchTranchen()
+            .stream()
+            .map(this::containsAusstehendeDokumenteWithFiles)
+            .allMatch(result -> result == false);
+
         // check for GesuchDokumente in state ABGELEHNT
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
@@ -117,6 +123,10 @@ public class RequiredDokumentService {
         final var containsAenderungenNOTInStateUeberpruefen =
             containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
         if (containsAenderungenNOTInStateUeberpruefen) {
+            return false;
+        }
+
+        if (!doesNOTContainAusstehendeGesuchDokumenteWithFiles) {
             return false;
         }
 
@@ -158,6 +168,16 @@ public class RequiredDokumentService {
             .filter(
                 gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
                 && gesuchDokument.getDokumente().isEmpty()
+            )
+            .count() > 0;
+    }
+
+    private boolean containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(
+                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                && !gesuchDokument.getDokumente().isEmpty()
             )
             .count() > 0;
     }
