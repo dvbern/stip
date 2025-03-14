@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -42,6 +39,9 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -116,41 +116,33 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
     }
 
-    /*
-     * flag is true when
-     * gesuchstatus must be FEHLENDE_DOKUMENTE
-     * all required (also custom) gesuchdokuments of all tranchen must contain at least 1 file
-     */
     @Test
     void testGSCanDokumenteUebermitteln() {
-        // overall arrange
+        /*
+         * Gesuchstatus must be EHLENDE_DOKUMENTE
+        */
+        // arrange
         when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
         when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
-
-        /** condition1: Gesuchstatus must be FEHLENDE_DOKUMENTE **/
-        // arrange
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         // act
         var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
 
-        // reset gesuchstatus for next tests
+        /*
+         * There must be NO required documents
+         */
+        // arrange
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenCallRealMethod();
-
-        /** condition2: no documents must be required anymore **/
-        /* case: no missing documents */
-        // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(true));
 
-        /* case: one normal missing & one custom missing document */
         // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of(new CustomDokumentTyp()));
@@ -162,31 +154,27 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
 
     @Test
     void sbCanFehlendeDokumenteUebermittelnTest() {
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
-        when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
-
-        // ignore behaviour of producers for the following tests
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-
-        /* condition 1:
-        gesuchstatus is IN_BEARBEITUNG_SB
-        or tranche of typ AENDERUNG is in tranchestatus UEBERPRUEFEN
+        /*
+         * Gesuchstatus must be IN_BEARBEITUNG_SB
          */
         // arrange
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
+        when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuch.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
         // act
         var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
-        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-
-        /* condition 2:
-        there are gesuchdokuments in status ausstehend without file (change made by sb, or custom dokument)
+        /*
+         * At least one of the following must exist:
+         * a change made by SB
+         * a newly added custom GesuchDokument
          */
         // arrange
-        // all accepted -> no missing documents
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
@@ -194,7 +182,6 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
-        // 1 ausstehend, 1 denied -> missing documents
         // arrange
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
@@ -203,8 +190,8 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
-        /* condition 3:
-        or gesuchdokuments in status abgelehnt
+        /*
+         * check for ABGELEHNTE GesuchDokuments as well
          */
         // arrange
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.ABGELEHNT);
@@ -214,18 +201,17 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
-        /* check AENDERUNG status as well */
-        // check that all tranchen of type aenderung are in tranchestatus UEBERPRUEFEN, otherwise the flag is false
-
-        // set tranche 2 to be an AENDERUNG
-        tranche2.setTyp(GesuchTrancheTyp.AENDERUNG);
+        /*
+         *  check that all tranchen of type aenderung are in tranchestatus UEBERPRUEFEN,
+         *  otherwise the flag is false
+         */
         // arrange
+        tranche2.setTyp(GesuchTrancheTyp.AENDERUNG);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
-        // change status of aenderung
         // arrange
         tranche2.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // act
@@ -233,7 +219,9 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
-        // check that all files have been processed
+        /*
+         * check that all files have been processed by SB
+         */
         // arrange
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setDokumente(List.of(new Dokument()));
@@ -242,7 +230,9 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
-        // test with documents appearing in one producer
+        /*
+         * test with documents appearing in one producer
+         */
         // arrange
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
@@ -252,21 +242,16 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
     }
 
-    /*
-     * all (existing)gesuchdokuments over all tranchen are AKZEPTIERT
-     * no gesuchdokument is required (e.g. after a change by SB)
-     * the logic used in pageValidation (endpoint bearbeitungAbschliessen) should also be considered during evaluation
-     * of this flag
-     */
+
     @Test
     void sbCanBearbeitungAbschliessenTest() {
+        /*
+         * all GesuchDokuments must be accepted
+         */
+        // arrange
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
         when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
-        // ignore validation for the moment
         Mockito.doNothing().when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
-
-        // case: no dokument required, all accepted (ignore page validation)
-        // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
@@ -276,7 +261,6 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(true));
 
-        // case: no dokument required, one not accepted (ignore page validation)
         // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
@@ -287,7 +271,9 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
 
-        // case: one doc required,  (ignore page validation)
+        /*
+         * No GesuchDokument should be required
+         */
         // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
@@ -298,10 +284,11 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
 
-        //test with pageValidation
-        Mockito.doThrow(ValidationsException.class).when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
-        // case: no dokument required, all accepted
+        /*
+         * also test validation
+         */
         // arrange
+        Mockito.doThrow(ValidationsException.class).when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
