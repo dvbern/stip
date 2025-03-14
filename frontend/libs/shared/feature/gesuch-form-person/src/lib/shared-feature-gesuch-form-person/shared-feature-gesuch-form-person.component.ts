@@ -82,6 +82,7 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  dateFromMonthYearString,
   getDateDifference,
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
@@ -98,6 +99,7 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 const MIN_AGE_GESUCHSSTELLER = 10;
 const MAX_AGE_GESUCHSSTELLER = 130;
 const MEDIUM_AGE_GESUCHSSTELLER = 20;
+const BEGRUENDUNGSSCHREIBEN_AGE = 35;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
@@ -201,24 +203,28 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
-  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(() => {
-    const geburtstag = this.geburtstagChangedSig();
-    const currentDay = new Date();
+  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(
+    () => {
+      const geburtstag = this.geburtstagChangedSig();
+      const currentDay = dateFromMonthYearString(
+        this.viewSig().gesuchFormular?.ausbildung.ausbildungBegin,
+      );
 
-    if (!geburtstag) return null;
+      if (!geburtstag || !currentDay) return null;
 
-    const geburtsdatum = geburtstag
-      ? getDateDifference(geburtstag, currentDay)
-      : null;
+      const geburtsdatum = getDateDifference(geburtstag, currentDay);
 
-    const alter = geburtsdatum?.years ?? 0;
+      const alter = geburtsdatum?.years ?? 0;
 
-    if (alter >= MAX_AGE_GESUCHSSTELLER) return null;
-
-    return alter > 35
-      ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_35
-      : null;
-  });
+      return alter > BEGRUENDUNGSSCHREIBEN_AGE
+        ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_35
+        : null;
+    },
+    {
+      descriptionKey:
+        'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_UEBER_35.info',
+    },
+  );
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();

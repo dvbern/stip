@@ -13,9 +13,7 @@
   </h4>
 
   @if (data.options.descriptionKey) {
-    <div class="tw-px-8">
-      {{ data.options.descriptionKey | translate }}
-    </div>
+    <div class="tw-whitespace-pre-wrap tw-px-8" [innerHTML]="data.options.descriptionKey | translate"></div>
   }
 
   @if (showUplaodSig()) {
