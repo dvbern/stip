@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -29,14 +28,13 @@ import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.util.RequiredDokumentUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -48,39 +46,12 @@ public class RequiredDokumentService {
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
     private final GesuchService gesuchService;
 
-    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
-        return formular
-            .getTranche()
-            .getGesuchDokuments()
-            .stream()
-            .filter(
-                dokument -> !dokument.getDokumente().isEmpty()
-                && Objects.nonNull(dokument.getDokumentTyp())
-            )
-            .map(GesuchDokument::getDokumentTyp)
-            .toList();
-    }
-
-    private Set<DokumentTyp> getDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
-        return formular
-            .getTranche()
-            .getGesuchDokuments()
-            .stream()
-            .filter(
-                gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
-                && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
-            )
-            .map(GesuchDokument::getDokumentTyp)
-            .collect(Collectors.toSet());
-    }
-
     public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
         if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
             return false;
         }
         /* check for any (normal | custom) required GesuchDokuments */
         var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
-
         return !isAnyDocumentStillRequired;
     }
 
@@ -111,18 +82,18 @@ public class RequiredDokumentService {
         final var containsAusstehendeGesuchDokumenteWithoutFiles =
             gesuch.getGesuchTranchen()
                 .stream()
-                .map(this::containsAusstehendeDokumenteWithNoFiles)
+                .map(RequiredDokumentUtil::containsAusstehendeDokumenteWithNoFiles)
                 .anyMatch(result -> result == true);
 
         // check for GesuchDokumente in state ABGELEHNT
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
-            .map(this::containsAbgelehnteDokumente)
+            .map(RequiredDokumentUtil::containsAbgelehnteDokumente)
             .anyMatch(result -> result == true);
 
         // check for AENDERUNGEN that are NOT in state UEBERPRUEFEN
         final var containsAenderungenNOTInStateUeberpruefen =
-            containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
+            RequiredDokumentUtil.containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
         if (containsAenderungenNOTInStateUeberpruefen) {
             return false;
         }
@@ -131,11 +102,11 @@ public class RequiredDokumentService {
         || containsAbgelehnteGesuchDokumente;
     }
 
-    // true when all (existing)gesuchdokuments over all tranchen are AKZEPTIERT
+    // true when all (existing) gesuchdokuments over all tranchen are AKZEPTIERT
     public boolean getSBCanBearbeitungAbschliessen(final Gesuch gesuch) {
         final var allExistingDocumentsAccepted = gesuch.getGesuchTranchen()
             .stream()
-            .map(this::allGesuchDokumentsAreAcceptedInTranche)
+            .map(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche)
             .allMatch(result -> result == true);
         final var noRequiredDocumentsExisting = gesuch.getGesuchTranchen()
             .stream()
@@ -160,44 +131,10 @@ public class RequiredDokumentService {
         });
     }
 
-    private boolean containsAusstehendeDokumenteWithNoFiles(final GesuchTranche gesuchTranche) {
-        return gesuchTranche.getGesuchDokuments()
-            .stream()
-            .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
-                && gesuchDokument.getDokumente().isEmpty()
-            )
-            .count() > 0;
-    }
-
-    private boolean containsAbgelehnteDokumente(final GesuchTranche gesuchTranche) {
-        return gesuchTranche.getGesuchDokuments()
-            .stream()
-            .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.ABGELEHNT)
-            )
-            .count() > 0;
-    }
-
-    private boolean allGesuchDokumentsAreAcceptedInTranche(final GesuchTranche gesuchTranche) {
-        return gesuchTranche.getGesuchDokuments()
-            .stream()
-            .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT));
-    }
-
-    private boolean containsAenderungNOTInTrancheStatus(
-        final Gesuch gesuch,
-        final GesuchTrancheStatus trancheStatus
-    ) {
-        return gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG))
-            .anyMatch(tranche -> !tranche.getStatus().equals(trancheStatus));
-    }
-
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
         final var tranche = gesuchDokument.getGesuchTranche();
-        final var requiredNormalDocuments = getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular());
+        final var requiredNormalDocuments = RequiredDokumentUtil
+            .getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular(), requiredDocumentProducers);
         final var requiredCustomDocuments = getRequiredCustomDokumentsForGesuchFormular(tranche);
         if (Objects.isNull(gesuchDokument.getCustomDokumentTyp())) {
             return requiredNormalDocuments.contains(gesuchDokument.getDokumentTyp());
@@ -206,34 +143,15 @@ public class RequiredDokumentService {
         return requiredCustomDocuments.contains(gesuchDokument.getCustomDokumentTyp());
     }
 
-    private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
-        return requiredDocumentProducers
-            .stream()
-            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
-            .flatMap(
-                dokumentTypPair -> dokumentTypPair.getRight().stream()
-            )
-            .collect(Collectors.toSet());
-    }
-
-    private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return requiredCustomDocumentProducers
-            .stream()
-            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(tranche))
-            .flatMap(
-                dokumentTypPair -> dokumentTypPair.getRight().stream()
-            )
-            .collect(Collectors.toSet());
-    }
-
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
         final var existingDokumentTypesHashSet = new HashSet<>(
-            getExistingDokumentTypesForGesuch(formular)
+            RequiredDokumentUtil.getExistingDokumentTypesForGesuch(formular)
         );
 
-        final var requiredDokumentTypes = getRequiredDokumentTypesForGesuch(formular);
+        final var requiredDokumentTypes =
+            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDocumentProducers);
         final var notAcceptedDokumentTypes =
-            getDokumentTypesWithNoFilesAttached(formular);
+            RequiredDokumentUtil.getDokumentTypesWithNoFilesAttached(formular);
 
         return requiredDokumentTypes
             .stream()
@@ -255,7 +173,8 @@ public class RequiredDokumentService {
             .collect(Collectors.toCollection(HashSet::new));
 
         // get required GesuchDokumente of current tranche
-        final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(tranche);
+        final var requiredDokumentTypes =
+            RequiredDokumentUtil.getRequiredCustomDokumentTypesForGesuch(tranche, requiredCustomDocumentProducers);
 
         // check if there is any mismatch / still missing GesuchDokument
         return requiredDokumentTypes
@@ -267,10 +186,10 @@ public class RequiredDokumentService {
     }
 
     public List<GesuchDokument> getSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
-        final var existingDokumentTypes = getExistingDokumentTypesForGesuch(formular);
+        final var existingDokumentTypes = RequiredDokumentUtil.getExistingDokumentTypesForGesuch(formular);
 
         final var requiredDokumentTypesHashSet = new HashSet<>(
-            getRequiredDokumentTypesForGesuch(formular)
+            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDocumentProducers)
         );
 
         final var superfluousDokumentTypes = existingDokumentTypes
