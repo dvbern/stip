@@ -1,18 +1,22 @@
 import { expect } from '@playwright/test';
 
 import {
-  SmallImageFile,
+  expectInfoTitleToContainText,
   expectStepTitleToContainText,
   getE2eUrls,
   today,
+  uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
 import { setupGesuchWithApi } from '../../initialize-test-api';
 import { FreigabePO } from '../../po/freigabe.po';
+import { GeschwisterPO } from '../../po/geschwister.po';
 import { PersonPO } from '../../po/person.po';
 import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
 import { StepsNavPO } from '../../po/steps-nav.po';
+import { TrancheInfoPO } from '../../po/tranche-info.po';
+import { bruder } from '../../test-data/aenderung-test-data';
 import {
   ausbildungValues,
   gesuchFormularUpdateFn,
@@ -26,9 +30,7 @@ const { test, getGesuchId, getTrancheId } = initializeTest(
 
 test('Aenderung erstellen', async ({ page, cockpit }) => {
   test.slow();
-
   const urls = getE2eUrls();
-
   const requiredDokumenteResponse = page.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload',
   );
@@ -39,21 +41,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   );
   await expectStepTitleToContainText('Dokumente', page);
   await requiredDokumenteResponse;
-  const uploads = await page
-    .locator('[data-testid^="button-document-upload"]')
-    .all();
-  for (const upload of uploads) {
-    const uploadCall = page.waitForResponse(
-      (response) =>
-        response.url().includes('/api/v1/gesuchDokument') &&
-        response.request().method() === 'POST',
-    );
-    await upload.click();
-    await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await page.keyboard.press('Escape');
-    await expect(page.getByTestId('file-input')).toHaveCount(0);
-    await uploadCall;
-  }
+  await uploadFiles(page);
   await page.getByTestId('button-continue').click();
 
   // Freigabe ===========================================================
@@ -69,9 +57,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await page.goto(
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
-
   const headerNav = new SachbearbeiterGesuchHeaderPO(page);
-
   await headerNav.elems.trancheMenu.click();
   await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
   await page.locator('.cdk-overlay-backdrop').click();
@@ -81,9 +67,8 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await headerNav.elems
     .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
     .click();
-
-  // kommentar dialog
   await page.getByTestId('dialog-confirm').click();
+
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems
     .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
@@ -91,28 +76,25 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
 
   // accept all documents =================================================
   const stepsNavPO = new StepsNavPO(page);
-
   const requiredDokumenteResp = page.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload',
   );
-
   await stepsNavPO.elems.dokumente.first().click();
-
   await expectStepTitleToContainText('Dokumente', page);
   await requiredDokumenteResp;
 
   const acceptDocumentsButtons = await page
     .locator('[data-testid="dokument-akzeptieren"]')
     .count();
-
   for (let i = 0; i < acceptDocumentsButtons; i++) {
-    const acceptCall = page.waitForResponse(
+    const documentsToUploadReq = page.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload',
     );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente',
+    );
     await page.getByTestId('dokument-akzeptieren').first().click();
-    await acceptCall;
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(200);
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
   }
 
   // bearbeitung abschliessen ===============================================
@@ -124,14 +106,12 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     .getAktionStatusUebergangItem('BEARBEITUNG_ABSCHLIESSEN')
     .click();
   await abschliesenPromise;
-
   const verfuegtPromise = page.waitForResponse(
     '**/api/v1/gesuch/status/verfuegt/*',
   );
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems.getAktionStatusUebergangItem('VERFUEGT').click();
   await verfuegtPromise;
-
   const versendetPromise = page.waitForResponse(
     '**/api/v1/gesuch/status/versendet/*',
   );
@@ -140,7 +120,6 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await versendetPromise;
 
   // // Go to GS App ===============================================================
-
   await page.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
   await cockpit.elems.cereateAaederung.click();
 
@@ -153,14 +132,12 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     .fill('E2E Testkommentar');
 
   await page.getByTestId('dialog-confirm').click();
-
   await expectStepTitleToContainText('Person in Ausbildung', page);
 
   // make a change in the form
   const personPO = new PersonPO(page);
   await personPO.elems.nachname.fill('E2E-Changed');
   await personPO.elems.buttonSaveContinue.click();
-
   // verify the change
   await stepsNavPO.elems.person.first().click();
   await expectStepTitleToContainText('Person in Ausbildung', page);
@@ -173,8 +150,6 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await expect(
     stepsNavPO.elems.person.first().locator('dv-shared-ui-change-indicator'),
   ).toBeVisible();
-
-  // could add more complex changes here, vater or mutter etc.
 
   // submit the change
   await stepsNavPO.elems.abschluss.first().click();
@@ -189,5 +164,31 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   const response = await freigabeAenderungResponse;
   expect(response.status()).toBe(204);
 
-  // could add switch to SB app and check and accept the change
+  // Go to Aenderung on SB App ==========================================================
+  await page.goto(
+    `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
+  );
+  await headerNav.elems.aenderungenMenu.click();
+  await expect(headerNav.elems.aenderungenMenuItems).toHaveCount(2);
+  await headerNav.elems.aenderungenMenuItems.first().click();
+  await expectInfoTitleToContainText('Änderung 1', page);
+
+  await stepsNavPO.elems.geschwister.first().click();
+  await expectStepTitleToContainText('Geschwister', page);
+  const geschwisterPO = new GeschwisterPO(page);
+  await expect(geschwisterPO.elems.loading).toBeHidden();
+  await geschwisterPO.addGeschwister(bruder);
+  await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
+  await geschwisterPO.elems.buttonContinue.click();
+
+  // Accept the Aenderung ==========================================================
+  await stepsNavPO.elems.info.first().click();
+  await expectInfoTitleToContainText('Änderung 1', page);
+  const trancheInfoPO = new TrancheInfoPO(page);
+  const aenderungAcceptResponse = page.waitForResponse(
+    '**/api/v1/gesuchtranche/*/aenderung/akzeptieren',
+  );
+  await trancheInfoPO.elems.aenderungAccept.click();
+  const acceptResponse = await aenderungAcceptResponse;
+  expect(acceptResponse.status()).toBe(200);
 });

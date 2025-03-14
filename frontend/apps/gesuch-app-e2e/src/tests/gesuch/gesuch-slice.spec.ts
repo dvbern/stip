@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
 
 import {
-  SmallImageFile,
   expectStepTitleToContainText,
   getE2eUrls,
+  uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
@@ -148,31 +148,13 @@ test.describe('Neues gesuch erstellen', () => {
     await darlehenPO.elems.buttonSaveContinue.click();
 
     // Step 10: Dokumente ===========================================================
-
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
-
-    const uploads = await page
-      .locator('[data-testid^="button-document-upload"]')
-      .all();
-    for (const upload of uploads) {
-      const uploadCall = page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/v1/gesuchDokument') &&
-          response.request().method() === 'POST',
-      );
-      await upload.click();
-      await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-      await page.keyboard.press('Escape');
-      await expect(page.getByTestId('file-input')).toHaveCount(0);
-      await uploadCall;
-    }
-
+    await uploadFiles(page);
     await page.getByTestId('button-continue').click();
 
     // Step 11: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
-
     await page.getByTestId('button-abschluss').click();
     const freigabeResponse = page.waitForResponse(
       '**/api/v1/gesuch/*/einreichen',
@@ -193,7 +175,7 @@ test.describe('Neues gesuch erstellen', () => {
       timeout: 10000,
     });
 
-    // check if the i element in steuerdaten steps has the correct icon, by checking the text
+    // check if the i element in steuerdaten steps has the correct icon
     const stepsNavPO = new StepsNavPO(page);
     const icon = stepsNavPO.elems.steuerdatenMutter
       .locator('.text-danger')
@@ -203,7 +185,7 @@ test.describe('Neues gesuch erstellen', () => {
     // set to bearbeiten
     const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
 
-    // @scph why ist this gesuch alreay bereit fuer bearbeitung?
+    // commented out since geusch is in allready in bereit für Bearbeitung, but that might change in the future
     // await headerNavPO.elems.aktionMenu.click();
     // await headerNavPO.elems
     //   .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
@@ -219,42 +201,33 @@ test.describe('Neues gesuch erstellen', () => {
     const status = page.getByTestId('form-tranche-status');
     await expect(status).toHaveValue('In Bearbeitung');
 
-    await stepsNavPO.elems.steuerdatenMutter.first().click();
-
-    await expectStepTitleToContainText('Steuerdaten Mutter', page);
     // fill steuerdaten ===========================================================
-
+    await stepsNavPO.elems.steuerdatenMutter.first().click();
+    await expectStepTitleToContainText('Steuerdaten Mutter', page);
     const steuerDatenPO = new SteuerdatenPO(page);
     await steuerDatenPO.fillSteuerdaten(steuerdaten);
-
     await steuerDatenPO.elems.buttonSaveContinue.click();
 
     // Go to Berechnung ===========================================================
     // will log the user out if verfuegung is not available yet!
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
-
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
       { timeout: 10000 },
     );
-
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
-
     await expect(
       page.getByTestId('berechnung-persoenlich-total'),
     ).toContainText("- 14'974");
-
     await expect(page.getByTestId('berechnung-familien-total')).toContainText(
       "- 55'492",
     );
 
     // Go to Gesuch infos =========================================================
     await page.getByTestId('sb-gesuch-header-infos-link').click();
-
     await expect(page.getByTestId('step-title')).toContainText(
       'Gesuchsverlauf',
     );
-
     await expect(
       page.getByRole('cell', { name: 'Bereit für Bearbeitung' }),
     ).toBeVisible();

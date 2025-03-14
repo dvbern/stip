@@ -9,7 +9,7 @@ export class GeschwisterPO {
     page: Page;
     loading: Locator;
     addGeschwister: Locator;
-
+    geschwisterRow: Locator;
     buttonContinue: Locator;
     buttonNext: Locator;
   };
@@ -19,7 +19,7 @@ export class GeschwisterPO {
       page,
       loading: page.getByTestId('form-geschwister-loading'),
       addGeschwister: page.getByTestId('button-add-geschwister'),
-
+      geschwisterRow: page.getByTestId('geschwister-row'),
       buttonContinue: page.getByTestId('button-continue'),
       buttonNext: page.getByTestId('button-next'),
     };
