@@ -323,6 +323,8 @@
   "shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C.info": "Sie haben eine Niederlassungsbewilligung C (auch Permis C genannt).",
   "shared.form.person.file.FLUECHTLING": "Asylausweis",
   "shared.form.person.file.FLUECHTLING.info": "Sie sind entweder als Flüchtling anerkannt oder vorläufig aufgenommen und dem Kanton Bern zugewiesen.",
+  "shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_UEBER_35": "Begründungsschreiben Alter ü35",
+  "shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_UEBER_35.info": "Nach dem vollendeten 35. Altersjahr besteht kein Anspruch auf Ausbildungsbeiträge mehr, ausser wenn\ndie Ausbildung dem beruflichen Einstieg oder Wiedereinstieg nach einer Familienphase oder nach der Betreuung von Angehörigen dient,\noder wichtige Gründe nachgewiesen werden, welche ein Fortsetzen der bisherigen Berufstätigkeit wesentlich erschweren (Art. 14 Abs. 4 des Gesetzes über die Ausbildungsbeiträge [ABG]).\n\nFalls Sie einen den obenstehenden Gründe geltend machen möchten, bitten wir Sie, uns Ihre Situation in einem Schreiben zu erläutern und dieses Begründungsschreiben hier hochzuladen.",
   "shared.form.person.file.VORMUNDSCHAFT": "KESB Verfügung oder Ernennungsurkunde",
   "shared.form.person.file.EIGENER_HAUSHALT": "Mietvertrag oder Hauptmietvertrag / Untermietvertrag",
   "shared.form.person.file.SOZIALHILFE": "Sozialhilfebudget",

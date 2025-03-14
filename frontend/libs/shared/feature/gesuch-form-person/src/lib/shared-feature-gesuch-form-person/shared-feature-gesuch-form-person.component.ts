@@ -82,6 +82,7 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  getDateDifference,
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
@@ -200,6 +201,24 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
+  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    const geburtstag = this.geburtstagChangedSig();
+    const currentDay = new Date();
+
+    if (!geburtstag) return null;
+
+    const geburtsdatum = geburtstag
+      ? getDateDifference(geburtstag, currentDay)
+      : null;
+
+    const alter = geburtsdatum?.years ?? 0;
+
+    if (alter >= MAX_AGE_GESUCHSSTELLER) return null;
+
+    return alter > 35
+      ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_35
+      : null;
+  });
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
@@ -247,6 +266,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           subYears(new Date(), MAX_AGE_GESUCHSSTELLER),
           'date',
         ),
+
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_GESUCHSSTELLER),
@@ -301,6 +321,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   private zivilstandChangedSig = toSignal(
     this.form.controls.zivilstand.valueChanges,
+  );
+  private geburtstagChangedSig = toSignal(
+    this.form.controls.geburtsdatum.valueChanges,
   );
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
