@@ -79,7 +79,13 @@ public class RequiredDokumentService {
             return false;
         }
         /* check for any (normal | custom) required GesuchDokuments */
-        var isAnyDocumentStillRequired = gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
+        var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
+
+        return !isAnyDocumentStillRequired;
+    }
+
+    private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
+        return gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
             // check for any still required GesuchDokuments.
             var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
             var gesuchDokumenteStilRequired =
@@ -91,8 +97,6 @@ public class RequiredDokumentService {
             }
             return true;
         }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
-
-        return !isAnyDocumentStillRequired;
     }
 
     // true, when all gesuchdokuments in state AUSSTEHEND contain no files
@@ -100,18 +104,15 @@ public class RequiredDokumentService {
         if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
             return false;
         }
+        /* check for any (normal | custom) required GesuchDokuments */
+        final var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
+
         // check for AUSSTEHENDE GesuchDokumente with no files
         final var containsAusstehendeGesuchDokumenteWithoutFiles =
             gesuch.getGesuchTranchen()
                 .stream()
                 .map(this::containsAusstehendeDokumenteWithNoFiles)
                 .anyMatch(result -> result == true);
-
-        // check that all GesuchDokuments have been processed
-        final var doesNOTContainAusstehendeGesuchDokumenteWithFiles = gesuch.getGesuchTranchen()
-            .stream()
-            .map(this::containsAusstehendeDokumenteWithFiles)
-            .allMatch(result -> result == false);
 
         // check for GesuchDokumente in state ABGELEHNT
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
@@ -126,11 +127,8 @@ public class RequiredDokumentService {
             return false;
         }
 
-        if (!doesNOTContainAusstehendeGesuchDokumenteWithFiles) {
-            return false;
-        }
-
-        return containsAusstehendeGesuchDokumenteWithoutFiles || containsAbgelehnteGesuchDokumente;
+        return isAnyDocumentStillRequired || containsAusstehendeGesuchDokumenteWithoutFiles
+        || containsAbgelehnteGesuchDokumente;
     }
 
     // true when all (existing)gesuchdokuments over all tranchen are AKZEPTIERT
@@ -168,16 +166,6 @@ public class RequiredDokumentService {
             .filter(
                 gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
                 && gesuchDokument.getDokumente().isEmpty()
-            )
-            .count() > 0;
-    }
-
-    private boolean containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {
-        return gesuchTranche.getGesuchDokuments()
-            .stream()
-            .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
-                && !gesuchDokument.getDokumente().isEmpty()
             )
             .count() > 0;
     }

@@ -165,7 +165,7 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
         when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
 
-        // ignore behaviour of producers, since they are not required
+        // ignore behaviour of producers for the following tests
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
 
@@ -241,6 +241,15 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
+
+        // test with documents appearing in one producer
+        // arrange
+        tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
+        // act
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        // assert
+        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
     }
 
     /*
