@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
@@ -39,6 +34,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 public class RequiredDokumentService {
@@ -50,50 +50,39 @@ public class RequiredDokumentService {
         if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
             return false;
         }
-        /* check for any (normal | custom) required GesuchDokuments */
         var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
         return !isAnyDocumentStillRequired;
     }
 
     private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
         return gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
-            // check for any still required GesuchDokuments.
             var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
             var gesuchDokumenteStilRequired =
                 !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
             // if any normal or custom GesuchDokument is still required,
             // the returned flag must be false
-            if (customDokumentsStillRequired || gesuchDokumenteStilRequired) {
-                return false;
-            }
-            return true;
+            return !(customDokumentsStillRequired || gesuchDokumenteStilRequired);
         }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
     }
 
-    // true, when all gesuchdokuments in state AUSSTEHEND contain no files
     public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
         if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
             return false;
         }
-        /* check for any (normal | custom) required GesuchDokuments */
         final var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
 
-        // check for AUSSTEHENDE GesuchDokumente with no files
         final var containsAusstehendeGesuchDokumenteWithoutFiles =
             gesuch.getGesuchTranchen()
                 .stream()
-                .map(RequiredDokumentUtil::containsAusstehendeDokumenteWithNoFiles)
-                .anyMatch(result -> result == true);
+                .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithNoFiles);
 
-        // check for GesuchDokumente in state ABGELEHNT
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
-            .map(RequiredDokumentUtil::containsAbgelehnteDokumente)
-            .anyMatch(result -> result == true);
+            .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
 
-        // check for AENDERUNGEN that are NOT in state UEBERPRUEFEN
         final var containsAenderungenNOTInStateUeberpruefen =
             RequiredDokumentUtil.containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
+
         if (containsAenderungenNOTInStateUeberpruefen) {
             return false;
         }
@@ -102,20 +91,16 @@ public class RequiredDokumentService {
         || containsAbgelehnteGesuchDokumente;
     }
 
-    // true when all (existing) gesuchdokuments over all tranchen are AKZEPTIERT
     public boolean getSBCanBearbeitungAbschliessen(final Gesuch gesuch) {
         final var allExistingDocumentsAccepted = gesuch.getGesuchTranchen()
             .stream()
-            .map(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche)
-            .allMatch(result -> result == true);
+            .allMatch(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche);
         final var noRequiredDocumentsExisting = gesuch.getGesuchTranchen()
             .stream()
-            .map(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular()).isEmpty())
-            .allMatch(result -> result == true);
+            .allMatch(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular()).isEmpty());
         final var noCustomRequiredDocumentsExisting = gesuch.getGesuchTranchen()
             .stream()
-            .map(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty())
-            .allMatch(result -> result == true);
+            .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
         try {
             validateBearbeitungAbschliessenForAllTranchen(gesuch);
 
