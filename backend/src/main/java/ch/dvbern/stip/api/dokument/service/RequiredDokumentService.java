@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -30,7 +29,6 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.RequiredDokumentUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -44,7 +42,6 @@ import lombok.RequiredArgsConstructor;
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
-    private final GesuchService gesuchService;
 
     public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
         if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
@@ -101,19 +98,7 @@ public class RequiredDokumentService {
         final var noCustomRequiredDocumentsExisting = gesuch.getGesuchTranchen()
             .stream()
             .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
-        try {
-            validateBearbeitungAbschliessenForAllTranchen(gesuch);
-
-        } catch (ValidationsException e) {
-            return false;
-        }
         return allExistingDocumentsAccepted && noRequiredDocumentsExisting && noCustomRequiredDocumentsExisting;
-    }
-
-    public void validateBearbeitungAbschliessenForAllTranchen(final Gesuch gesuch) {
-        gesuch.getGesuchTranchen().forEach(tranche -> {
-            gesuchService.validateBearbeitungAbschliessen(tranche.getId());
-        });
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {

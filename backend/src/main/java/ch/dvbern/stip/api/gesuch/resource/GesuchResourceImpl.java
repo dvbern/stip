@@ -39,7 +39,9 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
@@ -95,6 +97,8 @@ public class GesuchResourceImpl implements GesuchResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
+    private final GesuchValidatorService gesuchValidatorService;
+    private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -400,7 +404,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
 
-        gesuchService.validateBearbeitungAbschliessen(gesuchTrancheId);
+        gesuchTrancheValidatorService.validateBearbeitungAbschliessen(gesuchTranche);
 
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);

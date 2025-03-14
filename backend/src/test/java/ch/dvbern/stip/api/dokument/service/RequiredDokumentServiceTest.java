@@ -45,7 +45,7 @@ public class RequiredDokumentServiceTest {
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())),
-            null, null
+            null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -57,7 +57,7 @@ public class RequiredDokumentServiceTest {
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockEmptyDocumentProducer())),
-            null, null
+            null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -68,7 +68,7 @@ public class RequiredDokumentServiceTest {
     void oneExistingTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())),
-            null, null
+            null
         );
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));

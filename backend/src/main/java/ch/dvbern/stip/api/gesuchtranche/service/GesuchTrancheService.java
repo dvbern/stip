@@ -115,6 +115,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    // private final GesuchValidatorService gesuchValidatorService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -168,11 +169,22 @@ public class GesuchTrancheService {
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
             requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche.getGesuch())
         );
+        // gesuchValidatorService.validateBearbeitungAbschliessenForAllTranchen(gesuchTranche.getGesuch());
 
         // evaluate & set SBCanBearbeitungAbschliessen flag
         dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
             requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuchTranche.getGesuch())
         );
+
+        // reset SBCanBearbeitungAbschliessen if validation fails
+        try {
+            gesuchTranche.getGesuch()
+                .getGesuchTranchen()
+                .forEach(gesuchTrancheValidatorService::validateBearbeitungAbschliessen);
+        } catch (ValidationsException ex) {
+            dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(false);
+        }
+
         return dokumenteToUploadDto;
     }
 

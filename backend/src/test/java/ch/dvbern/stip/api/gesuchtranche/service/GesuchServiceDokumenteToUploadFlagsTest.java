@@ -50,6 +50,8 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class GesuchServiceDokumenteToUploadFlagsTest {
+    @InjectMock
+    GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
     @InjectMock
     GesuchRepository gesuchRepository;
@@ -250,7 +252,7 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
         when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
-        Mockito.doNothing().when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
+        Mockito.doNothing().when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
@@ -287,7 +289,7 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
          * also test validation
          */
         // arrange
-        Mockito.doThrow(ValidationsException.class).when(requiredDokumentService).validateBearbeitungAbschliessenForAllTranchen(any());
+        Mockito.doThrow(ValidationsException.class).when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
