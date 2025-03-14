@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -39,9 +42,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -241,7 +241,6 @@ public class GesuchServiceDokumenteToUploadFlagsTest {
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
     }
-
 
     @Test
     void sbCanBearbeitungAbschliessenTest() {
