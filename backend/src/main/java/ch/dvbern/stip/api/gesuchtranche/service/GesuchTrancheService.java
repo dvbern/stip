@@ -132,21 +132,37 @@ public class GesuchTrancheService {
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var gesuchToWorkWith = gesuchRepository.requireById(gesuchId);
+        var tranchenByTyp = gesuchTrancheRepository
+            .findForGesuch(gesuchId)
+            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
 
-        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuchToWorkWith)) {
+            gesuchToWorkWith =
+                gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT).orElseThrow();
+            tranchenByTyp =
+                gesuchToWorkWith.getGesuchTranchen().stream().collect(Collectors.groupingBy(GesuchTranche::getTyp));
         }
-        return null;
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+
+        final var trancheList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.TRANCHE, List.of());
+        final var aenderungList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.AENDERUNG, List.of())
+            .stream()
+            .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
+            .toList();
+        final var allTranchen = new ArrayList<GesuchTranche>(trancheList.size() + aenderungList.size());
+        allTranchen.addAll(trancheList);
+        allTranchen.addAll(aenderungList);
+
+        return gesuchTrancheMapper.toListDto(
+            allTranchen,
+            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+        );
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
-        final var tranchenByTyp = gesuchTrancheRepository
-            .findForGesuch(gesuchId)
-            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
-        final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
-        return null;
-
+        return getAllTranchenAndInitalTrancheForGesuch(gesuchId);
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
