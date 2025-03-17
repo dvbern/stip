@@ -115,6 +115,7 @@
       "@dv/shared/feature/gesuch-form-lebenslauf": ["libs/shared/feature/gesuch-form-lebenslauf/src/index.ts"],
       "@dv/shared/feature/gesuch-form-partner": ["libs/shared/feature/gesuch-form-partner/src/index.ts"],
       "@dv/shared/feature/gesuch-form-person": ["libs/shared/feature/gesuch-form-person/src/index.ts"],
+      "@dv/shared/feature/gesuch-form-routes": ["libs/shared/feature/gesuch-form-routes/src/index.ts"],
       "@dv/shared/feature/gesuch-form-tranche": ["libs/shared/feature/gesuch-form-tranche/src/index.ts"],
       "@dv/shared/feature/verfuegung-zusammenfassung": ["libs/shared/feature/verfuegung-zusammenfassung/src/index.ts"],
       "@dv/shared/global/ablehnung-grund": ["libs/shared/global/ablehnung-grund/src/index.ts"],
