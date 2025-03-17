@@ -17,13 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
@@ -83,6 +76,13 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheService {
@@ -115,7 +115,6 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
-    // private final GesuchValidatorService gesuchValidatorService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -160,23 +159,18 @@ public class GesuchTrancheService {
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
 
-        // evaluate & set GsCanDokumenteUebermitteln flag
         dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
             requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch())
         );
 
-        // evaluate & set SbCanFehlendeDokumenteUebermitteln flag
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
             requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche.getGesuch())
         );
-        // gesuchValidatorService.validateBearbeitungAbschliessenForAllTranchen(gesuchTranche.getGesuch());
 
-        // evaluate & set SBCanBearbeitungAbschliessen flag
         dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
             requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuchTranche.getGesuch())
         );
 
-        // reset SBCanBearbeitungAbschliessen if validation fails
         try {
             gesuchTranche.getGesuch()
                 .getGesuchTranchen()
