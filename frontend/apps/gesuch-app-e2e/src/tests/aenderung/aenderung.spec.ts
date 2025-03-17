@@ -84,7 +84,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await requiredDokumenteResp;
 
   const acceptDocumentsButtons = await page
-    .locator('[data-testid="dokument-akzeptieren"]')
+    .getByTestId('dokument-akzeptieren')
     .count();
   for (let i = 0; i < acceptDocumentsButtons; i++) {
     const documentsToUploadReq = page.waitForResponse(
@@ -142,7 +142,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await stepsNavPO.elems.person.first().click();
   await expectStepTitleToContainText('Person in Ausbildung', page);
   await expect(personPO.elems.nachname).toHaveValue('E2E-Changed');
-  await expect(page.locator('.mat-mdc-form-field-hint').first()).toHaveText(
+  await expect(page.getByTestId('form-person-nachname-zuvor-hint')).toHaveText(
     'Sanchez',
   );
 
@@ -173,6 +173,19 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await headerNav.elems.aenderungenMenuItems.first().click();
   await expectInfoTitleToContainText('Änderung 1', page);
 
+  // change the nachname again on SB App
+  await stepsNavPO.elems.person.first().click();
+  await expectStepTitleToContainText('Person in Ausbildung', page);
+  await personPO.elems.nachname.fill('E2E-Changed-2');
+  await personPO.elems.buttonSaveContinue.click();
+  // verify the change
+  await stepsNavPO.elems.person.first().click();
+  await expectStepTitleToContainText('Person in Ausbildung', page);
+  await expect(personPO.elems.nachname).toHaveValue('E2E-Changed-2');
+  await expect(page.getByTestId('form-person-nachname-zuvor-hint')).toHaveText(
+    'E2E-Changed',
+  );
+
   await stepsNavPO.elems.geschwister.first().click();
   await expectStepTitleToContainText('Geschwister', page);
   const geschwisterPO = new GeschwisterPO(page);
@@ -180,6 +193,13 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await geschwisterPO.addGeschwister(bruder);
   await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
   await geschwisterPO.elems.buttonContinue.click();
+
+  // verify step nav indicators
+  await expect(
+    stepsNavPO.elems.geschwister
+      .first()
+      .locator('dv-shared-ui-change-indicator'),
+  ).toBeVisible();
 
   // Accept the Aenderung ==========================================================
   await stepsNavPO.elems.info.first().click();
@@ -191,4 +211,8 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await trancheInfoPO.elems.aenderungAccept.click();
   const acceptResponse = await aenderungAcceptResponse;
   expect(acceptResponse.status()).toBe(200);
+
+  // assert that a second tranche was created
+  await headerNav.elems.trancheMenu.click();
+  await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
 });
