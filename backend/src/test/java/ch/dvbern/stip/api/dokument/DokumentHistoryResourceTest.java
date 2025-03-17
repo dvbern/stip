@@ -19,13 +19,14 @@ package ch.dvbern.stip.api.dokument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -54,8 +56,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.generated.dto.DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE;
-import static ch.dvbern.stip.generated.dto.DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
-import static ch.dvbern.stip.generated.dto.DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -111,20 +111,17 @@ public class DokumentHistoryResourceTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        final var notToUseDocuments = Set.of(
-            ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
-            ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
-            ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
-        );
-
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            if (notToUseDocuments.contains(dokTyp)) {
-                continue;
-            }
-
             final var file = TestUtil.getTestPng();
             TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
         }
+
+        gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
@@ -166,6 +163,8 @@ public class DokumentHistoryResourceTest {
 
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setWohnkosten(5);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setWohnkosten(5);
+        fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setSozialhilfebeitraege(false);
+        fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setSozialhilfebeitraege(false);
 
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
@@ -204,8 +203,26 @@ public class DokumentHistoryResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(6)
+    void removeSuperfluousDokuments() {
+        final var gesuchDokuments = Arrays.stream(
+            gesuchTrancheApiSpec.getGesuchDokumenteSB()
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentDtoSpec[].class)
+        ).toList();
+        assertThat(gesuchDokuments.size(), is(18));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(7)
     void testGSDoesNotSeeMoreNeeded() {
         final var validationReport = gesuchTrancheApiSpec.validateGesuchTranchePagesGS()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -233,11 +250,25 @@ public class DokumentHistoryResourceTest {
             .as(DokumenteToUploadDtoSpec.class);
 
         assertThat(dokumenteToUpload.getRequired().size(), equalTo(0));
+
+        final var gesuchDokuments = Arrays.stream(
+            gesuchTrancheApiSpec.getGesuchDokumenteGS()
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentDtoSpec[].class)
+        ).toList();
+
+        assertThat(gesuchDokuments.size(), is(20));
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void dokument_ablehnen_or_akzeptieren() {
         var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
@@ -267,7 +298,7 @@ public class DokumentHistoryResourceTest {
 
     @TestAsSachbearbeiter
     @Test
-    @Order(8)
+    @Order(9)
     void fehlendeDokumenteUebermitteln() {
         gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -279,7 +310,7 @@ public class DokumentHistoryResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(10)
     void testGSDoesSeeMoreNeeded() {
         final var validationReport = gesuchTrancheApiSpec.validateGesuchTranchePagesGS()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -307,6 +338,28 @@ public class DokumentHistoryResourceTest {
             .as(DokumenteToUploadDtoSpec.class);
 
         assertThat(dokumenteToUpload.getRequired().get(0), equalTo(ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE));
+
+        final var gesuchDokuments = Arrays.stream(
+            gesuchTrancheApiSpec.getGesuchDokumenteGS()
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentDtoSpec[].class)
+        ).toList();
+
+        assertThat(gesuchDokuments.size(), is(18));
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
     private GesuchUpdateDtoSpec overrideEssentialsForUpadate(

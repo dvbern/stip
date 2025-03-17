@@ -212,20 +212,19 @@ public class GesuchTrancheService {
     @Transactional
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+        removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
-        }
-        return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
+        return gesuchTranche.getGesuchDokuments()
+            .stream()
+            .map(gesuchDokumentMapper::toDto)
+            .toList();
     }
 
     @Transactional
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
-        }
         return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
     }
 
