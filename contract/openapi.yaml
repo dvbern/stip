@@ -2854,7 +2854,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumenteGS
-  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload':
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload/gs':
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -2877,7 +2877,31 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDocumentsToUpload
+      operationId: getDocumentsToUploadGS
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload/sb':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Returns the documents that are to be uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumenteToUpload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDocumentsToUploadSB
   '/gesuchtranche/{gesuchId}':
     parameters:
       - name: gesuchId
