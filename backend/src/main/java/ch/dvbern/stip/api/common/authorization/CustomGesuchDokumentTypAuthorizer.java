@@ -27,6 +27,8 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -47,11 +49,20 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreateCustomDokumentTyp(UUID trancheId) {
-        final var gesuch = gesuchTrancheRepository.requireById(trancheId).getGesuch();
+        final var tranche = gesuchTrancheRepository.requireById(trancheId);
+        final var gesuch = tranche.getGesuch();
         canReadAllTyps();
-        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
+        // condition 1
+        final var isAnAenderungInUeberpruefung = tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
+        && tranche.getStatus().equals(GesuchTrancheStatus.UEBERPRUEFEN);
+        // condition 2
+        final var isGesuchstatusInBearbeitungSB = gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB);
+        final var isATranche = tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
+
+        if (!(isATranche && isGesuchstatusInBearbeitungSB || isAnAenderungInUeberpruefung)) {
             throw new ForbiddenException();
         }
+
     }
 
     @Transactional

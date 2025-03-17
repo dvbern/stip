@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +34,10 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import io.quarkus.security.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -143,6 +147,8 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> {
@@ -151,6 +157,30 @@ class CustomGesuchDokumentTypAuthorizerTest {
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void canCreateTypShouldNOTFailWhenCurrentTrancheIsAenderungOfStatusUeberpruefen() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+        gesuch = new Gesuch();
+        gesuch.setGesuchTranchen(new ArrayList<>());
+        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        var gesuchTranche = new GesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG)
+            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
+            .setGesuch(gesuch);
+        gesuch.getGesuchTranchen()
+            .add(gesuchTranche);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche);
+        assertDoesNotThrow(() -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchTranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(ForbiddenException.class, () -> {
             authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });

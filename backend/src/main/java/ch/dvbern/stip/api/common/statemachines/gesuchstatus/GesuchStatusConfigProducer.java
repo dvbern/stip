@@ -70,7 +70,8 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE);
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
@@ -111,7 +112,8 @@ public class GesuchStatusConfigProducer {
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
         config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
-        config.configure(Gesuchstatus.STIPENDIENANSPRUCH);
+        config.configure(Gesuchstatus.STIPENDIENANSPRUCH)
+            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE);
         config.configure(Gesuchstatus.GESUCH_ABGELEHNT);
 
         for (final var status : Gesuchstatus.values()) {
