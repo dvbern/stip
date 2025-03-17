@@ -168,10 +168,16 @@ export class SharedFeatureGesuchDokumenteComponent {
   // if true, the button is shown
   canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
-      this.dokumentsStore.hasDokumenteToUebermittelnSig();
+      !!this.dokumentsStore.dokumenteCanFlagsSig()
+        .sbCanFehlendeDokumenteUebermitteln;
     const { permissions } = this.gesuchViewSig();
 
     return hasDokumenteToUebermitteln && permissions.canWrite;
+  });
+
+  canGSSendMissingDocumentsSig = computed(() => {
+    return !!this.dokumentsStore.dokumenteCanFlagsSig()
+      .gsCanDokumenteUebermitteln;
   });
 
   canCreateCustomDokumentTypSig = computed(() => {
