@@ -159,7 +159,7 @@ class DokumentResourcesCustomDokumenteTest {
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -249,7 +249,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(11)
     void test_read_custom_gesuchdokument() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -294,7 +294,7 @@ class DokumentResourcesCustomDokumenteTest {
         var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTyp()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)

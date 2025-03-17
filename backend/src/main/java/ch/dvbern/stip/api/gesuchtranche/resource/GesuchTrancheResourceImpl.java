@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -86,25 +85,25 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheService.deleteAenderung(aenderungId);
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public List<GesuchDokumentDto> getGesuchDokumente(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public GesuchDokumentDto getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
-    }
-
     @Override
     @RolesAllowed(GESUCH_READ)
     public DokumenteToUploadDto getDocumentsToUpload(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getDokumenteToUpload(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public List<GesuchDokumentDto> getGesuchDokumenteGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public List<GesuchDokumentDto> getGesuchDokumenteSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)

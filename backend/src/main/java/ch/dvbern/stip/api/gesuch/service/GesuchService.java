@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -75,6 +76,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheOverrideUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
@@ -860,5 +862,62 @@ public class GesuchService {
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    @Transactional
+    public void resetGesuchZurueckweisen(Gesuch gesuch) {
+        final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId())
+            .orElseThrow(NotFoundException::new);
+
+        if (gesuchOfStateEingereicht.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException("Trying to reset to a Gesuch which has more than 1 Tranchen");
+        }
+
+        final var trancheOfStateEingereicht = gesuchOfStateEingereicht.getGesuchTranchen().get(0);
+
+        final var trancheToReset = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> tranche.getId().equals(trancheOfStateEingereicht.getId()))
+            .findFirst()
+            .orElseGet(gesuch::getLatestGesuchTranche);
+
+        final var formularOfStateEingereicht = trancheOfStateEingereicht.getGesuchFormular();
+
+        trancheToReset.setGueltigkeit(trancheOfStateEingereicht.getGueltigkeit());
+
+        GesuchTrancheOverrideUtil.overrideGesuchFormular(
+            trancheToReset.getGesuchFormular(),
+            formularOfStateEingereicht
+        );
+
+        final var dokumentsNow = trancheToReset.getGesuchFormular().getTranche().getGesuchDokuments(); // now
+        final var dokumentsEingerichtIds =
+            formularOfStateEingereicht.getTranche().getGesuchDokuments().stream().map(GesuchDokument::getId).toList(); // then
+
+        final var dokumentsNowButNotThen = dokumentsNow.stream()
+            .filter(gesuchDokument -> !dokumentsEingerichtIds.contains(gesuchDokument.getId()))
+            .toList();
+
+        final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
+
+        dokumentsNowButNotThen
+            .forEach(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .forEach(
+                        dokument -> dokumentObjectIdsToBeDeleted
+                            .add(gesuchDokumentService.deleteDokument(dokument.getId()))
+                    )
+            );
+
+        gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
+
+        final var allOtherTranchen = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> !tranche.getId().equals(trancheToReset.getId()))
+            .toList();
+
+        for (final var trancheToDrop : allOtherTranchen) {
+            gesuchTrancheService.dropGesuchTranche(trancheToDrop);
+        }
     }
 }

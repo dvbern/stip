@@ -22,10 +22,8 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheOverrideUtil;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,41 +48,6 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         gesuch.setEinreichedatum(null);
-        resetGesuchFormular(gesuch);
-    }
-
-    private void resetGesuchFormular(final Gesuch gesuch) {
-        final var gesuchOfStateEingereicht = gesuchService.getLatestEingereichtVersion(gesuch.getId())
-            .orElseThrow(NotFoundException::new);
-
-        if (gesuchOfStateEingereicht.getGesuchTranchen().size() != 1) {
-            throw new IllegalStateException("Trying to reset to a Gesuch which has more than 1 Tranchen");
-        }
-
-        final var trancheOfStateEingereicht = gesuchOfStateEingereicht.getGesuchTranchen().get(0);
-
-        final var trancheToReset = gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getId().equals(trancheOfStateEingereicht.getId()))
-            .findFirst()
-            .orElseGet(gesuch::getLatestGesuchTranche);
-
-        final var formularOfStateEingereicht = trancheOfStateEingereicht.getGesuchFormular();
-
-        trancheToReset.setGueltigkeit(trancheOfStateEingereicht.getGueltigkeit());
-
-        GesuchTrancheOverrideUtil.overrideGesuchFormular(
-            trancheToReset.getGesuchFormular(),
-            formularOfStateEingereicht
-        );
-
-        final var allOtherTranchen = gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> !tranche.getId().equals(trancheToReset.getId()))
-            .toList();
-
-        for (final var trancheToDrop : allOtherTranchen) {
-            gesuchTrancheService.dropGesuchTranche(trancheToDrop);
-        }
+        gesuchService.resetGesuchZurueckweisen(gesuch);
     }
 }

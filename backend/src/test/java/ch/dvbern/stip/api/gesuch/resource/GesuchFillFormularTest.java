@@ -342,7 +342,7 @@ class GesuchFillFormularTest {
     void removeSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
-        gesuchTrancheApiSpec.getGesuchDokumente()
+        gesuchTrancheApiSpec.getGesuchDokumenteGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -377,7 +377,7 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
         };
 
-        var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()
+        var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumenteGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

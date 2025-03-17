@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -41,6 +43,9 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -81,6 +86,8 @@ public class GesuchDokumentService {
     private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final DokumentHistoryRepository dokumentHistoryRepository;
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
@@ -186,7 +193,42 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public NullableGesuchDokumentDto findGesuchDokumentForCustomTyp(
+    public NullableGesuchDokumentDto findGesuchDokumentForCustomTypGS(
+        final UUID customDokumentTypId
+    ) {
+        var gesuchDokumentOptional =
+            gesuchDokumentRepository.findByCustomDokumentTyp(customDokumentTypId);
+
+        if (gesuchDokumentOptional.isPresent()) {
+            final var gesuchDokument = gesuchDokumentOptional.get();
+            final var gesuchTranche = gesuchDokument.getGesuchTranche();
+            final var gesuch = gesuchTranche.getGesuch();
+            final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+            if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+                var trancheInStatusEingereicht =
+                    gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                        .orElseThrow();
+                final var dto = trancheInStatusEingereicht.getGesuchDokuments()
+                    .stream()
+                    .filter(
+                        gDok -> Objects.equals(
+                            gDok.getId(),
+                            gesuchDokument.getId()
+                        )
+                    )
+                    .findFirst()
+                    .map(gesuchDokumentMapper::toDto)
+                    .orElse(null);
+                return new NullableGesuchDokumentDto(dto);
+            }
+        }
+
+        final var dto = gesuchDokumentOptional.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
+    }
+
+    @Transactional
+    public NullableGesuchDokumentDto findGesuchDokumentForCustomTypSB(
         final UUID customDokumentTypId
     ) {
         final var gesuchDokument =
@@ -197,7 +239,29 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public NullableGesuchDokumentDto findGesuchDokumentForTyp(
+    public NullableGesuchDokumentDto findGesuchDokumentForTypGS(
+        final UUID gesuchTrancheId,
+        final DokumentTyp dokumentTyp
+    ) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            var trancheInStatusEingereicht =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
+            final var gesuchDokument = trancheInStatusEingereicht.getGesuchDokuments()
+                .stream()
+                .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+                .findFirst();
+            final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+            return new NullableGesuchDokumentDto(dto);
+        }
+        return findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
+    }
+
+    @Transactional
+    public NullableGesuchDokumentDto findGesuchDokumentForTypSB(
         final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp
     ) {
@@ -254,6 +318,35 @@ public class GesuchDokumentService {
         );
     }
 
+    public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
+        final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
+        if (historicalDokument.getGesuchDokumente().size() > 1) {
+            throw new IllegalStateException(
+                "Dokument " + dokument.getId() + " has multiple gesuchDokuments in history"
+            );
+        }
+
+        final var historicalTranche = historicalDokument.getGesuchDokumente().get(0).getGesuchTranche();
+        if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
+            return false;
+        }
+
+        if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
+            return false;
+        }
+
+        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            if (trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS) {
+                return true;
+            }
+        } else if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            if (trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
         DokumentDeleteUtil.executeDeleteDokumentsFromS3(
             s3,
@@ -285,14 +378,20 @@ public class GesuchDokumentService {
     @Transactional
     public void removeDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var dokumentObjectId = dokument.getObjectId();
+        final var dokumentObjectId = new ArrayList<String>();
+
+        if (dokument.getGesuchDokumente().size() == 1) {
+            if (canDeleteDokumentFromS3(dokument, dokument.getGesuchDokumente().get(0).getGesuchTranche())) {
+                dokumentObjectId.add(dokument.getObjectId());
+            }
+        }
 
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
             dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
-            executeDeleteDokumentsFromS3(List.of(dokumentObjectId));
+            executeDeleteDokumentsFromS3(dokumentObjectId);
         }
     }
 
@@ -313,7 +412,11 @@ public class GesuchDokumentService {
             iterator.remove();
             if (dokument.getGesuchDokumente().isEmpty()) {
                 dokumentRepository.delete(dokument);
-                dokumentObjectIds.add(dokument.getObjectId());
+                if (
+                    canDeleteDokumentFromS3(dokument, gesuchDokument.getGesuchTranche())
+                ) {
+                    dokumentObjectIds.add(dokument.getObjectId());
+                }
             }
         }
         if (gesuchDokument.getDokumente().isEmpty()) {
@@ -349,8 +452,11 @@ public class GesuchDokumentService {
 
                 // If no other references to this physical document exist, delete it as well
                 if (dokument.getGesuchDokumente().isEmpty()) {
-                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
+
                     dokumentRepository.delete(dokument);
+                    if (canDeleteDokumentFromS3(dokument, gesuchdokument.getGesuchTranche())) {
+                        dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                    }
                 }
             }
         }
@@ -359,7 +465,7 @@ public class GesuchDokumentService {
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
-        final var dokument = dokumentRepository.requireById(dokumentId);
+        final var dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
 
         return DokumentDownloadUtil.getDokument(
             s3,

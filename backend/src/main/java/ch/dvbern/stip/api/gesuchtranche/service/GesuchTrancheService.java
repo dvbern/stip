@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -186,7 +187,25 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            var trancheInStatusEingereicht =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
+            return trancheInStatusEingereicht.getGesuchDokuments()
+                .stream()
+                .map(gesuchDokumentMapper::toDto)
+                .toList();
+        }
+
+        return getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
+    }
+
+    @Transactional
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
@@ -207,7 +226,10 @@ public class GesuchTrancheService {
                 dokumente.forEach(
                     dokument -> {
                         final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
-                        if (dokument.getGesuchDokumente().isEmpty()) {
+                        if (
+                            dokument.getGesuchDokumente().isEmpty()
+                            && (gesuchDokumentService.canDeleteDokumentFromS3(dokument, formular.getTranche()))
+                        ) {
                             dokumentObjectIds.add(dokumentObjectId);
                         }
                     }
@@ -223,14 +245,6 @@ public class GesuchTrancheService {
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
-    }
-
-    @Transactional
-    public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
-        return gesuchDokumentMapper.toDto(
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp)
-                .orElseThrow(NotFoundException::new)
-        );
     }
 
     @Transactional

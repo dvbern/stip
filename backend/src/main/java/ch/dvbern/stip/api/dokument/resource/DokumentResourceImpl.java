@@ -82,7 +82,7 @@ public class DokumentResourceImpl implements DokumentResource {
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
         customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
         final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
-        return gesuchDokumentService.findGesuchDokumentForCustomTyp(createdCustomTyp.getId()).getValue();
+        return gesuchDokumentService.findGesuchDokumentForCustomTypSB(createdCustomTyp.getId()).getValue();
     }
 
     @Blocking
@@ -174,9 +174,16 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTypGS(UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
-        return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
+        return gesuchDokumentService.findGesuchDokumentForCustomTypGS(customDokumentTypId);
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTypSB(UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
+        return gesuchDokumentService.findGesuchDokumentForCustomTypSB(customDokumentTypId);
     }
 
     @Override
@@ -219,8 +226,15 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
-    public NullableGesuchDokumentDto getGesuchDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        return gesuchDokumentService.findGesuchDokumentForTyp(gesuchTrancheId, dokumentTyp);
+    public NullableGesuchDokumentDto getGesuchDokumenteForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        // TODO: Authorizer
+        return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public NullableGesuchDokumentDto getGesuchDokumenteForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        // TODO: Authorizer
+        return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
     }
 }

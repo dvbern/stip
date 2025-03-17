@@ -81,14 +81,14 @@ public interface GesuchTrancheResource {
     DokumenteToUploadDto getDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumente/{dokumentTyp}")
+    @Path("/{gesuchTrancheId}/dokumente/gs")
     @Produces({ "application/json", "text/plain" })
-    GesuchDokumentDto getGesuchDokument(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp);
+    List<GesuchDokumentDto> getGesuchDokumenteGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumente")
+    @Path("/{gesuchTrancheId}/dokumente/sb")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentDto> getGesuchDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    List<GesuchDokumentDto> getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/validatePages/{gesuchTrancheId}")

@@ -79,9 +79,14 @@ public interface DokumentResource {
     List<CustomDokumentTypDto> getAllCustomDokumentTypes(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/customGesuchDokument/{customDokumentTypId}")
+    @Path("/customGesuchDokument/gs/{customDokumentTypId}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId);
+    NullableGesuchDokumentDto getCustomGesuchDokumenteForTypGS(@PathParam("customDokumentTypId") UUID customDokumentTypId);
+
+    @GET
+    @Path("/customGesuchDokument/sb/{customDokumentTypId}")
+    @Produces({ "application/json", "text/plain" })
+    NullableGesuchDokumentDto getCustomGesuchDokumenteForTypSB(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @GET
     @Path("/dokument/{dokumentArt}/download")
@@ -99,9 +104,14 @@ public interface DokumentResource {
     List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
-    @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
+    @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getGesuchDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    NullableGesuchDokumentDto getGesuchDokumenteForTypGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
+    @Produces({ "application/json", "text/plain" })
+    NullableGesuchDokumentDto getGesuchDokumenteForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/unterschriftenblatt/{gesuchId}")

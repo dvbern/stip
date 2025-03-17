@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -44,6 +45,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -242,7 +244,10 @@ class GesuchDokumentServiceTest {
             ),
             null,
             null,
-            null, null
+            null,
+            null,
+            null,
+            null
         );
 
         gesuchDokumente = new HashMap<>();
@@ -342,7 +347,9 @@ class GesuchDokumentServiceTest {
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
-        RequiredDokumentService requiredDokumentService
+        RequiredDokumentService requiredDokumentService,
+        GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository,
+        DokumentHistoryRepository dokumentHistoryRepository
         ) {
             super(
                 gesuchDokumentMapper,
@@ -357,7 +364,9 @@ class GesuchDokumentServiceTest {
                 dokumentstatusService,
                 requiredDokumentService,
                 antivirus,
-                gesuchDokumentKommentarRepository
+                gesuchDokumentKommentarRepository,
+                gesuchTrancheHistoryRepository,
+                dokumentHistoryRepository
             );
         }
 
