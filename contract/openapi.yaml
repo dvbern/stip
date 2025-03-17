@@ -2842,6 +2842,58 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllTranchenForGesuch
+  '/gesuchtranche/gs/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllTranchenForGesuchGS
+  '/gesuchtranche/sb/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllTranchenForGesuchSB
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
