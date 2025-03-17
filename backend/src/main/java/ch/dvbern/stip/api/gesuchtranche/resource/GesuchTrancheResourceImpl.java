@@ -65,6 +65,20 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuch(gesuchId);
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public DokumenteToUploadDto getDocumentsToUploadGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getDokumenteToUploadGS(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public DokumenteToUploadDto getDocumentsToUploadSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getDokumenteToUploadSB(gesuchTrancheId);
+    }
+
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public GesuchTrancheDto createGesuchTrancheCopy(
@@ -85,13 +99,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheService.deleteAenderung(aenderungId);
     }
 
-    @Override
-    @RolesAllowed(GESUCH_READ)
-    public DokumenteToUploadDto getDocumentsToUpload(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getDokumenteToUpload(gesuchTrancheId);
-    }
-
     @RolesAllowed(GESUCH_READ)
     @Override
     public List<GesuchDokumentDto> getGesuchDokumenteGS(UUID gesuchTrancheId) {
@@ -106,11 +113,17 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
     }
 
+    @Override
+    public ValidationReportDto validateGesuchTranchePagesGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.validatePagesGS(gesuchTrancheId);
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
-    public ValidationReportDto validateGesuchTranchePages(UUID gesuchTrancheId) {
+    public ValidationReportDto validateGesuchTranchePagesSB(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.validatePages(gesuchTrancheId);
+        return gesuchTrancheService.validatePagesSB(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)

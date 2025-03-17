@@ -24,6 +24,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
@@ -76,6 +78,8 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+    private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
+    private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -219,22 +223,22 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+        gesuchDokumentAuthorizer.canRead(gesuchDokumentId);
         return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public NullableGesuchDokumentDto getGesuchDokumenteForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        // TODO: Authorizer
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public NullableGesuchDokumentDto getGesuchDokumenteForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        // TODO: Authorizer
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
     }
 }

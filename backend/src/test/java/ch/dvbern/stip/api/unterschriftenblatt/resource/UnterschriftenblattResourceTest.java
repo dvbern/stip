@@ -164,7 +164,15 @@ class UnterschriftenblattResourceTest {
     @Order(9)
     @TestAsSachbearbeiter
     void toUploadContainsNone() {
-        final var toUpload = getDokumenteToUpload();
+        final var toUpload = gesuchTrancheApiSpec.getDocumentsToUploadSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDtoSpec.class);
         checkToUploadCountIs(toUpload, 0);
     }
 
@@ -177,7 +185,15 @@ class UnterschriftenblattResourceTest {
     }
 
     private void getAndCheckDokumenteToUpload() {
-        final var toUpload = getDokumenteToUpload();
+        final var toUpload = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDtoSpec.class);
         checkToUploadCountIs(toUpload, 1);
         checkToUploadTypIsGemeinsam(toUpload);
     }
@@ -195,17 +211,5 @@ class UnterschriftenblattResourceTest {
     ) {
         assertThat(toUpload.getUnterschriftenblaetter(), is(notNullValue()));
         assertThat(toUpload.getUnterschriftenblaetter().size(), is(unterschriftenblaetterCount));
-    }
-
-    private DokumenteToUploadDtoSpec getDokumenteToUpload() {
-        return gesuchTrancheApiSpec.getDocumentsToUpload()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(DokumenteToUploadDtoSpec.class);
     }
 }

@@ -500,7 +500,7 @@ class GesuchFillFormularTest {
 
     private void validatePage(final boolean allowWarnings) {
         final var report = gesuchTrancheApiSpec
-            .validateGesuchTranchePages()
+            .validateGesuchTranchePagesGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

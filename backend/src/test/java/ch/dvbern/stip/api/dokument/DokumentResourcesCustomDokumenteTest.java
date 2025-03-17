@@ -57,6 +57,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -176,7 +177,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -206,7 +207,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(9)
     void test_get_required_custom_gesuchdokuments_should_not_appear() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -248,43 +249,17 @@ class DokumentResourcesCustomDokumenteTest {
     @Test
     @TestAsGesuchsteller
     @Order(11)
-    void test_read_custom_gesuchdokument() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+    void test_read_custom_gesuchdokument_null() throws IOException {
+        var nullableDokumentDto = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
             .as(NullableGesuchDokumentDtoSpec.class)
-            .getValue()
-            .getDokumente();
+            .getValue();
 
-        assertThat(dokumentDtoList.size(), is(1));
-
-        dokumentId = dokumentDtoList.get(0).getId();
-
-        final var token = dokumentApiSpec.getDokumentDownloadToken()
-            .dokumentIdPath(dokumentId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(FileDownloadTokenDtoSpec.class)
-            .getToken();
-
-        final var actualFileContent = dokumentApiSpec.getDokument()
-            .tokenQuery(token)
-            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .asString();
-
-        final var expectedFileContent = readPngFileData();
-        assertThat(expectedFileContent, is(actualFileContent));
+        assertThat(nullableDokumentDto, Matchers.nullValue());
     }
 
     @Test
@@ -326,11 +301,53 @@ class DokumentResourcesCustomDokumenteTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
+    @Test
+    @TestAsGesuchsteller
+    @Order(14)
+    void test_read_custom_gesuchdokument() throws IOException {
+        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDtoSpec.class)
+            .getValue()
+            .getDokumente();
+
+        assertThat(dokumentDtoList.size(), is(1));
+
+        dokumentId = dokumentDtoList.get(0).getId();
+
+        final var token = dokumentApiSpec.getDokumentDownloadToken()
+            .dokumentIdPath(dokumentId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(FileDownloadTokenDtoSpec.class)
+            .getToken();
+
+        final var actualFileContent = dokumentApiSpec.getDokument()
+            .tokenQuery(token)
+            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .asString();
+
+        final var expectedFileContent = readPngFileData();
+        assertThat(expectedFileContent, is(actualFileContent));
+    }
+
     // testAsGS
     // delete file
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
     void test_delete_required_custom_gesuchdokuments() {
         dokumentApiSpec.deleteDokument()
             .dokumentIdPath(dokumentId)
@@ -341,7 +358,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsAdmin
-    @Order(15)
+    @Order(16)
     void delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
@@ -351,7 +368,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void reset() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
@@ -360,14 +377,14 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void fillGesuch_2() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(19)
     void gesuchEinreichen_2() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -379,7 +396,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(19)
+    @Order(20)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -399,7 +416,7 @@ class DokumentResourcesCustomDokumenteTest {
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(20)
+    @Order(21)
     void test_delete_required_custom_gesuchdokument_should_success() {
         // first, prepare a new custom gesuch dokument type
         test_create_custom_gesuchdokument();
@@ -428,9 +445,9 @@ class DokumentResourcesCustomDokumenteTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(21)
+    @Order(22)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

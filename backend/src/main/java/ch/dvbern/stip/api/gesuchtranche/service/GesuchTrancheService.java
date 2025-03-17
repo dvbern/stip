@@ -151,8 +151,31 @@ public class GesuchTrancheService {
         );
     }
 
+    private GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
+        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            gesuchTranche =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                    .orElseThrow();
+        }
+        return gesuchTranche;
+    }
+
     @Transactional
-    public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
+    public DokumenteToUploadDto getDokumenteToUploadGS(final UUID gesuchTrancheId) {
+        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+
+        final var required = getRequiredDokumentTypes(gesuchTranche);
+        final var unterschriftenblaetter = unterschriftenblattService
+            .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
+        final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+    }
+
+    @Transactional
+    public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
@@ -188,20 +211,12 @@ public class GesuchTrancheService {
 
     @Transactional
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
-            var trancheInStatusEingereicht =
-                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                    .orElseThrow();
-            return trancheInStatusEingereicht.getGesuchDokuments()
-                .stream()
-                .map(gesuchDokumentMapper::toDto)
-                .toList();
-        }
+        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
 
-        return getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        }
+        return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
     }
 
     @Transactional
@@ -255,7 +270,18 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public ValidationReportDto validatePages(final UUID gesuchTrancheId) {
+    public ValidationReportDto validatePagesGS(final UUID gesuchTrancheId) {
+        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        if (gesuchFormular == null) {
+            throw new NotFoundException();
+        }
+        return gesuchFormularService.validatePages(gesuchFormular);
+    }
+
+    @Transactional
+    public ValidationReportDto validatePagesSB(final UUID gesuchTrancheId) {
         final var gesuchFormular = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
         if (gesuchFormular == null) {
             throw new NotFoundException();

@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -63,6 +64,8 @@ class DokumentResourceImplTest {
     GesuchFormularService gesuchFormularService;
     @InjectMock
     CustomDokumentTypService customDokumentTypService;
+    @InjectMock
+    GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     @BeforeEach
     void setUp() {
@@ -75,6 +78,7 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
+        doNothing().when(gesuchDokumentAuthorizer).canRead(any());
         assertNotNull(
             dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID())
         );

@@ -53,6 +53,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -231,7 +232,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
          * Both the denied & the newly added custom document should:
          * appear in requiredDocuments
          */
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -350,14 +351,25 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
-        assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
+        assertThat(customDok.getValue(), Matchers.nullValue());
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(23)
     void setToInBearbeitungSB() {
+        final var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
+
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)

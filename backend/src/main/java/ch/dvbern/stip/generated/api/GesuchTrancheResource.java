@@ -76,9 +76,14 @@ public interface GesuchTrancheResource {
     GesuchTrancheListDto getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumenteToUpload")
+    @Path("/{gesuchTrancheId}/dokumenteToUpload/gs")
     @Produces({ "application/json", "text/plain" })
-    DokumenteToUploadDto getDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    DokumenteToUploadDto getDocumentsToUploadGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchTrancheId}/dokumenteToUpload/sb")
+    @Produces({ "application/json", "text/plain" })
+    DokumenteToUploadDto getDocumentsToUploadSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumente/gs")
@@ -91,7 +96,12 @@ public interface GesuchTrancheResource {
     List<GesuchDokumentDto> getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/validatePages/{gesuchTrancheId}")
+    @Path("/validatePages/{gesuchTrancheId}/gs")
     @Produces({ "application/json" })
-    ValidationReportDto validateGesuchTranchePages(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    ValidationReportDto validateGesuchTranchePagesGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/validatePages/{gesuchTrancheId}/sb")
+    @Produces({ "application/json" })
+    ValidationReportDto validateGesuchTranchePagesSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }
