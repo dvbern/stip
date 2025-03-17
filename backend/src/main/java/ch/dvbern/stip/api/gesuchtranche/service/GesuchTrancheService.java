@@ -477,6 +477,8 @@ public class GesuchTrancheService {
 
     public ValidationReportDto einreichenValidieren(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+        final var documents = gesuchTranche.getGesuchDokuments();
+        final var hasDocuments = documents != null && !documents.isEmpty();
 
         try {
             if (
@@ -488,12 +490,12 @@ public class GesuchTrancheService {
                 gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
             }
         } catch (ValidationsException e) {
-            return ValidationsExceptionMapper.toDto(e);
+            return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
         } catch (CustomValidationsException e) {
-            return CustomValidationsExceptionMapper.toDto(e);
+            return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
         }
 
-        return new ValidationReportDto();
+        return new ValidationReportDto().hasDocuments(hasDocuments);
     }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
