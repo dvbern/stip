@@ -48,8 +48,10 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -115,6 +117,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchHistoryService gesuchHistoryService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -126,6 +129,24 @@ public class GesuchTrancheService {
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
+    }
+
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
+        }
+        return null;
+    }
+
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
+        final var tranchenByTyp = gesuchTrancheRepository
+            .findForGesuch(gesuchId)
+            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+        return null;
+
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
