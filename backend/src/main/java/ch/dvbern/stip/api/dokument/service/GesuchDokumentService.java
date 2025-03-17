@@ -272,10 +272,15 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public String deleteDokument(final UUID dokumentId) {
+    public String deleteDokument(final UUID dokumentId, final UUID trancheId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
-        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
+        for (
+            final var gesuchDokument : dokument.getGesuchDokumente()
+                .stream()
+                .filter(dok -> dok.getGesuchTranche().getId().equals(trancheId))
+                .toList()
+        ) {
             gesuchDokument.getDokumente().remove(dokument);
         }
 

@@ -234,7 +234,8 @@ public class GesuchTrancheService {
                 final var dokumente = new ArrayList<>(gesuchDokument.getDokumente());
                 dokumente.forEach(
                     dokument -> {
-                        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
+                        final var dokumentObjectId =
+                            gesuchDokumentService.deleteDokument(dokument.getId(), formular.getTranche().getId());
                         if (dokument.getGesuchDokumente().isEmpty()) {
                             dokumentObjectIds.add(dokumentObjectId);
                         }
