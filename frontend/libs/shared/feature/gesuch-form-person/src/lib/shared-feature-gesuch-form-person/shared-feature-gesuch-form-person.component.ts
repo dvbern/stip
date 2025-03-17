@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { isAfter, subYears } from 'date-fns';
+import { isAfter, subDays, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -82,6 +82,7 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  dateFromDateString,
   dateFromMonthYearString,
   getDateDifference,
   maxDateValidatorForLocale,
@@ -205,18 +206,17 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
   geburtstagDocumentOptionsSig = this.createUploadOptionsSig(
     () => {
-      const geburtstag = this.geburtstagChangedSig();
-      const currentDay = dateFromMonthYearString(
+      const geburtstag = dateFromDateString(this.geburtstagChangedSig());
+      let ausbildungsbegin = dateFromMonthYearString(
         this.viewSig().gesuchFormular?.ausbildung.ausbildungBegin,
       );
 
-      if (!geburtstag || !currentDay) return null;
+      if (!geburtstag || !ausbildungsbegin) return null;
 
-      const geburtsdatum = getDateDifference(geburtstag, currentDay);
+      ausbildungsbegin = subDays(ausbildungsbegin, 1);
+      const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
 
-      const alter = geburtsdatum?.years ?? 0;
-
-      return alter > BEGRUENDUNGSSCHREIBEN_AGE
+      return alter >= BEGRUENDUNGSSCHREIBEN_AGE
         ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_35
         : null;
     },

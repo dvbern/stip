@@ -103,6 +103,10 @@ export function asBackendLocalDate(
   return format(date, 'yyyy-MM-dd');
 }
 
+export function dateFromDateString(monthYearString?: string) {
+  return parseDateForVariant(monthYearString, new Date(), 'date');
+}
+
 export function dateFromMonthYearString(monthYearString?: string) {
   return parseDateForVariant(monthYearString, new Date(), 'monthYear');
 }
