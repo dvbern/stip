@@ -8,7 +8,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink } from '@angular/router';
@@ -18,25 +18,20 @@ import {
   TranslatePipe,
   isDefined,
 } from '@ngx-translate/core';
-import { filter, map } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
-  selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import {
-  SharedDataAccessLanguageEvents,
-  selectLanguage,
-} from '@dv/shared/data-access/language';
+import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
-import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -86,8 +81,6 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
-  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
@@ -114,11 +107,6 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const steps = this.stepsSig();
     return steps.find((step) => step.route === this.stepSig()?.route);
   });
-  isTrancheRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes('/tranche/')),
-    ),
-  );
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
