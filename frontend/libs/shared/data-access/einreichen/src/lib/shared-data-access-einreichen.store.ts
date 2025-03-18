@@ -240,15 +240,20 @@ export class EinreichenStore extends signalStore(
     gesuchTrancheId: string,
     allowNullValidation?: boolean,
   ) => {
-    const service$ = (
+    const service = (
       allowNullValidation
-        ? this.gesuchTrancheService.validateGesuchTranchePages$
-        : this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$
-    ).bind(this.gesuchTrancheService);
+        ? 'validateGesuchTranchePages$'
+        : 'gesuchTrancheEinreichenValidieren$'
+    ) satisfies keyof GesuchTrancheService;
 
-    return service$({ gesuchTrancheId }, undefined, undefined, {
-      context: shouldIgnoreErrorsIf(true),
-    });
+    return this.gesuchTrancheService[service](
+      { gesuchTrancheId },
+      undefined,
+      undefined,
+      {
+        context: shouldIgnoreErrorsIf(true),
+      },
+    );
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(
