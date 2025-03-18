@@ -336,13 +336,10 @@ public class GesuchDokumentService {
         }
 
         if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            if (trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS) {
-                return true;
-            }
-        } else if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            if (trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
-                return true;
-            }
+            return trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+        }
+        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            return trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
         }
         return false;
     }
@@ -380,10 +377,11 @@ public class GesuchDokumentService {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = new ArrayList<String>();
 
-        if (dokument.getGesuchDokumente().size() == 1) {
-            if (canDeleteDokumentFromS3(dokument, dokument.getGesuchDokumente().get(0).getGesuchTranche())) {
-                dokumentObjectId.add(dokument.getObjectId());
-            }
+        if (
+            dokument.getGesuchDokumente().size() == 1
+            && (canDeleteDokumentFromS3(dokument, dokument.getGesuchDokumente().get(0).getGesuchTranche()))
+        ) {
+            dokumentObjectId.add(dokument.getObjectId());
         }
 
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
