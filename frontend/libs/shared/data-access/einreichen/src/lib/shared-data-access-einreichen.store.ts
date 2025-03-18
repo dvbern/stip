@@ -12,6 +12,7 @@ import {
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
 import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
@@ -75,6 +76,7 @@ export class EinreichenStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private gesuchTrancheService = inject(GesuchTrancheService);
+  private config = inject(SharedModelCompileTimeConfig);
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
   );
@@ -234,15 +236,29 @@ export class EinreichenStore extends signalStore(
     gesuchTrancheId: string,
     allowNullValidation?: boolean,
   ) => {
-    const service$ = (
-      allowNullValidation
-        ? this.gesuchTrancheService.validateGesuchTranchePages$
-        : this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$
-    ).bind(this.gesuchTrancheService);
+    const requestArgs = [
+      { gesuchTrancheId },
+      undefined,
+      undefined,
+      {
+        context: shouldIgnoreErrorsIf(true),
+      },
+    ] as const;
 
-    return service$({ gesuchTrancheId }, undefined, undefined, {
-      context: shouldIgnoreErrorsIf(true),
-    });
+    if (allowNullValidation) {
+      if (this.config.appType === 'gesuch-app') {
+        return this.gesuchTrancheService.validateGesuchTranchePagesGS$(
+          ...requestArgs,
+        );
+      }
+
+      return this.gesuchTrancheService.validateGesuchTranchePagesSB$(
+        ...requestArgs,
+      );
+    }
+    return this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$(
+      ...requestArgs,
+    );
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(

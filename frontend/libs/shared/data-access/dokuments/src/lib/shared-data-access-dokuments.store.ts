@@ -74,6 +74,13 @@ export class DokumentsStore extends signalStore(
     return this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId });
   }
 
+  private getDcumentsToUploadByAppType$(gesuchTrancheId: string) {
+    if (this.config.appType === 'gesuch-app') {
+      return this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId });
+    }
+    return this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId });
+  }
+
   setExpandedList(list: 'custom' | 'required' | undefined) {
     patchState(this, { expandedComponentList: list });
   }
@@ -464,9 +471,7 @@ export class DokumentsStore extends signalStore(
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
           this.getGesuchDokumenteByAppType$(gesuchTrancheId),
-          this.trancheService.getDocumentsToUpload$({
-            gesuchTrancheId,
-          }),
+          this.getDcumentsToUploadByAppType$(gesuchTrancheId),
         ]),
       ),
       tapResponse({
@@ -541,13 +546,11 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((gesuchTrancheId) =>
-        this.trancheService
-          .getDocumentsToUpload$({ gesuchTrancheId })
-          .pipe(
-            handleApiResponse((documentsToUpload) =>
-              patchState(this, { documentsToUpload }),
-            ),
+        this.getDcumentsToUploadByAppType$(gesuchTrancheId).pipe(
+          handleApiResponse((documentsToUpload) =>
+            patchState(this, { documentsToUpload }),
           ),
+        ),
       ),
     ),
   );
