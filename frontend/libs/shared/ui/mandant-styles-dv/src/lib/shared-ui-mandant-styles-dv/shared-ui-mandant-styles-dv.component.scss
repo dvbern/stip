@@ -1,0 +1,31 @@
+body {
+  --dv-overridden-body-bg: #021e2f;
+  --dv-red: #ffa100;
+  .btn-danger {
+    --dv-btn-bg: #ffa100;
+    --dv-btn-border-color: #ffa100;
+    --dv-btn-hover-bg: #d38602;
+    --dv-btn-hover-border-color: #d38602;
+    --dv-btn-focus-shadow-rgb: 255, 161, 0;
+    --dv-btn-active-bg: #d38602;
+    --dv-btn-active-border-color: #d38602;
+    --dv-btn-disabled-bg: #ffa100;
+    --dv-btn-disabled-border-color: #ffa100;
+  }
+}
+
+header .first-entry {
+  &::before {
+    content: '';
+    display: block;
+    width: 135px;
+    height: 60px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('https://www.dvbern.ch/art/dvbern/logo-dvbern-dark.svg');
+  }
+  img {
+    display: none;
+  }
+}

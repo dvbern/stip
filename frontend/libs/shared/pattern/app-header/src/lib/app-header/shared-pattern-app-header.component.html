@@ -1,3 +1,14 @@
+@let tenant = tenantSig()?.identifier;
+@if (tenant && tenant !== 'bern') {
+  @defer {
+    @switch (tenant) {
+      @case ('dv') {
+        <dv-shared-ui-mandant-styles-dv></dv-shared-ui-mandant-styles-dv>
+      }
+    }
+  }
+}
+
 <!-- HEADER -->
 <header class="top-0 border-bottom w-100 z-3" [class.shadow-sm]="isScroll && !compactHeader">
   <ng-template #logoOrBackLink>
