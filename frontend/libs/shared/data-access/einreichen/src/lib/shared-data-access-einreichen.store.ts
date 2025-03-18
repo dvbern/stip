@@ -256,7 +256,12 @@ export class EinreichenStore extends signalStore(
         ...requestArgs,
       );
     }
-    return this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$(
+    if (this.config.appType === 'gesuch-app') {
+      return this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
+        ...requestArgs,
+      );
+    }
+    return this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
       ...requestArgs,
     );
   };
