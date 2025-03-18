@@ -118,6 +118,10 @@ quarkus:
       auth-server-url: '${keycloak.url}/realms/bern'
       client-id: '${keycloak.client-id}'
       application-type: service
+    dv:
+      auth-server-url: '${keycloak.url}/realms/dv'
+      client-id: '${keycloak.client-id}'
+      application-type: service
   s3:
     aws:
       credentials:
