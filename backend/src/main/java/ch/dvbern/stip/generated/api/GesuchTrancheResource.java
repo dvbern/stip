@@ -66,9 +66,14 @@ public interface GesuchTrancheResource {
     void deleteAenderung(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
-    @Path("/{gesuchTrancheId}/einreichen/validieren")
+    @Path("/{gesuchTrancheId}/einreichen/validieren/gs")
     @Produces({ "application/json", "text/plain" })
-    ValidationReportDto gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    ValidationReportDto gesuchTrancheEinreichenValidierenGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchTrancheId}/einreichen/validieren/sb")
+    @Produces({ "application/json", "text/plain" })
+    ValidationReportDto gesuchTrancheEinreichenValidierenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}")

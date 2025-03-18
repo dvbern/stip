@@ -71,7 +71,8 @@ public class GesuchTrancheApiSpec {
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
                 deleteAenderung(),
-                gesuchTrancheEinreichenValidieren(),
+                gesuchTrancheEinreichenValidierenGS(),
+                gesuchTrancheEinreichenValidierenSB(),
                 getAllTranchenForGesuch(),
                 getDocumentsToUploadGS(),
                 getDocumentsToUploadSB(),
@@ -110,8 +111,12 @@ public class GesuchTrancheApiSpec {
         return new DeleteAenderungOper(createReqSpec());
     }
 
-    public GesuchTrancheEinreichenValidierenOper gesuchTrancheEinreichenValidieren() {
-        return new GesuchTrancheEinreichenValidierenOper(createReqSpec());
+    public GesuchTrancheEinreichenValidierenGSOper gesuchTrancheEinreichenValidierenGS() {
+        return new GesuchTrancheEinreichenValidierenGSOper(createReqSpec());
+    }
+
+    public GesuchTrancheEinreichenValidierenSBOper gesuchTrancheEinreichenValidierenSB() {
+        return new GesuchTrancheEinreichenValidierenSBOper(createReqSpec());
     }
 
     public GetAllTranchenForGesuchOper getAllTranchenForGesuch() {
@@ -681,22 +686,22 @@ public class GesuchTrancheApiSpec {
      * @see #gesuchTrancheIdPath  (required)
      * return ValidationReportDtoSpec
      */
-    public static class GesuchTrancheEinreichenValidierenOper implements Oper {
+    public static class GesuchTrancheEinreichenValidierenGSOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/einreichen/validieren";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GesuchTrancheEinreichenValidierenOper(RequestSpecBuilder reqSpec) {
+        public GesuchTrancheEinreichenValidierenGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren
+         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -707,7 +712,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren
+         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs
          * @param handler handler
          * @return ValidationReportDtoSpec
          */
@@ -722,7 +727,7 @@ public class GesuchTrancheApiSpec {
          * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GesuchTrancheEinreichenValidierenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public GesuchTrancheEinreichenValidierenGSOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -732,7 +737,7 @@ public class GesuchTrancheApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GesuchTrancheEinreichenValidierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GesuchTrancheEinreichenValidierenGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -742,7 +747,80 @@ public class GesuchTrancheApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GesuchTrancheEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GesuchTrancheEinreichenValidierenGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Das Gesuch Einreichen Validation Report generieren
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return ValidationReportDtoSpec
+     */
+    public static class GesuchTrancheEinreichenValidierenSBOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchTrancheEinreichenValidierenSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/einreichen/validieren/sb
+         * @param handler handler
+         * @return ValidationReportDtoSpec
+         */
+        public ValidationReportDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<ValidationReportDtoSpec> type = new TypeRef<ValidationReportDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchTrancheEinreichenValidierenSBOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchTrancheEinreichenValidierenSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchTrancheEinreichenValidierenSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

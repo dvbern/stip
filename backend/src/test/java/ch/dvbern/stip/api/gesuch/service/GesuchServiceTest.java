@@ -910,7 +910,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.getValidationErrors().size(),
@@ -952,7 +952,7 @@ class GesuchServiceTest {
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()

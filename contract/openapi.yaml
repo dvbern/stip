@@ -2448,7 +2448,7 @@ paths:
       operationId: getBerechnungsBlattForGesuch
       summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
+  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs':
     get:
       tags:
         - GesuchTranche
@@ -2473,7 +2473,34 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchTrancheEinreichenValidieren
+      operationId: gesuchTrancheEinreichenValidierenGS
+      summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/sb':
+    get:
+      tags:
+        - GesuchTranche
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+          description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchTrancheEinreichenValidierenSB
       summary: Das Gesuch Einreichen Validation Report generieren
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:

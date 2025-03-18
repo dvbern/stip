@@ -474,8 +474,7 @@ public class GesuchTrancheService {
         return gesuchTrancheMapper.toDto(aenderung);
     }
 
-    public ValidationReportDto einreichenValidieren(final UUID trancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+    private ValidationReportDto einreichenValidationReport(final GesuchTranche gesuchTranche) {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
 
@@ -495,6 +494,16 @@ public class GesuchTrancheService {
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);
+    }
+
+    public ValidationReportDto einreichenValidierenGS(final UUID trancheId) {
+        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(trancheId);
+        return einreichenValidationReport(gesuchTranche);
+    }
+
+    public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+        return einreichenValidationReport(gesuchTranche);
     }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {

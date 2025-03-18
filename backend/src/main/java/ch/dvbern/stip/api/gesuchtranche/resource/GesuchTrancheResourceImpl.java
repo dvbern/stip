@@ -101,6 +101,20 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    public ValidationReportDto gesuchTrancheEinreichenValidierenGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        return gesuchTrancheService.einreichenValidierenGS(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public ValidationReportDto gesuchTrancheEinreichenValidierenSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        return gesuchTrancheService.einreichenValidierenSB(gesuchTrancheId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
     public List<GesuchDokumentDto> getGesuchDokumenteGS(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTrancheId);
@@ -131,13 +145,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public void aenderungEinreichen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canAenderungEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public ValidationReportDto gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
-        return gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
