@@ -15,24 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.resource;
+package ch.dvbern.stip.api.common.authorization;
 
-import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.generated.api.TenantResource;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import jakarta.enterprise.context.RequestScoped;
-import lombok.RequiredArgsConstructor;
+public class AusbildungsstaetteAuthorizer extends BaseAuthorizer {
+    public void canCreate() {
+        // TODO KSTIP-1967: Resolve this
+    }
 
-@RequestScoped
-@RequiredArgsConstructor
-@Validated
-public class TenantResourceImpl implements TenantResource {
+    public void canRead() {
+        permitAll();
+    }
 
-    private final TenantService tenantService;
+    public void canUpdate() {
+        // TODO KSTIP-1967: Resolve this
+    }
 
-    @Override
-    public TenantInfoDto getCurrentTenant() {
-        return tenantService.getCurrentTenant();
+    public void canDelete() {
+        // TODO KSTIP-1967: Resolve this
     }
 }

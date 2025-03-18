@@ -19,51 +19,30 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-@Authorizer
 @ApplicationScoped
 @RequiredArgsConstructor
-public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
+@Authorizer
+public class BuchhaltungAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final GesuchStatusService gesuchStatusService;
-    private final BenutzerService benutzerService;
-    private final GesuchHistoryService gesuchHistoryService;
 
     @Transactional
-    public void canUpload(final UUID gesuchId) {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminOrSb(benutzer)) {
-            throw new ForbiddenException();
-        }
-
+    public void canCreateBuchhaltungSaldokorrektur(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!gesuchStatusService.canUploadUnterschriftenblatt(benutzer, gesuch.getGesuchStatus())) {
-            throw new ForbiddenException();
-        }
-    }
-
-    public void canGetUnterschriftenblaetter() {
-        permitAll();
-    }
-
-    @Transactional
-    public void canDeleteUnterschriftenblattDokument(final UUID dokumentId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchForDokument = gesuchRepository.requireGesuchForDokument(dokumentId);
-
-        // Only Admins/ SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
-        if (isAdminOrSb(currentBenutzer) && !gesuchHistoryService.wasVerfuegt(gesuchForDokument.getId())) {
+        if (gesuchStatusService.canCreateBuchhaltungSaldokorrektur(gesuch.getGesuchStatus())) {
             return;
         }
 
         forbidden();
+    }
+
+    public void canGetBuchhaltungEntrys() {
+        permitAll();
     }
 }

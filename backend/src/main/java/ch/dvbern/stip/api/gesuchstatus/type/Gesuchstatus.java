@@ -146,6 +146,21 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR = Collections.unmodifiableSet(
+        EnumSet.of(
+            BEREIT_FUER_BEARBEITUNG,
+            IN_BEARBEITUNG_SB,
+            JURISTISCHE_ABKLAERUNG,
+            IN_FREIGABE,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            VERSANDBEREIT,
+            VERFUEGT,
+            VERSENDET,
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }

@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
@@ -32,6 +31,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -43,14 +45,14 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
 
     @Override
-    @RolesAllowed(OidcPermissions.GESUCH_READ)
+    @RolesAllowed(SB_GESUCH_READ)
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
         steuerdatenAuthorizer.canRead();
         return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
     }
 
     @Override
-    @RolesAllowed(OidcPermissions.GESUCH_READ)
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public List<SteuerdatenDto> updateSteuerdaten(
         UUID gesuchTrancheId,
         List<SteuerdatenDto> steuerdatenDto
@@ -63,6 +65,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     }
 
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public List<SteuerdatenDto> updateSteuerdatenFromNesko(
         UUID gesuchTrancheId,
         NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequestDto

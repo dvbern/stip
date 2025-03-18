@@ -38,8 +38,12 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_EINREICHEN;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -49,8 +53,8 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(AENDERUNG_CREATE)
     public GesuchTrancheDto createAenderungsantrag(
         UUID gesuchId,
         CreateAenderungsantragRequestDto createAenderungsantragRequestDto
@@ -59,15 +63,15 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public GesuchTrancheListDto getAllTranchenForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuch(gesuchId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto createGesuchTrancheCopy(
         UUID gesuchId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
@@ -79,71 +83,71 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         );
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed(AENDERUNG_DELETE)
     public void deleteAenderung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canDeleteAenderung(aenderungId);
         gesuchTrancheService.deleteAenderung(aenderungId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public List<GesuchDokumentDto> getGesuchDokumente(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public GesuchDokumentDto getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
     }
 
     @Override
-    @RolesAllowed(GESUCH_READ)
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public DokumenteToUploadDto getDocumentsToUpload(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getDokumenteToUpload(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public ValidationReportDto validateGesuchTranchePages(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.validatePages(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed(AENDERUNG_EINREICHEN)
     public void aenderungEinreichen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canAenderungEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public ValidationReportDto gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAkzeptieren(UUID aenderungId) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
         return gesuchTrancheService.aenderungAkzeptieren(aenderungId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
         return gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungManuellAnpassen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
         return gesuchTrancheService.aenderungManuellAnpassen(aenderungId);

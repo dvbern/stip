@@ -122,6 +122,10 @@ public class GesuchStatusService {
         return editStates.contains(gesuchstatus);
     }
 
+    public boolean canCreateBuchhaltungSaldokorrektur(final Gesuchstatus gesuchstatus) {
+        return Gesuchstatus.SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR.contains(gesuchstatus);
+    }
+
     public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {
         final var sm = createStateMachine(gesuch, null);
         return sm.canFire(target);

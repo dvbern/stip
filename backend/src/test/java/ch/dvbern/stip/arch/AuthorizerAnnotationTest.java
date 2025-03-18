@@ -21,14 +21,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.Authorizer;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.core.domain.AccessTarget.FieldAccessTarget;
 import com.tngtech.archunit.core.domain.AccessTarget.MethodCallTarget;
 import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.core.domain.JavaCodeUnit;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -38,6 +36,10 @@ import org.junit.jupiter.api.Test;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 public class AuthorizerAnnotationTest {
+    private static final Set<String> ANONYMOUS_METHODS = Set.of(
+        "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant"
+    );
+
     @Test
     void test_endpoint_calls_authorizer() {
         final var rule = classes()
@@ -57,7 +59,7 @@ public class AuthorizerAnnotationTest {
         public void check(JavaClass item, ConditionEvents events) {
             final var methodIds = getMethodIdentifiers(item);
             methodIds.removeAll(collectMethodsCallingAuthorizer(item));
-            methodIds.removeAll(collectAllowAllAnnotations(item));
+            methodIds.removeAll(ANONYMOUS_METHODS);
 
             for (final var methodId : methodIds) {
                 events.add(new SimpleConditionEvent(item, false, methodId));
@@ -68,8 +70,14 @@ public class AuthorizerAnnotationTest {
             return javaClass.getMethods()
                 .stream()
                 .filter(method -> !method.isConstructor())
-                .map(JavaCodeUnit::getFullName)
+                .map(method -> toFullyQualifiedName(javaClass, method))
                 .collect(Collectors.toSet());
+
+            // return javaClass.getMethods()
+            // .stream()
+            // .filter(method -> !method.isConstructor())
+            // .map(JavaCodeUnit::getFullName)
+            // .collect(Collectors.toSet());
         }
 
         private Set<String> collectMethodsCallingAuthorizer(final JavaClass javaClass) {
@@ -82,19 +90,7 @@ public class AuthorizerAnnotationTest {
 
                 if (isCallToAuthorizer(access)) {
                     final var callingMethod = (JavaMethod) access.getOwner();
-                    methodIdentifiers.add(callingMethod.getFullName());
-                }
-            }
-
-            return methodIdentifiers;
-        }
-
-        private Set<String> collectAllowAllAnnotations(final JavaClass javaClass) {
-            final var methodIdentifiers = new HashSet<String>();
-
-            for (final var method : javaClass.getMethods()) {
-                if (method.isAnnotatedWith(AllowAll.class)) {
-                    methodIdentifiers.add(method.getFullName());
+                    methodIdentifiers.add(toFullyQualifiedName(javaClass, callingMethod));
                 }
             }
 
@@ -116,6 +112,10 @@ public class AuthorizerAnnotationTest {
             }
 
             return false;
+        }
+
+        private String toFullyQualifiedName(final JavaClass parent, final JavaMethod method) {
+            return parent.getFullName() + "." + method.getName();
         }
     }
 }

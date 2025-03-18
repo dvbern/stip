@@ -17,11 +17,12 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Objects;
+import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -30,38 +31,24 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
-public class FallAuthorizer extends BaseAuthorizer {
+public class DokumentAuthorizer extends BaseAuthorizer {
+    private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
-    private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
 
-    public void canCreate() {
-        permitAll();
-    }
-
     @Transactional
-    public void sbCanGet() {
-        if (isAdminOrSb(benutzerService.getCurrentBenutzer())) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void gsCanGet() {
+    public void canGetDokumentDownloadToken(final UUID dokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!isGesuchsteller(currentBenutzer)) {
-            forbidden();
-        }
-
-        final var fall = fallRepository.requireFallForGs(currentBenutzer.getId());
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)) {
+        if (isAdminOrSb(currentBenutzer)) {
             return;
         }
 
-        // Gesuchsteller can only read their own Fall
-        if (Objects.equals(fall.getGesuchsteller().getId(), currentBenutzer.getId())) {
+        final var fall = gesuchRepository.requireGesuchForDokument(dokumentId).getAusbildung().getFall();
+        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
+
+        final BooleanSupplier isGesuchsteller = () -> AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall);
+        if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
             return;
         }
 

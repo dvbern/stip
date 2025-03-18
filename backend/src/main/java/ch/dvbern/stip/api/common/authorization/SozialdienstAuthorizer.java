@@ -37,6 +37,40 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
+    public void canCreateSozialdienst() {
+        permitAll();
+    }
+
+    public void canDeleteSozialdienst() {
+        permitAll();
+    }
+
+    @Transactional
+    public void canGetAllSozialdienste() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    public void canGetAllSozialdiensteForDelegation() {
+        permitAll();
+    }
+
+    public void canGetSozialdienst() {
+        permitAll();
+    }
+
+    public void canReplaceSozialdienstAdmin() {
+        permitAll();
+    }
+
+    public void canUpdate() {
+        permitAll();
+    }
+
     @Transactional
     public void canUpdateSozialdienstAdmin() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();

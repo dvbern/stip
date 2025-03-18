@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.notification.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.NotificationAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.api.NotificationResource;
@@ -29,19 +29,20 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIFICATION_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
 @Validated
 public class NotificationResourceImpl implements NotificationResource {
+    private final NotificationAuthorizer notificationAuthorizer;
     private final NotificationService notificationService;
 
-    @RolesAllowed(GESUCH_READ)
-    @AllowAll
     @Override
+    @RolesAllowed(NOTIFICATION_READ)
     public List<NotificationDto> getNotificationsForCurrentUser() {
+        notificationAuthorizer.canGetForCurrentUser();
         return notificationService.getNotificationsForCurrentUser();
     }
 }

@@ -18,9 +18,7 @@ const result = [];
 
 for (const type of filters) {
   for (const requestedRole of type.roles) {
-    result.push(
-      `${psfs} ${type.postfix}_${requestedRole} = '${filterDef.prefix}_${requestedRole}_${type.postfix}';`
-    );
+    result.push(`${psfs} ${type.postfix}_${requestedRole} = "${filterDef.prefix}_${requestedRole}_${type.postfix}";`);
   }
 
   result.push("");

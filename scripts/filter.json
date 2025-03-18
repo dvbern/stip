@@ -28,7 +28,8 @@
         "AUSBILDUNG_UPDATE",
         "AUSBILDUNG_DELETE",
         "GESUCH_UPDATE",
-        "GESUCH_READ"
+        "GESUCH_READ",
+        "STAMMDATEN_READ"
       ]
     },
     {
@@ -36,7 +37,8 @@
       "composite": "Jurist",
       "roles": [
         "AUSBILDUNG_READ",
-        "GESUCH_READ"
+        "GESUCH_READ",
+        "STAMMDATEN_READ"
       ]
     },
     {
@@ -52,6 +54,27 @@
         "STAMMDATEN_READ",
         "STAMMDATEN_UPDATE",
         "STAMMDATEN_DELETE"
+      ]
+    },
+    {
+      "postfix": "SOZIALDIENST",
+      "composite": "Sozialdienst-Mitarbeiter",
+      "roles": [
+        "AUSBILDUNG_CREATE",
+        "AUSBILDUNG_READ",
+        "AUSBILDUNG_UPDATE",
+        "AUSBILDUNG_DELETE",
+        "GESUCH_CREATE",
+        "GESUCH_READ",
+        "GESUCH_UPDATE",
+        "GESUCH_DELETE"
+      ]
+    },
+    {
+      "postfix": "SOZADMIN",
+      "composite": "Sozialdienst-Admin",
+      "roles": [
+
       ]
     }
   ]

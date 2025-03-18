@@ -15,27 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.stipdecision.resource;
+package ch.dvbern.stip.api.common.authorization;
 
-import java.util.List;
-
-import ch.dvbern.stip.generated.api.StipDecisionResource;
-import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
-import ch.dvbern.stip.stipdecision.service.StipDecisionService;
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
-
-@RequestScoped
+@ApplicationScoped
 @RequiredArgsConstructor
-public class StipDecisionResourceImpl implements StipDecisionResource {
-    private final StipDecisionService decisionService;
-
-    @RolesAllowed(STAMMDATEN_READ)
-    @Override
-    public List<StipDecisionTextDto> getAll() {
-        return decisionService.getAll();
+@Authorizer
+public class NotificationAuthorizer extends BaseAuthorizer {
+    public void canGetForCurrentUser() {
+        permitAll();
     }
 }
