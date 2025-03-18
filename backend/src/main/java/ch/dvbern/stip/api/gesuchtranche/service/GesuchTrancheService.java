@@ -162,10 +162,6 @@ public class GesuchTrancheService {
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
-        return getAllTranchenAndInitalTrancheForGesuch(gesuchId);
-    }
-
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
         final var tranchenByTyp = gesuchTrancheRepository
             .findForGesuch(gesuchId)
             .collect(Collectors.groupingBy(GesuchTranche::getTyp));

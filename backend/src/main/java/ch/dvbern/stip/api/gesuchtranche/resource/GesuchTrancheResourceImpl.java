@@ -59,13 +59,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public GesuchTrancheListDto getAllTranchenForGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuch(gesuchId);
-    }
-
     @Override
     public GesuchTrancheListDto getAllTranchenForGesuchGS(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
