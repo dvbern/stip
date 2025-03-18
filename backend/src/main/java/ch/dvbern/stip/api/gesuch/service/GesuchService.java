@@ -45,7 +45,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -890,24 +890,33 @@ public class GesuchService {
             formularOfStateEingereicht
         );
 
-        final var dokumentsNow = trancheToReset.getGesuchFormular().getTranche().getGesuchDokuments(); // now
-        final var dokumentsEingerichtIds =
-            formularOfStateEingereicht.getTranche().getGesuchDokuments().stream().map(GesuchDokument::getId).toList(); // then
-
-        final var dokumentsNowButNotThen = dokumentsNow.stream()
-            .filter(gesuchDokument -> !dokumentsEingerichtIds.contains(gesuchDokument.getId()))
+        final var dokumentIdsNow = trancheToReset.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .stream()
+                    .map(
+                        Dokument::getId
+                    )
+            )
             .toList();
 
-        final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
-
-        dokumentsNowButNotThen
-            .forEach(
+        final var dokumentIdsThen = trancheOfStateEingereicht.getGesuchDokuments()
+            .stream()
+            .flatMap(
                 gesuchDokument -> gesuchDokument.getDokumente()
-                    .forEach(
-                        dokument -> dokumentObjectIdsToBeDeleted
-                            .add(gesuchDokumentService.deleteDokument(dokument.getId()))
+                    .stream()
+                    .map(
+                        Dokument::getId
                     )
-            );
+            )
+            .toList();
+
+        final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
+
+        final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
+        dokumentIdsNowButNotThen
+            .forEach(uuid -> dokumentObjectIdsToBeDeleted.add(gesuchDokumentService.deleteDokument(uuid)));
 
         gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
 

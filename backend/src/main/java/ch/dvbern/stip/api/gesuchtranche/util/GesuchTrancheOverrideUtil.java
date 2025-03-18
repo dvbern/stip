@@ -121,11 +121,5 @@ public class GesuchTrancheOverrideUtil {
                 targetGesuchDokumente.add(GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument));
             }
         }
-        //
-        // target.getTranche()
-        // .getGesuchDokuments()
-        // .forEach(gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND));
-
-        // TODO KSTIP-1998: Reset the Dokumente as well
     }
 }
