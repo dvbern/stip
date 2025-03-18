@@ -73,6 +73,11 @@ public class RequiredDokumentService {
                 .stream()
                 .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithNoFiles);
 
+        final var containsAusstehendeGesuchDokumenteWithFiles =
+            gesuch.getGesuchTranchen()
+                .stream()
+                .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithFiles);
+
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
             .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
@@ -84,8 +89,11 @@ public class RequiredDokumentService {
             return false;
         }
 
-        return isAnyDocumentStillRequired || containsAusstehendeGesuchDokumenteWithoutFiles
-        || containsAbgelehnteGesuchDokumente;
+        final var shouldFehlendeDokumenteUebermitteln =
+            isAnyDocumentStillRequired || containsAusstehendeGesuchDokumenteWithoutFiles
+            || containsAbgelehnteGesuchDokumente;
+
+        return shouldFehlendeDokumenteUebermitteln && !containsAusstehendeGesuchDokumenteWithFiles;
     }
 
     public boolean getSBCanBearbeitungAbschliessen(final Gesuch gesuch) {

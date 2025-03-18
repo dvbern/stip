@@ -100,6 +100,16 @@ public class RequiredDokumentUtil {
             .count() > 0;
     }
 
+    public boolean containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(
+                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                && gesuchDokument.getDokumente().size() > 0
+            )
+            .count() > 0;
+    }
+
     public boolean containsAbgelehnteDokumente(final GesuchTranche gesuchTranche) {
         return gesuchTranche.getGesuchDokuments()
             .stream()
