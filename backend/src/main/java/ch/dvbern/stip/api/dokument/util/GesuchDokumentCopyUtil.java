@@ -17,8 +17,11 @@
 
 package ch.dvbern.stip.api.dokument.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -56,4 +59,32 @@ public class GesuchDokumentCopyUtil {
         copy.setGesuchDokument(source.getGesuchDokument());
         return copy;
     }
+
+    public GesuchDokument createCopy(final GesuchDokument source) {
+        final var copy = new GesuchDokument();
+        copyValues(source, copy);
+        return copy;
+    }
+
+    public void copyValues(final GesuchDokument source, final GesuchDokument target) {
+        target.setDokumentTyp(source.getDokumentTyp());
+        target.setGesuchTranche(source.getGesuchTranche());
+        target.setDokumentTyp(source.getDokumentTyp());
+        target.setStatus(source.getStatus());
+        if (source.getCustomDokumentTyp() != null) {
+            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()));
+        }
+        target.setDokumente(new ArrayList<>());
+        source.getDokumente().forEach(target::addDokument);
+    }
+
+    public void doOverrideOfSet(Set<GesuchDokument> targetItems, Set<GesuchDokument> sourceItems) {
+        OverrideUtil.doOverrideOfSet(
+            targetItems,
+            sourceItems,
+            GesuchDokumentCopyUtil::copyValues,
+            GesuchDokumentCopyUtil::createCopy
+        );
+    }
+
 }

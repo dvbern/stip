@@ -19,6 +19,8 @@ package ch.dvbern.stip.api.dokument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -42,6 +44,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -82,6 +85,7 @@ public class DokumentHistoryResourceTest {
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec returnedGesuch;
     private UUID gesuchTrancheId;
+    private List<GesuchDokumentDtoSpec> initialGesuchDokuments = null;
 
     @Test
     @TestAsGesuchsteller
@@ -116,12 +120,17 @@ public class DokumentHistoryResourceTest {
             TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
         }
 
-        gesuchTrancheApiSpec.getGesuchDokumenteGS()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+        initialGesuchDokuments = Arrays.stream(
+            gesuchTrancheApiSpec.getGesuchDokumenteGS()
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentDtoSpec[].class)
+        ).toList();
     }
 
     @Test
@@ -352,6 +361,107 @@ public class DokumentHistoryResourceTest {
         ).toList();
 
         assertThat(gesuchDokuments.size(), is(18));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(11)
+    void dokumenteHochladen() {
+        for (final var dokTyp : DokumentTypDtoSpec.values()) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
+        }
+
+        gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(12)
+    void gesuchEinreichen2() {
+        gesuchApiSpec.gesuchTrancheFehlendeDokumenteEinreichen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(13)
+    void gesuchStatusChangeToInBearbeitungSB2() {
+        returnedGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        assertThat(returnedGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(14)
+    void zurueckweisen() {
+        gesuchApiSpec.gesuchZurueckweisen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(
+                new KommentarDtoSpec()
+                    .text("DONT_CARE")
+            )
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(15)
+    void testDokumenteRestored() {
+        final var gesuchDokuments = Arrays.stream(
+            gesuchTrancheApiSpec.getGesuchDokumenteGS()
+                .gesuchTrancheIdPath(gesuchTrancheId)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentDtoSpec[].class)
+        ).toList();
+        var gesuchDokumentsComp = new ArrayList<>(gesuchDokuments);
+        gesuchDokumentsComp.sort(Comparator.comparing(GesuchDokumentDtoSpec::getDokumentTyp));
+        var gesuchDokumentsInit = new ArrayList<>(initialGesuchDokuments);
+        gesuchDokumentsInit.sort(Comparator.comparing(GesuchDokumentDtoSpec::getDokumentTyp));
+
+        assertThat(gesuchDokumentsComp.size(), is(initialGesuchDokuments.size()));
+
+        for (int i = 0; i < gesuchDokumentsComp.size(); i++) {
+            assertThat(
+                gesuchDokumentsComp.get(i).getDokumentTyp(),
+                equalTo(gesuchDokumentsInit.get(i).getDokumentTyp())
+            );
+            assertThat(
+                gesuchDokumentsComp.get(i).getCustomDokumentTyp(),
+                equalTo(gesuchDokumentsInit.get(i).getCustomDokumentTyp())
+            );
+            assertThat(gesuchDokumentsComp.get(i).getStatus(), equalTo(gesuchDokumentsInit.get(i).getStatus()));
+            assertThat(
+                gesuchDokumentsComp.get(i).getDokumente().size(),
+                equalTo(gesuchDokumentsInit.get(i).getDokumente().size())
+            );
+        }
     }
 
     @Test
