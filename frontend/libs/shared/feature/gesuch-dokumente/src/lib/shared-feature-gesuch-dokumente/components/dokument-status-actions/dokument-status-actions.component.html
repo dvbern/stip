@@ -9,6 +9,7 @@
           <button
             (click)="dokumentAkzeptieren.emit(dokument); $event.stopPropagation()"
             type="button"
+            data-testid="dokument-akzeptieren"
             class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
           >
             <i class="material-symbols-rounded tw-text-xl/none">check</i>
@@ -19,6 +20,7 @@
           <button
             (click)="dokumentAblehnen.emit(dokument); $event.stopPropagation()"
             type="button"
+            data-testid="dokument-ablehnen"
             class="btn table-btn btn-danger d-flex align-items-center gap-1"
           >
             <i class="material-symbols-rounded tw-text-xl/none">close</i>
