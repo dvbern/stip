@@ -52,9 +52,19 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
-        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+        if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
             throw new UnauthorizedException();
         }
+    }
+
+    @Transactional
+    public void canReadChanges(final UUID gesuchID) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (isAdminOrSb(currentBenutzer)) {
+            return;
+        }
+        throw new UnauthorizedException();
     }
 
     @Transactional

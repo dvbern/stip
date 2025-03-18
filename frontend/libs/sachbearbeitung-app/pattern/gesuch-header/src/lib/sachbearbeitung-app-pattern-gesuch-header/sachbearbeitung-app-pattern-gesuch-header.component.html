@@ -26,7 +26,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            [attr.data-testid]="'tranche-nav-menu-item-' + ($index + 1)"
+            data-testid="tranche-nav-menu-item"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <span>
@@ -48,7 +48,7 @@
       routerLinkActive="active"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="sb-gesuch-header-verfuegung-link"
-      [class.disabled]="!gesuchPermissionsSig().canViewVerfuegung"
+      [class.disabled]="!canViewBerechnungSig()"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
       <span>{{ 'sachbearbeitung-app.header.verfuegung' | translate }}</span>
@@ -201,7 +201,7 @@
               class="btn fw-normal px-2 shadow-none pe-auto"
               [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
               [disabled]="uebergang.disabledReason || !trancheId"
-              [attr.title]="
+              [matTooltip]="
                 uebergang.disabledReason
                   ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
                     | translate)

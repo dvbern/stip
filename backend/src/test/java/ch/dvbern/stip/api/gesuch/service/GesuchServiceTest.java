@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -38,9 +37,15 @@ import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -62,6 +67,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -74,6 +80,8 @@ import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -85,7 +93,9 @@ import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -97,7 +107,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -119,6 +128,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -142,6 +152,9 @@ class GesuchServiceTest {
     @Inject
     SteuerdatenMapper steuerdatenMapper;
 
+    @Inject
+    SteuererklaerungMapper steuererklaerungMapper;
+
     @InjectMock
     GesuchRepository gesuchRepository;
 
@@ -163,12 +176,26 @@ class GesuchServiceTest {
     @InjectMock
     BerechnungService berechnungService;
 
+    @InjectMock
+    GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+
     @InjectSpy
     MailService mailService;
+
     @InjectSpy
     NotificationService notificationService;
+
     @InjectMock
     NotificationRepository notificationRepository;
+
+    @InjectMock
+    CustomDokumentTypRepository customDokumentTypRepository;
+
+    @InjectMock
+    GesuchDokumentRepository gesuchDokumentRepository;
+
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
 
     static final String TENANT_ID = "bern";
 
@@ -971,222 +998,31 @@ class GesuchServiceTest {
     // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
     // }
 
-    private SteuerdatenUpdateDto initSteuerdatenUpdateDto(SteuerdatenTyp typ) {
-        SteuerdatenUpdateDto steuerdatenUpdateDto = new SteuerdatenUpdateDto();
-        steuerdatenUpdateDto.setId(UUID.randomUUID());
-        steuerdatenUpdateDto.setSteuerdatenTyp(typ);
-        steuerdatenUpdateDto.setVeranlagungsCode(5);
-        steuerdatenUpdateDto.setSteuerjahr(2010);
-        steuerdatenUpdateDto.setFahrkosten(0);
-        steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernBund(0);
-        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
-        steuerdatenUpdateDto.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto.setVerpflegung(0);
-        steuerdatenUpdateDto.setVermoegen(0);
-        return steuerdatenUpdateDto;
+    private SteuerdatenDto initSteuerdatenDto(SteuerdatenTyp typ) {
+        SteuerdatenDto steuerdatenDto = new SteuerdatenDto();
+        steuerdatenDto.setId(UUID.randomUUID());
+        steuerdatenDto.setSteuerdatenTyp(typ);
+        steuerdatenDto.setVeranlagungsCode(5);
+        steuerdatenDto.setSteuerjahr(2010);
+        steuerdatenDto.setFahrkosten(0);
+        steuerdatenDto.setEigenmietwert(0);
+        steuerdatenDto.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdatenDto.setKinderalimente(0);
+        steuerdatenDto.setSteuernBund(0);
+        steuerdatenDto.setSteuernKantonGemeinde(0);
+        steuerdatenDto.setTotalEinkuenfte(0);
+        steuerdatenDto.setTotalEinkuenfte(0);
+        steuerdatenDto.setVerpflegung(0);
+        steuerdatenDto.setVermoegen(0);
+        return steuerdatenDto;
     }
 
-    @Test
-    @TestAsGesuchsteller
-    void gesuchUpdateSteuerdatenSetDefaultValuesTest_NonNullValues() {
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
-        steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungsCode(null);
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // update values with non-null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(5);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(
-                tranche.getGesuch()
-                    .getGesuchsperiode()
-                    .getGesuchsjahr()
-                    .getTechnischesJahr()
-                - 1
-            )
-        );
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @DisplayName("Steuerjahr and veranlagungscode existing in db should not be overwritten by GS")
-    void gesuchUpdateSteuerdatenTest_NonNullValues() {
-        // init values like they would be in the db
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
-        steuerdatenUpdateDto1.setSteuerjahr(2010);
-        steuerdatenUpdateDto1.setVeranlagungsCode(5);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // prepare an update dto and set values with non-null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(0);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(0);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(5));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(2010)
-        );
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @DisplayName("Steuerjahr and veranlagungscode in steuerdaten should be overwriten by SB")
-    void gesuchUpdateSteuerdatenSetDefaultValuesTest_SBNonNullValues() {
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
-        steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungsCode(null);
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // update values with non-null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(5);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        final var gesuchStatus = tranche.getGesuch().getGesuchStatus();
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-        tranche.getGesuch().setGesuchStatus(gesuchStatus);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(5));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(2010)
-        );
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @DisplayName("Steuerjahr and veranlagungscode in steuerdaten should not be overwriten by GS")
-    void gesuchUpdateSteuerdatenSetDefaultValuesTest_NullValues() {
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
-        steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungsCode(null);
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // set null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(null);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
-        );
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @DisplayName("Correct default values should be set in steuerdaten when executed as SB")
-    void gesuchUpdateSteuerdatenSetDefaultValuesTest_SBNullValues() {
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
-        steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungsCode(null);
-
-        SteuerdatenUpdateDto steuerdatenUpdateDto2 = initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
-        steuerdatenUpdateDto2.setSteuerjahr(null);
-        steuerdatenUpdateDto2.setVeranlagungsCode(null);
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .setFamiliensituation(new FamiliensituationUpdateDto());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getFamiliensituation()
-            .setElternVerheiratetZusammen(false);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // set null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(1)
-            .setVeranlagungsCode(null);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        final var gesuchStatus = tranche.getGesuch().getGesuchStatus();
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-        tranche.getGesuch().setGesuchStatus(gesuchStatus);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
-        );
+    private SteuererklaerungUpdateDto initSteuererklaerungUpdateDto(SteuerdatenTyp typ) {
+        SteuererklaerungUpdateDto steuererklaerungUpdateDto = new SteuererklaerungUpdateDto();
+        steuererklaerungUpdateDto.setId(UUID.randomUUID());
+        steuererklaerungUpdateDto.setSteuerdatenTyp(typ);
+        steuererklaerungUpdateDto.setSteuererklaerungInBern(true);
+        return steuererklaerungUpdateDto;
     }
 
     @Test
@@ -1213,39 +1049,6 @@ class GesuchServiceTest {
         assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
             Matchers.equalTo(0)
-        );
-    }
-
-    @TestAsGesuchsteller
-    @Test
-    void emptyPageSteuerdatenTest() {
-        GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
-        steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungsCode(null);
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        // set null values
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getSteuerdaten()
-            .get(0)
-            .setVeranlagungsCode(null);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
-
-        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
-        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
-        assertThat(
-            steuerdatenTab.getSteuerjahr(),
-            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
         );
     }
 
@@ -1392,6 +1195,137 @@ class GesuchServiceTest {
         Mockito.verify(mailService, Mockito.atMost(2)).sendStandardNotificationEmail(any(), any(), any(), any());
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    @Description("gesuchFehlendeDokumenteUebermitteln should also handle custom documents in state AUSSTEHEND")
+    void gesuchFehlendeDokumenteEinreichenAlsoHandlesGenericMissingDocuments() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+
+        /*
+         * Setup:
+         * a gesuch in state IN_BEARBEITUNG_SB
+         * a customGesuchDokumentTyp
+         * one gesuchDokument in state ABGELEHNT
+         * one cusotm gesuchDokument in state AUSSTEHEND
+         *
+         * Expected:
+         * method call should not fail, no exception thrown
+         * these 2 gesuchDokuments should appear in state AUSSTEHEND (to the GS)
+         */
+
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        // ad a "normal" gesuch document
+        GesuchDokument gesuchDokument = new GesuchDokument();
+        gesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        // gesuchDokument.setDokumente(List.of(new Dokument()));
+        gesuchDokument.setId(UUID.randomUUID());
+        gesuchDokument.setStatus(Dokumentstatus.ABGELEHNT);
+
+        // add custom document
+        CustomDokumentTyp customDokument = new CustomDokumentTyp();
+        customDokument.setId(UUID.randomUUID());
+        customDokument.setType("test");
+        customDokument.setDescription("test");
+        GesuchDokument customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setCustomDokumentTyp(customDokument);
+        customGesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+
+        // add gesuchdokumente to gesuch
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(customGesuchDokument);
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(gesuchDokument);
+
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT))
+            .thenReturn(Stream.of(gesuchDokument));
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+            .thenReturn(Stream.of(customGesuchDokument));
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+
+        assertDoesNotThrow(() -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId()));
+    }
+
+    @Description("gesuchFehlendeDokumenteUebermitteln should also handle custom documents in state AUSSTEHEND")
+    @Test
+    @TestAsSachbearbeiter
+    void gesuchFehlendeDokumenteEinreichenAlsoHandlesGenericMissingDocumentsAllOthersAccepted() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+
+        /*
+         * Setup:
+         * a gesuch in state IN_BEARBEITUNG_SB
+         * a customGesuchDokumentTyp
+         * one gesuchDokument in state AKZEPTIERT
+         * one cusotm gesuchDokument in state AUSSTEHEND
+         *
+         * Expected:
+         * method call should not fail, no exception thrown
+         */
+
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        // ad a "normal" gesuch document
+        GesuchDokument gesuchDokument = new GesuchDokument();
+        gesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        // gesuchDokument.setDokumente(List.of(new Dokument()));
+        gesuchDokument.setId(UUID.randomUUID());
+        gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+
+        // add custom document
+        CustomDokumentTyp customDokument = new CustomDokumentTyp();
+        customDokument.setId(UUID.randomUUID());
+        customDokument.setType("test");
+        customDokument.setDescription("test");
+        GesuchDokument customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setCustomDokumentTyp(customDokument);
+        customGesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+
+        // add gesuchdokumente to gesuch
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(customGesuchDokument);
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(gesuchDokument);
+
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AKZEPTIERT))
+            .thenReturn(Stream.of(gesuchDokument));
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+            .thenReturn(Stream.of(customGesuchDokument));
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+
+        assertDoesNotThrow(() -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId()));
+    }
+
     @TestAsGesuchsteller
     @Test
     @Description("Try to einreichen a gesuch in state FEHLENDE_DOKUMENTE with missing documents")
@@ -1407,6 +1341,7 @@ class GesuchServiceTest {
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.getAusbildung().setFall(fall);
+        gesuch.getAusbildung().setAusbildungsgang(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
@@ -1459,6 +1394,224 @@ class GesuchServiceTest {
 
     @TestAsGesuchsteller
     @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status FEHLENDE_DOKUMENTE")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusFehlendeDokumente() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        // act
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status VERFUEGT")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusVerfuegt() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    /*
+     * Gesuch is in state IN_BEARBEITUNG_SB.
+     * GS receives Tranche of state when Gesuch was in state EINGEREICHT.
+     * the changes made to the tranche by SB (previous step) should not be visible
+     * changes is empty
+     * current gesuchtranche : state of eingereicht
+     */
+    @Test
+    @Description("GS should receive data of gesuch in state eingereicht when in bearbeitung by SB")
+    void checkGSReceivesTrancheInStateEingereicht() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+        gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSB
+            )
+        );
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+        var gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+
+        // also test for other related states
+        gesuchInBearbeitungSB.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+        gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+    }
+
+    /*
+     * Gesuch gets rejected by SB
+     * data of GesuchFormular should be reset entirely to the state of EINGEREICHT
+     * the gesuch shoudl be in state IN_BEARBEITUNG_GS
+     */
+    @Test
+    @Description("The whole gesuch should should be reset to snapshot of EINGEREICHT when rejected by SB")
+    void checkGesuchIsResetedAfterRejectionTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        final var gesuchInBearbeitungSpy = Mockito.spy(gesuchInBearbeitungSB);
+        gesuchInBearbeitungSpy.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSpy.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSpy.getAusbildung().setFall(fall);
+
+        doReturn(gesuchInBearbeitungSpy.getGesuchTranchen().get(0)).when(gesuchInBearbeitungSpy)
+            .getLatestGesuchTranche();
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSpy
+            )
+        );
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(eingereichtesGesuch));
+
+        // gesuch gets rejected
+        gesuchInBearbeitungSpy.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSpy.getId(), new KommentarDto("test"));
+        final var gesuchSB = gesuchService
+            .getGesuchSB(gesuchInBearbeitungSpy.getId(), gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());
+        assertThat(gesuchSB.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
+        assertThat(
+            gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+    }
+
+    @TestAsGesuchsteller
+    @Test
     @Description("Check that gesuch is moved to state IN_BEARBEITUNG_GS when the frist is done")
     void checkForFehlendeDokumenteOnAllGesucheTest() {
         // arrange
@@ -1489,6 +1642,9 @@ class GesuchServiceTest {
                 .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
         )
             .thenReturn(Stream.of(gesuch));
+
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuch));
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
@@ -1648,10 +1804,11 @@ class GesuchServiceTest {
             gesuchFormular.getLebenslaufItems().add(lebenslaufItemMapper.partialUpdate(item, new LebenslaufItem()));
         });
 
-        if (trancheUpdate.getGesuchFormular().getSteuerdaten() != null) {
-            trancheUpdate.getGesuchFormular().getSteuerdaten().forEach(item -> {
+        if (trancheUpdate.getGesuchFormular().getSteuererklaerung() != null) {
+            trancheUpdate.getGesuchFormular().getSteuererklaerung().forEach(item -> {
                 item.setId(UUID.randomUUID());
-                gesuchFormular.getSteuerdaten().add(steuerdatenMapper.partialUpdate(item, new Steuerdaten()));
+                gesuchFormular.getSteuererklaerung()
+                    .add(steuererklaerungMapper.partialUpdate(item, new Steuererklaerung()));
             });
         }
 

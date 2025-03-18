@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
@@ -36,7 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentsProducer {
     private final PlzService plzService;
 
     private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap = Map.of(

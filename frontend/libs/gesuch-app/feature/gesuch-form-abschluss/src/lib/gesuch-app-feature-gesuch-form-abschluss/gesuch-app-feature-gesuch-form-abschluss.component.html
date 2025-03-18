@@ -1,6 +1,7 @@
 <div class="container">
   <div class="row">
     @let gesuch = gesuchViewSig().gesuch;
+    @let permissions = gesuchViewSig().permissions;
     @let einreichenView = einreichenStore.einreichenViewSig();
     @if (gesuchViewSig().loading || einreichenView.loading) {
       <dv-shared-ui-loading data-testid="abschluss-loading"></dv-shared-ui-loading>
@@ -74,7 +75,7 @@
                   class="btn btn-primary mt-4"
                   (click)="abschliessen()"
                   data-testid="button-abschluss"
-                  [disabled]="einreichenStore.einreicheOperationIsInProgressSig()"
+                  [disabled]="permissions.canFreigeben && einreichenStore.einreicheOperationIsInProgressSig()"
                 >
                   {{ 'shared.form.abschluss.abschliessen' | translate }}
                 </button>

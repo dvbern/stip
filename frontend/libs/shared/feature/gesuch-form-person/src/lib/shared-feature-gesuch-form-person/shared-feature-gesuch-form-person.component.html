@@ -92,7 +92,7 @@
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
           <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-person-nachname" />
-          <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges?.nachname; testId: 'form-person-nachname-zuvor-hint'"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -282,7 +282,7 @@
         </mat-form-field>
 
         <!-- ZIVILSTAND -->
-        <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+        <div class="d-flex align-content-center col-12 col-md-6 col-xl-4 gap-2">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.person.zivilstand.label' | translate }}</mat-label>
             <mat-select
@@ -600,7 +600,7 @@
               <span class="material-symbols-rounded"> info </span>
             </button>
           </div>
-          <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+          <div class="d-flex gap-2 col-12 justify-content-between">
             <div class="d-flex flex-column">
               <mat-radio-button data-testid="yes" [value]="true">{{
                 'shared.form.radio.yes' | translate

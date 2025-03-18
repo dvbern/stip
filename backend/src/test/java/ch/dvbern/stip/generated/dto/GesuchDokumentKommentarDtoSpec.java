@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
-  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_DOKUMENT_ID,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_STATUS,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_KOMMENTAR,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
@@ -44,8 +43,8 @@ public class GesuchDokumentKommentarDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
 
-  public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
-  private DokumentTypDtoSpec dokumentTyp;
+  public static final String JSON_PROPERTY_GESUCH_DOKUMENT_ID = "gesuchDokumentId";
+  private UUID gesuchDokumentId;
 
   public static final String JSON_PROPERTY_DOKUMENT_STATUS = "dokumentStatus";
   private DokumentstatusDtoSpec dokumentStatus;
@@ -88,29 +87,29 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  public GesuchDokumentKommentarDtoSpec dokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+  public GesuchDokumentKommentarDtoSpec gesuchDokumentId(UUID gesuchDokumentId) {
     
-    this.dokumentTyp = dokumentTyp;
+    this.gesuchDokumentId = gesuchDokumentId;
     return this;
   }
 
    /**
-   * Get dokumentTyp
-   * @return dokumentTyp
+   * Get gesuchDokumentId
+   * @return gesuchDokumentId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public DokumentTypDtoSpec getDokumentTyp() {
-    return dokumentTyp;
+  public UUID getGesuchDokumentId() {
+    return gesuchDokumentId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
-    this.dokumentTyp = dokumentTyp;
+  public void setGesuchDokumentId(UUID gesuchDokumentId) {
+    this.gesuchDokumentId = gesuchDokumentId;
   }
 
 
@@ -227,7 +226,7 @@ public class GesuchDokumentKommentarDtoSpec {
     }
     GesuchDokumentKommentarDtoSpec gesuchDokumentKommentar = (GesuchDokumentKommentarDtoSpec) o;
     return Objects.equals(this.gesuchTrancheId, gesuchDokumentKommentar.gesuchTrancheId) &&
-        Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
+        Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.userErstellt, gesuchDokumentKommentar.userErstellt) &&
@@ -236,7 +235,7 @@ public class GesuchDokumentKommentarDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheId, dokumentTyp, dokumentStatus, kommentar, userErstellt, timestampErstellt);
+    return Objects.hash(gesuchTrancheId, gesuchDokumentId, dokumentStatus, kommentar, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -244,7 +243,7 @@ public class GesuchDokumentKommentarDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDtoSpec {\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
-    sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
+    sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");

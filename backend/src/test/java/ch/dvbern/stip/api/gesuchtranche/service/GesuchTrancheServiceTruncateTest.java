@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -357,6 +358,7 @@ class GesuchTrancheServiceTruncateTest {
             .setFamiliensituation(new Familiensituation())
             .setPartner(null)
             .setAuszahlung(new Auszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER))
-            .setEinnahmenKosten(new EinnahmenKosten());
+            .setEinnahmenKosten(new EinnahmenKosten())
+            .setDarlehen(new Darlehen());
     }
 }

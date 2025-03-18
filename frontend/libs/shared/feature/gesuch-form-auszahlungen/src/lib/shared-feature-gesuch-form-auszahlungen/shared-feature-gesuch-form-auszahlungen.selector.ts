@@ -2,10 +2,7 @@ import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
-import {
-  Kontoinhaber,
-  SharedModelGesuchFormular,
-} from '@dv/shared/model/gesuch';
+import { GesuchFormularType, Kontoinhaber } from '@dv/shared/model/gesuch';
 import {
   ElternSituation,
   calculateElternSituationGesuch,
@@ -44,7 +41,7 @@ export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
 );
 
 function calculateHasNecessaryPreStepsGesuch(
-  formular: SharedModelGesuchFormular | null,
+  formular: GesuchFormularType | null,
 ) {
   if (!formular?.familiensituation) {
     return false;
@@ -65,7 +62,7 @@ export function calculateHasNecessaryPreSteps(
 }
 
 function calculateKontoinhaberValuesGesuch(
-  formular: SharedModelGesuchFormular | null,
+  formular: GesuchFormularType | null,
 ) {
   const elternSituation = calculateElternSituationGesuch(formular);
   return calculateKontoinhaberValues(elternSituation);

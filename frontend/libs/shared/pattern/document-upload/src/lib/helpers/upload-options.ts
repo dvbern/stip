@@ -2,6 +2,7 @@ import { Signal, computed } from '@angular/core';
 
 import { DokumentOptions } from '@dv/shared/model/dokument';
 import {
+  CustomDokumentTyp,
   Dokument,
   DokumentTyp,
   GesuchDokument,
@@ -81,6 +82,12 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.darlehen.file.SCHULGELDRECHNUNG',
   DARLEHEN_BELEGE_ANSCHAFFUNGEN:
     'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER',
 };
 
 /**
@@ -140,15 +147,12 @@ export function createUploadOptionsFactory<
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
+    options?: { initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
       const permissions = view().permissions;
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
-      const readonly = !(
-        permissions.canUploadDocuments || permissions.canWrite
-      );
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? ({
@@ -160,9 +164,7 @@ export function createUploadOptionsFactory<
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },
-            singleUpload: options?.singleUpload ?? false,
             initialDokumente: options?.initialDocuments,
-            readonly,
           } satisfies DokumentOptions)
         : null;
     });
@@ -175,9 +177,7 @@ export function createGesuchDokumentOptions(options: {
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
-  singleUpload?: boolean;
   permissions: PermissionMap;
-  readonly: boolean;
 }): DokumentOptions {
   const {
     trancheId,
@@ -185,15 +185,12 @@ export function createGesuchDokumentOptions(options: {
     dokumentTyp,
     gesuchDokument,
     initialDocuments,
-    singleUpload,
     permissions,
-    readonly,
   } = options;
   return {
     allowTypes,
     permissions,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-    singleUpload: singleUpload ?? false,
     dokument: {
       dokumentTyp,
       trancheId,
@@ -201,7 +198,6 @@ export function createGesuchDokumentOptions(options: {
       art: 'GESUCH_DOKUMENT',
     },
     initialDokumente: initialDocuments,
-    readonly,
   };
 }
 
@@ -212,9 +208,7 @@ export function createAdditionalDokumentOptions(options: {
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchDokument?: UnterschriftenblattDokument;
   initialDocuments?: Dokument[];
-  singleUpload?: boolean;
   permissions: PermissionMap;
-  readonly: boolean;
 }): DokumentOptions {
   const {
     gesuchId,
@@ -223,15 +217,12 @@ export function createAdditionalDokumentOptions(options: {
     dokumentTyp,
     gesuchDokument,
     initialDocuments,
-    singleUpload,
     permissions,
-    readonly,
   } = options;
   return {
     allowTypes,
     permissions,
     titleKey: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
-    singleUpload: singleUpload ?? false,
     dokument: {
       dokumentTyp,
       gesuchId,
@@ -240,6 +231,39 @@ export function createAdditionalDokumentOptions(options: {
       gesuchDokument,
     },
     initialDokumente: initialDocuments,
-    readonly,
+  };
+}
+
+export function createCustomDokumentOptions(options: {
+  gesuchId: string;
+  trancheId: string;
+  allowTypes: string;
+  dokumentTyp: CustomDokumentTyp;
+  gesuchDokument?: GesuchDokument;
+  initialDocuments?: Dokument[];
+  permissions: PermissionMap;
+}): DokumentOptions {
+  const {
+    gesuchId,
+    trancheId,
+    allowTypes,
+    dokumentTyp,
+    gesuchDokument,
+    initialDocuments,
+    permissions,
+  } = options;
+  return {
+    allowTypes,
+    permissions,
+    titleKey: dokumentTyp.type,
+    descriptionKey: dokumentTyp.description,
+    dokument: {
+      dokumentTyp,
+      gesuchId,
+      trancheId,
+      gesuchDokument,
+      art: 'CUSTOM_DOKUMENT',
+    },
+    initialDokumente: initialDocuments,
   };
 }

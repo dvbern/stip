@@ -33,7 +33,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoS
 import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -51,7 +51,6 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -153,8 +152,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        final var gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -245,7 +243,7 @@ class GesuchFillFormularTest {
     void addEltern() {
         final var eltern = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2);
         eltern.get(0).setElternTyp(ElternTypDtoSpec.VATER);
-        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+        eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
         eltern.get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
         eltern.get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
 
@@ -256,9 +254,10 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(9)
-    void addSteuerdaten() {
-        final var steuerdaten = SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        currentFormular.setSteuerdaten(List.of(steuerdaten));
+    void addSteuererklaerung() {
+        final var steuererklaerung =
+            SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        currentFormular.setSteuererklaerung(List.of(steuererklaerung));
         patchAndValidate();
     }
 
@@ -374,7 +373,8 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
             DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
-            DokumentTypDtoSpec.PERSON_MIETVERTRAG
+            DokumentTypDtoSpec.PERSON_MIETVERTRAG,
+            DokumentTypDtoSpec.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
         };
 
         var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()
@@ -467,13 +467,13 @@ class GesuchFillFormularTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    private GesuchDtoSpec patchAndValidate() {
+    private GesuchWithChangesDtoSpec patchAndValidate() {
         final var returnedGesuch = patchGesuch();
         validatePage();
         return returnedGesuch;
     }
 
-    private GesuchDtoSpec patchGesuch() {
+    private GesuchWithChangesDtoSpec patchGesuch() {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);
 
@@ -485,14 +485,13 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        return gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuchId)
+        return gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheUpdateDtoSpec.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
     }
 
     private void validatePage() {

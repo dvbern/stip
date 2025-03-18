@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -37,9 +38,16 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -51,13 +59,21 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
+import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -77,6 +93,10 @@ import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintVa
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
 
+import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
+import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
+import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
+import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 
 public class TestUtil {
@@ -284,6 +304,10 @@ public class TestUtil {
         return ThreadLocalRandom.current().nextInt(lower, upper);
     }
 
+    public static boolean getRandomBoolean() {
+        return ThreadLocalRandom.current().nextBoolean();
+    }
+
     public static BigDecimal getRandomBigDecimal() {
         return getRandomBigDecimal(100, 10_000);
     }
@@ -313,6 +337,22 @@ public class TestUtil {
         dokumentApiSpec.createDokument()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
+            .reqSpec(req -> {
+                req.addMultiPart("fileUpload", file, "image/png");
+            })
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    public static void uploadCustomDokumentFile(
+        DokumentApiSpec dokumentApiSpec,
+        UUID customDokumentTypId,
+        File file
+    ) {
+        dokumentApiSpec.uploadCustomGesuchDokument()
+            .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");
             })
@@ -433,22 +473,26 @@ public class TestUtil {
                                 .setBfs(10)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().minusYears(1))
+                .setAusbildungEnd(LocalDate.now().plusYears(5))
         );
 
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
-            .setZivilstand(Zivilstand.LEDIG)
-            .setAdresse(new Adresse())
+            .setZivilstand(Zivilstand.VERHEIRATET)
+            .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
+            .setAdresse(
+                new Adresse().setPlz("1321").setLand(Land.CH).setStrasse("asd").setHausnummer("1").setOrt("asd")
+            )
+            .setHeimatort("Bern")
+            .setAnrede(Anrede.HERR)
+            .setTelefonnummer("0987654321")
+            .setEmail("asd@asd.ch")
+            .setKorrespondenzSprache(Sprache.DEUTSCH)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
+            .setNachname("a")
+            .setVorname("a")
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
-
-        gesuchFormular.setPartner(
-            (Partner) new Partner()
-                .setJahreseinkommen(0)
-                .setFahrkosten(0)
-                .setVerpflegungskosten(0)
-                .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
-        );
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
@@ -457,6 +501,26 @@ public class TestUtil {
                 .setWohnkosten(6000)
                 .setAusbildungskostenTertiaerstufe(450)
                 .setFahrkosten(523)
+                .setZulagen(0)
+                .setVerdienstRealisiert(true)
+                .setBetreuungskostenKinder(0)
+                .setSteuerjahr(2000)
+                .setRenten(0)
+                .setVermoegen(null)
+        );
+
+        gesuchFormular.setPartner(
+            (Partner) new Partner()
+                .setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER)
+                .setJahreseinkommen(null)
+                .setFahrkosten(null)
+                .setVerpflegungskosten(null)
+                .setAdresse(
+                    new Adresse().setPlz("1321").setLand(Land.CH).setStrasse("asd").setHausnummer("1").setOrt("asd")
+                )
+                .setNachname("a")
+                .setVorname("a")
+                .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
         );
 
         gesuchFormular.setFamiliensituation(
@@ -501,13 +565,29 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setSozialversicherungsnummer(AHV_NUMMER_VALID_VATER)
                     .setWohnkosten(0)
-                    .setAdresse(new Adresse().setLand(Land.CH).setPlz("3000"))
+                    .setErgaenzungsleistungen(0)
+                    .setTelefonnummer("0987654321")
+                    .setAusweisbFluechtling(false)
+                    .setAdresse(
+                        new Adresse().setLand(Land.CH).setPlz("3000").setStrasse("asd").setHausnummer("1").setOrt("asd")
+                    )
+                    .setNachname("a")
+                    .setVorname("a")
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setSozialversicherungsnummer(AHV_NUMMER_VALID_MUTTER)
                     .setWohnkosten(0)
-                    .setAdresse(new Adresse().setLand(Land.CH).setPlz("3000"))
+                    .setErgaenzungsleistungen(0)
+                    .setTelefonnummer("0987654321")
+                    .setAusweisbFluechtling(false)
+                    .setAdresse(
+                        new Adresse().setLand(Land.CH).setPlz("3000").setStrasse("asd").setHausnummer("1").setOrt("asd")
+                    )
+                    .setNachname("a")
+                    .setVorname("a")
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
             )
         );
@@ -524,9 +604,12 @@ public class TestUtil {
                     .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setEigenmietwert(0)
-                    .setSaeule2(0)
-                    .setSaeule3a(0)
+                    .setSaeule2(null)
+                    .setSaeule3a(null)
                     .setVermoegen(0)
+                    .setKinderalimente(0)
+                    .setSteuerjahr(2000)
+                    .setVeranlagungsCode(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
@@ -538,13 +621,115 @@ public class TestUtil {
                     .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setEigenmietwert(0)
-                    .setSaeule2(0)
-                    .setSaeule3a(0)
+                    .setSaeule2(null)
+                    .setSaeule3a(null)
                     .setVermoegen(0)
+                    .setKinderalimente(0)
+                    .setSteuerjahr(2000)
+                    .setVeranlagungsCode(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
             )
         );
 
         return baseGesuch;
+    }
+
+    public static Gesuch getFullGesuch() {
+        var gesuch = getGesuchForBerechnung(UUID.randomUUID());
+        gesuch.setGesuchNummer("asd");
+        gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
+        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+
+        gesuchFormular.setLebenslaufItems(
+            Set.of(
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.now().minusYears(2))
+                    .setWohnsitz(WohnsitzKanton.BE)
+                    .setBis(LocalDate.now().minusYears(1))
+                    .setTaetigkeitsBeschreibung("Gymnasiale Maturität")
+            )
+        );
+
+        Kind kind1 = (Kind) new Kind()
+            .setNachname("Testfall5")
+            .setVorname("Kind1")
+            .setGeburtsdatum(LocalDate.of(2013, 9, 1));
+        kind1.setWohnsitzAnteilPia(100);
+        kind1.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
+
+        Kind kind2 = (Kind) new Kind()
+            .setNachname("Testfall5")
+            .setVorname("Kind2")
+            .setGeburtsdatum(LocalDate.of(2019, 6, 1));
+        kind2.setWohnsitzAnteilPia(100);
+        kind2.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
+
+        gesuchFormular.setKinds(
+            Set.of(
+                kind1,
+                kind2
+            )
+        );
+
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung()
+                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setSteuererklaerungInBern(true),
+                new Steuererklaerung()
+                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setSteuererklaerungInBern(true)
+            )
+        );
+
+        gesuchFormular.setAuszahlung(
+            new Auszahlung()
+                .setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse())
+                .setKontoinhaber(Kontoinhaber.GESUCHSTELLER)
+                .setVorname("asd")
+                .setNachname("qwe")
+                .setIban("CH2289144464431833761")
+                .setSapBusinessPartnerId(9887965)
+        );
+
+        gesuchFormular.setDarlehen(
+            new Darlehen()
+                .setWillDarlehen(true)
+                .setBetragDarlehen(500)
+                .setBetragBezogenKanton(20)
+                .setSchulden(0)
+                .setAnzahlBetreibungen(0)
+                .setGrundNichtBerechtigt(false)
+                .setGrundAusbildungZwoelfJahre(true)
+                .setGrundHoheGebuehren(false)
+                .setGrundAnschaffungenFuerAusbildung(false)
+                .setGrundZweitausbildung(false)
+        );
+
+        return gesuch;
+    }
+
+    public static GesuchDokument setupCustomGesuchDokument() {
+        CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
+        customDokumentTyp.setId(UUID.randomUUID());
+        customDokumentTyp.setDescription("test");
+        customDokumentTyp.setType("test");
+
+        var customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+            .setDokumente(new ArrayList<>())
+            .setCustomDokumentTyp(customDokumentTyp);
+        return customGesuchDokument;
+    }
+
+    public static Gesuch setupGesuchWithCustomDokument() {
+        GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setGesuchDokuments(List.of(setupCustomGesuchDokument()));
+        Gesuch gesuch = new Gesuch();
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.setGesuchTranchen(List.of(gesuchTranche));
+        return gesuch;
     }
 }

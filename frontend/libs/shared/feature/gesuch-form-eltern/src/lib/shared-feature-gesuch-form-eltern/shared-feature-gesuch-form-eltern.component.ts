@@ -20,6 +20,7 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { preparePermissions } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -68,11 +69,17 @@ export class SharedFeatureGesuchFormElternComponent {
         const { loading, gesuch, gesuchFormular } = this.viewSig();
         const rolesMap = this.permissionStore.rolesMapSig();
         const { trancheTyp } = this.cacheSig();
+        const { permissions } = preparePermissions(
+          trancheTyp,
+          gesuch,
+          this.appType,
+          rolesMap,
+        );
         if (
           !loading &&
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(ELTERN, trancheTyp, gesuch, this.appType, rolesMap)
+          isStepDisabled(ELTERN, gesuch, permissions)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormEltern.nextTriggered({

@@ -1,12 +1,22 @@
 <div class="p-3 p-md-4">
   <h4 class="d-flex align-content-center align-self-start title">
     <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start">upload</span>
-    {{ data.options.titleKey | translate }}
+    <div [innerHTML]="data.options.titleKey | translate"></div>
     <span class="flex-grow-1"></span>
-    <button type="button" class="dv-icon-button ms-2 align-self-start close" (click)="closeDialog()">
+    <button
+      type="button"
+      class="dv-icon-button dv-icon-button-md position-absolute align-self-start top-0 end-0"
+      (click)="closeDialog()"
+    >
       <span class="material-symbols-rounded align-middle">close</span>
     </button>
   </h4>
+
+  @if (data.options.descriptionKey) {
+    <div class="tw-px-8">
+      {{ data.options.descriptionKey | translate }}
+    </div>
+  }
 
   @if (showUplaodSig()) {
     <dv-shared-ui-drop-file
@@ -30,7 +40,7 @@
           tabindex="-1"
           data-testid="file-input"
           [attr.accept]="data.options.allowTypes"
-          [attr.multiple]="data.options.singleUpload ? null : 'multiple'"
+          [attr.multiple]="'multiple'"
           [disabled]="data.store.isLoading()"
           (change)="handleFilInputEvent($event.target)"
         />

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.buchhaltung.resource;
 
 import java.util.Arrays;
+import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -25,6 +26,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -37,11 +39,14 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -77,10 +82,12 @@ class BuchhaltungResourceTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
     private static final String ERSTGESUCH_TL_KEY = "stip.verfuegung.buchhaltung.erstgesuch";
 
     private GesuchDtoSpec gesuch;
+    private GesuchWithChangesDtoSpec gesuchWithChanges;
 
     @Test
     @TestAsGesuchsteller
@@ -112,7 +119,7 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -120,14 +127,29 @@ class BuchhaltungResourceTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
-        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(5)
+    void gesuchAddSteuerdaten() {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
     void gesuchDokumenteAkzeptieren() {
         final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumente()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -157,7 +179,7 @@ class BuchhaltungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void gesuchVerfuegen() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -169,7 +191,7 @@ class BuchhaltungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void getBuchhaltung() {
         final var buchhaltungEntrys = Arrays.stream(
             buchhaltungApiSpec.getBuchhaltungEntrys()

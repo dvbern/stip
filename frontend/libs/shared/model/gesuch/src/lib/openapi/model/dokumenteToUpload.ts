@@ -9,10 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CustomDokumentTyp } from './customDokumentTyp';
 import { UnterschriftenblattDokumentTyp } from './unterschriftenblattDokumentTyp';
 import { DokumentTyp } from './dokumentTyp';
 
 export interface DokumenteToUpload { 
+    customDokumentTyps?: Array<CustomDokumentTyp>;
     required?: Array<DokumentTyp>;
     unterschriftenblaetter?: Array<UnterschriftenblattDokumentTyp>;
 }

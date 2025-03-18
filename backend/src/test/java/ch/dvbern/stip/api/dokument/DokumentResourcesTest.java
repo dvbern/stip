@@ -20,10 +20,13 @@ package ch.dvbern.stip.api.dokument;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -32,8 +35,10 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -67,20 +72,42 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
+        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private UUID gesuchId;
+    private GesuchDtoSpec gesuch;
     private UUID gesuchTrancheId;
     private UUID dokumentId;
+    private UUID customDokumentId;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void test_prepare_gesuch_for_dokument() {
-        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+
+        // set pia to < 18 years old - to prevent validation error in test
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(LocalDate.now().minusYears(19));
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuchId)
+            .body(gesuchUpdateDTO)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -169,8 +196,8 @@ class DokumentResourcesTest {
     }
 
     @Test
-    @TestAsGesuchsteller
-    @Order(6)
+    @TestAsAdmin
+    @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }

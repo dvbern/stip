@@ -95,10 +95,11 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
   gesuchAbbrechen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
       entityId: 'gesuchId',
-      titleKey: 'sachbearbeitung-app.infos.admin.gesuch-abbrechen',
-      messageKey: 'sachbearbeitung-app.infos.admin.gesuch-abbrechen.message',
+      titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
+      messageKey:
+        'sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message',
       placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
-      confirmKey: 'sachbearbeitung-app.infos.admin.gesuch-abbrechen',
+      confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -112,10 +113,11 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
   gesuchUnterbrechen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
       entityId: 'gesuchId',
-      titleKey: 'sachbearbeitung-app.infos.admin.gesuch-unterbrechen',
-      messageKey: 'sachbearbeitung-app.infos.admin.gesuch-unterbrechen.message',
+      titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
+      messageKey:
+        'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.message',
       placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
-      confirmKey: 'sachbearbeitung-app.infos.admin.gesuch-unterbrechen',
+      confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -129,10 +131,11 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
   gesuchAbschliessen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
       entityId: 'gesuchId',
-      titleKey: 'sachbearbeitung-app.infos.admin.gesuch-abschliessen',
-      messageKey: 'sachbearbeitung-app.infos.admin.gesuch-abschliessen.message',
+      titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abschliessen',
+      messageKey:
+        'sachbearbeitung-app.infos.admin.ausbildung-abschliessen.message',
       placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
-      confirmKey: 'sachbearbeitung-app.infos.admin.gesuch-abschliessen',
+      confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-abschliessen',
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

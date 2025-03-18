@@ -10,19 +10,53 @@ import {
 import { addYears, format } from 'date-fns';
 import seedRandom from 'seedrandom';
 
+import { SmallImageFile } from './files';
 import { BEARER_COOKIE } from './playwright.config.base';
 
-export const getStepTitle = async (page: Page) => {
-  return page.getByTestId('step-title');
-};
-
+/**
+ * works for all steptitles exept for "info" route (tranche component)
+ */
 export const expectStepTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(await getStepTitle(page)).toContainText(text, {
+  return expect(page.getByTestId('step-title')).toContainText(text, {
     timeout: 10000,
   });
+};
+
+/**
+ * works for "info" route (tranche component)
+ */
+export const expectInfoTitleToContainText = async (
+  text: string,
+  page: Page,
+) => {
+  return expect(page.getByTestId('dynamic-tranche-step-title')).toContainText(
+    text,
+    {
+      ignoreCase: true,
+      timeout: 10000,
+    },
+  );
+};
+
+export const uploadFiles = async (page: Page) => {
+  const uploads = await page
+    .locator('[data-testid^="button-document-upload"]')
+    .all();
+  for (const upload of uploads) {
+    const uploadCall = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/v1/gesuchDokument') &&
+        response.request().method() === 'POST',
+    );
+    await upload.click();
+    await page.getByTestId('file-input').setInputFiles(SmallImageFile);
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('file-input')).toHaveCount(0);
+    await uploadCall;
+  }
 };
 
 export type DeepNullable<T> = {
@@ -184,6 +218,7 @@ export const specificMonthPlusYears = (month: number, years: number) =>
   `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
 export const specificYearsAgo = (years: number) =>
   format(addYears(new Date(), -years), 'yyyy');
+export const today = () => format(new Date(), 'dd.MM.yyyy');
 
 export type SetupFn = (args: {
   contexts: TestContexts;

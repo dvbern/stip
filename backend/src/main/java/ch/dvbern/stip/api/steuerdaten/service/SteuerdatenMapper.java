@@ -26,52 +26,52 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenDiffUtil;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.ws.rs.NotFoundException;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenUpdateDto, Steuerdaten> {
+public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenDto, Steuerdaten> {
     public abstract Steuerdaten toEntity(SteuerdatenDto steuerdatenDto);
 
     public abstract SteuerdatenDto toDto(Steuerdaten steuerdaten);
 
     public abstract Steuerdaten partialUpdate(
-        SteuerdatenUpdateDto steuerdatenDto,
+        SteuerdatenDto steuerdatenDto,
         @MappingTarget Steuerdaten steuerdaten
     );
 
     public Set<Steuerdaten> map(
-        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+        final List<SteuerdatenDto> steuerdatenDtos,
         final @MappingTarget Set<Steuerdaten> steuerdatenSet
     ) {
-        if (steuerdatenUpdateDtos.isEmpty()) {
+        if (steuerdatenDtos.isEmpty()) {
             steuerdatenSet.clear();
         }
         Iterator<Steuerdaten> iterator = steuerdatenSet.iterator();
         while (iterator.hasNext()) {
             Steuerdaten steuerdaten = iterator.next();
             if (
-                steuerdatenUpdateDtos.stream()
+                steuerdatenDtos.stream()
                     .noneMatch(elternUpdateDto -> steuerdaten.getId().equals(elternUpdateDto.getId()))
             ) {
                 iterator.remove();
             }
         }
-        for (SteuerdatenUpdateDto steuerdatenUpdateDto : steuerdatenUpdateDtos) {
-            if (steuerdatenUpdateDto.getId() != null) {
+        for (SteuerdatenDto steuerdatenDto : steuerdatenDtos) {
+            if (steuerdatenDto.getId() != null) {
                 Steuerdaten found = steuerdatenSet.stream()
-                    .filter(steuerdaten -> steuerdaten.getId().equals(steuerdatenUpdateDto.getId()))
+                    .filter(steuerdaten -> steuerdaten.getId().equals(steuerdatenDto.getId()))
                     .findFirst()
                     .orElseThrow(
                         () -> new NotFoundException("Steuerdaten Not FOUND")
                     );
                 steuerdatenSet.remove(found);
-                steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, found));
+                steuerdatenSet.add(partialUpdate(steuerdatenDto, found));
             } else {
-                steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, new Steuerdaten()));
+                steuerdatenSet.add(partialUpdate(steuerdatenDto, new Steuerdaten()));
             }
         }
         return steuerdatenSet;
@@ -79,7 +79,7 @@ public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenUp
 
     @Override
     @BeforeMapping
-    protected void resetDependentDataBeforeUpdate(SteuerdatenUpdateDto source, @MappingTarget Steuerdaten target) {
+    protected void resetDependentDataBeforeUpdate(SteuerdatenDto source, @MappingTarget Steuerdaten target) {
         resetFieldIf(
             () -> SteuerdatenDiffUtil.hasArbeitsverhaeltnissChangedToUnselbstaendig(source, target),
             "Clear Saeulen because Arbeitsverhaeltniss is unselbstaendig",
@@ -90,5 +90,13 @@ public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenUp
         );
     }
 
-    public abstract SteuerdatenUpdateDto toUpdateDto(Steuerdaten steuerdaten);
+    @AfterMapping
+    protected void resetDependentDataAfterUpdate(
+        final Steuerdaten steuerdaten
+    ) {
+        if (!steuerdaten.getIsArbeitsverhaeltnisSelbstaendig()) {
+            steuerdaten.setSaeule2(null);
+            steuerdaten.setSaeule3a(null);
+        }
+    }
 }

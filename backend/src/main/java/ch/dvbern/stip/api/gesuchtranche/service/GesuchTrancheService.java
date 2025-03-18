@@ -32,8 +32,10 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
 import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -62,6 +64,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
@@ -105,6 +108,8 @@ public class GesuchTrancheService {
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
     private final SteuerdatenMapper steuerdatenMapper;
+    private final SteuererklaerungMapper steuererklaerungMapper;
+    private final CustomDocumentTypMapper customDocumentTypMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
@@ -148,16 +153,32 @@ public class GesuchTrancheService {
     @Transactional
     public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
+        final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+    }
 
-        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter);
+    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
+        var allRequired = new ArrayList<String>();
+        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTrancheId);
+        final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
+        allRequired
+            .addAll(requiredCustomDokumentTypes.stream().map(CustomDokumentTyp::getType).toList());
+        return allRequired;
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
         return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
+    }
+
+    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche)
+            .stream()
+            .toList();
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
@@ -195,6 +216,7 @@ public class GesuchTrancheService {
         );
 
         for (final var gesuchDokument : superfluousGesuchDokuments) {
+            gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
             formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
         }
 
@@ -206,7 +228,7 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         return gesuchDokumentMapper.toDto(
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp)
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp)
                 .orElseThrow(NotFoundException::new)
         );
     }
@@ -366,9 +388,10 @@ public class GesuchTrancheService {
             gesuchFormularUpdateDto.getKinds().add(kindMapper.toUpdateDto(kind).id(null));
         }
 
-        gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
-        for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
-            gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
+        gesuchFormularUpdateDto.setSteuererklaerung(new ArrayList<>(List.of()));
+        for (final var steuererklaerung : lastFreigegebenFormular.getSteuererklaerung()) {
+            gesuchFormularUpdateDto.getSteuererklaerung()
+                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
         }
 
         gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
@@ -393,6 +416,9 @@ public class GesuchTrancheService {
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
         gesuchDokumentKommentarService.deleteForGesuchTrancheId(aenderungId);
+        var aenderung = gesuchTrancheRepository.findById(aenderungId);
+        aenderung.getGesuchDokuments()
+            .forEach(gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId()));
         if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }
@@ -413,7 +439,14 @@ public class GesuchTrancheService {
         final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
 
         try {
-            gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+            if (
+                gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                && gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
+            ) {
+                gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
+            } else {
+                gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+            }
         } catch (ValidationsException e) {
             return ValidationsExceptionMapper.toDto(e);
         } catch (CustomValidationsException e) {
@@ -435,5 +468,9 @@ public class GesuchTrancheService {
             .toList();
 
         return !trancheInDisallowedStates.isEmpty();
+    }
+
+    public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
+        gesuchTrancheRepository.delete(gesuchTranche);
     }
 }

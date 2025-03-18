@@ -11,7 +11,7 @@ import ch.dvbern.stip.generated.dto.KindDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
 import ch.dvbern.stip.generated.dto.PartnerDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid List<LebenslaufItemDto> lebenslaufItems;
   private @Valid List<KindDto> kinds;
   private @Valid EinnahmenKostenDto einnahmenKosten;
-  private @Valid List<SteuerdatenDto> steuerdaten;
+  private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
   private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
   private @Valid DarlehenDto darlehen;
 
@@ -295,34 +295,34 @@ public class GesuchFormularDto  implements Serializable {
 
   /**
    **/
-  public GesuchFormularDto steuerdaten(List<SteuerdatenDto> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  public GesuchFormularDto steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
     return this;
   }
 
   
-  @JsonProperty("steuerdaten")
-  public List<SteuerdatenDto> getSteuerdaten() {
-    return steuerdaten;
+  @JsonProperty("steuererklaerung")
+  public List<SteuererklaerungUpdateDto> getSteuererklaerung() {
+    return steuererklaerung;
   }
 
-  @JsonProperty("steuerdaten")
-  public void setSteuerdaten(List<SteuerdatenDto> steuerdaten) {
-    this.steuerdaten = steuerdaten;
+  @JsonProperty("steuererklaerung")
+  public void setSteuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+    this.steuererklaerung = steuererklaerung;
   }
 
-  public GesuchFormularDto addSteuerdatenItem(SteuerdatenDto steuerdatenItem) {
-    if (this.steuerdaten == null) {
-      this.steuerdaten = new ArrayList<>();
+  public GesuchFormularDto addSteuererklaerungItem(SteuererklaerungUpdateDto steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
     }
 
-    this.steuerdaten.add(steuerdatenItem);
+    this.steuererklaerung.add(steuererklaerungItem);
     return this;
   }
 
-  public GesuchFormularDto removeSteuerdatenItem(SteuerdatenDto steuerdatenItem) {
-    if (steuerdatenItem != null && this.steuerdaten != null) {
-      this.steuerdaten.remove(steuerdatenItem);
+  public GesuchFormularDto removeSteuererklaerungItem(SteuererklaerungUpdateDto steuererklaerungItem) {
+    if (steuererklaerungItem != null && this.steuererklaerung != null) {
+      this.steuererklaerung.remove(steuererklaerungItem);
     }
 
     return this;
@@ -399,14 +399,14 @@ public class GesuchFormularDto  implements Serializable {
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
-        Objects.equals(this.steuerdaten, gesuchFormular.steuerdaten) &&
+        Objects.equals(this.steuererklaerung, gesuchFormular.steuererklaerung) &&
         Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs) &&
         Objects.equals(this.darlehen, gesuchFormular.darlehen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten, steuerdatenTabs, darlehen);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -424,7 +424,7 @@ public class GesuchFormularDto  implements Serializable {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
-    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
+    sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("}");
