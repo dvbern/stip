@@ -4,8 +4,10 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -42,6 +44,16 @@ public interface GesuchTrancheResource {
     @Path("/{aenderungId}/aenderung/einreichen")
     @Produces({ "text/plain" })
     void aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto aenderungFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/fehlendeDokumente")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto aenderungFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{aenderungId}/aenderung/manuelleAenderung")

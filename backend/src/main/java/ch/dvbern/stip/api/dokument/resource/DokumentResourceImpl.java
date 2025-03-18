@@ -94,16 +94,15 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID customDokumentTypId,
         FileUpload fileUpload
     ) {
-
         customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    @AllowAll
     @Blocking
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+        dokumentAuthorizer.canUpload(gesuchTrancheId);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 

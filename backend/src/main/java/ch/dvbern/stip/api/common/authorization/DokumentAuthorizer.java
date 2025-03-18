@@ -17,13 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import io.quarkus.security.ForbiddenException;
@@ -36,23 +37,29 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class DokumentAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
 
-    private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
-        if (gesuch.getGesuchStatus() != statusToVerify) {
-            throw new IllegalStateException(
-                "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString()
-            );
-        }
-    }
+    @Transactional
+    public void canUpload(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-    private static void gesuchTrancheStatusIsNotOrElseThrow(
-        final GesuchTranche gesuchTranche,
-        final GesuchTrancheStatus statusToVerify
-    ) {
-        if (gesuchTranche.getStatus() != statusToVerify) {
-            throw new IllegalStateException(
-                "GesuchTrancheStatus " + gesuchTranche.getStatus().toString() + " not " + statusToVerify.toString()
+        if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuchTranche.getGesuch())) {
+            throw new ForbiddenException();
+        }
+
+        final var trancheTyp = gesuchTranche.getTyp();
+
+        if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
+            AuthorizerUtil.gesuchStatusOneOfOrElseThrow(
+                gesuchTranche.getGesuch(),
+                List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.FEHLENDE_DOKUMENTE)
+            );
+        } else if (trancheTyp == GesuchTrancheTyp.AENDERUNG) {
+            AuthorizerUtil.gesuchTrancheStatusOneOfOrElseThrow(
+                gesuchTranche,
+                List.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             );
         }
     }
@@ -69,9 +76,15 @@ public class DokumentAuthorizer extends BaseAuthorizer {
         final var trancheTyp = gesuchDokument.getGesuchTranche().getTyp();
 
         if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
-            gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+            AuthorizerUtil.gesuchStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche().getGesuch(),
+                List.of(Gesuchstatus.IN_BEARBEITUNG_SB)
+            );
         } else if (trancheTyp == GesuchTrancheTyp.AENDERUNG) {
-            gesuchTrancheStatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
+            AuthorizerUtil.gesuchTrancheStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche(),
+                List.of(GesuchTrancheStatus.UEBERPRUEFEN)
+            );
         }
     }
 }

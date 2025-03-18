@@ -48,6 +48,7 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -70,6 +71,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
@@ -115,6 +117,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchMapperUtil gesuchMapperUtil;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -473,4 +476,23 @@ public class GesuchTrancheService {
     public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
         gesuchTrancheRepository.delete(gesuchTranche);
     }
+
+    @Transactional
+    public GesuchDto aenderungFehlendeDokumenteEinreichen(final UUID aenderungId) {
+        final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(aenderungsTranche);
+        gesuchTrancheStatusService
+            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
+    }
+
+    @Transactional
+    public void aenderungFehlendeDokumenteUebermitteln(final UUID aenderungId) {
+        final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheValidatorService
+            .validateGesuchTrancheForStatus(aenderungsTranche, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        gesuchTrancheStatusService
+            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
 }

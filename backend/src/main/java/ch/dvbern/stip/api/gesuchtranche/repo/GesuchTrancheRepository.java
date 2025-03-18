@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -54,7 +55,7 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
             .where(gesuchTranche.id.eq(aenderungId))
             .fetchFirst();
 
-        if (found != null) {
+        if (found != null && found.getTyp() == GesuchTrancheTyp.AENDERUNG) {
             return found;
         }
 

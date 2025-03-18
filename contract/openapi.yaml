@@ -2383,6 +2383,56 @@ paths:
       operationId: getBerechnungsBlattForGesuch
       summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungFehlendeDokumenteUebermitteln
+      summary: Dem GS übermitteln das Dokumente auf dieser Änderung nicht akzeptiert wurden
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Fehlende Dokumente eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungFehlendeDokumenteEinreichen
+      summary: Dem SB übermitteln das fehlende Dokumente auf dieser Änderung hochgeladen wurden
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:
@@ -4987,6 +5037,7 @@ components:
         - MANUELLE_AENDERUNG
         - AKZEPTIERT
         - ABGELEHNT
+        - FEHLENDE_DOKUMENTE
     GesuchTranche:
       required:
         - id

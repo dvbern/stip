@@ -18,8 +18,10 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -68,6 +70,8 @@ public class GesuchTrancheApiSpec {
                 aenderungAblehnen(),
                 aenderungAkzeptieren(),
                 aenderungEinreichen(),
+                aenderungFehlendeDokumenteEinreichen(),
+                aenderungFehlendeDokumenteUebermitteln(),
                 aenderungManuellAnpassen(),
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
@@ -91,6 +95,14 @@ public class GesuchTrancheApiSpec {
 
     public AenderungEinreichenOper aenderungEinreichen() {
         return new AenderungEinreichenOper(createReqSpec());
+    }
+
+    public AenderungFehlendeDokumenteEinreichenOper aenderungFehlendeDokumenteEinreichen() {
+        return new AenderungFehlendeDokumenteEinreichenOper(createReqSpec());
+    }
+
+    public AenderungFehlendeDokumenteUebermittelnOper aenderungFehlendeDokumenteUebermitteln() {
+        return new AenderungFehlendeDokumenteUebermittelnOper(createReqSpec());
     }
 
     public AenderungManuellAnpassenOper aenderungManuellAnpassen() {
@@ -358,6 +370,152 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public AenderungEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Dem SB übermitteln das fehlende Dokumente auf dieser Änderung hochgeladen wurden
+     * 
+     *
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
+     * return GesuchDtoSpec
+     */
+    public static class AenderungFehlendeDokumenteEinreichenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungFehlendeDokumenteEinreichenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteEinreichenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteEinreichenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Dem GS übermitteln das Dokumente auf dieser Änderung nicht akzeptiert wurden
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class AenderungFehlendeDokumenteUebermittelnOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/fehlendeDokumente";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungFehlendeDokumenteUebermittelnOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{gesuchTrancheId}/fehlendeDokumente
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchtranche/{gesuchTrancheId}/fehlendeDokumente
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteUebermittelnOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteUebermittelnOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

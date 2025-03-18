@@ -34,7 +34,9 @@ public enum GesuchTrancheStatusDtoSpec {
   
   AKZEPTIERT("AKZEPTIERT"),
   
-  ABGELEHNT("ABGELEHNT");
+  ABGELEHNT("ABGELEHNT"),
+  
+  FEHLENDE_DOKUMENTE("FEHLENDE_DOKUMENTE");
 
   private String value;
 
