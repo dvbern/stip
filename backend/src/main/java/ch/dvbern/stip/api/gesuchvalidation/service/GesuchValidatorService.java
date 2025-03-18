@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchvalidation.service;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
@@ -32,6 +28,10 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -74,12 +74,5 @@ public class GesuchValidatorService {
         final var validationGroups = statusToValidationGroups.getOrDefault(status, List.of());
         ValidatorUtil.validate(validator, toValidate, validationGroups);
     }
-
-    // public void validateBearbeitungAbschliessenForAllTranchen(final Gesuch gesuch,final List<Class<?>>
-    // validationGroups) {
-    // gesuch.getGesuchTranchen().forEach(tranche -> {
-    // validateBearbeitungAbschliessen(tranche.getId());
-    // });
-    // }
 
 }
