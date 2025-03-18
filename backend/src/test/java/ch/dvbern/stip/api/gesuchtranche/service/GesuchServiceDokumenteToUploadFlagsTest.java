@@ -234,8 +234,10 @@ class GesuchServiceDokumenteToUploadFlagsTest {
 
         /*
          * test with documents appearing in one producer
+         * (e.g. when SB makes a change which requires a new document)
          */
         // arrange
+        gesuchDokumentOfTranche2.setDokumente(List.of());
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
