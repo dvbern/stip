@@ -254,6 +254,24 @@ class GesuchTrancheCreateTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(11)
+    void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
+        // the gesuch (tranchen) of state eingereicht should be returned to GS
+        // so the total count of (visible) tranchen should be 1 instead of 2
+        var result = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchTrancheListDtoSpec.class);
+        assertThat(result.getTranchen().size(), is(1));
+    }
+
+    @Test
     @TestAsAdmin
     @Order(99)
     @AlwaysRun
