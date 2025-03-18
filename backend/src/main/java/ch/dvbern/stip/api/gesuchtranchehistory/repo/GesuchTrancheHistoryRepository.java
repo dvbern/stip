@@ -50,19 +50,6 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    // public List<GesuchTranche> getAllWhereGesuchStatusChangedTo(final UUID gesuchTrancheId, Gesuchstatus gesuchstatus
-    // ) {
-    // final var reader = AuditReaderFactory.get(em);
-    // return (GesuchTranche) reader.createQuery()
-    // .forRevisionsOfEntity(GesuchTranche.class, true, false)
-    // .add(AuditEntity.id().eq(gesuchTrancheId))
-    // .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
-    // .add(AuditEntity.property("status").hasChanged())
-    // .addOrder(AuditEntity.revisionNumber().desc())
-    // .setMaxResults(1)
-    // .getSingleResult();
-    // }
-
     public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
         return (GesuchTranche) reader.createQuery()
