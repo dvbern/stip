@@ -2,15 +2,19 @@ import * as z from 'zod';
 
 import { SharedModelState } from '@dv/shared/model/state-colors';
 
-export const GESUCHSTELLER_ROLES = ['Gesuchsteller'] as const;
+export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
 
-export const BENUTZER_ROLES = ['Admin', 'Sachbearbeiter', 'Jurist'] as const;
+export const BENUTZER_ROLES = [
+  'V0_Admin',
+  'V0_Sachbearbeiter',
+  'V0_Jurist',
+] as const;
 
-export const SOZIALDIENST_ADMIN_ROLE = 'Sozialdienst-Admin';
+export const SOZIALDIENST_ADMIN_ROLE = 'V0_Sozialdienst-Admin';
 
 export const SOZIALDIENST_BENUTZER_ROLES = [
   SOZIALDIENST_ADMIN_ROLE,
-  'Sozialdienst-Mitarbeiter',
+  'V0_Sozialdienst-Mitarbeiter',
 ] as const;
 
 export type BenutzerRole = (typeof BENUTZER_ROLES)[number];

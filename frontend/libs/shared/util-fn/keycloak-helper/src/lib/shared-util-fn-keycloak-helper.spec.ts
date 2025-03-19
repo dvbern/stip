@@ -1,7 +1,7 @@
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import {
-  BenutzerVerwaltungRole,
+  BenutzerRole,
   SharedModelBenutzerApi,
 } from '@dv/shared/model/benutzer';
 import { type } from '@dv/shared/model/type-util';
@@ -47,10 +47,10 @@ describe('Keycloak-Helper Functions', () => {
   });
 
   it.each([
-    type<[BenutzerVerwaltungRole, string][]>([
-      ['Sachbearbeiter', 'info'],
-      ['Admin', 'success'],
-      ['Jurist', 'warning'],
+    type<[BenutzerRole, string][]>([
+      ['V0_Sachbearbeiter', 'info'],
+      ['V0_Admin', 'success'],
+      ['V0_Jurist', 'warning'],
     ]),
   ])(
     'roleToStateColor - to correctly map roles to state colors',
@@ -82,22 +82,22 @@ describe('Keycloak-Helper Functions', () => {
     } as SharedModelBenutzerApi;
 
     const roles = {
-      Sachbearbeiter: { name: 'Sachbearbeiter', color: 'info' },
-      Admin: { name: 'Admin', color: 'success' },
-      Jurist: { name: 'Jurist', color: 'warning' },
+      Sachbearbeiter: { name: 'V0_Sachbearbeiter', color: 'info' },
+      Admin: { name: 'V0_Admin', color: 'success' },
+      Jurist: { name: 'V0_Jurist', color: 'warning' },
     };
 
     const roleLookups = [
       {
-        role: 'Sachbearbeiter' as const,
+        role: 'V0_Sachbearbeiter' as const,
         benutzers: [benutzer1, benutzer2, benutzer3, benutzer4],
       },
       {
-        role: 'Admin' as const,
+        role: 'V0_Admin' as const,
         benutzers: [benutzer2, benutzer3],
       },
       {
-        role: 'Jurist' as const,
+        role: 'V0_Jurist' as const,
         benutzers: [benutzer1, benutzer3],
       },
     ];

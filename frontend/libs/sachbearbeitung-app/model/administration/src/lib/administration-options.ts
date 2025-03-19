@@ -16,7 +16,7 @@ export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.ausbildungsstaette.route.overview',
   iconSymbolName: 'school',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {
@@ -26,7 +26,7 @@ export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.buchstabenZuteilung.route.overview',
   iconSymbolName: 'sort_by_alpha',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_GESUCHSPERIODEN: AdminOption = {
@@ -36,7 +36,7 @@ export const OPTION_GESUCHSPERIODEN: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
   iconSymbolName: 'format_indent_increase',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_EU_EFTA_LAENDER: AdminOption = {
@@ -45,7 +45,7 @@ export const OPTION_EU_EFTA_LAENDER: AdminOption = {
   translationKey: 'sachbearbeitung-app.admin.option.euEftaLaender',
   titleTranslationKey: 'sachbearbeitung-app.admin.euEftaLaender.route.overview',
   iconSymbolName: 'public',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
@@ -55,7 +55,7 @@ export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.benutzerverwaltung.route.overview',
   iconSymbolName: 'people',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_SOZIALDIENST: AdminOption = {
@@ -64,7 +64,7 @@ export const OPTION_SOZIALDIENST: AdminOption = {
   translationKey: 'sachbearbeitung-app.admin.option.sozialdienst',
   titleTranslationKey: 'sachbearbeitung-app.admin.sozialdienst.route.overview',
   iconSymbolName: 'supervisor_account',
-  allowedRoles: ['Admin'],
+  allowedRoles: ['V0_Admin'],
 };
 
 export const OPTION_SOZIALDIENST_BENUTZER: AdminOption = {
@@ -74,7 +74,7 @@ export const OPTION_SOZIALDIENST_BENUTZER: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
   iconSymbolName: 'people',
-  allowedRoles: ['Sozialdienst-Admin'],
+  allowedRoles: ['V0_Sozialdienst-Admin'],
 };
 
 export const AdminOptions = [
