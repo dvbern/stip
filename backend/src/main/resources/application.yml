@@ -6,7 +6,7 @@ keycloak:
 kstip:
   version: '0.1-SNAPSHOT'
   environment: 'local'
-  default-tenant: 'dv'
+  default-tenant: 'bern'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
   pre-signed-request:

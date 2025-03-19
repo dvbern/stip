@@ -11,13 +11,6 @@ export class SharedUtilTenantCacheService {
   tenantInfoSig = computed(() => this._tenantInfoSig());
 
   setTenantInfo(tenantInfo: TenantInfo) {
-    this._tenantInfoSig.set({
-      // TODO: Remove this workaround once the backend and devops works correctly
-      //       the tenant will be possible to set via `default-tenant` in application.yml
-      identifier: 'dv',
-      clientAuth: {
-        ...tenantInfo.clientAuth,
-      },
-    });
+    this._tenantInfoSig.set(tenantInfo);
   }
 }
