@@ -109,7 +109,7 @@ public class TestcaseSeeding extends Seeder {
     }
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         LOG.info("Starting testcase seeding");
 
         if (gesuchRepository.count() != 0) {

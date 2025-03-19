@@ -42,7 +42,7 @@ public class GesuchTestSeeding extends Seeder {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         if (gesuchsperiodeRepository.count() == 0) {
             LOG.info("Seeding Gesuchsjahr and Gesuchsperiode");
 

@@ -72,22 +72,6 @@ public class ConfigService {
     List<String> testcasesToSeed;
 
     @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-url")
-    String welcomeEmailKcUrl;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-path")
-    String welcomeEmailKcPath;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-query-parameter")
-    String welcomeEmailKcQueryParameter;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-scope")
-    String welcomeEmailKcScope;
-
-    @Getter
     @ConfigProperty(name = "kstip.sap.system-id")
     Integer systemid;
 
@@ -116,12 +100,5 @@ public class ConfigService {
             .version(version)
             .environment(environment)
             .allowedMimeTypes(allowedMimeTypes.stream().toList());
-    }
-
-    public String getWelcomeMailURI(String tenant, String redirectURI) {
-        return welcomeEmailKcUrl
-        + welcomeEmailKcPath.replace("<TENANT>", tenant)
-        + welcomeEmailKcQueryParameter.replace("<REDIRECT_URI>", redirectURI)
-        + welcomeEmailKcScope;
     }
 }

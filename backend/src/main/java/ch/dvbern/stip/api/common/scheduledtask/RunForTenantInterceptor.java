@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import jakarta.annotation.Priority;
 import jakarta.interceptor.AroundInvoke;
@@ -29,7 +30,7 @@ import jakarta.interceptor.InvocationContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RunForTenant(MandantIdentifier.BERN) // TODO DVSTIP-1: Check if this breaks the scheduled tasks
+@RunForTenant(MandantIdentifier.BERN)
 @Interceptor
 @Priority(Interceptor.Priority.PLATFORM_AFTER + 10)
 public class RunForTenantInterceptor {
@@ -41,7 +42,10 @@ public class RunForTenantInterceptor {
 
         // ignored because it's reset in the finalizer of the returned ExplicitTenantIdScope as such unused
         QuarkusTransaction.requiringNew().run(() -> {
-            try (final var ignored = DataTenantResolver.setTenantId(annotation.value().getIdentifier())) {
+            try (
+                final var ignored1 = DataTenantResolver.setTenantId(annotation.value().getIdentifier());
+                final var ignored2 = TenantService.setTenantId(annotation.value().getIdentifier());
+            ) {
                 proceed.set(invocationContext.proceed());
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);

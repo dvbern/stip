@@ -36,6 +36,8 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class TenantService {
+    private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
+
     private final RoutingContext context;
     private final ConfigService configService;
     private final List<PerTenantSubdomains> perTenantSubdomains;
@@ -43,17 +45,28 @@ public class TenantService {
     @ConfigProperty(name = "keycloak.frontend-url")
     String keycloakFrontendUrl;
 
+    public static ExplicitTenantIdScope setTenantId(final String tenantId) {
+        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
+    }
+
     public TenantInfoDto getCurrentTenant() {
         final String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
 
         final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
-        // TODO DVSTIP-1: Use tenant-based configuration for the URL here
         tenantAuthConfig.setAuthServerUrl(keycloakFrontendUrl);
         tenantAuthConfig.setRealm(tenantId);
 
         return new TenantInfoDto()
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
+    }
+
+    public String getCurrentTenantIdentifier() {
+        if (EXPLICIT_TENANT_ID.get() != null) {
+            return EXPLICIT_TENANT_ID.get();
+        }
+
+        return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
     }
 
     public MandantIdentifier resolveTenant(final String subdomain) {

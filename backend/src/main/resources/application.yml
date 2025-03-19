@@ -6,7 +6,7 @@ keycloak:
 kstip:
   version: '0.1-SNAPSHOT'
   environment: 'local'
-  default-tenant: 'bern'
+  default-tenant: 'dv'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
   pre-signed-request:
@@ -91,8 +91,8 @@ kstip:
         - 'dv'
 
 quarkus:
-  live-reload:
-    instrumentation: true
+#  live-reload:
+#    instrumentation: true
   log:
     sentry:
       ~: 'true'
@@ -219,6 +219,12 @@ quarkus:
           trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
           trust-store-file: './src/main/resources/development.jks'
           trust-store-password: 'changeit'
+      dv:
+        tls:
+          trust-store-file-type: 'jks'
+          trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
+          trust-store-file: './src/main/resources/development.jks'
+          trust-store-password: 'changeit'
     smallrye-openapi:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
@@ -274,11 +280,12 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
-    welcome-mail:
-      kc-url: 'http://dummy.keycloak'
-      kc-path: '/realms/bern/protocol/openid-connect/auth'
-      kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
-      kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+    bern:
+      welcome-mail:
+        kc-url: 'http://dummy.keycloak'
+        kc-path: '/realms/bern/protocol/openid-connect/auth'
+        kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
+        kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
 '%prod':
   quarkus:
     s3:
