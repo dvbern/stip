@@ -61,7 +61,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -295,7 +294,7 @@ class GesuchUpdateNachristDokumenteTest {
 
         assertThat(
             items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
-            is(notNullValue())
+            is(nachreichefrist)
         );
     }
 
