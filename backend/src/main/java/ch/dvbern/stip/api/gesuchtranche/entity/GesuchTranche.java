@@ -57,7 +57,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
     name = "gesuch_tranche",
     indexes = {
         @Index(name = "IX_gesuch_tranche_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id")
+        @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id"),
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
     }
 )
 @Getter

@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.config.service.TenantConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;

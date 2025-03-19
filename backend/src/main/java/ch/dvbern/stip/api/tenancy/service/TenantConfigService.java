@@ -15,9 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.service;
+package ch.dvbern.stip.api.tenancy.service;
 
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.ConfigProvider;

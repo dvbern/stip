@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
@@ -38,5 +39,15 @@ public class MockTenantService extends TenantService {
                     .authServerUrl(keycloakFrontendUrl)
                     .realm("bern")
             );
+    }
+
+    @Override
+    public String getCurrentTenantIdentifier() {
+        return MandantIdentifier.BERN.getIdentifier();
+    }
+
+    @Override
+    public MandantIdentifier resolveTenant(String subdomain) {
+        return MandantIdentifier.BERN;
     }
 }

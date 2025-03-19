@@ -15,27 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.arch;
+package ch.dvbern.stip.api.common.service.seeding;
+
+import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.arch.util.ArchTestUtil;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import io.quarkus.runtime.Startup;
-import io.quarkus.scheduler.Scheduled;
-import org.junit.jupiter.api.Test;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+@Slf4j
+@ApplicationScoped
+@RequiredArgsConstructor
+public class TestSeedingExecutor {
+    private final Instance<Seeder> seeders;
 
-class RunForTenantAnnotationTest {
-    @Test
-    void test_run_for_tenant_annotation_only_with_scheduled() {
-        var rule = methods()
-            .that()
-            .areAnnotatedWith(RunForTenant.class)
-            .and()
-            .areNotAnnotatedWith(Startup.class)
-            .should()
-            .beAnnotatedWith(Scheduled.class);
-
-        rule.check(ArchTestUtil.APP_CLASSES);
+    @Startup
+    @RunForTenant(MandantIdentifier.BERN)
+    public void seedForBern() {
+        LOG.info("SeedingExecutor starting execution for testing");
+        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
+        LOG.info("SeedingExecutor finished execution for testing");
     }
 }

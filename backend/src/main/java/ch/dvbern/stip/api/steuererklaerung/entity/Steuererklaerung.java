@@ -23,6 +23,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -31,7 +32,12 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(name = "steuererklaerung")
+@Table(
+    name = "steuererklaerung",
+    indexes = {
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Steuererklaerung extends AbstractMandantEntity {

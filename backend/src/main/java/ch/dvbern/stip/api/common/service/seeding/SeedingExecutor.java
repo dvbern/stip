@@ -21,6 +21,7 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 public class SeedingExecutor {
     private final Instance<Seeder> seeders;
 

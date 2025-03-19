@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -34,7 +35,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Getter
 @Setter
-@Table
+@Table(
+    name = "bildungskategorie",
+    indexes = {
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+    }
+)
 @RequiredArgsConstructor
 public class Bildungskategorie extends AbstractMandantEntity {
     // Bildungskategorien from BFS code 7 adn higher are of Bildungsstufe Tertiaer, lower are sekundaer_2
