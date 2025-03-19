@@ -22,9 +22,11 @@
         <span>{{ backLink.text }}</span>
       </a>
     } @else {
-      <a class="first-entry" routerLink="/">
-        <img src="assets/images/logo_kanton_bern_full.svg" alt="Logo Kanton Bern" height="60" />
-      </a>
+      @if (logoSig(); as logo) {
+        <a class="first-entry" routerLink="/">
+          <img [src]="logo.src" [alt]="'shared.logo.tenant' | translate: logo" class="tw-h-[60px] tw-max-w-[135px]" />
+        </a>
+      }
     }
   </ng-template>
   <!-- Small screens Header -->

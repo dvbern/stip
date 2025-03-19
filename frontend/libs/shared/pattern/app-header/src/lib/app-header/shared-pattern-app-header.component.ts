@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { capitalize } from '@angular-architects/ngrx-toolkit';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -73,6 +74,16 @@ export class SharedPatternAppHeaderComponent {
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
   tenantSig = this.tenantCacheService.tenantInfoSig;
+  logoSig = computed(() => {
+    const identifier = this.tenantSig()?.identifier;
+    if (!identifier) {
+      return null;
+    }
+    return {
+      src: `assets/images/logo_kanton_${identifier}_full.svg`,
+      name: capitalize(identifier),
+    };
+  });
 
   constructor() {
     this.breakpointObserver

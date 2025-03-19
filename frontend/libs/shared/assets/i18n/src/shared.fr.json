@@ -9,6 +9,7 @@
   "shared.create": "Créer",
   "shared.label.von": "du",
   "shared.label.bis": "au",
+  "shared.logo.tenant": "Logo du canton de {{ name }}",
   "shared.nothing": "",
   "shared.ui.yes": "Oui",
   "shared.ui.no": "Non",

@@ -13,19 +13,3 @@ body {
     --dv-btn-disabled-border-color: #ffa100;
   }
 }
-
-header .first-entry {
-  &::before {
-    content: '';
-    display: block;
-    width: 135px;
-    height: 60px;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: url('https://www.dvbern.ch/art/dvbern/logo-dvbern-dark.svg');
-  }
-  img {
-    display: none;
-  }
-}
