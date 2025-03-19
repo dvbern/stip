@@ -21,8 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -789,36 +787,8 @@ public class GesuchService {
     @Transactional
     public void checkForFehlendeDokumenteOnAllGesuche() {
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
-        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
-        gesuchsToCheck.forEach(
-            gesuch -> {
-                gesuchsperiodenGesucheMap.computeIfAbsent(gesuch.getGesuchsperiode().getId(), k -> new ArrayList<>());
-                gesuchsperiodenGesucheMap.get(gesuch.getGesuchsperiode().getId()).add(gesuch);
-            }
-        );
-
-        final var changedTooLongAgo = new HashSet<UUID>();
-
-        gesuchsperiodenGesucheMap.forEach(
-            (uuid, gesuchsperiodenGesuchs) -> {
-                gesuchsperiodenGesuchs.forEach(
-                    gesuch -> {
-                        var gesuchInStateFehlendeDokumente = gesuchHistoryRepository
-                            .getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.FEHLENDE_DOKUMENTE)
-                            .get();
-                        if (gesuchInStateFehlendeDokumente.getNachfristDokumente().isAfter(LocalDate.now())) {
-                            changedTooLongAgo.add(
-                                gesuchInStateFehlendeDokumente.getId()
-                            );
-                        }
-                    }
-                );
-
-            }
-        );
-
         final var toUpdate =
-            gesuchsToCheck.stream().filter(gesuch -> changedTooLongAgo.contains(gesuch.getId())).toList();
+            gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
         if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
