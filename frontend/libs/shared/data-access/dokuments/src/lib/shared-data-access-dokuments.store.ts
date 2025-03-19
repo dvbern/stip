@@ -15,6 +15,7 @@ import {
   GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
+  GesuchTrancheTyp,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
 import {
@@ -325,41 +326,50 @@ export class DokumentsStore extends signalStore(
    */
   fehlendeDokumenteUebermitteln$ = rxMethod<{
     trancheId: string;
+    trancheTyp: GesuchTrancheTyp;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ trancheId, onSuccess }) => {
-        return this.gesuchService
-          .gesuchFehlendeDokumenteUebermitteln$({ gesuchTrancheId: trancheId })
-          .pipe(
-            tap(() => {
+      switchMap(({ trancheId, trancheTyp, onSuccess }) => {
+        const serviceMap$ = {
+          TRANCHE: () =>
+            this.gesuchService.gesuchFehlendeDokumenteUebermitteln$({
+              gesuchTrancheId: trancheId,
+            }),
+          AENDERUNG: () =>
+            this.trancheService.aenderungFehlendeDokumenteUebermitteln$({
+              gesuchTrancheId: trancheId,
+            }),
+        } satisfies Record<GesuchTrancheTyp, unknown>;
+        return serviceMap$[trancheTyp]().pipe(
+          tap(() => {
+            patchState(this, (state) => ({
+              dokuments: cachedPending(state.dokuments),
+            }));
+          }),
+          switchMap(() =>
+            this.trancheService.getGesuchDokumente$({
+              gesuchTrancheId: trancheId,
+            }),
+          ),
+          tapResponse({
+            next: (dokuments) => {
+              patchState(this, { dokuments: success(dokuments) });
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: 'shared.dokumente.uebermitteln.success',
+              });
+              onSuccess();
+            },
+            error: () => {
               patchState(this, (state) => ({
-                dokuments: cachedPending(state.dokuments),
+                dokuments: success(state.dokuments.data ?? []),
               }));
-            }),
-            switchMap(() =>
-              this.trancheService.getGesuchDokumente$({
-                gesuchTrancheId: trancheId,
-              }),
-            ),
-            tapResponse({
-              next: (dokuments) => {
-                patchState(this, { dokuments: success(dokuments) });
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.uebermitteln.success',
-                });
-                onSuccess();
-              },
-              error: () => {
-                patchState(this, (state) => ({
-                  dokuments: success(state.dokuments.data ?? []),
-                }));
-              },
-            }),
-            catchError(() => {
-              return EMPTY;
-            }),
-          );
+            },
+          }),
+          catchError(() => {
+            return EMPTY;
+          }),
+        );
       }),
     ),
   );
@@ -391,6 +401,7 @@ export class DokumentsStore extends signalStore(
 
   fehlendeDokumenteEinreichen$ = rxMethod<{
     trancheId: string;
+    tranchenTyp: GesuchTrancheTyp;
     onSuccess: () => void;
   }>(
     pipe(
@@ -400,29 +411,35 @@ export class DokumentsStore extends signalStore(
           documentsToUpload: cachedPending(state.documentsToUpload),
         }));
       }),
-      switchMap(({ trancheId, onSuccess }) =>
-        this.gesuchService
-          .gesuchTrancheFehlendeDokumenteEinreichen$({
-            gesuchTrancheId: trancheId,
-          })
-          .pipe(
-            tapResponse({
-              next: () => {
-                this.getRequiredDocumentTypes$(trancheId);
-                onSuccess();
-              },
-              error: (error) => {
-                patchState(this, (state) => ({
-                  dokuments: cachedFailure(state.dokuments, error),
-                  documentsToUpload: cachedFailure(
-                    state.documentsToUpload,
-                    error,
-                  ),
-                }));
-              },
+      switchMap(({ trancheId, tranchenTyp, onSuccess }) => {
+        const serviceMap$ = {
+          TRANCHE: () =>
+            this.gesuchService.gesuchTrancheFehlendeDokumenteEinreichen$({
+              gesuchTrancheId: trancheId,
             }),
-          ),
-      ),
+          AENDERUNG: () =>
+            this.trancheService.aenderungFehlendeDokumenteEinreichen$({
+              gesuchTrancheId: trancheId,
+            }),
+        } satisfies Record<GesuchTrancheTyp, unknown>;
+        return serviceMap$[tranchenTyp]().pipe(
+          tapResponse({
+            next: () => {
+              this.getRequiredDocumentTypes$(trancheId);
+              onSuccess();
+            },
+            error: (error) => {
+              patchState(this, (state) => ({
+                dokuments: cachedFailure(state.dokuments, error),
+                documentsToUpload: cachedFailure(
+                  state.documentsToUpload,
+                  error,
+                ),
+              }));
+            },
+          }),
+        );
+      }),
     ),
   );
 

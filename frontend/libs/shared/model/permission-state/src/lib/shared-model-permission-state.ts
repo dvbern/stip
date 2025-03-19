@@ -100,8 +100,9 @@ export const permissionTableByAppType = {
 export const trancheReadWritestatusByAppType = {
   IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WD   ', [sb]: '     ' },
   UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
+  FEHLENDE_DOKUMENTE: /** */ { [gs]: ' D   ', [sb]: '     ' },
   AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
-  ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
+  ABGELEHNT: /**          */ { [gs]: 'WD   ', [sb]: '     ' },
   MANUELLE_AENDERUNG: /** */ { [gs]: '     ', [sb]: '     ' },
 } as const satisfies Record<
   GesuchTrancheStatus,

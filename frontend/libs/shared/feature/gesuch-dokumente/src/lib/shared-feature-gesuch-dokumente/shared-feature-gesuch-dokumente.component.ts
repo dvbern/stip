@@ -167,20 +167,17 @@ export class SharedFeatureGesuchDokumenteComponent {
   // show button to inform the GS that documents are missing (or declined)
   // if true, the button is shown
   canSBSendMissingDocumentsSig = computed(() => {
+    const { permissions } = this.gesuchViewSig();
     const hasDokumenteToUebermitteln =
       this.dokumentsStore.hasDokumenteToUebermittelnSig();
 
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
-
-    return hasDokumenteToUebermitteln && isInCorrectState;
+    return hasDokumenteToUebermitteln && !!permissions.canWrite;
   });
 
   canCreateCustomDokumentTypSig = computed(() => {
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+    const { permissions } = this.gesuchViewSig();
 
-    return isInCorrectState;
+    return !!permissions.canWrite;
   });
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
@@ -294,11 +291,12 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
+        tranchenTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
@@ -308,11 +306,12 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
         trancheId,
+        trancheTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
