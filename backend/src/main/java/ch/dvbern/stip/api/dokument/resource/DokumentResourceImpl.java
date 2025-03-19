@@ -150,7 +150,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(DOKUMENT_DELETE)
     public void deleteDokument(UUID dokumentId) {
-        customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
+        gesuchDokumentAuthorizer.canDeleteDokument(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 

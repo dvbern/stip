@@ -20,14 +20,18 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -39,6 +43,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final GesuchStatusService gesuchStatusService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final SozialdienstService sozialdienstService;
+    private final DokumentRepository dokumentRepository;
 
     @Transactional
     public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
@@ -48,6 +53,42 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final BooleanSupplier canBenutzerUpload =
             () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus());
 
+        if (isDelegiertAndCanUploadOrDelete(gesuch, currentBenutzer, canBenutzerUpload)) {
+            return;
+        } else if (
+            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerUpload.getAsBoolean()
+        ) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canDeleteDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var gesuch = dokument.getGesuchDokumente().get(0).getGesuchTranche().getGesuch();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        final BooleanSupplier canBenutzerDeleteDokument =
+            () -> gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus());
+
+        if (isDelegiertAndCanUploadOrDelete(gesuch, currentBenutzer, canBenutzerDeleteDokument)) {
+            return;
+        } else if (
+            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerDeleteDokument.getAsBoolean()
+        ) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    private boolean isDelegiertAndCanUploadOrDelete(
+        final Gesuch gesuch,
+        final Benutzer currentBenutzer,
+        final BooleanSupplier canUploadOrDeleteCheck
+    ) {
         if (AuthorizerUtil.isDelegiert(gesuch)) {
             if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
                 forbidden();
@@ -58,17 +99,10 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
                 && AuthorizerUtil
                     .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
 
-            if (canBenutzerUpload.getAsBoolean() && isNotGesuchstellerButDelegierter) {
-                return;
-            }
-        } else if (
-            isGesuchsteller(currentBenutzer)
-            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
-        ) {
-            return;
+            return canUploadOrDeleteCheck.getAsBoolean() && isNotGesuchstellerButDelegierter;
         }
 
-        forbidden();
+        return false;
     }
 
     @Transactional

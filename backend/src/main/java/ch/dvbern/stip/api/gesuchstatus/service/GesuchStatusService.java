@@ -129,6 +129,17 @@ public class GesuchStatusService {
         return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
     }
 
+    public boolean benutzerCanDeleteDokument(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
+        final var identifiers = benutzer.getRollenIdentifiers();
+        final var editStates = new HashSet<Gesuchstatus>();
+
+        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_DELETE_DOKUMENTE);
+        }
+
+        return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
+    }
+
     public boolean canCreateBuchhaltungSaldokorrektur(final Gesuchstatus gesuchstatus) {
         return Gesuchstatus.SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR.contains(gesuchstatus);
     }

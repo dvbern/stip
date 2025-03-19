@@ -24,15 +24,11 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.GESUCHSTELLER_CAN_DELETE_DOKUMENTE;
 
 @Authorizer
 @ApplicationScoped
@@ -106,26 +102,6 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         // check if gesuch is being edited by SB
         // or if GS has already attached a file to it
         if (notBeingEditedBySB || isAnyFileAttached) {
-            forbidden();
-        }
-    }
-
-    @Transactional
-    public void canDeleteDokument(final UUID dokumentId) {
-        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuch = dokument.getGesuchDokumente().get(0).getGesuchTranche().getGesuch();
-
-        final var isDeleteAuthorized =
-            AuthorizerUtil.isGesuchstellerOfGesuch(benutzerService.getCurrentBenutzer(), gesuch)
-            && GESUCHSTELLER_CAN_DELETE_DOKUMENTE.contains(gesuch.getGesuchStatus());
-        final var isDokumentAusstehend = dokument.getGesuchDokumente()
-            .stream()
-            .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND));
-
-        if (
-            !isDeleteAuthorized
-            || !isDokumentAusstehend
-        ) {
             forbidden();
         }
     }
