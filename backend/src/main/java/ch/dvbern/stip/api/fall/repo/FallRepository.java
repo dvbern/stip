@@ -29,7 +29,6 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -59,9 +58,5 @@ public class FallRepository implements BaseRepository<Fall> {
 
     public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
-    }
-
-    public Fall requireFallForGs(final UUID gesuchstellerId) {
-        return findFallForGsOptional(gesuchstellerId).orElseThrow(NotFoundException::new);
     }
 }

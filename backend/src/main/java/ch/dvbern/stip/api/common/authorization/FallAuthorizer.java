@@ -55,7 +55,12 @@ public class FallAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        final var fall = fallRepository.requireFallForGs(currentBenutzer.getId());
+        final var fallOpt = fallRepository.findFallForGsOptional(currentBenutzer.getId());
+        if (fallOpt.isEmpty()) {
+            return;
+        }
+
+        final var fall = fallOpt.get();
         if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)) {
             return;
         }
