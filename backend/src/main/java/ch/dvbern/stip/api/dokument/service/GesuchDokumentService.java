@@ -55,7 +55,6 @@ import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +73,6 @@ public class GesuchDokumentService {
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
 
     private final GesuchDokumentMapper gesuchDokumentMapper;
-    private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final CustomDokumentTypRepository customDocumentTypRepository;
@@ -88,12 +86,13 @@ public class GesuchDokumentService {
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
+    private final GesuchDokumentKommentarService dokumentKommentarService;
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
         UUID gesuchDokumentId
     ) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchDokumentId(gesuchDokumentId);
+        return dokumentKommentarService.getAllKommentareForGesuchDokument(gesuchDokumentId);
     }
 
     @Transactional
@@ -277,7 +276,7 @@ public class GesuchDokumentService {
             .forEach(gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId()));
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
         gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .forEach(

@@ -46,10 +46,12 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -157,6 +159,7 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
+    private final DokumentRepository dokumentRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -537,6 +540,8 @@ public class GesuchService {
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
 
+        resetGesuchZurueckweisen(gesuch);
+
         // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
         return new GesuchZurueckweisenResponseDto()
             .gesuchId(gesuchId)
@@ -889,10 +894,17 @@ public class GesuchService {
 
         trancheToReset.setGueltigkeit(trancheOfStateEingereicht.getGueltigkeit());
 
+        trancheToReset.getGesuchDokuments()
+            .forEach(
+                gesuchDokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId())
+            );
+
         GesuchTrancheOverrideUtil.overrideGesuchFormular(
             trancheToReset.getGesuchFormular(),
             formularOfStateEingereicht
         );
+
+        // Dokumente
 
         final var dokumentIdsNow = trancheToReset.getGesuchDokuments()
             .stream()
@@ -923,6 +935,52 @@ public class GesuchService {
             .forEach(uuid -> dokumentObjectIdsToBeDeleted.add(gesuchDokumentService.deleteDokument(uuid)));
 
         gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
+
+        trancheToReset.getGesuchDokuments()
+            .removeIf(
+                gesuchDokument -> !formularOfStateEingereicht.getTranche().getGesuchDokuments().contains(gesuchDokument)
+            );
+
+        final var targetGesuchDokumente = trancheToReset.getGesuchDokuments();
+
+        for (var sourceGesuchDokument : formularOfStateEingereicht.getTranche().getGesuchDokuments()) {
+            if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
+                final var replacement =
+                    targetGesuchDokumente.stream()
+                        .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
+                        .findFirst();
+                replacement.ifPresent(
+                    gesuchDokument -> {
+                        GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument);
+                        sourceGesuchDokument.getDokumente()
+                            .forEach(
+                                dokument -> {
+                                    if (!gesuchDokument.getDokumente().contains(dokument)) {
+                                        final var newDokument = new Dokument();
+                                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                                        gesuchDokument.addDokument(newDokument);
+                                        dokumentRepository.persist(newDokument);
+                                    }
+                                }
+                            );
+                    }
+                );
+
+            } else {
+                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument);
+                targetGesuchDokumente.add(newGesuchDokument);
+                sourceGesuchDokument.getDokumente()
+                    .forEach(
+                        dokument -> {
+                            final var newDokument = new Dokument();
+                            GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                            newGesuchDokument.addDokument(newDokument);
+                            dokumentRepository.persist(newDokument);
+                        }
+                    );
+                gesuchDokumentRepository.persist(newGesuchDokument);
+            }
+        }
 
         final var allOtherTranchen = gesuch.getGesuchTranchen()
             .stream()

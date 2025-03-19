@@ -228,7 +228,6 @@ class GesuchDokumentServiceTest {
         // Arrange
         final var gsDokService = new GesuchDokumentServiceMock(
             new GesuchDokumentMapperImpl(dokumentMapper, customDokumentMapper),
-            dokumentMapper,
             dokumentRepository,
             gesuchDokumentRepository,
             null,
@@ -242,6 +241,7 @@ class GesuchDokumentServiceTest {
                 ),
                 null
             ),
+            null,
             null,
             null,
             null,
@@ -336,7 +336,6 @@ class GesuchDokumentServiceTest {
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
         public GesuchDokumentServiceMock(
         GesuchDokumentMapper gesuchDokumentMapper,
-        DokumentMapper dokumentMapper,
         DokumentRepository dokumentRepository,
         GesuchDokumentRepository gesuchDokumentRepository,
         GesuchRepository gesuchRepository,
@@ -349,11 +348,11 @@ class GesuchDokumentServiceTest {
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
         RequiredDokumentService requiredDokumentService,
         GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository,
-        DokumentHistoryRepository dokumentHistoryRepository
+        DokumentHistoryRepository dokumentHistoryRepository,
+        GesuchDokumentKommentarService gesuchDokumentKommentarService
         ) {
             super(
                 gesuchDokumentMapper,
-                dokumentMapper,
                 dokumentRepository,
                 gesuchDokumentRepository,
                 customDocumentTypRepository,
@@ -366,7 +365,8 @@ class GesuchDokumentServiceTest {
                 antivirus,
                 gesuchDokumentKommentarRepository,
                 gesuchTrancheHistoryRepository,
-                dokumentHistoryRepository
+                dokumentHistoryRepository,
+                gesuchDokumentKommentarService
             );
         }
 

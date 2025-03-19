@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
-import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
@@ -101,25 +100,25 @@ public class GesuchTrancheOverrideUtil {
         // Darlehen
         DarlehenCopyUtil.copyValues(source.getDarlehen(), target.getDarlehen());
 
-        // Dokumente
-        target.getTranche()
-            .getGesuchDokuments()
-            .removeIf(gesuchDokument -> !source.getTranche().getGesuchDokuments().contains(gesuchDokument));
-
-        final var targetGesuchDokumente = target.getTranche().getGesuchDokuments();
-
-        for (var sourceGesuchDokument : source.getTranche().getGesuchDokuments()) {
-            if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
-                final var replacement =
-                    targetGesuchDokumente.stream()
-                        .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
-                        .findFirst();
-                replacement.ifPresent(
-                    gesuchDokument -> GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument)
-                );
-            } else {
-                targetGesuchDokumente.add(GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument));
-            }
-        }
+        // // Dokumente
+        // target.getTranche()
+        // .getGesuchDokuments()
+        // .removeIf(gesuchDokument -> !source.getTranche().getGesuchDokuments().contains(gesuchDokument));
+        //
+        // final var targetGesuchDokumente = target.getTranche().getGesuchDokuments();
+        //
+        // for (var sourceGesuchDokument : source.getTranche().getGesuchDokuments()) {
+        // if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
+        // final var replacement =
+        // targetGesuchDokumente.stream()
+        // .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
+        // .findFirst();
+        // replacement.ifPresent(
+        // gesuchDokument -> GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument)
+        // );
+        // } else {
+        // targetGesuchDokumente.add(GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument));
+        // }
+        // }
     }
 }

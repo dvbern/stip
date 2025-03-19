@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -36,7 +35,6 @@ import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
 import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -64,7 +62,6 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -108,9 +105,7 @@ public class GesuchTrancheService {
     private final LebenslaufItemMapper lebenslaufItemMapper;
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
-    private final SteuerdatenMapper steuerdatenMapper;
     private final SteuererklaerungMapper steuererklaerungMapper;
-    private final CustomDocumentTypMapper customDocumentTypMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
@@ -126,27 +121,28 @@ public class GesuchTrancheService {
     }
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
-        return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
+        return gesuchTrancheRepository.findForGesuch(gesuchId).stream().map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
-        final var tranchenByTyp = gesuchTrancheRepository
-            .findForGesuch(gesuchId)
-            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
+        final var allTranchenList = gesuchTrancheRepository.findForGesuch(gesuchId);
         final var currentTrancheFromGesuchInStatusVerfuegt =
             gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
-
-        final var trancheList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.TRANCHE, List.of());
-        final var aenderungList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.AENDERUNG, List.of())
-            .stream()
-            .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
-            .toList();
-        final var allTranchen = new ArrayList<GesuchTranche>(trancheList.size() + aenderungList.size());
-        allTranchen.addAll(trancheList);
-        allTranchen.addAll(aenderungList);
+        final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
+        allTranchenOut.addAll(
+            allTranchenList.stream()
+                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .toList()
+        );
+        allTranchenOut.addAll(
+            allTranchenList.stream()
+                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+                .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
+                .toList()
+        );
 
         return gesuchTrancheMapper.toListDto(
-            allTranchen,
+            allTranchenOut,
             currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
         );
     }
@@ -178,7 +174,7 @@ public class GesuchTrancheService {
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
-        final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
     }
 
@@ -188,26 +184,22 @@ public class GesuchTrancheService {
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
-        final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
     }
 
     public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
         var allRequired = new ArrayList<String>();
-        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTrancheId);
-        final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche);
+        final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTranche);
         allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
         allRequired
             .addAll(requiredCustomDokumentTypes.stream().map(CustomDokumentTyp::getType).toList());
         return allRequired;
     }
 
-    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
-        return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
-    }
-
-    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche)
             .stream()
             .toList();
@@ -465,7 +457,13 @@ public class GesuchTrancheService {
         gesuchDokumentKommentarService.deleteForGesuchTrancheId(aenderungId);
         var aenderung = gesuchTrancheRepository.findById(aenderungId);
         aenderung.getGesuchDokuments()
-            .forEach(gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId()));
+            .forEach(
+                gesuchDokument -> {
+                    gesuchDokument.getDokumente()
+                        .forEach(dokument -> dokument.getGesuchDokumente().remove(gesuchDokument));
+                    gesuchDokumentRepository.deleteById(gesuchDokument.getId());
+                }
+            );
         if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }

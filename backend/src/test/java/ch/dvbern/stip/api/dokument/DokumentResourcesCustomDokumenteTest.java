@@ -177,7 +177,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -186,7 +186,19 @@ class DokumentResourcesCustomDokumenteTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        final var result = requiredDocuments.getCustomDokumentTyps();
+        var result = requiredDocuments.getCustomDokumentTyps();
+        assertThat(result.size(), is(0));
+
+        requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadSB()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDto.class);
+        result = requiredDocuments.getCustomDokumentTyps();
         assertThat(result.size(), is(greaterThan(0)));
     }
 

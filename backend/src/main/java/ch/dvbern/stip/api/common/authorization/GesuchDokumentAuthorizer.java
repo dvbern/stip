@@ -33,7 +33,10 @@ public class GesuchDokumentAuthorizer {
 
     @Transactional
     public void canRead(final UUID gesuchDokumentId) {
-        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        final var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
+        if (gesuchDokument == null) {
+            return;
+        }
         gesuchTrancheAuthorizer.canRead(gesuchDokument.getGesuchTranche().getId());
     }
 }

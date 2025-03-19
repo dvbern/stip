@@ -17,12 +17,10 @@
 
 package ch.dvbern.stip.api.dokument.util;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
@@ -66,6 +64,13 @@ public class GesuchDokumentCopyUtil {
         return copy;
     }
 
+    public void copyValues(final Dokument source, final Dokument target) {
+        target.setFilepath(source.getFilepath());
+        target.setFilename(source.getFilename());
+        target.setFilesize(source.getFilesize());
+        target.setObjectId(source.getObjectId());
+    }
+
     public void copyValues(final GesuchDokument source, final GesuchDokument target) {
         target.setDokumentTyp(source.getDokumentTyp());
         target.setGesuchTranche(source.getGesuchTranche());
@@ -74,17 +79,15 @@ public class GesuchDokumentCopyUtil {
         if (source.getCustomDokumentTyp() != null) {
             target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()));
         }
-        target.setDokumente(new ArrayList<>());
-        source.getDokumente().forEach(target::addDokument);
-    }
 
-    public void doOverrideOfSet(Set<GesuchDokument> targetItems, Set<GesuchDokument> sourceItems) {
-        OverrideUtil.doOverrideOfSet(
-            targetItems,
-            sourceItems,
-            GesuchDokumentCopyUtil::copyValues,
-            GesuchDokumentCopyUtil::createCopy
-        );
+        // source.getDokumente()
+        // .forEach(
+        // dokument -> {
+        // if (!target.getDokumente().contains(dokument)) {
+        // dokument.setId(null);
+        // target.addDokument(dokument);
+        // }
+        // }
+        // );
     }
-
 }

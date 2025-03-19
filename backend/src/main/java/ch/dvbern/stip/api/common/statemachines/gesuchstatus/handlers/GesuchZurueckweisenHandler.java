@@ -48,6 +48,5 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         gesuch.setEinreichedatum(null);
-        gesuchService.resetGesuchZurueckweisen(gesuch);
     }
 }
