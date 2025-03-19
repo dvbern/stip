@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import jakarta.enterprise.context.RequestScoped;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
-@Validated
+@Authorizer
 public class GesuchsperiodeAuthorizer extends BaseAuthorizer {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsperiodenService gesuchsperiodenService;

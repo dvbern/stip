@@ -17,7 +17,9 @@
 
 package ch.dvbern.stip.arch;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,13 +33,19 @@ import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 public class AuthorizerAnnotationTest {
-    private static final Set<String> ANONYMOUS_METHODS = Set.of(
-        "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant"
+    private static final Set<String> ANONYMOUS_METHODS = new HashSet<>(
+        List.of(
+            "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant",
+            "ch.dvbern.stip.api.dokument.resource.DokumentResourceImpl.getDokument",
+            "ch.dvbern.stip.api.gesuch.resource.GesuchResourceImpl.getBerechnungsBlattForGesuch",
+            "ch.dvbern.stip.api.config.resource.ConfigResourceImpl.getDeploymentConfig"
+        )
     );
 
     @Test
@@ -48,6 +56,14 @@ public class AuthorizerAnnotationTest {
             .should(new CallAuthorizerMethod());
 
         rule.check(ArchTestUtil.APP_CLASSES);
+
+        if (!ANONYMOUS_METHODS.isEmpty()) {
+            final var msg = String.format(
+                "Methods that are marked as anonymous in this test now call an authorizer:\n%s",
+                Arrays.toString(ANONYMOUS_METHODS.toArray())
+            );
+            Assertions.fail(msg);
+        }
     }
 
     private static class CallAuthorizerMethod extends ArchCondition<JavaClass> {
@@ -59,7 +75,15 @@ public class AuthorizerAnnotationTest {
         public void check(JavaClass item, ConditionEvents events) {
             final var methodIds = getMethodIdentifiers(item);
             methodIds.removeAll(collectMethodsCallingAuthorizer(item));
-            methodIds.removeAll(ANONYMOUS_METHODS);
+
+            final var removed = new HashSet<String>();
+            for (final var anonymousMethod : ANONYMOUS_METHODS) {
+                if (methodIds.remove(anonymousMethod)) {
+                    removed.add(anonymousMethod);
+                }
+            }
+
+            ANONYMOUS_METHODS.removeAll(removed);
 
             for (final var methodId : methodIds) {
                 events.add(new SimpleConditionEvent(item, false, methodId));
@@ -72,12 +96,6 @@ public class AuthorizerAnnotationTest {
                 .filter(method -> !method.isConstructor())
                 .map(method -> toFullyQualifiedName(javaClass, method))
                 .collect(Collectors.toSet());
-
-            // return javaClass.getMethods()
-            // .stream()
-            // .filter(method -> !method.isConstructor())
-            // .map(JavaCodeUnit::getFullName)
-            // .collect(Collectors.toSet());
         }
 
         private Set<String> collectMethodsCallingAuthorizer(final JavaClass javaClass) {

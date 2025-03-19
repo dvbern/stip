@@ -120,6 +120,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     public SozialdienstBenutzerDto createSozialdienstBenutzer(
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
+        sozialdienstAuthorizer.canCreateSozialdienstBenutzer();
         return sozialdienstBenutzerService.createSozialdienstBenutzer(
             sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin(),
             sozialdienstBenutzerCreateDto
@@ -137,6 +138,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @Override
     @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzerList() {
+        sozialdienstAuthorizer.canGetSozialdienstBenutzer();
         return sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin());
     }

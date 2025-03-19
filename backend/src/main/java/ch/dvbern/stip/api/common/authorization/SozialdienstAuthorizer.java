@@ -102,4 +102,12 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
             throw new UnauthorizedException();
         }
     }
+
+    public void canCreateSozialdienstBenutzer() {
+        permitAll();
+    }
+
+    public void canGetSozialdienstBenutzer() {
+        permitAll();
+    }
 }
