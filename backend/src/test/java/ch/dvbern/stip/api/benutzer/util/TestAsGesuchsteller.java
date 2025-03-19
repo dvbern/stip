@@ -58,6 +58,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
         OidcPermissions.FALL_CREATE,
         OidcPermissions.CUSTOM_DOKUMENT_READ,
         OidcPermissions.AENDERUNG_DELETE,
+        OidcPermissions.SOZIALDIENST_READ,
         "default-roles-bern"
     }
 )
