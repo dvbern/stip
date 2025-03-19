@@ -34,6 +34,7 @@ package ch.dvbern.stip.api.gesuch.resource;
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -93,8 +94,6 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
     private UUID gesuchTrancheId;
-    private UUID dokumentId;
-    private UUID customDokumentId;
 
     @Test
     @TestAsGesuchsteller
@@ -221,7 +220,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getNachfristDokumente(), is(notNullValue()));
+        assertThat(gesuchWithChanges.getNachfristDokumente(), is(LocalDate.now().plusDays(30)));
     }
 
     @TestAsGesuchsteller
