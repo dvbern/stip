@@ -17,19 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -111,6 +98,19 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -788,7 +788,6 @@ public class GesuchService {
 
     @Transactional
     public void checkForFehlendeDokumenteOnAllGesuche() {
-        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
         final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
         gesuchsToCheck.forEach(
