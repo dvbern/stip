@@ -102,6 +102,3 @@ hs_err_pid*.log
 
 ## nx
 .nx/
-
-# scripts
-scripts/out/*

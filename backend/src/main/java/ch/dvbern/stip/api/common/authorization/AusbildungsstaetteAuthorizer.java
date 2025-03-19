@@ -17,6 +17,12 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+@Authorizer
 public class AusbildungsstaetteAuthorizer extends BaseAuthorizer {
     public void canCreate() {
         // TODO KSTIP-1967: Resolve this
