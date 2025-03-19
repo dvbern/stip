@@ -36,6 +36,7 @@ import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import {
@@ -246,24 +247,16 @@ export class EinreichenStore extends signalStore(
     ] as const;
 
     if (allowNullValidation) {
-      if (this.config.appType === 'gesuch-app') {
-        return this.gesuchTrancheService.validateGesuchTranchePagesGS$(
-          ...requestArgs,
-        );
-      }
+      return byAppType(this.gesuchTrancheService, this.config.appType, {
+        'gesuch-app': 'validateGesuchTranchePagesGS$',
+        'sachbearbeitung-app': 'validateGesuchTranchePagesSB$',
+      })(...requestArgs);
+    }
 
-      return this.gesuchTrancheService.validateGesuchTranchePagesSB$(
-        ...requestArgs,
-      );
-    }
-    if (this.config.appType === 'gesuch-app') {
-      return this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
-        ...requestArgs,
-      );
-    }
-    return this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
-      ...requestArgs,
-    );
+    return byAppType(this.gesuchTrancheService, this.config.appType, {
+      'gesuch-app': 'gesuchTrancheEinreichenValidierenGS$',
+      'sachbearbeitung-app': 'gesuchTrancheEinreichenValidierenSB$',
+    })(...requestArgs);
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(

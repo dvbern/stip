@@ -210,3 +210,22 @@ const applyDelegatedPermission = (
     canFreigeben: false,
   };
 };
+
+/**
+ * Used to define values that are accessed by the app type
+ *
+ * @example
+ * ```ts
+ * byAppType(this.trancheService, this.config.appType, {
+ *   'gesuch-app': 'getGesuchDokumenteGS$',
+ *   'sachbearbeitung-app': 'getGesuchDokumenteSB$',
+ * })({ gesuchTrancheId })
+ * ```
+ */
+export const byAppType = <T, K extends keyof T>(
+  origin: T,
+  appType: AppType,
+  map: Record<AppType, K>,
+) => {
+  return origin[map[appType]];
+};

@@ -18,6 +18,7 @@ import {
   GesuchTrancheService,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   RemoteData,
@@ -42,7 +43,7 @@ type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
-  dokument: CachedRemoteData<GesuchDokument>;
+  dokument: CachedRemoteData<GesuchDokument | undefined>;
   expandedComponentList: 'custom' | 'required' | undefined;
 };
 
@@ -68,17 +69,17 @@ export class DokumentsStore extends signalStore(
   private config = inject(SharedModelCompileTimeConfig);
 
   private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
-    if (this.config.appType === 'gesuch-app') {
-      return this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId });
-    }
-    return this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId });
+    return byAppType(this.trancheService, this.config.appType, {
+      'gesuch-app': 'getGesuchDokumenteGS$',
+      'sachbearbeitung-app': 'getGesuchDokumenteSB$',
+    })({ gesuchTrancheId });
   }
 
   private getDcumentsToUploadByAppType$(gesuchTrancheId: string) {
-    if (this.config.appType === 'gesuch-app') {
-      return this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId });
-    }
-    return this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId });
+    return byAppType(this.trancheService, this.config.appType, {
+      'gesuch-app': 'getDocumentsToUploadGS$',
+      'sachbearbeitung-app': 'getDocumentsToUploadSB$',
+    })({ gesuchTrancheId });
   }
 
   setExpandedList(list: 'custom' | 'required' | undefined) {
@@ -241,18 +242,10 @@ export class DokumentsStore extends signalStore(
         });
       }),
       handleApiResponse((res) => {
-        // res is Failure | Success<NullableGesuchDokument>
-        // how to update the state with the new data?
-        if (isSuccess(res) && res.data.value) {
-          const val = res.data.value;
-          patchState(this, () => ({
-            dokument: success(val),
-          }));
-        } else {
-          patchState(this, () => ({
-            dokument: failure(res.error),
-          }));
-        }
+        patchState(this, () => ({
+          // Response is NullableGesuchDokument, so we extract the value
+          dokument: mapData(res, (data) => data.value),
+        }));
       }),
     ),
   );
