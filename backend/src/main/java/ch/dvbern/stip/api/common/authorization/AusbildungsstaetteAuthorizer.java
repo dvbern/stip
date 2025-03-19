@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class AusbildungsstaetteAuthorizer extends BaseAuthorizer {
     public void canCreate() {
-        // TODO KSTIP-1967: Resolve this
+        permitAll();
     }
 
     public void canRead() {
@@ -33,10 +33,10 @@ public class AusbildungsstaetteAuthorizer extends BaseAuthorizer {
     }
 
     public void canUpdate() {
-        // TODO KSTIP-1967: Resolve this
+        permitAll();
     }
 
     public void canDelete() {
-        // TODO KSTIP-1967: Resolve this
+        permitAll();
     }
 }

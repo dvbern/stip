@@ -51,9 +51,6 @@ import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -195,7 +192,6 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(8)
     void test_upload_custom_gesuchdokuments() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
     }

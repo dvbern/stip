@@ -54,10 +54,21 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_UPLOAD_DOCUMENT = Collections.unmodifiableSet(
+        EnumSet.of(
+            FEHLENDE_DOKUMENTE
+        )
+    );
+
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.of(
-                IN_BEARBEITUNG_SB
+                IN_BEARBEITUNG_SB,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                VERSANDBEREIT,
+                VERSENDET
             )
         );
 
@@ -164,4 +175,5 @@ public enum Gesuchstatus {
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }
+
 }

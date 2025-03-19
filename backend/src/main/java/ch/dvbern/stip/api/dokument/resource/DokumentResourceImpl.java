@@ -113,7 +113,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Override
     @Blocking
-    @RolesAllowed(DOKUMENT_UPLOAD)
+    @RolesAllowed(UNTERSCHRIFTENBLATT_UPLOAD)
     public Uni<Response> createUnterschriftenblatt(
         UnterschriftenblattDokumentTyp unterschriftenblattTyp,
         UUID gesuchId,

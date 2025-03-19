@@ -72,10 +72,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
@@ -162,7 +164,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(GS_GESUCH_DELETE)
+    @RolesAllowed({ GS_GESUCH_DELETE, ADMIN_GESUCH_DELETE })
     public void deleteGesuch(UUID gesuchId) {
         gesuchAuthorizer.canDelete(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
@@ -235,7 +237,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public PaginatedSbDashboardDto getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
         GesuchTrancheTyp typ,
@@ -272,7 +274,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchHistoryService.getStatusprotokoll(gesuchId);

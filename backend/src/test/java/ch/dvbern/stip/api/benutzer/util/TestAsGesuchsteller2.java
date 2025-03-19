@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -37,16 +38,27 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
     user = "gesuchsteller2",
     roles = {
         OidcConstants.ROLE_GESUCHSTELLER,
-        "GESUCH_READ",
-        "GESUCH_UPDATE",
-        "FALL_UPDATE",
-        "GESUCH_CREATE",
-        "GESUCH_DELETE",
-        "FALL_CREATE",
-        "GESUCHSPERIODE_READ",
-        "FALL_READ",
-        "AUSBILDUNG_READ",
-        "STAMMDATEN_READ"
+        OidcPermissions.DOKUMENT_UPLOAD,
+        OidcPermissions.AENDERUNG_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_READ,
+        OidcPermissions.GS_GESUCH_READ,
+        OidcPermissions.AUSBILDUNG_READ,
+        OidcPermissions.NOTIFICATION_READ,
+        OidcPermissions.DOKUMENT_READ,
+        OidcPermissions.GS_GESUCH_DELETE,
+        OidcPermissions.FALL_READ,
+        OidcPermissions.GS_GESUCH_UPDATE,
+        OidcPermissions.AUSBILDUNG_CREATE,
+        OidcPermissions.AUSBILDUNG_UPDATE,
+        OidcPermissions.AUSBILDUNG_DELETE,
+        OidcPermissions.GS_GESUCH_CREATE,
+        OidcPermissions.AENDERUNG_EINREICHEN,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.DOKUMENT_DELETE,
+        OidcPermissions.FALL_CREATE,
+        OidcPermissions.CUSTOM_DOKUMENT_READ,
+        OidcPermissions.AENDERUNG_DELETE,
+        "default-roles-bern"
     }
 )
 @OidcSecurity(

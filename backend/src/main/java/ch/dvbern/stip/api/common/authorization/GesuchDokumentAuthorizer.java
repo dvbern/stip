@@ -44,7 +44,10 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchstatus = gesuchTrancheRepository.findById(gesuchTrancheId).getGesuch().getGesuchStatus();
 
-        if (isGesuchsteller(currentBenutzer) && gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuchstatus)) {
+        if (
+            isGesuchsteller(currentBenutzer)
+            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuchstatus)
+        ) {
             return;
         }
 

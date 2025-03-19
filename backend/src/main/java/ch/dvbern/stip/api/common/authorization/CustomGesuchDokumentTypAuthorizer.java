@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -50,7 +49,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var gesuch = gesuchTrancheRepository.requireById(trancheId).getGesuch();
         canReadAllTyps();
         if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 
@@ -58,18 +57,25 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     public void canReadAllTyps() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!isAdminOrSb(currentBenutzer)) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 
     @Transactional
     public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
-        final var customDokuementTyp = customDokumentTypRepository.requireById(customDokumentTypId);
-        final var gesuch = customDokuementTyp.getGesuchDokument().getGesuchTranche().getGesuch();
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!(isAdminOrSb(currentBenutzer) || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch))) {
-            throw new ForbiddenException();
+        if (isAdminOrSb(currentBenutzer)) {
+            return;
         }
+
+        final var customDokumentTyp = customDokumentTypRepository.requireById(customDokumentTypId);
+        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
+
+        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
@@ -78,9 +84,11 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
 
-        if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
-            throw new ForbiddenException();
+        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+            return;
         }
+
+        forbidden();
     }
 
     @Transactional
@@ -98,7 +106,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         // check if gesuch is being edited by SB
         // or if GS has already attached a file to it
         if (notBeingEditedBySB || isAnyFileAttached) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 
@@ -118,7 +126,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             !isDeleteAuthorized
             || !isDokumentAusstehend
         ) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 }

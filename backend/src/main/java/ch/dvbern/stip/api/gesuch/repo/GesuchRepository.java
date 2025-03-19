@@ -232,7 +232,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .join(gesuchTranche)
             .on(gesuchTranche.gesuch.id.eq(gesuch.id))
             .join(gesuchDokument)
-            .on(gesuchDokument.gesuchTranche.id.eq(gesuchDokument.id))
+            .on(gesuchDokument.gesuchTranche.id.eq(gesuchTranche.id))
             .where(gesuchDokument.dokumente.any().in(subQuery))
             .stream()
             .findFirst()

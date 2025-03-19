@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.TestUtil;
-import io.quarkus.security.ForbiddenException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -113,7 +113,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
