@@ -183,10 +183,9 @@ export const canCurrentlyEdit = (
   }
 
   return (
-    // OK if it is not delegated and current user is not a sozialdienst-mitarbeiter
-    (!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] !== true) ||
+    !delegierung ||
     // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-    (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
+    (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
   );
 };
 
