@@ -28,7 +28,7 @@ $gesuch-app-theme: map.deep-merge(
     (
       color: (
         primary: $gesuch-app-primary,
-        accent: $gesuch-app-accent,
+        accent: $gesuch-app-caution,
         warn: $gesuch-app-warn,
       ),
     )
