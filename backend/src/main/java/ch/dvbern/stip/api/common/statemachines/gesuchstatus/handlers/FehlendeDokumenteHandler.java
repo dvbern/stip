@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -28,9 +31,6 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.Objects;
 
 @ApplicationScoped
 @RequiredArgsConstructor
