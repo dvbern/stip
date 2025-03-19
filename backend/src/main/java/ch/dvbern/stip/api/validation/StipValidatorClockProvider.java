@@ -24,6 +24,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ClockProvider;
 
 @ApplicationScoped
+/**
+ * Set default clock provider for validators
+ */
 public class StipValidatorClockProvider implements ClockProvider {
     private static final String TIMEZONE_ID = "Europe/Zurich";
 
