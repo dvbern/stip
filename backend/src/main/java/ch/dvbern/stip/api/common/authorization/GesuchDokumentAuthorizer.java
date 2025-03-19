@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -42,11 +43,27 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchstatus = gesuchTrancheRepository.findById(gesuchTrancheId).getGesuch().getGesuchStatus();
+        final var gesuch = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuch();
 
-        if (
+        final BooleanSupplier canBenutzerUpload =
+            () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus());
+
+        if (AuthorizerUtil.isDelegiert(gesuch)) {
+            if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+                forbidden();
+            }
+
+            final var isNotGesuchstellerButDelegierter =
+                !AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+                && AuthorizerUtil
+                    .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+            if (canBenutzerUpload.getAsBoolean() && isNotGesuchstellerButDelegierter) {
+                return;
+            }
+        } else if (
             isGesuchsteller(currentBenutzer)
-            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuchstatus)
+            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
         ) {
             return;
         }

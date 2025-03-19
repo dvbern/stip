@@ -89,4 +89,8 @@ public class AuthorizerUtil {
         return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
         || isGesuchstellerOfGesuch(currentBenutzer, gesuch);
     }
+
+    public boolean isDelegiert(final Gesuch gesuch) {
+        return gesuch.getAusbildung().getFall().getDelegierung() != null;
+    }
 }
