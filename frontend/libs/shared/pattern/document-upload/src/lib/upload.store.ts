@@ -29,6 +29,7 @@ import {
   DokumentService,
   DokumentTyp,
 } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -111,19 +112,19 @@ export class UploadStore {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
   }) {
-    if (this.config.appType === 'gesuch-app') {
-      return this.documentService.getGesuchDokumenteForTypGS$(params);
-    }
-    return this.documentService.getGesuchDokumenteForTypSB$(params);
+    return byAppType(this.documentService, this.config.appType, {
+      'gesuch-app': 'getGesuchDokumenteForTypGS$',
+      'sachbearbeitung-app': 'getGesuchDokumenteForTypSB$',
+    })(params);
   }
 
   private getCustomGesuchDokumenteByAppType$(params: {
     customDokumentTypId: string;
   }) {
-    if (this.config.appType === 'gesuch-app') {
-      return this.documentService.getCustomGesuchDokumenteForTypGS$(params);
-    }
-    return this.documentService.getCustomGesuchDokumenteForTypSB$(params);
+    return byAppType(this.documentService, this.config.appType, {
+      'gesuch-app': 'getCustomGesuchDokumenteForTypGS$',
+      'sachbearbeitung-app': 'getCustomGesuchDokumenteForTypSB$',
+    })(params);
   }
 
   constructor() {
