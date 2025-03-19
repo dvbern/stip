@@ -1632,7 +1632,6 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
-
         Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
 

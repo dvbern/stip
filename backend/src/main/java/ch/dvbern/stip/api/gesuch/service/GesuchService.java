@@ -620,6 +620,10 @@ public class GesuchService {
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        var violations = validator.validate(gesuch);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 

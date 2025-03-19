@@ -154,12 +154,20 @@ public class GesuchTrancheService {
     private GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
-            gesuchTranche =
-                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                    .orElseThrow();
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
+            if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+                gesuchTranche =
+                    gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+                        .orElseThrow();
+            }
+        } else if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        ) {
+            gesuchTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId);
         }
+
         return gesuchTranche;
     }
 
