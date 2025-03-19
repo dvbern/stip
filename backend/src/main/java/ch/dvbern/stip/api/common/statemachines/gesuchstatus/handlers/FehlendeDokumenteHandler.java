@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -31,6 +28,9 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        setDefaultNachfristDokumenteIfNecessary(gesuch);
+        setDefaultNachfristDokumente(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
@@ -60,7 +60,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 
-    private void setDefaultNachfristDokumenteIfNecessary(Gesuch gesuch) {
+    private void setDefaultNachfristDokumente(Gesuch gesuch) {
         if (Objects.isNull(gesuch.getNachfristDokumente())) {
             gesuch
                 .setNachfristDokumente(
