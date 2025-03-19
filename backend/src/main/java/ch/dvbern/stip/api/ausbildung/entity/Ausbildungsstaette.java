@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,7 +37,7 @@ import org.hibernate.envers.Audited;
 @Table(name = "ausbildungsstaette")
 @Getter
 @Setter
-public class Ausbildungsstaette extends AbstractEntity {
+public class Ausbildungsstaette extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
     private List<Ausbildungsgang> ausbildungsgaenge;
 

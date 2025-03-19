@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.steuererklaerung.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ import org.hibernate.envers.Audited;
 @Table(name = "steuererklaerung")
 @Getter
 @Setter
-public class Steuererklaerung extends AbstractEntity {
+public class Steuererklaerung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
     @Enumerated(EnumType.STRING)

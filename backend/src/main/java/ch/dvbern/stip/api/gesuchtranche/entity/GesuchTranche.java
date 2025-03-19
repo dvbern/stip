@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -62,7 +62,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 )
 @Getter
 @Setter
-public class GesuchTranche extends AbstractEntity {
+public class GesuchTranche extends AbstractMandantEntity {
     @Embedded
     private @Valid DateRange gueltigkeit = new DateRange();
 

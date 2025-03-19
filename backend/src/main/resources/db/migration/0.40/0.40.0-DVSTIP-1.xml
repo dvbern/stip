@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1742392105500-3">
+        <addColumn tableName="ausbildungsstaette">
+            <column name="mandant" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-4">
+        <addColumn tableName="ausbildungsstaette_aud">
+            <column name="mandant" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-5">
+        <addColumn tableName="gesuch_tranche">
+            <column name="mandant" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-6">
+        <addColumn tableName="gesuch_tranche_aud">
+            <column name="mandant" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-7">
+        <addColumn tableName="scheduledtask">
+            <column name="mandant" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-8">
+        <addColumn tableName="scheduledtask_aud">
+            <column name="mandant" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-9">
+        <addColumn tableName="steuerdaten">
+            <column name="mandant" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-10">
+        <addColumn tableName="steuerdaten_aud">
+            <column name="mandant" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-11">
+        <addColumn tableName="steuererklaerung">
+            <column name="mandant" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742392105500-12">
+        <addColumn tableName="steuererklaerung_aud">
+            <column name="mandant" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
