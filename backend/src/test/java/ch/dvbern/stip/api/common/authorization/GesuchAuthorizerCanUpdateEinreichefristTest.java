@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -31,6 +28,9 @@ import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -78,9 +78,5 @@ class GesuchAuthorizerCanUpdateEinreichefristTest {
             authorizer.canUpdateEinreichefrist(UUID.randomUUID());
         });
     }
-
-    // current benutzer is NOT AdminOrSB, but gesuch is in correct state
-    // current benutzer is NOT AdminOrSB and gesuch is NOT in correct state
-    // current benutzer is adminOrSB
 
 }
