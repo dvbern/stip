@@ -37,6 +37,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
@@ -216,7 +218,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canUpdateEinreichefrist(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (
-            gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB
+            !SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuch.getGesuchStatus())
             || !isAdminOrSb(benutzerService.getCurrentBenutzer())
         ) {
             throw new UnauthorizedException();
