@@ -34,7 +34,7 @@ public class OidcTenantResolver implements TenantResolver {
     @Override
     public String resolve(RoutingContext context) {
         final var authority = context.request().authority().host();
-        final var parts = authority.split("\\.");
+        final var parts = authority.split("-");
         final var tenant = tenantService.resolveTenant(parts[0]);
 
         context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant.getIdentifier());
