@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
@@ -160,6 +161,7 @@ public class GesuchService {
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
     private final DokumentRepository dokumentRepository;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);

@@ -99,9 +99,14 @@ public interface DokumentResource {
     FileDownloadTokenDto getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare")
+    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/gs")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
+    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareGS(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
+
+    @GET
+    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/sb")
+    @Produces({ "application/json", "text/plain" })
+    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
     @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")

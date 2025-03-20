@@ -147,7 +147,7 @@ public class GesuchTrancheService {
         );
     }
 
-    private GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
+    public GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {

@@ -860,7 +860,7 @@ paths:
       operationId: uploadCustomGesuchDokument
       summary: Upload a file for the given customDokumentTyp to the Tranche
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchDokumentId}/kommentare':
+  '/gesuchDokument/{gesuchDokumentId}/kommentare/gs':
     get:
       tags:
         - Dokument
@@ -887,7 +887,36 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumentKommentare
+      operationId: getGesuchDokumentKommentareGS
+      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+  '/gesuchDokument/{gesuchDokumentId}/kommentare/sb':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: gesuchDokumentId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+          description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumentKommentareSB
       summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
   '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
     parameters:

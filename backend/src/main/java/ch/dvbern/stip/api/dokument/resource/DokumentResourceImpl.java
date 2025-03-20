@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -80,6 +81,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -221,11 +223,16 @@ public class DokumentResourceImpl implements DokumentResource {
             );
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareGS(UUID gesuchDokumentId) {
         gesuchDokumentAuthorizer.canRead(gesuchDokumentId);
-        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
+        return gesuchDokumentKommentarService.getAllKommentareForGesuchDokumentGS(gesuchDokumentId);
+    }
+
+    @Override
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(UUID gesuchDokumentId) {
+        gesuchDokumentAuthorizer.canRead(gesuchDokumentId);
+        return gesuchDokumentKommentarService.getAllKommentareForGesuchDokumentSB(gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)

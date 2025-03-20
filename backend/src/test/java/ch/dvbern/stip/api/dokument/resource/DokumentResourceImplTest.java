@@ -80,7 +80,7 @@ class DokumentResourceImplTest {
     void resourceShouldReturnCommentsOfADokument() {
         doNothing().when(gesuchDokumentAuthorizer).canRead(any());
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID())
+            dokumentResource.getGesuchDokumentKommentareGS(UUID.randomUUID())
         );
     }
 

@@ -25,9 +25,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -39,6 +42,13 @@ public class GesuchDokumentKommentarService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchTrancheService gesuchTrancheService;
+
+    @Transactional
+    public void deleteAllForGesuch(final Gesuch gesuch) {
+        gesuch.getGesuchTranchen().forEach(gesuchTranche -> deleteForGesuchTrancheId(gesuchTranche.getId()));
+    }
 
     @Transactional
     public void deleteForGesuchDokument(UUID gesuchDokumentId) {
@@ -50,7 +60,9 @@ public class GesuchDokumentKommentarService {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
         gesuchDokuments
-            .forEach(dokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId()));
+            .forEach(dokument -> {
+                gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId());
+            });
     }
 
     @Transactional
@@ -95,12 +107,37 @@ public class GesuchDokumentKommentarService {
     }
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokument(
+    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokumentGS(
+        final UUID gesuchDokumentId
+    ) {
+        var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        final var gesuchTranche =
+            gesuchTrancheService.getCurrentOrEingereichtTrancheForGS(gesuchDokument.getGesuchTranche().getId());
+
+        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument1 -> gesuchDokument1.getId().equals(gesuchDokumentId))
+            .findFirst();
+
+        List<GesuchDokumentKommentar> gesuchDokumentKommentars = List.of();
+
+        if (gesuchDokumentOpt.isPresent()) {
+            gesuchDokumentKommentars = gesuchDokumentOpt.get().getGesuchDokumentKommentare();
+        }
+
+        return gesuchDokumentKommentars.stream()
+            .map(gesuchDokumentKommentarMapper::toDto)
+            .toList();
+    }
+
+    @Transactional
+    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokumentSB(
         final UUID gesuchDokumentId
     ) {
         final var gesuchDokumentKommentars =
             gesuchDokumentKommentarRepository
                 .getByGesuchDokumentId(gesuchDokumentId);
+
         if (gesuchDokumentKommentars != null) {
             return gesuchDokumentKommentars.stream()
                 .map(gesuchDokumentKommentarMapper::toDto)

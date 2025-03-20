@@ -47,7 +47,6 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
@@ -86,14 +85,6 @@ public class GesuchDokumentService {
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
-    private final GesuchDokumentKommentarService dokumentKommentarService;
-
-    @Transactional
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
-        UUID gesuchDokumentId
-    ) {
-        return dokumentKommentarService.getAllKommentareForGesuchDokument(gesuchDokumentId);
-    }
 
     @Transactional
     public Uni<Response> getUploadCustomDokumentUni(
@@ -403,6 +394,7 @@ public class GesuchDokumentService {
         final var dokuments = gesuchDokument.getDokumente();
 
         List<String> dokumentObjectIds = new ArrayList<>();
+
         // Using Iterator to be able to remove while looping
         for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext();) {
             final var dokument = iterator.next();
@@ -417,7 +409,8 @@ public class GesuchDokumentService {
             }
         }
         if (gesuchDokument.getDokumente().isEmpty()) {
-            gesuchDokumentRepository.delete(gesuchDokument);
+            gesuchDokumentRepository.deleteById(gesuchDokument.getId());
+            gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
         }
         if (!dokumentObjectIds.isEmpty()) {
             executeDeleteDokumentsFromS3(dokumentObjectIds);

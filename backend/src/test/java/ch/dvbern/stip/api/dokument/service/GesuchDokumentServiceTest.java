@@ -67,7 +67,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -105,6 +104,9 @@ class GesuchDokumentServiceTest {
 
     @Inject
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+
+    @Inject
+    GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     private final UUID id = UUID.randomUUID();
 
@@ -193,14 +195,6 @@ class GesuchDokumentServiceTest {
 
     @TestAsSachbearbeiter
     @Test
-    void getKommentareWhenNoEntriesExist(){
-        when(gesuchDokumentKommentarRepository.getByGesuchDokumentId(any())).thenReturn(null);
-        assertDoesNotThrow(() -> gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()));
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()).size(), notNullValue());
-    }
-
-    @TestAsSachbearbeiter
-    @Test
     void akzeptierenCreatesCommentWithNull() {
         // Arrange
         mockedDokument = (GesuchDokument) new GesuchDokument()
@@ -237,11 +231,12 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new GesuchDokumentKommentarService(
                     null,
-                    gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
+                    gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl(),
+                    null,
+                    null
                 ),
                 null
             ),
-            null,
             null,
             null,
             null,
@@ -348,8 +343,7 @@ class GesuchDokumentServiceTest {
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
         RequiredDokumentService requiredDokumentService,
         GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository,
-        DokumentHistoryRepository dokumentHistoryRepository,
-        GesuchDokumentKommentarService gesuchDokumentKommentarService
+        DokumentHistoryRepository dokumentHistoryRepository
         ) {
             super(
                 gesuchDokumentMapper,
@@ -365,8 +359,7 @@ class GesuchDokumentServiceTest {
                 antivirus,
                 gesuchDokumentKommentarRepository,
                 gesuchTrancheHistoryRepository,
-                dokumentHistoryRepository,
-                gesuchDokumentKommentarService
+                dokumentHistoryRepository
             );
         }
 
