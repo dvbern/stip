@@ -187,6 +187,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
+
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
         // assert
