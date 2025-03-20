@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -96,6 +97,42 @@ public class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
         assertEquals(gesuch.getNachfristDokumente(), nachfrist);
         gesuchDokument2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument2.getId());
+        // since all documents are accepted, reset nachreichefrist
+        assertNull(gesuch.getNachfristDokumente());
+
+    }
+
+    @Test
+    void nachfristDokumenteShouldBeRemovedWhenAllAcceptedOnDifferentTranchen() {
+        GesuchTranche tranche2 = new GesuchTranche();
+
+        // reset gesuchtranchen of gesuch to modifiable list
+        ArrayList<GesuchTranche> tranches = new ArrayList<>();
+        tranches.addAll(gesuch.getGesuchTranchen());
+        gesuch.setGesuchTranchen(tranches);
+
+        gesuch.getGesuchTranchen().add(tranche2);
+        tranche2.setGesuch(gesuch);
+
+        Mockito.doNothing().when(dokumentstatusService).triggerStatusChange(any(), any());
+        gesuchDokument1.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
+
+        // also check 2nd tranche with a new dokument
+        GesuchDokument gesuchDokument3 = new GesuchDokument();
+        gesuchDokument3.setDokumentTyp(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
+        gesuchDokument3.setId(UUID.randomUUID());
+        gesuchDokument3.setGesuchTranche(tranche);
+        tranche2.setGesuchDokuments(new ArrayList<>());
+        tranche2.getGesuchDokuments().add(gesuchDokument3);
+        tranche2.getGesuchDokuments().add(gesuchDokument1);
+        gesuchDokument3.setStatus(Dokumentstatus.AUSSTEHEND);
+
+        assertEquals(gesuch.getNachfristDokumente(), nachfrist);
+        gesuchDokument2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokument3.setStatus(Dokumentstatus.AKZEPTIERT);
+
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument2.getId());
         // since all documents are accepted, reset nachreichefrist
         assertNull(gesuch.getNachfristDokumente());
