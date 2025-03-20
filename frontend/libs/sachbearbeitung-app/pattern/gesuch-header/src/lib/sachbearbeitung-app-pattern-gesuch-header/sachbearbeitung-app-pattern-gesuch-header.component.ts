@@ -23,6 +23,7 @@ import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbei
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  SharedDataAccessGesuchEvents,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -187,8 +188,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     };
   });
 
-  setStatusUebergang(nextStatus: StatusUebergang, gesuchTrancheId?: string) {
-    if (!gesuchTrancheId) {
+  setStatusUebergang(
+    nextStatus: StatusUebergang,
+    gesuchId?: string,
+    gesuchTrancheId?: string,
+  ) {
+    if (!gesuchId || !gesuchTrancheId) {
       return;
     }
 
@@ -234,7 +239,20 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
                 gesuchTrancheId,
                 text: result.kommentar,
-                onSuccess: () => {
+                onSuccess: (newGesuchTrancheId) => {
+                  if (gesuchTrancheId !== newGesuchTrancheId) {
+                    this.router.navigate([
+                      'gesuch',
+                      'info',
+                      gesuchId,
+                      'tranche',
+                      newGesuchTrancheId,
+                    ]);
+                  } else {
+                    this.store.dispatch(
+                      SharedDataAccessGesuchEvents.loadGesuch(),
+                    );
+                  }
                   this.einreichenStore.validateSteps$({ gesuchTrancheId });
                 },
               });
