@@ -52,14 +52,13 @@ public class RequiredDokumentService {
     }
 
     private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
-        return gesuch.getGesuchTranchen().stream().map(gesuchTranche -> {
+        return gesuch.getGesuchTranchen().stream().anyMatch(gesuchTranche -> {
             var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
-            var gesuchDokumenteStilRequired =
+            var gesuchDokumenteStillRequired =
                 !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
             // if any normal or custom GesuchDokument is still required,
-            // the returned flag must be false
-            return !(customDokumentsStillRequired || gesuchDokumenteStilRequired);
-        }).toList().stream().anyMatch(containsRequiredDocuments -> !containsRequiredDocuments);
+            return (customDokumentsStillRequired || gesuchDokumenteStillRequired);
+        });
     }
 
     public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {

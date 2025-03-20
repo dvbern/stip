@@ -59,7 +59,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var isGesuchstatusInBearbeitungSB = gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB);
         final var isATranche = tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
 
-        if (!(isATranche && isGesuchstatusInBearbeitungSB || isAnAenderungInUeberpruefung)) {
+        if (!((isATranche && isGesuchstatusInBearbeitungSB) || isAnAenderungInUeberpruefung)) {
             throw new ForbiddenException();
         }
 
@@ -112,7 +112,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         // check if gesuch is being edited by SB
         // or if GS has already attached a file to it
 
-        if (isNormalTranche && (notBeingEditedBySB || isAnyFileAttached) || isAenderungAndNOTInStatusUeberpruefen) {
+        if ((isNormalTranche && notBeingEditedBySB) || isAenderungAndNOTInStatusUeberpruefen || isAnyFileAttached) {
             throw new ForbiddenException();
         }
     }
