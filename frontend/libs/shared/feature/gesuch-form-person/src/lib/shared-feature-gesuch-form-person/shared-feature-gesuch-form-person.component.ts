@@ -217,12 +217,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
 
       return alter >= BEGRUENDUNGSSCHREIBEN_AGE
-        ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_35
+        ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         : null;
     },
     {
       descriptionKey:
-        'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_UEBER_35.info',
+        'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN.info',
     },
   );
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {

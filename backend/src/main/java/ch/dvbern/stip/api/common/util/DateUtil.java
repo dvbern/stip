@@ -97,7 +97,11 @@ public class DateUtil {
     }
 
     public int getAgeInYears(final LocalDate geburtsdatum) {
-        return (int) ChronoUnit.YEARS.between(geburtsdatum, LocalDate.now());
+        return getAgeInYearsAtDate(geburtsdatum, LocalDate.now());
+    }
+
+    public int getAgeInYearsAtDate(final LocalDate geburtsdatum, final LocalDate date) {
+        return (int) ChronoUnit.YEARS.between(geburtsdatum, date);
     }
 
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
