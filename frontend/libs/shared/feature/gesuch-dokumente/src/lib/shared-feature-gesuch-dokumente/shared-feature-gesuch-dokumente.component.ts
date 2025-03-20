@@ -302,6 +302,10 @@ export class SharedFeatureGesuchDokumenteComponent {
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          // Also load the required documents again
+          this.dokumentsStore.getDokumenteAndRequired$({
+            gesuchTrancheId: trancheId,
+          });
         },
       });
     }
