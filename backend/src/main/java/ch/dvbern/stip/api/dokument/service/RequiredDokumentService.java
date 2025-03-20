@@ -117,20 +117,24 @@ public class RequiredDokumentService {
     }
 
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
-        final var existingDokumentTypesHashSet = new HashSet<>(
+        final var uploadedDocumentTypes = new HashSet<>(
             RequiredDokumentUtil.getExistingDokumentTypesForGesuch(formular)
         );
 
-        final var requiredDokumentTypes =
+        final var requiredByProducers =
             RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDocumentProducers);
-        final var notAcceptedDokumentTypes =
-            RequiredDokumentUtil.getDokumentTypesWithNoFilesAttached(formular);
+        final var ausstehendWithMissingFiles =
+            RequiredDokumentUtil.getAusstehendeDokumentTypesWithNoFilesAttached(formular);
 
-        return requiredDokumentTypes
+        // check if :
+        // * for each producer entry, there is an uploaded GesuchDokument
+        // * there is no empty GesuchDokument listed in the producer
+        // if opposite, this GesuchDokument is listed as still required
+        return requiredByProducers
             .stream()
             .filter(
-                requiredDokumentType -> !existingDokumentTypesHashSet.contains(requiredDokumentType)
-                || notAcceptedDokumentTypes.contains(requiredDokumentType)
+                requiredDokumentType -> !uploadedDocumentTypes.contains(requiredDokumentType)
+                || ausstehendWithMissingFiles.contains(requiredDokumentType)
             )
             .toList();
     }

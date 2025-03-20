@@ -51,7 +51,7 @@ public class RequiredDokumentUtil {
             .toList();
     }
 
-    public Set<DokumentTyp> getDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
+    public Set<DokumentTyp> getAusstehendeDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments()
