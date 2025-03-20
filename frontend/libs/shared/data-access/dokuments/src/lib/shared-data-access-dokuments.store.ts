@@ -69,17 +69,21 @@ export class DokumentsStore extends signalStore(
   private config = inject(SharedModelCompileTimeConfig);
 
   private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.trancheService, this.config.appType, {
-      'gesuch-app': 'getGesuchDokumenteGS$',
-      'sachbearbeitung-app': 'getGesuchDokumenteSB$',
-    })({ gesuchTrancheId });
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
+      'sachbearbeitung-app': () =>
+        this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
+    });
   }
 
   private getDcumentsToUploadByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.trancheService, this.config.appType, {
-      'gesuch-app': 'getDocumentsToUploadGS$',
-      'sachbearbeitung-app': 'getDocumentsToUploadSB$',
-    })({ gesuchTrancheId });
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
+      'sachbearbeitung-app': () =>
+        this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
+    });
   }
 
   setExpandedList(list: 'custom' | 'required' | undefined) {

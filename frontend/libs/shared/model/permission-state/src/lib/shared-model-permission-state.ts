@@ -216,16 +216,15 @@ const applyDelegatedPermission = (
  *
  * @example
  * ```ts
- * byAppType(this.trancheService, this.config.appType, {
- *   'gesuch-app': 'getGesuchDokumenteGS$',
- *   'sachbearbeitung-app': 'getGesuchDokumenteSB$',
- * })({ gesuchTrancheId })
+ * byAppType(this.config.appType, {
+ *   'gesuch-app': () => this.trancheService.getGesuchDokumenteGS$(...),
+ *   'sachbearbeitung-app': () => this.trancheService.getGesuchDokumenteSB$(...),
+ * })()
  * ```
  */
-export const byAppType = <T, K extends keyof T>(
-  origin: T,
+export const byAppType = <R>(
   appType: AppType,
-  map: Record<AppType, K>,
+  map: Record<AppType, () => R>,
 ) => {
-  return origin[map[appType]];
+  return map[appType]();
 };

@@ -247,16 +247,28 @@ export class EinreichenStore extends signalStore(
     ] as const;
 
     if (allowNullValidation) {
-      return byAppType(this.gesuchTrancheService, this.config.appType, {
-        'gesuch-app': 'validateGesuchTranchePagesGS$',
-        'sachbearbeitung-app': 'validateGesuchTranchePagesSB$',
-      })(...requestArgs);
+      return byAppType(this.config.appType, {
+        'gesuch-app': () =>
+          this.gesuchTrancheService.validateGesuchTranchePagesGS$(
+            ...requestArgs,
+          ),
+        'sachbearbeitung-app': () =>
+          this.gesuchTrancheService.validateGesuchTranchePagesSB$(
+            ...requestArgs,
+          ),
+      });
     }
 
-    return byAppType(this.gesuchTrancheService, this.config.appType, {
-      'gesuch-app': 'gesuchTrancheEinreichenValidierenGS$',
-      'sachbearbeitung-app': 'gesuchTrancheEinreichenValidierenSB$',
-    })(...requestArgs);
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
+          ...requestArgs,
+        ),
+      'sachbearbeitung-app': () =>
+        this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
+          ...requestArgs,
+        ),
+    });
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(

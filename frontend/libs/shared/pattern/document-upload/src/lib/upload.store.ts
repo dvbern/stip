@@ -112,19 +112,23 @@ export class UploadStore {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
   }) {
-    return byAppType(this.documentService, this.config.appType, {
-      'gesuch-app': 'getGesuchDokumenteForTypGS$',
-      'sachbearbeitung-app': 'getGesuchDokumenteForTypSB$',
-    })(params);
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.documentService.getGesuchDokumenteForTypGS$(params),
+      'sachbearbeitung-app': () =>
+        this.documentService.getGesuchDokumenteForTypSB$(params),
+    });
   }
 
   private getCustomGesuchDokumenteByAppType$(params: {
     customDokumentTypId: string;
   }) {
-    return byAppType(this.documentService, this.config.appType, {
-      'gesuch-app': 'getCustomGesuchDokumenteForTypGS$',
-      'sachbearbeitung-app': 'getCustomGesuchDokumenteForTypSB$',
-    })(params);
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.documentService.getCustomGesuchDokumenteForTypGS$(params),
+      'sachbearbeitung-app': () =>
+        this.documentService.getCustomGesuchDokumenteForTypSB$(params),
+    });
   }
 
   constructor() {
