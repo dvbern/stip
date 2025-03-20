@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 
-import java.util.Optional;
-
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -29,6 +27,8 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 @UtilityClass
 @Slf4j
@@ -70,8 +70,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
@@ -112,8 +111,7 @@ public class GesuchStatusConfigProducer {
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
         config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
-        config.configure(Gesuchstatus.STIPENDIENANSPRUCH)
-            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE);
+        config.configure(Gesuchstatus.STIPENDIENANSPRUCH);
         config.configure(Gesuchstatus.GESUCH_ABGELEHNT);
 
         for (final var status : Gesuchstatus.values()) {
