@@ -10,7 +10,6 @@ import {
 export class GeschwisterEditorPO {
   public elems: {
     page: Page;
-
     form: Locator;
     nachname: Locator;
     vorname: Locator;

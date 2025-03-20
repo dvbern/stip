@@ -1,10 +1,11 @@
 import { expect } from '@playwright/test';
 
 import {
-  SmallImageFile,
+  expectInfoTitleToContainText,
   expectStepTitleToContainText,
   getE2eUrls,
   specificMonth,
+  uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
@@ -39,21 +40,8 @@ test.describe('Tranche erstellen', () => {
     );
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
-    const uploads = await page
-      .locator('[data-testid^="button-document-upload"]')
-      .all();
-    for (const upload of uploads) {
-      const uploadCall = page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/v1/gesuchDokument') &&
-          response.request().method() === 'POST',
-      );
-      await upload.click();
-      await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-      await page.keyboard.press('Escape');
-      await expect(page.getByTestId('file-input')).toHaveCount(0);
-      await uploadCall;
-    }
+
+    await uploadFiles(page);
     await page.getByTestId('button-continue').click();
 
     // Freigabe ===========================================================
@@ -65,10 +53,11 @@ test.describe('Tranche erstellen', () => {
     await page.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
-    // Go to Berechnung (SB-App) ===============================================
+    // Go to Info (SB-App) ===============================================
     await page.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
+    await expectInfoTitleToContainText('Tranche 1', page);
 
     const headerNav = new SachbearbeiterGesuchHeaderPO(page);
 
@@ -81,9 +70,9 @@ test.describe('Tranche erstellen', () => {
     await headerNav.elems
       .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
       .click();
-
     // kommentar dialog
     await page.getByTestId('dialog-confirm').click();
+
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems
       .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
@@ -93,7 +82,7 @@ test.describe('Tranche erstellen', () => {
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems.aktionTrancheErstellen.click();
 
-    // Aenderungen erfassen dialog
+    // Tranche erfassen dialog
     await page
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
       .fill(`1.${specificMonth(1)}`);
@@ -108,13 +97,8 @@ test.describe('Tranche erstellen', () => {
     await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
 
     // tranche oeffnen ============================================================
-
-    await page.getByTestId('tranche-nav-menu-item-2').click();
-
-    await expect(page.getByRole('heading').nth(1)).toContainText('Tranche 2', {
-      ignoreCase: true,
-      timeout: 10000,
-    });
+    await page.getByTestId('tranche-nav-menu-item').nth(1).click();
+    await expectInfoTitleToContainText('Tranche 2', page);
 
     // end of test
   });
