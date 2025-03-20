@@ -17,9 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -60,6 +63,24 @@ public class GesuchTrancheHistoryRepository {
             .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1)
             .getSingleResult();
+    }
+
+    public Stream<GesuchTranche> getWhereStatusChangeHappenedBefore(
+        final List<UUID> ids,
+        final GesuchTrancheStatus gesuchTrancheStatus,
+        final LocalDateTime dueDate
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.property("id").in(ids))
+            .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
+            .add(AuditEntity.property("status").hasChanged())
+            .add(AuditEntity.property("timestampMutiert").lt(dueDate))
+            .setMaxResults(1)
+            .getResultList()
+            .stream();
     }
 
     public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {

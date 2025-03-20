@@ -40,6 +40,7 @@ public class FehlendeDokumenteScheduledTask {
         try {
             LOG.info("Processing gesuchs in FEHLENDE_DOKUMENTE");
             gesuchService.checkForFehlendeDokumenteOnAllGesuche();
+            gesuchService.checkForFehlendeDokumenteOnALlAenderungen();
             LOG.info("Done processing gesuchs in FEHLENDE_DOKUMENTE");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);

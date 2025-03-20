@@ -74,6 +74,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -421,7 +422,6 @@ public class GesuchService {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
         fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
-
         return fallDashboardItemDtos;
     }
 
@@ -816,6 +816,51 @@ public class GesuchService {
                 GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
             );
         }
+    }
+
+    @Transactional
+    public void checkForFehlendeDokumenteOnALlAenderungen() {
+        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
+        final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
+        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<GesuchTranche>>();
+        gesuchTranchenToCheck.forEach(
+            gesuchTranche -> {
+                gesuchsperiodenGesucheMap
+                    .computeIfAbsent(gesuchTranche.getGesuch().getGesuchsperiode().getId(), k -> new ArrayList<>());
+                gesuchsperiodenGesucheMap.get(gesuchTranche.getGesuch().getGesuchsperiode().getId()).add(gesuchTranche);
+            }
+        );
+
+        final var changedTooLongAgo = new HashSet<UUID>();
+
+        gesuchsperiodenGesucheMap.forEach(
+            (uuid, gesuchsperiodenGesuchsTranchen) -> {
+                final var nachfrist = gesuchsperiodenGesuchsTranchen.get(0)
+                    .getGesuch()
+                    .getGesuchsperiode()
+                    .getFristNachreichenDokumente();
+                changedTooLongAgo.addAll(
+                    gesuchTrancheHistoryRepository.getWhereStatusChangeHappenedBefore(
+                        gesuchsperiodenGesuchsTranchen.stream().map(AbstractEntity::getId).toList(),
+                        GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
+                        LocalDateTime.now().minusDays(nachfrist)
+                    ).map(AbstractEntity::getId).toList()
+                );
+            }
+        );
+
+        final var toUpdate =
+            gesuchTranchenToCheck.stream()
+                .filter(gesuchTranche -> changedTooLongAgo.contains(gesuchTranche.getId()))
+                .toList();
+        if (!toUpdate.isEmpty()) {
+
+            gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
+            );
+        }
+
     }
 
     @Transactional

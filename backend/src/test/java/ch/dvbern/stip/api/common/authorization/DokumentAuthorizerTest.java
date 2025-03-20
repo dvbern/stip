@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,7 @@ import static org.mockito.ArgumentMatchers.any;
 class DokumentAuthorizerTest {
     private DokumentAuthorizer dokumentAuthorizer;
     private BenutzerService benutzerService;
+    private GesuchTrancheRepository gesuchTrancheRepository;
     private GesuchDokumentRepository gesuchDokumentRepository;
 
     private GesuchDokument gesuchDokument;
@@ -58,7 +60,10 @@ class DokumentAuthorizerTest {
         gesuchDokument.setGesuchTranche(new GesuchTranche().setGesuch(new Gesuch()));
         Mockito.when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
 
-        dokumentAuthorizer = new DokumentAuthorizer(benutzerService, gesuchDokumentRepository);
+        gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
+
+        dokumentAuthorizer = new DokumentAuthorizer(benutzerService, gesuchTrancheRepository, gesuchDokumentRepository);
     }
 
     @Test

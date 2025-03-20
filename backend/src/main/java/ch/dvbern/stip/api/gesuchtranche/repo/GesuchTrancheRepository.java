@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,9 +39,9 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     private final EntityManager em;
 
-    public Stream<GesuchTranche> findForGesuch(final UUID gesuchId) {
-        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+    private static final QGesuchTranche gesuchTranche = QGesuchTranche.gesuchTranche;
 
+    public Stream<GesuchTranche> findForGesuch(final UUID gesuchId) {
         return new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
@@ -48,8 +50,6 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {
-        final var gesuchTranche = QGesuchTranche.gesuchTranche;
-
         final var found = new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.id.eq(aenderungId))
@@ -63,13 +63,19 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     }
 
     public Optional<GesuchTranche> findMostRecentCreatedTranche(final Gesuch gesuch) {
-        final var gesuchTranche = QGesuchTranche.gesuchTranche;
-
         return new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.gesuch.id.eq(gesuch.getId()))
             .orderBy(gesuchTranche.timestampErstellt.desc())
             .stream()
             .findFirst();
+    }
+
+    public List<GesuchTranche> getAllFehlendeDokumente() {
+        return new JPAQueryFactory(em)
+            .selectFrom(gesuchTranche)
+            .where(gesuchTranche.status.eq(GesuchTrancheStatus.FEHLENDE_DOKUMENTE))
+            .stream()
+            .toList();
     }
 }
