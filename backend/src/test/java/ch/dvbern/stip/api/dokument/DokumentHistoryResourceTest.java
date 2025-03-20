@@ -166,7 +166,7 @@ class DokumentHistoryResourceTest {
     void testMoreDocumentsNeeded() {
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
 
-        overrideEssentialsForUpadate(fullGesuch, returnedGesuch);
+        overrideEssentialsForUpdate(fullGesuch, returnedGesuch);
 
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setWohnkosten(5);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setWohnkosten(5);
@@ -381,7 +381,7 @@ class DokumentHistoryResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(12)
-    void gesuchEinreichen2() {
+    void gesuchTrancheFehlendeDokumenteEinreichen() {
         gesuchApiSpec.gesuchTrancheFehlendeDokumenteEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -445,6 +445,7 @@ class DokumentHistoryResourceTest {
 
         assertThat(gesuchDokumentsComp.size(), is(initialGesuchDokuments.size()));
 
+        // Assert that the before and after of the gesuchDokument is equal
         for (int i = 0; i < gesuchDokumentsComp.size(); i++) {
             assertThat(
                 gesuchDokumentsComp.get(i).getDokumentTyp(),
@@ -470,7 +471,7 @@ class DokumentHistoryResourceTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    private GesuchUpdateDtoSpec overrideEssentialsForUpadate(
+    private GesuchUpdateDtoSpec overrideEssentialsForUpdate(
         GesuchUpdateDtoSpec toOverride,
         GesuchWithChangesDtoSpec override
     ) {
