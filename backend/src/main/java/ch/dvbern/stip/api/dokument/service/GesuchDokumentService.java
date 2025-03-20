@@ -228,7 +228,7 @@ public class GesuchDokumentService {
 
     private static void checkGesuchOrAenderungStatusOrElseThrow(final GesuchDokument gesuchDokument) {
         if (gesuchDokument.getGesuchTranche().getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            aenderungIsNotOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
+            gesuchTrancheStatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
         } else {
             gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         }
@@ -242,7 +242,7 @@ public class GesuchDokumentService {
         }
     }
 
-    private static void aenderungIsNotOrElseThrow(
+    private static void gesuchTrancheStatusIsNotOrElseThrow(
         final GesuchTranche aenderung,
         final GesuchTrancheStatus statusToVerify
     ) {
