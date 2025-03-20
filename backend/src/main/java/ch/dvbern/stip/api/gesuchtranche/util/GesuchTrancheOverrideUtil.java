@@ -99,26 +99,5 @@ public class GesuchTrancheOverrideUtil {
 
         // Darlehen
         DarlehenCopyUtil.copyValues(source.getDarlehen(), target.getDarlehen());
-
-        // // Dokumente
-        // target.getTranche()
-        // .getGesuchDokuments()
-        // .removeIf(gesuchDokument -> !source.getTranche().getGesuchDokuments().contains(gesuchDokument));
-        //
-        // final var targetGesuchDokumente = target.getTranche().getGesuchDokuments();
-        //
-        // for (var sourceGesuchDokument : source.getTranche().getGesuchDokuments()) {
-        // if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
-        // final var replacement =
-        // targetGesuchDokumente.stream()
-        // .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
-        // .findFirst();
-        // replacement.ifPresent(
-        // gesuchDokument -> GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument)
-        // );
-        // } else {
-        // targetGesuchDokumente.add(GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument));
-        // }
-        // }
     }
 }

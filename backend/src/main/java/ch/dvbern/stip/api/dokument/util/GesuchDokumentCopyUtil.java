@@ -79,15 +79,5 @@ public class GesuchDokumentCopyUtil {
         if (source.getCustomDokumentTyp() != null) {
             target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()));
         }
-
-        // source.getDokumente()
-        // .forEach(
-        // dokument -> {
-        // if (!target.getDokumente().contains(dokument)) {
-        // dokument.setId(null);
-        // target.addDokument(dokument);
-        // }
-        // }
-        // );
     }
 }

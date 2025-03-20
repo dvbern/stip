@@ -288,7 +288,7 @@ public class GesuchService {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
     }
 
@@ -306,7 +306,7 @@ public class GesuchService {
         gesuch.getAusbildung().getGesuchs().add(gesuch);
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
         gesuchRepository.persistAndFlush(gesuch);
@@ -510,7 +510,7 @@ public class GesuchService {
         Set<ConstraintViolation<GesuchFormular>> violations =
             validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
     }
 
@@ -627,7 +627,7 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var violations = validator.validate(gesuch);
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
@@ -905,7 +905,7 @@ public class GesuchService {
         );
 
         // Dokumente
-
+        // Remove new but not then doks
         final var dokumentIdsNow = trancheToReset.getGesuchDokuments()
             .stream()
             .flatMap(
@@ -935,6 +935,8 @@ public class GesuchService {
             .forEach(uuid -> dokumentObjectIdsToBeDeleted.add(gesuchDokumentService.deleteDokument(uuid)));
 
         gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
+
+        // Restore then but not now doks
 
         trancheToReset.getGesuchDokuments()
             .removeIf(
