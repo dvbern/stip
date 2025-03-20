@@ -3725,7 +3725,7 @@ components:
         delegierung:
           $ref: '#/components/schemas/Delegierung'
         nachfristDokumente:
-          $ref: '#/components/schemas/LocalDate'
+          type: string
     Delegierung:
       type: object
       properties:
@@ -3792,7 +3792,7 @@ components:
       type: object
       properties:
         nachfristDokumente:
-          $ref: '#/components/schemas/LocalDate'
+          type: string
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:
@@ -3841,7 +3841,7 @@ components:
       type: object
       properties:
         nachfristDokumente:
-          $ref: '#/components/schemas/LocalDate'
+          type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTrancheUpdate'
     LandEuEfta:

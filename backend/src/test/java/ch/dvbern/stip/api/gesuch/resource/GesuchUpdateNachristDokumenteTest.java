@@ -25,6 +25,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -247,7 +248,7 @@ class GesuchUpdateNachristDokumenteTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertEquals(nachreichefrist, updatedGesuch.getNachfristDokumente());
+        assertEquals(DateUtil.formatDate(nachreichefrist), updatedGesuch.getNachfristDokumente());
     }
 
     @TestAsSachbearbeiter
@@ -276,7 +277,7 @@ class GesuchUpdateNachristDokumenteTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getNachfristDokumente(), is(nachreichefrist));
+        assertThat(gesuchWithChanges.getNachfristDokumente(), is(DateUtil.formatDate(nachreichefrist)));
     }
 
     @TestAsGesuchsteller
@@ -294,7 +295,7 @@ class GesuchUpdateNachristDokumenteTest {
 
         assertThat(
             items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
-            is(nachreichefrist)
+            is(DateUtil.formatDate(nachreichefrist))
         );
     }
 

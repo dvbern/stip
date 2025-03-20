@@ -47,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
-  private LocalDate nachfristDokumente;
+  private String nachfristDokumente;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
@@ -76,7 +76,7 @@ public class GesuchDashboardItemDtoSpec {
   public GesuchDashboardItemDtoSpec() {
   }
 
-  public GesuchDashboardItemDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
+  public GesuchDashboardItemDtoSpec nachfristDokumente(String nachfristDokumente) {
     
     this.nachfristDokumente = nachfristDokumente;
     return this;
@@ -90,14 +90,14 @@ public class GesuchDashboardItemDtoSpec {
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getNachfristDokumente() {
+  public String getNachfristDokumente() {
     return nachfristDokumente;
   }
 
 
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+  public void setNachfristDokumente(String nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 

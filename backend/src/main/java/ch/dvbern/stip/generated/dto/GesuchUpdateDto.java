@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchUpdateDto  implements Serializable {
   private @Valid GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
-  private @Valid LocalDate nachfristDokumente;
+  private @Valid String nachfristDokumente;
 
   /**
    **/
@@ -45,19 +44,19 @@ public class GesuchUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchUpdateDto nachfristDokumente(LocalDate nachfristDokumente) {
+  public GesuchUpdateDto nachfristDokumente(String nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
     return this;
   }
 
   
   @JsonProperty("nachfristDokumente")
-  public LocalDate getNachfristDokumente() {
+  public String getNachfristDokumente() {
     return nachfristDokumente;
   }
 
   @JsonProperty("nachfristDokumente")
-  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+  public void setNachfristDokumente(String nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 

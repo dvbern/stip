@@ -42,6 +42,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -220,7 +221,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getNachfristDokumente(), is(LocalDate.now().plusDays(30)));
+        assertThat(gesuchWithChanges.getNachfristDokumente(), is(DateUtil.formatDate(LocalDate.now().plusDays(30))));
     }
 
     @TestAsGesuchsteller

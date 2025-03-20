@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -36,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchUpdateDtoSpec {
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
-  private LocalDate nachfristDokumente;
+  private String nachfristDokumente;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH = "gesuchTrancheToWorkWith";
   private GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith;
@@ -44,7 +43,7 @@ public class GesuchUpdateDtoSpec {
   public GesuchUpdateDtoSpec() {
   }
 
-  public GesuchUpdateDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
+  public GesuchUpdateDtoSpec nachfristDokumente(String nachfristDokumente) {
     
     this.nachfristDokumente = nachfristDokumente;
     return this;
@@ -58,14 +57,14 @@ public class GesuchUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getNachfristDokumente() {
+  public String getNachfristDokumente() {
     return nachfristDokumente;
   }
 
 
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+  public void setNachfristDokumente(String nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 
