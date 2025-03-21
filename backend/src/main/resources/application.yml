@@ -69,10 +69,10 @@ kstip:
   fehlendedokumente:
     cron: '0 0 10 1/1 * ? *' # Fires daily at 09:00
   welcome-mail:
-    kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
-    kc-path: '${STIP_WELCOME_MAIL_PATH}'
-    kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
-    kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
+    kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND:foo}'
+    kc-path: '${STIP_WELCOME_MAIL_PATH:foo}'
+    kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER:foo}'
+    kc-scope: '${STIP_WELCOME_MAIL_SCOPE:foo}'
   dmn:
     current-major-version: 1
     current-minor-version: 0

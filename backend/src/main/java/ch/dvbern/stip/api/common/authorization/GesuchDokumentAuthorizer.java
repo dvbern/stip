@@ -20,14 +20,14 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -48,12 +48,22 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuch();
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
 
         final BooleanSupplier canBenutzerUpload =
-            () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus());
+            () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
+            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG;
 
-        if (isDelegiertAndCanUploadOrDelete(gesuch, currentBenutzer, canBenutzerUpload)) {
+        if (
+            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
+                gesuch,
+                currentBenutzer,
+                canBenutzerUpload,
+                this::forbidden,
+                sozialdienstService
+            )
+        ) {
             return;
         } else if (
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerUpload.getAsBoolean()
@@ -67,13 +77,23 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canDeleteDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuch = dokument.getGesuchDokumente().get(0).getGesuchTranche().getGesuch();
+        final var gesuchTranche = dokument.getGesuchDokumente().get(0).getGesuchTranche();
+        final var gesuch = gesuchTranche.getGesuch();
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         final BooleanSupplier canBenutzerDeleteDokument =
-            () -> gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus());
+            () -> gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())
+            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG;
 
-        if (isDelegiertAndCanUploadOrDelete(gesuch, currentBenutzer, canBenutzerDeleteDokument)) {
+        if (
+            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
+                gesuch,
+                currentBenutzer,
+                canBenutzerDeleteDokument,
+                this::forbidden,
+                sozialdienstService
+            )
+        ) {
             return;
         } else if (
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerDeleteDokument.getAsBoolean()
@@ -82,27 +102,6 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
-    }
-
-    private boolean isDelegiertAndCanUploadOrDelete(
-        final Gesuch gesuch,
-        final Benutzer currentBenutzer,
-        final BooleanSupplier canUploadOrDeleteCheck
-    ) {
-        if (AuthorizerUtil.isDelegiert(gesuch)) {
-            if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
-                forbidden();
-            }
-
-            final var isNotGesuchstellerButDelegierter =
-                !AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
-                && AuthorizerUtil
-                    .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
-
-            return canUploadOrDeleteCheck.getAsBoolean() && isNotGesuchstellerButDelegierter;
-        }
-
-        return false;
     }
 
     @Transactional
