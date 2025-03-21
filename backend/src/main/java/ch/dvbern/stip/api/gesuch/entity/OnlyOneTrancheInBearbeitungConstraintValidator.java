@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -26,6 +27,10 @@ public class OnlyOneTrancheInBearbeitungConstraintValidator
     @Override
     public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
         if (gesuch.getGesuchTranchen().size() <= 1) {
+            return true;
+        }
+
+        if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
             return true;
         }
 

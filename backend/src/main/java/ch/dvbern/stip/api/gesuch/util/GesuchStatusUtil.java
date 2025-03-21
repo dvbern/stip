@@ -15,24 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.util;
+package ch.dvbern.stip.api.gesuch.util;
 
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import java.util.Objects;
+
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class GesuchDokumentKommentarCopyUtil {
-    public GesuchDokumentKommentar createCopy(
-        final GesuchDokumentKommentar source,
-        final GesuchDokument destinationGesuchDokument
-    ) {
-        final var copy = new GesuchDokumentKommentar();
+public class GesuchStatusUtil {
+    public boolean gsReceivesGesuchdataOfStateEingereicht(final Gesuch gesuch) {
+        // only show actual data to GS if Gesuch is NOT EINGEREICHT or VERFUEGT or further
+        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
 
-        copy.setGesuchDokument(destinationGesuchDokument);
-        copy.setKommentar(source.getKommentar());
-        copy.setDokumentstatus(source.getDokumentstatus());
+        return wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus());
+    }
 
-        return copy;
+    public boolean sbReceivesChanges(final Gesuch gesuch) {
+        return Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(gesuch.getGesuchStatus());
     }
 }
