@@ -70,6 +70,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -102,6 +103,7 @@ public class TestcaseSeeding extends Seeder {
     private final DokumentRepository dokumentRepository;
     private final AusbildungRepository ausbildungRepository;
     private final AusbildungMapper ausbildungMapper;
+    private final TenantService tenantService;
 
     @Override
     public int getPriority() {
@@ -245,10 +247,14 @@ public class TestcaseSeeding extends Seeder {
 
     List<Pair<String, String>> getJsons() {
         final var jsonStrings = new ArrayList<Pair<String, String>>();
+        final var currentTenant = tenantService.getCurrentTenantIdentifier();
 
         final var classLoader = getClass().getClassLoader();
         for (final var toLoad : configService.getTestcasesToSeed()) {
-            try (final var is = classLoader.getResourceAsStream(String.format("/seeding/gesuch/%s.json", toLoad))) {
+            try (
+                final var is =
+                    classLoader.getResourceAsStream(String.format("/seeding/gesuch/%s/%s.json", currentTenant, toLoad))
+            ) {
                 if (is == null) {
                     LOG.warn("Tried to load testcase {}.json but cannot find it", toLoad);
                     continue;
