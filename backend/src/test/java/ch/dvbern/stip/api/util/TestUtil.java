@@ -51,6 +51,7 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
@@ -737,6 +738,7 @@ public class TestUtil {
         Gesuch gesuch = new Gesuch();
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.setGesuchTranchen(List.of(gesuchTranche));
+        gesuch.setAusbildung(new Ausbildung().setFall(new Fall()));
         return gesuch;
     }
 }
