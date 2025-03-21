@@ -21,11 +21,14 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
-import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +37,12 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
-    private final DokumentRepository dokumentRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
+    private final GesuchStatusService gesuchStatusService;
+    private final SozialdienstService sozialdienstService;
 
     @Transactional
     public void canCreateCustomDokumentTyp(UUID trancheId) {
@@ -78,9 +82,21 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     public void canUpload(final UUID customDokumentTypId) {
         final var customDokumentTyp = customDokumentTypRepository.findById(customDokumentTypId);
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
+        final var gesuchTranche = customDokumentTyp.getGesuchDokument().getGesuchTranche();
+        final var gesuch = gesuchTranche.getGesuch();
 
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+        if (
+            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
+                gesuch,
+                currentBenutzer,
+                () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
+                || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG,
+                this::forbidden,
+                sozialdienstService
+            )
+        ) {
+            return;
+        } else if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
             return;
         }
 
