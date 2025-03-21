@@ -38,7 +38,7 @@ VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae9', '2023-06-12 15:26:47.000000', '2
 INSERT INTO rolle (timestamp_erstellt, timestamp_mutiert, version, id, keycloak_identifier, mandant, user_erstellt,
                    user_mutiert)
 VALUES (now(), now(), 0, 'b497e381-16f4-4971-b2d1-3c8c809ed68b', 'V0_Sachbearbeiter', 'bern', 'Admin', 'Admin'),
-       (now(), now(), 0, '9df93c85-db0a-4699-8900-b602878426e8', 'V0_Admin', 'bern', 'Admin', 'Admin'),
+       (now(), now(), 0, '9df93c85-db0a-4699-8900-b602878426e8', 'V0_Sachbearbeiter-Admin', 'bern', 'Admin', 'Admin'),
        (now(), now(), 0, 'a584a031-e8a6-4dad-9b27-1350242ff67b', 'V0_Gesuchsteller', 'bern', 'Admin', 'Admin');
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,

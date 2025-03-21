@@ -31,7 +31,7 @@ class ValidateUpdateLegalityUtilTest {
             // role, dtoValue, existingValue, defaultValue, expected
             "V0_Gesuchsteller,1,2,0,2",
             "V0_Sachbearbeiter,1,2,0,1",
-            "V0_Admin,1,2,0,1",
+            "V0_Sachbearbeiter-Admin,1,2,0,1",
         }
     )
     @ParameterizedTest
@@ -58,7 +58,7 @@ class ValidateUpdateLegalityUtilTest {
             // role,dtoValue,defaultValue,expected
             "V0_Gesuchsteller,1,0,0",
             "V0_Sachbearbeiter,1,0,1",
-            "V0_Admin,1,0,1"
+            "V0_Sachbearbeiter-Admin,1,0,1"
         }
     )
     @ParameterizedTest
@@ -84,7 +84,7 @@ class ValidateUpdateLegalityUtilTest {
             // role,defaultValue,expected
             "V0_Gesuchsteller,0,0",
             "V0_Sachbearbeiter,0,0",
-            "V0_Admin,0,0"
+            "V0_Sachbearbeiter-Admin,0,0"
         }
     )
     @ParameterizedTest
