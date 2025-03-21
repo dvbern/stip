@@ -12,7 +12,6 @@ include:
 
   - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
     inputs:
-      enforce-quality-gate: "false"
       sonar-scanner: maven
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"

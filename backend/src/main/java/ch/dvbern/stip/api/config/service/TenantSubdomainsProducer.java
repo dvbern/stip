@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.config.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,17 +40,17 @@ public class TenantSubdomainsProducer {
 
         for (final var tenant : MandantIdentifier.values()) {
             final var value = getSubdomainsForTenant(tenant.getIdentifier());
-            allSubdomains.add(new PerTenantSubdomains(tenant.getIdentifier(), Set.of(value)));
+            allSubdomains.add(new PerTenantSubdomains(tenant.getIdentifier(), new HashSet<>(value)));
         }
 
         return allSubdomains;
     }
 
-    private String[] getSubdomainsForTenant(final String tenant) {
+    private List<String> getSubdomainsForTenant(final String tenant) {
         final var config = ConfigProvider.getConfig();
         final var path = String.format(SUBDOMAINS_FORMAT, tenant);
 
-        return config.getOptionalValue(path, String[].class)
+        return config.getOptionalValues(path, String.class)
             .orElseThrow(() -> AppFailureMessage.missingTenantConfig(path, tenant).create());
     }
 
