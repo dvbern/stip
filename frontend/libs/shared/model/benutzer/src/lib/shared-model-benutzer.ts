@@ -5,7 +5,7 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
 
 export const BENUTZER_ROLES = [
-  'V0_Admin',
+  'V0_Sachbearbeiter-Admin',
   'V0_Sachbearbeiter',
   'V0_Jurist',
 ] as const;

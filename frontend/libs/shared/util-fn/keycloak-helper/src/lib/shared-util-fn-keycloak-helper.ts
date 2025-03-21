@@ -32,7 +32,7 @@ export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
   switch (role) {
     case 'V0_Sachbearbeiter':
       return 'info';
-    case 'V0_Admin':
+    case 'V0_Sachbearbeiter-Admin':
       return 'success';
     case 'V0_Jurist':
       return 'warning';
@@ -47,7 +47,7 @@ export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
 export const createBenutzerListFromRoleLookup = (
   benutzersByRole: {
     benutzers: SharedModelBenutzerApi[];
-    role: 'V0_Sachbearbeiter' | 'V0_Admin' | 'V0_Jurist';
+    role: 'V0_Sachbearbeiter' | 'V0_Sachbearbeiter-Admin' | 'V0_Jurist';
   }[],
 ): SharedModelBenutzer[] => {
   return Object.values(

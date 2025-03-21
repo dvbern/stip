@@ -13,7 +13,7 @@ import { hasRoles } from '@dv/shared/pattern/status-guard';
 export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   {
     path: OPTION_SOZIALDIENST.route,
-    canActivate: [hasRoles(['V0_Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
@@ -36,7 +36,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     path: OPTION_AUSBILDUNGSSTAETTE.route,
     canActivate: [
       hasRoles(
-        ['V0_Admin'],
+        ['V0_Sachbearbeiter-Admin'],
         '/administration/' + OPTION_SOZIALDIENST_BENUTZER.route,
       ),
     ],
@@ -50,7 +50,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_BUCHSTABEN_ZUTEILUNG.route,
-    canActivate: [hasRoles(['V0_Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_BUCHSTABEN_ZUTEILUNG.titleTranslationKey,
     loadChildren: () =>
       import(
@@ -62,7 +62,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_GESUCHSPERIODEN.route,
-    canActivate: [hasRoles(['V0_Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_GESUCHSPERIODEN.titleTranslationKey,
     loadChildren: () =>
       import(
@@ -71,7 +71,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_EU_EFTA_LAENDER.route,
-    canActivate: [hasRoles(['V0_Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_EU_EFTA_LAENDER.titleTranslationKey,
     loadChildren: () =>
       import(
@@ -82,7 +82,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: 'benutzerverwaltung',
-    canActivate: [hasRoles(['V0_Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-benutzerverwaltung'

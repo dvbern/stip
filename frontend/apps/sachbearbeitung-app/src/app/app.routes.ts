@@ -24,7 +24,12 @@ export const appRoutes: Route[] = [
     canActivate: [
       hasBenutzer,
       hasRoles(
-        ['V0_Admin', 'V0_Jurist', 'V0_Sachbearbeiter', 'V0_Sozialdienst-Admin'],
+        [
+          'V0_Sachbearbeiter-Admin',
+          'V0_Jurist',
+          'V0_Sachbearbeiter',
+          'V0_Sozialdienst-Admin',
+        ],
         '/unauthorized',
       ),
     ],
@@ -56,7 +61,7 @@ export const appRoutes: Route[] = [
         path: 'administration',
         canActivate: [
           hasBenutzer,
-          hasRoles(['V0_Admin', 'V0_Sozialdienst-Admin']),
+          hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Sozialdienst-Admin']),
         ],
         title: 'sachbearbeitung-app.admin.title',
         loadComponent: () =>

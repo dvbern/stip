@@ -49,7 +49,7 @@ describe('Keycloak-Helper Functions', () => {
   it.each([
     type<[BenutzerRole, string][]>([
       ['V0_Sachbearbeiter', 'info'],
-      ['V0_Admin', 'success'],
+      ['V0_Sachbearbeiter-Admin', 'success'],
       ['V0_Jurist', 'warning'],
     ]),
   ])(
@@ -83,7 +83,7 @@ describe('Keycloak-Helper Functions', () => {
 
     const roles = {
       Sachbearbeiter: { name: 'V0_Sachbearbeiter', color: 'info' },
-      Admin: { name: 'V0_Admin', color: 'success' },
+      Admin: { name: 'V0_Sachbearbeiter-Admin', color: 'success' },
       Jurist: { name: 'V0_Jurist', color: 'warning' },
     };
 
@@ -93,7 +93,7 @@ describe('Keycloak-Helper Functions', () => {
         benutzers: [benutzer1, benutzer2, benutzer3, benutzer4],
       },
       {
-        role: 'V0_Admin' as const,
+        role: 'V0_Sachbearbeiter-Admin' as const,
         benutzers: [benutzer2, benutzer3],
       },
       {

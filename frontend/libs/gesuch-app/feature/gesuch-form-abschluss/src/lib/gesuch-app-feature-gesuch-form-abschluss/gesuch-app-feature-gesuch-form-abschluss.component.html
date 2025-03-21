@@ -62,7 +62,7 @@
                   type="submit"
                   class="btn btn-primary mt-4"
                   (click)="fehlendeDokumenteEinreichen()"
-                  data-testid="button-abschluss"
+                  data-testid="button-fehlende-dokumente-einreichen"
                   [disabled]="
                     (dokumentsStore.dokuments() | rdIsPending) || (dokumentsStore.documentsToUpload() | rdIsPending)
                   "
@@ -75,7 +75,7 @@
                   class="btn btn-primary mt-4"
                   (click)="abschliessen()"
                   data-testid="button-abschluss"
-                  [disabled]="permissions.canFreigeben && einreichenStore.einreicheOperationIsInProgressSig()"
+                  [disabled]="!permissions.canFreigeben || einreichenStore.einreicheOperationIsInProgressSig()"
                 >
                   {{ 'shared.form.abschluss.abschliessen' | translate }}
                 </button>
