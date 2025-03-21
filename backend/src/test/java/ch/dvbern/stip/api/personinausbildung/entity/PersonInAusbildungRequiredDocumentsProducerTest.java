@@ -17,13 +17,17 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
@@ -33,6 +37,8 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
 
 @QuarkusTest
 class PersonInAusbildungRequiredDocumentsProducerTest {
@@ -46,6 +52,10 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     void setup() {
         producer = new PersonInAusbildungRequiredDocumentsProducer(plzService);
         formular = new GesuchFormular();
+
+        final Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().withDayOfMonth(1));
+        formular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
     }
 
     @Test
@@ -79,7 +89,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfVormundschaft() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setVormundschaft(true)
         );
@@ -89,7 +99,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfWohnsitz() {
         formular.setPersonInAusbildung(
-            (PersonInAusbildung) new PersonInAusbildung()
+            (PersonInAusbildung) createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
         );
@@ -99,7 +109,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfQuellenbesteuert() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setNationalitaet(Land.DE)
                 .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
@@ -116,7 +126,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfSozialhilfebeitraege() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setSozialhilfebeitraege(true)
         );
@@ -127,9 +137,26 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     }
 
     @Test
+    void requiresIfAgeOverAusbildungsbeginMax() {
+        final PersonInAusbildung person = createNewPia();
+        person.setGeburtsdatum(
+            LocalDate
+                .now()
+                .withDayOfMonth(1)
+                .minusYears(MAX_AGE_AUSBILDUNGSBEGIN)
+                .minusDays(1)
+        );
+        formular.setPersonInAusbildung(person);
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
+        );
+    }
+
+    @Test
     void requiresIfGeschieden() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setZivilstand(Zivilstand.GESCHIEDEN_GERICHTLICH)
         );
@@ -142,7 +169,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfAufgeloestePartnerschaft() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setZivilstand(Zivilstand.AUFGELOESTE_PARTNERSCHAFT)
         );
@@ -155,7 +182,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfInBernAndParentsAbroad() {
         formular.setPersonInAusbildung(
-            new PersonInAusbildung()
+            createNewPia()
                 .setSozialhilfebeitraege(false)
                 .setAdresse(
                     new Adresse()
@@ -170,8 +197,14 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_AUSWEIS);
     }
 
+    private PersonInAusbildung createNewPia() {
+        final PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        personInAusbildung.setGeburtsdatum(LocalDate.now());
+        return personInAusbildung;
+    }
+
     private PersonInAusbildung createWithNiederlassungsstatus(Niederlassungsstatus status) {
-        return new PersonInAusbildung()
+        return createNewPia()
             .setSozialhilfebeitraege(false)
             .setNiederlassungsstatus(status);
     }

@@ -13,6 +13,12 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
 
+const formularMock = {
+  ausbildung: {
+    ausbildungBegin: '01.' + new Date().getFullYear(),
+  },
+};
+
 async function setup() {
   return await render(SharedFeatureGesuchFormPersonComponent, {
     imports: [
@@ -26,7 +32,9 @@ async function setup() {
           language: {
             language: 'de',
           },
-          gesuchs: mockedGesuchAppWritableGesuchState({}),
+          gesuchs: mockedGesuchAppWritableGesuchState({
+            formular: formularMock,
+          }),
           configs: {},
         },
       }),
@@ -103,6 +111,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
         allowTypes: '',
         gesuch: null,
         gesuchFormular: {
+          ...formularMock,
           personInAusbildung: {
             adresse: {},
           } as PersonInAusbildung,
