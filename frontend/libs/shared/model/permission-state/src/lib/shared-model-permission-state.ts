@@ -98,7 +98,7 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WD   ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF  ', [sb]: '     ' },
   UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
   AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
   ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
