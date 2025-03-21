@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="stip.kibon.ch" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_29C4516C-614A-48F3-B851-A25E8853C853" name="Familienbudget" expressionLanguage="FEEL" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="stip.kibon.ch">
+  <dmn:description>Berechnet Familienbudget für einen Elternetil</dmn:description>
+  <dmn:extensionElements/>
+  <dmn:itemDefinition id="_B0C80C2B-05F7-404C-A74E-61B514AD5835" name="ElternteilV1" isCollection="false">
+    <dmn:itemComponent id="_3CABF560-71A1-45ED-9C73-803CE543B5B0" name="totalEinkuenfte" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_12CE9002-9891-4342-A7E4-34E252E8C659" name="steuernStaat" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_A41EAC00-0200-4DB2-9058-4B2E7D2E5A4A" name="steuernBund" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_425CF511-A909-4494-AE3D-9C112239988E" name="selbststaendigErwerbend" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_CF15653B-718C-41F7-A419-F73B0AF81BDA" name="medizinischeGrundversorgung" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_67407AC0-6B6B-467B-8097-B98C915DDCBF" name="integrationszulage" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_E95C6DFC-392A-44D6-9826-580B37590141" name="grundbedarf" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_8CAB8776-D441-4CA0-B809-18B61C943E3A" name="fahrkostenPerson2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2A48A173-6F79-44E1-9C73-D7262F0BADDD" name="fahrkostenPerson1" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_89E07042-5B52-497D-AE20-65DAA6B2C5A7" name="essenskostenPerson2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_86C8FE89-ED68-4080-B863-F7DC3D6E1E77" name="essenskostenPerson1" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_22D07E54-5F1B-4EF7-BBCD-C4E1C6C16359" name="ergaenzungsleistungen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_0DAF4B21-F1A5-482A-A195-9CB8F5B6DC4D" name="einzahlungSaeule3a" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_51E0ED7D-6131-4048-811F-1E562D56CD6A" name="einzahlungSaeule2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_93CC4B15-291C-4E32-BABF-40DF46E174F3" name="eigenmietwert" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_6F32FA36-BE81-4E34-9C8D-3D886D57A1C9" name="effektiveWohnkosten" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_1E8E7D30-38B5-4372-A0C0-5829F4543590" name="alimente" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2DC65599-66EC-46A3-BBB8-E30649E9AC8D" name="steuerbaresVermoegen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_55FBDD4F-E817-4CDF-8075-4B99769A67D1" name="anzahlGeschwisterInAusbildung" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_D5382E37-D093-4D7A-B34F-279DFDB0E6E5" name="anzahlPersonenImHaushalt" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_2EF0C645-661A-4455-952F-58FB2B7ADC73" name="InputFamilienbudgetV1" isCollection="false">
+    <dmn:itemComponent id="_9D270B09-ED0A-4683-9B01-7C35B89007BA" name="elternteil" isCollection="false">
+      <dmn:typeRef>ElternteilV1</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_417EDBD4-E34C-439A-9D50-1DA70D6DD911" name="StammdatenV1" isCollection="false">
+    <dmn:itemComponent id="_C0E13E4C-3CC2-4D79-8FB0-009AF790374B" name="preisProMahlzeit" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_1F0E556D-6493-4CEE-9746-1D605A788A84" name="maxSaeule3a" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2D7A8EC6-871D-4E59-A3FF-51E843B2C8BF" name="einkommensfreibetrag" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_4F18510F-4538-40E6-8FBD-F876CB3657FE" name="freibetragErwerbseinkommen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_102E15EF-6D1A-44D2-94DA-1F9A3D800470" name="freibetragVermoegen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_3B62AF46-DB1A-4947-B252-3064802FE467" name="vermoegensanteilInProzent" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_73B92A57-2F79-4F5D-A2B1-E4E58DF84D15" name="anzahlWochenLehre" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_78FF46A8-394F-4799-99FF-974E5A2A49FC" name="anzahlWochenSchule" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2370FABC-6C40-45FE-A429-DDCB64D3A0AA" name="stipLimiteMinimalstipendium" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_87272540-FFAB-433C-B853-557108025B05" name="limiteAlterAntragsstellerHalbierungElternbeitrag" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_46D35BC3-2FB6-4ECC-9EBB-E9A042B8E8B2" name="FamilienbudgetReturnvalue" isCollection="false">
+    <dmn:itemComponent id="_79E50C45-B368-4DBD-AFC1-1E1748A6A9AE" name="AusgabenFamilienbudget" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_B43AD783-7637-4408-B57D-47C54173BDC4" name="EinnahmenFamilienbudget" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_52D191DD-D2FE-4812-952F-11FA9520C994" name="familienbudgetBerechnet" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2B7BF0A9-C176-479A-8FFC-2C5C364C2FB4" name="anzahlPersonenImHaushalt" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_1FE3628D-4349-4D06-93AB-750A5FCB5BAA" name="anzahlGeschwisterInAusbildung" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:decisionService id="_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" name="Familienbudget">
+    <dmn:extensionElements/>
+    <dmn:variable id="_5808C743-1DF8-4106-AD50-046A60D97C9B" name="Familienbudget" typeRef="number"/>
+    <dmn:outputDecision href="#_B8D2CC7A-CE18-4D57-8141-DF53190E6D78"/>
+    <dmn:outputDecision href="#_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A"/>
+    <dmn:outputDecision href="#_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC"/>
+    <dmn:encapsulatedDecision href="#_3AF45009-087F-499D-813E-B76AB0E89FCE"/>
+    <dmn:encapsulatedDecision href="#_00A869A3-C329-408B-91FF-4C40A7BE7D25"/>
+    <dmn:inputData href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    <dmn:inputData href="#_19E31FE9-3E67-4890-BE56-5704E55707A9"/>
+  </dmn:decisionService>
+  <dmn:decision id="_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" name="familienbudgetBerechnet">
+    <dmn:extensionElements/>
+    <dmn:variable id="_D4532A69-481B-4CCF-A68D-F07420B2E5C7" name="familienbudgetBerechnet" typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:informationRequirement id="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
+      <dmn:requiredDecision href="#_3AF45009-087F-499D-813E-B76AB0E89FCE"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_79C3E7EC-4A79-4944-B98C-5917EEABF614">
+      <dmn:requiredDecision href="#_00A869A3-C329-408B-91FF-4C40A7BE7D25"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_7D329038-7431-459C-B7FD-0205771E47CC">
+      <dmn:text>round half up(EinnahmenFamilienbudget - AusgabenFamilienbudget)</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:decision id="_3AF45009-087F-499D-813E-B76AB0E89FCE" name="EinnahmenFamilienbudget">
+    <dmn:extensionElements/>
+    <dmn:variable id="_115FA041-7057-4F74-BBA6-7EADDEFB82BC" name="EinnahmenFamilienbudget" typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:informationRequirement id="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
+      <dmn:requiredInput href="#_19E31FE9-3E67-4890-BE56-5704E55707A9"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_EA769C99-6AE1-432C-8CC3-F33CB27D41AF">
+      <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    </dmn:informationRequirement>
+    <dmn:context id="_8436402C-F345-4B05-9065-6476204E2FC6">
+      <dmn:contextEntry>
+        <dmn:variable id="_C311AB63-3C55-4D6B-8229-8C18AD91BADF" name="Ergänzungsleistungen" typeRef="number"/>
+        <dmn:literalExpression id="_71F02D8B-92E9-4304-9A48-CB25889E3AC4">
+          <dmn:text>InputFamilienbudget.elternteil.ergaenzungsleistungen</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_F826CBD5-8B93-411A-B90B-2BBB63AE4942" name="Einkünfte" typeRef="number"/>
+        <dmn:literalExpression id="_5D99ED6D-8C2A-439E-B090-EB2D1F7D1FA3">
+          <dmn:text>InputFamilienbudget.elternteil.totalEinkuenfte</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_E8AFAF5B-C4CE-4FCA-89F3-AB63548F5ADC" name="Eigenmietwert" typeRef="number"/>
+        <dmn:literalExpression id="_9AC168EB-2BA9-4B52-AC79-59E59D8DF7FC">
+          <dmn:text>InputFamilienbudget.elternteil.eigenmietwert</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_17EAF23C-0256-49DB-8B97-F5F78E83F780" name="Alimente" typeRef="number"/>
+        <dmn:literalExpression id="_7467F3DB-B4D6-4DFE-A5F3-BC31068A6BC7">
+          <dmn:text>InputFamilienbudget.elternteil.alimente</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_3D5C1476-4ED2-40B5-A3C6-0AE2CCF13700" name="Säule_3a" typeRef="number"/>
+        <dmn:decisionTable id="_DCE09626-8432-4AF8-AAAD-28311B5DEA1B" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+          <dmn:input id="_74CB7112-E2A9-473B-BFC8-7EE763319BEA">
+            <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE9">
+              <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
+          <dmn:output id="_6B38CFF6-539C-427E-B0EC-E64697FF4A47"/>
+          <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_CAA18095-E08A-4575-A5DD-EB71CF545978">
+            <dmn:inputEntry id="_8B9906DF-95D2-4A32-AA87-F8DB4942F118">
+              <dmn:text>true</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_4F64B141-C2C3-4E5C-A699-3BF02E047D49">
+              <dmn:text>max((InputFamilienbudget.elternteil.einzahlungSaeule3a - Stammdaten.maxSaeule3a), 0)</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_1838A837-35DF-4F43-A24D-D4D79D7A5FD1">
+            <dmn:inputEntry id="_ADF2F1D7-A185-4633-B624-8B5DB15094DD">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_B4C829FD-0906-455F-AD3D-B3A53550FB5D">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_18D69E59-A4F6-49C3-963E-B5CB41E22C31">
+            <dmn:inputEntry id="_A78C98B0-A8D7-4C23-85EE-237FDBFEF3FD">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_4190B25D-0DE1-4914-B7E8-0DE2E0521002">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+        </dmn:decisionTable>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_FCE54F96-2875-44A3-AFE9-00B97024BAAC" name="Säule_2" typeRef="number"/>
+        <dmn:decisionTable id="_9A3A9689-1214-46D5-A743-D2DDFF41FB89" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+          <dmn:input id="_AD086746-C6CC-41FA-B5DA-E267E3307FF1">
+            <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE9YX">
+              <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
+          <dmn:output id="_4007662C-60E6-4CFD-8158-D3ACEE87B80A"/>
+          <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_C0A4B4C3-799A-461E-A614-23D655FFA493">
+            <dmn:inputEntry id="_1C518D35-3717-4761-B930-F345F0CA334F">
+              <dmn:text>true</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_DF2457B4-E7C8-491A-8FFE-8F08DB244716">
+              <dmn:text>InputFamilienbudget.elternteil.einzahlungSaeule2</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_B9D85457-8607-4D59-9F7C-5E9146823E19">
+            <dmn:inputEntry id="_98D85B13-1BDC-4E21-94DF-49CB4D1B3E61">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_4399234B-3A3B-4365-B112-52BB2DE5DF9E">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_0FF017FE-1650-466B-A081-00F1A3A095A8">
+            <dmn:inputEntry id="_4696A481-A633-46F3-BA06-A7D9D32F6636">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_24F7E3C1-D5E8-45C3-8B17-D560911F9E49">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+        </dmn:decisionTable>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_E90D9313-DA51-4192-A566-70DC2EA9A9C6" name="Vermögen" typeRef="number"/>
+        <dmn:decisionTable id="_DE0C354A-ED3D-4579-BE83-9939B8B61FAE" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+          <dmn:input id="_ABA3671A-39B6-4EC5-B625-2C753D719117">
+            <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE912" typeRef="boolean">
+              <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
+          <dmn:output id="_C38E9980-5A4F-4102-A3EC-8942B5EF0CB3"/>
+          <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_5CED740C-59F9-446A-9AF5-6A22073DB611">
+            <dmn:inputEntry id="_D8320E70-243E-4F9C-8C71-8E8D3C0C85DE">
+              <dmn:text>true</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_8CEF44A3-682D-4352-803C-67960D1E3C3D">
+              <dmn:text>round half up(max(InputFamilienbudget.elternteil.steuerbaresVermoegen - Stammdaten.freibetragVermoegen,0) * Stammdaten.vermoegensanteilInProzent / 100.0)</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_C7ACFF7D-98D6-4210-B71D-91FAF8AFDC42">
+            <dmn:inputEntry id="_38935D49-C55E-47B2-8031-9E796117F96E">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_3AAD035E-C6D6-409E-89A3-DD7DA8C219C4">
+              <dmn:text>round half up(InputFamilienbudget.elternteil.steuerbaresVermoegen * Stammdaten.vermoegensanteilInProzent / 100.0)</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_84A9D49C-60ED-4377-8A33-35E69F5777E9">
+            <dmn:inputEntry id="_21F92625-AC41-477E-A93F-E94438638C9B">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_469EEC7A-4215-4481-920E-446A00436FD1">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+        </dmn:decisionTable>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:literalExpression id="_ABF25F3D-AA6D-4531-BF48-36A441B74532">
+          <dmn:text>max((Einkünfte + Ergänzungsleistungen - Eigenmietwert - Alimente - Säule_3a - Säule_2 -
+            Stammdaten.einkommensfreibetrag),0) + Vermögen
+          </dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+    </dmn:context>
+  </dmn:decision>
+  <dmn:decision id="_00A869A3-C329-408B-91FF-4C40A7BE7D25" name="AusgabenFamilienbudget">
+    <dmn:extensionElements/>
+    <dmn:variable id="_5ADCBDD9-EDB8-4FCE-A40A-0DD47621C3F2" name="AusgabenFamilienbudget" typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:informationRequirement id="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
+      <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_D5208E11-A032-4854-8D1C-8097A8E22FFA">
+      <dmn:requiredInput href="#_19E31FE9-3E67-4890-BE56-5704E55707A9"/>
+    </dmn:informationRequirement>
+    <dmn:context id="_A5367507-BE7C-4240-A097-034101741196">
+      <dmn:contextEntry>
+        <dmn:variable id="_C6D47714-C78C-43A3-BBFC-2A38144FABD1" name="Grundbedarf" typeRef="number"/>
+        <dmn:literalExpression id="_20309C12-638F-4CA7-8B39-1AC70C2FE2E5">
+          <dmn:text>InputFamilienbudget.elternteil.grundbedarf</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_83F07874-D43C-4BA5-9C4B-3C488393BBF3" name="Effektive_Wohnkosten" typeRef="number"/>
+        <dmn:literalExpression id="_FC862984-0D65-45D1-B423-4A90F5487D01">
+          <dmn:text>InputFamilienbudget.elternteil.effektiveWohnkosten</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_269CB60E-0FEF-43CE-B781-67DF0468D96F" name="Medizinische_Grundversorgung" typeRef="number"/>
+        <dmn:literalExpression id="_333AE44A-7F2C-4F3D-BFC7-40D9435FC6CC">
+          <dmn:text>InputFamilienbudget.elternteil.medizinischeGrundversorgung</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_13BF9CF2-30F6-41C0-BF43-753F03098667" name="Steuern_Staat" typeRef="number"/>
+        <dmn:literalExpression id="_A3FCA7FC-453C-4CDC-BDFB-8D2EBC21B9C1">
+          <dmn:text>InputFamilienbudget.elternteil.steuernStaat</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_E464C95D-D391-4485-98F0-6C0F8CED6BB3" name="Steuern_Bund" typeRef="number"/>
+        <dmn:literalExpression id="_7AA1A7DE-7FA3-4927-90C4-86716343C37F">
+          <dmn:text>InputFamilienbudget.elternteil.steuernBund</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_2EFAE1FB-EF49-499A-9389-7C20769F4A95" name="Integrationszulage" typeRef="number"/>
+        <dmn:literalExpression id="_4E6E3502-A2BB-4D4E-9EBB-7E57DBD97FD8">
+          <dmn:text>InputFamilienbudget.elternteil.integrationszulage</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_1A691834-13FC-4F0D-8974-4BDFFCE84EE4" name="Fahrkosten_Person_1" typeRef="number"/>
+        <dmn:literalExpression id="_4B8C72C7-E10A-4099-BC9D-CA8CB73644CF">
+          <dmn:text>InputFamilienbudget.elternteil.fahrkostenPerson1</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_6ACE852E-4D20-440B-9C1C-8FE225BC5B74" name="Fahrkosten_Person_2" typeRef="number"/>
+        <dmn:literalExpression id="_C2A7D368-293C-48E4-91FA-9AE129D1B074">
+          <dmn:text>InputFamilienbudget.elternteil.fahrkostenPerson2</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_27B80D90-F7F4-4F3F-9FD2-8426625731FF" name="Essenskosten_Person_1" typeRef="number"/>
+        <dmn:literalExpression id="_9FD7FEC6-14B3-4E66-86D7-98A8E1D8DF65">
+          <dmn:text>InputFamilienbudget.elternteil.essenskostenPerson1</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:variable id="_08FC800F-1D18-4206-B274-2C0CD3AC0609" name="Essenskosten_Person_2" typeRef="number"/>
+        <dmn:literalExpression id="_1C04BB50-E836-466B-AA18-627850E7226C">
+          <dmn:text>InputFamilienbudget.elternteil.essenskostenPerson2</dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+      <dmn:contextEntry>
+        <dmn:literalExpression id="_F368F70C-5E4E-4F33-9232-9A05792199E9">
+          <dmn:text>Grundbedarf + Effektive_Wohnkosten + Medizinische_Grundversorgung + Steuern_Staat + Steuern_Bund +
+            Integrationszulage + Fahrkosten_Person_1 + Fahrkosten_Person_2 + Essenskosten_Person_1 +
+            Essenskosten_Person_2
+          </dmn:text>
+        </dmn:literalExpression>
+      </dmn:contextEntry>
+    </dmn:context>
+  </dmn:decision>
+  <dmn:inputData id="_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" name="InputFamilienbudget">
+    <dmn:extensionElements/>
+    <dmn:variable id="_BCC1662F-D4A2-4F06-A190-F12A7F275196" name="InputFamilienbudget" typeRef="InputFamilienbudgetV1"/>
+  </dmn:inputData>
+  <dmn:inputData id="_19E31FE9-3E67-4890-BE56-5704E55707A9" name="Stammdaten">
+    <dmn:extensionElements/>
+    <dmn:variable id="_3F6004EE-6B0F-4F1D-B0E7-431198032DC9" name="Stammdaten" typeRef="StammdatenV1"/>
+  </dmn:inputData>
+  <dmn:decision id="_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" name="anzahlPersonenImHaushalt">
+    <dmn:extensionElements/>
+    <dmn:variable id="_6396072D-2789-4959-89CA-89F241E05231" name="anzahlPersonenImHaushalt" typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:informationRequirement id="_621599AC-82A1-4517-83C2-BE41D1674AA4">
+      <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_BAF9CDA8-97EC-4EEE-9BC7-22FBA3FDBD29">
+      <dmn:text>InputFamilienbudget.elternteil.anzahlPersonenImHaushalt</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmn:decision id="_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" name="anzahlGeschwisterInAusbildung">
+    <dmn:extensionElements/>
+    <dmn:variable id="_F37F115E-9ADE-4542-A7D6-73187A020621" name="anzahlGeschwisterInAusbildung" typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:informationRequirement id="_13DE5E97-8565-410C-AC62-4A43F37DCA8F">
+      <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    </dmn:informationRequirement>
+    <dmn:literalExpression id="_08F5F694-7BB5-4A29-8896-960104ADFBF8">
+      <dmn:text>InputFamilienbudget.elternteil.anzahlGeschwisterInAusbildung</dmn:text>
+    </dmn:literalExpression>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="_AAEE144E-C690-4852-9C89-2ACE8943E8D6" name="DRG">
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_7D329038-7431-459C-B7FD-0205771E47CC">
+            <kie:width>1045</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_8436402C-F345-4B05-9065-6476204E2FC6">
+            <kie:width>50</kie:width>
+            <kie:width>281</kie:width>
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_71F02D8B-92E9-4304-9A48-CB25889E3AC4">
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_5D99ED6D-8C2A-439E-B090-EB2D1F7D1FA3">
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_9AC168EB-2BA9-4B52-AC79-59E59D8DF7FC">
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_7467F3DB-B4D6-4DFE-A5F3-BC31068A6BC7">
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_DCE09626-8432-4AF8-AAAD-28311B5DEA1B">
+            <kie:width>50</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>568</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_9A3A9689-1214-46D5-A743-D2DDFF41FB89">
+            <kie:width>50</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>568</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_DE0C354A-ED3D-4579-BE83-9939B8B61FAE">
+            <kie:width>50</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>568</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_ABF25F3D-AA6D-4531-BF48-36A441B74532">
+            <kie:width>1950</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_A5367507-BE7C-4240-A097-034101741196">
+            <kie:width>50</kie:width>
+            <kie:width>305</kie:width>
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_20309C12-638F-4CA7-8B39-1AC70C2FE2E5">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_FC862984-0D65-45D1-B423-4A90F5487D01">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_333AE44A-7F2C-4F3D-BFC7-40D9435FC6CC">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_A3FCA7FC-453C-4CDC-BDFB-8D2EBC21B9C1">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_7AA1A7DE-7FA3-4927-90C4-86716343C37F">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_4E6E3502-A2BB-4D4E-9EBB-7E57DBD97FD8">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_4B8C72C7-E10A-4099-BC9D-CA8CB73644CF">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_C2A7D368-293C-48E4-91FA-9AE129D1B074">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_9FD7FEC6-14B3-4E66-86D7-98A8E1D8DF65">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_1C04BB50-E836-466B-AA18-627850E7226C">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_F368F70C-5E4E-4F33-9232-9A05792199E9">
+            <kie:width>2117</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_BAF9CDA8-97EC-4EEE-9BC7-22FBA3FDBD29">
+            <kie:width>518</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_08F5F694-7BB5-4A29-8896-960104ADFBF8">
+            <kie:width>726</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape id="dmnshape-drg-_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" dmnElementRef="_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="965.5" y="64" width="631" height="792"/>
+        <dmndi:DMNLabel/>
+        <dmndi:DMNDecisionServiceDividerLine>
+          <di:waypoint x="965.5" y="292"/>
+          <di:waypoint x="1596.5" y="292"/>
+        </dmndi:DMNDecisionServiceDividerLine>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" dmnElementRef="_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1017" y="147" width="205" height="71"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_3AF45009-087F-499D-813E-B76AB0E89FCE" dmnElementRef="_3AF45009-087F-499D-813E-B76AB0E89FCE" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1375" y="571" width="142" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_00A869A3-C329-408B-91FF-4C40A7BE7D25" dmnElementRef="_00A869A3-C329-408B-91FF-4C40A7BE7D25" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1059" y="500" width="191" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" dmnElementRef="_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1291.2990654205607" y="919" width="162" height="113"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_19E31FE9-3E67-4890-BE56-5704E55707A9" dmnElementRef="_19E31FE9-3E67-4890-BE56-5704E55707A9" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="779.2990654205607" y="974" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" dmnElementRef="_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1460" y="90" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" dmnElementRef="_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="1327" y="180" width="218" height="80"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="dmnedge-drg-_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4-AUTO-TARGET" dmnElementRef="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
+        <di:waypoint x="1446" y="596"/>
+        <di:waypoint x="1119.5" y="218"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_79C3E7EC-4A79-4944-B98C-5917EEABF614-AUTO-TARGET" dmnElementRef="_79C3E7EC-4A79-4944-B98C-5917EEABF614">
+        <di:waypoint x="1154.5" y="525"/>
+        <di:waypoint x="1119.5" y="218"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_E177DC15-40CA-45BA-8D37-A6F1BF2F0986-AUTO-TARGET" dmnElementRef="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
+        <di:waypoint x="829.2990654205607" y="999"/>
+        <di:waypoint x="1446" y="621"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_EA769C99-6AE1-432C-8CC3-F33CB27D41AF-AUTO-TARGET" dmnElementRef="_EA769C99-6AE1-432C-8CC3-F33CB27D41AF">
+        <di:waypoint x="1372.2990654205607" y="975.5"/>
+        <di:waypoint x="1446" y="621"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_EFE45371-68A1-4871-B5F1-B5CDE68F4579-AUTO-TARGET" dmnElementRef="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
+        <di:waypoint x="1372.2990654205607" y="975.5"/>
+        <di:waypoint x="1154.5" y="550"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_D5208E11-A032-4854-8D1C-8097A8E22FFA-AUTO-TARGET" dmnElementRef="_D5208E11-A032-4854-8D1C-8097A8E22FFA">
+        <di:waypoint x="829.2990654205607" y="999"/>
+        <di:waypoint x="1154.5" y="550"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_621599AC-82A1-4517-83C2-BE41D1674AA4-AUTO-TARGET" dmnElementRef="_621599AC-82A1-4517-83C2-BE41D1674AA4">
+        <di:waypoint x="1372.2990654205607" y="975.5"/>
+        <di:waypoint x="1510" y="140"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_13DE5E97-8565-410C-AC62-4A43F37DCA8F-AUTO-TARGET" dmnElementRef="_13DE5E97-8565-410C-AC62-4A43F37DCA8F">
+        <di:waypoint x="1372.2990654205607" y="975.5"/>
+        <di:waypoint x="1436" y="260"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>
