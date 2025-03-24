@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
@@ -52,6 +53,7 @@ class GesuchAuthorizerCanDeleteTest {
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
     private BenutzerService benutzerService;
+    private GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @BeforeEach
     void setUp() {
@@ -68,6 +70,7 @@ class GesuchAuthorizerCanDeleteTest {
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
+        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
         final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
@@ -100,6 +103,7 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchRepository,
             gesuchTrancheRepository,
             gesuchStatusService,
+            gesuchTrancheStatusService,
             fallRepository,
             sozialdienstService,
             null

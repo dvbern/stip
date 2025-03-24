@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -45,6 +46,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchStatusService gesuchStatusService;
+    private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
@@ -103,18 +105,35 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdate(final UUID gesuchId, final boolean aenderung) {
+    public void canUpdate(final UUID gesuchId, final boolean isAenderung) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        // final var aenderung = gesuch.getGesuchTranchen()
+        // .stream()
+        // .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+        // .findFirst();
+        final BooleanSupplier benutzerCanEditAenderung = () -> isAenderung
+        && gesuchTrancheStatusService.benutzerCanEdit(
+            currentBenutzer,
+            gesuch.getGesuchTranchen()
+                .stream()
+                .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+                .findFirst()
+                .get()
+                .getStatus()
+        );
 
         // TODO KSTIP-1967: Authorizer aktualisieren
-        if (isAdminOrSb(currentBenutzer)) {
+        if (!isAenderung && isAdminOrSb(currentBenutzer)) {
+            return;
+        } else if (isAenderung && benutzerCanEditAenderung.getAsBoolean()) {
             return;
         }
 
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
-            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
+            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
+            || isAenderung && benutzerCanEditAenderung.getAsBoolean();
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
