@@ -17,6 +17,11 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import java.util.List;
+
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.service.TenantSubdomainsProducer.PerTenantSubdomains;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -31,11 +36,18 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class TenantService {
+    private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
 
     private final RoutingContext context;
+    private final ConfigService configService;
+    private final List<PerTenantSubdomains> perTenantSubdomains;
 
     @ConfigProperty(name = "keycloak.frontend-url")
     String keycloakFrontendUrl;
+
+    public static ExplicitTenantIdScope setTenantId(final String tenantId) {
+        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
+    }
 
     public TenantInfoDto getCurrentTenant() {
         final String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
@@ -47,5 +59,23 @@ public class TenantService {
         return new TenantInfoDto()
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
+    }
+
+    public String getCurrentTenantIdentifier() {
+        if (EXPLICIT_TENANT_ID.get() != null) {
+            return EXPLICIT_TENANT_ID.get();
+        }
+
+        return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
+    }
+
+    public MandantIdentifier resolveTenant(final String subdomain) {
+        for (final var perTenantSubdomain : perTenantSubdomains) {
+            if (perTenantSubdomain.subdomains().contains(subdomain)) {
+                return MandantIdentifier.of(perTenantSubdomain.tenant());
+            }
+        }
+
+        return MandantIdentifier.of(configService.getDefaultTenant());
     }
 }

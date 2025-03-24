@@ -7,6 +7,7 @@ import { delay, switchMap, tap } from 'rxjs/operators';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TenantService } from '@dv/shared/model/gesuch';
 import { shouldNotAuthorizeRequestIf } from '@dv/shared/util/http';
+import { SharedUtilTenantCacheService } from '@dv/shared/util/tenant-cache';
 
 function goBackToPreviousUrlIfAvailable(
   oauthService: OAuthService,
@@ -21,6 +22,7 @@ function goBackToPreviousUrlIfAvailable(
 const TIME_TO_WAIT_BEFORE_RELOAD = 5000;
 function initializeOidc(
   router: Router,
+  tenantCacheService: SharedUtilTenantCacheService,
   tenantService: TenantService,
   oauthService: OAuthService,
   compileTimeConfig: SharedModelCompileTimeConfig,
@@ -33,10 +35,12 @@ function initializeOidc(
           context: shouldNotAuthorizeRequestIf(true),
         })
         .pipe(
-          switchMap(({ clientAuth }) => {
+          switchMap((tenantInfo) => {
+            tenantCacheService.setTenantInfo(tenantInfo);
             // It is important to run the configuration outside of the Angular zone
             // to prevent Angular Application Ref from always switching between ready and not ready
             return zone.runOutsideAngular(() => {
+              const { clientAuth } = tenantInfo;
               oauthService.configure({
                 issuer: `${clientAuth.authServerUrl}/realms/${clientAuth.realm}`,
                 redirectUri: window.location.origin + window.location.pathname,
@@ -101,6 +105,7 @@ export const provideSharedPatternAppInitialization = () => {
       multi: true,
       deps: [
         Router,
+        SharedUtilTenantCacheService,
         TenantService,
         OAuthService,
         SharedModelCompileTimeConfig,

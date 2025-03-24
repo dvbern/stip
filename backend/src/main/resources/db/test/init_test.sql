@@ -3,7 +3,8 @@ INSERT INTO benutzereinstellungen (id, timestamp_erstellt, timestamp_mutiert, us
 VALUES ('92486d34-083a-4eb2-b676-f160a99512ba', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern'),
        ('be468db0-017e-4516-b2bb-6077bae8d78a', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern'),
        ('be468db0-017e-4516-b2bb-6077bae8d79a', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern'),
-       ('be468db0-017e-4516-b2bb-6077bae8d70a', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern');
+       ('be468db0-017e-4516-b2bb-6077bae8d70a', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern'),
+       ('be468db0-017e-4516-b2bb-6077bae8d71a', now(), now(), 'Admin', 'Admin', 0, TRUE, 'bern');
 
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
@@ -33,7 +34,7 @@ INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, 
                       benutzereinstellungen_id, keycloak_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae9', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
         'Admin', 0, 'Sachbearbeiter', 'Hans', '756.4444.4444.46', 'AKTIV', 'bern',
-        'be468db0-017e-4516-b2bb-6077bae8d78a', 'ea75c9be-35a0-4ae6-9383-a3459501596b', 'Benutzer');
+        'be468db0-017e-4516-b2bb-6077bae8d71a', 'ea75c9be-35a0-4ae6-9383-a3459501596b', 'Benutzer');
 INSERT INTO rolle (timestamp_erstellt, timestamp_mutiert, version, id, keycloak_identifier, mandant, user_erstellt,
                    user_mutiert)
 VALUES (now(), now(), 0, 'b497e381-16f4-4971-b2d1-3c8c809ed68b', 'Sachbearbeiter', 'bern', 'Admin', 'Admin'),

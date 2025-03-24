@@ -19,6 +19,9 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.Comparator;
 
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -28,13 +31,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 public class SeedingExecutor {
     private final Instance<Seeder> seeders;
 
     @Startup
-    public void execute() {
-        LOG.info("SeedingExecutor starting execution");
+    @RunForTenant(MandantIdentifier.BERN)
+    public void seedForBern() {
+        LOG.info("SeedingExecutor starting execution for Bern");
         seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
-        LOG.info("SeedingExecutor finished execution");
+        LOG.info("SeedingExecutor finished execution for Bern");
+    }
+
+    @Startup
+    @RunForTenant(MandantIdentifier.DV)
+    public void seedForDv() {
+        LOG.info("SeedingExecutor starting execution for DV");
+        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
+        LOG.info("SeedingExecutor finished execution for DV");
     }
 }
