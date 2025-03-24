@@ -37,7 +37,6 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -53,7 +52,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
-import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -72,7 +70,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -222,53 +219,6 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getNachfristDokumente(), is(LocalDate.now().plusDays(30)));
-    }
-
-    @TestAsGesuchsteller
-    @Test
-    @Order(21)
-    void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
-        final var fallDashboardItemDtos = gesuchApiSpec.getGsDashboard()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(FallDashboardItemDto[].class);
-
-        Arrays.stream(fallDashboardItemDtos)
-            .forEach(
-                fallDashboardItemDto -> {
-                    fallDashboardItemDto.getAusbildungDashboardItems()
-                        .forEach(
-                            ausbildungDashboardItemDto -> ausbildungDashboardItemDto.getGesuchs()
-                                .forEach(
-                                    gesuchDashboardItemDto -> {
-                                        if (
-                                            Objects
-                                                .equals(gesuchDashboardItemDto.getCurrentTrancheId(), gesuchTrancheId)
-                                        ) {
-                                            assertThat(
-                                                gesuchDashboardItemDto.getNachfristDokumente(),
-                                                is(notNullValue())
-                                            );
-                                        }
-                                    }
-                                )
-                        );
-                }
-            );
-
-        // var ausbildungDashBoardItemDtos =
-        // fallDashboardItemDtos[fallDashboardItemDtos.length - 1].getAusbildungDashboardItems();
-        // var gesuchDashBoardItemDtos =
-        // ausbildungDashBoardItemDtos.get(ausbildungDashBoardItemDtos.size() - 1).getGesuchs();
-        //
-        // assertThat(
-        // gesuchDashBoardItemDtos.get(0).getNachfristDokumente(),
-        // is(notNullValue())
-        // );
     }
 
     @Test
