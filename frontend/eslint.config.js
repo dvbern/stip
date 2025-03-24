@@ -42,6 +42,13 @@ module.exports = [
               onlyDependOnLibsWithTags: ['scope:shared', 'scope:gesuch-app'],
             },
             {
+              sourceTag: 'scope:sozialdienst-app',
+              onlyDependOnLibsWithTags: [
+                'scope:shared',
+                'scope:sozialdienst-app',
+              ],
+            },
+            {
               sourceTag: 'scope:shared',
               onlyDependOnLibsWithTags: ['scope:shared'],
             },
