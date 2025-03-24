@@ -23,6 +23,7 @@ import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbei
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  SharedDataAccessGesuchEvents,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -161,8 +162,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const hasAcceptedAllDokuments =
-      this.dokumentsStore.hasAcceptedAllDokumentsSig();
+    const sbCanBearbeitungAbschliessen =
+      this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
 
     const validations =
       this.einreichnenStore.validationViewSig().invalidFormularProps
@@ -176,7 +177,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
       StatusUebergaengeOptions[status]({
-        hasAcceptedAllDokuments,
+        hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
         isInvalid: hasValidationErrors || hasValidationWarnings,
       }),
     );
@@ -187,8 +188,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     };
   });
 
-  setStatusUebergang(nextStatus: StatusUebergang, gesuchTrancheId?: string) {
-    if (!gesuchTrancheId) {
+  setStatusUebergang(
+    nextStatus: StatusUebergang,
+    gesuchId?: string,
+    gesuchTrancheId?: string,
+  ) {
+    if (!gesuchId || !gesuchTrancheId) {
       return;
     }
 
@@ -234,7 +239,20 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
                 gesuchTrancheId,
                 text: result.kommentar,
-                onSuccess: () => {
+                onSuccess: (newGesuchTrancheId) => {
+                  if (gesuchTrancheId !== newGesuchTrancheId) {
+                    this.router.navigate([
+                      'gesuch',
+                      'info',
+                      gesuchId,
+                      'tranche',
+                      newGesuchTrancheId,
+                    ]);
+                  } else {
+                    this.store.dispatch(
+                      SharedDataAccessGesuchEvents.loadGesuch(),
+                    );
+                  }
                   this.einreichenStore.validateSteps$({ gesuchTrancheId });
                 },
               });

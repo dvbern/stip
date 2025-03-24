@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   SharedDataAccessGesuchEvents,
   isGesuchFormularProp,
@@ -76,6 +77,7 @@ export class EinreichenStore extends signalStore(
 ) {
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
+  private dokumentsStore = inject(DokumentsStore);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private config = inject(SharedModelCompileTimeConfig);
   private gesuchViewSig = this.store.selectSignal(
@@ -134,6 +136,9 @@ export class EinreichenStore extends signalStore(
     const { trancheSetting } = this.gesuchViewSig();
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
+    const hasNoDokumenteToUebermitteln =
+      gesuch?.gesuchStatus !== 'FEHLENDE_DOKUMENTE' ||
+      this.dokumentsStore.dokumenteCanFlagsSig().gsCanDokumenteUebermitteln;
 
     const routesSuffix = trancheSetting?.routesSuffix;
     const error = validationReport
@@ -171,7 +176,8 @@ export class EinreichenStore extends signalStore(
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
-        isComplete: hasNoValidationErrors(error),
+        isComplete:
+          hasNoValidationErrors(error) && hasNoDokumenteToUebermitteln,
         checkAenderung: trancheTyp === 'AENDERUNG',
       }),
     };

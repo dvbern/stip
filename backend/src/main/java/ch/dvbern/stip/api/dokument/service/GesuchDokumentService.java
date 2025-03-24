@@ -278,10 +278,29 @@ public class GesuchDokumentService {
             );
     }
 
-    private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
+    private static void validateGesuchAndTrancheAreInCorrectStateOrElseThrow(final GesuchDokument gesuchDokument) {
+        if (gesuchDokument.getGesuchTranche().getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            gesuchTrancheStatusIsOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
+        } else {
+            gesuchstatusIsOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        }
+    }
+
+    private static void gesuchstatusIsOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
         if (gesuch.getGesuchStatus() != statusToVerify) {
             throw new IllegalStateException(
                 "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString()
+            );
+        }
+    }
+
+    private static void gesuchTrancheStatusIsOrElseThrow(
+        final GesuchTranche aenderung,
+        final GesuchTrancheStatus statusToVerify
+    ) {
+        if (aenderung.getStatus() != statusToVerify) {
+            throw new IllegalStateException(
+                "GesuchTrancheStatus " + aenderung.getStatus().toString() + " not " + statusToVerify.toString()
             );
         }
     }
@@ -290,7 +309,7 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
@@ -301,7 +320,7 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         dokumentstatusService.triggerStatusChange(
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT
@@ -352,10 +371,15 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public String deleteDokument(final UUID dokumentId) {
+    public String deleteDokument(final UUID dokumentId, final UUID trancheId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
-        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
+        for (
+            final var gesuchDokument : dokument.getGesuchDokumente()
+                .stream()
+                .filter(dok -> dok.getGesuchTranche().getId().equals(trancheId))
+                .toList()
+        ) {
             gesuchDokument.getDokumente().remove(dokument);
         }
 
@@ -365,13 +389,13 @@ public class GesuchDokumentService {
     @Transactional
     public void removeDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var dokumentObjectId = new ArrayList<String>();
+        final var dokumentObjectIds = new ArrayList<String>();
 
         if (
             dokument.getGesuchDokumente().size() == 1
             && (canDeleteDokumentFromS3(dokument, dokument.getGesuchDokumente().get(0).getGesuchTranche()))
         ) {
-            dokumentObjectId.add(dokument.getObjectId());
+            dokumentObjectIds.add(dokument.getObjectId());
         }
 
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
@@ -379,7 +403,7 @@ public class GesuchDokumentService {
             dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
-            executeDeleteDokumentsFromS3(dokumentObjectId);
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
     }
 

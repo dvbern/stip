@@ -76,9 +76,14 @@ public interface GesuchTrancheResource {
     ValidationReportDto gesuchTrancheEinreichenValidierenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchId}")
+    @Path("/gs/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchTrancheListDto getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    GesuchTrancheListDto getAllTranchenForGesuchGS(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/sb/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchTrancheListDto getAllTranchenForGesuchSB(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumenteToUpload/gs")

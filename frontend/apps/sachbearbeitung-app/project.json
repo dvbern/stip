@@ -54,7 +54,6 @@
             "input": "libs/shared/assets/auth/src",
             "output": "assets/auth/"
           },
-          "apps/sachbearbeitung-app/src/favicon.ico",
           "apps/sachbearbeitung-app/src/assets"
         ],
         "styles": [

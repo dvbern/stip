@@ -487,7 +487,9 @@ class GesuchValidatorTest {
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
         familiensituation.setMutterWiederverheiratet(false);
         Gesuch gesuch = prepareDummyGesuch();
-        gesuch.setAusbildung(null);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
@@ -512,7 +514,9 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         gesuch.setGesuchsperiode(null);
-        gesuch.setAusbildung(null);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         assertOneMessage(
             VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
@@ -542,7 +546,9 @@ class GesuchValidatorTest {
         darlehen.setGrundZweitausbildung(false);
         darlehen.setGrundAusbildungZwoelfJahre(true);
         gesuch.setGesuchsperiode(null);
-        gesuch.setAusbildung(null);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
@@ -593,7 +599,9 @@ class GesuchValidatorTest {
         darlehen.setGrundZweitausbildung(false);
         darlehen.setGrundAusbildungZwoelfJahre(false);
         gesuch.setGesuchsperiode(null);
-        gesuch.setAusbildung(null);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
@@ -676,7 +684,11 @@ class GesuchValidatorTest {
         GesuchTranche gesuchTranche = new GesuchTranche().setGesuchFormular(new GesuchFormular());
         gesuchTranche.setId(UUID.randomUUID());
         gesuch.getGesuchTranchen().add(gesuchTranche);
-        gesuch.setAusbildung(new Ausbildung().setFall(new Fall()));
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung
+            .setFall(new Fall())
+            .setAusbildungBegin(LocalDate.now().minusDays(1));
+        gesuch.setAusbildung(ausbildung);
         gesuch.setGesuchsperiode(new Gesuchsperiode());
         gesuchTranche.setGesuch(gesuch);
         gesuchTranche.getGesuchFormular().setTranche(gesuchTranche);

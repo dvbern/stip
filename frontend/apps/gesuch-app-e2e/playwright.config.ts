@@ -17,6 +17,7 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
+  workers: 3,
   projects: [
     {
       name: 'gesuch-app-e2e',

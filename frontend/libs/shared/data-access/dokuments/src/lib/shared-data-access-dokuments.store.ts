@@ -90,6 +90,19 @@ export class DokumentsStore extends signalStore(
     patchState(this, { expandedComponentList: list });
   }
 
+  dokumenteCanFlagsSig = computed(() => {
+    const {
+      gsCanDokumenteUebermitteln,
+      sbCanBearbeitungAbschliessen,
+      sbCanFehlendeDokumenteUebermitteln,
+    } = this.documentsToUpload.data() ?? {};
+    return {
+      gsCanDokumenteUebermitteln,
+      sbCanBearbeitungAbschliessen,
+      sbCanFehlendeDokumenteUebermitteln,
+    };
+  });
+
   dokumenteViewSig = computed(() => {
     // only show standard documents
     const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
@@ -146,15 +159,6 @@ export class DokumentsStore extends signalStore(
   dokumentViewSig = computed(() =>
     isSuccess(this.dokument()) ? this.dokument().data : undefined,
   );
-
-  hasAcceptedAllDokumentsSig = computed(() => {
-    return (
-      this.dokuments
-        .data()
-        ?.every((dokument) => dokument.status === Dokumentstatus.AKZEPTIERT) ??
-      false
-    );
-  });
 
   /**
    * check if there are any abgelehnte dokumente or new custom dokument types

@@ -75,7 +75,7 @@ public class GesuchTrancheHistoryRepository {
         final Gesuchstatus gesuchStatus
     ) {
         return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
-            .flatMap(Gesuch::getCurrentGesuchTrancheOptional);
+            .flatMap(Gesuch::getNewestGesuchTranche);
     }
 
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(

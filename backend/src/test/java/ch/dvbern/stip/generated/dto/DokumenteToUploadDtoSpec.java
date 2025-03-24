@@ -35,7 +35,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DokumenteToUploadDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_REQUIRED,
-  DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER,
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN,
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN,
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN
 })
 @JsonTypeName("DokumenteToUpload")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +51,15 @@ public class DokumenteToUploadDtoSpec {
 
   public static final String JSON_PROPERTY_UNTERSCHRIFTENBLAETTER = "unterschriftenblaetter";
   private List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter;
+
+  public static final String JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN = "sbCanFehlendeDokumenteUebermitteln";
+  private Boolean sbCanFehlendeDokumenteUebermitteln;
+
+  public static final String JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN = "gsCanDokumenteUebermitteln";
+  private Boolean gsCanDokumenteUebermitteln;
+
+  public static final String JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN = "sbCanBearbeitungAbschliessen";
+  private Boolean sbCanBearbeitungAbschliessen;
 
   public DokumenteToUploadDtoSpec() {
   }
@@ -153,6 +165,84 @@ public class DokumenteToUploadDtoSpec {
     this.unterschriftenblaetter = unterschriftenblaetter;
   }
 
+
+  public DokumenteToUploadDtoSpec sbCanFehlendeDokumenteUebermitteln(Boolean sbCanFehlendeDokumenteUebermitteln) {
+    
+    this.sbCanFehlendeDokumenteUebermitteln = sbCanFehlendeDokumenteUebermitteln;
+    return this;
+  }
+
+   /**
+   * Get sbCanFehlendeDokumenteUebermitteln
+   * @return sbCanFehlendeDokumenteUebermitteln
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getSbCanFehlendeDokumenteUebermitteln() {
+    return sbCanFehlendeDokumenteUebermitteln;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSbCanFehlendeDokumenteUebermitteln(Boolean sbCanFehlendeDokumenteUebermitteln) {
+    this.sbCanFehlendeDokumenteUebermitteln = sbCanFehlendeDokumenteUebermitteln;
+  }
+
+
+  public DokumenteToUploadDtoSpec gsCanDokumenteUebermitteln(Boolean gsCanDokumenteUebermitteln) {
+    
+    this.gsCanDokumenteUebermitteln = gsCanDokumenteUebermitteln;
+    return this;
+  }
+
+   /**
+   * Get gsCanDokumenteUebermitteln
+   * @return gsCanDokumenteUebermitteln
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getGsCanDokumenteUebermitteln() {
+    return gsCanDokumenteUebermitteln;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGsCanDokumenteUebermitteln(Boolean gsCanDokumenteUebermitteln) {
+    this.gsCanDokumenteUebermitteln = gsCanDokumenteUebermitteln;
+  }
+
+
+  public DokumenteToUploadDtoSpec sbCanBearbeitungAbschliessen(Boolean sbCanBearbeitungAbschliessen) {
+    
+    this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
+    return this;
+  }
+
+   /**
+   * Get sbCanBearbeitungAbschliessen
+   * @return sbCanBearbeitungAbschliessen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getSbCanBearbeitungAbschliessen() {
+    return sbCanBearbeitungAbschliessen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSbCanBearbeitungAbschliessen(Boolean sbCanBearbeitungAbschliessen) {
+    this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -164,12 +254,15 @@ public class DokumenteToUploadDtoSpec {
     DokumenteToUploadDtoSpec dokumenteToUpload = (DokumenteToUploadDtoSpec) o;
     return Objects.equals(this.customDokumentTyps, dokumenteToUpload.customDokumentTyps) &&
         Objects.equals(this.required, dokumenteToUpload.required) &&
-        Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter);
+        Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter) &&
+        Objects.equals(this.sbCanFehlendeDokumenteUebermitteln, dokumenteToUpload.sbCanFehlendeDokumenteUebermitteln) &&
+        Objects.equals(this.gsCanDokumenteUebermitteln, dokumenteToUpload.gsCanDokumenteUebermitteln) &&
+        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter);
+    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen);
   }
 
   @Override
@@ -179,6 +272,9 @@ public class DokumenteToUploadDtoSpec {
     sb.append("    customDokumentTyps: ").append(toIndentedString(customDokumentTyps)).append("\n");
     sb.append("    required: ").append(toIndentedString(required)).append("\n");
     sb.append("    unterschriftenblaetter: ").append(toIndentedString(unterschriftenblaetter)).append("\n");
+    sb.append("    sbCanFehlendeDokumenteUebermitteln: ").append(toIndentedString(sbCanFehlendeDokumenteUebermitteln)).append("\n");
+    sb.append("    gsCanDokumenteUebermitteln: ").append(toIndentedString(gsCanDokumenteUebermitteln)).append("\n");
+    sb.append("    sbCanBearbeitungAbschliessen: ").append(toIndentedString(sbCanBearbeitungAbschliessen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

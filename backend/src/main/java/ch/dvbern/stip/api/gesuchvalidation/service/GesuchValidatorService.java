@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValid
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchValidatorService {
     private static final Map<Gesuchstatus, List<Class<?>>> statusToValidationGroups = new EnumMap<>(Gesuchstatus.class);
-
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     static {
         statusToValidationGroups.put(Gesuchstatus.EINGEREICHT, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups
@@ -73,4 +74,5 @@ public class GesuchValidatorService {
         final var validationGroups = statusToValidationGroups.getOrDefault(status, List.of());
         ValidatorUtil.validate(validator, toValidate, validationGroups);
     }
+
 }

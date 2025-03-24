@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +34,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -49,7 +47,6 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
@@ -60,6 +57,7 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
@@ -136,7 +134,6 @@ public class GesuchService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
-    private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
@@ -161,7 +158,6 @@ public class GesuchService {
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
     private final DokumentRepository dokumentRepository;
-    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -171,24 +167,22 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
 
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
             var trancheInStatusEingereicht =
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                     .orElseThrow();
             return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
-        } else {
-            // atkuelles gesuch
-            return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
         }
+        // atkuelles gesuch
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @Transactional
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         Optional<GesuchTranche> changes = Optional.empty();
-        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
             changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
         }
         // bis eingereicht: changes: empty/null
@@ -934,7 +928,10 @@ public class GesuchService {
 
         final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
         dokumentIdsNowButNotThen
-            .forEach(uuid -> dokumentObjectIdsToBeDeleted.add(gesuchDokumentService.deleteDokument(uuid)));
+            .forEach(
+                uuid -> dokumentObjectIdsToBeDeleted
+                    .add(gesuchDokumentService.deleteDokument(uuid, trancheToReset.getId()))
+            );
 
         gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
 

@@ -1,30 +1,34 @@
-import { Page, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 import { AusbildungPO, AusbildungValues } from './ausbildung.po';
 
 export class CockpitPO {
-  private page: Page;
+  public elems: {
+    page: Page;
+    periodeTitle: Locator;
+    gesuchEdit: Locator;
+    createAusbildung: Locator;
+    cereateAaederung: Locator;
+  };
 
   constructor(page: Page) {
-    this.page = page;
-  }
-
-  public getPeriodeTitle() {
-    return this.page.getByTestId('cockpit-periode-title');
-  }
-
-  public getGesuchEdit() {
-    return this.page.getByTestId('cockpit-gesuch-edit');
+    this.elems = {
+      page,
+      periodeTitle: page.getByTestId('cockpit-periode-title'),
+      gesuchEdit: page.getByTestId('cockpit-gesuch-edit'),
+      createAusbildung: page.getByTestId('cockpit-create-ausbildung'),
+      cereateAaederung: page.getByTestId('cockpit-gesuch-aenderung-create'),
+    };
   }
 
   public async goToDashBoard() {
-    await this.page.goto('/gesuch-app-feature-cockpit');
+    await this.elems.page.goto('/gesuch-app-feature-cockpit');
   }
 
   public async createNewStipendium(ausbildung: AusbildungValues) {
-    await this.page.getByTestId('cockpit-create-ausbildung').click();
+    await this.elems.createAusbildung.click();
 
-    const ausbildungPO = new AusbildungPO(this.page);
+    const ausbildungPO = new AusbildungPO(this.elems.page);
     await expect(ausbildungPO.elems.loading).toBeHidden();
 
     await ausbildungPO.fillEducationForm(ausbildung);

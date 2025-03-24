@@ -76,9 +76,9 @@ export class UploadStore {
    * The documents in the state, enriched with a state and a theme
    */
   dokumentListView = computed<DokumentListView>(() => {
-    const { dokumentModel, dokuments } = this.state();
+    const { dokumentModel: gesuchDokument, dokuments } = this.state();
     return {
-      dokumentModel,
+      gesuchDokument,
       dokuments: dokuments.map((document) => {
         const state = checkDocumentState(document);
 

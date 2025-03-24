@@ -17,5 +17,8 @@ export interface DokumenteToUpload {
     customDokumentTyps?: Array<CustomDokumentTyp>;
     required?: Array<DokumentTyp>;
     unterschriftenblaetter?: Array<UnterschriftenblattDokumentTyp>;
+    sbCanFehlendeDokumenteUebermitteln?: boolean;
+    gsCanDokumenteUebermitteln?: boolean;
+    sbCanBearbeitungAbschliessen?: boolean;
 }
 
