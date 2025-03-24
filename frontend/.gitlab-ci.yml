@@ -43,3 +43,13 @@ include:
       build-latest: false
       build-args: |
         APP=gesuch-app
+
+  - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
+    inputs:
+      name: package:sozialdienst-app
+      context-dir: frontend
+      image-name: 'sozialdienst-app'
+      version: '$VERSION'
+      build-latest: false
+      build-args: |
+        APP=sozialdienst-app

@@ -9,6 +9,7 @@
   "shared.create": "Erstellen",
   "shared.label.von": "von",
   "shared.label.bis": "bis",
+  "shared.logo.tenant": "Logo Kanton {{ name }}",
   "shared.nothing": "",
   "shared.ui.yes": "Ja",
   "shared.ui.no": "Nein",

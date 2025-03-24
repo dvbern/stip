@@ -23,6 +23,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.opencsv.CSVParserBuilder;
@@ -40,16 +41,19 @@ public class StipDecisionTextSeeding extends Seeder {
 
     private final ConfigService configService;
     private final StipDecisionTextRepository decisionTextRepository;
+    private final TenantService tenantService;
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         if (decisionTextRepository.count() != 0) {
             LOG.info("stip decision texts already seeded, skipping...");
             return;
         }
 
-        final var decisionTexts = getDecisionTextsToSeed(getTenant());
-        decisionTextRepository.persist(decisionTexts);
+        final var decisionTexts = getDecisionTextsToSeed(tenantService.getCurrentTenantIdentifier());
+        if (!decisionTexts.isEmpty()) {
+            decisionTextRepository.persist(decisionTexts);
+        }
     }
 
     @Override
@@ -62,7 +66,7 @@ public class StipDecisionTextSeeding extends Seeder {
         final var toLoad = String.format(PATH_TO_CSV, tenant);
         try (final var resource = getClass().getResourceAsStream(toLoad)) {
             if (resource == null) {
-                throw new RuntimeException(String.format("Could not load resource %s", toLoad));
+                return List.of();
             }
 
             try (

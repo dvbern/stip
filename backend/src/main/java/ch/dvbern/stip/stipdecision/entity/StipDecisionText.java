@@ -24,6 +24,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,13 +34,18 @@ import org.hibernate.envers.Audited;
 
 @Getter
 @Setter
-@Table(name = "stip_decision_text")
+@Table(
+    name = "stip_decision_text",
+    indexes = {
+        @Index(name = "IX_stip_decision_text_stip_decision", columnList = "stip_decision,mandant", unique = true),
+    }
+)
 @Audited
 @Entity
 public class StipDecisionText extends AbstractMandantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false)
+    @Column(name = "stip_decision", nullable = false)
     private StipDecision stipDecision;
 
     @NotNull
