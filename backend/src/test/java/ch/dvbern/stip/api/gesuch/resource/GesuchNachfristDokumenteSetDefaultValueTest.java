@@ -237,7 +237,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .as(FallDashboardItemDto[].class);
 
         assertThat(
-            items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
+            items[items.length - 1].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
             is(notNullValue())
         );
     }
