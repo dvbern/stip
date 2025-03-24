@@ -30,14 +30,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -83,11 +81,6 @@ public class GesuchDokument extends AbstractMandantEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Dokumentstatus status = Dokumentstatus.AUSSTEHEND;
-
-    @OneToMany(
-        mappedBy = "gesuchDokument", cascade = { CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER
-    )
-    private List<GesuchDokumentKommentar> gesuchDokumentKommentare = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

@@ -70,7 +70,7 @@ public class GesuchTrancheHistoryRepository {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
-    private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
+    public Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.dokument.resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -29,14 +30,20 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -59,7 +66,15 @@ class DokumentResourceImplTest {
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
+    GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
+    @InjectMock
     GesuchDokumentService gesuchDokumentService;
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    @InjectMock
+    GesuchDokumentRepository gesuchDokumentRepository;
+    @InjectMock
+    GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     @Inject
     GesuchFormularService gesuchFormularService;
     @InjectMock
@@ -72,6 +87,19 @@ class DokumentResourceImplTest {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
         when(dokumentKommentarRepository.getByGesuchDokumentId(any()))
             .thenReturn(List.of(kommentar));
+        when(gesuchDokumentKommentarHistoryRepository.getGesuchDokumentKommentarOfGesuchDokumentBefore(any(), any()))
+            .thenReturn(List.of(kommentar));
+        GesuchDokument gesuchDokument = new GesuchDokument();
+        gesuchDokument.setId(UUID.randomUUID());
+        GesuchTranche tranche = new GesuchTranche().setGesuchDokuments(List.of(gesuchDokument));
+        gesuchDokument.setGesuchTranche(tranche);
+        Gesuch gesuch = new Gesuch();
+        gesuch.setId(UUID.randomUUID());
+        tranche.setGesuch(gesuch);
+        when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
+        when(gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(any(), any()))
+            .thenReturn(Optional.empty());
     }
 
     @Test

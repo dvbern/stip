@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -57,6 +56,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -111,6 +111,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -147,29 +148,9 @@ public class GesuchTrancheService {
         );
     }
 
-    public GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
-        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-            if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
-                gesuchTranche =
-                    gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                        .orElseThrow();
-            }
-        } else if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
-        ) {
-            gesuchTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId);
-        }
-
-        return gesuchTranche;
-    }
-
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadGS(final UUID gesuchTrancheId) {
-        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
 
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
@@ -211,7 +192,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final UUID gesuchTrancheId) {
-        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
         return gesuchTranche.getGesuchDokuments()
@@ -270,7 +251,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public ValidationReportDto validatePagesGS(final UUID gesuchTrancheId) {
-        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(gesuchTrancheId);
 
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         if (gesuchFormular == null) {
@@ -503,7 +484,7 @@ public class GesuchTrancheService {
     }
 
     public ValidationReportDto einreichenValidierenGS(final UUID trancheId) {
-        final var gesuchTranche = getCurrentOrEingereichtTrancheForGS(trancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(trancheId);
         return einreichenValidationReport(gesuchTranche);
     }
 
