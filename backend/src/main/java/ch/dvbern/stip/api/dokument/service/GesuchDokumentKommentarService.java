@@ -59,9 +59,7 @@ public class GesuchDokumentKommentarService {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
         gesuchDokuments
-            .forEach(dokument -> {
-                gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId());
-            });
+            .forEach(dokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId()));
     }
 
     @Transactional

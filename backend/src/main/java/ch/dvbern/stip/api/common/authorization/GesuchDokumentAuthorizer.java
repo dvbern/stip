@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -34,7 +35,7 @@ public class GesuchDokumentAuthorizer {
     @Transactional
     public void canRead(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
-        if (gesuchDokument == null) {
+        if (Objects.isNull(gesuchDokument)) {
             return;
         }
         gesuchTrancheAuthorizer.canRead(gesuchDokument.getGesuchTranche().getId());
