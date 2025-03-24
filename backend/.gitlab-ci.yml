@@ -8,7 +8,7 @@ include:
       name: build-api
       context-dir: backend
       java-image-version: 17-jdk-alpine
-      maven-goal: -Drevision=$VERSION -Pcoverage install -DskipTests
+      maven-goal: -Drevision=$VERSION -Pcoverage install
 
   - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
     inputs:
