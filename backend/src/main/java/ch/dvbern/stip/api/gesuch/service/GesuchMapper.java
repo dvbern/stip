@@ -25,7 +25,6 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -62,7 +61,6 @@ public abstract class GesuchMapper {
     @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
     @Mapping(target = "ausbildungId", source = "ausbildung.id")
     @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
-    @Mapping(source = ".", target = "nachfristDokumente", qualifiedByName = "formatNachfristDokumente")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
@@ -79,7 +77,6 @@ public abstract class GesuchMapper {
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
-    @Mapping(source = ".", target = "nachfristDokumente", qualifiedByName = "formatNachfristDokumente")
     public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
 
     @Named("getFullNameOfSachbearbeiter")
@@ -90,14 +87,6 @@ public abstract class GesuchMapper {
         }
 
         return zuordnung.getSachbearbeiter().getFullName();
-    }
-
-    @Named("formatNachfristDokumente")
-    static String getNachfristDokumente(Gesuch gesuch) {
-        if (Objects.nonNull(gesuch.getNachfristDokumente())) {
-            return DateUtil.formatDate(gesuch.getNachfristDokumente());
-        }
-        return "";
     }
 
     @Named("getStartDate")

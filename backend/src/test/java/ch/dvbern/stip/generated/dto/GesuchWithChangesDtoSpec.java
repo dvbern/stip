@@ -94,7 +94,7 @@ public class GesuchWithChangesDtoSpec {
   private DelegierungDtoSpec delegierung;
 
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
-  private String nachfristDokumente;
+  private LocalDate nachfristDokumente;
 
   public GesuchWithChangesDtoSpec() {
   }
@@ -445,7 +445,7 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
-  public GesuchWithChangesDtoSpec nachfristDokumente(String nachfristDokumente) {
+  public GesuchWithChangesDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
     
     this.nachfristDokumente = nachfristDokumente;
     return this;
@@ -459,14 +459,14 @@ public class GesuchWithChangesDtoSpec {
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getNachfristDokumente() {
+  public LocalDate getNachfristDokumente() {
     return nachfristDokumente;
   }
 
 
   @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(String nachfristDokumente) {
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 

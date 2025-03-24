@@ -18,12 +18,10 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
@@ -45,7 +43,6 @@ public interface GesuchDashboardItemMapper {
     @Mapping(source = "gesuch.latestGesuchTranche.id", target = "currentTrancheId")
     @Mapping(source = "gesuch", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = "gesuch", target = "endDate", qualifiedByName = "getEndDate")
-    @Mapping(source = "gesuch", target = "nachfristDokumente", qualifiedByName = "formatNachfristDokumente")
     GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
@@ -68,13 +65,5 @@ public interface GesuchDashboardItemMapper {
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
         return GesuchMapper.getGesuchDateRange(gesuch).getGueltigBis();
-    }
-
-    @Named("formatNachfristDokumente")
-    static String getNachfristDokumente(Gesuch gesuch) {
-        if (Objects.nonNull(gesuch.getNachfristDokumente())) {
-            return DateUtil.formatDate(gesuch.getNachfristDokumente());
-        }
-        return "";
     }
 }

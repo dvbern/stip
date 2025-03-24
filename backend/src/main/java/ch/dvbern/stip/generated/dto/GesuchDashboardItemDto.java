@@ -30,7 +30,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid UUID currentTrancheId;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
-  private @Valid String nachfristDokumente;
+  private @Valid LocalDate nachfristDokumente;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
@@ -150,19 +150,19 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
-  public GesuchDashboardItemDto nachfristDokumente(String nachfristDokumente) {
+  public GesuchDashboardItemDto nachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
     return this;
   }
 
   
   @JsonProperty("nachfristDokumente")
-  public String getNachfristDokumente() {
+  public LocalDate getNachfristDokumente() {
     return nachfristDokumente;
   }
 
   @JsonProperty("nachfristDokumente")
-  public void setNachfristDokumente(String nachfristDokumente) {
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 

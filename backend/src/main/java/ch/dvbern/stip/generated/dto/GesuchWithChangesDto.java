@@ -39,7 +39,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid DelegierungDto delegierung;
-  private @Valid String nachfristDokumente;
+  private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
 
   /**
@@ -270,19 +270,19 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
-  public GesuchWithChangesDto nachfristDokumente(String nachfristDokumente) {
+  public GesuchWithChangesDto nachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
     return this;
   }
 
   
   @JsonProperty("nachfristDokumente")
-  public String getNachfristDokumente() {
+  public LocalDate getNachfristDokumente() {
     return nachfristDokumente;
   }
 
   @JsonProperty("nachfristDokumente")
-  public void setNachfristDokumente(String nachfristDokumente) {
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 

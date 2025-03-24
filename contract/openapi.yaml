@@ -3752,7 +3752,7 @@ components:
         delegierung:
           $ref: '#/components/schemas/Delegierung'
         nachfristDokumente:
-          type: string
+          $ref: '#/components/schemas/LocalDate'
     Delegierung:
       type: object
       properties:
@@ -3819,7 +3819,7 @@ components:
       type: object
       properties:
         nachfristDokumente:
-          type: string
+          $ref: '#/components/schemas/LocalDate'
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:

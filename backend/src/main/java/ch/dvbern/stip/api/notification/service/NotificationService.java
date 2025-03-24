@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -71,7 +72,11 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
             .setGesuch(gesuch);
-        String msg = Templates.getNachfristDokumenteChangedText(sprache, gesuch.getNachfristDokumente()).render();
+        var nachfristDokumente = "";
+        if (Objects.nonNull(gesuch.getNachfristDokumente())) {
+            nachfristDokumente = DateUtil.formatDate(gesuch.getNachfristDokumente());
+        }
+        String msg = Templates.getNachfristDokumenteChangedText(sprache, nachfristDokumente).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -335,13 +340,13 @@ public class NotificationService {
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
         }
 
-        public static native TemplateInstance nachfristDokumenteChangedDE(final LocalDate nachfristDokumente);
+        public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);
 
-        public static native TemplateInstance nachfristDokumenteChangedFR(final LocalDate nachfristDokumente);
+        public static native TemplateInstance nachfristDokumenteChangedFR(final String nachfristDokumente);
 
         public static TemplateInstance getNachfristDokumenteChangedText(
             final Sprache korrespondenzSprache,
-            final LocalDate nachfristDokumente
+            final String nachfristDokumente
         ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
                 return nachfristDokumenteChangedFR(nachfristDokumente);
