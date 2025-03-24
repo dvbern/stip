@@ -6,7 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -21,6 +25,9 @@ import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { normalizeDateForUTC } from '@dv/shared/util/validator-date';
 
+type NachfristData = {
+  nachfrist: string;
+};
 type EditNachfristResult = {
   newNachfrist: string;
 };
@@ -46,19 +53,18 @@ type EditNachfristResult = {
 export class SharedDialogEditDokumentenNachfristComponent {
   private dialogRef = inject(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
+  private dialogData = inject<NachfristData>(MAT_DIALOG_DATA);
 
   minDate = startOfDay(new Date());
   form = this.formBuilder.group({
-    newNachfrist: [new Date(), [Validators.required]],
+    newNachfrist: [this.dialogData.nachfrist, [Validators.required]],
   });
 
   static open(dialog: MatDialog, nachfrist: string) {
     return dialog
       .open<
         SharedDialogEditDokumentenNachfristComponent,
-        {
-          nachfrist: string;
-        },
+        NachfristData,
         EditNachfristResult
       >(SharedDialogEditDokumentenNachfristComponent, { data: { nachfrist } })
       .afterClosed();
