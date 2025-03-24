@@ -37,6 +37,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -236,15 +237,38 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
             .body()
             .as(FallDashboardItemDto[].class);
 
-        var ausbildungDashBoardItemDtos =
-            fallDashboardItemDtos[fallDashboardItemDtos.length - 1].getAusbildungDashboardItems();
-        var gesuchDashBoardItemDtos =
-            ausbildungDashBoardItemDtos.get(ausbildungDashBoardItemDtos.size() - 1).getGesuchs();
+        Arrays.stream(fallDashboardItemDtos)
+            .forEach(
+                fallDashboardItemDto -> {
+                    fallDashboardItemDto.getAusbildungDashboardItems()
+                        .forEach(
+                            ausbildungDashboardItemDto -> ausbildungDashboardItemDto.getGesuchs()
+                                .forEach(
+                                    gesuchDashboardItemDto -> {
+                                        if (
+                                            Objects
+                                                .equals(gesuchDashboardItemDto.getCurrentTrancheId(), gesuchTrancheId)
+                                        ) {
+                                            assertThat(
+                                                gesuchDashboardItemDto.getNachfristDokumente(),
+                                                is(notNullValue())
+                                            );
+                                        }
+                                    }
+                                )
+                        );
+                }
+            );
 
-        assertThat(
-            gesuchDashBoardItemDtos.get(0).getNachfristDokumente(),
-            is(notNullValue())
-        );
+        // var ausbildungDashBoardItemDtos =
+        // fallDashboardItemDtos[fallDashboardItemDtos.length - 1].getAusbildungDashboardItems();
+        // var gesuchDashBoardItemDtos =
+        // ausbildungDashBoardItemDtos.get(ausbildungDashBoardItemDtos.size() - 1).getGesuchs();
+        //
+        // assertThat(
+        // gesuchDashBoardItemDtos.get(0).getNachfristDokumente(),
+        // is(notNullValue())
+        // );
     }
 
     @Test
