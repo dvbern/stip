@@ -134,7 +134,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @Column(name = "sozialhilfebeitraege", nullable = false)
-    private boolean sozialhilfebeitraege = true;
+    private boolean sozialhilfebeitraege = false;
 
     @NotNull
     @Column(name = "vormundschaft", nullable = false)

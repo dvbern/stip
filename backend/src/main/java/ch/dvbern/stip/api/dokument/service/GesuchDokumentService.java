@@ -41,6 +41,8 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -224,6 +226,14 @@ public class GesuchDokumentService {
             );
     }
 
+    private static void validateGesuchAndTrancheAreInCorrectStateOrElseThrow(final GesuchDokument gesuchDokument) {
+        if (gesuchDokument.getGesuchTranche().getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            gesuchTrancheStatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
+        } else {
+            gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        }
+    }
+
     private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
         if (gesuch.getGesuchStatus() != statusToVerify) {
             throw new IllegalStateException(
@@ -232,11 +242,22 @@ public class GesuchDokumentService {
         }
     }
 
+    private static void gesuchTrancheStatusIsNotOrElseThrow(
+        final GesuchTranche aenderung,
+        final GesuchTrancheStatus statusToVerify
+    ) {
+        if (aenderung.getStatus() != statusToVerify) {
+            throw new IllegalStateException(
+                "GesuchTrancheStatus " + aenderung.getStatus().toString() + " not " + statusToVerify.toString()
+            );
+        }
+    }
+
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
@@ -247,7 +268,7 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         dokumentstatusService.triggerStatusChange(
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT
@@ -286,10 +307,15 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public String deleteDokument(final UUID dokumentId) {
+    public String deleteDokument(final UUID dokumentId, final UUID trancheId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
-        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
+        for (
+            final var gesuchDokument : dokument.getGesuchDokumente()
+                .stream()
+                .filter(dok -> dok.getGesuchTranche().getId().equals(trancheId))
+                .toList()
+        ) {
             gesuchDokument.getDokumente().remove(dokument);
         }
 

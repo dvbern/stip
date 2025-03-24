@@ -21,6 +21,8 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_NIEDERLASSUNGSSTATUS_C:
     'shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C',
   PERSON_NIEDERLASSUNGSSTATUS_COMPLETE: 'shared.form.person.file.FLUECHTLING',
+  PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN:
+    'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN',
   PERSON_KESB_ERNENNUNG: 'shared.form.person.file.VORMUNDSCHAFT',
   PERSON_MIETVERTRAG: 'shared.form.person.file.EIGENER_HAUSHALT',
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
@@ -141,13 +143,14 @@ export function createUploadOptionsFactory<
    * ```
    *
    * @param lazyDokumentTyp - a function that should return the {@link DokumentTyp} or `null | undefined` if the upload is not required
-   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
+   * @param options - some additional options for the upload.
+   *                  If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
    *                  but display the provided documents instead. Primarily used for Dokument Table view.
-   *                  initialDocuments are of type {@link Dokument} which refers to the "File", not the GesuchDokument
+   *                  descriptionKey is used to display a description for the upload component.
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { initialDocuments?: Dokument[] },
+    options?: { initialDocuments?: Dokument[]; descriptionKey?: string },
   ) => {
     return computed<DokumentOptions | null>(() => {
       const permissions = view().permissions;
@@ -165,6 +168,7 @@ export function createUploadOptionsFactory<
               art: 'GESUCH_DOKUMENT',
             },
             initialDokumente: options?.initialDocuments,
+            descriptionKey: options?.descriptionKey,
           } satisfies DokumentOptions)
         : null;
     });

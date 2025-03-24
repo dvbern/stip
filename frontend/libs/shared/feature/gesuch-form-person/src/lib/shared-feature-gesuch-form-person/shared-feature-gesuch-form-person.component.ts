@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { isAfter, subYears } from 'date-fns';
+import { isAfter, subDays, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -82,6 +82,9 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  dateFromDateString,
+  dateFromMonthYearString,
+  getDateDifference,
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
@@ -97,6 +100,7 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 const MIN_AGE_GESUCHSSTELLER = 10;
 const MAX_AGE_GESUCHSSTELLER = 130;
 const MEDIUM_AGE_GESUCHSSTELLER = 20;
+const BEGRUENDUNGSSCHREIBEN_AGE = 35;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
@@ -200,6 +204,27 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
+  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(
+    () => {
+      const geburtstag = dateFromDateString(this.geburtstagChangedSig());
+      let ausbildungsbegin = dateFromMonthYearString(
+        this.viewSig().gesuchFormular?.ausbildung.ausbildungBegin,
+      );
+
+      if (!geburtstag || !ausbildungsbegin) return null;
+
+      ausbildungsbegin = subDays(ausbildungsbegin, 1);
+      const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
+
+      return alter >= BEGRUENDUNGSSCHREIBEN_AGE
+        ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
+        : null;
+    },
+    {
+      descriptionKey:
+        'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN.info',
+    },
+  );
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
@@ -247,6 +272,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           subYears(new Date(), MAX_AGE_GESUCHSSTELLER),
           'date',
         ),
+
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_GESUCHSSTELLER),
@@ -301,6 +327,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   private zivilstandChangedSig = toSignal(
     this.form.controls.zivilstand.valueChanges,
+  );
+  private geburtstagChangedSig = toSignal(
+    this.form.controls.geburtsdatum.valueChanges,
   );
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,

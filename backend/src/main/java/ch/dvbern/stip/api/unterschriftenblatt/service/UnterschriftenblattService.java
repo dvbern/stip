@@ -261,7 +261,7 @@ public class UnterschriftenblattService {
         }
 
         if (toGetFor == null) {
-            toGetFor = gesuch.getCurrentGesuchTrancheOptional().orElseThrow(NotFoundException::new);
+            toGetFor = gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new);
         }
 
         final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();

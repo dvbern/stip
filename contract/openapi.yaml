@@ -2844,7 +2844,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDocumentsToUpload
-  '/gesuchtranche/{gesuchId}':
+  '/gesuchtranche/gs/{gesuchId}':
     parameters:
       - name: gesuchId
         schema:
@@ -2869,7 +2869,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuch
+      operationId: getAllTranchenForGesuchGS
+  '/gesuchtranche/sb/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllTranchenForGesuchSB
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -3203,6 +3229,7 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_C
         - PERSON_NIEDERLASSUNGSSTATUS_B
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
         - PERSON_SOZIALHILFEBUDGET
@@ -5884,6 +5911,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        sbCanFehlendeDokumenteUebermitteln:
+          type: boolean
+        gsCanDokumenteUebermitteln:
+          type: boolean
+        sbCanBearbeitungAbschliessen:
+          type: boolean
     SapStatus:
       enum:
         - SUCCESS

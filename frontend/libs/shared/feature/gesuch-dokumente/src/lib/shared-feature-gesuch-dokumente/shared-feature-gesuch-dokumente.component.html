@@ -90,7 +90,9 @@
       class="btn btn-primary"
       (click)="fehlendeDokumenteEinreichen()"
       data-testid="button-save"
-      [disabled]="(dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig()"
+      [disabled]="
+        (dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig() || !canGSSendMissingDocumentsSig()
+      "
     >
       {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
     </button>

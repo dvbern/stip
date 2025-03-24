@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -52,11 +51,8 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -160,9 +156,8 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
 
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
             var trancheInStatusEingereicht =
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                     .orElseThrow();
@@ -177,7 +172,7 @@ public class GesuchService {
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         Optional<GesuchTranche> changes = Optional.empty();
-        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
             changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
         }
         // bis eingereicht: changes: empty/null
@@ -487,22 +482,6 @@ public class GesuchService {
             kommentarDto,
             false
         );
-    }
-
-    @Transactional
-    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
-        validationGroups.add(LebenslaufItemPageValidation.class);
-        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
-
-        Set<ConstraintViolation<GesuchFormular>> violations =
-            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
     }
 
     @Transactional

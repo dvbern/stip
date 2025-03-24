@@ -17,13 +17,13 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -33,19 +33,23 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -54,6 +58,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -63,7 +69,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class GesuchTrancheAenderungTest {
+class GesuchTrancheCustomDokumentOnAenderungTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
@@ -74,6 +80,7 @@ class GesuchTrancheAenderungTest {
     private GesuchTrancheListDtoSpec gesuchtranchen;
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec gesuchWithChanges;
+    private UUID customDokumentId;
 
     @Test
     @TestAsGesuchsteller
@@ -234,100 +241,81 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode())
+            .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-    }
-
-    @Test
-    @TestAsGesuchsteller2
-    @Order(12)
-    @Description("The another GS must not be able do delete a Aenderung'")
-    void deleteAenderungByOtherUserTest() {
         final var aenderung = gesuchtranchen.getTranchen()
             .stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
             .findFirst()
             .get();
-        // delete aenderung
-        gesuchTrancheApiSpec
-            .deleteAenderung()
-            .aenderungIdPath(aenderung.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
-    }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(13)
-    @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
-    void deleteAenderungTest() {
-        var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
-        int count = gesuchtranchen.size();
-        final var aenderung = gesuchtranchen.stream()
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
-            .findFirst()
-            .get();
-        // delete aenderung
-        gesuchTrancheApiSpec.deleteAenderung()
+        gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderung.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-
-        // assert that list size is -1 to previous
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
-        assertThat(gesuchtranchen).hasSizeLessThan(count);
     }
 
     @Test
-    @TestAsGesuchsteller
-    @Order(14)
-    @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
-    void deleteAenderungShouldFailTest() {
-        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
-        final var tranche = gesuchtranchen.stream()
-            .filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE)
+    @TestAsSachbearbeiter
+    @Order(12)
+    void createCustomDokumentTypOnAenderungShouldSucceed() {
+        final var aenderung = gesuchtranchen.getTranchen()
+            .stream()
+            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
             .findFirst()
             .get();
-        gesuchTrancheApiSpec.deleteAenderung()
-            .aenderungIdPath(tranche.getId())
+
+        CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
+        customDokumentTypCreateDtoSpec.setType("test");
+        customDokumentTypCreateDtoSpec.setDescription("test description");
+        customDokumentTypCreateDtoSpec.setTrancheId(aenderung.getId());
+        final var createdGesuchDokumentWithCustomType = dokumentApiSpec.createCustomDokumentTyp()
+            .body(customDokumentTypCreateDtoSpec)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDto.class);
+        // get newly created type
+        // check if empty dokument has been created
+        // dokumentstatus: ausstehend
+        MatcherAssert.assertThat(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getType(), is("test"));
+        MatcherAssert.assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
+        customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
+
+        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        MatcherAssert.assertThat(result.getValue().getCustomDokumentTyp(), notNullValue());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(13)
+    void deleteCustomDokumentTypOnAenderungShouldSucceed() {
+        dokumentApiSpec.deleteCustomDokumentTyp()
+            .customDokumentTypIdPath(customDokumentId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
-    // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 
     @Test
     @TestAsAdmin
     @Order(99)
-    @AlwaysRun
+    @StepwiseExtension.AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }

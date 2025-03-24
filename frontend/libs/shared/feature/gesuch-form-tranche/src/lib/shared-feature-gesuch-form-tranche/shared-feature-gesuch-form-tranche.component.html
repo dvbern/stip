@@ -3,7 +3,7 @@
 @let gesuchId = view.gesuchId;
 
 <ng-template dvHeaderSuffix>
-  <h2 class="tw-font-bold">
+  <h2 data-testid="dynamic-tranche-step-title" class="tw-font-bold">
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheNumberSig() } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
