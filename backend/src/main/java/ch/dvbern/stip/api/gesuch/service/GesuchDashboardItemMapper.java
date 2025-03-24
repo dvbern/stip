@@ -43,6 +43,7 @@ public interface GesuchDashboardItemMapper {
     @Mapping(source = "gesuch.latestGesuchTranche.id", target = "currentTrancheId")
     @Mapping(source = "gesuch", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = "gesuch", target = "endDate", qualifiedByName = "getEndDate")
+    @Mapping(source = "gesuch.nachfristDokumente", target = "nachfristDokumente")
     GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
