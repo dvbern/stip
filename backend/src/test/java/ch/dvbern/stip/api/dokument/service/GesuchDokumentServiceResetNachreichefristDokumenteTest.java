@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -35,10 +39,6 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
