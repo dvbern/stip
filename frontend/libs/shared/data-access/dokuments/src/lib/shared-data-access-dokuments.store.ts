@@ -276,8 +276,14 @@ export class DokumentsStore extends signalStore(
           gesuchDokumentKommentare: pending(),
         }));
       }),
-      switchMap((req) =>
-        this.dokumentService.getGesuchDokumentKommentare$(req).pipe(
+      switchMap((req) => {
+        const service$ = byAppType(this.config.appType, {
+          'gesuch-app': () =>
+            this.dokumentService.getGesuchDokumentKommentareGS$(req),
+          'sachbearbeitung-app': () =>
+            this.dokumentService.getGesuchDokumentKommentareSB$(req),
+        });
+        return service$.pipe(
           handleApiResponse((gesuchDokumentKommentare) =>
             patchState(this, {
               gesuchDokumentKommentare: mapData(
@@ -290,8 +296,8 @@ export class DokumentsStore extends signalStore(
               ),
             }),
           ),
-        ),
-      ),
+        );
+      }),
     ),
   );
 
