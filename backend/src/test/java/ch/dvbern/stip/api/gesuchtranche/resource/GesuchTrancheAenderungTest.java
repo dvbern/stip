@@ -120,7 +120,7 @@ class GesuchTrancheAenderungTest {
         createAenderungsanstrag()
             .then()
             .assertThat()
-            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.UNAUTHORIZED.getStatusCode());
     }
 
     @TestAsSachbearbeiter

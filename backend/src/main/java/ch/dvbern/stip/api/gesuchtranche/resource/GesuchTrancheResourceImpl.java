@@ -55,7 +55,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         UUID gesuchId,
         CreateAenderungsantragRequestDto createAenderungsantragRequestDto
     ) {
-        gesuchAuthorizer.canUpdate(gesuchId, true);
+        gesuchAuthorizer.canCreateAenderung(gesuchId);
         return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
     }
 
