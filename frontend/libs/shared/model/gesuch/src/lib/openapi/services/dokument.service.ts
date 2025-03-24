@@ -94,7 +94,11 @@ export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
     dokumentId: string;
 }
 
-export interface DokumentServiceGetGesuchDokumentKommentareRequestParams {
+export interface DokumentServiceGetGesuchDokumentKommentareGSRequestParams {
+    gesuchDokumentId: string;
+}
+
+export interface DokumentServiceGetGesuchDokumentKommentareSBRequestParams {
     gesuchDokumentId: string;
 }
 
@@ -1222,13 +1226,13 @@ export class DokumentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchDokumentId = requestParameters.gesuchDokumentId;
         if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
-            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentare$.');
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1276,7 +1280,80 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare`;
+        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/gs`;
+        return this.httpClient.request<Array<GesuchDokumentKommentar>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/sb`;
         return this.httpClient.request<Array<GesuchDokumentKommentar>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
