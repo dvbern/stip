@@ -100,7 +100,7 @@ class GesuchsperiodeResourceTest {
             .body()
             .as(GesuchsperiodeDtoSpec[].class);
 
-        assertThat(gesuchsperioden.length, is(2));
+        assertThat(gesuchsperioden.length, is(4));
     }
 
     @Test
@@ -114,7 +114,7 @@ class GesuchsperiodeResourceTest {
             .body()
             .as(GesuchsperiodeDtoSpec[].class);
 
-        assertThat(gesuchsperioden.length, is(2));
+        assertThat(gesuchsperioden.length, is(3));
     }
 
     @Test

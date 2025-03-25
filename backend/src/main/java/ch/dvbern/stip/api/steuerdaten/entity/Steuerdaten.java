@@ -17,13 +17,14 @@
 
 package ch.dvbern.stip.api.steuerdaten.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -34,10 +35,15 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(name = "steuerdaten")
+@Table(
+    name = "steuerdaten",
+    indexes = {
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
-public class Steuerdaten extends AbstractEntity {
+public class Steuerdaten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
     @Enumerated(EnumType.STRING)

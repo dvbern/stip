@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -45,8 +44,6 @@ export class GesuchStore extends signalStore(
   withDevtools('GesuchStore'),
 ) {
   private store = inject(Store);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
     <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
@@ -197,7 +194,7 @@ export class GesuchStore extends signalStore(
     ZURUECKWEISEN: rxMethod<{
       gesuchTrancheId: string;
       text: string;
-      onSuccess?: () => void;
+      onSuccess?: (newGesuchTrancheId: string) => void;
     }>(
       pipe(
         switchMap(({ gesuchTrancheId, text, onSuccess }) =>
@@ -213,16 +210,7 @@ export class GesuchStore extends signalStore(
                 },
                 {
                   onSuccess: ({ gesuchTrancheId: newGesuchTrancheId }) => {
-                    if (gesuchTrancheId !== newGesuchTrancheId) {
-                      this.router.navigate(['..', gesuchTrancheId], {
-                        relativeTo: this.route,
-                      });
-                    } else {
-                      this.store.dispatch(
-                        SharedDataAccessGesuchEvents.loadGesuch(),
-                      );
-                    }
-                    onSuccess?.();
+                    onSuccess?.(newGesuchTrancheId);
                   },
                 },
               ),

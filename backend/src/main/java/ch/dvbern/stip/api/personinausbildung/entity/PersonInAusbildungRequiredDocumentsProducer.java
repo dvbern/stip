@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -33,6 +34,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -71,6 +74,15 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
 
         if (pia.isSozialhilfebeitraege()) {
             requiredDocs.add(DokumentTyp.PERSON_SOZIALHILFEBUDGET);
+        }
+
+        if (
+            DateUtil.getAgeInYearsAtDate(
+                pia.getGeburtsdatum(),
+                formular.getAusbildung().getAusbildungBegin().minusDays(1)
+            ) >= MAX_AGE_AUSBILDUNGSBEGIN
+        ) {
+            requiredDocs.add(DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN);
         }
 
         final var zivilstand = pia.getZivilstand();

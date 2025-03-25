@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +34,10 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
 import jakarta.ws.rs.ForbiddenException;
@@ -57,7 +61,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     private GesuchStatusService gesuchStatusService;
     private SozialdienstService sozialdienstService;
     private Benutzer currentBenutzer;
-
+    private GesuchDokument currentGesuchDokument;
     private Gesuch gesuch;
 
     @BeforeEach
@@ -66,6 +70,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         gesuch = TestUtil.setupGesuchWithCustomDokument();
         var gesuchDokument = new GesuchDokument();
         gesuchDokument.setId(UUID.randomUUID());
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchDokument.setGesuchTranche(gesuch.getGesuchTranchen().get(0));
         customDokumentTyp = new CustomDokumentTyp();
         customDokumentTyp.setId(UUID.randomUUID());
@@ -89,14 +94,16 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        var gesuchDok = new GesuchDokument();
-        gesuchDok.setDokumente(List.of());
+        currentGesuchDokument = new GesuchDokument();
+        currentGesuchDokument.setDokumente(List.of());
         when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
-            .thenReturn(Optional.of(gesuchDok));
+            .thenReturn(Optional.of(currentGesuchDokument));
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
         when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);
         when(gesuchStatusService.benutzerCanUploadDokument(any(), any())).thenReturn(true);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
+        when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
+            .thenReturn(Optional.ofNullable(customDokumentTyp.getGesuchDokument()));
     }
 
     // a GS should not be allowed to delete a CustomDokumentType (only a SB should be able)
@@ -136,7 +143,6 @@ class CustomGesuchDokumentTypAuthorizerTest {
     @Test
     void canDeleteTypShouldSuccessAsSB() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
-
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         assertDoesNotThrow(() -> {
             authorizer.canDeleteTyp(
@@ -150,6 +156,8 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> {
@@ -160,6 +168,62 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {
             authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void canCreateTypShouldNOTFailWhenCurrentTrancheIsAenderungOfStatusUeberpruefen() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+        gesuch = new Gesuch();
+        gesuch.setGesuchTranchen(new ArrayList<>());
+        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        var gesuchTranche = new GesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG)
+            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
+            .setGesuch(gesuch);
+        gesuch.getGesuchTranchen()
+            .add(gesuchTranche);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche);
+        assertDoesNotThrow(() -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchTranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void canDeleteTypShouldNOTFailWhenCurrentTrancheIsAenderungOfStatusUeberpruefen() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+        gesuch = new Gesuch();
+        gesuch.setGesuchTranchen(new ArrayList<>());
+        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        var gesuchTranche = new GesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG)
+            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
+            .setGesuch(gesuch);
+        gesuch.getGesuchTranchen()
+            .add(gesuchTranche);
+        currentGesuchDokument.setGesuchTranche(gesuchTranche);
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchTranche.setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchTranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
+
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche);
+        when(gesuchDokumentRepository.requireById(any())).thenReturn(currentGesuchDokument);
+        when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
+            .thenReturn(Optional.ofNullable(currentGesuchDokument));
+
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canDeleteTyp(UUID.randomUUID());
+        });
+
+        gesuchTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        assertDoesNotThrow(() -> {
+            authorizer.canDeleteTyp(UUID.randomUUID());
         });
     }
 

@@ -82,7 +82,8 @@ public enum Gesuchstatus {
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
                 ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-                BEREIT_FUER_BEARBEITUNG
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE
             )
         );
 

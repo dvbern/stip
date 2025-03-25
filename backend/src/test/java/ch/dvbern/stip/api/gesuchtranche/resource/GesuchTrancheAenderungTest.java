@@ -229,7 +229,7 @@ class GesuchTrancheAenderungTest {
     @Order(11)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
     void setupnextTest() {
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -265,7 +265,7 @@ class GesuchTrancheAenderungTest {
     @Order(13)
     @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
     void deleteAenderungTest() {
-        var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -287,7 +287,7 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
         // assert that list size is -1 to previous
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -303,7 +303,7 @@ class GesuchTrancheAenderungTest {
     @Order(14)
     @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
     void deleteAenderungShouldFailTest() {
-        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

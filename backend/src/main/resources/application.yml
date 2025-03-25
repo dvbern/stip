@@ -6,6 +6,7 @@ keycloak:
 kstip:
   version: '0.1-SNAPSHOT'
   environment: 'local'
+  default-tenant: 'bern'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
   pre-signed-request:
@@ -68,11 +69,18 @@ kstip:
     cron: '0 0 9 1/1 * ? *' # Fires daily at 09:00
   fehlendedokumente:
     cron: '0 0 10 1/1 * ? *' # Fires daily at 09:00
-  welcome-mail:
-    kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND:foo}'
-    kc-path: '${STIP_WELCOME_MAIL_PATH:foo}'
-    kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER:foo}'
-    kc-scope: '${STIP_WELCOME_MAIL_SCOPE:foo}'
+  bern:
+    welcome-mail:
+      kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
+      kc-path: '${STIP_WELCOME_MAIL_PATH}'
+      kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
+      kc-scope: '${STIP_BERN_WELCOME_MAIL_SCOPE}'
+  dv:
+    welcome-mail:
+      kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
+      kc-path: '${STIP_WELCOME_MAIL_PATH}'
+      kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
+      kc-scope: '${STIP_DV_WELCOME_MAIL_SCOPE}'
   dmn:
     current-major-version: 1
     current-minor-version: 0
@@ -80,10 +88,18 @@ kstip:
     max-allowed-page-size: 50
   should-clear-database: false
   nesko-wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
+  tenancy:
+    bern:
+      subdomains:
+        - 'dev-stip'
+        - 'dev-sb-stip'
+    dv:
+      subdomains:
+        - 'dv'
 
 quarkus:
-  live-reload:
-    instrumentation: true
+#  live-reload:
+#    instrumentation: true
   log:
     sentry:
       ~: 'true'
@@ -107,6 +123,10 @@ quarkus:
   oidc:
     bern:
       auth-server-url: '${keycloak.url}/realms/bern'
+      client-id: '${keycloak.client-id}'
+      application-type: service
+    dv:
+      auth-server-url: '${keycloak.url}/realms/dv'
       client-id: '${keycloak.client-id}'
       application-type: service
   s3:
@@ -206,6 +226,12 @@ quarkus:
           trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
           trust-store-file: './src/main/resources/development.jks'
           trust-store-password: 'changeit'
+      dv:
+        tls:
+          trust-store-file-type: 'jks'
+          trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
+          trust-store-file: './src/main/resources/development.jks'
+          trust-store-password: 'changeit'
     smallrye-openapi:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
@@ -261,11 +287,12 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
-    welcome-mail:
-      kc-url: 'http://dummy.keycloak'
-      kc-path: '/realms/bern/protocol/openid-connect/auth'
-      kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
-      kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+    bern:
+      welcome-mail:
+        kc-url: 'http://dummy.keycloak'
+        kc-path: '/realms/bern/protocol/openid-connect/auth'
+        kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
+        kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
 '%prod':
   quarkus:
     s3:

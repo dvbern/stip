@@ -26,7 +26,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            [attr.data-testid]="'tranche-nav-menu-item-' + ($index + 1)"
+            data-testid="tranche-nav-menu-item"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <span>
@@ -208,7 +208,7 @@
                   : null
               "
               mat-menu-item
-              (click)="setStatusUebergang(uebergang.typ, trancheId)"
+              (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
             >
               <div class="d-flex gap-2 align-items-center">
                 <i class="material-symbols-rounded">{{ uebergang.icon }}</i>

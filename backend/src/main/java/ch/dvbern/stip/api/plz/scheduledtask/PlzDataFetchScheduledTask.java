@@ -35,7 +35,7 @@ public class PlzDataFetchScheduledTask {
 
     @Transactional
     @Scheduled(cron = "{kstip.plzdata.cron}")
-    @RunForTenant(MandantIdentifier.GLOBAL)
+    @RunForTenant(MandantIdentifier.BERN)
     public void run() {
         try {
             LOG.info("Fetching PLZ data from scheduled task");

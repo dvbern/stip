@@ -90,7 +90,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {
-      component.setStatusUebergang(nextStatus, 'gesuchTrancheId');
+      component.setStatusUebergang(nextStatus, 'gesuchId', 'gesuchTrancheId');
       expect(setStatus$[nextStatus]).toHaveBeenCalledWith({
         gesuchTrancheId: 'gesuchTrancheId',
       });
@@ -100,7 +100,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   it.each([['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang with onSuccess',
     (nextStatus) => {
-      component.setStatusUebergang(nextStatus, 'gesuchTrancheId');
+      component.setStatusUebergang(nextStatus, 'gesuchId', 'gesuchTrancheId');
       expect(setStatus$[nextStatus]).toHaveBeenCalledWith({
         gesuchTrancheId: 'gesuchTrancheId',
         onSuccess: expect.any(Function),

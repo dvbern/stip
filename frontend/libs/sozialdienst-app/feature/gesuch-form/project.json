@@ -1,0 +1,26 @@
+{
+  "name": "sozialdienst-app-feature-gesuch-form",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sozialdienst-app/feature/gesuch-form/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:sozialdienst-app"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sozialdienst-app/feature/gesuch-form/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/sozialdienst-app/feature/gesuch-form/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
