@@ -58,7 +58,7 @@ public class StipDecisionTextSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return configService.getSeedAllProfiles();
+        return configService.getSeedOnProfile();
     }
 
     @SneakyThrows
