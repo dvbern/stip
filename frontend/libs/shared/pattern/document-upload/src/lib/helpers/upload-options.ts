@@ -13,7 +13,9 @@ import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
-} = {
+} & Partial<
+  Record<`${DokumentTyp}_DESCRIPTION`, DokumentOptions['descriptionKey']>
+> = {
   AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.ausbildung.file.AUSBILDUNGSSTAETTE',
   PERSON_NIEDERLASSUNGSSTATUS_B:
@@ -23,6 +25,8 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_NIEDERLASSUNGSSTATUS_COMPLETE: 'shared.form.person.file.FLUECHTLING',
   PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN:
     'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN',
+  PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN_DESCRIPTION:
+    'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN.description',
   PERSON_KESB_ERNENNUNG: 'shared.form.person.file.VORMUNDSCHAFT',
   PERSON_MIETVERTRAG: 'shared.form.person.file.EIGENER_HAUSHALT',
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
@@ -146,11 +150,10 @@ export function createUploadOptionsFactory<
    * @param options - some additional options for the upload.
    *                  If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
    *                  but display the provided documents instead. Primarily used for Dokument Table view.
-   *                  descriptionKey is used to display a description for the upload component.
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { initialDocuments?: Dokument[]; descriptionKey?: string },
+    options?: { initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
       const permissions = view().permissions;
@@ -158,18 +161,19 @@ export function createUploadOptionsFactory<
       const allowTypes = view().allowTypes;
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
-        ? ({
+        ? {
             permissions,
             allowTypes,
             titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+            descriptionKey:
+              DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
             dokument: {
               trancheId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },
             initialDokumente: options?.initialDocuments,
-            descriptionKey: options?.descriptionKey,
-          } satisfies DokumentOptions)
+          }
         : null;
     });
   };
@@ -195,6 +199,8 @@ export function createGesuchDokumentOptions(options: {
     allowTypes,
     permissions,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+    descriptionKey:
+      DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
     dokument: {
       dokumentTyp,
       trancheId,
