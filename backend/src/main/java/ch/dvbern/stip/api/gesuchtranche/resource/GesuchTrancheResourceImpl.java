@@ -64,7 +64,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed(GS_GESUCH_READ)
     public GesuchTrancheListDto getAllTranchenForGesuchGS(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuchGS(gesuchId);

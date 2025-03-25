@@ -27,10 +27,10 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +45,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchStatusService gesuchStatusService;
     private final SozialdienstService sozialdienstService;
+    private final GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @Transactional
     public void canCreateCustomDokumentTyp(UUID trancheId) {
@@ -122,21 +123,25 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             gesuchDokumentRepository.findByCustomDokumentTyp(gesuchDokumentTypId)
                 .orElseThrow();
         final var currentTranche = customGesuchDokument.getGesuchTranche();
-        final var isAenderungAndNOTInStatusUeberpruefen = currentTranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-        && currentTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN;
-        final var notBeingEditedBySB = !(isAdminOrSb(benutzerService.getCurrentBenutzer()))
-        || gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB;
         final var isAnyFileAttached = !customGesuchDokument.getDokumente().isEmpty();
-        final var isNormalTranche = currentTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
+        final var isTranche = currentTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
+        final var isAenderung = currentTranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG);
 
-        // check if gesuch is being edited by SB
-        // or if GS has already attached a file to it
-        if (notBeingEditedBySB || isAnyFileAttached) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!isAdminOrSb(currentBenutzer)) {
             forbidden();
         }
 
-        if ((isNormalTranche && notBeingEditedBySB) || isAenderungAndNOTInStatusUeberpruefen || isAnyFileAttached) {
-            throw new ForbiddenException();
+        if (isAnyFileAttached) {
+            forbidden();
+        }
+
+        if (isAenderung && !gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, currentTranche.getStatus())) {
+            forbidden();
+        }
+
+        if (isTranche && !gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())) {
+            forbidden();
         }
     }
 }
