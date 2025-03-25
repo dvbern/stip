@@ -17,6 +17,11 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -32,6 +37,7 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.NotificationApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -51,11 +57,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -278,24 +279,24 @@ class GesuchUpdateNachristDokumenteTest {
         assertThat(gesuchWithChanges.getNachfristDokumente(), is(nachreichefrist));
     }
 
-//    @TestAsGesuchsteller
-//    @Test
-//    @Order(24)
-//    void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
-//        final var items = gesuchApiSpec.getGsDashboard()
-//            .execute(TestUtil.PEEK_IF_ENV_SET)
-//            .then()
-//            .assertThat()
-//            .statusCode(Response.Status.OK.getStatusCode())
-//            .extract()
-//            .body()
-//            .as(FallDashboardItemDto[].class);
-//
-//        assertThat(
-//            items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
-//            is(nachreichefrist)
-//        );
-//    }
+    @TestAsGesuchsteller
+    @Test
+    @Order(24)
+    void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
+        final var items = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(
+            items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
+            is(nachreichefrist)
+        );
+    }
 
     @Test
     @TestAsAdmin
