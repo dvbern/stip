@@ -253,7 +253,19 @@ public class TestUtil {
         final GesuchApiSpec gesuchApiSpec
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
-        final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
+        final var fallDashboardItemDtos = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        if (fallDashboardItemDtos[0].getAusbildungDashboardItems().isEmpty()) {
+            createAusbildung(ausbildungApiSpec, fall.getId());
+        }
+
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

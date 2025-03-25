@@ -127,7 +127,7 @@ class GesuchNotizResourceImplTest {
 
         // create notiz for gesuch2
         gesuchNotizCreateDto = new GesuchNotizCreateDtoSpec();
-        gesuchNotizCreateDto.setGesuchId(gesucheGS.get(1).getId());
+        gesuchNotizCreateDto.setGesuchId(gesucheGS.get(gesucheGS.size() - 1).getId());
         gesuchNotizCreateDto.setText("test2");
         gesuchNotizCreateDto.setBetreff("test2");
         gesuchNotizCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
