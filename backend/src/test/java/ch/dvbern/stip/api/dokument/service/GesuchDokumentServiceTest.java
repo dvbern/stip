@@ -106,6 +106,8 @@ class GesuchDokumentServiceTest {
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
     private final UUID id = UUID.randomUUID();
+    @Inject
+    DokumentstatusService dokumentstatusService;
 
     private GesuchDokument mockedDokument;
     private GesuchDokumentKommentar comment;

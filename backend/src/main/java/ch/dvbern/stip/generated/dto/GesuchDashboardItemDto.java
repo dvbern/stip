@@ -30,6 +30,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid UUID currentTrancheId;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
+  private @Valid LocalDate nachfristDokumente;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
@@ -149,6 +150,24 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public GesuchDashboardItemDto nachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("nachfristDokumente")
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+  @JsonProperty("nachfristDokumente")
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
+  /**
+   **/
   public GesuchDashboardItemDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
     return this;
@@ -199,13 +218,14 @@ public class GesuchDashboardItemDto  implements Serializable {
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
         Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
+        Objects.equals(this.nachfristDokumente, gesuchDashboardItem.nachfristDokumente) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, startDate, endDate, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, startDate, endDate, nachfristDokumente, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -219,6 +239,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");

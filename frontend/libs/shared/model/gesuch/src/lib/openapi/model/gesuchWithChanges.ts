@@ -30,6 +30,7 @@ export interface GesuchWithChanges {
     gesuchTrancheToWorkWith: GesuchTranche;
     einreichedatum?: string;
     delegierung?: Delegierung;
+    nachfristDokumente?: string;
     changes?: Array<GesuchTranche>;
 }
 

@@ -273,6 +273,20 @@ public class GesuchDokumentService {
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT
         );
+        removeNachfristDokumenteIfAllAccepted(gesuchDokument);
+    }
+
+    private void removeNachfristDokumenteIfAllAccepted(GesuchDokument gesuchDokument) {
+        final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
+        final var allGesuchDokuments = new ArrayList<GesuchDokument>();
+        gesuch.getGesuchTranchen().stream().map(GesuchTranche::getGesuchDokuments).forEach(allGesuchDokuments::addAll);
+        final var allAccepted = allGesuchDokuments.stream()
+            .allMatch(dok -> dok.getStatus().equals(Dokumentstatus.AKZEPTIERT));
+        if (!allAccepted) {
+            return;
+        }
+
+        gesuch.setNachfristDokumente(null);
     }
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {

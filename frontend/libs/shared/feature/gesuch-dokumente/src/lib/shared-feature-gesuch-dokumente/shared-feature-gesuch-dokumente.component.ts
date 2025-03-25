@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   computed,
+  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,6 +20,7 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   SharedModelGesuchDokument,
   SharedModelTableCustomDokument,
@@ -71,6 +73,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
+  private config = inject(SharedModelCompileTimeConfig);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -112,6 +115,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     return {
       gesuchId,
+      nachfrist: gesuch?.nachfristDokumente,
       trancheId,
       permissions,
       trancheSetting: trancheSetting ?? undefined,
@@ -214,6 +218,19 @@ export class SharedFeatureGesuchDokumenteComponent {
           ignoreCache: true,
         });
       });
+
+    effect(
+      () => {
+        if (
+          this.config.isSachbearbeitungApp &&
+          this.dokumentsStore.dokumenteCanFlagsSig()
+            .sbCanBearbeitungAbschliessen
+        ) {
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        }
+      },
+      { allowSignalWrites: true },
+    );
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
@@ -359,6 +376,10 @@ export class SharedFeatureGesuchDokumenteComponent {
           }
         }
       });
+  }
+
+  reloadGesuch() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
   }
 
   handleContinue() {
