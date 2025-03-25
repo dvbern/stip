@@ -56,7 +56,7 @@ public class BaseAuthorizer {
     }
 
     protected void permitAll() {
-
+        // Noop, since an action is allowed if not exception is thrown
     }
 
     protected void forbidden() {

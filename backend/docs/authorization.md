@@ -22,6 +22,4 @@ Authorization is there check if a given user can execute a given action on a giv
 
 Authorization methods are specialized, and to reduce the amount of boilerplate, are allowed to directly access a repository to execute a query.
 
-TODO KSTIP-1967: Rename `@AllowAll` annotation? Reduce confusion/ association with `@RolesAllowed`
-
 Every endpoint unless explicitly disabled with `@AllowAll` must call an authorizer method.

@@ -72,7 +72,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
     @Override
     @RolesAllowed(BENUTZER_DELETE)
     public void deleteBenutzer(String benutzerId) {
-        // TODO KSTIP-1967: resolve this
         benutzerAuthorizer.canDeleteBenutzer();
         benutzerService.deleteBenutzer(benutzerId);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
@@ -94,7 +93,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
-    // TODO KSTIP-1967: Resolve this. The problem is all users should be allowed to call, but they need to have a JWT
     public BenutzerDto prepareCurrentBenutzer() {
         benutzerAuthorizer.canPrepare();
         return benutzerService.getOrCreateAndUpdateCurrentBenutzer();

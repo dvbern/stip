@@ -28,7 +28,6 @@ public final class OidcPermissions {
 
     public static final String JURIST_GESUCH_READ = "V0_GESUCH_READ_JURIST";
 
-    // TODO KSTIP-1967: Is this needed?
     public static final String ADMIN_GESUCH_DELETE = "V0_GESUCH_DELETE_ADMIN";
 
     public static final String AENDERUNG_CREATE = "V0_AENDERUNG_CREATE";
