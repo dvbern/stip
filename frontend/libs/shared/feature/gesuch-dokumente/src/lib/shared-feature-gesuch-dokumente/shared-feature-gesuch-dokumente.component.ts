@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   computed,
+  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -74,6 +75,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private dialog = inject(MatDialog);
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
+  private config = inject(SharedModelCompileTimeConfig);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -115,6 +117,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     return {
       gesuchId,
+      nachfrist: gesuch?.nachfristDokumente,
       trancheId,
       permissions,
       trancheSetting: trancheSetting ?? undefined,
@@ -220,6 +223,19 @@ export class SharedFeatureGesuchDokumenteComponent {
           ignoreCache: true,
         });
       });
+
+    effect(
+      () => {
+        if (
+          this.config.isSachbearbeitungApp &&
+          this.dokumentsStore.dokumenteCanFlagsSig()
+            .sbCanBearbeitungAbschliessen
+        ) {
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        }
+      },
+      { allowSignalWrites: true },
+    );
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
@@ -365,6 +381,10 @@ export class SharedFeatureGesuchDokumenteComponent {
           }
         }
       });
+  }
+
+  reloadGesuch() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
   }
 
   handleContinue() {

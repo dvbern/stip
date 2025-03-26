@@ -12,6 +12,7 @@
 import { GesuchTrancheUpdate } from './gesuchTrancheUpdate';
 
 export interface GesuchUpdate { 
+    nachfristDokumente?: string;
     gesuchTrancheToWorkWith: GesuchTrancheUpdate;
 }
 

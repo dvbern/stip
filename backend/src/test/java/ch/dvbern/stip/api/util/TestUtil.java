@@ -166,6 +166,22 @@ public class TestUtil {
         }
     }
 
+    public static void updateGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
     public static void fillGesuch(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,
@@ -238,17 +254,20 @@ public class TestUtil {
         final GesuchApiSpec gesuchApiSpec
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
-        var gesuche = getGesuche(gesuchApiSpec);
+        final var fallDashboardItemDtos = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
 
-        if (gesuche.length == 0) {
+        if (fallDashboardItemDtos[0].getAusbildungDashboardItems().isEmpty()) {
             createAusbildung(ausbildungApiSpec, fall.getId());
         }
 
-        return getGesuche(gesuchApiSpec)[0];
-    }
-
-    public static GesuchDtoSpec[] getGesuche(final GesuchApiSpec gesuchApiSpec) {
-        return gesuchApiSpec.getGesucheGs()
+        final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -256,6 +275,8 @@ public class TestUtil {
             .extract()
             .body()
             .as(GesuchDtoSpec[].class);
+
+        return gesuche[0];
     }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {

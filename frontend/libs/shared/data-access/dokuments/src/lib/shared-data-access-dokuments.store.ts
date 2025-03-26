@@ -43,6 +43,7 @@ type DokumentsState = {
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
   expandedComponentList: 'custom' | 'required' | undefined;
+  nachfrist: RemoteData<string>;
 };
 
 const initialState: DokumentsState = {
@@ -52,6 +53,7 @@ const initialState: DokumentsState = {
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
   expandedComponentList: undefined,
+  nachfrist: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -580,6 +582,40 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey:
                     'shared.dokumente.deleteCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
+      ),
+    ),
+  );
+
+  editNachfrist$ = rxMethod<{
+    gesuchId: string;
+    newNachfrist: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          nachfrist: pending(),
+        });
+      }),
+      switchMap(({ gesuchId, newNachfrist, onSuccess }) =>
+        this.gesuchService
+          .updateNachfristDokumente$({
+            gesuchId,
+            nachfristAendernRequest: {
+              newNachfrist,
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.nachfrist.editSuccess',
                 });
                 onSuccess();
               },

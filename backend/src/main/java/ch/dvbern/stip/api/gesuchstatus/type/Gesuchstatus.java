@@ -146,6 +146,13 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB,
+            FEHLENDE_DOKUMENTE
+        )
+    );
+
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT = Collections.unmodifiableSet(
         EnumSet.of(
             ABKLAERUNG_DURCH_RECHSTABTEILUNG,

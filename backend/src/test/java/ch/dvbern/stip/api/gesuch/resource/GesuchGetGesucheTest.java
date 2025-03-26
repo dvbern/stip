@@ -89,7 +89,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(1)
+    @Order(2)
     void getGsDashboardNoAusbildungTest() {
 
         final var fall = TestUtil.getOrCreateFall(fallApiSpec);
@@ -130,21 +130,21 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(2)
+    @Order(3)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
+    @Order(4)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void getMeineBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -152,7 +152,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void getAlleBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -160,7 +160,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(7)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -172,7 +172,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void getMeineBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -180,7 +180,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void getAlleBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -188,7 +188,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(10)
     void getGsDashboardTest() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -223,13 +223,13 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsAdmin
-    @Order(10)
+    @Order(11)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
-    @Order(11)
+    @Order(12)
     void getGsDashboardTestNoAusbildung() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -250,7 +250,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(13)
     void prepareForJuristischAbklaeren() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
@@ -264,7 +264,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(14)
     void juristischAbklaeren() {
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -289,7 +289,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsJurist
-    @Order(14)
+    @Order(15)
     void getAlleJurisitischeAbklaerungOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JURISTISCHE_ABKLAERUNG_MEINE);
         allAreNotInWrongStatus(
@@ -304,7 +304,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsAdmin
-    @Order(15)
+    @Order(16)
     @AlwaysRun
     void deleteOtherGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

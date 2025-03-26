@@ -17,10 +17,13 @@
 
 package ch.dvbern.stip.api.notification.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
@@ -56,6 +59,26 @@ public class NotificationService {
     @Transactional
     public List<NotificationDto> getNotificationsForUser(final UUID userId) {
         return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
+    }
+
+    @Transactional
+    public void createGesuchNachfristDokumenteChangedNotification(final Gesuch gesuch) {
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
+            .setGesuch(gesuch);
+        var nachfristDokumente = "";
+        if (Objects.nonNull(gesuch.getNachfristDokumente())) {
+            nachfristDokumente = DateUtil.formatDate(gesuch.getNachfristDokumente());
+        }
+        String msg = Templates.getNachfristDokumenteChangedText(sprache, nachfristDokumente).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
     }
 
     @Transactional
@@ -114,8 +137,11 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
+        final var numberOfDays =
+            String.valueOf(DateUtil.getDaysBetween(LocalDate.now(), gesuch.getNachfristDokumente()));
         String msg = Templates.getGesuchFehlendeDokumenteText(
             sprache,
+            numberOfDays,
             gesuch.getAusbildung()
                 .getFall()
                 .getSachbearbeiterZuordnung()
@@ -217,24 +243,27 @@ public class NotificationService {
         }
 
         public static native TemplateInstance gesuchFehlendeDokumenteDE(
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         );
 
         public static native TemplateInstance gesuchFehlendeDokumenteFR(
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         );
 
         public static TemplateInstance getGesuchFehlendeDokumenteText(
             final Sprache korrespondenzSprache,
+            final String numberOfDays,
             final String sbVorname,
             final String sbNachname
         ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
+                return gesuchFehlendeDokumenteFR(numberOfDays, sbVorname, sbNachname);
             }
-            return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
+            return gesuchFehlendeDokumenteDE(numberOfDays, sbVorname, sbNachname);
         }
 
         public static native TemplateInstance aenderungAbgelehntDE(
@@ -309,6 +338,20 @@ public class NotificationService {
                 return gesuchFehlendeDokumenteNichtEingereichtFr(anrede, nachname, sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
+        }
+
+        public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);
+
+        public static native TemplateInstance nachfristDokumenteChangedFR(final String nachfristDokumente);
+
+        public static TemplateInstance getNachfristDokumenteChangedText(
+            final Sprache korrespondenzSprache,
+            final String nachfristDokumente
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return nachfristDokumenteChangedFR(nachfristDokumente);
+            }
+            return nachfristDokumenteChangedDE(nachfristDokumente);
         }
     }
 }

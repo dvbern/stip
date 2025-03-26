@@ -10,13 +10,13 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
-import { addHours } from 'date-fns';
 
 import { EinreichedatumAendernRequest } from '@dv/shared/model/gesuch';
 import { SharedUiFormMessageErrorDirective } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { normalizeDateForUTC } from '@dv/shared/util/validator-date';
 
 export interface EinreichedatumAendernDialogData {
   minDate: string;
@@ -82,8 +82,3 @@ export class SharedDialogEinreichedatumAendernComponent {
     });
   }
 }
-
-const normalizeDateForUTC = (date: Date | string) => {
-  const offset = (new Date().getTimezoneOffset() / 60) * -1 + 1;
-  return addHours(date, offset).toISOString();
-};
