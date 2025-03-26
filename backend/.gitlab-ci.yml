@@ -3,7 +3,7 @@ variables:
   GIT_DEPTH: 0
 
 include:
-  - component: 'gitlab.dvbern.ch/components/build/maven@1.5.0'
+  - component: 'gitlab.dvbern.ch/fuju/build/maven@7e49585c8d7810a31b92beaa88f30a84d5c668e7'
     inputs:
       name: build-api
       context-dir: backend
