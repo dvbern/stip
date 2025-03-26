@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -32,6 +33,8 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -63,6 +66,8 @@ class GesuchAuthorizerUpdateAenderungTest {
     Gesuch gesuch;
     GesuchTranche aenderung;
 
+    GesuchUpdateDto gesuchUpdateDto;
+
     @BeforeEach
     void setUp() {
         // gesuch in status verfuegt
@@ -81,6 +86,11 @@ class GesuchAuthorizerUpdateAenderungTest {
         tranches.add(aenderung);
         gesuch.setGesuchTranchen(tranches);
 
+        GesuchTrancheUpdateDto gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto();
+        gesuchTrancheUpdateDto.setId(UUID.randomUUID());
+        gesuchUpdateDto = new GesuchUpdateDto();
+        gesuchUpdateDto.setGesuchTrancheToWorkWith(gesuchTrancheUpdateDto);
+
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(aenderung);
@@ -97,7 +107,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertThrows(UnauthorizedException.class, () -> {
-                gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+                gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
             });
 
         });
@@ -105,19 +115,19 @@ class GesuchAuthorizerUpdateAenderungTest {
         SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertDoesNotThrow(() -> {
-                gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+                gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
             });
         });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(UnauthorizedException.class, () -> {
-            gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+            gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
         assertThrows(UnauthorizedException.class, () -> {
-            gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+            gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
         });
     }
@@ -130,7 +140,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertDoesNotThrow(() -> {
-                gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+                gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
             });
         });
@@ -138,20 +148,20 @@ class GesuchAuthorizerUpdateAenderungTest {
         SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertThrows(UnauthorizedException.class, () -> {
-                gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+                gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
             });
         });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(UnauthorizedException.class, () -> {
-            gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+            gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
         assertThrows(UnauthorizedException.class, () -> {
-            gesuchAuthorizer.canUpdate(gesuch.getId(), true);
+            gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
         });
     }

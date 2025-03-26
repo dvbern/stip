@@ -123,7 +123,7 @@ class GesuchAuthorizerCanDeleteTest {
         final var uuid = UUID.randomUUID();
 
         // assert
-        assertDoesNotThrow(() -> authorizer.canUpdate(uuid));
+        assertDoesNotThrow(() -> authorizer.canUpdateTranche(uuid));
     }
 
     @Test

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -93,47 +95,64 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdate(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
+    public void canUpdateTranche(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
         final var gesuchTranche =
             gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
-        canUpdate(gesuchId, gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            canUpdateAenderung(gesuchId, gesuchTranche);
+        } else {
+            canUpdateNormalTranche(gesuchId, Optional.of(gesuchTranche));
+
+        }
     }
 
     @Transactional
-    public void canUpdate(final UUID gesuchId) {
-        canUpdate(gesuchId, false);
+    public void canUpdateTranche(final UUID gesuchId) {
+        canUpdateNormalTranche(gesuchId, Optional.empty());
     }
 
     @Transactional
-    public void canUpdate(final UUID gesuchId, final boolean isAenderung) {
+    public void canUpdateAenderung(final UUID gesuchId, final GesuchTranche gesuchTranche) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        // final var aenderung = gesuch.getGesuchTranchen()
-        // .stream()
-        // .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-        // .findFirst();
-        final BooleanSupplier benutzerCanEditAenderung = () -> isAenderung
-        && gesuchTrancheStatusService.benutzerCanEdit(
+        final BooleanSupplier benutzerCanEditAenderung = () -> gesuchTrancheStatusService.benutzerCanEdit(
             currentBenutzer,
-            gesuch.getGesuchTranchen()
-                .stream()
-                .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .findFirst()
-                .get()
+            gesuchTranche
                 .getStatus()
         );
 
-        // TODO KSTIP-1967: Authorizer aktualisieren
-        if (!isAenderung && isAdminOrSb(currentBenutzer)) {
+        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
+            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
+            || benutzerCanEditAenderung.getAsBoolean();
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
-        } else if (isAenderung && benutzerCanEditAenderung.getAsBoolean()) {
+        }
+
+        throw new UnauthorizedException();
+    }
+
+    @Transactional
+    public void canUpdateNormalTranche(final UUID gesuchId, final Optional<GesuchTranche> gesuchTranche) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        // TODO KSTIP-1967: Authorizer aktualisieren
+        if (isAdminOrSb(currentBenutzer)) {
             return;
         }
 
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
-            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
-            || isAenderung && benutzerCanEditAenderung.getAsBoolean();
+            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus());
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
