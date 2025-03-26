@@ -1,0 +1,74 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1742993330758-3">
+        <addColumn tableName="delegierung">
+            <column name="adresse_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-4">
+        <addColumn tableName="delegierung_aud">
+            <column name="adresse_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-5">
+        <addColumn tableName="delegierung">
+            <column name="anrede" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-6">
+        <addColumn tableName="delegierung_aud">
+            <column name="anrede" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-7">
+        <addColumn tableName="delegierung">
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-8">
+        <addColumn tableName="delegierung_aud">
+            <column name="geburtsdatum" type="date"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-9">
+        <addColumn tableName="delegierung">
+            <column name="nachname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-10">
+        <addColumn tableName="delegierung_aud">
+            <column name="nachname" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-11">
+        <addColumn tableName="delegierung">
+            <column name="vorname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-12">
+        <addColumn tableName="delegierung_aud">
+            <column name="vorname" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-13">
+        <addUniqueConstraint columnNames="adresse_id" constraintName="UC_DELEGIERUNGADRESSE_ID_COL" tableName="delegierung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1742993330758-22">
+        <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="delegierung" constraintName="FK_delegierung_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+    </changeSet>
+    <changeSet id="1742993576437-1" author="Juri Furer">
+        <addColumn tableName="delegierung">
+            <column name="delegierung_angenommen" type="boolean">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

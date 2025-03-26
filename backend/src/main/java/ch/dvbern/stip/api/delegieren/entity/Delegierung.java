@@ -20,6 +20,10 @@ package ch.dvbern.stip.api.delegieren.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import jakarta.persistence.AssociationOverride;
+import jakarta.persistence.AssociationOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -63,4 +67,18 @@ public class Delegierung extends AbstractMandantEntity {
         nullable = false
     )
     private @Valid Fall delegierterFall;
+
+    @NotNull
+    @Column(name = "delegierung_angenommen")
+    private boolean delegierungAngenommen;
+
+    @Embedded
+    @AssociationOverrides(
+        @AssociationOverride(
+            name = "adresse",
+            foreignKey = @ForeignKey(name = "FK_delegierung_adresse_id"),
+            joinColumns = @JoinColumn(name = "adresse_id")
+        )
+    )
+    private @Valid PersoenlicheAngaben persoenlicheAngaben;
 }
