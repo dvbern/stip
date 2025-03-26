@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -147,7 +148,9 @@ class GesuchAuthorizerUpdateAenderungTest {
         // add role GS to SB, as it is existing in default roles
         Rolle gsRole = new Rolle();
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
-        benutzer.getRollen().add(gsRole);
+        Rolle sbRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER);
+        benutzer.setRollen(Set.of(gsRole, sbRole));
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzer);
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
