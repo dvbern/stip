@@ -75,7 +75,6 @@ export class SharedFeatureGesuchDokumenteComponent {
   private dialog = inject(MatDialog);
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
-  private config = inject(SharedModelCompileTimeConfig);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
