@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
@@ -39,6 +38,8 @@ import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -101,14 +102,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
             canUpdateAenderung(gesuchId, gesuchTranche);
         } else {
-            canUpdateNormalTranche(gesuchId, Optional.of(gesuchTranche));
+            canUpdateNormalTranche(gesuchId);
 
         }
     }
 
     @Transactional
     public void canUpdateTranche(final UUID gesuchId) {
-        canUpdateNormalTranche(gesuchId, Optional.empty());
+        canUpdateNormalTranche(gesuchId);
     }
 
     @Transactional
@@ -126,6 +127,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
             || benutzerCanEditAenderung.getAsBoolean();
 
+        final BooleanSupplier isAdminOrSBCanEdit =
+            () -> isAdminOrSb(currentBenutzer) && !GESUCHSTELLER_CAN_EDIT.contains(gesuchTranche.getStatus())
+            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
         && benutzerCanEditInStatusOrAenderung.getAsBoolean();
@@ -138,11 +143,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
+        if (isAdminOrSBCanEdit.getAsBoolean()) {
+            return;
+        }
+
         throw new UnauthorizedException();
     }
 
     @Transactional
-    public void canUpdateNormalTranche(final UUID gesuchId, final Optional<GesuchTranche> gesuchTranche) {
+    public void canUpdateNormalTranche(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
