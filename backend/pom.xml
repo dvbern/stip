@@ -43,6 +43,7 @@
     <spotless.version>2.43.0</spotless.version>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <ci.disableConsole>false</ci.disableConsole>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -442,6 +443,9 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
+          <consoleOutputReporter>
+            <disable>${ci.disableConsole}</disable>
+          </consoleOutputReporter>
         </configuration>
       </plugin>
       <plugin>
@@ -459,6 +463,9 @@
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                 <maven.home>${maven.home}</maven.home>
               </systemPropertyVariables>
+              <consoleOutputReporter>
+                <disable>${ci.disableConsole}</disable>
+              </consoleOutputReporter>
             </configuration>
           </execution>
         </executions>
