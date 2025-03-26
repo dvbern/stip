@@ -42,9 +42,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -130,7 +127,6 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(3)
     void test_create_dokument_for_gesuch() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_FILE_LOCATION);
         dokumentApiSpec.createDokument();
         given()
