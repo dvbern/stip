@@ -20,9 +20,12 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -39,10 +42,12 @@ import io.quarkus.security.UnauthorizedException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN;
+import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.IN_BEARBEITUNG_GS;
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -129,6 +134,25 @@ class GesuchAuthorizerUpdateAenderungTest {
         assertThrows(UnauthorizedException.class, () -> {
             gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
 
+        });
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description(
+        "Despite containing GS Role in default roles, SB should not be able to update when in GesuchTrancheStatus IN_BEARBEITUNG_GS"
+    )
+    void canNotUpdateAenderungasInBearbeitungGSAsSB() {
+        Benutzer benutzer = benutzerService.getCurrentBenutzer();
+        // add role GS to SB, as it is existing in default roles
+        Rolle gsRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
+        benutzer.getRollen().add(gsRole);
+        gesuch.getAusbildung().getFall().setGesuchsteller(benutzer);
+
+        aenderung.setStatus(IN_BEARBEITUNG_GS);
+        assertThrows(UnauthorizedException.class, () -> {
+            gesuchAuthorizer.canUpdateTranche(gesuch.getId(), gesuchUpdateDto);
         });
     }
 
