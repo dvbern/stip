@@ -28,9 +28,13 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -48,6 +52,7 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public void deleteForGesuchDokument(UUID gesuchDokumentId) {
@@ -111,32 +116,39 @@ public class GesuchDokumentKommentarService {
     ) {
         var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
 
-        var gesuchTranche =
-            gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(gesuchDokument.getGesuchTranche().getId());
-
-        var gesuchTrancheOpt = gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(
-            gesuchDokument.getGesuchTranche().getGesuch().getId(),
-            Gesuchstatus.FEHLENDE_DOKUMENTE
-        );
-
-        if (gesuchTrancheOpt.isPresent()) {
-            gesuchTranche = gesuchTrancheOpt.get();
+        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchDokument.getGesuchTranche().getId());
+        Integer gesuchTrancheRevision = null;
+        final var gesuch = gesuchTranche.getGesuch();
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
+                final var gesuchTrancheFehlendeDokumentRevisionOpt = gesuchHistoryRepository
+                    .getRevisionWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.FEHLENDE_DOKUMENTE);
+                gesuchTrancheRevision = gesuchTrancheFehlendeDokumentRevisionOpt.orElseGet(
+                    () -> gesuchHistoryRepository
+                        .getRevisionWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                        .orElseThrow()
+                );
+            }
+        } else if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        ) {
+            gesuchTrancheRevision =
+                gesuchTrancheHistoryRepository
+                    .getLatestRevisionWhereStatusChangedTo(gesuchTranche.getId(), GesuchTrancheStatus.UEBERPRUEFEN)
+                    .orElseThrow();
+            // TODO KSTIP-1910: add handling for tranche status Fehlende Dokumente
         }
 
-        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
-            .stream()
-            .filter(gesuchDokument1 -> gesuchDokument1.getId().equals(gesuchDokumentId))
-            .findFirst();
+        List<GesuchDokumentKommentar> gesuchDokumentKommentars =
+            gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokumentId);
 
-        List<GesuchDokumentKommentar> gesuchDokumentKommentars = List.of();
+        if (Objects.nonNull(gesuchTrancheRevision)) {
+            List<GesuchDokumentKommentar> versionedGesuchDokumentKommentars = gesuchDokumentKommentarHistoryRepository
+                .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokumentId, gesuchTrancheRevision);
 
-        if (gesuchDokumentOpt.isPresent()) {
-            gesuchDokument = gesuchDokumentOpt.get();
             gesuchDokumentKommentars =
-                gesuchDokumentKommentarHistoryRepository.getGesuchDokumentKommentarOfGesuchDokumentBefore(
-                    gesuchDokument.getId(),
-                    gesuchDokument.getTimestampMutiert()
-                );
+                versionedGesuchDokumentKommentars.stream().filter(gesuchDokumentKommentars::contains).toList();
         }
 
         return gesuchDokumentKommentars.stream()

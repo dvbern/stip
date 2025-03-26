@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.api.DokumentResource;
@@ -75,6 +76,8 @@ class DokumentResourceImplTest {
     GesuchDokumentRepository gesuchDokumentRepository;
     @InjectMock
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
     @Inject
     GesuchFormularService gesuchFormularService;
     @InjectMock
@@ -87,12 +90,16 @@ class DokumentResourceImplTest {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
         when(dokumentKommentarRepository.getByGesuchDokumentId(any()))
             .thenReturn(List.of(kommentar));
-        when(gesuchDokumentKommentarHistoryRepository.getGesuchDokumentKommentarOfGesuchDokumentBefore(any(), any()))
+        when(
+            gesuchDokumentKommentarHistoryRepository.getGesuchDokumentKommentarOfGesuchDokumentAtRevision(any(), any())
+        )
             .thenReturn(List.of(kommentar));
         GesuchDokument gesuchDokument = new GesuchDokument();
         gesuchDokument.setId(UUID.randomUUID());
         GesuchTranche tranche = new GesuchTranche().setGesuchDokuments(List.of(gesuchDokument));
+        tranche.setId(UUID.randomUUID());
         gesuchDokument.setGesuchTranche(tranche);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         Gesuch gesuch = new Gesuch();
         gesuch.setId(UUID.randomUUID());
         tranche.setGesuch(gesuch);

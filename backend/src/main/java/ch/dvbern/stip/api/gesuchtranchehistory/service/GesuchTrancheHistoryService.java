@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranchehistory.service;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheHistoryService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     public GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);

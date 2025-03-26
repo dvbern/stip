@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +25,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 
 @ApplicationScoped
@@ -33,20 +33,16 @@ import org.hibernate.envers.query.AuditEntity;
 public class GesuchDokumentKommentarHistoryRepository {
     private final EntityManager em;
 
-    public List<GesuchDokumentKommentar> getGesuchDokumentKommentarOfGesuchDokumentBefore(
+    public List<GesuchDokumentKommentar> getGesuchDokumentKommentarOfGesuchDokumentAtRevision(
         final UUID gesuchDokumentId,
-        final LocalDateTime timestampMutiertBefore
+        final Integer revision
     ) {
         @SuppressWarnings("unchecked")
-        // Reason: forRevisionsOfEntity with GesuchDokumentKommentar.class and selectEntitiesOnly will always return a
-        // List<GesuchDokumentKommentar>
         final List<GesuchDokumentKommentar> revisions = AuditReaderFactory.get(em)
             .createQuery()
-            .forRevisionsOfEntity(GesuchDokumentKommentar.class, true, true)
+            .forEntitiesAtRevision(GesuchDokumentKommentar.class, revision)
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
             .add(AuditEntity.relatedId("gesuchDokument").eq(gesuchDokumentId))
-            .add(AuditEntity.property("timestampMutiert").le(timestampMutiertBefore))
-            .addOrder(AuditEntity.property("timestampMutiert").desc())
-            // .setMaxResults(1)
             .getResultList()
             .stream()
             .map(GesuchDokumentKommentar.class::cast)
