@@ -110,6 +110,8 @@ class GesuchDokumentServiceTest {
     GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     private final UUID id = UUID.randomUUID();
+    @Inject
+    DokumentstatusService dokumentstatusService;
 
     private GesuchDokument mockedDokument;
     private GesuchDokumentKommentar comment;

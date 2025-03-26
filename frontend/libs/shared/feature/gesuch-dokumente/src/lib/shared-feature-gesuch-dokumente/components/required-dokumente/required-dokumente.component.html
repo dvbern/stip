@@ -1,9 +1,32 @@
 @let view = dokumenteViewSig();
 @let expandedRowId = expandedRowSig();
 
-<h3>
-  {{ 'shared.dokumente.table.title.requiredDocuments' | translate }}
-</h3>
+<div class="tw-flex tw-items-center tw-justify-between">
+  <h3>
+    {{ 'shared.dokumente.table.title.requiredDocuments' | translate }}
+  </h3>
+
+  @if (view.gesuchId && view.nachfrist) {
+    <div class="tw-flex tw-items-center tw-gap-3">
+      <dl class="tw-mt-6 tw-flex tw-gap-3">
+        <dt>{{ 'shared.dokumente.nachfrist.label' | translate }}</dt>
+        <dd>{{ view.nachfrist | date: 'dd.MM.yyyy' }}</dd>
+      </dl>
+      @if (canEditNachfristSig() !== undefined) {
+        <button
+          *dvIfSachbearbeiter
+          [disabled]="!canEditNachfristSig()"
+          type="button"
+          class="btn btn-outline-primary btn-sm tw-flex tw-p-2"
+          (click)="editNachfrist(view.gesuchId, view.nachfrist)"
+          [matTooltip]="'shared.dokumente.nachfrist.edit' | translate"
+        >
+          <i class="material-symbols-rounded tw-text-xl/none">calendar_month</i>
+        </button>
+      }
+    </div>
+  }
+</div>
 
 <div class="tw-dv-table">
   <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>

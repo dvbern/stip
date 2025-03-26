@@ -76,8 +76,8 @@ public class BerechnungsblattService {
 
     public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
     throws IOException {
-        pdfFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-        pdfFontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+        pdfFont = PdfFontFactory.createFont(FONT);
+        pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
 
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(

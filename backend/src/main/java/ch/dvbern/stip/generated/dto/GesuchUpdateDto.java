@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchUpdateDto  implements Serializable {
   private @Valid GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
+  private @Valid String nachfristDokumente;
 
   /**
    **/
@@ -41,6 +42,24 @@ public class GesuchUpdateDto  implements Serializable {
     this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
   }
 
+  /**
+   **/
+  public GesuchUpdateDto nachfristDokumente(String nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("nachfristDokumente")
+  public String getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+  @JsonProperty("nachfristDokumente")
+  public void setNachfristDokumente(String nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -51,12 +70,13 @@ public class GesuchUpdateDto  implements Serializable {
       return false;
     }
     GesuchUpdateDto gesuchUpdate = (GesuchUpdateDto) o;
-    return Objects.equals(this.gesuchTrancheToWorkWith, gesuchUpdate.gesuchTrancheToWorkWith);
+    return Objects.equals(this.gesuchTrancheToWorkWith, gesuchUpdate.gesuchTrancheToWorkWith) &&
+        Objects.equals(this.nachfristDokumente, gesuchUpdate.nachfristDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheToWorkWith);
+    return Objects.hash(gesuchTrancheToWorkWith, nachfristDokumente);
   }
 
   @Override
@@ -65,6 +85,7 @@ public class GesuchUpdateDto  implements Serializable {
     sb.append("class GesuchUpdateDto {\n");
     
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

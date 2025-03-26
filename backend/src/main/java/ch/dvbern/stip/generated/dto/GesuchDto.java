@@ -36,6 +36,7 @@ public class GesuchDto  implements Serializable {
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid DelegierungDto delegierung;
+  private @Valid LocalDate nachfristDokumente;
 
   /**
    **/
@@ -263,6 +264,24 @@ public class GesuchDto  implements Serializable {
     this.delegierung = delegierung;
   }
 
+  /**
+   **/
+  public GesuchDto nachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("nachfristDokumente")
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+  @JsonProperty("nachfristDokumente")
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -284,12 +303,13 @@ public class GesuchDto  implements Serializable {
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
-        Objects.equals(this.delegierung, gesuch.delegierung);
+        Objects.equals(this.delegierung, gesuch.delegierung) &&
+        Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung, nachfristDokumente);
   }
 
   @Override
@@ -309,6 +329,7 @@ public class GesuchDto  implements Serializable {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

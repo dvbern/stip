@@ -48,7 +48,7 @@ public class LandEuEftaSeeding extends Seeder {
     }
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         LOG.info("Seeding EU/EFTA Laender");
         final var json = getJson();
 

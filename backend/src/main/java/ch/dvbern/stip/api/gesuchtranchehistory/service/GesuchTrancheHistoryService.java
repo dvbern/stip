@@ -17,10 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.service;
 
-import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -39,8 +38,7 @@ public class GesuchTrancheHistoryService {
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-            if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
                 gesuchTranche =
                     gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                         .orElseThrow();

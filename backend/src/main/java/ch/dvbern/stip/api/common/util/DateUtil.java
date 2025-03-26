@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -104,6 +105,10 @@ public class DateUtil {
         return (int) ChronoUnit.YEARS.between(geburtsdatum, date);
     }
 
+    public int getDaysBetween(final LocalDate start, final LocalDate end) {
+        return (int) ChronoUnit.DAYS.between(start, end);
+    }
+
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
         return left.isBefore(right) || left.isEqual(right);
     }
@@ -120,6 +125,11 @@ public class DateUtil {
         }
     }
 
+    public String formatDate(final LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return localDate.format(formatter);
+    }
+
     private boolean betweenInclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
         return beforeOrEqual(left, date) && afterOrEqual(right, date);
     }
@@ -127,4 +137,5 @@ public class DateUtil {
     private boolean betweenExclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
         return left.isBefore(date) && right.isAfter(date);
     }
+
 }

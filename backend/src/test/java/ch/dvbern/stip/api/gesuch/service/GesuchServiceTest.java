@@ -1659,9 +1659,10 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
         when(
             gesuchHistoryRepository
-                .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
-        )
-            .thenReturn(Stream.of(gesuch));
+                .getLatestWhereStatusChangedTo(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE))
+        ).thenReturn(
+            Optional.of(gesuch)
+        );
 
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuch));

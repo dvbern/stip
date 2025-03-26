@@ -21,6 +21,7 @@
   "gesuch-app.dashboard.periode.einreichefrist.abgelaufen.warning": "Die Eingabefrist für diese Ausbildungsperiode ist abgelaufen.",
   "gesuch-app.dashboard.periode.einreichefrist.abgelaufen.text": "Sie können das Gesuch einreichen, aber ohne gerechtfertigte Begründung wird es abgewiesen",
   "gesuch-app.dashboard.periode.einreichefrist.text": "Einreichefrist des Gesuchs",
+  "gesuch-app.dashboard.periode.nachfrist.text": "Frist zum Einreichen der Dokumente",
   "gesuch-app.dashboard.gesuch.title": "Ausbildungsjahr {{ yearRange }}",
   "gesuch-app.dashboard.gesuch.new": "Antrag erstellen",
   "gesuch-app.dashboard.gesuch.edit": "Gesuch bearbeiten",

@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.transitions.Transition;
@@ -30,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandler {
-    private final GesuchService gesuchService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -46,5 +44,6 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         gesuch.setEinreichedatum(null);
+        gesuch.setNachfristDokumente(null);
     }
 }

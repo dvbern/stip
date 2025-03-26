@@ -22,6 +22,7 @@
           {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
         </dd>
 
+        @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
         @if (gesuch.isActive) {
           <dt class="tw-font-bold">{{ 'gesuch-app.dashboard.gesuch.status.title' | translate }}</dt>
           <dd class="tw-mb-6">
@@ -79,6 +80,14 @@
             </span>
             <span class="tw-mt-6">{{ 'gesuch-app.dashboard.periode.einreichefrist.abgelaufen.text' | translate }}</span>
           }
+          @if (missingDocTrancheId && gesuch.nachfristDokumente) {
+            <dt class="tw-mt-6 tw-font-bold">
+              {{ 'gesuch-app.dashboard.periode.nachfrist.text' | translate }}
+            </dt>
+            <dd>
+              {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
+            </dd>
+          }
         }
       </dl>
       <div class="tw-flex-grow"></div>
@@ -91,7 +100,6 @@
       >
         @if (gesuch.id) {
           @if (gesuch.isActive) {
-            @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
             @if (gesuch.canEdit) {
               <a
                 class="btn btn-primary"

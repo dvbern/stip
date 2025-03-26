@@ -1,3 +1,4 @@
 Einige eingereichte Dokumente sind fehlerhaft und müssen nochmals eingereicht werden. Sie können dies direkt über ihr Dashboard machen.
+Sie haben {numberOfDays} Tage Zeit diese Dokumente hochzuladen.
 Freundliche Grüsse
 {sbVorname} {sbNachname}

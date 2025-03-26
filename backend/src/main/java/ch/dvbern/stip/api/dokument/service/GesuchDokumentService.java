@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -193,8 +194,7 @@ public class GesuchDokumentService {
             final var gesuchDokument = gesuchDokumentOptional.get();
             final var gesuchTranche = gesuchDokument.getGesuchTranche();
             final var gesuch = gesuchTranche.getGesuch();
-            final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-            if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
                 var trancheInStatusEingereicht =
                     gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                         .orElseThrow();
@@ -235,8 +235,7 @@ public class GesuchDokumentService {
     ) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
             var trancheInStatusEingereicht =
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                     .orElseThrow();
@@ -325,6 +324,20 @@ public class GesuchDokumentService {
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT
         );
+        removeNachfristDokumenteIfAllAccepted(gesuchDokument);
+    }
+
+    private void removeNachfristDokumenteIfAllAccepted(GesuchDokument gesuchDokument) {
+        final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
+        final var allGesuchDokuments = new ArrayList<GesuchDokument>();
+        gesuch.getGesuchTranchen().stream().map(GesuchTranche::getGesuchDokuments).forEach(allGesuchDokuments::addAll);
+        final var allAccepted = allGesuchDokuments.stream()
+            .allMatch(dok -> dok.getStatus().equals(Dokumentstatus.AKZEPTIERT));
+        if (!allAccepted) {
+            return;
+        }
+
+        gesuch.setNachfristDokumente(null);
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {

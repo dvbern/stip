@@ -20,10 +20,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,7 +32,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -675,6 +671,13 @@ public class GesuchService {
             .toList();
     }
 
+    @Transactional
+    public void updateNachfristDokumente(final UUID gesuchId, LocalDate nachfristDokumente) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuch.setNachfristDokumente(nachfristDokumente);
+        notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
+    }
+
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
@@ -790,33 +793,9 @@ public class GesuchService {
 
     @Transactional
     public void checkForFehlendeDokumenteOnAllGesuche() {
-        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
-        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
-        gesuchsToCheck.forEach(
-            gesuch -> {
-                gesuchsperiodenGesucheMap.computeIfAbsent(gesuch.getGesuchsperiode().getId(), k -> new ArrayList<>());
-                gesuchsperiodenGesucheMap.get(gesuch.getGesuchsperiode().getId()).add(gesuch);
-            }
-        );
-
-        final var changedTooLongAgo = new HashSet<UUID>();
-
-        gesuchsperiodenGesucheMap.forEach(
-            (uuid, gesuchsperiodenGesuchs) -> {
-                final var nachfrist = gesuchsperiodenGesuchs.get(0).getGesuchsperiode().getFristNachreichenDokumente();
-                changedTooLongAgo.addAll(
-                    gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
-                        gesuchsperiodenGesuchs.stream().map(AbstractEntity::getId).toList(),
-                        Gesuchstatus.FEHLENDE_DOKUMENTE,
-                        LocalDateTime.now().minusDays(nachfrist)
-                    ).map(AbstractEntity::getId).toList()
-                );
-            }
-        );
-
         final var toUpdate =
-            gesuchsToCheck.stream().filter(gesuch -> changedTooLongAgo.contains(gesuch.getId())).toList();
+            gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
         if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
