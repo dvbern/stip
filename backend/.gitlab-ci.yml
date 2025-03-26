@@ -9,7 +9,7 @@ include:
       context-dir: backend
       java-image-version: 17-jdk-alpine
       maven-goal: -Drevision=$VERSION -Pcoverage install
-      maven-opts-extend : -Dci.disableConsole=true
+      maven-opts-extend : -Dci.disableConsole=true -Dci.logLevel=WARN
 
   - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
     inputs:
