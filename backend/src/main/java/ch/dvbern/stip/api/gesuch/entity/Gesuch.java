@@ -17,16 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
@@ -62,6 +52,16 @@ import lombok.Setter;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -171,7 +171,7 @@ public class Gesuch extends AbstractMandantEntity {
     private List<BeschwerdeVerlaufEntry> beschwerdeVerlauf = new ArrayList<>();
 
     @Column(name = "beschwerde_haengig", nullable = false)
-    private boolean beschwerdeHaengig = false;
+    private boolean beschwerdeHaengig;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
