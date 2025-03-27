@@ -5,39 +5,6 @@
   "projectType": "library",
   "tags": ["scope:tooling", "type:nx-plugin"],
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/tooling/nx-plugin",
-        "main": "libs/tooling/nx-plugin/src/index.ts",
-        "tsConfig": "libs/tooling/nx-plugin/tsconfig.lib.json",
-        "assets": [
-          "libs/tooling/nx-plugin/*.md",
-          {
-            "input": "./libs/tooling/nx-plugin/src",
-            "glob": "**/!(*.ts)",
-            "output": "./src"
-          },
-          {
-            "input": "./libs/tooling/nx-plugin/src",
-            "glob": "**/*.d.ts",
-            "output": "./src"
-          },
-          {
-            "input": "./libs/tooling/nx-plugin",
-            "glob": "generators.json",
-            "output": "."
-          },
-          {
-            "input": "./libs/tooling/nx-plugin",
-            "glob": "executors.json",
-            "output": "."
-          }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
