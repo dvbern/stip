@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
@@ -102,6 +103,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BenutzerService benutzerService;
     private final GesuchValidatorService gesuchValidatorService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final BeschwerdeverlaufService beschwerdeverlaufService;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -172,7 +174,7 @@ public class GesuchResourceImpl implements GesuchResource {
         BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto
     ) {
         gesuchAuthorizer.canRead(gesuchId);
-        return null;
+        return beschwerdeverlaufService.createBeschwerdeVerlaufEntry(gesuchId, beschwerdeVerlaufEntryCreateDto);
     }
 
     @RolesAllowed(GESUCH_CREATE)
@@ -211,7 +213,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
-        return List.of();
+        return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)

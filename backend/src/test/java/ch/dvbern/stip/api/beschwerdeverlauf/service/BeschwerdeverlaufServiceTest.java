@@ -24,6 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.beschwerdeverlauf.repo.BeschwerdeVerlaufRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,11 +37,14 @@ import static org.mockito.ArgumentMatchers.any;
 class BeschwerdeverlaufServiceTest {
     private Gesuch gesuch;
     private BeschwerdeVerlaufRepository beschwerdeverlaufRepository;
+    private GesuchRepository gesuchRepository;
+    private BeschwerdeverlaufMapper beschwerdeverlaufMapper;
     private BeschwerdeverlaufService beschwerdeverlaufService;
     private BeschwerdeVerlaufEntry beschwerdeverlaufEntry;
 
     @BeforeEach
     void setUp() {
+        beschwerdeverlaufMapper = new BeschwerdeverlaufMapperImpl();
         beschwerdeverlaufEntry = new BeschwerdeVerlaufEntry();
         beschwerdeverlaufEntry.setGesuch(gesuch);
         beschwerdeverlaufEntry.setKommentar("blabla");
@@ -53,9 +57,12 @@ class BeschwerdeverlaufServiceTest {
         gesuch.getBeschwerdeVerlauf().add(beschwerdeverlaufEntry);
 
         beschwerdeverlaufRepository = Mockito.mock(BeschwerdeVerlaufRepository.class);
+        gesuchRepository = Mockito.mock(GesuchRepository.class);
         Mockito.when(beschwerdeverlaufRepository.findByGesuchId(any())).thenReturn(List.of(beschwerdeverlaufEntry));
+        Mockito.when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        beschwerdeverlaufService = new BeschwerdeverlaufService(beschwerdeverlaufRepository);
+        beschwerdeverlaufService =
+            new BeschwerdeverlaufService(beschwerdeverlaufRepository, gesuchRepository, beschwerdeverlaufMapper);
     }
 
     @Test

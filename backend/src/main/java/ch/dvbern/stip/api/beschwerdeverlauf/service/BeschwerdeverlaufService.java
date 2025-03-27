@@ -20,8 +20,10 @@ package ch.dvbern.stip.api.beschwerdeverlauf.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.beschwerdeverlauf.repo.BeschwerdeVerlaufRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +32,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeschwerdeverlaufService {
     private final BeschwerdeVerlaufRepository beschwerdeverlaufRepository;
+    private final GesuchRepository gesuchRepository;
+    private final BeschwerdeverlaufMapper beschwerdeverlaufMapper;
 
     @Transactional
-    public List<BeschwerdeVerlaufEntry> getAllBeschwerdeVerlaufEntriesByGesuchId(final UUID gesuchId) {
-        return beschwerdeverlaufRepository.findByGesuchId(gesuchId);
+    public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntriesByGesuchId(final UUID gesuchId) {
+        return beschwerdeverlaufRepository.findByGesuchId(gesuchId)
+            .stream()
+            .map(beschwerdeverlaufMapper::toDto)
+            .toList();
     }
 
-    // todo: use dto?
     // todo: throw bad request if flag is not changed
-    public void createBeschwerdeVerlaufEntry(final BeschwerdeVerlaufEntry entry) {}
+    @Transactional
+    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
+        final UUID gesuchId,
+        final BeschwerdeVerlaufEntryCreateDto createDto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var entry = beschwerdeverlaufMapper.toEntity(createDto);
+        entry.setGesuch(gesuch);
+        beschwerdeverlaufRepository.persistAndFlush(entry);
+        return beschwerdeverlaufMapper.toDto(entry);
+    }
 
 }
