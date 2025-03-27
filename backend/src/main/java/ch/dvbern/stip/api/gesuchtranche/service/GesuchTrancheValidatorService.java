@@ -57,7 +57,7 @@ public class GesuchTrancheValidatorService {
         );
         statusToValidationGroups.put(
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
-            List.of(GesuchEinreichenValidationGroup.class, GesuchFehlendeDokumenteValidationGroup.class)
+            List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
     }
 

@@ -42,6 +42,7 @@ public class FehlendeDokumenteNichtEingereichtHandler implements GesuchStatusSta
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
+        gesuch.setNachfristDokumente(null);
         gesuch.setEinreichedatum(null);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }

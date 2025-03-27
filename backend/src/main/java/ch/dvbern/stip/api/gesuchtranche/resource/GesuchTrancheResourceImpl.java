@@ -147,6 +147,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public GesuchWithChangesDto aenderungFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchTrancheAuthorizer.canFehlendeDokumenteUebermitteln(gesuchTrancheId);
         gesuchTrancheService.aenderungFehlendeDokumenteUebermitteln(gesuchTrancheId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -154,7 +155,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public ValidationReportDto gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
     }
 

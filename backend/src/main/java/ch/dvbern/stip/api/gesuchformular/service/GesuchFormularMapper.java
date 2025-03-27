@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchformular.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -452,6 +453,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 targetFormular.getTranche()
                     .getGesuchDokuments()
                     .stream()
+                    .filter(gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp()))
                     .filter(gesuchDokument -> dokumentTypsToRemove.contains(gesuchDokument.getDokumentTyp()))
                     .forEach(gesuchDokument -> gesuchDokumentService.removeGesuchDokument(gesuchDokument));
             }

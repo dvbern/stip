@@ -17,14 +17,11 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusStateChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
-    private final NotificationService notificationService;
-    private final MailService mailService;
-
-    private void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
-        notificationService.createMissingDocumentNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
-    }
+    private final GesuchService gesuchService;
 
     @Override
     public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
@@ -52,6 +43,7 @@ public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatu
         GesuchTranche gesuchTranche
     ) {
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuchTranche.getGesuch());
-        sendFehlendeDokumenteNotifications(gesuchTranche.getGesuch());
+        gesuchService.setDefaultNachfristDokumente(gesuchTranche.getGesuch());
+        gesuchService.sendFehlendeDokumenteNotifications(gesuchTranche.getGesuch());
     }
 }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,8 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -148,6 +151,7 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
+    private final MailService mailService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -777,48 +781,20 @@ public class GesuchService {
     }
 
     @Transactional
-    public void checkForFehlendeDokumenteOnALlAenderungen() {
+    public void checkForFehlendeDokumenteOnAllAenderungen() {
         // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
         final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
-        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<GesuchTranche>>();
-        gesuchTranchenToCheck.forEach(
-            gesuchTranche -> {
-                gesuchsperiodenGesucheMap
-                    .computeIfAbsent(gesuchTranche.getGesuch().getGesuchsperiode().getId(), k -> new ArrayList<>());
-                gesuchsperiodenGesucheMap.get(gesuchTranche.getGesuch().getGesuchsperiode().getId()).add(gesuchTranche);
-            }
-        );
-
-        final var changedTooLongAgo = new HashSet<UUID>();
-
-        gesuchsperiodenGesucheMap.forEach(
-            (uuid, gesuchsperiodenGesuchsTranchen) -> {
-                final var nachfrist = gesuchsperiodenGesuchsTranchen.get(0)
-                    .getGesuch()
-                    .getGesuchsperiode()
-                    .getFristNachreichenDokumente();
-                changedTooLongAgo.addAll(
-                    gesuchTrancheHistoryRepository.getWhereStatusChangeHappenedBefore(
-                        gesuchsperiodenGesuchsTranchen.stream().map(AbstractEntity::getId).toList(),
-                        GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
-                        LocalDateTime.now().minusDays(nachfrist)
-                    ).map(AbstractEntity::getId).toList()
-                );
-            }
-        );
 
         final var toUpdate =
             gesuchTranchenToCheck.stream()
-                .filter(gesuchTranche -> changedTooLongAgo.contains(gesuchTranche.getId()))
+                .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isAfter(LocalDate.now()))
                 .toList();
         if (!toUpdate.isEmpty()) {
-
             gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
                 GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
             );
         }
-
     }
 
     @Transactional
@@ -863,5 +839,19 @@ public class GesuchService {
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
+        notificationService.createMissingDocumentNotification(gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+    }
+
+    public void setDefaultNachfristDokumente(Gesuch gesuch) {
+        if (Objects.isNull(gesuch.getNachfristDokumente())) {
+            gesuch
+                .setNachfristDokumente(
+                    LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+                );
+        }
     }
 }
