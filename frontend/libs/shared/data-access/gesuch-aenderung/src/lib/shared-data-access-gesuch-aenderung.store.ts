@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
@@ -58,7 +58,7 @@ export class GesuchAenderungStore extends signalStore(
 ) {
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
-  private store = inject(Store);
+  private config = inject(SharedModelCompileTimeConfig);
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
@@ -107,13 +107,20 @@ export class GesuchAenderungStore extends signalStore(
           cachedTranchenList: cachedPending(state.cachedTranchenList),
         }));
       }),
-      switchMap((req) =>
-        this.gesuchTrancheService
-          .getAllTranchenForGesuch$(req, undefined, undefined, {
+      switchMap((req) => {
+        const serviceMap = {
+          'gesuch-app': 'getAllTranchenForGesuchGS$',
+          'sachbearbeitung-app': 'getAllTranchenForGesuchSB$',
+        } satisfies Record<AppType, keyof GesuchTrancheService>;
+        return this.gesuchTrancheService[serviceMap[this.config.appType]](
+          req,
+          undefined,
+          undefined,
+          {
             context: shouldIgnoreNotFoundErrorsIf(true),
-          })
-          .pipe(map((tranchen) => tranchen ?? [])),
-      ),
+          },
+        ).pipe(map((tranchen) => tranchen ?? []));
+      }),
       handleApiResponse((tranchen) => {
         patchState(this, () => ({
           cachedTranchenList: tranchen,

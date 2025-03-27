@@ -24,7 +24,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MandantIdentifier {
     BERN("bern"),
-    GLOBAL("global");
+    DV("dv");
 
     private final String identifier;
+
+    public static MandantIdentifier of(final String identifier) {
+        return switch (identifier) {
+            case "bern" -> BERN;
+            case "dv" -> DV;
+            default -> throw new IllegalArgumentException("Invalid mandant identifier: " + identifier);
+        };
+    }
 }

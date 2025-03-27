@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;
@@ -41,11 +42,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class MailService {
-
     private final Mailer mailer;
     private final TL tl;
     private final ReactiveMailer reactiveMailer;
     private final ConfigService configService;
+    private final TenantConfigService tenantConfigService;
     private final TenantService tenantService;
 
     public void sendStandardNotificationEmails(
@@ -79,8 +80,7 @@ public class MailService {
     }
 
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
-        String redirectURI = configService.getWelcomeMailURI(
-            tenantService.getCurrentTenant().getIdentifier(),
+        String redirectURI = tenantConfigService.getWelcomeMailURI(
             welcomeMailDto.getRedirectUri()
         );
 

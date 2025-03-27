@@ -39,7 +39,7 @@ public class AusbildungTestSeeding extends Seeder {
     private Bildungskategorie bildungskategorie;
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         createBildungskategorie();
         seedUni();
         seedFh();

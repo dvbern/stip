@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.scheduledtask.entity;
 
 import java.time.LocalDateTime;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,13 +40,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "scheduledtask",
     indexes = {
         @Index(name = "IX_scheduledtask_last_execution", columnList = "last_execution"),
-        @Index(name = "IX_scheduledtask_type", columnList = "type")
+        @Index(name = "IX_scheduledtask_type", columnList = "type"),
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
     }
 )
 @Audited
 @Getter
 @Setter
-public class Scheduledtask extends AbstractEntity {
+public class Scheduledtask extends AbstractMandantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

@@ -40,7 +40,7 @@ public class AusbildungSeeding extends Seeder {
     private final ConfigService configService;
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         if (ausbildungsstaetteRepository.count() == 0) {
             LOG.info("Seeding Uni and FH");
 

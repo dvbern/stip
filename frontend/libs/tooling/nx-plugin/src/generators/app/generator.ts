@@ -1,12 +1,14 @@
-import path from 'path';
 import * as fs from 'fs';
+import path from 'path';
+
+import { applicationGenerator } from '@nx/angular/generators';
 import {
+  Tree,
   formatFiles,
   generateFiles,
   getWorkspaceLayout,
   names,
   offsetFromRoot,
-  Tree,
   updateJson,
 } from '@nx/devkit';
 import {
@@ -15,7 +17,6 @@ import {
   classify,
   dasherize,
 } from '@nx/devkit/src/utils/string-utils';
-import { applicationGenerator } from '@nx/angular/generators';
 
 import { AppGeneratorSchema } from './schema';
 
@@ -26,11 +27,12 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
     name: projectName,
     style: 'scss',
     standalone: true,
+    directory: projectRoot,
     routing: true,
     tags: `type:app,scope:${projectName}`,
   });
 
-  addFiles(tree, options, { projectName, projectRoot });
+  addFiles(tree, options, { projectRoot });
 
   const pathToApp = path.join(projectRoot, 'src', 'app');
   removeNxWelcomeComponent(tree, pathToApp);
@@ -53,7 +55,7 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
 function addFiles(
   tree: Tree,
   options: AppGeneratorSchema,
-  { projectName, projectRoot }: { projectName: string; projectRoot: string },
+  { projectRoot }: { projectRoot: string },
 ) {
   const templateOptions = {
     ...options,
@@ -141,15 +143,6 @@ function removeNxWelcomeComponent(tree: Tree, pathToApp: string) {
 }
 
 function addScope(tree: Tree, projectName: string) {
-  updateJson(tree, 'eslint.config.js', (json) => {
-    json.overrides
-      .find((o: any) => o.rules['@nx/enforce-module-boundaries'])
-      .rules['@nx/enforce-module-boundaries'][1].depConstraints.unshift({
-        sourceTag: `scope:${projectName}`,
-        onlyDependOnLibsWithTags: ['scope:shared', `scope:${projectName}`],
-      });
-    return json;
-  });
   updateJson(
     tree,
     'libs/tooling/nx-plugin/src/generators/lib/schema.json',

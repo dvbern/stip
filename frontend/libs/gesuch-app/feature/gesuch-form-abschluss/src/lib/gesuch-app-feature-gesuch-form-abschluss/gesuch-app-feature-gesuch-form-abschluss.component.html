@@ -64,7 +64,9 @@
                   (click)="fehlendeDokumenteEinreichen()"
                   data-testid="button-abschluss"
                   [disabled]="
-                    (dokumentsStore.dokuments() | rdIsPending) || (dokumentsStore.documentsToUpload() | rdIsPending)
+                    (dokumentsStore.dokuments() | rdIsPending) ||
+                    (dokumentsStore.documentsToUpload() | rdIsPending) ||
+                    !canGSSendMissingDocumentsSig()
                   "
                 >
                   {{ 'shared.form.abschluss.fehlendeDokumenteEinreichen' | translate }}

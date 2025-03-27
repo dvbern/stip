@@ -19,6 +19,7 @@ package ch.dvbern.stip.arch;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
+import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,13 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 class RunForTenantAnnotationTest {
     @Test
     void test_run_for_tenant_annotation_only_with_scheduled() {
-        var rule = methods().that().areAnnotatedWith(RunForTenant.class).should().beAnnotatedWith(Scheduled.class);
+        var rule = methods()
+            .that()
+            .areAnnotatedWith(RunForTenant.class)
+            .and()
+            .areNotAnnotatedWith(Startup.class)
+            .should()
+            .beAnnotatedWith(Scheduled.class);
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }

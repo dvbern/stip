@@ -78,6 +78,10 @@
           {
             "value": "sachbearbeitung-app",
             "label": "sachbearbeitung-app - used only by sachbearbeitung-app"
+          },
+          {
+            "value": "sozialdienst-app",
+            "label": "sozialdienst-app - used only by sozialdienst-app"
           }
         ]
       }

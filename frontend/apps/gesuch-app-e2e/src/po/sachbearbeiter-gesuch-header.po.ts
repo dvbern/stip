@@ -20,12 +20,12 @@ export class SachbearbeiterGesuchHeaderPO {
     this.elems = {
       page,
       trancheMenu: page.getByTestId('sb-gesuch-header-tranche-nav-menu'),
-      trancheMenuItems: page.locator('[data-testid^="tranche-nav-menu-item-"]'),
+      trancheMenuItems: page.getByTestId('tranche-nav-menu-item'),
       verfuegungLink: page.getByTestId('sb-gesuch-header-verfuegung-link'),
       aenderungenMenu: page.getByTestId(
         'sb-gesuch-header-aenderungen-nav-menu',
       ),
-      aenderungenMenuItems: page.locator('aenderungen-nav-menu-item'),
+      aenderungenMenuItems: page.getByTestId('aenderungen-nav-menu-item'),
       infosPageLink: page.getByTestId('sb-gesuch-header-infos-link'),
       aktionMenu: page.getByTestId('sb-gesuch-header-aktion-menu'),
       aktionTrancheErstellen: page.getByTestId('aktion-tranche-erstellen'),

@@ -21,22 +21,24 @@ import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class OidcTenantResolver implements TenantResolver {
+    private final TenantService tenantService;
 
     public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.getIdentifier();
     public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
 
     @Override
-    @SuppressWarnings("java:S1135")
     public String resolve(RoutingContext context) {
+        final var authority = context.request().authority().host();
+        final var parts = authority.split("\\.");
+        final var tenant = tenantService.resolveTenant(parts[0]);
 
-        final var tenant = DEFAULT_TENANT_IDENTIFIER;
+        context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant.getIdentifier());
 
-        // TODO KSTIP-781: resolve tenant based on request and implement a test for it and remove SupressWarning
-        context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant);
-
-        return tenant;
+        return tenant.getIdentifier();
     }
 }

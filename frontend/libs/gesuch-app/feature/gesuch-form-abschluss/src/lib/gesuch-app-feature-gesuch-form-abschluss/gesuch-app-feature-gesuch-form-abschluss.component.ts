@@ -51,6 +51,11 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   dokumentsStore = inject(DokumentsStore);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  canGSSendMissingDocumentsSig = computed(() => {
+    return !!this.dokumentsStore.dokumenteCanFlagsSig()
+      .gsCanDokumenteUebermitteln;
+  });
+
   dokumenteRouteSig = computed(() => {
     const { gesuchId, trancheSetting } = this.gesuchViewSig();
     if (!gesuchId || !trancheSetting) {
@@ -63,6 +68,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
     getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
+        this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });

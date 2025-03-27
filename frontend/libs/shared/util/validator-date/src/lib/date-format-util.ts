@@ -1,3 +1,5 @@
+import { addHours } from 'date-fns';
+
 import { Language } from '@dv/shared/model/language';
 
 const acceptedDateInputFormatsDe = [
@@ -58,3 +60,8 @@ export function getFormatDef(
 ): DateFormatTypeDef {
   return dateFormats.get(locale)!.get(dateType)!;
 }
+
+export const normalizeDateForUTC = (date: Date | string) => {
+  const offset = (new Date().getTimezoneOffset() / 60) * -1 + 1;
+  return addHours(date, offset).toISOString();
+};

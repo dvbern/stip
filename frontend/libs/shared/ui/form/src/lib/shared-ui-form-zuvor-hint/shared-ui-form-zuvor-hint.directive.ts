@@ -41,6 +41,7 @@ export class SharedUiZuvorHintDirective {
   dvZuvorHintSig = input<FormularChangeTypes>(undefined, {
     alias: 'dvZuvorHint',
   });
+  dvZuvorHintTestId = input<string>('');
 
   constructor() {
     let componentRef: ComponentRef<SharedUiZuvorHintComponent> | undefined =
@@ -54,6 +55,10 @@ export class SharedUiZuvorHintDirective {
           this.viewContainerRef.clear();
           componentRef = this.viewContainerRef.createComponent(
             SharedUiZuvorHintComponent,
+          );
+          componentRef.location.nativeElement.setAttribute(
+            'data-testid',
+            this.dvZuvorHintTestId(),
           );
         }
         if (typeof value === 'number') {

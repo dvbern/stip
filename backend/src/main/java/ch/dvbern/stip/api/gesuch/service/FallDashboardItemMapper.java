@@ -43,4 +43,5 @@ public abstract class FallDashboardItemMapper {
     ) {
         dto.setNotifications(notificationService.getNotificationsForUser(entity.getGesuchsteller().getId()));
     }
+
 }

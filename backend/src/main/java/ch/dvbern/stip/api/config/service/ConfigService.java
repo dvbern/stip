@@ -23,11 +23,12 @@ import java.util.Set;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class ConfigService {
-
     @ConfigProperty(name = "kstip.environment", defaultValue = "local")
     String environment;
 
@@ -36,7 +37,7 @@ public class ConfigService {
 
     @Getter
     @ConfigProperty(name = "bucket.name")
-    String bucketName;
+    public String bucketName;
 
     @Getter
     @ConfigProperty(name = "kstip.allowed.mimetypes")
@@ -71,22 +72,6 @@ public class ConfigService {
     List<String> testcasesToSeed;
 
     @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-url")
-    String welcomeEmailKcUrl;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-path")
-    String welcomeEmailKcPath;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-query-parameter")
-    String welcomeEmailKcQueryParameter;
-
-    @Getter
-    @ConfigProperty(name = "kstip.welcome-mail.kc-scope")
-    String welcomeEmailKcScope;
-
-    @Getter
     @ConfigProperty(name = "kstip.sap.system-id")
     Integer systemid;
 
@@ -106,17 +91,14 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.should-clear-database")
     Boolean shouldClearDatabase;
 
+    @Getter
+    @ConfigProperty(name = "kstip.default-tenant")
+    String defaultTenant;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()
             .version(version)
             .environment(environment)
             .allowedMimeTypes(allowedMimeTypes.stream().toList());
-    }
-
-    public String getWelcomeMailURI(String tenant, String redirectURI) {
-        return welcomeEmailKcUrl
-        + welcomeEmailKcPath.replace("<TENANT>", tenant)
-        + welcomeEmailKcQueryParameter.replace("<REDIRECT_URI>", redirectURI)
-        + welcomeEmailKcScope;
     }
 }

@@ -33,5 +33,5 @@ import jakarta.interceptor.InterceptorBinding;
 @Inherited
 public @interface RunForTenant {
     @Nonbinding
-    MandantIdentifier value() default MandantIdentifier.GLOBAL;
+    MandantIdentifier value();
 }

@@ -92,7 +92,7 @@
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
           <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-person-nachname" />
-          <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges?.nachname; testId: 'form-person-nachname-zuvor-hint'"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -254,32 +254,37 @@
 
       <div class="row g-4 mt-1">
         <!-- GEBURTSDATUM -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
+        <div class="d-flex align-content-center col-12 col-md-6 col-xl-4 gap-2">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
 
-          <input
-            matInput
-            [dvMaxLength]="'small'"
-            placeholder="dd.mm.yyyy"
-            formControlName="geburtsdatum"
-            data-testid="form-person-geburtsdatum"
-            (blur)="onGeburtsdatumBlur()"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+            <input
+              matInput
+              [dvMaxLength]="'small'"
+              placeholder="dd.mm.yyyy"
+              formControlName="geburtsdatum"
+              data-testid="form-person-geburtsdatum"
+              (blur)="onGeburtsdatumBlur()"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-            {{ 'shared.form.error.dateFormat' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'minDate'">
-            {{ 'shared.form.error.minDatePast' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'maxDate'">
-            {{ 'shared.form.error.maxDatePast' | translate }}
-          </mat-error>
-        </mat-form-field>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+              {{ 'shared.form.error.dateFormat' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'minDate'">
+              {{ 'shared.form.error.minDatePast' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'maxDate'">
+              {{ 'shared.form.error.maxDatePast' | translate }}
+            </mat-error>
+          </mat-form-field>
+          @if (geburtstagDocumentOptionsSig(); as options) {
+            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+          }
+        </div>
 
         <!-- ZIVILSTAND -->
         <div class="d-flex align-content-center col-12 col-md-6 col-xl-4 gap-2">

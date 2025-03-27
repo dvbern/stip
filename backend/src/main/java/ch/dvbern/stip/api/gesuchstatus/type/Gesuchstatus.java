@@ -66,7 +66,8 @@ public enum Gesuchstatus {
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
                 ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-                BEREIT_FUER_BEARBEITUNG
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE
             )
         );
 
@@ -126,6 +127,13 @@ public enum Gesuchstatus {
             VERSENDET,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
             STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB,
+            FEHLENDE_DOKUMENTE
         )
     );
 

@@ -2170,6 +2170,34 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/nachfristDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NachfristAendernRequest'
+      responses:
+        '204':
+          description: nachfrist updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateNachfristDokumente
+      summary: Nachfrist der nachzureichenden Dokumente anpassen
   '/gesuch/{gesuchTrancheId}/fehlendeDokumente':
     parameters:
       - name: gesuchTrancheId
@@ -2866,7 +2894,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDocumentsToUpload
-  '/gesuchtranche/{gesuchId}':
+  '/gesuchtranche/gs/{gesuchId}':
     parameters:
       - name: gesuchId
         schema:
@@ -2891,7 +2919,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuch
+      operationId: getAllTranchenForGesuchGS
+  '/gesuchtranche/sb/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllTranchenForGesuchSB
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -3225,6 +3279,7 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_C
         - PERSON_NIEDERLASSUNGSSTATUS_B
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
         - PERSON_SOZIALHILFEBUDGET
@@ -3746,6 +3801,8 @@ components:
           type: string
         delegierung:
           $ref: '#/components/schemas/Delegierung'
+        nachfristDokumente:
+          $ref: '#/components/schemas/LocalDate'
     Delegierung:
       type: object
       properties:
@@ -3811,6 +3868,8 @@ components:
         - endDate
       type: object
       properties:
+        nachfristDokumente:
+          $ref: '#/components/schemas/LocalDate'
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:
@@ -3858,6 +3917,8 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
+        nachfristDokumente:
+          type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTrancheUpdate'
     LandEuEfta:
@@ -5901,6 +5962,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        sbCanFehlendeDokumenteUebermitteln:
+          type: boolean
+        gsCanDokumenteUebermitteln:
+          type: boolean
+        sbCanBearbeitungAbschliessen:
+          type: boolean
     SapStatus:
       enum:
         - SUCCESS
@@ -5974,6 +6041,14 @@ components:
       properties:
         canAendern:
           type: boolean
+    NachfristAendernRequest:
+      type: object
+      required:
+        - newNachfrist
+      properties:
+        newNachfrist:
+          type: string
+          format: date
     GesuchZurueckweisenResponse:
       type: object
       required:

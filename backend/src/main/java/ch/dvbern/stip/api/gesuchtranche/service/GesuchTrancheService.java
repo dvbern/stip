@@ -49,8 +49,10 @@ import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -117,6 +119,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
@@ -131,7 +134,37 @@ public class GesuchTrancheService {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
+        var gesuchToWorkWith = gesuchRepository.requireById(gesuchId);
+        var tranchenByTyp = gesuchTrancheRepository
+            .findForGesuch(gesuchId)
+            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
+
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuchToWorkWith)) {
+            gesuchToWorkWith =
+                gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT).orElseThrow();
+            tranchenByTyp =
+                gesuchToWorkWith.getGesuchTranchen().stream().collect(Collectors.groupingBy(GesuchTranche::getTyp));
+        }
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+
+        final var trancheList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.TRANCHE, List.of());
+        final var aenderungList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.AENDERUNG, List.of())
+            .stream()
+            .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
+            .toList();
+        final var allTranchen = new ArrayList<GesuchTranche>(trancheList.size() + aenderungList.size());
+        allTranchen.addAll(trancheList);
+        allTranchen.addAll(aenderungList);
+
+        return gesuchTrancheMapper.toListDto(
+            allTranchen,
+            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+        );
+    }
+
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
         final var tranchenByTyp = gesuchTrancheRepository
             .findForGesuch(gesuchId)
             .collect(Collectors.groupingBy(GesuchTranche::getTyp));
@@ -160,7 +193,29 @@ public class GesuchTrancheService {
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
-        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+        var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+
+        dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
+            requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch())
+        );
+
+        dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
+            requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche.getGesuch())
+        );
+
+        dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
+            requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuchTranche.getGesuch())
+        );
+
+        try {
+            gesuchTranche.getGesuch()
+                .getGesuchTranchen()
+                .forEach(gesuchTrancheValidatorService::validateBearbeitungAbschliessen);
+        } catch (ValidationsException ex) {
+            dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(false);
+        }
+
+        return dokumenteToUploadDto;
     }
 
     public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
@@ -209,7 +264,8 @@ public class GesuchTrancheService {
                 final var dokumente = new ArrayList<>(gesuchDokument.getDokumente());
                 dokumente.forEach(
                     dokument -> {
-                        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
+                        final var dokumentObjectId =
+                            gesuchDokumentService.deleteDokument(dokument.getId(), formular.getTranche().getId());
                         if (dokument.getGesuchDokumente().isEmpty()) {
                             dokumentObjectIds.add(dokumentObjectId);
                         }

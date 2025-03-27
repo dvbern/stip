@@ -1410,19 +1410,39 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
-            List.of(
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
-            )
-        );
 
         // act
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
 
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("getGesuchGS should return Gesuch in state EINGEREICHT when in status IN_FREIGABE")
+    void getGesuchGSShouldNOTReturnActualGesuchWhenInStatusInFreigabe() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        gesuch.getAusbildung().setFall(fall);
+        gesuch.setEinreichedatum(LocalDate.now());
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT).getNewestGesuchTranche());
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
+        // assert that gesuchHistory IS queried AND the gesuch in state EINGEREICHT is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(Gesuchstatus.EINGEREICHT));
     }
 
     @TestAsGesuchsteller
@@ -1440,6 +1460,7 @@ class GesuchServiceTest {
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
         gesuch.getAusbildung().setFall(fall);
+        gesuch.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
@@ -1639,9 +1660,10 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
         when(
             gesuchHistoryRepository
-                .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
-        )
-            .thenReturn(Stream.of(gesuch));
+                .getLatestWhereStatusChangedTo(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE))
+        ).thenReturn(
+            Optional.of(gesuch)
+        );
 
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuch));
