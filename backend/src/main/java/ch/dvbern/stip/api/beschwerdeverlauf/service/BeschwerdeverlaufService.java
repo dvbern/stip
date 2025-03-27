@@ -26,6 +26,7 @@ import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -43,13 +44,17 @@ public class BeschwerdeverlaufService {
             .toList();
     }
 
-    // todo: throw bad request if flag is not changed
     @Transactional
     public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
         final UUID gesuchId,
         final BeschwerdeVerlaufEntryCreateDto createDto
     ) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.isBeschwerdeHaengig() == createDto.getBeschwerdeSetTo()) {
+            throw new BadRequestException("isBeschwerdeHaengig wurde bereits auf Wert gesetzt!");
+        }
+        gesuch.setBeschwerdeHaengig(createDto.getBeschwerdeSetTo());
+
         var entry = beschwerdeverlaufMapper.toEntity(createDto);
         entry.setGesuch(gesuch);
         beschwerdeverlaufRepository.persistAndFlush(entry);

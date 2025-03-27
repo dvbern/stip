@@ -94,11 +94,10 @@ public class GesuchResourceBeschwerdeVerlaufTest {
             .body()
             .as(GesuchDto[].class);
         gesucheGS = Arrays.stream(gesuche).toList();
+        // assert that flag is false by default
+        assertThat(gesuche[0].getBeschwerdeHaengig(), is(false));
     }
 
-    // todo: assert flag is false
-
-    // create a notiz as SB
     @Test
     @TestAsSachbearbeiter
     @Order(2)
@@ -136,7 +135,55 @@ public class GesuchResourceBeschwerdeVerlaufTest {
         assertThat(beschwerdeVerlaufEntries.length, is(1));
     }
 
-    // todo: try to set flag to true again -> bad request
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
+    void verifyBeschwerdeHaengigHasBeenSetToTrue() {
+        var gesuche = gesuchApiSpec.getGesucheGs()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDto[].class);
+        gesucheGS = Arrays.stream(gesuche).toList();
+        // assert that flag is false by default
+        assertThat(gesuche[0].getBeschwerdeHaengig(), is(true));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(5)
+    void createBeschwerdeVerlaufEntryAgainWithFlagSetToTrue() {
+        // if the flag should be again set from true to true e.g,
+        // a bad request error will be returned
+        BeschwerdeVerlaufEntryCreateDtoSpec createDto = new BeschwerdeVerlaufEntryCreateDtoSpec();
+        createDto.setBeschwerdeSetTo(true);
+        createDto.setKommentar("test2");
+
+        gesuchApiSpec.createBeschwerdeVerlaufEntry()
+            .gesuchIdPath(gesuch.getId())
+            .body(createDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.BAD_REQUEST_400);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
+    void verifyNewEntryHasNotBeenAdded() {
+        final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK_200)
+            .extract()
+            .body()
+            .as(BeschwerdeVerlaufEntryDtoSpec[].class);
+        assertThat(beschwerdeVerlaufEntries.length, is(1));
+    }
 
     @Test
     @Order(99)
