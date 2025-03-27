@@ -726,7 +726,9 @@ public class GesuchService {
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
-        if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+        final var statesWhereCurrentIsReturned =
+            List.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
             aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         }
 

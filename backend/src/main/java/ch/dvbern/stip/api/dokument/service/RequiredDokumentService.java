@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,13 @@ public class RequiredDokumentService {
     }
 
     public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
-        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
+        if (
+            (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB)
+            && (gesuch.getGesuchTranchen()
+                .stream()
+                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+                .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN))
+        ) {
             return false;
         }
         final var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);

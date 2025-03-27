@@ -215,6 +215,7 @@
   "gesuch-app.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "gesuch-app.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
   "gesuch-app.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
+  "gesuch-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Eingereicht",

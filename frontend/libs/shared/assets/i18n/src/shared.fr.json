@@ -214,6 +214,7 @@
   "gesuch-app.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
   "gesuch-app.gesuch.status.tranche.AKZEPTIERT": "Accepté",
   "gesuch-app.gesuch.status.tranche.ABGELEHNT": "Rejeté",
+  "gesuch-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Documents manquants",
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",

@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -106,7 +107,10 @@ public class DocumentsRequiredConstraintValidator
             return logAndReturn.apply("GesuchTranche->GesuchDokumente");
         }
 
-        if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
+        if (
+            gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE
+            || tranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+        ) {
             return gesuchDokumente.stream()
                 .filter(
                     gesuchDokument -> !gesuchDokument.getDokumente().isEmpty()
