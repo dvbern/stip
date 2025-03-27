@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -173,21 +172,14 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
-        customGesuchDokumentTypAuthorizer.canReadAllTyps();
-        return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
-    }
-
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTypGS(UUID customDokumentTypId) {
+    public NullableGesuchDokumentDto getCustomGesuchDokumentForTypGS(UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
         return gesuchDokumentService.findGesuchDokumentForCustomTypGS(customDokumentTypId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTypSB(UUID customDokumentTypId) {
+    public NullableGesuchDokumentDto getCustomGesuchDokumentForTypSB(UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
         return gesuchDokumentService.findGesuchDokumentForCustomTypSB(customDokumentTypId);
     }
@@ -237,14 +229,14 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public NullableGesuchDokumentDto getGesuchDokumenteForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+    public NullableGesuchDokumentDto getGesuchDokumentForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public NullableGesuchDokumentDto getGesuchDokumenteForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+    public NullableGesuchDokumentDto getGesuchDokumentForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
     }

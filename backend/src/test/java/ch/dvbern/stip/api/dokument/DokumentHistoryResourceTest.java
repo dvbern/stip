@@ -281,7 +281,7 @@ class DokumentHistoryResourceTest {
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.remove(ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTypSB()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)

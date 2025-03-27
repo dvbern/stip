@@ -114,9 +114,9 @@ export class UploadStore {
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.getGesuchDokumenteForTypGS$(params),
+        this.documentService.getGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
-        this.documentService.getGesuchDokumenteForTypSB$(params),
+        this.documentService.getGesuchDokumentForTypSB$(params),
     });
   }
 
@@ -125,9 +125,9 @@ export class UploadStore {
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.getCustomGesuchDokumenteForTypGS$(params),
+        this.documentService.getCustomGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
-        this.documentService.getCustomGesuchDokumenteForTypSB$(params),
+        this.documentService.getCustomGesuchDokumentForTypSB$(params),
     });
   }
 

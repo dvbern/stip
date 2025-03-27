@@ -37,7 +37,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
@@ -160,7 +159,7 @@ class DokumentResourcesCustomDokumenteTest {
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -244,25 +243,13 @@ class DokumentResourcesCustomDokumenteTest {
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-
-        assertThat(customDocumentTypes.length, is(greaterThan(0)));
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(11)
     void test_read_custom_gesuchdokument_null() throws IOException {
-        var nullableDokumentDto = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+        var nullableDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -281,7 +268,7 @@ class DokumentResourcesCustomDokumenteTest {
         var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTypSB()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -317,7 +304,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(14)
     void test_read_custom_gesuchdokument() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -439,17 +426,6 @@ class DokumentResourcesCustomDokumenteTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(customDocumentTypes.length, is(0));
     }
 
     // testAsGS

@@ -146,7 +146,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.remove(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTypSB()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -164,7 +164,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
                 .assertThat()
                 .statusCode(Status.NO_CONTENT.getStatusCode());
         });
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -254,7 +254,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
          * be in state "AUSSTEHEND"
          * not contain any attached files
          */
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypGS()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypGS()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -267,7 +267,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente(), is(empty()));
 
-        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+        var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -291,7 +291,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsGesuchsteller
     @Order(22)
     void reupload_abgelehnte_dokumente() {
-        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+        var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -329,7 +329,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypGS()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypGS()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -342,7 +342,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
 
-        customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypGS()
+        customDok = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -358,7 +358,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsSachbearbeiter
     @Order(23)
     void setToInBearbeitungSB() {
-        final var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        final var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -392,7 +392,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsSachbearbeiter
     @Order(24)
     void deny_reuploaded_dokumente_of_both_categories() {
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -402,7 +402,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -449,7 +449,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .statusCode(Status.OK.getStatusCode());
 
         // check that both gesuchdokuments are in correct state & do not contain files
-        dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -463,7 +463,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente(), is(empty()));
 
-        customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -507,7 +507,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsSachbearbeiter
     @Order(27)
     void accept_reuploaded_dokumente_of_both_categories() {
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -517,7 +517,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -550,7 +550,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
         // check that both gesuchdokuments are in correct state & do contain files
-        dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -564,7 +564,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AKZEPTIERT));
         assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
 
-        customDok = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

@@ -151,7 +151,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.remove(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTypSB()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -169,7 +169,7 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
                 .assertThat()
                 .statusCode(Status.NO_CONTENT.getStatusCode());
         });
-        var dok = dokumentApiSpec.getGesuchDokumenteForTypSB()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)

@@ -241,12 +241,12 @@ export class DokumentsStore extends signalStore(
       }),
       switchMap(({ trancheId, dokumentTyp }) => {
         if (this.config.appType === 'gesuch-app') {
-          return this.dokumentService.getGesuchDokumenteForTypGS$({
+          return this.dokumentService.getGesuchDokumentForTypGS$({
             gesuchTrancheId: trancheId,
             dokumentTyp,
           });
         }
-        return this.dokumentService.getGesuchDokumenteForTypSB$({
+        return this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
           dokumentTyp,
         });

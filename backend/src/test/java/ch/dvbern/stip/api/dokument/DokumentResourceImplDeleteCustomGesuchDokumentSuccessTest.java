@@ -32,7 +32,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -143,7 +142,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTypSB()
+        final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -167,17 +166,6 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(customDocumentTypes.length, is(0));
     }
 
     // testAsGS

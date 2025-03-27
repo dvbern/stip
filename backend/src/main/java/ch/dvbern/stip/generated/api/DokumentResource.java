@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -74,19 +73,14 @@ public interface DokumentResource {
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
-    @Path("/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}")
-    @Produces({ "application/json", "text/plain" })
-    List<CustomDokumentTypDto> getAllCustomDokumentTypes(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
     @Path("/customGesuchDokument/gs/{customDokumentTypId}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getCustomGesuchDokumenteForTypGS(@PathParam("customDokumentTypId") UUID customDokumentTypId);
+    NullableGesuchDokumentDto getCustomGesuchDokumentForTypGS(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @GET
     @Path("/customGesuchDokument/sb/{customDokumentTypId}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getCustomGesuchDokumenteForTypSB(@PathParam("customDokumentTypId") UUID customDokumentTypId);
+    NullableGesuchDokumentDto getCustomGesuchDokumentForTypSB(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @GET
     @Path("/dokument/{dokumentArt}/download")
@@ -99,6 +93,16 @@ public interface DokumentResource {
     FileDownloadTokenDto getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
+    @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")
+    @Produces({ "application/json", "text/plain" })
+    NullableGesuchDokumentDto getGesuchDokumentForTypGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
+    @Produces({ "application/json", "text/plain" })
+    NullableGesuchDokumentDto getGesuchDokumentForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
     @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/gs")
     @Produces({ "application/json", "text/plain" })
     List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareGS(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
@@ -107,16 +111,6 @@ public interface DokumentResource {
     @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/sb")
     @Produces({ "application/json", "text/plain" })
     List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
-
-    @GET
-    @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")
-    @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getGesuchDokumenteForTypGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
-    @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getGesuchDokumenteForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/unterschriftenblatt/{gesuchId}")

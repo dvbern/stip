@@ -605,33 +605,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
-  '/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}':
-    parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Dokument
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CustomDokumentTyp'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllCustomDokumentTypes
-      summary: get All CustomDokumentTypDtos Of Tranche
   '/gesuchDokument/customGesuchDokument/':
     post:
       requestBody:
@@ -681,38 +654,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteCustomDokumentTyp
       summary: delete a customDokumentTyp
-  '/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}':
-    get:
-      tags:
-        - Dokument
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NullableGesuchDokument'
-          description: Returns a Dokument for a given GesuchTrancheId and a DokumentTyp
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumenteForTypSB
-      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
   '/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -743,8 +684,40 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumenteForTypGS
+      operationId: getGesuchDokumentForTypGS
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Historisiert für den GS
+  '/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns a Dokument for a given GesuchTrancheId and a DokumentTyp
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumentForTypSB
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     post:
       requestBody:
@@ -803,7 +776,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getCustomGesuchDokumenteForTypSB
+      operationId: getCustomGesuchDokumentForTypSB
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
   '/customGesuchDokument/gs/{customDokumentTypId}':
     get:
@@ -830,7 +803,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getCustomGesuchDokumenteForTypGS
+      operationId: getCustomGesuchDokumentForTypGS
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den GS
   '/customGesuchDokument/{customDokumentTypId}':
     post:
@@ -2905,32 +2878,6 @@ paths:
                 $ref: '#/components/schemas/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchTranchePagesSB
-  '/gesuchtranche/{gesuchTrancheId}/dokumente/sb':
-    parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          description: GesuchDokumente returned
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumenteSB
   '/gesuchtranche/{gesuchTrancheId}/dokumente/gs':
     parameters:
       - name: gesuchTrancheId
@@ -2957,6 +2904,32 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumenteGS
+  '/gesuchtranche/{gesuchTrancheId}/dokumente/sb':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: GesuchDokumente returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumenteSB
   '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload/gs':
     parameters:
       - name: gesuchTrancheId
