@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BeschwerdeVerlaufEntryDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid Boolean beschwerdeSetTo;
-  private @Valid LocalDate timestampErstellt;
+  private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid String userErstellt;
 
   /**
@@ -65,7 +64,7 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
 
   /**
    **/
-  public BeschwerdeVerlaufEntryDto timestampErstellt(LocalDate timestampErstellt) {
+  public BeschwerdeVerlaufEntryDto timestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
   }
@@ -73,12 +72,12 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   
   @JsonProperty("timestampErstellt")
   @NotNull
-  public LocalDate getTimestampErstellt() {
+  public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
   @JsonProperty("timestampErstellt")
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
+  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 

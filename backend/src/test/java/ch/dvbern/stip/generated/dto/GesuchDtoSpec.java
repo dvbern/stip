@@ -39,7 +39,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
-  GesuchDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
   GesuchDtoSpec.JSON_PROPERTY_ID,
   GesuchDtoSpec.JSON_PROPERTY_AENDERUNGSDATUM,
   GesuchDtoSpec.JSON_PROPERTY_BEARBEITER,
@@ -68,9 +67,6 @@ public class GesuchDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
   private String gesuchNummer;
-
-  public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
-  private Boolean beschwerdeHaengig;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -249,32 +245,6 @@ public class GesuchDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
-  }
-
-
-  public GesuchDtoSpec beschwerdeHaengig(Boolean beschwerdeHaengig) {
-    
-    this.beschwerdeHaengig = beschwerdeHaengig;
-    return this;
-  }
-
-   /**
-   * Get beschwerdeHaengig
-   * @return beschwerdeHaengig
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getBeschwerdeHaengig() {
-    return beschwerdeHaengig;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
-    this.beschwerdeHaengig = beschwerdeHaengig;
   }
 
 
@@ -474,7 +444,6 @@ public class GesuchDtoSpec {
         Objects.equals(this.gesuchsperiode, gesuch.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuch.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuch.gesuchNummer) &&
-        Objects.equals(this.beschwerdeHaengig, gesuch.beschwerdeHaengig) &&
         Objects.equals(this.id, gesuch.id) &&
         Objects.equals(this.aenderungsdatum, gesuch.aenderungsdatum) &&
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
@@ -486,7 +455,7 @@ public class GesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, beschwerdeHaengig, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
   }
 
   @Override
@@ -499,7 +468,6 @@ public class GesuchDtoSpec {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
-    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");

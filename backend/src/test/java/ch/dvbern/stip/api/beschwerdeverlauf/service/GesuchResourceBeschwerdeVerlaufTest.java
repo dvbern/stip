@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.beschwerdeverlauf.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -33,12 +29,10 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchNotizApiSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchNotizDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.RequiredArgsConstructor;
@@ -65,18 +59,12 @@ import static org.hamcrest.Matchers.notNullValue;
 @Slf4j
 public class GesuchResourceBeschwerdeVerlaufTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
 
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
-    private GesuchNotizDto juristischeAbklaerungNotizDto;
-    private GesuchNotizDto abklaerungNotizDto;
-    private GesuchNotizDto gesuchNotizDto;
-
-    private List<GesuchDto> gesucheGS = new ArrayList<>();
 
     @Test
     @TestAsGesuchsteller
@@ -87,15 +75,15 @@ public class GesuchResourceBeschwerdeVerlaufTest {
         TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
 
-        var gesuche = gesuchApiSpec.getGesucheGs()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
-            .as(GesuchDto[].class);
-        gesucheGS = Arrays.stream(gesuche).toList();
+            .as(GesuchInfoDto.class);
         // assert that flag is false by default
-        assertThat(gesuche[0].getBeschwerdeHaengig(), is(false));
+        assertThat(gesuchInfo.getBeschwerdeHaengig(), is(false));
     }
 
     @Test
@@ -139,15 +127,15 @@ public class GesuchResourceBeschwerdeVerlaufTest {
     @TestAsGesuchsteller
     @Order(4)
     void verifyBeschwerdeHaengigHasBeenSetToTrue() {
-        var gesuche = gesuchApiSpec.getGesucheGs()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
-            .as(GesuchDto[].class);
-        gesucheGS = Arrays.stream(gesuche).toList();
+            .as(GesuchInfoDto.class);
         // assert that flag is false by default
-        assertThat(gesuche[0].getBeschwerdeHaengig(), is(true));
+        assertThat(gesuchInfo.getBeschwerdeHaengig(), is(true));
     }
 
     @Test

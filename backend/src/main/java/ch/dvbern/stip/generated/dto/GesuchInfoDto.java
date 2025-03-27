@@ -27,6 +27,7 @@ public class GesuchInfoDto  implements Serializable {
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
   private @Valid Boolean canGetBerechnung;
+  private @Valid Boolean beschwerdeHaengig;
 
   /**
    **/
@@ -142,6 +143,25 @@ public class GesuchInfoDto  implements Serializable {
     this.canGetBerechnung = canGetBerechnung;
   }
 
+  /**
+   **/
+  public GesuchInfoDto beschwerdeHaengig(Boolean beschwerdeHaengig) {
+    this.beschwerdeHaengig = beschwerdeHaengig;
+    return this;
+  }
+
+  
+  @JsonProperty("beschwerdeHaengig")
+  @NotNull
+  public Boolean getBeschwerdeHaengig() {
+    return beschwerdeHaengig;
+  }
+
+  @JsonProperty("beschwerdeHaengig")
+  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
+    this.beschwerdeHaengig = beschwerdeHaengig;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -157,12 +177,13 @@ public class GesuchInfoDto  implements Serializable {
         Objects.equals(this.gesuchStatus, gesuchInfo.gesuchStatus) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
-        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung);
+        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
+        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig);
   }
 
   @Override
@@ -176,6 +197,7 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
+    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("}");
     return sb.toString();
   }

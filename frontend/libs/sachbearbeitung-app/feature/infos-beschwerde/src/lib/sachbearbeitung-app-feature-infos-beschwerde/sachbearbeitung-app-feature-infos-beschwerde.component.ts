@@ -20,7 +20,9 @@ import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { BeschwerdeVerlaufEntry } from '@dv/shared/model/gesuch';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
@@ -32,6 +34,8 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     MatTableModule,
     MatTooltipModule,
     SharedUiKommentarDialogComponent,
+    SharedUiTruncateTooltipDirective,
+    SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',
@@ -40,12 +44,18 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 })
 export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   private beschwerdeStore = inject(BeschwerdeStore);
-  private gesuchStore = inject(GesuchStore);
   private matDialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
+  gesuchStore = inject(GesuchStore);
   gesuchIdSig = input.required<string>({ alias: 'id' });
-  displayColumns = ['userErstellt', 'timestampErstellt', 'title', 'kommentar'];
+  displayColumns = [
+    'userErstellt',
+    'timestampErstellt',
+    'title',
+    'kommentar',
+    'actions',
+  ];
   beschwerdeVerlaufSig = computed(() => {
     const { data } = this.beschwerdeStore.beschwerden();
     const dataSource = new MatTableDataSource(data);
@@ -77,10 +87,13 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
     }
 
     SharedUiKommentarDialogComponent.open(this.matDialog, {
-      titleKey: 'sachbearbeitung.beschwerde.create.title',
-      messageKey: 'sachbearbeitung.beschwerde.create.message',
-      confirmKey: 'sachbearbeitung.beschwerde.create.confirm',
-      placeholderKey: 'sachbearbeitung.beschwerde.create.placeholder',
+      titleKey:
+        'sachbearbeitung-app.infos.beschwerde.create.title.' +
+        beschwerdeHaengig,
+      confirmKey: 'sachbearbeitung-app.infos.beschwerde.create.confirm',
+      placeholderKey:
+        'sachbearbeitung-app.infos.beschwerde.create.placeholder.' +
+        beschwerdeHaengig,
       entityId: gesuchId,
     })
       .afterClosed()
@@ -92,6 +105,10 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
             values: {
               beschwerdeSetTo: !beschwerdeHaengig,
               kommentar: result?.kommentar,
+            },
+            onSucces: () => {
+              this.gesuchStore.loadGesuchInfo$({ gesuchId });
+              this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });
         }

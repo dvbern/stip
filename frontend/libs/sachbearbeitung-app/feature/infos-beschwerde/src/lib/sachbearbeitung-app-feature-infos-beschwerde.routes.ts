@@ -1,23 +1,20 @@
 import { Route } from '@angular/router';
 
+import { BESCHWERDEN_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
+
 import { SachbearbeitungAppFeatureInfosBeschwerdeComponent } from './sachbearbeitung-app-feature-infos-beschwerde/sachbearbeitung-app-feature-infos-beschwerde.component';
 
 export const sachbearbeitungAppFeatureInfosBeschwerdeRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // feature specific services and other providers
-      // always remove { providedIn: 'root' } from the feature specific services
-    ],
+    providers: [],
     children: [
       {
         path: '',
+        data: { option: BESCHWERDEN_ROUTE },
         component: SachbearbeitungAppFeatureInfosBeschwerdeComponent,
       },
-      // add more routes here (siblings)
-      // it is also possible to add nested routes as children
-      // of this feature root component (or even lazy loaded sub features)
     ],
   },
 ];

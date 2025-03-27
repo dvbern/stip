@@ -3765,7 +3765,6 @@ components:
         - gesuchsperiode
         - gesuchStatus
         - gesuchNummer
-        - beschwerdeHaengig
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
@@ -3783,8 +3782,6 @@ components:
           $ref: '#/components/schemas/Gesuchstatus'
         gesuchNummer:
           type: string
-        beschwerdeHaengig:
-          type: boolean
         id:
           $ref: '#/components/schemas/UUID'
         aenderungsdatum:
@@ -3815,6 +3812,7 @@ components:
         - startDate
         - endDate
         - canGetBerechnung
+        - beschwerdeHaengig
       type: object
       properties:
         id:
@@ -3828,6 +3826,8 @@ components:
         endDate:
           $ref: '#/components/schemas/LocalDate'
         canGetBerechnung:
+          type: boolean
+        beschwerdeHaengig:
           type: boolean
     FallDashboardItem:
       required:
@@ -6060,7 +6060,8 @@ components:
         - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
       properties:
         timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
+          type: string
+          format: date-time
         userErstellt:
           type: string
     NachfristAendernRequest:

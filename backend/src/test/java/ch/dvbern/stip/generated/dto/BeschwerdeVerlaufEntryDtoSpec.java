@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -37,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class BeschwerdeVerlaufEntryDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
-  private LocalDate timestampErstellt;
+  private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
@@ -51,7 +50,7 @@ public class BeschwerdeVerlaufEntryDtoSpec {
   public BeschwerdeVerlaufEntryDtoSpec() {
   }
 
-  public BeschwerdeVerlaufEntryDtoSpec timestampErstellt(LocalDate timestampErstellt) {
+  public BeschwerdeVerlaufEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
@@ -65,14 +64,14 @@ public class BeschwerdeVerlaufEntryDtoSpec {
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getTimestampErstellt() {
+  public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
 
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
+  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 

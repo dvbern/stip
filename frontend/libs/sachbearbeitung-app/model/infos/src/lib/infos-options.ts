@@ -60,7 +60,7 @@ export const BESCHWERDEN_ROUTE: InfosOptions = {
   route: 'beschwerden',
   translationKey: 'sachbearbeitung-app.infos.beschwerden',
   titleTranslationKey: 'sachbearbeitung-app.infos.beschwerden',
-  iconSymbolName: 'exclamation',
+  iconSymbolName: 'dangerous',
 };
 
 export const INFOS_OPTIONS = [

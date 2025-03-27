@@ -82,7 +82,9 @@ export class BeschwerdeStore extends signalStore(
               {
                 onSuccess: () => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'sachbearbeitung-app.beschwerde.create.success',
+                    messageKey:
+                      'sachbearbeitung-app.infos.beschwerde.create.success.' +
+                      values.beschwerdeSetTo,
                   });
                   onSucces?.();
                 },
