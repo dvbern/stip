@@ -82,6 +82,10 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  BEGRUENDUNGSSCHREIBEN_AGE,
+  MAX_AGE_GESUCHSSTELLER,
+  MEDIUM_AGE_GESUCHSSTELLER,
+  MIN_AGE_GESUCHSSTELLER,
   dateFromDateString,
   dateFromMonthYearString,
   getDateDifference,
@@ -96,11 +100,6 @@ import {
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
-
-const MIN_AGE_GESUCHSSTELLER = 10;
-const MAX_AGE_GESUCHSSTELLER = 130;
-const MEDIUM_AGE_GESUCHSSTELLER = 20;
-const BEGRUENDUNGSSCHREIBEN_AGE = 35;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',

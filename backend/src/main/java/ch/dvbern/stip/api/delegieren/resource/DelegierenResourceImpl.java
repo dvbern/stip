@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.delegieren.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
@@ -37,7 +38,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @RolesAllowed({ OidcPermissions.GESUCH_UPDATE })
     @Override
-    public void fallDelegieren(UUID fallId, UUID sozialdienstId) {
+    public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
         delegierenService.delegateFall(fallId, sozialdienstId);
     }

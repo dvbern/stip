@@ -39,6 +39,7 @@ export * from './customDokumentTyp';
 export * from './customDokumentTypCreate';
 export * from './darlehen';
 export * from './delegierung';
+export * from './delegierungCreate';
 export * from './deploymentConfig';
 export * from './dokument';
 export * from './dokumentArt';

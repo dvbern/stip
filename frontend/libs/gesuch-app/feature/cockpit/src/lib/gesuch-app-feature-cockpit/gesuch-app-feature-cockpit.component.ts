@@ -14,6 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
 import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
+import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import {
   GesuchAppUiDashboardAusbildungComponent,
@@ -223,17 +224,18 @@ export class GesuchAppFeatureCockpitComponent {
   }
 
   delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
-    SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.gesuch.delegieren',
-      message: 'gesuch-app.dashboard.gesuch.delegieren.message',
-      translationObject: sozialdienst,
-    })
+    GesuchAppFeatureDelegierenDialogComponent.open(this.dialog)
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.sozialdienstStore.fallDelegieren$({
+          const req = {
             sozialdienstId: sozialdienst.id,
             fallId,
+            delegierungCreate: result,
+          };
+
+          this.sozialdienstStore.fallDelegieren$({
+            req,
             onSuccess: () => {
               this.dashboardStore.loadDashboard$();
             },

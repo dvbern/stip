@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -20,6 +21,7 @@ import jakarta.validation.Valid;
 public interface DelegierenResource {
 
     @POST
+    @Consumes({ "application/json" })
     @Produces({ "text/plain" })
-    void fallDelegieren(@PathParam("fallId") UUID fallId,@PathParam("sozialdienstId") UUID sozialdienstId);
+    void fallDelegieren(@PathParam("fallId") UUID fallId,@PathParam("sozialdienstId") UUID sozialdienstId,@Valid @NotNull DelegierungCreateDto delegierungCreateDto);
 }

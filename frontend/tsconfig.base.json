@@ -22,6 +22,7 @@
       "@dv/gesuch-app/data-access/dashboard": ["libs/gesuch-app/data-access/dashboard/src/index.ts"],
       "@dv/gesuch-app/dialog/create-ausbildung": ["libs/gesuch-app/dialog/create-ausbildung/src/index.ts"],
       "@dv/gesuch-app/feature/cockpit": ["libs/gesuch-app/feature/cockpit/src/index.ts"],
+      "@dv/gesuch-app/feature/delegieren-dialog": ["libs/gesuch-app/feature/delegieren-dialog/src/index.ts"],
       "@dv/gesuch-app/feature/gesuch-form": ["libs/gesuch-app/feature/gesuch-form/src/index.ts"],
       "@dv/gesuch-app/feature/gesuch-form-abschluss": ["libs/gesuch-app/feature/gesuch-form-abschluss/src/index.ts"],
       "@dv/gesuch-app/pattern/gesuch-step-layout": ["libs/gesuch-app/pattern/gesuch-step-layout/src/index.ts"],
