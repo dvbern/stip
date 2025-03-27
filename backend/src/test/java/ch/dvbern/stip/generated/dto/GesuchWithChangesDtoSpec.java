@@ -43,6 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_ID,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_AENDERUNGSDATUM,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_BEARBEITER,
@@ -74,6 +75,9 @@ public class GesuchWithChangesDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
   private String gesuchNummer;
+
+  public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
+  private Boolean beschwerdeHaengig;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -289,6 +293,32 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
+  public GesuchWithChangesDtoSpec beschwerdeHaengig(Boolean beschwerdeHaengig) {
+    
+    this.beschwerdeHaengig = beschwerdeHaengig;
+    return this;
+  }
+
+   /**
+   * Get beschwerdeHaengig
+   * @return beschwerdeHaengig
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getBeschwerdeHaengig() {
+    return beschwerdeHaengig;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
+    this.beschwerdeHaengig = beschwerdeHaengig;
+  }
+
+
   public GesuchWithChangesDtoSpec id(UUID id) {
     
     this.id = id;
@@ -486,6 +516,7 @@ public class GesuchWithChangesDtoSpec {
         Objects.equals(this.gesuchsperiode, gesuchWithChanges.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchWithChanges.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuchWithChanges.gesuchNummer) &&
+        Objects.equals(this.beschwerdeHaengig, gesuchWithChanges.beschwerdeHaengig) &&
         Objects.equals(this.id, gesuchWithChanges.id) &&
         Objects.equals(this.aenderungsdatum, gesuchWithChanges.aenderungsdatum) &&
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
@@ -497,7 +528,7 @@ public class GesuchWithChangesDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
+    return Objects.hash(changes, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, beschwerdeHaengig, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
   }
 
   @Override
@@ -511,6 +542,7 @@ public class GesuchWithChangesDtoSpec {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
+    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");

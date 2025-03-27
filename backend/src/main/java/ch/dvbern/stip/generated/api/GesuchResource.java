@@ -2,6 +2,8 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -81,6 +83,12 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
+    @Path("/{gesuchId}/beschwerde")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(@PathParam("gesuchId") UUID gesuchId,@Valid BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto);
+
+    @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     UUID createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
@@ -116,6 +124,11 @@ public interface GesuchResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchZurueckweisenResponseDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+
+    @GET
+    @Path("/{gesuchId}/beschwerde")
+    @Produces({ "application/json", "text/plain" })
+    List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")

@@ -21,6 +21,7 @@ export interface GesuchWithChanges {
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     gesuchNummer: string;
+    beschwerdeHaengig: boolean;
     id: string;
     aenderungsdatum: string;
     /**
