@@ -38,7 +38,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Table(
     name = "beschwerde_verlauf_entry",
     indexes = {
-        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
+        @Index(name = "IX_beschwerde_verlauf_entry_mandant", columnList = "mandant")
     }
 )
 @Audited
