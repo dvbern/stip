@@ -178,4 +178,12 @@ export const baseGesuchFormRoutes: Routes = [
     path: ':id/tranche/:trancheId',
     redirectTo: TRANCHE.route + '/:id/tranche/:trancheId',
   },
+  {
+    path: ':id/aenderung/:trancheId',
+    redirectTo: TRANCHE.route + '/:id/aenderung/:trancheId',
+  },
+  {
+    path: ':id/initial/:trancheId',
+    redirectTo: TRANCHE.route + '/:id/initial/:trancheId',
+  },
 ];
