@@ -178,7 +178,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(SB_GESUCH_READ)
     public EinreichedatumStatusDto canEinreichedatumAendern(UUID gesuchId) {
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.canUpdateEinreichedatum(gesuchId);
     }
 
