@@ -1,0 +1,102 @@
+@let beschwerdeHaengig = false;
+<!-- Beschwerde Hängig -->
+<h3 class="tw-mb-6">
+  {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate }}
+</h3>
+
+<p>
+  {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text' | translate }}
+</p>
+
+<button
+  class="btn btn-primary"
+  type="button"
+  data-testid="button-beschwerde-create"
+  (click)="setBeschwerdeTo(beschwerdeHaengig)"
+>
+  {{ 'sachbearbeitung-app.infos.beschwerde.create.' + beschwerdeHaengig | translate }}
+</button>
+
+<!-- Beschwerde Entscheid hochladen -->
+<h3 class="tw-mb-6 tw-mt-10">
+  {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen' | translate }}
+</h3>
+
+<!-- Beschwerde Verlauf -->
+<h3 class="tw-mb-6 tw-mt-10">
+  {{ 'sachbearbeitung-app.infos.beschwerde.verlauf' | translate }}
+</h3>
+
+<div class="tw-dv-table tw-mb-6">
+  @let datasource = beschwerdeVerlaufSig();
+  <table mat-table [dataSource]="datasource">
+    <caption class="cdk-visually-hidden">
+      {{
+        'sachbearbeitung-app.infos.beschwerde.table.title' | translate
+      }}
+    </caption>
+
+    <!-- Datum -->
+    <ng-container matColumnDef="timestampErstellt">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.datum' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+        {{ beschwerde.timestampErstellt | date: 'dd.MM.yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- User -->
+    <ng-container matColumnDef="userErstellt">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.user' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+        {{ beschwerde.userErstellt }}
+      </td>
+    </ng-container>
+
+    <!-- Titel -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.title' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+        {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo }}
+      </td>
+    </ng-container>
+
+    <!-- Kommentar -->
+    <ng-container matColumnDef="kommentar">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.comment' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+        {{ beschwerde.kommentar }}
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actoins">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+        <button
+          type="button"
+          (click)="showDetails(beschwerde)"
+          class="dv-icon-button dv-icon-button-md text-info"
+          [matTooltip]="'sachbearbeitung-app.infos.beschwerde.table.moreInfo' | translate"
+        >
+          <span class="material-symbols-rounded">info</span>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-p-3" [colSpan]="displayColumns.length">
+        {{ 'shared.table.noEntries' | translate }}
+      </td>
+    </tr>
+  </table>
+</div>
