@@ -7,7 +7,7 @@
 >
   @let gesuchId = gesuchIdSig();
   @let trancheId = gesuchTrancheIdSig();
-  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+  <div dvHeaderDesktopLeft class="tw-flex tw-flex-grow tw-items-center tw-gap-4">
     <!-- Gesuch -->
     <button
       type="button"
@@ -218,6 +218,13 @@
           }
         </div>
       </mat-menu>
+    }
+    @if (isBeschwerdeHaengigSig()) {
+      <div class="tw-w-full tw-grow"></div>
+
+      <mat-chip [color]="'info'" highlighted>{{
+        'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate
+      }}</mat-chip>
     }
   </div>
 </dv-shared-pattern-app-header>

@@ -10,6 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -52,6 +53,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     TranslatePipe,
     RouterLink,
     RouterLinkActive,
+    MatChipsModule,
     MatMenuModule,
     MatTooltipModule,
     SharedPatternAppHeaderComponent,
@@ -98,6 +100,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       this.gesuchStore.gesuchInfo().data?.canGetBerechnung;
 
     return canViewBerechnung;
+  });
+  isBeschwerdeHaengigSig = computed(() => {
+    return this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());
