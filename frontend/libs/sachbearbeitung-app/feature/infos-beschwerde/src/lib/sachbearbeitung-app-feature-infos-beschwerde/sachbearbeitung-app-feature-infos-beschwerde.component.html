@@ -32,7 +32,13 @@
 
   <div class="tw-dv-table tw-mb-6">
     @let datasource = beschwerdeVerlaufSig();
-    <table mat-table [dataSource]="datasource">
+    <table
+      mat-table
+      matSort
+      [dataSource]="datasource"
+      [matSortActive]="'timestampErstellt'"
+      [matSortDirection]="'desc'"
+    >
       <caption class="cdk-visually-hidden">
         {{
           'sachbearbeitung-app.infos.beschwerde.table.title' | translate
@@ -41,7 +47,7 @@
 
       <!-- Datum -->
       <ng-container matColumnDef="timestampErstellt">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.beschwerde.table.datum' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
@@ -51,7 +57,7 @@
 
       <!-- User -->
       <ng-container matColumnDef="userErstellt">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.beschwerde.table.user' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
@@ -61,7 +67,7 @@
 
       <!-- Titel -->
       <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-64">
           {{ 'sachbearbeitung-app.infos.beschwerde.table.title' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
@@ -71,7 +77,7 @@
 
       <!-- Kommentar -->
       <ng-container matColumnDef="kommentar">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-[30ch]">
           {{ 'sachbearbeitung-app.infos.beschwerde.table.comment' | translate }}
         </th>
         <td
@@ -84,9 +90,34 @@
         </td>
       </ng-container>
 
+      <!-- Beschwerde erfolgreich -->
+      <ng-container matColumnDef="successfull">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ 'sachbearbeitung-app.infos.beschwerde.table.successfull' | translate }}
+        </th>
+        <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap"></td>
+      </ng-container>
+
+      <!-- Hochgeladenes Dokument -->
+      <ng-container matColumnDef="document">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | translate }}
+        </th>
+        <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
+          <button
+            type="button"
+            class="btn btn-outline-primary fs-7 tw-ml-3 tw-p-4 tw-text-sm"
+            [dvDownloadButton]="{ type: 'dokument', id: 'TBD', dokumentArt: 'CUSTOM_DOKUMENT' }"
+            [matTooltip]="'shared.dokumente.table.download' | translate"
+          >
+            <span class="material-symbols-rounded tw-align-middle">download</span>
+          </button>
+        </td>
+      </ng-container>
+
       <!-- Actions -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-20"></th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
           <button
             type="button"
@@ -107,5 +138,7 @@
         </td>
       </tr>
     </table>
+
+    <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
   </div>
 }

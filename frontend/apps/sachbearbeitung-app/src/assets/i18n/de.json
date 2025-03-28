@@ -323,6 +323,8 @@
   "sachbearbeitung-app.infos.beschwerde.table.title": "Titel",
   "sachbearbeitung-app.infos.beschwerde.table.user": "Benutzer",
   "sachbearbeitung-app.infos.beschwerde.table.comment": "Kommentar",
+  "sachbearbeitung-app.infos.beschwerde.table.successfull": "Erfolgreich",
+  "sachbearbeitung-app.infos.beschwerde.table.document": "Dokument",
   "sachbearbeitung-app.infos.beschwerde.table.moreInfo": "Weitere Informationen anzeigen",
   "sachbearbeitung-app.infos.beschwerde.create.title.false": "Hängige Beschwerde aktivieren",
   "sachbearbeitung-app.infos.beschwerde.create.title.true": "Hängige Beschwerde deaktivieren",
@@ -335,8 +337,6 @@
   "sachbearbeitung-app.infos.beschwerde.datum": "Datum:",
   "sachbearbeitung-app.infos.beschwerde.user": "Benutzer:",
   "sachbearbeitung-app.infos.beschwerde.title": "Titel:",
-  "sachbearbeitung-app.infos.haengig.true": "aktiviert",
-  "sachbearbeitung-app.infos.haengig.false": "deaktiviert",
   "sachbearbeitung-app.infos.beschwerde.kommentar": "Kommentar:",
 
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
