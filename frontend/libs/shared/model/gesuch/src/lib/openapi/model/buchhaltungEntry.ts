@@ -13,6 +13,7 @@ import { BuchhaltungType } from './buchhaltungType';
 import { SapStatus } from './sapStatus';
 
 export interface BuchhaltungEntry { 
+    userErstellt: string;
     timestampErstellt: string;
     buchhaltungType: BuchhaltungType;
     stipendienBetrag?: number;

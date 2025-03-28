@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * BuchhaltungEntryDtoSpec
  */
 @JsonPropertyOrder({
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_BUCHHALTUNG_TYPE,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_STIPENDIEN_BETRAG,
@@ -46,6 +47,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("BuchhaltungEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class BuchhaltungEntryDtoSpec {
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  private String userErstellt;
+
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private java.time.LocalDateTime timestampErstellt;
 
@@ -84,6 +88,32 @@ public class BuchhaltungEntryDtoSpec {
 
   public BuchhaltungEntryDtoSpec() {
   }
+
+  public BuchhaltungEntryDtoSpec userErstellt(String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+   /**
+   * Get userErstellt
+   * @return userErstellt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
 
   public BuchhaltungEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
     
@@ -405,7 +435,8 @@ public class BuchhaltungEntryDtoSpec {
       return false;
     }
     BuchhaltungEntryDtoSpec buchhaltungEntry = (BuchhaltungEntryDtoSpec) o;
-    return Objects.equals(this.timestampErstellt, buchhaltungEntry.timestampErstellt) &&
+    return Objects.equals(this.userErstellt, buchhaltungEntry.userErstellt) &&
+        Objects.equals(this.timestampErstellt, buchhaltungEntry.timestampErstellt) &&
         Objects.equals(this.buchhaltungType, buchhaltungEntry.buchhaltungType) &&
         Objects.equals(this.stipendienBetrag, buchhaltungEntry.stipendienBetrag) &&
         Objects.equals(this.auszahlung, buchhaltungEntry.auszahlung) &&
@@ -421,13 +452,14 @@ public class BuchhaltungEntryDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, comment, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, comment, verfuegungId, gesuchId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BuchhaltungEntryDtoSpec {\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    buchhaltungType: ").append(toIndentedString(buchhaltungType)).append("\n");
     sb.append("    stipendienBetrag: ").append(toIndentedString(stipendienBetrag)).append("\n");

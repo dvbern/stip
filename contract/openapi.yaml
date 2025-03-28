@@ -5930,12 +5930,15 @@ components:
     BuchhaltungEntry:
       type: object
       required:
+        - userErstellt
         - timestampErstellt
         - buchhaltungType
         - saldoAenderung
         - saldo
         - comment
       properties:
+        userErstellt:
+          type: string
         timestampErstellt:
           type: string
           format: date-time
