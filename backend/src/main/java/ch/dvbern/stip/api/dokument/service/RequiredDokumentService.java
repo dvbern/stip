@@ -45,7 +45,12 @@ public class RequiredDokumentService {
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
 
     public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
-        if (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE) {
+        if (
+            (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE)
+            && gesuch.getGesuchTranchen()
+                .stream()
+                .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
+        ) {
             return false;
         }
         var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
