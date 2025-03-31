@@ -166,6 +166,24 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canAenderungFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        if (
+            !(AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+                gesuchTranche.getGesuch(),
+                sozialdienstService
+            )
+            || AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuchTranche.getGesuch()))
+        ) {
+            throw new UnauthorizedException();
+        }
+        if (gesuchTranche.getStatus() != GesuchTrancheStatus.FEHLENDE_DOKUMENTE) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Transactional
     public void canFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         if (

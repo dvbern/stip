@@ -136,7 +136,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public GesuchDto aenderungFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canAenderungFehlendeDokumenteEinreichen(gesuchTrancheId);
         gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchTrancheService.aenderungFehlendeDokumenteEinreichen(gesuchTrancheId);
     }
