@@ -77,7 +77,7 @@ export const appRoutes: Route[] = [
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,
-          hasRoles(['V0_Sachbearbeiter'], '/administration'),
+          hasRoles(['V0_Sachbearbeiter', 'V0_Jurist'], '/administration'),
         ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
