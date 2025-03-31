@@ -504,7 +504,13 @@ public class GesuchDokumentService {
     }
 
     public void checkIfDokumentExists(final UUID dokumentId) {
-        dokumentRepository.requireById(dokumentId);
+        var dokument = dokumentRepository.findById(dokumentId);
+        if (Objects.isNull(dokument)) {
+            dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
+        }
+        if (Objects.isNull(dokument)) {
+            throw new NotFoundException();
+        }
     }
 
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {

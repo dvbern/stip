@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -30,13 +31,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchDokumentAuthorizer {
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
 
     @Transactional
     public void canRead(final UUID gesuchDokumentId) {
-        final var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
+        var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
         if (Objects.isNull(gesuchDokument)) {
-            return;
+            gesuchDokument = gesuchDokumentHistoryRepository.findInHistoryById(gesuchDokumentId);
         }
         gesuchTrancheAuthorizer.canRead(gesuchDokument.getGesuchTranche().getId());
     }

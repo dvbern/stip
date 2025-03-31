@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -50,6 +51,7 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchHistoryRepository gesuchHistoryRepository;
@@ -114,7 +116,10 @@ public class GesuchDokumentKommentarService {
     public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokumentGS(
         final UUID gesuchDokumentId
     ) {
-        var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
+        if (Objects.isNull(gesuchDokument)) {
+            gesuchDokument = gesuchDokumentHistoryRepository.findInHistoryById(gesuchDokumentId);
+        }
 
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchDokument.getGesuchTranche().getId());
         Integer gesuchTrancheRevision = null;
@@ -144,11 +149,8 @@ public class GesuchDokumentKommentarService {
             gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokumentId);
 
         if (Objects.nonNull(gesuchTrancheRevision)) {
-            List<GesuchDokumentKommentar> versionedGesuchDokumentKommentars = gesuchDokumentKommentarHistoryRepository
+            gesuchDokumentKommentars = gesuchDokumentKommentarHistoryRepository
                 .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokumentId, gesuchTrancheRevision);
-
-            gesuchDokumentKommentars =
-                versionedGesuchDokumentKommentars.stream().filter(gesuchDokumentKommentars::contains).toList();
         }
 
         return gesuchDokumentKommentars.stream()
