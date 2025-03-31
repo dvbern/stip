@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -57,6 +58,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Getter
 @Setter
 @AhvIfSwissConstraint
+@ElternFieldsNullableUntilEinreichenConstraint(groups = { GesuchEinreichenValidationGroup.class })
 public class Eltern extends AbstractPerson {
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -104,13 +106,11 @@ public class Eltern extends AbstractPerson {
     @Column(name = "sozialhilfebeitraege", nullable = false)
     private boolean sozialhilfebeitraege = true;
 
-    @NotNull
-    @Column(name = "ergaenzungsleistungen", nullable = false)
+    @Column(name = "ergaenzungsleistungen")
     @Min(0)
     private Integer ergaenzungsleistungen;
 
-    @NotNull
-    @Column(name = "wohnkosten", nullable = false)
+    @Column(name = "wohnkosten")
     @Min(0)
     private Integer wohnkosten;
 }

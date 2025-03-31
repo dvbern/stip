@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.partner.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,7 +40,7 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
-@AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint
+@AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint(groups = { GesuchEinreichenValidationGroup.class })
 @AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 @Entity
 @Table(
