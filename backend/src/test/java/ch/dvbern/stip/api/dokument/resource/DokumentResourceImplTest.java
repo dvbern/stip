@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -78,6 +79,8 @@ class DokumentResourceImplTest {
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     @InjectMock
     GesuchTrancheRepository gesuchTrancheRepository;
+    @InjectMock
+    GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     @Inject
     GesuchFormularService gesuchFormularService;
     @InjectMock
@@ -104,6 +107,7 @@ class DokumentResourceImplTest {
         gesuch.setId(UUID.randomUUID());
         tranche.setGesuch(gesuch);
         when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
+        when(gesuchDokumentHistoryRepository.findInHistoryById(any())).thenReturn(gesuchDokument);
         when(gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(any())).thenReturn(tranche);
         when(gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(any(), any()))
             .thenReturn(Optional.empty());
