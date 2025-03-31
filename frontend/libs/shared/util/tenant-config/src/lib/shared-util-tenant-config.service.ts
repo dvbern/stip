@@ -1,12 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
 
+import { isTenantKey } from '@dv/shared/model/config';
 import { TenantInfo } from '@dv/shared/model/gesuch';
-
-const faviconMap = {
-  bern: 'assets/images/logo_kanton_bern_full.svg',
-  dv: 'assets/images/dv-favicon-logo.svg',
-} as const;
+import { isDefined } from '@dv/shared/model/type-util';
 
 @Injectable({
   providedIn: 'root',
@@ -30,13 +27,12 @@ export class SharedUtilTenantConfigService {
     this._tenantInfoSig.set(tenantInfo);
   }
 
-  private setFavicon(identifier: string) {
+  private setFavicon(identifier: string | undefined | null) {
     const favicon = this.document.querySelector('link[rel="icon"]');
-    if (favicon) {
+    if (favicon && isDefined(identifier) && isTenantKey(identifier)) {
       favicon.setAttribute(
         'href',
-        faviconMap[identifier as keyof typeof faviconMap] ||
-          'assets/images/logo_kanton_bern_full.svg',
+        `assets/images/logo_kanton_${identifier}.svg`,
       );
     }
   }
