@@ -784,7 +784,6 @@ public class GesuchService {
 
     @Transactional
     public void checkForFehlendeDokumenteOnAllAenderungen() {
-        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
         final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
 
         final var toUpdate =
