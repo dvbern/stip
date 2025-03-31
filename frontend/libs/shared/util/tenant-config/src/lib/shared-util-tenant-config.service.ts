@@ -11,13 +11,12 @@ const faviconMap = {
 @Injectable({
   providedIn: 'root',
 })
-export class SharedUtilTenantCacheService {
+export class SharedUtilTenantConfigService {
   private _tenantInfoSig = signal<TenantInfo | null>(null);
   private document = inject(DOCUMENT);
 
   tenantInfoSig = computed(() => this._tenantInfoSig());
 
-  // effect to set favicon
   constructor() {
     effect(() => {
       const tenantInfo = this._tenantInfoSig();
