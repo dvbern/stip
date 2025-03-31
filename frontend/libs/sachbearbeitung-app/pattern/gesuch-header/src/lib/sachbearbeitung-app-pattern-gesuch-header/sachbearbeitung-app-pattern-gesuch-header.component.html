@@ -222,9 +222,11 @@
     @if (isBeschwerdeHaengigSig()) {
       <div class="tw-w-full tw-grow"></div>
 
-      <mat-chip [color]="'info'" highlighted>{{
-        'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate
-      }}</mat-chip>
+      <div class="tw-text-sm">
+        <mat-chip [color]="'info'" highlighted>
+          {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate }}
+        </mat-chip>
+      </div>
     }
   </div>
 </dv-shared-pattern-app-header>
