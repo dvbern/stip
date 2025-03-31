@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
@@ -68,6 +65,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.List;
+import java.util.UUID;
+
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -84,7 +84,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-public class GesuchFormularNullableFieldsByGesuchstatusTest {
+class GesuchFormularNullableFieldsByGesuchstatusTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
@@ -267,14 +267,12 @@ public class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(14)
     void addPartnerWithNullableFields() {
-        // Set partner to null as Zivilstand is LEDIG
         partnerUpdateDtoSpec = (PartnerUpdateDtoSpec) PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec();
         var partner = partnerUpdateDtoSpec;
         partner.setVerpflegungskosten(null);
         partner.setFahrkosten(null);
         partner.setJahreseinkommen(null);
 
-        // var partner = (PartnerUpdateDtoSpec) null;
         currentFormular.setPartner(partner);
         final var updatedGesuch = patchAndValidate();
         final var adresse = updatedGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse();
