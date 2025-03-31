@@ -48,7 +48,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [GesuchStore, BeschwerdeStore, paginatorTranslationProvider()],
+  providers: [BeschwerdeStore, paginatorTranslationProvider()],
 })
 export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   private beschwerdeStore = inject(BeschwerdeStore);

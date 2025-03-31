@@ -59,7 +59,6 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
   ],
-  providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -102,7 +101,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return canViewBerechnung;
   });
   isBeschwerdeHaengigSig = computed(() => {
-    return this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
+    const beschwerdeHaengig =
+      this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
+    console.log('beschwerdeHaengig', { beschwerdeHaengig });
+    return beschwerdeHaengig;
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());
