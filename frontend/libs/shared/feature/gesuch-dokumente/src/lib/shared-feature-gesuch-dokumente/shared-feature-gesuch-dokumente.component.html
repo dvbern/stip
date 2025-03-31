@@ -84,7 +84,7 @@
       {{ 'shared.form.gonext' | translate }}
     </button>
   }
-  @if (gesuch.permissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
+  @if (gesuch.permissions.canUploadDocuments && gesuch.permissions.canFreigeben) {
     <button
       type="button"
       class="btn btn-primary"

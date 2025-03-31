@@ -130,7 +130,7 @@ export class EinreichenStore extends signalStore(
 
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
-    const { trancheSetting } = this.gesuchViewSig();
+    const { permissions, trancheSetting } = this.gesuchViewSig();
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
     const hasNoDokumenteToUebermitteln =
@@ -170,6 +170,7 @@ export class EinreichenStore extends signalStore(
         validationReport,
         gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
       ),
+      permissions,
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
