@@ -43,6 +43,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.nachname.NotBlank.message}";
     public static final String VALIDATION_VORNAME_NOTBLANK_MESSAGE =
         "{jakarta.validation.constraints.vorname.NotBlank.message}";
+    public static final String VALIDATION_ELTERN_NULLABLE_FIELDS_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.eltern.fieldsNullableUntilEinreichen.required.message}";
     public static final String VALIDATION_IZW_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.izw.required.message}";
     public static final String VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE =
