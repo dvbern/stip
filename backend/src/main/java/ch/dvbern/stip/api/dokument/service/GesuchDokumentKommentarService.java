@@ -82,7 +82,7 @@ public class GesuchDokumentKommentarService {
                     if (fromGesuchDokument.getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
                         final var newKommentar =
                             GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);
-                        gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
+                        gesuchDokumentKommentarRepository.persist(newKommentar);
                     }
                 } else if (
                     fromGesuchDokument.getCustomDokumentTyp() != null && toGesuchDokument.getCustomDokumentTyp() != null
@@ -93,7 +93,7 @@ public class GesuchDokumentKommentarService {
                 ) {
                     final var newKommentar =
                         GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);
-                    gesuchDokumentKommentarRepository.persistAndFlush(newKommentar);
+                    gesuchDokumentKommentarRepository.persist(newKommentar);
                 }
             }
         }

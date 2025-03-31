@@ -343,9 +343,7 @@ public class GesuchDokumentService {
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
         final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
         if (historicalDokument.getGesuchDokumente().size() > 1) {
-            throw new IllegalStateException(
-                "Dokument " + dokument.getId() + " has multiple gesuchDokuments in history"
-            );
+            return false;
         }
 
         final var historicalTranche = historicalDokument.getGesuchDokumente().get(0).getGesuchTranche();

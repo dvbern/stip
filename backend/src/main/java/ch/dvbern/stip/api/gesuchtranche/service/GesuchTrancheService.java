@@ -448,6 +448,7 @@ public class GesuchTrancheService {
         gesuchFormularUpdateDto.setPartner(partnerMapper.toUpdateDto(lastFreigegebenFormular.getPartner()));
 
         gesuchFormularUpdateDto.setElterns(new ArrayList<>(List.of()));
+        aenderung.getGesuchFormular().getElterns().clear();
         for (final var eltern : lastFreigegebenFormular.getElterns()) {
             gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern));
         }
@@ -570,6 +571,16 @@ public class GesuchTrancheService {
     }
 
     public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
+        gesuchDokumentKommentarService.deleteForGesuchTrancheId(gesuchTranche.getId());
+        gesuchTranche.getGesuchDokuments()
+            .forEach(
+                gesuchDokument -> {
+                    gesuchDokument.getDokumente()
+                        .forEach(dokument -> dokument.getGesuchDokumente().remove(gesuchDokument));
+                    gesuchDokumentRepository.deleteById(gesuchDokument.getId());
+                }
+            );
+        gesuchTranche.getGesuch().getGesuchTranchen().remove(gesuchTranche);
         gesuchTrancheRepository.delete(gesuchTranche);
     }
 }
