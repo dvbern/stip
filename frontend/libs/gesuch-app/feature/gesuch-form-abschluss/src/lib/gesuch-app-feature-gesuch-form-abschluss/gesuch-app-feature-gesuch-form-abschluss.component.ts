@@ -68,7 +68,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
     getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
-        this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });

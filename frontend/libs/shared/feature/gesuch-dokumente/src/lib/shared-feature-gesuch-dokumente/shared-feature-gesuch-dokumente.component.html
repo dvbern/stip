@@ -72,7 +72,6 @@
 
 <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
   @let dokumente = dokumentsStore.dokuments();
-  <!-- @let missingDocuments = dokumentsToUpload?.required?.length ?? 0; -->
   @if (gesuch.permissions.canFreigeben) {
     <button
       type="button"
@@ -84,7 +83,7 @@
       {{ 'shared.form.gonext' | translate }}
     </button>
   }
-  @if (gesuch.permissions.canUploadDocuments && gesuch.permissions.canFreigeben) {
+  @if (gesuch.permissions.canUploadDocuments && gesuch.permissions.canDokumenteUebermitteln) {
     <button
       type="button"
       class="btn btn-primary"

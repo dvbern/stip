@@ -29,7 +29,7 @@ async function setup(abschlussPhase: AbschlussPhase) {
             specialValidationErrors: [],
             invalidFormularSteps: [],
             permissions: {
-              canFreigeben: true,
+              canDokumenteUebermitteln: true,
             },
             gesuchStatus: 'IN_BEARBEITUNG_GS',
           }),

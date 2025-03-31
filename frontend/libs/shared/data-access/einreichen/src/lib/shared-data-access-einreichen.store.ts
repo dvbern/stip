@@ -134,7 +134,7 @@ export class EinreichenStore extends signalStore(
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
     const hasNoDokumenteToUebermitteln =
-      gesuch?.gesuchStatus !== 'FEHLENDE_DOKUMENTE' ||
+      permissions.canDokumenteUebermitteln &&
       this.dokumentsStore.dokumenteCanFlagsSig().gsCanDokumenteUebermitteln;
 
     const routesSuffix = trancheSetting?.routesSuffix;
