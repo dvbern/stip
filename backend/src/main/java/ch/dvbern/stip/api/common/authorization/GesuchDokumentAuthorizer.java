@@ -131,7 +131,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         // Admins and Sachbearbeiter can always read every Gesuch
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 
@@ -152,7 +152,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetGesuchDokumentKommentareForTranche(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 

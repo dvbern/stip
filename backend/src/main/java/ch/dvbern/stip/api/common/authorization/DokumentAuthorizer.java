@@ -39,7 +39,7 @@ public class DokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetDokumentDownloadToken(final UUID dokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 

@@ -32,6 +32,7 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
@@ -45,7 +46,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
         steuerdatenAuthorizer.canRead();
         return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();

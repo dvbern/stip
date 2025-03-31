@@ -68,7 +68,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canReadAllTyps() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminOrSb(currentBenutzer)) {
+        if (!isAdminSbOrJurist(currentBenutzer)) {
             forbidden();
         }
     }
@@ -76,7 +76,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 

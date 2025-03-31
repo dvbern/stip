@@ -41,7 +41,7 @@ public class FallAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanGet() {
-        if (isAdminOrSb(benutzerService.getCurrentBenutzer())) {
+        if (isAdminSbOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
 

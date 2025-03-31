@@ -176,7 +176,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public EinreichedatumStatusDto canEinreichedatumAendern(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.canUpdateEinreichedatum(gesuchId);
@@ -279,7 +279,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchHistoryService.getStatusprotokoll(gesuchId);
@@ -300,7 +300,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
@@ -345,7 +345,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
@@ -364,7 +364,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchWithChangesDto getGesuchSB(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);

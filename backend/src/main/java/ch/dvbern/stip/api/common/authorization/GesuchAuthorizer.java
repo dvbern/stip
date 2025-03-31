@@ -62,7 +62,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canReadChanges(final UUID gesuchID) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 

@@ -124,7 +124,7 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Override
-    @RolesAllowed(UNTERSCHRIFTENBLATT_UPLOAD)
+    @RolesAllowed(UNTERSCHRIFTENBLATT_READ)
     public List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(UUID gesuchId) {
         unterschriftenblattAuthorizer.canGetUnterschriftenblaetter();
         return unterschriftenblattService.getForGesuchAndType(gesuchId);
