@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.AusbildungsstaetteAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
@@ -31,52 +31,53 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResource {
+    private final AusbildungsstaetteAuthorizer ausbildungsstaetteAuthorizer;
     private final AusbildungsstaetteService ausbildungsstaetteService;
 
     @Override
-    @RolesAllowed(AUSBILDUNG_CREATE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_CREATE)
     public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaette) {
+        ausbildungsstaetteAuthorizer.canCreate();
         return ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaette);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_DELETE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_DELETE)
     public void deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
+        ausbildungsstaetteAuthorizer.canDelete();
         ausbildungsstaetteService.deleteAusbildungsstaette(ausbildungsstaetteId);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_READ)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public AusbildungsstaetteDto getAusbildungsstaette(UUID ausbildungsstaetteId) {
+        ausbildungsstaetteAuthorizer.canRead();
         return ausbildungsstaetteService.findById(ausbildungsstaetteId);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_READ)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<AusbildungsstaetteDto> getAusbildungsstaetten() {
+        ausbildungsstaetteAuthorizer.canRead();
         return ausbildungsstaetteService.getAusbildungsstaetten();
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_UPDATE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public AusbildungsstaetteDto updateAusbildungsstaette(
         UUID ausbildungsstaetteId,
         AusbildungsstaetteUpdateDto ausbildungsstaette
     ) {
+        ausbildungsstaetteAuthorizer.canUpdate();
         return ausbildungsstaetteService.updateAusbildungsstaette(ausbildungsstaetteId, ausbildungsstaette);
     }
 }

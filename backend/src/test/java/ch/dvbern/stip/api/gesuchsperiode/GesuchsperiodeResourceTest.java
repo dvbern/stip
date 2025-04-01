@@ -217,7 +217,7 @@ class GesuchsperiodeResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -229,7 +229,7 @@ class GesuchsperiodeResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         api.getGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())

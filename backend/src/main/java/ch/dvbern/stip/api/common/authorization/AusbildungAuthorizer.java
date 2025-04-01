@@ -25,10 +25,9 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +40,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungRepository ausbildungRepository;
     private final SozialdienstService sozialdienstService;
+    private final FallService fallService;
 
     private boolean isGesuchstellerOfAusbildung(final Benutzer currentBenutzer, final Ausbildung ausbildung) {
         return Objects.equals(
@@ -50,16 +50,20 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canCreate() {
-        // TODO: Check state of ausbildung - only one may be active
+    public void canCreate(final UUID fallId) {
+        if (!fallService.hasAktiveAusbildung(fallId)) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
     public void canRead(final UUID ausbildungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        // Admins and Sachbearbeiter can always read every Gesuch
-        if (isAdminOrSb(currentBenutzer)) {
+        // Admins, Sachbearbeiter or Jurist can always read every Gesuch
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 
@@ -74,16 +78,15 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
     public boolean canUpdateCheck(final UUID ausbildungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
-        // Only an Sb can edit a ausbildung, and only if it has at most one gesuch, at most one tranche ant the
+        // Only an Sb can edit a ausbildung, and only if it has at most one gesuch, at most one tranche anD the
         // gesuch is in the state IN_BEARBEITUNG_SB or ABKLAERUNG_DURCH_RECHSTABTEILUNG
 
         if (!isAdminOrSb(currentBenutzer)) {
@@ -113,7 +116,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
     public void canUpdate(final UUID ausbildungId) {
         if (!canUpdateCheck(ausbildungId)) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 }

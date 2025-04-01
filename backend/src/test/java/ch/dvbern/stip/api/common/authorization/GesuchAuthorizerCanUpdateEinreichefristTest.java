@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import io.quarkus.security.UnauthorizedException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -56,7 +56,7 @@ class GesuchAuthorizerCanUpdateEinreichefristTest {
     void canUpdateEinreichefristShouldFailAsGS() {
         when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             authorizer.canUpdateEinreichefrist(UUID.randomUUID());
         });
     }
@@ -65,7 +65,7 @@ class GesuchAuthorizerCanUpdateEinreichefristTest {
     void canUpdateEinreichefristShouldFailAsSB() {
         when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             authorizer.canUpdateEinreichefrist(UUID.randomUUID());
         });
     }

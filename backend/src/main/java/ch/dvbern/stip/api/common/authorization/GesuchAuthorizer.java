@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +54,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
         if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -63,10 +62,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canReadChanges(final UUID gesuchID) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
-        throw new UnauthorizedException();
+
+        forbidden();
     }
 
     @Transactional
@@ -89,7 +89,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -107,13 +107,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canUpdate(final UUID gesuchId, final boolean aenderung) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuchStatus = gesuch.getGesuchStatus();
 
-        // TODO KSTIP-1967: Authorizer aktualisieren
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminOrSb(currentBenutzer) && gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuchStatus)) {
             return;
         }
-
-        final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
@@ -130,7 +129,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -156,7 +155,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -178,7 +177,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -201,7 +200,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -211,7 +210,24 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
+    }
+
+    public void canGetGsDashboard() {
+        permitAll();
+    }
+
+    public void gsCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanReadTranche(final UUID aenderungId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(aenderungId);
+        canRead(gesuchTranche.getGesuch().getId());
     }
 
     @Transactional
@@ -221,7 +237,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             !SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuch.getGesuchStatus())
             || !isAdminOrSb(benutzerService.getCurrentBenutzer())
         ) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 }

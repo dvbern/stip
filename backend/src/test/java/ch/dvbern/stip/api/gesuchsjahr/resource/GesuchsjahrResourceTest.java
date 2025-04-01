@@ -173,7 +173,7 @@ class GesuchsjahrResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -185,7 +185,7 @@ class GesuchsjahrResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         apiSpec.getGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())

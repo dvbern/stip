@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.benutzer.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
@@ -118,5 +119,12 @@ public class Benutzer extends AbstractMandantEntity {
 
     public boolean hasRole(final String roleId) {
         return getRollen().stream().anyMatch(rolle -> rolle.getKeycloakIdentifier().equals(roleId));
+    }
+
+    public Set<String> getRollenIdentifiers() {
+        return getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
     }
 }

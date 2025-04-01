@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungResource;
@@ -30,8 +29,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -41,21 +41,21 @@ public class AusbildungResourceImpl implements AusbildungResource {
     private final AusbildungAuthorizer ausbildungAuthorizer;
 
     @Override
-    @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
+    @RolesAllowed(AUSBILDUNG_CREATE)
     public AusbildungDto createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
+        ausbildungAuthorizer.canCreate(ausbildungUpdateDto.getFallId());
         return ausbildungService.createAusbildung(ausbildungUpdateDto);
     }
 
     @Override
-    @RolesAllowed(GESUCH_READ)
+    @RolesAllowed(AUSBILDUNG_READ)
     public AusbildungDto getAusbildung(UUID ausbildungId) {
         ausbildungAuthorizer.canRead(ausbildungId);
         return ausbildungService.getAusbildungById(ausbildungId);
     }
 
     @Override
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed(AUSBILDUNG_UPDATE)
     public AusbildungDto updateAusbildung(UUID ausbildungId, AusbildungUpdateDto ausbildungUpdateDto) {
         ausbildungAuthorizer.canUpdate(ausbildungId);
         return ausbildungService.patchAusbildung(ausbildungId, ausbildungUpdateDto);
