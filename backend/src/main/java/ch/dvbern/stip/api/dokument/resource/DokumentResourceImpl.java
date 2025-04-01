@@ -162,14 +162,14 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
     ) {
-        gesuchDokumentAuthorizer.canGesuchDokumentAblehnen(gesuchDokumentId);
+        gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
     @Override
     @RolesAllowed(DOKUMENT_ABLEHNEN_AKZEPTIEREN)
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
-        gesuchDokumentAuthorizer.canGesuchDokumentAkzeptieren(gesuchDokumentId);
+        gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 

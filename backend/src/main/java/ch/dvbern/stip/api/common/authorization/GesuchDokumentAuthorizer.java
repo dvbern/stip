@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
@@ -26,9 +27,12 @@ import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -105,25 +109,27 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGesuchDokumentAblehnen(final UUID gesuchDokumentId) {
-        canAblehnenOderAkzeptieren(gesuchDokumentId);
-    }
-
-    @Transactional
-    public void canGesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
-        canAblehnenOderAkzeptieren(gesuchDokumentId);
-    }
-
-    private void canAblehnenOderAkzeptieren(final UUID gesuchDokumentId) {
+    public void canUpdateGesuchDokument(UUID gesuchDokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
 
-        if (gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
-            return;
+        if (!isAdminOrSb(currentBenutzer)) {
+            throw new ForbiddenException();
         }
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
 
-        forbidden();
+        final var trancheTyp = gesuchDokument.getGesuchTranche().getTyp();
+
+        if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
+            AuthorizerUtil.gesuchStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche().getGesuch(),
+                List.of(Gesuchstatus.IN_BEARBEITUNG_SB)
+            );
+        } else if (trancheTyp == GesuchTrancheTyp.AENDERUNG) {
+            AuthorizerUtil.gesuchTrancheStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche(),
+                List.of(GesuchTrancheStatus.UEBERPRUEFEN)
+            );
+        }
     }
 
     @Transactional
