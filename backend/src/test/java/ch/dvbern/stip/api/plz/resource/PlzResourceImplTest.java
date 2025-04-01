@@ -20,13 +20,11 @@ package ch.dvbern.stip.api.plz.resource;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.generated.api.PlzResource;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
 class PlzResourceImplTest {
@@ -42,6 +40,6 @@ class PlzResourceImplTest {
     @TestAsSachbearbeiter
     @Test
     void getPlzAsSB() {
-        assertThrows(ForbiddenException.class, () -> plzResource.getPlz());
+        assertNotNull(plzResource.getPlz());
     }
 }

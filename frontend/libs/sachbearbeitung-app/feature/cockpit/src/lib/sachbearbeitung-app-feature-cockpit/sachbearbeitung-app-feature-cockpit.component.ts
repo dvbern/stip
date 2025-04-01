@@ -233,22 +233,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
     {
       typ: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
       icon: 'person',
-      roles: ['Jurist'],
+      roles: ['V0_Jurist'],
     },
     {
       typ: 'ALLE_BEARBEITBAR_MEINE',
       icon: 'person',
-      roles: ['Sachbearbeiter'],
+      roles: ['V0_Sachbearbeiter'],
     },
     {
       typ: 'ALLE_BEARBEITBAR',
       icon: 'people',
-      roles: ['Sachbearbeiter'],
+      roles: ['V0_Sachbearbeiter'],
     },
     {
       typ: 'ALLE',
       icon: 'all_inclusive',
-      roles: ['Sachbearbeiter', 'Jurist'],
+      roles: ['V0_Sachbearbeiter', 'V0_Jurist'],
     },
   ];
 

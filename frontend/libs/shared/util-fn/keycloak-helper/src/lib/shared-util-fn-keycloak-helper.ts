@@ -30,11 +30,11 @@ export const hasLocationHeader = (
 
 export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
   switch (role) {
-    case 'Sachbearbeiter':
+    case 'V0_Sachbearbeiter':
       return 'info';
-    case 'Admin':
+    case 'V0_Sachbearbeiter-Admin':
       return 'success';
-    case 'Jurist':
+    case 'V0_Jurist':
       return 'warning';
     default:
       return 'danger';
@@ -47,7 +47,7 @@ export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
 export const createBenutzerListFromRoleLookup = (
   benutzersByRole: {
     benutzers: SharedModelBenutzerApi[];
-    role: 'Sachbearbeiter' | 'Admin' | 'Jurist';
+    role: 'V0_Sachbearbeiter' | 'V0_Sachbearbeiter-Admin' | 'V0_Jurist';
   }[],
 ): SharedModelBenutzer[] => {
   return Object.values(

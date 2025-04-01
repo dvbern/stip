@@ -208,7 +208,7 @@ export class KeycloakHttpService {
       combineLatestWith(this.getRoles$(bySozialdienstAdminRole)),
       switchMap(([user, roles]) => {
         const adminRole = roles.find(
-          (role) => role.name === 'Sozialdienst-Admin',
+          (role) => role.name === 'V0_Sozialdienst-Admin',
         );
 
         if (!adminRole) {
@@ -216,7 +216,7 @@ export class KeycloakHttpService {
         }
 
         return this.assignRoles$(user, [
-          { id: adminRole.id, name: 'Sozialdienst-Admin' },
+          { id: adminRole.id, name: 'V0_Sozialdienst-Admin' },
         ]);
       }),
     );

@@ -204,27 +204,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
-  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(
-    () => {
-      const geburtstag = dateFromDateString(this.geburtstagChangedSig());
-      let ausbildungsbegin = dateFromMonthYearString(
-        this.viewSig().gesuchFormular?.ausbildung.ausbildungBegin,
-      );
+  geburtstagDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    const geburtstag = dateFromDateString(this.geburtstagChangedSig());
+    let ausbildungsbegin = dateFromMonthYearString(
+      this.viewSig().gesuchFormular?.ausbildung.ausbildungBegin,
+    );
 
-      if (!geburtstag || !ausbildungsbegin) return null;
+    if (!geburtstag || !ausbildungsbegin) return null;
 
-      ausbildungsbegin = subDays(ausbildungsbegin, 1);
-      const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
+    ausbildungsbegin = subDays(ausbildungsbegin, 1);
+    const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
 
-      return alter >= BEGRUENDUNGSSCHREIBEN_AGE
-        ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
-        : null;
-    },
-    {
-      descriptionKey:
-        'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN.info',
-    },
-  );
+    return alter >= BEGRUENDUNGSSCHREIBEN_AGE
+      ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
+      : null;
+  });
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();

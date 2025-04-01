@@ -19,7 +19,6 @@ package ch.dvbern.stip.stipdecision.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.generated.api.StipDecisionResource;
 import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
-@AllowAll
 @RequestScoped
 @RequiredArgsConstructor
 public class StipDecisionResourceImpl implements StipDecisionResource {

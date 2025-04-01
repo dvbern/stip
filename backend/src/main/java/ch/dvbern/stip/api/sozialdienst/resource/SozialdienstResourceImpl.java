@@ -20,11 +20,8 @@ package ch.dvbern.stip.api.sozialdienst.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
@@ -40,70 +37,77 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENST_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENST_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENST_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENST_UPDATE;
+
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class SozialdienstResourceImpl implements SozialdienstResource {
-
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_CREATE)
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
+        sozialdienstAuthorizer.canCreateSozialdienst();
         return sozialdienstService.createSozialdienst(sozialdienstCreateDto);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_DELETE)
     public SozialdienstDto deleteSozialdienst(UUID sozialdienstId) {
+        sozialdienstAuthorizer.canDeleteSozialdienst();
         return sozialdienstService.deleteSozialdienst(sozialdienstId);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_READ)
     public List<SozialdienstDto> getAllSozialdienste() {
+        sozialdienstAuthorizer.canGetAllSozialdienste();
         return sozialdienstService.getAllSozialdienst();
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcPermissions.STAMMDATEN_READ })
     @Override
+    @RolesAllowed(SOZIALDIENST_READ)
     public List<SozialdienstSlimDto> getAllSozialdiensteForDelegation() {
+        sozialdienstAuthorizer.canGetAllSozialdiensteForDelegation();
         return sozialdienstService.getAllSozialdiensteForDelegation();
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_READ)
     public SozialdienstDto getSozialdienst(UUID sozialdienstId) {
+        sozialdienstAuthorizer.canGetSozialdienst();
         return sozialdienstService.getSozialdienstById(sozialdienstId);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_UPDATE)
     public SozialdienstBenutzerDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminDto sozialdienstAdminDto
     ) {
+        sozialdienstAuthorizer.canReplaceSozialdienstAdmin();
         return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminDto);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_UPDATE)
     public SozialdienstDto updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
+        sozialdienstAuthorizer.canUpdate();
         return sozialdienstService.updateSozialdienst(sozialdienstUpdateDto);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENST_UPDATE)
     public SozialdienstBenutzerDto updateSozialdienstAdmin(
         SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
     ) {
@@ -111,37 +115,36 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_CREATE)
     public SozialdienstBenutzerDto createSozialdienstBenutzer(
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
+        sozialdienstAuthorizer.canCreateSozialdienstBenutzer();
         return sozialdienstBenutzerService.createSozialdienstBenutzer(
             sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin(),
             sozialdienstBenutzerCreateDto
         );
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
     public SozialdienstBenutzerDto getSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
         sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
         return sozialdienstBenutzerService
             .getSozialdienstBenutzerDtoById(sozialdienstBenutzerId);
     }
 
-    @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzerList() {
+        sozialdienstAuthorizer.canGetSozialdienstBenutzer();
         return sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin());
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_UPDATE)
     public SozialdienstBenutzerDto updateSozialdienstBenutzer(
         SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
     ) {
@@ -149,8 +152,8 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_DELETE)
     public void deleteSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
         sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
         sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstBenutzerId);
