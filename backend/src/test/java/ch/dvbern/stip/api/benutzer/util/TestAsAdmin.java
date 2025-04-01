@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -33,24 +34,47 @@ import io.quarkus.test.security.oidc.OidcSecurity;
     user = "admin",
     roles = {
         OidcConstants.ROLE_ADMIN,
-        "GESUCHSPERIODE_DELETE",
-        "GESUCHSPERIODE_UPDATE",
-        "GESUCHSPERIODE_CREATE",
-        "GESUCHSPERIODE_READ",
-        "GESUCH_READ",
-        "GESUCH_UPDATE",
-        "FALL_UPDATE",
-        "GESUCH_CREATE",
-        "FALL_CREATE",
-        "GESUCHSPERIODE_READ",
-        "GESUCH_DELETE",
-        "FALL_DELETE",
-        "FALL_READ",
-        "STAMMDATEN_CREATE",
-        "STAMMDATEN_DELETE",
-        "STAMMDATEN_READ",
-        "STAMMDATEN_UPDATE",
-        "SEND_EMAIL"
+        OidcConstants.ROLE_SACHBEARBEITER,
+        OidcPermissions.BENUTZER_DELETE,
+        OidcPermissions.STAMMDATEN_DELETE,
+        OidcPermissions.BUCHSTABENZUWEISUNG_CREATE,
+        OidcPermissions.SOZIALDIENST_CREATE,
+        OidcPermissions.SOZIALDIENST_UPDATE,
+        OidcPermissions.BUCHSTABENZUWEISUNG_UPDATE,
+        OidcPermissions.BUCHSTABENZUWEISUNG_READ,
+        OidcPermissions.SOZIALDIENSTBENUTZER_DELETE,
+        OidcPermissions.SOZIALDIENSTBENUTZER_READ,
+        OidcPermissions.SOZIALDIENST_DELETE,
+        OidcPermissions.SOZIALDIENSTBENUTZER_CREATE,
+        OidcPermissions.SEND_EMAIL,
+        OidcPermissions.STAMMDATEN_CREATE,
+        OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE,
+        OidcPermissions.STAMMDATEN_UPDATE,
+        OidcPermissions.ADMIN_GESUCH_DELETE,
+        OidcPermissions.NOTIZ_READ,
+        OidcPermissions.NOTIZ_DELETE,
+        OidcPermissions.BUCHHALTUNG_ENTRY_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_READ,
+        OidcPermissions.AUSBILDUNG_READ,
+        OidcPermissions.CUSTOM_DOKUMENT_READ,
+        OidcPermissions.NOTIFICATION_READ,
+        OidcPermissions.DOKUMENT_READ,
+        OidcPermissions.BUCHSTABENZUWEISUNG_READ,
+        OidcPermissions.FALL_READ,
+        OidcPermissions.AUSBILDUNG_UPDATE,
+        OidcPermissions.BUCHHALTUNG_ENTRY_READ,
+        OidcPermissions.NOTIZ_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_UPLOAD,
+        OidcPermissions.CUSTOM_DOKUMENT_CREATE,
+        OidcPermissions.SB_GESUCH_READ,
+        OidcPermissions.DOKUMENT_ABLEHNEN_AKZEPTIEREN,
+        OidcPermissions.NOTIZ_UPDATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_DELETE,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.SB_GESUCH_UPDATE,
+        OidcPermissions.CUSTOM_DOKUMENT_DELETE,
+        OidcPermissions.SOZIALDIENST_READ,
+        "default-roles-bern"
     }
 )
 @OidcSecurity(

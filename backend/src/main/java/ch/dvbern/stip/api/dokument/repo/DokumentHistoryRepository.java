@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -31,6 +32,7 @@ import org.hibernate.envers.query.AuditEntity;
 public class DokumentHistoryRepository {
     private final EntityManager em;
 
+    @Transactional
     public Dokument findInHistoryById(UUID dokumentId) {
         final var reader = AuditReaderFactory.get(em);
 

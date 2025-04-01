@@ -21,13 +21,10 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import jakarta.ws.rs.ForbiddenException;
 
 @Authorizer
 public class BaseAuthorizer {
-    public void allowAllow() {
-        // noop
-    }
-
     protected boolean isAdminOrSb(final Benutzer currentBenutzer) {
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER));
     }
@@ -46,15 +43,19 @@ public class BaseAuthorizer {
         return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER);
     }
 
-    protected boolean isJurist(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasRole(OidcConstants.ROLE_JURIST);
-    }
-
     protected boolean isGesuchsteller(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_GESUCHSTELLER);
     }
 
     protected boolean isGesuchstellerAndNotAdmin(final Benutzer currentBenutzer) {
         return isGesuchsteller(currentBenutzer) && !isAdmin(currentBenutzer);
+    }
+
+    protected void permitAll() {
+        // Noop, since an action is allowed if not exception is thrown
+    }
+
+    protected void forbidden() {
+        throw new ForbiddenException();
     }
 }

@@ -44,7 +44,6 @@ import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
@@ -275,7 +274,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
         customDokumentTypCreateDtoSpec.setTrancheId(aenderung.getId());
         final var createdGesuchDokumentWithCustomType = dokumentApiSpec.createCustomDokumentTyp()
             .body(customDokumentTypCreateDtoSpec)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -291,7 +290,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
 
         final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()

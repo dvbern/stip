@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchsperiodeApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
@@ -37,9 +38,7 @@ import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -50,6 +49,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -83,7 +83,7 @@ class GesuchsperiodeResourceTest {
 
         gesuchsperiode = api.createGesuchsperiode()
             .body(newPeriode)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -96,7 +96,7 @@ class GesuchsperiodeResourceTest {
     @Order(2)
     void getAllTest() {
         var gesuchsperioden = api.getGesuchsperioden()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -110,13 +110,13 @@ class GesuchsperiodeResourceTest {
     @Order(3)
     void getAktiveTest() {
         var gesuchsperioden = api.getAktiveGesuchsperioden()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
             .as(GesuchsperiodeDtoSpec[].class);
 
-        assertThat(gesuchsperioden.length, is(Matchers.in(List.of(2, 3))));
+        assertThat(gesuchsperioden.length, is(in(List.of(3, 2))));
     }
 
     @Test
@@ -125,7 +125,7 @@ class GesuchsperiodeResourceTest {
     void getByIdTest() {
         var got = api.getGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -154,7 +154,7 @@ class GesuchsperiodeResourceTest {
         final var updated = api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -171,7 +171,7 @@ class GesuchsperiodeResourceTest {
     void publishTest() {
         final var updated = api.publishGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -187,7 +187,7 @@ class GesuchsperiodeResourceTest {
     @Order(7)
     void getLatestTest() {
         final var got = api.getLatest()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .and()
             .statusCode(Status.OK.getStatusCode())
@@ -216,10 +216,10 @@ class GesuchsperiodeResourceTest {
         api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -228,14 +228,14 @@ class GesuchsperiodeResourceTest {
     void readonlyDeleteFailsTest() {
         api.deleteGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         api.getGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());

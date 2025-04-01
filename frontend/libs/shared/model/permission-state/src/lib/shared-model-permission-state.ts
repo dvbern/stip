@@ -98,7 +98,7 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WD   ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF  ', [sb]: '     ' },
   UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
   AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
   ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
@@ -183,10 +183,9 @@ export const canCurrentlyEdit = (
   }
 
   return (
-    // OK if it is not delegated and current user is not a sozialdienst-mitarbeiter
-    (!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] !== true) ||
+    !delegierung ||
     // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-    (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
+    (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
   );
 };
 

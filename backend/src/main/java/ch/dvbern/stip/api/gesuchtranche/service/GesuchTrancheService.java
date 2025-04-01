@@ -128,6 +128,7 @@ public class GesuchTrancheService {
         return gesuchTrancheRepository.findForGesuch(gesuchId).stream().map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
+    @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
         var gesuchToWorkWith = gesuchRepository.requireById(gesuchId);
 

@@ -63,7 +63,7 @@ class BuchhaltungServiceTest {
         gesuch = GesuchGenerator.initGesuch();
         benutzerService.getOrCreateAndUpdateCurrentBenutzer();
 
-        final var fallOpt = fallRepository.getFallForGesuchsteller(benutzerService.getCurrentBenutzer().getId());
+        final var fallOpt = fallRepository.findFallForGsOptional(benutzerService.getCurrentBenutzer().getId());
         if (fallOpt.isPresent()) {
             return fallOpt.get();
         }

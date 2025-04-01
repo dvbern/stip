@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -72,8 +73,8 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private destroyRef = inject(DestroyRef);
   private config = inject(SharedModelCompileTimeConfig);
+  private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -204,7 +205,10 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        filter(() => this.config.isSachbearbeitungApp),
+      )
       .subscribe((gesuchId) => {
         this.dokumentsStore.getAdditionalDokumente$({
           gesuchId,
