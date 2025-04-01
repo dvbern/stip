@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -34,6 +35,7 @@ public class GesuchHistoryService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final StatusprotokollMapper statusprotokollMapper;
 
+    @Transactional
     public List<StatusprotokollEntryDto> getStatusprotokoll(final UUID gesuchId) {
         final var revisions = gesuchHistoryRepository.getStatusHistory(gesuchId);
         return revisions.stream().map(statusprotokollMapper::toDto).toList();
