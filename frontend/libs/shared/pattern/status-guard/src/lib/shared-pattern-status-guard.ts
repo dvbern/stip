@@ -34,7 +34,7 @@ export const isAllowedTo =
           map(({ gesuchStatus }) =>
             getGesuchPermissions({ gesuchStatus }, config.appType, {
               Gesuchsteller: true,
-            })[`can${capitalized(permission)}`]
+            }).permissions[`can${capitalized(permission)}`]
               ? true
               : new RedirectCommand(router.parseUrl('/')),
           ),

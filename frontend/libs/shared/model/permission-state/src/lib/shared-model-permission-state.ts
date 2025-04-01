@@ -13,9 +13,8 @@ const Permissions = {
   W: { index: 0, name: 'write' },
   D: { index: 1, name: 'uploadDocuments' },
   F: { index: 2, name: 'freigeben' },
-  Ü: { index: 3, name: 'dokumenteUebermitteln' },
-  U: { index: 4, name: 'uploadUnterschriftenblatt' },
-  A: { index: 5, name: 'approve' },
+  U: { index: 3, name: 'uploadUnterschriftenblatt' },
+  A: { index: 4, name: 'approve' },
 } as const;
 type Permissions = typeof Permissions;
 type PermissionFlag = keyof typeof Permissions;
@@ -29,7 +28,7 @@ type P<T extends PermissionFlag> = T | ' ';
  * * `F` - Freigeben
  * * `U` - Unterschriftenblatt hochladen
  */
-type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'Ü'>}${P<'U'>}${P<'A'>}`;
+type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}${P<'A'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
@@ -72,25 +71,25 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'WDF   ', [sb]: '    U ' },
-  EINGEREICHT /**                      */: { [gs]: '      ', [sb]: '    U ' },
-  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '      ', [sb]: '    U ' },
-  IN_BEARBEITUNG_SB /**                */: { [gs]: '      ', [sb]: 'W   UA' },
-  IN_FREIGABE /**                      */: { [gs]: '      ', [sb]: '    U ' },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '      ', [sb]: 'W   U ' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '      ', [sb]: '    U ' },
-  FEHLENDE_DOKUMENTE /**               */: { [gs]: ' DFÜ  ', [sb]: '    U ' },
-  GESUCH_ABGELEHNT /**                 */: { [gs]: '      ', [sb]: '    U ' },
-  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '      ', [sb]: '    U ' },
-  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '      ', [sb]: '      ' },
-  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '      ', [sb]: '    U ' },
-  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '      ', [sb]: '    U ' },
-  STIPENDIENANSPRUCH /**               */: { [gs]: '      ', [sb]: '      ' },
-  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '      ', [sb]: '    U ' },
-  VERSANDBEREIT /**                    */: { [gs]: '      ', [sb]: '      ' },
-  VERFUEGT /**                         */: { [gs]: '      ', [sb]: '    U ' },
-  VERSENDET /**                        */: { [gs]: '      ', [sb]: '      ' },
-  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '      ', [sb]: '    U ' },
+  IN_BEARBEITUNG_GS /**                */: { [gs]: 'WDF  ', [sb]: '   U ' },
+  EINGEREICHT /**                      */: { [gs]: '     ', [sb]: '   U ' },
+  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: '   U ' },
+  IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'W  UA' },
+  IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: '   U ' },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'W  U ' },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: '   U ' },
+  FEHLENDE_DOKUMENTE /**               */: { [gs]: ' DF  ', [sb]: '   U ' },
+  GESUCH_ABGELEHNT /**                 */: { [gs]: '     ', [sb]: '   U ' },
+  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '     ', [sb]: '   U ' },
+  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: '     ' },
+  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '     ', [sb]: '   U ' },
+  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '     ', [sb]: '   U ' },
+  STIPENDIENANSPRUCH /**               */: { [gs]: '     ', [sb]: '     ' },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '     ', [sb]: '   U ' },
+  VERSANDBEREIT /**                    */: { [gs]: '     ', [sb]: '     ' },
+  VERFUEGT /**                         */: { [gs]: '     ', [sb]: '   U ' },
+  VERSENDET /**                        */: { [gs]: '     ', [sb]: '     ' },
+  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: '   U ' },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
 
 /**
@@ -99,12 +98,12 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF   ', [sb]: '      ' },
-  UEBERPRUEFEN: /**       */ { [gs]: '      ', [sb]: 'W    A' },
-  FEHLENDE_DOKUMENTE: /** */ { [gs]: ' D Ü  ', [sb]: '      ' },
-  AKZEPTIERT: /**         */ { [gs]: '      ', [sb]: '      ' },
-  ABGELEHNT: /**          */ { [gs]: 'WD    ', [sb]: '      ' },
-  MANUELLE_AENDERUNG: /** */ { [gs]: '      ', [sb]: '      ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF  ', [sb]: '     ' },
+  UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
+  FEHLENDE_DOKUMENTE: /** */ { [gs]: ' D   ', [sb]: '     ' },
+  AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
+  ABGELEHNT: /**          */ { [gs]: 'WD   ', [sb]: '     ' },
+  MANUELLE_AENDERUNG: /** */ { [gs]: '     ', [sb]: '     ' },
 } as const satisfies Record<
   GesuchTrancheStatus,
   Record<AppType, PermissionFlags>
@@ -116,16 +115,20 @@ export const preparePermissions = (
   appType: AppType | undefined,
   rolesMap: RolesMap,
 ) => {
-  if (!gesuch || !appType) return { readonly: false, permissions: {} };
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
-  const tranchePermissions = getTranchePermissions(gesuch, appType, rolesMap);
-  const permissions =
-    trancheTyp === 'AENDERUNG' ? tranchePermissions : gesuchPermissions;
+  if (!gesuch || !appType)
+    return { readonly: false, permissions: {} as PermissionMap };
+  const getPermissions = {
+    TRANCHE: () => getGesuchPermissions(gesuch, appType, rolesMap),
+    AENDERUNG: () => getTranchePermissions(gesuch, appType, rolesMap),
+    INITIAL: () => getGesuchPermissions(gesuch, appType, rolesMap),
+  } satisfies Record<GesuchUrlType, unknown>;
+  const { permissions, status } = getPermissions[trancheTyp ?? 'TRANCHE']();
   const canWrite = permissions.canWrite ?? true;
 
   return {
     readonly: trancheTyp === 'INITIAL' || !canWrite,
     permissions,
+    isFehlendeDokumente: status === 'FEHLENDE_DOKUMENTE',
   };
 };
 
@@ -139,12 +142,20 @@ export const getGesuchPermissions = (
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
-): PermissionMap => {
-  if (!gesuch || !appType) return {};
+): { permissions: PermissionMap; status?: Gesuchstatus } => {
+  if (!gesuch || !appType) return { permissions: {} };
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
   const permissions = parsePermissions(state);
-  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
+  return {
+    permissions: applyDelegatedPermission(
+      permissions,
+      gesuch,
+      appType,
+      rolesMap,
+    ),
+    status: gesuch.gesuchStatus,
+  };
 };
 
 /**
@@ -157,15 +168,23 @@ export const getTranchePermissions = (
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
-): PermissionMap => {
-  if (!gesuch || !appType) return {};
+): { permissions: PermissionMap; status?: GesuchTrancheStatus } => {
+  if (!gesuch || !appType) return { permissions: {} };
 
   const state =
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
     ];
   const permissions = parsePermissions(state);
-  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
+  return {
+    permissions: applyDelegatedPermission(
+      permissions,
+      gesuch,
+      appType,
+      rolesMap,
+    ),
+    status: gesuch.gesuchTrancheToWorkWith.status,
+  };
 };
 
 /**
