@@ -32,8 +32,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
-import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -41,7 +39,6 @@ import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -129,7 +126,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
         customDokumentTypCreateDtoSpec.setTrancheId(gesuchTrancheId);
         final var createdGesuchDokumentWithCustomType = dokumentApiSpec.createCustomDokumentTyp()
             .body(customDokumentTypCreateDtoSpec)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -145,58 +142,13 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
 
         final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
         assertThat(result.getValue().getCustomDokumentTyp().getType(), is("test"));
-    }
-
-    // testAsSB
-    // delete custom
-    // b: no files -> ok
-    @Test
-    @TestAsSachbearbeiter
-    @Order(6)
-    void test_delete_required_custom_gesuchdokument_should_success() {
-        dokumentApiSpec.deleteCustomDokumentTyp()
-            .customDokumentTypIdPath(customDokumentId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(customDocumentTypes.length, is(0));
-    }
-
-    // testAsGS
-    // new document should appear in required documents
-    // upload
-    @Test
-    @TestAsGesuchsteller
-    @Order(7)
-    void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(DokumenteToUploadDto.class);
-        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

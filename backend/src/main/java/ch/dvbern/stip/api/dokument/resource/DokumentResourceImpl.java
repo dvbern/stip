@@ -22,8 +22,9 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
+import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
@@ -57,11 +58,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_ABLEHNEN_AKZEPTIEREN;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_UPLOAD;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_UPLOAD;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -76,9 +82,11 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+    private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
+    private final DokumentAuthorizer dokumentAuthorizer;
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
         customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
         final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
@@ -86,28 +94,26 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Blocking
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(DOKUMENT_UPLOAD)
     public Uni<Response> uploadCustomGesuchDokument(
         UUID customDokumentTypId,
         FileUpload fileUpload
     ) {
-
         customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    @AllowAll
     @Blocking
+    @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+        gesuchDokumentAuthorizer.canCreateGesuchDokument(gesuchTrancheId);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
     @Blocking
+    @RolesAllowed(UNTERSCHRIFTENBLATT_UPLOAD)
     public Uni<Response> createUnterschriftenblatt(
         UnterschriftenblattDokumentTyp unterschriftenblattTyp,
         UUID gesuchId,
@@ -117,71 +123,70 @@ public class DokumentResourceImpl implements DokumentResource {
         return unterschriftenblattService.getUploadUnterschriftenblattUni(unterschriftenblattTyp, gesuchId, fileUpload);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(UNTERSCHRIFTENBLATT_READ)
     public List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(UUID gesuchId) {
+        unterschriftenblattAuthorizer.canGetUnterschriftenblaetter();
         return unterschriftenblattService.getForGesuchAndType(gesuchId);
     }
 
-    @RolesAllowed(GESUCH_DELETE)
-    @Override
-    @AllowAll
     @Blocking
+    @Override
+    @RolesAllowed(UNTERSCHRIFTENBLATT_DELETE)
     public void deleteUnterschriftenblattDokument(UUID dokumentId) {
+        unterschriftenblattAuthorizer.canDeleteUnterschriftenblattDokument(dokumentId);
         unterschriftenblattService.removeDokument(dokumentId);
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
     @Blocking
+    @Override
+    @RolesAllowed(CUSTOM_DOKUMENT_DELETE)
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canDeleteTyp(customDokumentTypId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
-    @RolesAllowed(GESUCH_DELETE)
-    @Override
     @Blocking
+    @Override
+    @RolesAllowed(DOKUMENT_DELETE)
     public void deleteDokument(UUID dokumentId) {
-        customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
+        gesuchDokumentAuthorizer.canDeleteDokument(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
-    @AllowAll
+    @RolesAllowed(DOKUMENT_ABLEHNEN_AKZEPTIEREN)
     public void gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
     ) {
+        gesuchDokumentAuthorizer.canGesuchDokumentAblehnen(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
-    @AllowAll
+    @RolesAllowed(DOKUMENT_ABLEHNEN_AKZEPTIEREN)
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
+        gesuchDokumentAuthorizer.canGesuchDokumentAkzeptieren(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(CUSTOM_DOKUMENT_READ)
     public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
         customGesuchDokumentTypAuthorizer.canReadAllTyps();
         return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @RolesAllowed(CUSTOM_DOKUMENT_READ)
     public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canReadCustomDokumentOfTyp(customDokumentTypId);
         return gesuchDokumentService.findGesuchDokumentForCustomTyp(customDokumentTypId);
     }
 
-    @Override
-    @AllowAll
     @Blocking
+    @Override
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
 
@@ -191,10 +196,10 @@ public class DokumentResourceImpl implements DokumentResource {
         };
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
+    @RolesAllowed({ CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
     public FileDownloadTokenDto getDokumentDownloadToken(UUID dokumentId) {
+        dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
 
         return new FileDownloadTokenDto()
@@ -210,17 +215,17 @@ public class DokumentResourceImpl implements DokumentResource {
             );
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(DOKUMENT_READ)
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+        gesuchDokumentAuthorizer.canGetGesuchDokumentKommentar(gesuchDokumentId);
         return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(DOKUMENT_READ)
     public NullableGesuchDokumentDto getGesuchDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        gesuchDokumentAuthorizer.canGetGesuchDokumentKommentareForTranche(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTyp(gesuchTrancheId, dokumentTyp);
     }
 }

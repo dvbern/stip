@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.tenancy.resource;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.TenantResource;
@@ -33,7 +32,6 @@ public class TenantResourceImpl implements TenantResource {
     private final TenantService tenantService;
 
     @Override
-    @AllowAll
     public TenantInfoDto getCurrentTenant() {
         return tenantService.getCurrentTenant();
     }

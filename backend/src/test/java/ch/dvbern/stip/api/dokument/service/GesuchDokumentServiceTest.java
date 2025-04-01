@@ -325,7 +325,7 @@ class GesuchDokumentServiceTest {
         // send missing files to GS
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertThrows(
-            ForbiddenException.class,
+            jakarta.ws.rs.ForbiddenException.class,
             () -> customGesuchDokumentTypAuthorizer
                 .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );

@@ -24,12 +24,12 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.BildungskategorieApiSpec;
 import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 import com.github.javaparser.utils.Log;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class BildungskategorieResourceTest {
     @TestAsGesuchsteller
     void testGetBildungsarten() {
         final var bildungskategorien = api.getBildungskategorien()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())

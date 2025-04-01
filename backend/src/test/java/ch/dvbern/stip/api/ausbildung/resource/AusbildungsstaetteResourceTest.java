@@ -27,12 +27,12 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -66,7 +66,7 @@ class AusbildungsstaetteResourceTest {
     void createAusbildungsstaetteAsGesuchstellerForbidden() {
         api.createAusbildungsstaette()
             .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
@@ -78,7 +78,7 @@ class AusbildungsstaetteResourceTest {
     void createAusbildungsstaetteAsJurist() {
         var response = api.createAusbildungsstaette()
             .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then();
 
         response.assertThat()
@@ -92,7 +92,7 @@ class AusbildungsstaetteResourceTest {
     @Order(3)
     void getAusbildungsstaetten() {
         var res = api.getAusbildungsstaetten()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -108,7 +108,7 @@ class AusbildungsstaetteResourceTest {
     void getAusbildungsstaette() {
         api.getAusbildungsstaette()
             .ausbildungsstaetteIdPath(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
@@ -123,7 +123,7 @@ class AusbildungsstaetteResourceTest {
         api.updateAusbildungsstaette()
             .ausbildungsstaetteIdPath(UUID.randomUUID())
             .body(ausbildungsstaette)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
@@ -138,7 +138,7 @@ class AusbildungsstaetteResourceTest {
         api.updateAusbildungsstaette()
             .ausbildungsstaetteIdPath(ausbildungsstaetteId)
             .body(ausbildungsstaette)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
@@ -157,7 +157,7 @@ class AusbildungsstaetteResourceTest {
         api.updateAusbildungsstaette()
             .ausbildungsstaetteIdPath(ausbildungsstaetteId)
             .body(ausbildungsstaette)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
@@ -173,7 +173,7 @@ class AusbildungsstaetteResourceTest {
     void deleteAusbildungsstaetteAsGesuchstellerForbidden() {
         api.deleteAusbildungsstaette()
             .ausbildungsstaetteIdPath(ausbildungsstaetteId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
@@ -185,7 +185,7 @@ class AusbildungsstaetteResourceTest {
     void deleteAusbildungsstaetteNotFound() {
         api.deleteAusbildungsstaette()
             .ausbildungsstaetteIdPath(UUID.randomUUID())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
@@ -197,14 +197,14 @@ class AusbildungsstaetteResourceTest {
     void deleteAusbildungsstaette() {
         api.deleteAusbildungsstaette()
             .ausbildungsstaetteIdPath(ausbildungsstaetteId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
         api.getAusbildungsstaette()
             .ausbildungsstaetteIdPath(ausbildungsstaetteId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
@@ -213,7 +213,7 @@ class AusbildungsstaetteResourceTest {
     private AusbildungsstaetteDtoSpec getAusbildungsstaetteFromApi(UUID id) {
         return api.getAusbildungsstaette()
             .ausbildungsstaetteIdPath(id)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .as(AusbildungsstaetteDtoSpec.class);
