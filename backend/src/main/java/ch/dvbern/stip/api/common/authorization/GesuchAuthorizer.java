@@ -39,6 +39,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT;
 
 @ApplicationScoped
@@ -58,7 +59,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
         if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -66,10 +67,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canReadChanges(final UUID gesuchID) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
-        throw new UnauthorizedException();
+
+        forbidden();
     }
 
     @Transactional
@@ -92,7 +94,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -155,8 +157,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        // TODO KSTIP-1967: Authorizer aktualisieren
-        if (isAdminOrSb(currentBenutzer)) {
+        if (
+            isAdminOrSb(currentBenutzer)
+            && gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
+        ) {
             return;
         }
 
@@ -175,7 +179,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -201,7 +205,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -223,7 +227,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -246,7 +250,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -256,7 +260,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -280,6 +284,34 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
+    }
+
+    public void canGetGsDashboard() {
+        permitAll();
+    }
+
+    public void gsCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanReadTranche(final UUID aenderungId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(aenderungId);
+        canRead(gesuchTranche.getGesuch().getId());
+    }
+
+    @Transactional
+    public void canUpdateEinreichefrist(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            !SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuch.getGesuchStatus())
+            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+        ) {
+            forbidden();
+        }
     }
 }

@@ -18,12 +18,14 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
@@ -31,6 +33,7 @@ import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +46,14 @@ public class SozialdienstSeeding extends Seeder {
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final ConfigService configService;
-    private static final String KEYCLOAK_ID = "7a72b682-f4dc-4b72-9d26-dbdc19246b7d";
+    private final TenantService tenantService;
+
+    private static final Map<String, String> KEYCLOAK_IDS = Map.of(
+        MandantIdentifier.BERN.getIdentifier(),
+        "7a72b682-f4dc-4b72-9d26-dbdc19246b7d",
+        MandantIdentifier.DV.getIdentifier(),
+        "8982b682-f4dc-4b72-9d26-dbdc19246b7e"
+    );
 
     @Override
     public int getPriority() {
@@ -51,9 +61,10 @@ public class SozialdienstSeeding extends Seeder {
     }
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         LOG.info("Seeding Sozialdienste");
-        final var existingAdmin = sozialdienstBenutzerRepository.findByKeycloakId(KEYCLOAK_ID);
+        final var keycloakId = KEYCLOAK_IDS.get(tenantService.getCurrentTenantIdentifier());
+        final var existingAdmin = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
 
         if (existingAdmin.isPresent()) {
             return;
@@ -65,7 +76,7 @@ public class SozialdienstSeeding extends Seeder {
             .setEmail("sozialdienst-mitarbeiter-admin@mailbucket.dvbern.ch")
             .setVorname("soz-admin")
             .setNachname("e2e")
-            .setKeycloakId(KEYCLOAK_ID)
+            .setKeycloakId(keycloakId)
             .setRollen(rollen)
             .setBenutzerStatus(BenutzerStatus.AKTIV)
             .setBenutzereinstellungen(

@@ -20,12 +20,8 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -37,7 +33,6 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -56,11 +51,8 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -164,9 +156,8 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
 
-        if (wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
             var trancheInStatusEingereicht =
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                     .orElseThrow();
@@ -181,7 +172,7 @@ public class GesuchService {
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         Optional<GesuchTranche> changes = Optional.empty();
-        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+        if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
             changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
         }
         // bis eingereicht: changes: empty/null
@@ -494,22 +485,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
-        validationGroups.add(LebenslaufItemPageValidation.class);
-        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
-
-        Set<ConstraintViolation<GesuchFormular>> violations =
-            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
-    }
-
-    @Transactional
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -668,6 +643,13 @@ public class GesuchService {
             .toList();
     }
 
+    @Transactional
+    public void updateNachfristDokumente(final UUID gesuchId, LocalDate nachfristDokumente) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuch.setNachfristDokumente(nachfristDokumente);
+        notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
+    }
+
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
@@ -716,6 +698,7 @@ public class GesuchService {
         );
     }
 
+    @Transactional
     public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -737,6 +720,7 @@ public class GesuchService {
         );
     }
 
+    @Transactional
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
@@ -748,6 +732,7 @@ public class GesuchService {
         return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
     }
 
+    @Transactional
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -783,33 +768,9 @@ public class GesuchService {
 
     @Transactional
     public void checkForFehlendeDokumenteOnAllGesuche() {
-        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
-        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
-        gesuchsToCheck.forEach(
-            gesuch -> {
-                gesuchsperiodenGesucheMap.computeIfAbsent(gesuch.getGesuchsperiode().getId(), k -> new ArrayList<>());
-                gesuchsperiodenGesucheMap.get(gesuch.getGesuchsperiode().getId()).add(gesuch);
-            }
-        );
-
-        final var changedTooLongAgo = new HashSet<UUID>();
-
-        gesuchsperiodenGesucheMap.forEach(
-            (uuid, gesuchsperiodenGesuchs) -> {
-                final var nachfrist = gesuchsperiodenGesuchs.get(0).getGesuchsperiode().getFristNachreichenDokumente();
-                changedTooLongAgo.addAll(
-                    gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
-                        gesuchsperiodenGesuchs.stream().map(AbstractEntity::getId).toList(),
-                        Gesuchstatus.FEHLENDE_DOKUMENTE,
-                        LocalDateTime.now().minusDays(nachfrist)
-                    ).map(AbstractEntity::getId).toList()
-                );
-            }
-        );
-
         final var toUpdate =
-            gesuchsToCheck.stream().filter(gesuch -> changedTooLongAgo.contains(gesuch.getId())).toList();
+            gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
         if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,

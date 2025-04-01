@@ -21,6 +21,7 @@
   "gesuch-app.dashboard.periode.einreichefrist.abgelaufen.warning": "Le délai de dépôt pour cette période de formation est expiré.",
   "gesuch-app.dashboard.periode.einreichefrist.abgelaufen.text": "Vous pouvez soumettre la demande, mais sans justification valable, elle sera rejetée",
   "gesuch-app.dashboard.periode.einreichefrist.text": "Délai de dépôt de la demande",
+  "gesuch-app.dashboard.periode.nachfrist.text": "Délai pour soumettre les documents",
   "gesuch-app.dashboard.gesuch.title": "Année de formation {{ yearRange }}",
   "gesuch-app.dashboard.gesuch.new": "Créer une demande",
   "gesuch-app.dashboard.gesuch.edit": "Modifier la demande",

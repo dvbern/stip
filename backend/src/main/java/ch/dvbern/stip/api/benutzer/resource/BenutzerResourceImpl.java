@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.BenutzerAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
@@ -34,63 +34,67 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BENUTZER_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class BenutzerResourceImpl implements BenutzerResource {
-
+    private final BenutzerAuthorizer benutzerAuthorizer;
     private final BenutzerService benutzerService;
     private final SachbearbeiterZuordnungStammdatenWorker worker;
     private final TenantService tenantService;
 
     @Override
-    @RolesAllowed(STAMMDATEN_CREATE)
-    @AllowAll
+    @RolesAllowed({ BUCHSTABENZUWEISUNG_CREATE, BUCHSTABENZUWEISUNG_UPDATE })
     public void createOrUpdateSachbearbeiterStammdaten(
         UUID benutzerId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto
     ) {
+        benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
         benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_CREATE)
-    @AllowAll
+    @RolesAllowed({ BUCHSTABENZUWEISUNG_CREATE, BUCHSTABENZUWEISUNG_UPDATE })
     public void createOrUpdateSachbearbeiterStammdatenList(
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto
     ) {
+        benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
         benutzerService.createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdatenListDto);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
     }
 
     @Override
-    @AllowAll
+    @RolesAllowed(BENUTZER_DELETE)
     public void deleteBenutzer(String benutzerId) {
+        benutzerAuthorizer.canDeleteBenutzer();
         benutzerService.deleteBenutzer(benutzerId);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
     }
 
     @Override
-    @AllowAll
+    @RolesAllowed(BUCHSTABENZUWEISUNG_READ)
     public List<BenutzerDto> getSachbearbeitende() {
+        benutzerAuthorizer.canGetBuchstabenzuweisung();
         return benutzerService.getAllSachbearbeitendeMitZuordnungStammdaten();
     }
 
     @Override
-    @AllowAll
-    @RolesAllowed(STAMMDATEN_READ)
+    @RolesAllowed(BUCHSTABENZUWEISUNG_READ)
     public SachbearbeiterZuordnungStammdatenDto getSachbearbeiterStammdaten(UUID benutzerId) {
+        benutzerAuthorizer.canGetBuchstabenzuweisung();
         return benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId)
             .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    @AllowAll
     public BenutzerDto prepareCurrentBenutzer() {
+        benutzerAuthorizer.canPrepare();
         return benutzerService.getOrCreateAndUpdateCurrentBenutzer();
     }
 }

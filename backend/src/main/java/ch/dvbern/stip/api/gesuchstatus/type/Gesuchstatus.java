@@ -45,8 +45,19 @@ public enum Gesuchstatus {
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE =
-        EnumSet.of(IN_BEARBEITUNG_GS, FEHLENDE_DOKUMENTE);
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_UPLOAD_DOCUMENT = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE
+        )
+    );
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
@@ -57,7 +68,12 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.of(
-                IN_BEARBEITUNG_SB
+                IN_BEARBEITUNG_SB,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                VERSANDBEREIT,
+                VERSENDET
             )
         );
 
@@ -66,7 +82,8 @@ public enum Gesuchstatus {
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
                 ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-                BEREIT_FUER_BEARBEITUNG
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE
             )
         );
 
@@ -129,6 +146,13 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB,
+            FEHLENDE_DOKUMENTE
+        )
+    );
+
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT = Collections.unmodifiableSet(
         EnumSet.of(
             ABKLAERUNG_DURCH_RECHSTABTEILUNG,
@@ -146,7 +170,23 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR = Collections.unmodifiableSet(
+        EnumSet.of(
+            BEREIT_FUER_BEARBEITUNG,
+            IN_BEARBEITUNG_SB,
+            JURISTISCHE_ABKLAERUNG,
+            IN_FREIGABE,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            VERSANDBEREIT,
+            VERFUEGT,
+            VERSENDET,
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }
+
 }

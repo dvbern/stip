@@ -46,7 +46,7 @@ public class GesuchsperiodeSeeding extends Seeder {
     }
 
     @Override
-    protected void doSeed() {
+    protected void seed() {
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(
             ImmutablePair.of(

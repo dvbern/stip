@@ -24,13 +24,19 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
+import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
@@ -84,6 +90,21 @@ public class GesuchTrancheValidatorService {
                 toValidate.getGesuchFormular().getPersonInAusbildung(),
                 gesuch.getId()
             );
+        }
+    }
+
+    @Transactional
+    public void validateBearbeitungAbschliessen(final GesuchTranche gesuchTranche) {
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(DocumentsRequiredValidationGroup.class);
+        validationGroups.add(LebenslaufItemPageValidation.class);
+        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
+
+        Set<ConstraintViolation<GesuchFormular>> violations =
+            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
     }
 }

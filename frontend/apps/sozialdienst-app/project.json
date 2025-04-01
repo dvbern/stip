@@ -1,0 +1,136 @@
+{
+  "name": "sozialdienst-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "dv",
+  "sourceRoot": "apps/sozialdienst-app/src",
+  "tags": ["type:app", "scope:sozialdienst-app"],
+  "implicitDependencies": [
+    "libs/shared/assets/i18n",
+    "libs/shared/assets/images",
+    "libs/shared/styles/theme",
+    "libs/shared/styles/components"
+  ],
+  "targets": {
+    "prepare": {
+      "cache": false,
+      "executor": "nx:run-script",
+      "options": {
+        "script": "set-version"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/model/version/src/lib/version.ts"
+      ]
+    },
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "allowedCommonJsDependencies": [
+          "core-js",
+          "dompurify",
+          "html2canvas",
+          "raf",
+          "rgbcolor"
+        ],
+        "outputPath": "dist/apps/sozialdienst-app",
+        "index": "apps/sozialdienst-app/src/index.html",
+        "browser": "apps/sozialdienst-app/src/main.ts",
+        "polyfills": ["@angular/localize/init", "zone.js"],
+        "tsConfig": "apps/sozialdienst-app/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/images/src",
+            "output": "assets/images"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/auth/src",
+            "output": "assets/auth/"
+          },
+          "apps/sozialdienst-app/src/assets"
+        ],
+        "styles": [
+          "apps/sozialdienst-app/src/styles.scss",
+          "libs/shared/styles/theme/src/tailwind.css"
+        ],
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/shared/styles/theme/src",
+            "libs/shared/styles/components/src"
+          ]
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "750kb",
+              "maximumError": "1500kb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4202,
+        "proxyConfig": "proxy.conf.js"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "sozialdienst-app:build:production"
+        },
+        "development": {
+          "buildTarget": "sozialdienst-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "sozialdienst-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/sozialdienst-app/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "sozialdienst-app:build"
+      }
+    }
+  }
+}

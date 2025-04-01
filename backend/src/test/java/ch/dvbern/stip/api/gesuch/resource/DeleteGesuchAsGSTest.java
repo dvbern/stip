@@ -82,7 +82,7 @@ public class DeleteGesuchAsGSTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class DeleteGesuchAsGSTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     /**

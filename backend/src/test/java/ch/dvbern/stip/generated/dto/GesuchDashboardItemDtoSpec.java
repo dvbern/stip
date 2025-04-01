@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchDashboardItemDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_ID,
@@ -45,6 +46,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GesuchDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDashboardItemDtoSpec {
+  public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
+  private LocalDate nachfristDokumente;
+
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
 
@@ -71,6 +75,32 @@ public class GesuchDashboardItemDtoSpec {
 
   public GesuchDashboardItemDtoSpec() {
   }
+
+  public GesuchDashboardItemDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
+    
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+   /**
+   * Get nachfristDokumente
+   * @return nachfristDokumente
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
 
   public GesuchDashboardItemDtoSpec gesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
     
@@ -288,7 +318,8 @@ public class GesuchDashboardItemDtoSpec {
       return false;
     }
     GesuchDashboardItemDtoSpec gesuchDashboardItem = (GesuchDashboardItemDtoSpec) o;
-    return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
+    return Objects.equals(this.nachfristDokumente, gesuchDashboardItem.nachfristDokumente) &&
+        Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
         Objects.equals(this.id, gesuchDashboardItem.id) &&
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
@@ -300,13 +331,14 @@ public class GesuchDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, missingDocuments);
+    return Objects.hash(nachfristDokumente, gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, missingDocuments);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDashboardItemDtoSpec {\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");

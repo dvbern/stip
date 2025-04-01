@@ -162,8 +162,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
-    const hasAcceptedAllDokuments =
-      this.dokumentsStore.hasAcceptedAllDokumentsSig();
+    const sbCanBearbeitungAbschliessen =
+      this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
 
     const validations =
       this.einreichnenStore.validationViewSig().invalidFormularProps
@@ -177,7 +177,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
       StatusUebergaengeOptions[status]({
-        hasAcceptedAllDokuments,
+        hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
         isInvalid: hasValidationErrors || hasValidationWarnings,
       }),
     );

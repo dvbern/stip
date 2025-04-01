@@ -52,6 +52,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -86,6 +87,11 @@ public class Gesuch extends AbstractMandantEntity {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
     private Ausbildung ausbildung;
+
+    @Nullable
+    @Future
+    @Column(name = "nachfrist_dokumente")
+    private LocalDate nachfristDokumente;
 
     @NotNull
     @ManyToOne(optional = false)

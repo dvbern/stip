@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.BuchhaltungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.BuchhaltungResource;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
@@ -30,28 +30,30 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class BuchhaltungResourceImpl implements BuchhaltungResource {
+    private final BuchhaltungAuthorizer buchhaltungAuthorizer;
     private final BuchhaltungService buchhaltungService;
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER })
-    @AllowAll
     @Override
+    @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public BuchhaltungEntryDto createBuchhaltungSaldokorrektur(
         UUID gesuchId,
         BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
+        buchhaltungAuthorizer.canCreateBuchhaltungSaldokorrektur(gesuchId);
         return buchhaltungService.createBuchhaltungSaldokorrekturForFall(gesuchId, buchhaltungSaldokorrekturDto);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER })
-    @AllowAll
     @Override
+    @RolesAllowed(BUCHHALTUNG_ENTRY_READ)
     public List<BuchhaltungEntryDto> getBuchhaltungEntrys(UUID gesuchId) {
+        buchhaltungAuthorizer.canGetBuchhaltungEntrys();
         return buchhaltungService.getAllDtoForGesuchId(gesuchId).toList();
     }
 }

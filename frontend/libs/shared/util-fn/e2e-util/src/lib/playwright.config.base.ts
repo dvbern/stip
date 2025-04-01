@@ -5,10 +5,12 @@ export const REFRESH_COOKIE = 'refresh_cookie';
 
 const gsURL = process.env['E2E_BASEURL_GS'];
 const sbURL = process.env['E2E_BASEURL_SB'];
+const sozURL = process.env['E2E_BASEURL_SOZ'];
 export const getE2eUrls = () => {
   return {
     gs: gsURL ?? '',
     sb: sbURL ?? '',
+    soz: sozURL ?? '',
   };
 };
 

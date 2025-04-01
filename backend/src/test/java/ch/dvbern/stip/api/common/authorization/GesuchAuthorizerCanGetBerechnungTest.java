@@ -36,7 +36,7 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.UnauthorizedException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -115,7 +115,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     void testGesuchStatusCorrectForBerechnung() {
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             authorizer.canGetBerechnung(gesuch.getId());
         });
         Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {

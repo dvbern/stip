@@ -51,6 +51,7 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
@@ -165,6 +166,22 @@ public class TestUtil {
         }
     }
 
+    public static void updateGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
     public static void fillGesuch(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,
@@ -237,7 +254,19 @@ public class TestUtil {
         final GesuchApiSpec gesuchApiSpec
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
-        final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
+        final var fallDashboardItemDtos = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        if (fallDashboardItemDtos[0].getAusbildungDashboardItems().isEmpty()) {
+            createAusbildung(ausbildungApiSpec, fall.getId());
+        }
+
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -730,6 +759,7 @@ public class TestUtil {
         Gesuch gesuch = new Gesuch();
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.setGesuchTranchen(List.of(gesuchTranche));
+        gesuch.setAusbildung(new Ausbildung().setFall(new Fall()));
         return gesuch;
     }
 }

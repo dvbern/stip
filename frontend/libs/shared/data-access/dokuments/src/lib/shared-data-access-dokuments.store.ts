@@ -43,6 +43,7 @@ type DokumentsState = {
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
   expandedComponentList: 'custom' | 'required' | undefined;
+  nachfrist: RemoteData<string>;
 };
 
 const initialState: DokumentsState = {
@@ -52,6 +53,7 @@ const initialState: DokumentsState = {
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
   expandedComponentList: undefined,
+  nachfrist: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -68,6 +70,19 @@ export class DokumentsStore extends signalStore(
   setExpandedList(list: 'custom' | 'required' | undefined) {
     patchState(this, { expandedComponentList: list });
   }
+
+  dokumenteCanFlagsSig = computed(() => {
+    const {
+      gsCanDokumenteUebermitteln,
+      sbCanBearbeitungAbschliessen,
+      sbCanFehlendeDokumenteUebermitteln,
+    } = this.documentsToUpload.data() ?? {};
+    return {
+      gsCanDokumenteUebermitteln,
+      sbCanBearbeitungAbschliessen,
+      sbCanFehlendeDokumenteUebermitteln,
+    };
+  });
 
   dokumenteViewSig = computed(() => {
     // only show standard documents
@@ -125,15 +140,6 @@ export class DokumentsStore extends signalStore(
   dokumentViewSig = computed(() =>
     isSuccess(this.dokument()) ? this.dokument().data : undefined,
   );
-
-  hasAcceptedAllDokumentsSig = computed(() => {
-    return (
-      this.dokuments
-        .data()
-        ?.every((dokument) => dokument.status === Dokumentstatus.AKZEPTIERT) ??
-      false
-    );
-  });
 
   /**
    * check if there are any abgelehnte dokumente or new custom dokument types
@@ -576,6 +582,40 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey:
                     'shared.dokumente.deleteCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
+      ),
+    ),
+  );
+
+  editNachfrist$ = rxMethod<{
+    gesuchId: string;
+    newNachfrist: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          nachfrist: pending(),
+        });
+      }),
+      switchMap(({ gesuchId, newNachfrist, onSuccess }) =>
+        this.gesuchService
+          .updateNachfristDokumente$({
+            gesuchId,
+            nachfristAendernRequest: {
+              newNachfrist,
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.nachfrist.editSuccess',
                 });
                 onSuccess();
               },

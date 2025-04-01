@@ -70,6 +70,7 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   paginatorSig = viewChild(MatPaginator);
   displayedColumns = [
     'datum',
+    'benutzer',
     'stipendienbetrag',
     'auszahlung',
     'rueckforderung',

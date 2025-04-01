@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   computed,
+  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -11,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -19,6 +21,7 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   SharedModelGesuchDokument,
   SharedModelTableCustomDokument,
@@ -70,6 +73,7 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
@@ -112,6 +116,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     return {
       gesuchId,
+      nachfrist: gesuch?.nachfristDokumente,
       trancheId,
       permissions,
       trancheSetting: trancheSetting ?? undefined,
@@ -168,19 +173,22 @@ export class SharedFeatureGesuchDokumenteComponent {
   // if true, the button is shown
   canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
-      this.dokumentsStore.hasDokumenteToUebermittelnSig();
+      !!this.dokumentsStore.dokumenteCanFlagsSig()
+        .sbCanFehlendeDokumenteUebermitteln;
+    const { permissions } = this.gesuchViewSig();
 
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+    return hasDokumenteToUebermitteln && permissions.canWrite;
+  });
 
-    return hasDokumenteToUebermitteln && isInCorrectState;
+  canGSSendMissingDocumentsSig = computed(() => {
+    return !!this.dokumentsStore.dokumenteCanFlagsSig()
+      .gsCanDokumenteUebermitteln;
   });
 
   canCreateCustomDokumentTypSig = computed(() => {
-    const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+    const { permissions } = this.gesuchViewSig();
 
-    return isInCorrectState;
+    return !!permissions.canWrite;
   });
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
@@ -197,7 +205,10 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        filter(() => this.config.isSachbearbeitungApp),
+      )
       .subscribe((gesuchId) => {
         this.dokumentsStore.getAdditionalDokumente$({
           gesuchId,
@@ -211,6 +222,19 @@ export class SharedFeatureGesuchDokumenteComponent {
           ignoreCache: true,
         });
       });
+
+    effect(
+      () => {
+        if (
+          this.config.isSachbearbeitungApp &&
+          this.dokumentsStore.dokumenteCanFlagsSig()
+            .sbCanBearbeitungAbschliessen
+        ) {
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        }
+      },
+      { allowSignalWrites: true },
+    );
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
@@ -356,6 +380,10 @@ export class SharedFeatureGesuchDokumenteComponent {
           }
         }
       });
+  }
+
+  reloadGesuch() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
   }
 
   handleContinue() {

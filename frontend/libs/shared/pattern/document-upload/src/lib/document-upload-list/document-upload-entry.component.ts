@@ -14,7 +14,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentView,
   UploadView,
@@ -46,7 +45,6 @@ export class SharedPatternDocumentUploadEntryComponent {
   documentViewSig = input.required<DokumentView>();
   loadingSig = input.required<boolean>();
 
-  private config = inject(SharedModelCompileTimeConfig);
   isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();
     return isUploadable(dokumentModel, permissions);

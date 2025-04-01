@@ -15,6 +15,10 @@
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.datum' | translate }}
     </dt>
     <dd class="tw-font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.user' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.userErstellt }}</dd>
     @if (dialogData.stipendienBetrag) {
       <dt class="tw-whitespace-nowrap tw-font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.stipendienbetrag' | translate }}

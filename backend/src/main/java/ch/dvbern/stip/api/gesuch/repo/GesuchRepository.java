@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.dokument.entity.QDokument;
+import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
@@ -210,5 +212,30 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public List<Gesuch> getAllFehlendeDokumente() {
         return addStatusFilter(getFindAlleQuery(), Gesuchstatus.FEHLENDE_DOKUMENTE).stream().toList();
+    }
+
+    public Gesuch requireGesuchForDokument(final UUID dokumentId) {
+        final var gesuch = QGesuch.gesuch;
+        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+        final var gesuchDokument = QGesuchDokument.gesuchDokument;
+        final var dokument = QDokument.dokument;
+
+        final var subQuery = JPAExpressions
+            .select(dokument)
+            .from(dokument)
+            .where(dokument.id.eq(dokumentId));
+
+        // It is referentially possible that one Dokument could be attached to multiple Gesuche
+        // but our business logic forbids that
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .join(gesuchTranche)
+            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .join(gesuchDokument)
+            .on(gesuchDokument.gesuchTranche.id.eq(gesuchTranche.id))
+            .where(gesuchDokument.dokumente.any().in(subQuery))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
     }
 }

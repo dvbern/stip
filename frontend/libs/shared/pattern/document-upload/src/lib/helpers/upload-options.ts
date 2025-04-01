@@ -13,7 +13,9 @@ import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
-} = {
+} & Partial<
+  Record<`${DokumentTyp}_DESCRIPTION`, DokumentOptions['descriptionKey']>
+> = {
   AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.ausbildung.file.AUSBILDUNGSSTAETTE',
   PERSON_NIEDERLASSUNGSSTATUS_B:
@@ -23,6 +25,8 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_NIEDERLASSUNGSSTATUS_COMPLETE: 'shared.form.person.file.FLUECHTLING',
   PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN:
     'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN',
+  PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN_DESCRIPTION:
+    'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN_DESCRIPTION',
   PERSON_KESB_ERNENNUNG: 'shared.form.person.file.VORMUNDSCHAFT',
   PERSON_MIETVERTRAG: 'shared.form.person.file.EIGENER_HAUSHALT',
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
@@ -36,60 +40,108 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER',
   FAMILIENSITUATION_TRENNUNGSKONVENTION:
     'shared.form.familiensituation.file.TRENNUNGSKONVENTION',
+  FAMILIENSITUATION_TRENNUNGSKONVENTION_DESCRIPTION:
+    'shared.form.familiensituation.file.TRENNUNGSKONVENTION_DESCRIPTION',
   ELTERN_ERGAENZUNGSLEISTUNGEN_VATER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_VATER',
+  ELTERN_ERGAENZUNGSLEISTUNGEN_VATER_DESCRIPTION:
+    'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_VATER_DESCRIPTION',
   ELTERN_SOZIALHILFEBUDGET_VATER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_VATER',
+  ELTERN_SOZIALHILFEBUDGET_VATER_DESCRIPTION:
+    'shared.form.eltern.file.SOZIALHILFEBUDGET_VATER_DESCRIPTION',
   ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER',
+  ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER_DESCRIPTION:
+    'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER_DESCRIPTION',
   ELTERN_SOZIALHILFEBUDGET_MUTTER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER',
+  ELTERN_SOZIALHILFEBUDGET_MUTTER_DESCRIPTION:
+    'shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER_DESCRIPTION',
   ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER:
     'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER_DESCRIPTION:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_DESCRIPTION',
   ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER:
     'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER_DESCRIPTION:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_DESCRIPTION',
   ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE:
     'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE_DESCRIPTION:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_DESCRIPTION',
   GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.geschwister.file.AUSBILDUNGSSTAETTE',
+  GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE_DESCRIPTION:
+    'shared.form.geschwister.file.AUSBILDUNGSSTAETTE_DESCRIPTION',
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
     'shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION',
   KINDER_ALIMENTENVERORDUNG: 'shared.form.kinder.file.ALIMENTENVERORDNUNG',
   PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
     'shared.form.partner.file.AUSBILDUNG_LOHNABRECHNUNG',
+  PARTNER_AUSBILDUNG_LOHNABRECHNUNG_DESCRIPTION:
+    'shared.form.partner.file.AUSBILDUNG_LOHNABRECHNUNG_DESCRIPTION',
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',
+  PARTNER_BELEG_OV_ABONNEMENT_DESCRIPTION:
+    'shared.form.partner.file.OV_ABONNEMENT_DESCRIPTION',
   AUSZAHLUNG_ABTRETUNGSERKLAERUNG:
     'shared.form.auszahlung.file.ABTRETUNGSERKLAERUNG',
   EK_BELEG_ALIMENTE: 'shared.form.einnahmenkosten.file.ALIMENTE',
+  EK_BELEG_ALIMENTE_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.ALIMENTE_DESCRIPTION',
   EK_BELEG_KINDERZULAGEN: 'shared.form.einnahmenkosten.file.KINDERZULAGEN',
   EK_VERFUEGUNG_GEMEINDE_INSTITUTION:
     'shared.form.einnahmenkosten.file.GEMEINDE_INSTITUTION',
+  EK_VERFUEGUNG_GEMEINDE_INSTITUTION_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.GEMEINDE_INSTITUTION_DESCRIPTION',
   EK_BELEG_BEZAHLTE_RENTEN: 'shared.form.einnahmenkosten.file.BEZAHLTE_RENTEN',
   EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN:
     'shared.form.einnahmenkosten.file.ERGAENZUNGSLEISTUNGEN',
   EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO:
     'shared.form.einnahmenkosten.file.ERGAENZUNGSLEISTUNGEN_EO',
+  EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.ERGAENZUNGSLEISTUNGEN_EO_DESCRIPTION',
   EK_BELEG_OV_ABONNEMENT: 'shared.form.einnahmenkosten.file.OV_ABONNEMENT',
+  EK_BELEG_OV_ABONNEMENT_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.OV_ABONNEMENT_DESCRIPTION',
   EK_MIETVERTRAG: 'shared.form.einnahmenkosten.file.MIETVERTRAG',
   EK_BELEG_BETREUUNGSKOSTEN_KINDER:
     'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER',
+  EK_BELEG_BETREUUNGSKOSTEN_KINDER_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER_DESCRIPTION',
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
   EK_VERDIENST: 'shared.form.einnahmenkosten.file.VERDIENST',
+  EK_VERDIENST_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.VERDIENST_DESCRIPTION',
   EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
+  EK_VERMOEGEN_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.VERMOEGEN_DESCRIPTION',
   DARLEHEN_BETREIBUNGSREGISTERAUSZUG:
     'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
   DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN:
     'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
+  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION',
   DARLEHEN_KOPIE_SCHULGELDRECHNUNG:
     'shared.form.darlehen.file.SCHULGELDRECHNUNG',
+  DARLEHEN_KOPIE_SCHULGELDRECHNUNG_DESCRIPTION:
+    'shared.form.darlehen.file.SCHULGELDRECHNUNG_DESCRIPTION',
   DARLEHEN_BELEGE_ANSCHAFFUNGEN:
     'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
+  DARLEHEN_BELEGE_ANSCHAFFUNGEN_DESCRIPTION:
+    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN_DESCRIPTION',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE:
     'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE_DESCRIPTION:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE_DESCRIPTION',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER:
     'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER_DESCRIPTION:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER_DESCRIPTION',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER:
     'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER',
+  STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER_DESCRIPTION:
+    'shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER_DESCRIPTION',
 };
 
 /**
@@ -146,11 +198,10 @@ export function createUploadOptionsFactory<
    * @param options - some additional options for the upload.
    *                  If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
    *                  but display the provided documents instead. Primarily used for Dokument Table view.
-   *                  descriptionKey is used to display a description for the upload component.
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { initialDocuments?: Dokument[]; descriptionKey?: string },
+    options?: { initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
       const permissions = view().permissions;
@@ -158,18 +209,19 @@ export function createUploadOptionsFactory<
       const allowTypes = view().allowTypes;
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
-        ? ({
+        ? {
             permissions,
             allowTypes,
             titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+            descriptionKey:
+              DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
             dokument: {
               trancheId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },
             initialDokumente: options?.initialDocuments,
-            descriptionKey: options?.descriptionKey,
-          } satisfies DokumentOptions)
+          }
         : null;
     });
   };
@@ -195,6 +247,8 @@ export function createGesuchDokumentOptions(options: {
     allowTypes,
     permissions,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+    descriptionKey:
+      DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
     dokument: {
       dokumentTyp,
       trancheId,

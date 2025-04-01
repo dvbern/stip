@@ -1,0 +1,1212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/"
+				 xmlns="https://kiegroup.org/dmn/_B5BC0ECE-C92A-4DD6-9AFE-13801D822608"
+				 xmlns:kie="http://www.drools.org/kie/dmn/1.2"
+				 xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/"
+				 xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+				 xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+				 id="_0138CF25-963C-4469-A8C1-73896B29B4B7"
+				 name="Untitled"
+				 typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/"
+				 namespace="https://kiegroup.org/dmn/_B5BC0ECE-C92A-4DD6-9AFE-13801D822608">
+  <dmn:extensionElements/>
+  <dmn:itemDefinition id="_B9A9A963-3EEA-4442-8A7A-6E0D26A9332A" name="Wohnsitz" isCollection="false">
+    <dmn:typeRef>string</dmn:typeRef>
+    <dmn:allowedValues kie:constraintType="enumeration" id="_8D4EF56B-6C8A-417E-BD8A-0D0A37077B4D">
+      <dmn:text>"EIGENER_HAUSHALT", "FAMILIE", "MUTTER_VATER"</dmn:text>
+    </dmn:allowedValues>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_1F8F25A4-FD8B-4F7B-87AD-38F3370FEC68" name="ElternTyp" isCollection="false">
+    <dmn:typeRef>string</dmn:typeRef>
+    <dmn:allowedValues kie:constraintType="enumeration" id="_799D2347-C68A-4190-BC3C-917031DCB670">
+      <dmn:text>"VATER", "MUTTER"</dmn:text>
+    </dmn:allowedValues>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_4B6C3FDF-0679-4626-BDB6-9D59B20F01B9" name="Elternschaftsteilung" isCollection="false">
+    <dmn:typeRef>string</dmn:typeRef>
+    <dmn:allowedValues kie:constraintType="enumeration" id="_989E7DEB-CD5B-48A7-9E17-BA1BCC62A5CE">
+      <dmn:text>"VATER", "MUTTER", "GEMEINSAM", null</dmn:text>
+    </dmn:allowedValues>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_192FB0B1-84CB-49D4-84A0-ACB45E1A9A90" name="Familiensituation" isCollection="false">
+    <dmn:itemComponent id="_FBC52DA2-B33D-44D7-A767-C76967667E52" name="elternVerheiratetZusammen" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2FFDD724-0E3C-4737-B46E-70B5FAAFCAC2" name="gerichtlicheAlimentenregelung" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_64F64B64-D8A2-46BE-A0E7-5CBF32EB233C" name="werZahltAlimente" isCollection="false">
+      <dmn:typeRef>Elternschaftsteilung</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_8C42FEFB-9332-4BB2-80E3-06216251B5D2" name="elternteilUnbekanntVerstorben" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_330C5F2E-A41C-4D12-A29E-B2191F36B238" name="vaterUnbekanntVerstorben" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_AEDFFD11-9553-4B3D-8076-6A71DD8788DC" name="mutterUnbekanntVerstorben" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_B8E91084-085D-40E7-B16C-9E1F957C679E" name="vaterWiederverheiratet" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_8AB5E1C2-BDC0-4707-B9F8-E891DED72575" name="mutterWiederverheiratet" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_4BC0527C-C2C3-4775-87DC-6BD13618AAC7" name="PersonInAusbildung" isCollection="false">
+    <dmn:itemComponent id="_8A009FB6-8885-4805-BB09-80071AC911BE" name="wohnsitzAnteilMutter" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+      <dmn:allowedValues kie:constraintType="range" id="_7C621478-A51A-46C6-ABA4-AFE1694FCE8C">
+        <dmn:text>[0..100]</dmn:text>
+      </dmn:allowedValues>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2333EE7C-7AE4-4781-96D1-65856C1915FF" name="wohnsitzAnteilVater" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+      <dmn:allowedValues kie:constraintType="range" id="_BF5DB85B-F5BF-461F-A8EA-F52DD0E8CA1F">
+        <dmn:text>[0..100]</dmn:text>
+      </dmn:allowedValues>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_80E11209-F875-435D-924E-748F4E3615B4" name="wohnsitz" isCollection="false">
+      <dmn:typeRef>Wohnsitz</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_17EFBF51-9F55-4609-B494-26849A02A6EC" name="PersonenImHaushaltInput" isCollection="false">
+    <dmn:itemComponent id="_9DA716FC-0F7E-401E-8BD4-3DCB09139062" name="familiensituation" isCollection="false">
+      <dmn:typeRef>Familiensituation</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_0DA7A131-A075-4488-8B89-514CD4CEFFB3" name="geschwisterTeilzeit" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+      <dmn:allowedValues kie:constraintType="expression" id="_73A97529-23E1-4DF8-A3C9-4118A5A1D933">
+        <dmn:text>(&gt;=0)</dmn:text>
+      </dmn:allowedValues>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_CBC00DAB-F2C8-43AD-973B-4164A86F8579" name="geschwisterVaterVollzeit" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+      <dmn:allowedValues kie:constraintType="expression" id="_0CF82692-3B97-4CD4-85ED-366E4C0FCF02">
+        <dmn:text>(&gt;=0)</dmn:text>
+      </dmn:allowedValues>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_59A8669D-A7A8-4F7F-938B-2EF409984F61" name="geschwisterMutterVollzeit" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+      <dmn:allowedValues kie:constraintType="expression" id="_2203E7B2-98C5-4686-96F0-0DF27A04D46F">
+        <dmn:text>(&gt;=0)</dmn:text>
+      </dmn:allowedValues>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_C28E0137-0948-4FFC-8F3B-56172520B405" name="personInAusbildung" isCollection="false">
+      <dmn:typeRef>PersonInAusbildung</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_1AB5433F-9A95-41E7-BCD8-B60C15CA9AAA" name="elternToPrioritize" isCollection="false">
+      <dmn:typeRef>ElternTyp</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_2F07B8B5-978C-4DDA-B2E5-390B030A56C6" name="PersonenImHaushaltOutput" isCollection="false">
+    <dmn:itemComponent id="_6E6059B5-BE91-43FF-AC06-34E3E39AAE80" name="noBudgetsRequired" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_073604C3-FF8D-4346-9106-FF0967062C84" name="kinderImHaushalt1" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_0C0C994F-C9B8-4FB1-93A5-CEA580759D93" name="kinderImHaushalt2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_6EBC5667-A05C-4547-8E77-07FA4BE626CB" name="personenImHaushalt1" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_B55D0CCF-D3FF-442A-BAC9-D34B6B07D91E" name="personenImHaushalt2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_5BB3EF23-01F4-4055-B937-C23A2EC14A4C" name="ElternImHaushalt" isCollection="false">
+    <dmn:itemComponent id="_1DEBE724-3A2A-43CC-890D-CDA9C606D879" name="elternImHaushalt1" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_F6F4DCCC-DDF3-4022-93F7-178BB94ACC88" name="elternImHaushalt2" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:inputData id="_D12D6D2E-7AF1-4424-B969-288EEEC95F81" name="personenImHaushaltInput">
+    <dmn:extensionElements/>
+    <dmn:variable id="_1C3D914E-74D7-47C0-8EF0-F347D38E830A" name="personenImHaushaltInput" typeRef="PersonenImHaushaltInput"/>
+  </dmn:inputData>
+  <dmn:decision id="_5100372D-5F29-4772-BF49-FEEF600527CB" name="personenImHaushaltOutput">
+    <dmn:extensionElements/>
+    <dmn:variable id="_D5B629F3-631A-4AC8-92E6-175B0A2FBF70" name="personenImHaushaltOutput" typeRef="PersonenImHaushaltOutput"/>
+    <dmn:informationRequirement id="_2FE73367-397A-4C9D-B189-D7B9DA78A94B">
+      <dmn:requiredInput href="#_D12D6D2E-7AF1-4424-B969-288EEEC95F81"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_BFD75A28-722C-434F-9EDB-669E09627FAF">
+      <dmn:requiredDecision href="#_542C4B21-145F-4E27-AFB5-91A142A3F331"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_C439C825-3F4C-4674-898A-5B0374A446C7">
+      <dmn:requiredDecision href="#_6B2017BC-680F-4B45-A179-B7181CE8429E"/>
+    </dmn:informationRequirement>
+    <dmn:decisionTable id="_32CF9452-745D-4BA9-9DD8-395C207761CE" hitPolicy="ANY" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_90A199F2-8689-40F4-B17C-AD17D2831BC7">
+        <dmn:inputExpression id="_56581BC9-084D-4B21-8DE6-FBE1C706AD93" typeRef="ElternTyp">
+          <dmn:text>personenImHaushaltInput.elternToPrioritize</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_D06A18EF-EE83-4B7F-B62D-FDA402380F85">
+        <dmn:inputExpression id="_AFD2806B-87A2-4092-BA29-6A5D5D61A38C" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.elternVerheiratetZusammen</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_39A76909-557A-46F2-A03D-D92BC2B10F4C">
+        <dmn:inputExpression id="_C1AE77B9-8754-4266-A6DE-332DC1D8288B" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.gerichtlicheAlimentenregelung</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_97321F9B-CD08-416C-8BD3-ECF911E373DD">
+        <dmn:inputExpression id="_9E63B8B7-3E00-4EEA-91B7-ED86B95091A4" typeRef="Elternschaftsteilung">
+          <dmn:text>personenImHaushaltInput.familiensituation.werZahltAlimente</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_35E44180-0F84-427B-90AE-70C973FC055E">
+        <dmn:inputExpression id="_67DB3AB3-2CB8-41E1-B1FB-EFA9F67AD872" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.elternteilUnbekanntVerstorben</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_3E662AC0-739D-48F5-941A-094191836A9D">
+        <dmn:inputExpression id="_218087ED-2FD6-43BF-A1ED-39BEA191603F" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.vaterUnbekanntVerstorben</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_B96522B3-3A66-4DBA-811A-632333A318F2">
+        <dmn:inputExpression id="_C79577B2-8A7B-4F46-9D8F-7389DF07B6C9" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.mutterUnbekanntVerstorben</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_7DC0FCDE-41CA-4EEB-9615-85CD4687BD80">
+        <dmn:inputExpression id="_A08999E4-F3AF-4635-AD47-DF0E1A263B2B" typeRef="number">
+          <dmn:text>personenImHaushaltInput.personInAusbildung.wohnsitzAnteilVater</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_F2EE8CCC-86B2-4038-A816-ADDF05302B3B">
+        <dmn:inputExpression id="_8D9DE826-21D0-4A49-B3C9-426A06CE37D6" typeRef="number">
+          <dmn:text>personenImHaushaltInput.personInAusbildung.wohnsitzAnteilMutter</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_16CE97DA-A325-4CB7-A625-CE62C227FC9E" name="noBudgetsRequired" typeRef="number"/>
+      <dmn:output id="_F13783CF-BBCD-4238-A317-1F1300E9722B" name="kinderImHaushalt1" typeRef="number"/>
+      <dmn:output id="_A83968B4-9D91-4716-AC28-AA2FA959CF7B" name="kinderImHaushalt2" typeRef="number"/>
+      <dmn:output id="_6F4A8303-38E8-43B6-9A34-FFE3C0C19175" name="personenImHaushalt1" typeRef="number"/>
+      <dmn:output id="_B26A397A-CA31-4D3B-B0FC-7627EB2A2E67" name="personenImHaushalt2" typeRef="number"/>
+      <dmn:annotation name="annotation-1"/>
+      <dmn:rule id="_BFECC601-93C7-4350-8B79-8D8CCA1CBBBF">
+        <dmn:inputEntry id="_B4951CFD-30B2-419D-A928-A568279C1064">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_33720BDB-BB54-421A-B8A0-3164867097BC">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_8A576EF4-219B-4EF0-9BED-F1B4A1F4D2F7">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_CA2A20CD-BAA7-41E0-8F23-D633283CCE56">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_10C24407-2840-4C5D-B00B-328B8113DB68">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9C09F25C-BF0C-4145-A98A-4601C524C875">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_CC830023-18F3-43D5-AD83-50A366E1EE0D">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_FCCF0187-F0F6-4A1A-A75D-1179CCD5C9EA">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BB622185-475E-45E6-A0DA-B57D0AD1E0BF">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_16923F9D-427C-4786-B831-BA823205C3A4">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_0CC8BD25-9A8B-4493-8781-502126C79211">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_957665E1-C7BE-4BC2-99F9-854ABEA4EE46">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_C10B0860-46F0-4252-9151-D6A4833BE12A">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_439F78CD-480E-40BC-9A68-1D0EDD9C5818">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_035A9CBD-6558-407F-B2C6-9165792BDEC1">
+        <dmn:inputEntry id="_EB0BA49B-0AA4-4657-968F-A3278D70A695">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BE319FFE-4489-407C-BE27-C7C4D420A336">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5BFF3A74-7E5D-4503-8397-5B4AA76E0824">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A0617C67-A4A7-4EBD-A1E1-6081EA38691A">
+          <dmn:text>"MUTTER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A8A15877-E35A-4B48-8E9D-9690161C41F4">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1D221F08-2369-48CE-B85C-41095F63EB18">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7EF8E75C-A0C0-43CA-9268-B62FC8363581">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_F5B833A5-8A35-46C5-AB68-3A3F65EB6BC2">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_B934A869-0FEA-4010-9A6A-175E2F60D191">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_0217626A-1FCD-4A4C-BF00-F8193D87FEA9">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_DC447440-9067-43A5-8A09-71556335D20B">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_1C9809EE-40F7-44A6-9E12-D36A47EF0371">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_418792AD-8635-48C7-B7B7-4FA0A221061E">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_09B7B2A3-5D59-46E1-88D3-24A5BC3EE55C">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_364C7CB2-DA16-44C8-8499-955A1E92C9C3">
+        <dmn:inputEntry id="_56CE3B7C-AD74-43BD-B84C-59DDDADDC0C8">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C35C5879-B7A0-493A-A1AD-33D7A3056DDA">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1AEEB919-F92D-41D7-9570-94DE5AE10ABD">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_139FE189-E615-4297-AC7B-ECDF8FC02561">
+          <dmn:text>"VATER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_4411D526-74FD-4A62-AAF5-BBC230AC383B">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_711A1370-8E0D-49F4-9A87-27F06E4187A3">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_66D21A35-CDF4-470D-A78B-C3B8DF6803A5">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_3D5FF984-39E1-45B4-ACB5-87D96150132C">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_820C127C-5CCA-47AB-9472-92DFB432E545">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_BC7C978B-0EE7-439E-AD4A-65A0EF675184">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_069B4E0A-0425-4735-93B2-FF5A44BBDB1A">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_54860C7A-F023-439C-9BF5-8AD14FB44C56">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_25EC9B82-4D68-418D-9BC1-CC6F9085C9FE">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_A947DCCA-19C2-48FF-BD50-6A1EEFF21F1D">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_F2E9A1BD-9ECB-416E-AB2A-82440B12D451">
+        <dmn:inputEntry id="_70A61826-620E-48B3-8442-45006B74C88B">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5FC46C0E-23F9-4BE1-990B-07F20B16CCD6">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A10541E1-9B37-42C1-A935-369491797EA2">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_436B2982-34FE-4679-A311-903C33E48DD5">
+          <dmn:text>"GEMEINSAM"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2B5C0702-1279-4631-91C2-8948589E9673">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_243AEC39-D341-4F7A-AD39-08BCA562506C">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E98FE7E4-E9E3-4E07-80C7-A03A55F8A3D4">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_289C210E-3865-4A7E-8723-F6311F73E1C9">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9292F4A7-B80C-4790-AA42-B3FF4AF602F9">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_4FCFBCAB-98F6-4D4E-AAE2-93DF53D0B0EB">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_7A71EDD7-FC9F-40DD-AB12-F11ED5B3F013">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_83C938F8-2735-4E26-937F-43FDCDCAC234">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_2E005871-83B2-42E2-8ECE-A30B0A57DC46">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_6FCCBBED-D520-45AF-9ECA-3DD85B8D409C">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_AE20A345-8AE2-43DD-9EAF-5D5502750304">
+        <dmn:inputEntry id="_9617D89E-DEAA-4B48-A386-3CB9BE2E3F86">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_ACB20D73-CA6D-4469-9AD7-6A8153EA1CD6">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2AE06446-9580-40A2-A88D-36A10B563804">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_84232BF4-950F-48D9-B483-D1625216319F">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9F736DE4-ECCD-4924-A7F6-E9EE6A93E170">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_EC94F902-5ED7-4C9A-A783-3FA6FD4956A1">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_B9AA1A18-F579-4DCF-ABB3-3F7B0C8B14C5">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D0DA7166-F521-4992-B3B5-AAC0F90D0D99">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_B3891A0D-753C-46C2-A9A1-0E6FFDFAF5C2">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_3670FBD6-19CF-4CAC-B680-458E279904D3">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_08FDED29-F447-4191-8294-E1CDB6863E35">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_81A79BB6-33C8-4C1D-83EF-3157F528A955">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_5A76E4D1-E66F-48F1-ABE8-746D73AA52A7">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_1D707434-0940-4F56-A1CE-EDA7CAA04481">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_075988C5-2D85-4A19-822A-02D14700364B">
+        <dmn:inputEntry id="_BF631D07-3874-4736-A2B1-47475781FDA3">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C6E8E71D-083A-4A30-BF6A-DD4EC8F7A9F7">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_74062FC0-A87C-415B-BE03-FEF5072EF2FE">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1015AE88-DF35-4C3E-856E-4A8C87B04A76">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_88EBD166-AD55-49BD-875F-B48E87BB3B6A">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D9423488-6E99-4D0E-9819-152BE644A365">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_87FE6391-A01A-4776-95CC-9FAA4A25CFCE">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1DC57194-1599-47FF-8E74-FDF954F61030">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_3D90114B-CD97-4E0C-A10A-E77CC85B051D">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_C34E0C4D-9136-480D-B3D7-37A6FD9EB213">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_C55745C6-C8E1-4EF5-B7B0-01503E07CF61">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_F0E767B0-BB26-4D85-A42B-A3ECCCEC7C4D">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_3051D053-88AE-4CF3-AFC1-B5A9B8007083">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_21E8D384-655F-4EC6-A116-35D4335EF682">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_2C4895BD-61F1-40A8-863C-D2FE63E193FA">
+        <dmn:inputEntry id="_D98F8946-6361-4E53-8C97-001ADF9AB31E">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BFAFCF4E-BD00-4040-866D-5EC7BB31D437">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_ECD18870-846C-450F-8409-3FC7C2A81631">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_723E0FF9-29F9-456F-BD86-44B281B3FAEC">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_0C9096A2-318D-4BAF-A5DC-B56748E12A56">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_38F4B5D6-99C2-49F8-AB20-5EA9C49DDB0C">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A78CAA3A-5985-4859-81F4-C5AEED154F1F">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2319D6B5-25EC-4F10-94DA-35E8FD580886">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BC21B681-AFC4-4458-9C0E-43C47A0FE798">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_7D7BC9F1-CFE0-46D5-984E-6B757B075E66">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_51AC5A7A-9331-475E-A678-2E50935B828E">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_E0131B4F-646C-4188-8D0E-6B9D2BDD82A5">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_D32F82D1-C99D-4C62-9AA1-7539881F42B8">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_DBB60D5D-4F04-46FF-9CC0-8F1EF2ACA1F7">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_6FA97ECF-3E9C-4545-AEF0-C4C7D096E470">
+        <dmn:inputEntry id="_9C12E7D6-2AA5-4673-86C8-6786CC49D1C6">
+          <dmn:text>"VATER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_AD7BB9D6-72D5-4BCB-B73A-69E1A260AC3A">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5C7CB07B-EF99-45B8-8C29-74EFAA4B07F5">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D47CE275-3896-45BF-B61E-20F545B0C7F6">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_198F2109-F293-4E6E-A11D-3BBF15223151">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C4010695-714B-4CB8-855A-FBD2F5C0AD3B">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C878FEA3-1824-45CB-B91B-52EC7610D486">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_6AF5A26F-96C2-477D-995E-F8A605134ADE">
+          <dmn:text>&gt;0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5F75872D-BAD6-40A2-ABBA-D66A32969F82">
+          <dmn:text>&gt;=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_CBECF1DB-D0DC-4C0E-BDDD-0957ADC8B15A">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_BA266698-CFE9-4AB0-B3F8-1CA8FA103E2D">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_108C84E3-D6A1-4CFB-B4C1-6842BBA38CF2">
+          <dmn:text>personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_C9C74355-A945-4FC0-9F09-1312DDF2E8E5">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_587B5EA7-1886-4864-B682-8E50019BC6B1">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_97054459-C4A6-47E4-913B-A2559024CFA4">
+        <dmn:inputEntry id="_752D1644-EBCA-4DAA-BB48-7509F655F1B9">
+          <dmn:text>"VATER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_A6D10C8E-61F7-45DF-B2EC-B16C38D7A921">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_496A77BE-81AF-45AE-93AA-0AA33CA9F7C0">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_65B51333-EA83-4B53-87AA-86477227F8ED">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2CFEBAF8-6273-4C5F-B5DF-47624A7BB0CD">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5C121EEA-36CC-489D-B619-705094269259">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5F458209-5266-4405-92C2-A10AA0A7C731">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5F2D5C55-70CD-4BF1-B1C7-C870106969EA">
+          <dmn:text>=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D985AC0F-ED20-464B-BBC4-EDE22D9C2EFE">
+          <dmn:text>&gt;=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_F2B816AD-51BC-4394-AE7F-369AC629AB10">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_EA894936-3C0D-4903-9E35-63D02652880E">
+          <dmn:text>personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_CF30BC55-08E6-4A26-BCF3-C8806A00FFC5">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_D1367E67-238C-4FF6-B9AE-AF30AD2A6385">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_538E7A5F-9D87-4BA1-A161-2E4831898924">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_BDA00634-85D4-4DD9-9AF1-E199EE1C5A0D">
+        <dmn:inputEntry id="_E9648DF4-524C-472F-981B-16BA09E5A1FE">
+          <dmn:text>"VATER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_3E42F8CC-6C16-4518-ACB9-366FD1D465F3">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_95A6E742-909A-458D-B75B-DC72FC0C77F0">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7B9743E9-DFF8-4157-B44F-4B942259DBC9">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_B4E69CFB-635D-499F-8748-A060A01FE1DC">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BE50A7B9-3244-411C-B371-9A7C90266B4C">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D86CA1A5-4363-4272-B31D-C850DF57C5FD">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_F35020D6-353A-4DBA-8006-D933E0153E03">
+          <dmn:text>null</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_8EFE6DCF-1DCB-4640-8A4E-E1DD756732CD">
+          <dmn:text>null</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_D5CFF7F6-E372-4CA6-BC16-8F0CB8DE6874">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_98BD6987-A23E-41A4-9B7D-1795D2E142AB">
+          <dmn:text>personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_BA0DD5D2-9DB9-4F32-8F08-F8570DEE513A">
+          <dmn:text>personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_A54DFC6B-5C4E-465D-BF75-7E8241B87C02">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_47C9FB4E-63D4-404D-AC78-BF060AF8160E">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personenImHaushaltInput.geschwisterMutterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_77F1FD4B-8FA1-41A5-9376-E06766B3687E">
+        <dmn:inputEntry id="_0EC6AA34-8B9A-4E47-A909-5012B07BF40A">
+          <dmn:text>"MUTTER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7042D778-956C-454F-A99A-9484D0BB536A">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_48028598-BB32-419E-861C-CD94A1601B37">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2A4E7BEF-1CC3-4B94-B438-70CAC673DE2B">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_400F9106-7822-4320-8A4B-C5533494783E">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_43EA27F1-B16D-4611-ABF0-8421C6828E83">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_2AE89016-4B2F-4A62-A2F5-F87DC58D279E">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5D28DA62-55BD-4441-A1D4-DC2C1203B11F">
+          <dmn:text>&gt;=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_DA9D59F8-96AA-49C0-BE77-B43B68F5E09C">
+          <dmn:text>&gt;0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_8F444862-BBC6-439C-9FA0-3D9873BFC7BC">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_E9B155C4-7D6B-4203-9379-FC484535E9B4">
+          <dmn:text>personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_7224666B-B6C5-4AC1-9B0A-8B08ECF68979">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_E0B53150-93A1-4C19-9312-13BF173DBE8F">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_61EC39B0-A00E-4910-AC70-42F61E7AE494">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_C018F80C-5BEC-4BC8-9D56-70104E5BDDBB">
+        <dmn:inputEntry id="_1BBD9169-99BE-4E02-8308-5BF96FF55684">
+          <dmn:text>"MUTTER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_213874FF-26F7-4BF9-B307-4F20E8BAE4A4">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_6131C9C2-2BCB-4DE9-A287-CC583C7EC8EE">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1F42162F-1602-4B42-860A-A6405CC4F6C2">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_565D1D9D-67C6-43FF-9AE6-E53A032B632F">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_4F22F2EE-814B-45F9-88F3-CA8EBA8CF17C">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_67B4F7AD-1D6C-4CC6-8187-489761E7B2ED">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_3DDC5B9C-D5B7-430F-9839-B5FEDFE1BEFA">
+          <dmn:text>&gt;=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D9932247-24BC-4DDE-9E29-5B09213F5443">
+          <dmn:text>=0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_5B7F5281-1E96-4F26-BAAC-8485CB30839E">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_A0E21A20-CF5F-4F1D-B7FD-04F1698A12A1">
+          <dmn:text>personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_4621F5AD-7C34-4129-AEB8-A46A01A34F82">
+          <dmn:text>personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_9B2F8EDD-3622-4105-BD4D-AE197BD9A4C2">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_BFC9DFE3-249D-41E9-AC95-984AF5FF4191">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_DD881EAE-91E3-4FD2-BE15-5D115BDFACC7">
+        <dmn:inputEntry id="_0C251F22-EB06-4EA0-8FDD-C1136F778FA2">
+          <dmn:text>"MUTTER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7B555D5F-F587-4697-A9E0-79F15FDF3498">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E1B7C292-09DC-493B-ACD6-557565FD4D12">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7255FF79-B8A2-443E-BECE-8D9C3BFF331D">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7BB82887-0790-4E3D-BCCF-F7BD61E8D4CF">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_38CD14FB-D5C7-4D60-BE1F-C3F43D9BC1BD">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C2270470-642E-4393-B622-B92B6DE42162">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_5FD04611-6437-4DA2-BA31-6690DFE314D0">
+          <dmn:text>null</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_76C068FA-8F8F-4AA2-AF03-7948A894D7A3">
+          <dmn:text>null</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_0F80DF54-AC6A-4BF2-8561-3490F21499E2">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_B9857FA8-65F8-42F4-895A-EABCD382FFCF">
+          <dmn:text>personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_1748F6DF-9FAA-4D9A-9C93-8BE10F1FEE1B">
+          <dmn:text>personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_68B8FF9A-C407-4F9C-9CF5-C162CCBF0E9F">
+          <dmn:text>elternImHaushalt.elternImHaushalt1+personenImHaushaltInput.geschwisterVaterVollzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_21C8746B-E81E-4019-964A-0EA005269145">
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_DC94AE3E-9625-4BD6-80D0-7B56774643ED">
+        <dmn:inputEntry id="_E9FC9ED9-3074-42FE-98DE-976760EA6959">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D5C774B9-01FC-4410-A82A-F0539B722AC8">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_44557528-1612-4484-AC3F-B40A4229F4FA">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_3AB3F04D-94DC-4BD7-A915-982722F4C6D1">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_95487251-05A3-426C-A089-3FED0FAB4F0F">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_8CF94267-F5BD-4F10-A3C1-F4A1B57ACA06">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E89A0F68-98ED-4B9E-B875-7EEDFDE6AF3A">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_C951D96C-F896-4AB9-82F1-D64393AB07C1">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_838B5452-B980-45DF-8049-9E383D2421CF">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_05DF8043-2566-4CCD-B091-CF55DDCAB64F">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_BB9D7635-7BFC-42E1-AC2A-A8096B750A53">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_9D134DEC-E486-48D0-B862-B14145A400A0">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_F9B369C2-3117-4FAD-9C55-049D2E42A059">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_A4B2B566-F7C6-4344-8D04-7A058B22B36C">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_B73126A7-CEDA-4E09-9E21-A2AE0D951CFE">
+        <dmn:inputEntry id="_08A0D6D8-B214-49A7-81EB-131F7B58918A">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_71B2EBE8-009F-41CB-A624-C93C0F529D6A">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BF08CDD7-4A54-4108-93EC-B311F33C7646">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_1D016773-5353-40FF-9B0B-BFDA9CE7D637">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_FA3462EB-55C8-4943-9709-047F662B0A3E">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9CAE1333-615C-47D4-A45D-E2906A62A983">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_F4F97078-1EA2-41ED-9571-87B5B56B3EB2">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BAFE7EA5-477B-4E5C-B9CE-32386B064434">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D2048E7A-B98C-4C54-9774-1AE6FCFE76E0">
+          <dmn:text>&lt;0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_83F39FAB-8ABD-4EC7-AD0E-80D2A93F6FA1">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_FD3F9EF1-8CCC-4B59-984B-3484A0AC01EF">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_CFAA8121-5D2E-4BBF-ACB6-DF417C9A2E3A">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_1474E7EB-5971-4EFF-85E5-61579AABA808">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_2982E110-FF00-4071-A233-E3A8DD575499">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_1D805CD8-7ADF-4558-A4F7-F2FEAEC91E87">
+        <dmn:inputEntry id="_A62B8802-0BAD-4B2A-9C54-9843B5FBC2FE">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_459A655D-9E79-47C1-BB86-C2A6AD3FB2CD">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E4AE5257-535F-4D46-800C-74C57B07FA34">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D8E48365-3930-45FD-8F3A-B2E42833E7B8">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9ADAE165-079F-4A5F-A468-523FB1CB44C7">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_6BDEC83D-A1F2-405F-9DC2-3E338A011BE2">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_CF97C4F5-4689-4AA7-9807-144C870B05F3">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_E3597958-B1B2-4508-83DF-FC664F3E79A6">
+          <dmn:text>&lt;0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_4FD5D78F-C029-4582-A910-37577F035464">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_DC7AC784-3095-4D81-BD5B-8296834553B2">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_0C0401F2-E5E9-446F-9FDD-0BB47A9246F5">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_E1C44431-B4E1-4CAE-8D7F-59C407ABC310">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_2AD527CF-FAFC-4A63-8115-5DED3B037E79">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_F4A4B827-3745-44FD-8F6E-46877E6F9AF3">
+          <dmn:text>null</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmn:decision id="_542C4B21-145F-4E27-AFB5-91A142A3F331" name="personInAusbildungPersonenImHaushaltContributionNo">
+    <dmn:extensionElements/>
+    <dmn:variable id="_1FCDCFFB-7E52-46EE-8507-2C0E5F7B7B6F" name="personInAusbildungPersonenImHaushaltContributionNo" typeRef="number"/>
+    <dmn:informationRequirement id="_EAA0387F-1AD3-4D34-9242-0B465AB9638E">
+      <dmn:requiredInput href="#_D12D6D2E-7AF1-4424-B969-288EEEC95F81"/>
+    </dmn:informationRequirement>
+    <dmn:decisionTable id="_FB6BCB5E-877E-4E42-A958-5392AC8BDA87" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_A978F3E0-5D6A-47FD-AF7C-E3F12F87980F">
+        <dmn:inputExpression id="_4E46EAB4-4879-4D85-9C6A-293AEACF2CA5" typeRef="Wohnsitz">
+          <dmn:text>personenImHaushaltInput.personInAusbildung.wohnsitz</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_5999F642-9849-417E-99BD-32A6CE0CF19D"/>
+      <dmn:annotation name="annotation-1"/>
+      <dmn:rule id="_A88ED6C6-13F3-44E1-83CD-C57CDE2F4F5A">
+        <dmn:inputEntry id="_79BBB097-FF0E-43A3-92AE-1DE130BEA501">
+          <dmn:text>"EIGENER_HAUSHALT"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_0330FAD9-AB43-4D11-9C80-696E2192C906">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_7FDCE29D-8507-404A-AA6D-DBCB31529CDD">
+        <dmn:inputEntry id="_F11550A5-6267-43EC-8F85-ACD8DD6B52A7">
+          <dmn:text>"FAMILIE", "MUTTER_VATER"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_78286B11-9E91-4827-AC2A-F7DC6A354311">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmn:decision id="_6B2017BC-680F-4B45-A179-B7181CE8429E" name="elternImHaushalt">
+    <dmn:extensionElements/>
+    <dmn:variable id="_67F3F078-306E-468E-AD53-D65544BE3FC5" name="elternImHaushalt" typeRef="ElternImHaushalt"/>
+    <dmn:informationRequirement id="_B47DCC06-E067-4DB3-A919-C90CD6E9A829">
+      <dmn:requiredInput href="#_D12D6D2E-7AF1-4424-B969-288EEEC95F81"/>
+    </dmn:informationRequirement>
+    <dmn:decisionTable id="_941E0914-A702-4F30-AB13-E6DC4B3B4936" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_836A42FA-5205-4C8E-ADFC-C4980078F679">
+        <dmn:inputExpression id="_3A38C226-FC0A-477E-B79B-F61603DD1BA7" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.elternVerheiratetZusammen</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_C65EC6FC-E3A1-422E-963D-50DD1007FB6D">
+        <dmn:inputExpression id="_EE77AB38-009B-4A00-9464-E306637D4808" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.vaterWiederverheiratet</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_AC1878CF-47E3-4E6B-964E-34821A59FC38">
+        <dmn:inputExpression id="_6C698E7E-CA33-43C4-8FA8-1994DFF2CE8F" typeRef="boolean">
+          <dmn:text>personenImHaushaltInput.familiensituation.mutterWiederverheiratet</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_D6A94696-0E53-4BB6-B48E-8BD2A7E30A3A" name="elternImHaushalt1" typeRef="number"/>
+      <dmn:output id="_55CAD057-8A36-468A-B0AA-8CAD4DAEA84D" name="elternImHaushalt2" typeRef="number"/>
+      <dmn:annotation name="annotation-1"/>
+      <dmn:rule id="_895F153A-023E-454E-98CA-C33B4D1A764E">
+        <dmn:inputEntry id="_72CDD288-A7D0-4D0E-B3B8-D233576EF12C">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_4C8AC043-07EF-41B3-98A6-0C960114C6C7">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D49B92F4-83D9-4068-8F31-D18E4FEBCBA0">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_24FC7DD3-1F99-4457-9589-F410A17D5B7C">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_7896628C-3535-4658-A603-FD8449CDD663">
+          <dmn:text>0</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_731315D4-DA54-42E6-B9B4-D7BF6D760737">
+        <dmn:inputEntry id="_31453661-8F3D-47C7-91D7-61D842B891B1">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_6E9D0B56-9125-4625-9C28-1A69E1428EAE">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_076A8BCB-95D2-4C79-99C1-FC04EACD6EA9">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_93590701-48BE-4FAF-A853-3A70C38EFF50">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_40E6D365-EA41-4567-B096-E53D9A58CA7A">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_5C9B5849-F6D8-47F7-828D-679F71E41C6E">
+        <dmn:inputEntry id="_AFCE9F34-201B-4054-AF28-183CF8D9ABBB">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_FB0D657A-886E-47EA-93D3-9C4A38C20A59">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_BF62AF8F-4586-4690-A295-C7B1CEC4D440">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_FA51284D-2407-48D3-B010-B511CE8858F0">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_043F8343-312B-46DE-873A-0259F16F11BF">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_44FD4072-20FE-4BC9-8A42-9FB64324E578">
+        <dmn:inputEntry id="_9C9F5DA3-915C-4891-AD4B-70399E656CA5">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D6620962-9EED-44AA-B374-96E11CED8742">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D76C132A-BB5B-4909-B448-A6B59A5DEEFA">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_92F06979-B0DE-407D-8631-D9D02256FE72">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_5ECCA8DE-E4CE-4825-87E9-621314DE6F81">
+          <dmn:text>1</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_B6DF56F6-3EE2-413E-B739-54DA0BEC9D69">
+        <dmn:inputEntry id="_388B84D2-423E-4173-9999-5AFE9E4AC95A">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_B284E4F9-4E24-4512-915E-5BB31A3CAF72">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_09AF9D74-F482-41DF-A323-B9D953E210C0">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_8DAAD4B5-0CED-45AB-94C4-E142FFA713FB">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:outputEntry id="_F88C259C-30FC-4E05-A90F-E2D84B6E8A9A">
+          <dmn:text>2</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="_17265F8F-2244-4964-B75B-E68C3C2B543A" name="DRG">
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_32CF9452-745D-4BA9-9DD8-395C207761CE">
+            <kie:width>50</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>363</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>115</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>465</kie:width>
+            <kie:width>551</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>103</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>529</kie:width>
+            <kie:width>395</kie:width>
+            <kie:width>611</kie:width>
+            <kie:width>500</kie:width>
+            <kie:width>237</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_FB6BCB5E-877E-4E42-A958-5392AC8BDA87">
+            <kie:width>50</kie:width>
+            <kie:width>416</kie:width>
+            <kie:width>314</kie:width>
+            <kie:width>173</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_941E0914-A702-4F30-AB13-E6DC4B3B4936">
+            <kie:width>50</kie:width>
+            <kie:width>470</kie:width>
+            <kie:width>511</kie:width>
+            <kie:width>456</kie:width>
+            <kie:width>160</kie:width>
+            <kie:width>180</kie:width>
+            <kie:width>100</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape id="dmnshape-drg-_D12D6D2E-7AF1-4424-B969-288EEEC95F81" dmnElementRef="_D12D6D2E-7AF1-4424-B969-288EEEC95F81" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="73" y="163.43421052631578" width="191" height="81"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_5100372D-5F29-4772-BF49-FEEF600527CB" dmnElementRef="_5100372D-5F29-4772-BF49-FEEF600527CB" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="442" y="180" width="228" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_542C4B21-145F-4E27-AFB5-91A142A3F331" dmnElementRef="_542C4B21-145F-4E27-AFB5-91A142A3F331" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="73" y="345" width="405" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_6B2017BC-680F-4B45-A179-B7181CE8429E" dmnElementRef="_6B2017BC-680F-4B45-A179-B7181CE8429E" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="202" y="15" width="147" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="dmnedge-drg-_2FE73367-397A-4C9D-B189-D7B9DA78A94B-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_2FE73367-397A-4C9D-B189-D7B9DA78A94B">
+        <di:waypoint x="168.5" y="163.43421052631578"/>
+        <di:waypoint x="556" y="230"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_BFD75A28-722C-434F-9EDB-669E09627FAF" dmnElementRef="_BFD75A28-722C-434F-9EDB-669E09627FAF">
+        <di:waypoint x="275.5" y="370"/>
+        <di:waypoint x="556" y="230"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_C439C825-3F4C-4674-898A-5B0374A446C7" dmnElementRef="_C439C825-3F4C-4674-898A-5B0374A446C7">
+        <di:waypoint x="275.5" y="40"/>
+        <di:waypoint x="556" y="180"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_EAA0387F-1AD3-4D34-9242-0B465AB9638E-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_EAA0387F-1AD3-4D34-9242-0B465AB9638E">
+        <di:waypoint x="168.5" y="163.43421052631578"/>
+        <di:waypoint x="275.5" y="395"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_B47DCC06-E067-4DB3-A919-C90CD6E9A829-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_B47DCC06-E067-4DB3-A919-C90CD6E9A829">
+        <di:waypoint x="168.5" y="163.43421052631578"/>
+        <di:waypoint x="275.5" y="65"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>

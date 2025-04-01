@@ -17,15 +17,19 @@
 
 package ch.dvbern.stip.api.dokument.util;
 
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchDokumentKommentarCopyUtil {
-    public GesuchDokumentKommentar createCopy(final GesuchDokumentKommentar source) {
+    public GesuchDokumentKommentar createCopy(
+        final GesuchDokumentKommentar source,
+        final GesuchDokument destinationGesuchDokument
+    ) {
         final var copy = new GesuchDokumentKommentar();
 
-        copy.setGesuchDokument(source.getGesuchDokument());
+        copy.setGesuchDokument(destinationGesuchDokument);
         copy.setKommentar(source.getKommentar());
         copy.setDokumentstatus(source.getDokumentstatus());
 
