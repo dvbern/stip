@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchsperiode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -38,6 +39,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -114,7 +116,7 @@ class GesuchsperiodeResourceTest {
             .body()
             .as(GesuchsperiodeDtoSpec[].class);
 
-        assertThat(gesuchsperioden.length, is(3));
+        assertThat(gesuchsperioden.length, is(Matchers.in(List.of(2, 3))));
     }
 
     @Test

@@ -96,8 +96,10 @@ class GesuchFormularMapperTest {
         final var elterns = new ArrayList<ElternUpdateDto>();
         final var vater = new ElternUpdateDto();
         vater.setElternTyp(ElternTyp.VATER);
+        vater.setAdresse(new AdresseDto());
         final var mutter = new ElternUpdateDto();
         mutter.setElternTyp(ElternTyp.MUTTER);
+        mutter.setAdresse(new AdresseDto());
         elterns.add(vater);
         elterns.add(mutter);
 
