@@ -21,10 +21,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
@@ -91,11 +89,9 @@ public class GesuchStatusService {
     }
 
     public boolean benutzerCanEdit(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
-        final var identifiers = benutzer.getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
+        final var identifiers = benutzer.getRollenIdentifiers();
         final var editStates = new HashSet<Gesuchstatus>();
+
         if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
             editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
         }
@@ -120,6 +116,32 @@ public class GesuchStatusService {
         }
 
         return editStates.contains(gesuchstatus);
+    }
+
+    public boolean benutzerCanUploadDokument(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
+        final var identifiers = benutzer.getRollenIdentifiers();
+        final var editStates = new HashSet<Gesuchstatus>();
+
+        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_UPLOAD_DOCUMENT);
+        }
+
+        return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
+    }
+
+    public boolean benutzerCanDeleteDokument(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
+        final var identifiers = benutzer.getRollenIdentifiers();
+        final var editStates = new HashSet<Gesuchstatus>();
+
+        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_DELETE_DOKUMENTE);
+        }
+
+        return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
+    }
+
+    public boolean canCreateBuchhaltungSaldokorrektur(final Gesuchstatus gesuchstatus) {
+        return Gesuchstatus.SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR.contains(gesuchstatus);
     }
 
     public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {

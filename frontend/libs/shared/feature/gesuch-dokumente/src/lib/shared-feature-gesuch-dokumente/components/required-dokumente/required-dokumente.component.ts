@@ -76,8 +76,8 @@ export class RequiredDokumenteComponent {
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
-  dokumentStore = inject(DokumentsStore);
 
+  dokumentStore = inject(DokumentsStore);
   dokumenteViewSig = input.required<{
     gesuchId: string | undefined;
     nachfrist: string | undefined;

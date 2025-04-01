@@ -24,7 +24,12 @@ export const appRoutes: Route[] = [
     canActivate: [
       hasBenutzer,
       hasRoles(
-        ['Admin', 'Jurist', 'Sachbearbeiter', 'Sozialdienst-Admin'],
+        [
+          'V0_Sachbearbeiter-Admin',
+          'V0_Jurist',
+          'V0_Sachbearbeiter',
+          'V0_Sozialdienst-Admin',
+        ],
         '/unauthorized',
       ),
     ],
@@ -54,7 +59,10 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'administration',
-        canActivate: [hasBenutzer, hasRoles(['Admin', 'Sozialdienst-Admin'])],
+        canActivate: [
+          hasBenutzer,
+          hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Sozialdienst-Admin']),
+        ],
         title: 'sachbearbeitung-app.admin.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/administration').then(
@@ -69,7 +77,7 @@ export const appRoutes: Route[] = [
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,
-          hasRoles(['Sachbearbeiter'], '/administration'),
+          hasRoles(['V0_Sachbearbeiter', 'V0_Jurist'], '/administration'),
         ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>

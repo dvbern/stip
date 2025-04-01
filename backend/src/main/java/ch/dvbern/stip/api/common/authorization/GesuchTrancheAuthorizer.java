@@ -29,10 +29,10 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -61,7 +61,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -88,7 +88,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -137,7 +137,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         canRead(gesuchTrancheId);
         final var aenderung = gesuchTrancheRepository.requireAenderungById(gesuchTrancheId);
         if (!GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(aenderung.getStatus())) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -154,14 +154,14 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
         // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (!isAuthorizedForCurrentOperation) {
-            throw new UnauthorizedException();
+            forbidden();
         }
 
         if (
             (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) ||
             (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)
         ) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -194,7 +194,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
                     && gesuchDokument.getDokumente().isEmpty()
                 )
         ) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 }

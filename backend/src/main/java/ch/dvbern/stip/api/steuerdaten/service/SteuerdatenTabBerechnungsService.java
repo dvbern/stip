@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -30,6 +31,10 @@ import static ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung.VAT
 @RequestScoped
 public class SteuerdatenTabBerechnungsService {
     public List<SteuerdatenTyp> calculateTabs(final Familiensituation familiensituation) {
+        if (Objects.isNull(familiensituation)) {
+            return List.of();
+        }
+
         // We need boxed equality as we can only assume it isn't null if it's been saved to/ loaded from the DB
         if (Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen())) {
             return List.of(SteuerdatenTyp.FAMILIE);

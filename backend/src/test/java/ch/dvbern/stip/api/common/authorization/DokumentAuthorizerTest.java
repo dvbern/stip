@@ -20,18 +20,22 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,10 +43,13 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 class DokumentAuthorizerTest {
     private DokumentAuthorizer dokumentAuthorizer;
     private BenutzerService benutzerService;
+    private SozialdienstService sozialdienstService;
+    private GesuchRepository gesuchRepository;
     private GesuchTrancheRepository gesuchTrancheRepository;
     private GesuchDokumentRepository gesuchDokumentRepository;
 
@@ -50,11 +57,25 @@ class DokumentAuthorizerTest {
 
     @BeforeEach
     void setUp() {
+        sozialdienstService = Mockito.mock(SozialdienstService.class);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
         benutzerService = Mockito.mock(BenutzerService.class);
-        var mockBenutzer = new Benutzer();
+        final var mockBenutzer = new Benutzer();
         mockBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
         Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
+        final var currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
 
+        gesuchRepository = Mockito.mock(GesuchRepository.class);
+        final var gesuch = new Gesuch()
+            .setAusbildung(
+                new Ausbildung()
+                    .setFall(
+                        new Fall()
+                            .setGesuchsteller(currentBenutzer)
+                    )
+            );
+        Mockito.when(gesuchRepository.requireGesuchForDokument(any())).thenReturn(gesuch);
         gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(new GesuchTranche().setGesuch(new Gesuch()));
@@ -63,7 +84,13 @@ class DokumentAuthorizerTest {
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
 
-        dokumentAuthorizer = new DokumentAuthorizer(benutzerService, gesuchTrancheRepository, gesuchDokumentRepository);
+        dokumentAuthorizer = new DokumentAuthorizer(
+            gesuchRepository,
+            benutzerService,
+            gesuchTrancheRepository,
+            gesuchDokumentRepository,
+            sozialdienstService
+        );
     }
 
     @Test

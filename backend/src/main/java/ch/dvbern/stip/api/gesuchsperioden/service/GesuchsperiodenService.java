@@ -42,7 +42,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchsperiodenService {
-
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
@@ -139,8 +138,12 @@ public class GesuchsperiodenService {
         return found.map(gesuchsperiodeMapper::toDatenDto).orElse(null);
     }
 
+    public boolean isReadonly(final Gesuchsperiode gesuchsperiode) {
+        return gesuchsperiode.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF;
+    }
+
     private void preventUpdateIfReadonly(final Gesuchsperiode gesuchsperiode) {
-        if (gesuchsperiode.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF) {
+        if (isReadonly(gesuchsperiode)) {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");
         }
     }

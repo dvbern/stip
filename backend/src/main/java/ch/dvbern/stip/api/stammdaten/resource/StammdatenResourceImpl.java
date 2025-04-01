@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.stammdaten.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.StammdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
@@ -35,26 +35,27 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 @RequiredArgsConstructor
 @Validated
 public class StammdatenResourceImpl implements StammdatenResource {
+    private final StammdatenAuthorizer stammdatenAuthorizer;
     private final LandService landService;
 
     @Override
-    @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
     public List<Land> getLaender() {
+        stammdatenAuthorizer.canGetLaender();
         return landService.getAllLaender();
     }
 
     @Override
-    @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
     public List<LandEuEftaDto> getLaenderEuEfta() {
+        stammdatenAuthorizer.canGetLaender();
         return landService.getAllLandEuEfta();
     }
 
     @Override
-    @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
     public List<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
+        stammdatenAuthorizer.canSetLaenderEuEfta();
         return landService.setLaenderEuEfta(landEuEftaDto);
     }
 }

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.fall.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +80,7 @@ public class Fall extends AbstractMandantEntity {
     private Zuordnung sachbearbeiterZuordnung;
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
-    private Set<Ausbildung> ausbildungs;
+    private Set<Ausbildung> ausbildungs = new HashSet<>();
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private List<Buchhaltung> buchhaltungs = new ArrayList<>();

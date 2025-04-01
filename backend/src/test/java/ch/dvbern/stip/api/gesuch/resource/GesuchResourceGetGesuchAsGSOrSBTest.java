@@ -38,7 +38,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -93,7 +92,7 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
     void checkSBReceivesEmptyChanges() {
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -157,7 +156,7 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
@@ -165,7 +164,7 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
         // Assert
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(trancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()

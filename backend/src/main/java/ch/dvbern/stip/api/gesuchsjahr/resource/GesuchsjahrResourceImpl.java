@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.gesuchsjahr.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.GesuchsjahrAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.generated.api.GesuchsjahrResource;
@@ -40,47 +40,48 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 @AllArgsConstructor
 @Validated
 public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
+    private final GesuchsjahrAuthorizer gesuchsjahrAuthorizer;
     private final GesuchsjahrService gesuchsjahrService;
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public GesuchsjahrDto getGesuchsjahr(UUID gesuchsjahrId) {
+        gesuchsjahrAuthorizer.canGet();
         return gesuchsjahrService.getGesuchsjahr(gesuchsjahrId);
     }
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<GesuchsjahrDto> getGesuchsjahre() {
+        gesuchsjahrAuthorizer.canGet();
         return gesuchsjahrService.getGesuchsjahre();
     }
 
-    @RolesAllowed(STAMMDATEN_CREATE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_CREATE)
     public GesuchsjahrDto createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
+        gesuchsjahrAuthorizer.canCreate();
         return gesuchsjahrService.createGesuchsjahr(gesuchsjahrCreateDto);
     }
 
-    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
+        gesuchsjahrAuthorizer.canUpdate(gesuchsjahrId);
         return gesuchsjahrService.updateGesuchsjahr(gesuchsjahrId, gesuchsjahrUpdateDto);
     }
 
-    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public GesuchsjahrDto publishGesuchsjahr(UUID gesuchsjahrId) {
+        gesuchsjahrAuthorizer.canPublish();
         return gesuchsjahrService.publishGesuchsjahr(gesuchsjahrId);
     }
 
-    @RolesAllowed(STAMMDATEN_DELETE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_DELETE)
     public void deleteGesuchsjahr(UUID gesuchsjahrId) {
+        gesuchsjahrAuthorizer.canDelete(gesuchsjahrId);
         gesuchsjahrService.deleteGesuchsjahr(gesuchsjahrId);
     }
 }
