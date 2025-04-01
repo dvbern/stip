@@ -48,7 +48,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -144,7 +143,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -293,7 +292,7 @@ class GesuchTrancheCreateTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
@@ -313,7 +312,7 @@ class GesuchTrancheCreateTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());

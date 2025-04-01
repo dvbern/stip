@@ -698,6 +698,7 @@ public class GesuchService {
         );
     }
 
+    @Transactional
     public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -719,6 +720,7 @@ public class GesuchService {
         );
     }
 
+    @Transactional
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
@@ -730,6 +732,7 @@ public class GesuchService {
         return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
     }
 
+    @Transactional
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);

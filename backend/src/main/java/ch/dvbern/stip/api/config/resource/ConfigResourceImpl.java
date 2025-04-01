@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.config.resource;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.api.ConfigurationResource;
@@ -29,11 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Validated
 public class ConfigResourceImpl implements ConfigurationResource {
-
     private final ConfigService configService;
 
     @Override
-    @AllowAll
     public DeploymentConfigDto getDeploymentConfig() {
         return configService.getDeploymentConfiguration();
     }

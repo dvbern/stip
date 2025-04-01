@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.bildungskategorie.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.BildungskategorieAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.BildungskategorieResource;
 import ch.dvbern.stip.generated.dto.BildungskategorieDto;
@@ -28,18 +28,19 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class BildungskategorieResourceImpl implements BildungskategorieResource {
+    private final BildungskategorieAuthorizer bildungskategorieAuthorizer;
     private final BildungskategorieService bildungskategorieService;
 
     @Override
-    @RolesAllowed(AUSBILDUNG_READ)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<BildungskategorieDto> getBildungskategorien() {
+        bildungskategorieAuthorizer.canGet();
         return bildungskategorieService.findAll();
     }
 }

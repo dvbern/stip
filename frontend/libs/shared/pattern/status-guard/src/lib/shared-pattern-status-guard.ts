@@ -33,7 +33,7 @@ export const isAllowedTo =
         return gesuchService.getGesuchInfo$({ gesuchId }).pipe(
           map(({ gesuchStatus }) =>
             getGesuchPermissions({ gesuchStatus }, config.appType, {
-              Gesuchsteller: true,
+              V0_Gesuchsteller: true,
             })[`can${capitalized(permission)}`]
               ? true
               : new RedirectCommand(router.parseUrl('/')),
@@ -64,7 +64,7 @@ export const hasRoles =
   };
 
 const failSafeSozialdienstAdmin = (rolesMap: RolesMap, router: Router) => {
-  return rolesMap['Sozialdienst-Admin']
+  return rolesMap['V0_Sozialdienst-Admin']
     ? new RedirectCommand(
         router.parseUrl('/administration/sozialdienst-benutzer'),
       )

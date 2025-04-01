@@ -78,8 +78,12 @@ public class GesuchsjahrService {
         gesuchsjahrRepository.delete(gesuchsjahr);
     }
 
+    public boolean isReadonly(final Gesuchsjahr gesuchsjahr) {
+        return gesuchsjahr.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF;
+    }
+
     private void preventUpdateIfReadonly(final Gesuchsjahr gesuchsjahr) {
-        if (gesuchsjahr.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF) {
+        if (isReadonly(gesuchsjahr)) {
             throw new IllegalStateException("Cannot update a Gesuchsjahr with GueltigkeitStatus != ENTWURF");
         }
     }
