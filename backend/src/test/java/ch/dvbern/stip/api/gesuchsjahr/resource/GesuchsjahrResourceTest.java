@@ -24,12 +24,12 @@ import ch.dvbern.stip.api.generator.api.model.GesuchsjahrTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchsjahrApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchsjahrDtoSpec;
 import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -60,7 +60,7 @@ class GesuchsjahrResourceTest {
         final var createDto = GesuchsjahrTestSpecGenerator.gesuchsjahrCreateDtoSpec;
         apiSpec.createGesuchsjahr()
             .body(createDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
@@ -73,7 +73,7 @@ class GesuchsjahrResourceTest {
         final var createDto = GesuchsjahrTestSpecGenerator.gesuchsjahrCreateDtoSpec;
         gesuchsjahr = apiSpec.createGesuchsjahr()
             .body(createDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -98,7 +98,7 @@ class GesuchsjahrResourceTest {
     private void read() {
         final var read = apiSpec.getGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -113,7 +113,7 @@ class GesuchsjahrResourceTest {
     @TestAsAdmin
     void readAllTest() {
         final var read = apiSpec.getGesuchsjahre()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -133,7 +133,7 @@ class GesuchsjahrResourceTest {
         final var updated = apiSpec.updateGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -150,7 +150,7 @@ class GesuchsjahrResourceTest {
     void publishTest() {
         final var published = apiSpec.publishGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -170,7 +170,7 @@ class GesuchsjahrResourceTest {
         apiSpec.updateGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
@@ -182,14 +182,14 @@ class GesuchsjahrResourceTest {
     void readonlyDeleteFailsTest() {
         apiSpec.deleteGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
 
         apiSpec.getGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
