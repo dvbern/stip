@@ -27,11 +27,8 @@ public class ElternFieldsNullableUntilEinreichenConstraintValidator
 
     @Override
     public boolean isValid(Eltern eltern, ConstraintValidatorContext context) {
-        if (Objects.nonNull(eltern)) {
-            // is in gesuch_einreichen_validation group, so check if null
-            return Objects.nonNull(eltern.getWohnkosten())
-            && Objects.nonNull(eltern.getErgaenzungsleistungen());
-        }
-        return true;
+        // is in gesuch_einreichen_validation group, so check if null
+        return Objects.nonNull(eltern.getWohnkosten())
+        && Objects.nonNull(eltern.getErgaenzungsleistungen());
     }
 }
