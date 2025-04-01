@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class BuchhaltungEntryDto  implements Serializable {
+  private @Valid String userErstellt;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType;
   private @Valid Integer saldoAenderung;
@@ -32,6 +33,25 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
   private @Valid UUID verfuegungId;
   private @Valid UUID gesuchId;
+
+  /**
+   **/
+  public BuchhaltungEntryDto userErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("userErstellt")
+  @NotNull
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+  @JsonProperty("userErstellt")
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
 
   /**
    **/
@@ -264,7 +284,8 @@ public class BuchhaltungEntryDto  implements Serializable {
       return false;
     }
     BuchhaltungEntryDto buchhaltungEntry = (BuchhaltungEntryDto) o;
-    return Objects.equals(this.timestampErstellt, buchhaltungEntry.timestampErstellt) &&
+    return Objects.equals(this.userErstellt, buchhaltungEntry.userErstellt) &&
+        Objects.equals(this.timestampErstellt, buchhaltungEntry.timestampErstellt) &&
         Objects.equals(this.buchhaltungType, buchhaltungEntry.buchhaltungType) &&
         Objects.equals(this.saldoAenderung, buchhaltungEntry.saldoAenderung) &&
         Objects.equals(this.saldo, buchhaltungEntry.saldo) &&
@@ -280,7 +301,7 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
   }
 
   @Override
@@ -288,6 +309,7 @@ public class BuchhaltungEntryDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class BuchhaltungEntryDto {\n");
     
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    buchhaltungType: ").append(toIndentedString(buchhaltungType)).append("\n");
     sb.append("    saldoAenderung: ").append(toIndentedString(saldoAenderung)).append("\n");
