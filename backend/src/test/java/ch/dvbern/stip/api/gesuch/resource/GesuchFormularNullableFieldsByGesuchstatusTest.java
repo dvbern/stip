@@ -211,7 +211,9 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         // todo: enable eltern.get(1).setErgaenzungsleistungen(null);
 
         currentFormular.setElterns(eltern);
-        patchAndValidate();
+        // patch should still be possible
+        patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }
 
     @Test
@@ -221,7 +223,8 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         final var steuererklaerung =
             SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
         currentFormular.setSteuererklaerung(List.of(steuererklaerung));
-        patchAndValidate();
+        patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }
 
     @Test
@@ -230,7 +233,8 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     void addGeschwister() {
         final var geschwister = GeschwisterUpdateDtoSpecModel.geschwisterUpdateDtoSpecs();
         currentFormular.setGeschwisters(geschwister);
-        patchAndValidate();
+        patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }
 
     @Test
@@ -239,7 +243,8 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     void addAuszahlung() {
         final var auszahlung = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
         currentFormular.setAuszahlung(auszahlung);
-        patchAndValidate();
+        patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }
 
     @Test
@@ -248,7 +253,8 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     void addEinnahmenKosten() {
         final var einnahmenKosten = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
         currentFormular.setEinnahmenKosten(einnahmenKosten);
-        patchAndValidate();
+        patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }
 
     @Test
@@ -259,8 +265,6 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
             final var file = TestUtil.getTestPng();
             TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
         }
-
-        validatePage(false);
     }
 
     @Test
@@ -274,7 +278,9 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         partner.setJahreseinkommen(null);
 
         currentFormular.setPartner(partner);
-        final var updatedGesuch = patchAndValidate();
+        // patch should still be possible
+        final var updatedGesuch = patchGesuch();
+        assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
         final var adresse = updatedGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse();
         partnerUpdateDtoSpec.setAdresse(adresse);
     }
@@ -426,6 +432,18 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
 
     private void validatePage() {
         validatePage(true);
+    }
+
+    private ValidationReportDto getValidationReport() {
+        return gesuchTrancheApiSpec
+            .validateGesuchTranchePages()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(ValidationReportDto.class);
     }
 
     private void validatePage(final boolean allowWarnings) {

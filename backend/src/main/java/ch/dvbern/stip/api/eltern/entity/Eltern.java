@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -58,7 +59,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Getter
 @Setter
 @AhvIfSwissConstraint
-@ElternFieldsNullableUntilEinreichenConstraint(groups = { GesuchEinreichenValidationGroup.class })
+@ElternFieldsNullableUntilEinreichenConstraint(
+    groups = { GesuchEinreichenValidationGroup.class, ElternPageValidation.class }
+)
 public class Eltern extends AbstractPerson {
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
