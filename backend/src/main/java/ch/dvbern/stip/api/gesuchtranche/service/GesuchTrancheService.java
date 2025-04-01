@@ -134,6 +134,7 @@ public class GesuchTrancheService {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
+    @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
         var gesuchToWorkWith = gesuchRepository.requireById(gesuchId);
         var tranchenByTyp = gesuchTrancheRepository
