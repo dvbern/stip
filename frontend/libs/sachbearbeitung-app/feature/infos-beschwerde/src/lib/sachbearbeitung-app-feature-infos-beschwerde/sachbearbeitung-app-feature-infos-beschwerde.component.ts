@@ -22,7 +22,6 @@ import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde'
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { BeschwerdeVerlaufEntry } from '@dv/shared/model/gesuch';
-import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -43,7 +42,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     SharedUiKommentarDialogComponent,
     SharedUiTruncateTooltipDirective,
     SharedUiLoadingComponent,
-    SharedUiDownloadButtonDirective,
     TypeSafeMatCellDefDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',

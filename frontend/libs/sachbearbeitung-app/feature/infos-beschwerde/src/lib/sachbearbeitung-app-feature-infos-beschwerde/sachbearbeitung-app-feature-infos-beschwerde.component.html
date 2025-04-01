@@ -104,15 +104,7 @@
           {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
-          <button
-            type="button"
-            class="btn btn-outline-primary fs-7 tw-ml-3 tw-p-4 tw-text-sm"
-            [dvDownloadButton]="{ type: 'dokument', id: 'TBD', dokumentArt: 'CUSTOM_DOKUMENT' }"
-            [matTooltip]="'shared.dokumente.table.download' | translate"
-            disabled
-          >
-            <span class="material-symbols-rounded tw-align-middle">download</span>
-          </button>
+          <!-- use "<button [dvDownloadButton]" here once there are files to download -->
         </td>
       </ng-container>
 
