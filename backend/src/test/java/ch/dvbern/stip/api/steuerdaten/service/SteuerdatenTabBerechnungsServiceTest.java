@@ -55,6 +55,12 @@ class SteuerdatenTabBerechnungsServiceTest {
         assertCountAndTypes(calculated, 1, SteuerdatenTyp.FAMILIE);
     }
 
+    @Test
+    void emptyIfNoFamiliensituationTest() {
+        final var calculated = service.calculateTabs(null);
+        assertCountAndTypes(calculated, 0);
+    }
+
     @ParameterizedTest
     @CsvSource(
         {

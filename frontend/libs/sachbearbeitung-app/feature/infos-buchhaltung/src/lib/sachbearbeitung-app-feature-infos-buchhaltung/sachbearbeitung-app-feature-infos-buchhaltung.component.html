@@ -28,6 +28,19 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="benutzer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.user' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-w-32 tw-whitespace-nowrap"
+          >
+            {{ buchhaltung.entry.userErstellt }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="stipendienbetrag">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | translate }}
