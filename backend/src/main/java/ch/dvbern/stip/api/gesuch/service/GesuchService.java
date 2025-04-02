@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -40,10 +39,13 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -53,6 +55,10 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -67,6 +73,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheOverrideUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
@@ -123,7 +130,6 @@ public class GesuchService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
-    private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
@@ -147,6 +153,7 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
+    private final DokumentRepository dokumentRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -162,10 +169,9 @@ public class GesuchService {
                 gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
                     .orElseThrow();
             return gesuchMapperUtil.mapWithGesuchOfTranche(trancheInStatusEingereicht);
-        } else {
-            // atkuelles gesuch
-            return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
         }
+        // atkuelles gesuch
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @Transactional
@@ -274,7 +280,7 @@ public class GesuchService {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
     }
 
@@ -292,7 +298,7 @@ public class GesuchService {
         gesuch.getAusbildung().getGesuchs().add(gesuch);
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
         if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
         gesuchRepository.persistAndFlush(gesuch);
@@ -485,6 +491,22 @@ public class GesuchService {
     }
 
     @Transactional
+    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(DocumentsRequiredValidationGroup.class);
+        validationGroups.add(LebenslaufItemPageValidation.class);
+        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
+
+        Set<ConstraintViolation<GesuchFormular>> violations =
+            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
+        if (!violations.isEmpty()) {
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
+        }
+    }
+
+    @Transactional
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -509,6 +531,8 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
+
+        resetGesuchZurueckweisen(gesuch);
 
         // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
         return new GesuchZurueckweisenResponseDto()
@@ -593,6 +617,10 @@ public class GesuchService {
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        var violations = validator.validate(gesuch);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
+        }
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
@@ -821,5 +849,129 @@ public class GesuchService {
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    @Transactional
+    public void resetGesuchZurueckweisen(Gesuch gesuch) {
+        final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId())
+            .orElseThrow(NotFoundException::new);
+
+        if (gesuchOfStateEingereicht.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException("Trying to reset to a Gesuch which has more than 1 Tranchen");
+        }
+
+        final var trancheOfStateEingereicht = gesuchOfStateEingereicht.getGesuchTranchen().get(0);
+
+        final var trancheToReset = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> tranche.getId().equals(trancheOfStateEingereicht.getId()))
+            .findFirst()
+            .orElseGet(gesuch::getLatestGesuchTranche);
+
+        final var formularOfStateEingereicht = trancheOfStateEingereicht.getGesuchFormular();
+
+        trancheToReset.setGueltigkeit(trancheOfStateEingereicht.getGueltigkeit());
+
+        trancheToReset.getGesuchDokuments()
+            .forEach(
+                gesuchDokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId())
+            );
+
+        GesuchTrancheOverrideUtil.overrideGesuchFormular(
+            trancheToReset.getGesuchFormular(),
+            formularOfStateEingereicht
+        );
+
+        // Dokumente
+        // Remove new but not then doks
+        final var dokumentIdsNow = trancheToReset.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .stream()
+                    .map(
+                        Dokument::getId
+                    )
+            )
+            .toList();
+
+        final var dokumentIdsThen = trancheOfStateEingereicht.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .stream()
+                    .map(
+                        Dokument::getId
+                    )
+            )
+            .toList();
+
+        final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
+
+        final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
+        dokumentIdsNowButNotThen
+            .forEach(
+                uuid -> dokumentObjectIdsToBeDeleted
+                    .add(gesuchDokumentService.deleteDokument(uuid, trancheToReset.getId()))
+            );
+
+        gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
+
+        // Restore then but not now doks
+
+        trancheToReset.getGesuchDokuments()
+            .removeIf(
+                gesuchDokument -> !formularOfStateEingereicht.getTranche().getGesuchDokuments().contains(gesuchDokument)
+            );
+
+        final var targetGesuchDokumente = trancheToReset.getGesuchDokuments();
+
+        for (var sourceGesuchDokument : formularOfStateEingereicht.getTranche().getGesuchDokuments()) {
+            if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
+                final var replacement =
+                    targetGesuchDokumente.stream()
+                        .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
+                        .findFirst();
+                replacement.ifPresent(
+                    gesuchDokument -> {
+                        GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument);
+                        sourceGesuchDokument.getDokumente()
+                            .forEach(
+                                dokument -> {
+                                    if (!gesuchDokument.getDokumente().contains(dokument)) {
+                                        final var newDokument = new Dokument();
+                                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                                        gesuchDokument.addDokument(newDokument);
+                                        dokumentRepository.persist(newDokument);
+                                    }
+                                }
+                            );
+                    }
+                );
+
+            } else {
+                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument);
+                targetGesuchDokumente.add(newGesuchDokument);
+                sourceGesuchDokument.getDokumente()
+                    .forEach(
+                        dokument -> {
+                            final var newDokument = new Dokument();
+                            GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                            newGesuchDokument.addDokument(newDokument);
+                            dokumentRepository.persist(newDokument);
+                        }
+                    );
+                gesuchDokumentRepository.persist(newGesuchDokument);
+            }
+        }
+
+        final var allOtherTranchen = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> !tranche.getId().equals(trancheToReset.getId()))
+            .toList();
+
+        for (final var trancheToDrop : allOtherTranchen) {
+            gesuchTrancheService.dropGesuchTranche(trancheToDrop);
+        }
     }
 }

@@ -122,7 +122,7 @@ class CustomDokumenteGetGSDashboardTest {
         var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTyp()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)

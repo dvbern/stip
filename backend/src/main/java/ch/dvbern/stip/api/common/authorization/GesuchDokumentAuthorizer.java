@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
@@ -24,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -34,14 +36,15 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+@Authorizer
 @ApplicationScoped
 @RequiredArgsConstructor
-@Authorizer
 public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
     private final GesuchStatusService gesuchStatusService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final SozialdienstService sozialdienstService;
     private final DokumentRepository dokumentRepository;
 
@@ -135,7 +138,12 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final var gesuch = gesuchDokumentRepository.requireById(gesuchDokumentId).getGesuchTranche().getGesuch();
+        var gesuchDokument = gesuchDokumentRepository.findById(gesuchDokumentId);
+        if (Objects.isNull(gesuchDokument)) {
+            gesuchDokument = gesuchDokumentHistoryRepository.findInHistoryById(gesuchDokumentId);
+        }
+
+        final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
         if (
             AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(
                 gesuch,
@@ -150,7 +158,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGetGesuchDokumentKommentareForTranche(final UUID gesuchTrancheId) {
+    public void canGetGesuchDokumentForTranche(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isAdminSbOrJurist(currentBenutzer)) {
             return;

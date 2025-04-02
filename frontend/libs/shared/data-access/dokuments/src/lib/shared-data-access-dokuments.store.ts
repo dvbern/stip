@@ -6,6 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentService,
   DokumentTyp,
@@ -17,6 +18,7 @@ import {
   GesuchTrancheService,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   RemoteData,
@@ -41,7 +43,7 @@ type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
-  dokument: CachedRemoteData<GesuchDokument>;
+  dokument: CachedRemoteData<GesuchDokument | undefined>;
   expandedComponentList: 'custom' | 'required' | undefined;
   nachfrist: RemoteData<string>;
 };
@@ -66,6 +68,25 @@ export class DokumentsStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private config = inject(SharedModelCompileTimeConfig);
+
+  private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
+      'sachbearbeitung-app': () =>
+        this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
+    });
+  }
+
+  private getDcumentsToUploadByAppType$(gesuchTrancheId: string) {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
+      'sachbearbeitung-app': () =>
+        this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
+    });
+  }
 
   setExpandedList(list: 'custom' | 'required' | undefined) {
     patchState(this, { expandedComponentList: list });
@@ -208,7 +229,7 @@ export class DokumentsStore extends signalStore(
     return hasDokumenteWithoutDocuments || hasRequiredDokumenteWithoutDokument;
   });
 
-  getGesuchDokument$ = rxMethod<{
+  getRequiredGesuchDokument$ = rxMethod<{
     trancheId: string;
     dokumentTyp: DokumentTyp;
   }>(
@@ -218,13 +239,24 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, dokumentTyp }) =>
-        this.trancheService.getGesuchDokument$({
+      switchMap(({ trancheId, dokumentTyp }) => {
+        if (this.config.appType === 'gesuch-app') {
+          return this.dokumentService.getGesuchDokumentForTypGS$({
+            gesuchTrancheId: trancheId,
+            dokumentTyp,
+          });
+        }
+        return this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
           dokumentTyp,
-        }),
-      ),
-      handleApiResponse((dokument) => patchState(this, { dokument })),
+        });
+      }),
+      handleApiResponse((res) => {
+        patchState(this, () => ({
+          // Response is NullableGesuchDokument, so we extract the value
+          dokument: mapData(res, (data) => data.value),
+        }));
+      }),
     ),
   );
 
@@ -246,8 +278,14 @@ export class DokumentsStore extends signalStore(
           gesuchDokumentKommentare: pending(),
         }));
       }),
-      switchMap((req) =>
-        this.dokumentService.getGesuchDokumentKommentare$(req).pipe(
+      switchMap((req) => {
+        const service$ = byAppType(this.config.appType, {
+          'gesuch-app': () =>
+            this.dokumentService.getGesuchDokumentKommentareGS$(req),
+          'sachbearbeitung-app': () =>
+            this.dokumentService.getGesuchDokumentKommentareSB$(req),
+        });
+        return service$.pipe(
           handleApiResponse((gesuchDokumentKommentare) =>
             patchState(this, {
               gesuchDokumentKommentare: mapData(
@@ -260,8 +298,8 @@ export class DokumentsStore extends signalStore(
               ),
             }),
           ),
-        ),
-      ),
+        );
+      }),
     ),
   );
 
@@ -343,11 +381,7 @@ export class DokumentsStore extends signalStore(
                 dokuments: cachedPending(state.dokuments),
               }));
             }),
-            switchMap(() =>
-              this.trancheService.getGesuchDokumente$({
-                gesuchTrancheId: trancheId,
-              }),
-            ),
+            switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
             tapResponse({
               next: (dokuments) => {
                 patchState(this, { dokuments: success(dokuments) });
@@ -445,10 +479,8 @@ export class DokumentsStore extends signalStore(
       }),
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
-          this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
-          this.trancheService.getDocumentsToUpload$({
-            gesuchTrancheId,
-          }),
+          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
+          this.getDcumentsToUploadByAppType$(gesuchTrancheId),
         ]),
       ),
       tapResponse({
@@ -488,7 +520,7 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
-        this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
+        this.getGesuchDokumenteByAppType$(gesuchTrancheId),
       ),
       handleApiResponse((dokuments) => patchState(this, { dokuments })),
     ),
@@ -523,13 +555,11 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((gesuchTrancheId) =>
-        this.trancheService
-          .getDocumentsToUpload$({ gesuchTrancheId })
-          .pipe(
-            handleApiResponse((documentsToUpload) =>
-              patchState(this, { documentsToUpload }),
-            ),
+        this.getDcumentsToUploadByAppType$(gesuchTrancheId).pipe(
+          handleApiResponse((documentsToUpload) =>
+            patchState(this, { documentsToUpload }),
           ),
+        ),
       ),
     ),
   );

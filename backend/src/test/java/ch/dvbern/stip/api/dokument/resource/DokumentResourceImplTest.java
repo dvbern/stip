@@ -20,15 +20,19 @@ package ch.dvbern.stip.api.dokument.resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
@@ -41,6 +45,9 @@ import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -63,19 +70,49 @@ class DokumentResourceImplTest {
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
+    GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
+    @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    @InjectMock
+    GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
+    @InjectMock
+    GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     @Inject
     GesuchFormularService gesuchFormularService;
     @InjectMock
     CustomDokumentTypService customDokumentTypService;
+    @InjectMock
+    GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     @BeforeEach
     void setUp() {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
         when(dokumentKommentarRepository.getByGesuchDokumentId(any()))
             .thenReturn(List.of(kommentar));
+        when(
+            gesuchDokumentKommentarHistoryRepository.getGesuchDokumentKommentarOfGesuchDokumentAtRevision(any(), any())
+        )
+            .thenReturn(List.of(kommentar));
+        GesuchDokument gesuchDokument = new GesuchDokument();
+        gesuchDokument.setId(UUID.randomUUID());
+        GesuchTranche tranche = new GesuchTranche().setGesuchDokuments(List.of(gesuchDokument));
+        tranche.setId(UUID.randomUUID());
+        gesuchDokument.setGesuchTranche(tranche);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
+        Gesuch gesuch = new Gesuch();
+        gesuch.setId(UUID.randomUUID());
+        tranche.setGesuch(gesuch);
+        when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
+        when(gesuchDokumentHistoryRepository.findInHistoryById(any())).thenReturn(gesuchDokument);
+        when(gesuchTrancheHistoryService.getCurrentOrEingereichtTrancheForGS(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(any(), any()))
+            .thenReturn(Optional.empty());
     }
 
     @Test
@@ -98,7 +135,7 @@ class DokumentResourceImplTest {
         );
 
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID())
+            dokumentResource.getGesuchDokumentKommentareGS(UUID.randomUUID())
         );
     }
 

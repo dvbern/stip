@@ -14,7 +14,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
@@ -77,12 +76,14 @@ public class DokumentApiSpec {
                 deleteUnterschriftenblattDokument(),
                 gesuchDokumentAblehnen(),
                 gesuchDokumentAkzeptieren(),
-                getAllCustomDokumentTypes(),
-                getCustomGesuchDokumenteForTyp(),
+                getCustomGesuchDokumentForTypGS(),
+                getCustomGesuchDokumentForTypSB(),
                 getDokument(),
                 getDokumentDownloadToken(),
-                getGesuchDokumentKommentare(),
-                getGesuchDokumenteForTyp(),
+                getGesuchDokumentForTypGS(),
+                getGesuchDokumentForTypSB(),
+                getGesuchDokumentKommentareGS(),
+                getGesuchDokumentKommentareSB(),
                 getUnterschriftenblaetterForGesuch(),
                 uploadCustomGesuchDokument()
         );
@@ -120,12 +121,12 @@ public class DokumentApiSpec {
         return new GesuchDokumentAkzeptierenOper(createReqSpec());
     }
 
-    public GetAllCustomDokumentTypesOper getAllCustomDokumentTypes() {
-        return new GetAllCustomDokumentTypesOper(createReqSpec());
+    public GetCustomGesuchDokumentForTypGSOper getCustomGesuchDokumentForTypGS() {
+        return new GetCustomGesuchDokumentForTypGSOper(createReqSpec());
     }
 
-    public GetCustomGesuchDokumenteForTypOper getCustomGesuchDokumenteForTyp() {
-        return new GetCustomGesuchDokumenteForTypOper(createReqSpec());
+    public GetCustomGesuchDokumentForTypSBOper getCustomGesuchDokumentForTypSB() {
+        return new GetCustomGesuchDokumentForTypSBOper(createReqSpec());
     }
 
     public GetDokumentOper getDokument() {
@@ -136,12 +137,20 @@ public class DokumentApiSpec {
         return new GetDokumentDownloadTokenOper(createReqSpec());
     }
 
-    public GetGesuchDokumentKommentareOper getGesuchDokumentKommentare() {
-        return new GetGesuchDokumentKommentareOper(createReqSpec());
+    public GetGesuchDokumentForTypGSOper getGesuchDokumentForTypGS() {
+        return new GetGesuchDokumentForTypGSOper(createReqSpec());
     }
 
-    public GetGesuchDokumenteForTypOper getGesuchDokumenteForTyp() {
-        return new GetGesuchDokumenteForTypOper(createReqSpec());
+    public GetGesuchDokumentForTypSBOper getGesuchDokumentForTypSB() {
+        return new GetGesuchDokumentForTypSBOper(createReqSpec());
+    }
+
+    public GetGesuchDokumentKommentareGSOper getGesuchDokumentKommentareGS() {
+        return new GetGesuchDokumentKommentareGSOper(createReqSpec());
+    }
+
+    public GetGesuchDokumentKommentareSBOper getGesuchDokumentKommentareSB() {
+        return new GetGesuchDokumentKommentareSBOper(createReqSpec());
     }
 
     public GetUnterschriftenblaetterForGesuchOper getUnterschriftenblaetterForGesuch() {
@@ -163,7 +172,7 @@ public class DokumentApiSpec {
     }
 
     /**
-     * 
+     * create CustomDokumentTyp
      * 
      *
      * @see #body  (required)
@@ -235,7 +244,7 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * 
+     * Upload a file for the given Typ to the Tranche
      * 
      *
      * @see #dokumentTypPath  (required)
@@ -730,101 +739,28 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * 
-     * 
-     *
-     * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;CustomDokumentTypDtoSpec&gt;
-     */
-    public static class GetAllCustomDokumentTypesOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAllCustomDokumentTypesOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchDokument/customGesuchDokuments/{gesuchTrancheId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchDokument/customGesuchDokuments/{gesuchTrancheId}
-         * @param handler handler
-         * @return List&lt;CustomDokumentTypDtoSpec&gt;
-         */
-        public List<CustomDokumentTypDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<CustomDokumentTypDtoSpec>> type = new TypeRef<List<CustomDokumentTypDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GetAllCustomDokumentTypesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAllCustomDokumentTypesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAllCustomDokumentTypesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den GS
      * 
      *
      * @see #customDokumentTypIdPath  (required)
      * return NullableGesuchDokumentDtoSpec
      */
-    public static class GetCustomGesuchDokumenteForTypOper implements Oper {
+    public static class GetCustomGesuchDokumentForTypGSOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/customGesuchDokument/{customDokumentTypId}";
+        public static final String REQ_URI = "/customGesuchDokument/gs/{customDokumentTypId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetCustomGesuchDokumenteForTypOper(RequestSpecBuilder reqSpec) {
+        public GetCustomGesuchDokumentForTypGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /customGesuchDokument/{customDokumentTypId}
+         * GET /customGesuchDokument/gs/{customDokumentTypId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -835,7 +771,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /customGesuchDokument/{customDokumentTypId}
+         * GET /customGesuchDokument/gs/{customDokumentTypId}
          * @param handler handler
          * @return NullableGesuchDokumentDtoSpec
          */
@@ -850,7 +786,7 @@ public class DokumentApiSpec {
          * @param customDokumentTypId (UUID)  (required)
          * @return operation
          */
-        public GetCustomGesuchDokumenteForTypOper customDokumentTypIdPath(Object customDokumentTypId) {
+        public GetCustomGesuchDokumentForTypGSOper customDokumentTypIdPath(Object customDokumentTypId) {
             reqSpec.addPathParam(CUSTOM_DOKUMENT_TYP_ID_PATH, customDokumentTypId);
             return this;
         }
@@ -860,7 +796,7 @@ public class DokumentApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetCustomGesuchDokumenteForTypOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetCustomGesuchDokumentForTypGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -870,7 +806,80 @@ public class DokumentApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetCustomGesuchDokumenteForTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetCustomGesuchDokumentForTypGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+     * 
+     *
+     * @see #customDokumentTypIdPath  (required)
+     * return NullableGesuchDokumentDtoSpec
+     */
+    public static class GetCustomGesuchDokumentForTypSBOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/customGesuchDokument/sb/{customDokumentTypId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetCustomGesuchDokumentForTypSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /customGesuchDokument/sb/{customDokumentTypId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /customGesuchDokument/sb/{customDokumentTypId}
+         * @param handler handler
+         * @return NullableGesuchDokumentDtoSpec
+         */
+        public NullableGesuchDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<NullableGesuchDokumentDtoSpec> type = new TypeRef<NullableGesuchDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String CUSTOM_DOKUMENT_TYP_ID_PATH = "customDokumentTypId";
+
+        /**
+         * @param customDokumentTypId (UUID)  (required)
+         * @return operation
+         */
+        public GetCustomGesuchDokumentForTypSBOper customDokumentTypIdPath(Object customDokumentTypId) {
+            reqSpec.addPathParam(CUSTOM_DOKUMENT_TYP_ID_PATH, customDokumentTypId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetCustomGesuchDokumentForTypSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetCustomGesuchDokumentForTypSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1034,102 +1043,29 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
-     * 
-     *
-     * @see #gesuchDokumentIdPath  (required)
-     * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
-     */
-    public static class GetGesuchDokumentKommentareOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/kommentare";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGesuchDokumentKommentareOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchDokument/{gesuchDokumentId}/kommentare
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchDokument/{gesuchDokumentId}/kommentare
-         * @param handler handler
-         * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
-         */
-        public List<GesuchDokumentKommentarDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDokumentKommentarDtoSpec>> type = new TypeRef<List<GesuchDokumentKommentarDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
-
-        /**
-         * @param gesuchDokumentId (UUID)  (required)
-         * @return operation
-         */
-        public GetGesuchDokumentKommentareOper gesuchDokumentIdPath(Object gesuchDokumentId) {
-            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGesuchDokumentKommentareOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGesuchDokumentKommentareOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Historisiert für den GS
      * 
      *
      * @see #dokumentTypPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * return NullableGesuchDokumentDtoSpec
      */
-    public static class GetGesuchDokumenteForTypOper implements Oper {
+    public static class GetGesuchDokumentForTypGSOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}";
+        public static final String REQ_URI = "/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetGesuchDokumenteForTypOper(RequestSpecBuilder reqSpec) {
+        public GetGesuchDokumentForTypGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuchDokument/{gesuchTrancheId}/{dokumentTyp}
+         * GET /gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1140,7 +1076,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/{gesuchTrancheId}/{dokumentTyp}
+         * GET /gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}
          * @param handler handler
          * @return NullableGesuchDokumentDtoSpec
          */
@@ -1155,7 +1091,7 @@ public class DokumentApiSpec {
          * @param dokumentTyp (DokumentTypDtoSpec)  (required)
          * @return operation
          */
-        public GetGesuchDokumenteForTypOper dokumentTypPath(Object dokumentTyp) {
+        public GetGesuchDokumentForTypGSOper dokumentTypPath(Object dokumentTyp) {
             reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
             return this;
         }
@@ -1166,7 +1102,7 @@ public class DokumentApiSpec {
          * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetGesuchDokumenteForTypOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public GetGesuchDokumentForTypGSOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -1176,7 +1112,7 @@ public class DokumentApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetGesuchDokumenteForTypOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetGesuchDokumentForTypGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1186,7 +1122,238 @@ public class DokumentApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetGesuchDokumenteForTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetGesuchDokumentForTypGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+     * 
+     *
+     * @see #dokumentTypPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
+     * return NullableGesuchDokumentDtoSpec
+     */
+    public static class GetGesuchDokumentForTypSBOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentForTypSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}
+         * @param handler handler
+         * @return NullableGesuchDokumentDtoSpec
+         */
+        public NullableGesuchDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<NullableGesuchDokumentDtoSpec> type = new TypeRef<NullableGesuchDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+
+        /**
+         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentForTypSBOper dokumentTypPath(Object dokumentTyp) {
+            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+            return this;
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentForTypSBOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentForTypSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentForTypSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * 
+     *
+     * @see #gesuchDokumentIdPath  (required)
+     * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+     */
+    public static class GetGesuchDokumentKommentareGSOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/kommentare/gs";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentKommentareGSOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchDokumentId}/kommentare/gs
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchDokumentId}/kommentare/gs
+         * @param handler handler
+         * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+         */
+        public List<GesuchDokumentKommentarDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDokumentKommentarDtoSpec>> type = new TypeRef<List<GesuchDokumentKommentarDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
+
+        /**
+         * @param gesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareGSOper gesuchDokumentIdPath(Object gesuchDokumentId) {
+            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * 
+     *
+     * @see #gesuchDokumentIdPath  (required)
+     * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+     */
+    public static class GetGesuchDokumentKommentareSBOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/kommentare/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentKommentareSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchDokumentId}/kommentare/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchDokumentId}/kommentare/sb
+         * @param handler handler
+         * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+         */
+        public List<GesuchDokumentKommentarDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDokumentKommentarDtoSpec>> type = new TypeRef<List<GesuchDokumentKommentarDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
+
+        /**
+         * @param gesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareSBOper gesuchDokumentIdPath(Object gesuchDokumentId) {
+            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1265,7 +1432,7 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * 
+     * Upload a file for the given customDokumentTyp to the Tranche
      * 
      *
      * @see #customDokumentTypIdPath  (required)

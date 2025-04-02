@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranche.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -36,14 +36,14 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     private final EntityManager em;
 
-    public Stream<GesuchTranche> findForGesuch(final UUID gesuchId) {
+    public List<GesuchTranche> findForGesuch(final UUID gesuchId) {
         final var gesuchTranche = QGesuchTranche.gesuchTranche;
 
         return new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
             .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
-            .stream();
+            .fetch();
     }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {

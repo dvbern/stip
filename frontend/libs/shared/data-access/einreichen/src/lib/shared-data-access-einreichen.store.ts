@@ -13,6 +13,7 @@ import {
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
 import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
@@ -36,6 +37,7 @@ import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import {
@@ -77,6 +79,7 @@ export class EinreichenStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchTrancheService = inject(GesuchTrancheService);
+  private config = inject(SharedModelCompileTimeConfig);
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
   );
@@ -240,20 +243,38 @@ export class EinreichenStore extends signalStore(
     gesuchTrancheId: string,
     allowNullValidation?: boolean,
   ) => {
-    const service = (
-      allowNullValidation
-        ? 'validateGesuchTranchePages$'
-        : 'gesuchTrancheEinreichenValidieren$'
-    ) satisfies keyof GesuchTrancheService;
-
-    return this.gesuchTrancheService[service](
+    const requestArgs = [
       { gesuchTrancheId },
       undefined,
       undefined,
       {
         context: shouldIgnoreErrorsIf(true),
       },
-    );
+    ] as const;
+
+    if (allowNullValidation) {
+      return byAppType(this.config.appType, {
+        'gesuch-app': () =>
+          this.gesuchTrancheService.validateGesuchTranchePagesGS$(
+            ...requestArgs,
+          ),
+        'sachbearbeitung-app': () =>
+          this.gesuchTrancheService.validateGesuchTranchePagesSB$(
+            ...requestArgs,
+          ),
+      });
+    }
+
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
+          ...requestArgs,
+        ),
+      'sachbearbeitung-app': () =>
+        this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
+          ...requestArgs,
+        ),
+    });
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(
