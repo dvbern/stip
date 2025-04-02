@@ -29,17 +29,19 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
-import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
-import io.quarkus.security.ForbiddenException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -53,11 +55,13 @@ class CustomGesuchDokumentTypAuthorizerTest {
     private CustomGesuchDokumentTypAuthorizer authorizer;
     private CustomDokumentTyp customDokumentTyp;
     private GesuchRepository gesuchRepository;
-    private DokumentRepository dokumentRepository;
     private GesuchDokumentRepository gesuchDokumentRepository;
     private GesuchTrancheRepository gesuchTrancheRepository;
     private CustomDokumentTypRepository customDokumentTypRepository;
     private BenutzerService benutzerService;
+    private GesuchStatusService gesuchStatusService;
+    private SozialdienstService sozialdienstService;
+    private GesuchTrancheStatusService gesuchTrancheStatusService;
     private Benutzer currentBenutzer;
     private GesuchDokument currentGesuchDokument;
     private Gesuch gesuch;
@@ -75,17 +79,21 @@ class CustomGesuchDokumentTypAuthorizerTest {
         customDokumentTyp.setDescription("test");
         customDokumentTyp.setGesuchDokument(gesuchDokument);
         gesuchRepository = Mockito.mock(GesuchRepository.class);
-        dokumentRepository = Mockito.mock(DokumentRepository.class);
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.setId(currentBenutzerId);
         gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         customDokumentTypRepository = Mockito.mock(CustomDokumentTypRepository.class);
+        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        sozialdienstService = Mockito.mock(SozialdienstService.class);
+        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
+
         authorizer = new CustomGesuchDokumentTypAuthorizer(
-            dokumentRepository, customDokumentTypRepository, gesuchDokumentRepository, gesuchTrancheRepository,
-            benutzerService
+            customDokumentTypRepository, gesuchDokumentRepository, gesuchTrancheRepository,
+            benutzerService, gesuchStatusService, sozialdienstService, gesuchTrancheStatusService
         );
+
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
@@ -95,8 +103,15 @@ class CustomGesuchDokumentTypAuthorizerTest {
             .thenReturn(Optional.of(currentGesuchDokument));
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
         when(customDokumentTypRepository.requireById(any())).thenReturn(customDokumentTyp);
+        when(gesuchStatusService.benutzerCanUploadDokument(any(), any())).thenReturn(true);
+        when(gesuchStatusService.benutzerCanDeleteDokument(any(), any())).thenReturn(true);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
         when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
             .thenReturn(Optional.ofNullable(customDokumentTyp.getGesuchDokument()));
+        when(gesuchTrancheStatusService.benutzerCanEdit(any(), any())).thenAnswer(invocation -> {
+            final var status = invocation.getArgument(1, GesuchTrancheStatus.class);
+            return status == GesuchTrancheStatus.UEBERPRUEFEN;
+        });
     }
 
     // a GS should not be allowed to delete a CustomDokumentType (only a SB should be able)
@@ -126,6 +141,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     void canDeleteTypShouldFailAsAdmin() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
+        when(gesuchStatusService.benutzerCanDeleteDokument(any(), any())).thenReturn(false);
         assertThrows(ForbiddenException.class, () -> {
             authorizer.canDeleteTyp(
                 UUID.randomUUID()
@@ -209,6 +225,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchDokumentRepository.requireById(any())).thenReturn(currentGesuchDokument);
         when(gesuchDokumentRepository.findByCustomDokumentTyp(any()))
             .thenReturn(Optional.ofNullable(currentGesuchDokument));
+        when(gesuchStatusService.benutzerCanDeleteDokument(any(), any())).thenReturn(false);
 
         assertThrows(ForbiddenException.class, () -> {
             authorizer.canDeleteTyp(UUID.randomUUID());

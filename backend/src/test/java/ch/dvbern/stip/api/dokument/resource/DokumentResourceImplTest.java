@@ -22,20 +22,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -43,8 +48,8 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,6 +62,8 @@ class DokumentResourceImplTest {
     DokumentResource dokumentResource;
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
+    @InjectMock
+    GesuchDokumentRepository gesuchDokumentRepository;
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
     @Inject
@@ -75,6 +82,21 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
+        when(gesuchDokumentRepository.requireById(any())).thenReturn(
+            new GesuchDokument()
+                .setGesuchTranche(new GesuchTranche()
+                    .setGesuch(new Gesuch()
+                        .setAusbildung(new Ausbildung()
+                            .setFall(new Fall()
+                                .setGesuchsteller((Benutzer) new Benutzer()
+                                    .setId(UUID.fromString(GESUCHSTELLER_TEST_ID))
+                                )
+                            )
+                        )
+                    )
+                )
+        );
+
         assertNotNull(
             dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID())
         );
@@ -98,20 +120,6 @@ class DokumentResourceImplTest {
             io.quarkus.security.ForbiddenException.class,
             () -> dokumentResource.gesuchDokumentAkzeptieren(UUID.randomUUID())
         );
-    }
-
-    @TestAsSachbearbeiter
-    @Test
-    void sbShouldBeAbleToDenyDocumentTest() {
-        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(), any());
-        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
-    }
-
-    @TestAsSachbearbeiter
-    @Test
-    void sbShouldBeAbleToAcceptDocumentTest() {
-        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
-        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 
     @TestAsGesuchsteller

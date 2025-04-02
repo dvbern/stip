@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.communication.mail.resource;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.MailAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.generated.api.MailResource;
@@ -32,13 +32,13 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SEND_EMAIL;
 @RequiredArgsConstructor
 @Validated
 public class MailResourceImpl implements MailResource {
-
+    private final MailAuthorizer mailAuthorizer;
     private final MailService mailService;
 
     @Override
-    @AllowAll
     @RolesAllowed(SEND_EMAIL)
     public void sendWelcomeEmail(WelcomeMailDto welcomeMailDto) {
+        mailAuthorizer.canSend();
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
     }
 }

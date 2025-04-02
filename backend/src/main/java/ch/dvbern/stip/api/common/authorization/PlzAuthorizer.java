@@ -17,9 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AllowAll {
+@ApplicationScoped
+@RequiredArgsConstructor
+@Authorizer
+public class PlzAuthorizer extends BaseAuthorizer {
+    public void canGet() {
+        permitAll();
+    }
 }

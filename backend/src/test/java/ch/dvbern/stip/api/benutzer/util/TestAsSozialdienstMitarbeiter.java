@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -34,7 +35,25 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_MITARBEITER_ID;
 @TestSecurity(
     user = "sozialdienst_mitarbeiter",
     roles = {
-        OidcConstants.ROLE_SOZIALDIENST_MITARBEITER
+        OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
+        OidcPermissions.AENDERUNG_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_READ,
+        OidcPermissions.GS_GESUCH_READ,
+        OidcPermissions.AUSBILDUNG_READ,
+        OidcPermissions.NOTIFICATION_READ,
+        OidcPermissions.DOKUMENT_READ,
+        OidcPermissions.GS_GESUCH_DELETE,
+        OidcPermissions.FALL_READ,
+        OidcPermissions.GS_GESUCH_UPDATE,
+        OidcPermissions.AUSBILDUNG_CREATE,
+        OidcPermissions.AUSBILDUNG_UPDATE,
+        OidcPermissions.AUSBILDUNG_DELETE,
+        OidcPermissions.GS_GESUCH_CREATE,
+        OidcPermissions.AENDERUNG_EINREICHEN,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.DOKUMENT_DELETE,
+        OidcPermissions.FALL_CREATE,
+        "default-roles-bern"
     }
 )
 @OidcSecurity(

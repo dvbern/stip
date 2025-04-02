@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.AusbildungsgangAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
@@ -30,45 +30,46 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
+    private final AusbildungsgangAuthorizer ausbildungsgangAuthorizer;
     private final AusbildungsgangService ausbildungsgangService;
 
     @Override
-    @RolesAllowed(AUSBILDUNG_CREATE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_CREATE)
     public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        ausbildungsgangAuthorizer.canCreate();
         return ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_DELETE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_DELETE)
     public void deleteAusbildungsgang(UUID ausbildungsgangId) {
+        ausbildungsgangAuthorizer.canDelete();
         ausbildungsgangService.deleteAusbildungsgang(ausbildungsgangId);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_READ)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public AusbildungsgangDto getAusbildungsgang(UUID ausbildungsgangId) {
+        ausbildungsgangAuthorizer.canRead();
         return ausbildungsgangService.findById(ausbildungsgangId);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNG_UPDATE)
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public AusbildungsgangDto updateAusbildungsgang(
         UUID ausbildungsgangId,
         AusbildungsgangUpdateDto ausbildungsgangUpdateDto
     ) {
+        ausbildungsgangAuthorizer.canUpdate();
         return ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
     }
 }
