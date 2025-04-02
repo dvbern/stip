@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import lombok.experimental.UtilityClass;
@@ -102,26 +101,6 @@ public class NeskoSteuerdatenMapper {
         steuerdaten.setSteuernBund(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragBund(), BigDecimal.ZERO).intValue()
         );
-        int[] steuerdatenKosten = getSteuerdatenKostenBySteuerdatenTyp(steuerdaten, steuerdatenNesko);
-        int fahrkosten = steuerdatenKosten[0];
-        int fahrkostenPartner = steuerdatenKosten[1];
-        int verpflegung = steuerdatenKosten[2];
-        int verpflegungPartner = steuerdatenKosten[3];
-
-        steuerdaten.setFahrkosten(fahrkosten);
-        steuerdaten.setFahrkostenPartner(fahrkostenPartner);
-
-        steuerdaten.setVerpflegung(verpflegung);
-        steuerdaten.setVerpflegungPartner(verpflegungPartner);
-        steuerdaten.setSteuerjahr(getSteuerdatenResponse.getSteuerjahr());
-        steuerdaten.setVeranlagungsCode(0);
-        return steuerdaten;
-    }
-
-    private int[] getSteuerdatenKostenBySteuerdatenTyp(
-        final Steuerdaten steuerdaten,
-        final SteuerdatenType steuerdatenNesko
-    ) {
         int fahrkosten = 0;
         int fahrkostenPartner = 0;
         int verpflegung = 0;
@@ -208,6 +187,14 @@ public class NeskoSteuerdatenMapper {
                     .intValue();
             }
         }
-        return new int[] { fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner };
+
+        steuerdaten.setFahrkosten(fahrkosten);
+        steuerdaten.setFahrkostenPartner(fahrkostenPartner);
+
+        steuerdaten.setVerpflegung(verpflegung);
+        steuerdaten.setVerpflegungPartner(verpflegungPartner);
+        steuerdaten.setSteuerjahr(getSteuerdatenResponse.getSteuerjahr());
+        steuerdaten.setVeranlagungsCode(0);
+        return steuerdaten;
     }
 }
