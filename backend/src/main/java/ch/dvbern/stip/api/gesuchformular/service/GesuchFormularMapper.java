@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.service.DarlehenMapper;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
@@ -91,6 +92,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Inject
     GesuchDokumentService gesuchDokumentService;
+
+    @Inject
+    GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     @Inject
     UnterschriftenblattService unterschriftenblattService;
@@ -450,12 +454,20 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     dokumentTypsToRemove = Set.of(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
                 }
 
-                targetFormular.getTranche()
-                    .getGesuchDokuments()
-                    .stream()
-                    .filter(gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp()))
-                    .filter(gesuchDokument -> dokumentTypsToRemove.contains(gesuchDokument.getDokumentTyp()))
-                    .forEach(gesuchDokument -> gesuchDokumentService.removeGesuchDokument(gesuchDokument));
+                var gesuchDokumentsToRemove = new ArrayList<>(
+                    targetFormular.getTranche()
+                        .getGesuchDokuments()
+                        .stream()
+                        .filter(gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp()))
+                        .filter(gesuchDokument -> dokumentTypsToRemove.contains(gesuchDokument.getDokumentTyp()))
+                        .toList()
+                );
+
+                gesuchDokumentsToRemove
+                    .forEach(gesuchDokument -> {
+                        gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+                        gesuchDokumentService.removeGesuchDokument(gesuchDokument);
+                    });
             }
         );
     }
