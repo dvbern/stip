@@ -271,7 +271,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
         && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
 
-        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchstellerAndNotAdmin(currentBenutzer)
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
         && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
         && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
 
