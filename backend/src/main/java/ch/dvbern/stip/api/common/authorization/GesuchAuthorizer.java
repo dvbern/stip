@@ -163,16 +163,16 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
+        final BooleanSupplier benutzerCanEdit =
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus());
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+        && benutzerCanEdit.getAsBoolean();
 
         final BooleanSupplier isGesuchstellerAndCanEdit =
             () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+            && benutzerCanEdit.getAsBoolean();
 
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
