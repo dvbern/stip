@@ -73,7 +73,8 @@ public enum Gesuchstatus {
                 IN_FREIGABE,
                 WARTEN_AUF_UNTERSCHRIFTENBLATT,
                 VERSANDBEREIT,
-                VERSENDET
+                VERSENDET,
+                NICHT_ANSPRUCHSBERECHTIGT
             )
         );
 

@@ -18,10 +18,12 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.GesuchTrancheStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusStateChangeHandler;
@@ -42,6 +44,19 @@ public class GesuchTrancheStatusService {
     private final GesuchTrancheValidatorService validatorService;
 
     private final Instance<GesuchTrancheStatusStateChangeHandler> handlers;
+
+    public void bulkTriggerStateMachineEvent(
+        final List<GesuchTranche> gesuchTranches,
+        final GesuchTrancheStatusChangeEvent event
+    ) {
+        for (final GesuchTranche gesuchTranche : gesuchTranches) {
+            try {
+                triggerStateMachineEvent(gesuchTranche, event);
+            } catch (ValidationsException ignored) {
+                // ignored
+            }
+        }
+    }
 
     @Transactional
     public void triggerStateMachineEvent(

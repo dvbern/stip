@@ -18,7 +18,6 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { CustomDokumentTyp } from '../model/customDokumentTyp';
 import { CustomDokumentTypCreate } from '../model/customDokumentTypCreate';
 import { DokumentArt } from '../model/dokumentArt';
 import { DokumentTyp } from '../model/dokumentTyp';
@@ -73,11 +72,11 @@ export interface DokumentServiceGesuchDokumentAkzeptierenRequestParams {
     gesuchDokumentId: string;
 }
 
-export interface DokumentServiceGetAllCustomDokumentTypesRequestParams {
-    gesuchTrancheId: string;
+export interface DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams {
+    customDokumentTypId: string;
 }
 
-export interface DokumentServiceGetCustomGesuchDokumenteForTypRequestParams {
+export interface DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams {
     customDokumentTypId: string;
 }
 
@@ -90,13 +89,22 @@ export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
     dokumentId: string;
 }
 
-export interface DokumentServiceGetGesuchDokumentKommentareRequestParams {
+export interface DokumentServiceGetGesuchDokumentForTypGSRequestParams {
+    dokumentTyp: DokumentTyp;
+    gesuchTrancheId: string;
+}
+
+export interface DokumentServiceGetGesuchDokumentForTypSBRequestParams {
+    dokumentTyp: DokumentTyp;
+    gesuchTrancheId: string;
+}
+
+export interface DokumentServiceGetGesuchDokumentKommentareGSRequestParams {
     gesuchDokumentId: string;
 }
 
-export interface DokumentServiceGetGesuchDokumenteForTypRequestParams {
-    dokumentTyp: DokumentTyp;
-    gesuchTrancheId: string;
+export interface DokumentServiceGetGesuchDokumentKommentareSBRequestParams {
+    gesuchDokumentId: string;
 }
 
 export interface DokumentServiceGetUnterschriftenblaetterForGesuchRequestParams {
@@ -187,6 +195,7 @@ export class DokumentService {
     }
 
     /**
+     * create CustomDokumentTyp
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -269,6 +278,7 @@ export class DokumentService {
     }
 
     /**
+     * Upload a file for the given Typ to the Tranche
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -842,17 +852,18 @@ export class DokumentService {
     }
 
     /**
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den GS
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<CustomDokumentTyp>>;
-     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<CustomDokumentTyp>>>;
-     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<CustomDokumentTyp>>>;
-     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getAllCustomDokumentTypes$.');
+     public getCustomGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
+     public getCustomGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
+     public getCustomGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
+     public getCustomGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling getCustomGesuchDokumentForTypGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -900,8 +911,8 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokuments/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<CustomDokumentTyp>>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/customGesuchDokument/gs/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -914,18 +925,18 @@ export class DokumentService {
     }
 
     /**
-     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getCustomGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetCustomGesuchDokumenteForTypRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
-     public getCustomGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetCustomGesuchDokumenteForTypRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
-     public getCustomGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetCustomGesuchDokumenteForTypRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
-     public getCustomGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetCustomGesuchDokumenteForTypRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getCustomGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
+     public getCustomGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
+     public getCustomGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
+     public getCustomGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const customDokumentTypId = requestParameters.customDokumentTypId;
         if (customDokumentTypId === null || customDokumentTypId === undefined) {
-            throw new Error('Required parameter customDokumentTypId was null or undefined when calling getCustomGesuchDokumenteForTyp$.');
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling getCustomGesuchDokumentForTypSB$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -973,7 +984,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/customGesuchDokument/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/customGesuchDokument/sb/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -1132,18 +1143,22 @@ export class DokumentService {
     }
 
     /**
-     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Historisiert für den GS
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
-     public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchDokumentId = requestParameters.gesuchDokumentId;
-        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
-            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentare$.');
+     public getGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetGesuchDokumentForTypGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
+     public getGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetGesuchDokumentForTypGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
+     public getGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetGesuchDokumentForTypGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
+     public getGesuchDokumentForTypGS$(requestParameters: DokumentServiceGetGesuchDokumentForTypGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumentForTypGS$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1191,7 +1206,157 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare`;
+        const localVarPath = `/gesuchDokument/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetGesuchDokumentForTypSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
+     public getGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetGesuchDokumentForTypSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
+     public getGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetGesuchDokumentForTypSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
+     public getGesuchDokumentForTypSB$(requestParameters: DokumentServiceGetGesuchDokumentForTypSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumentForTypSB$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchDokument/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareGS$(requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareGS$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/gs`;
         return this.httpClient.request<Array<GesuchDokumentKommentar>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -1205,22 +1370,18 @@ export class DokumentService {
     }
 
     /**
-     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetGesuchDokumenteForTypRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchDokument>;
-     public getGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetGesuchDokumenteForTypRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchDokument>>;
-     public getGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetGesuchDokumenteForTypRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchDokument>>;
-     public getGesuchDokumenteForTyp$(requestParameters: DokumentServiceGetGesuchDokumenteForTypRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const dokumentTyp = requestParameters.dokumentTyp;
-        if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumenteForTyp$.');
-        }
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumenteForTyp$.');
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokumentKommentar>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
+     public getGesuchDokumentKommentareSB$(requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareSB$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1268,8 +1429,8 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
-        return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/sb`;
+        return this.httpClient.request<Array<GesuchDokumentKommentar>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1354,6 +1515,7 @@ export class DokumentService {
     }
 
     /**
+     * Upload a file for the given customDokumentTyp to the Tranche
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

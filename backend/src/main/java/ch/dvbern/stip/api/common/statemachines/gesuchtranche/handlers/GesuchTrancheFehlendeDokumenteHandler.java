@@ -15,37 +15,35 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler {
+public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusStateChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchService gesuchService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.FEHLENDE_DOKUMENTE;
+    public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
+        return transition.getDestination() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE;
     }
 
     @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        gesuchService.setDefaultNachfristDokumente(gesuch);
-        gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
-            .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
-        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
-        gesuchService.sendFehlendeDokumenteNotifications(gesuch);
+    public void handle(
+        Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
+        GesuchTranche gesuchTranche
+    ) {
+        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuchTranche.getGesuch());
+        gesuchService.setDefaultNachfristDokumente(gesuchTranche.getGesuch());
+        gesuchService.sendFehlendeDokumenteNotifications(gesuchTranche.getGesuch());
     }
 }

@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -910,7 +911,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.getValidationErrors().size(),
@@ -939,7 +940,11 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
+                .map(x -> {
+                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche);
+                    gesuchDokument.addDokument(new Dokument());
+                    return gesuchDokument;
+                })
                 .toList()
         );
 
@@ -952,7 +957,7 @@ class GesuchServiceTest {
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -1653,7 +1658,6 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
-
         Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
 

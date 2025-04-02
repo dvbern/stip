@@ -46,13 +46,18 @@ public class GesuchTrancheStatusConfigProducer {
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABLEHNEN, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .permit(GesuchTrancheStatusChangeEvent.AKZEPTIERT, GesuchTrancheStatus.AKZEPTIERT)
-            .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG);
+            .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
             .permit(GesuchTrancheStatusChangeEvent.AKZEPTIERT, GesuchTrancheStatus.AKZEPTIERT);
 
         config.configure(GesuchTrancheStatus.ABGELEHNT);
         config.configure(GesuchTrancheStatus.AKZEPTIERT);
+
+        config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
+            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
+            .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
 
         for (final var status : GesuchTrancheStatus.values()) {
             final var state = config.getRepresentation(status);

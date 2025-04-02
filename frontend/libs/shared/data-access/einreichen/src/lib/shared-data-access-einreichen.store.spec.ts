@@ -18,6 +18,7 @@ describe('EinreichenStore', () => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
+        provideSharedPatternJestTestSetup(),
         provideMockStore({
           initialState: {
             gesuchs: {
@@ -37,7 +38,6 @@ describe('EinreichenStore', () => {
             configs: {},
           },
         }),
-        provideSharedPatternJestTestSetup(),
       ],
     });
 

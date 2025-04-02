@@ -17,12 +17,28 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
-import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.dokument.entity.Dokument;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DokumentRepository implements BaseRepository<Dokument> {
+public class GesuchDokumentHistoryRepository {
+    private final EntityManager em;
+
+    public GesuchDokument findInHistoryById(UUID gesuchDokumentId) {
+        final var reader = AuditReaderFactory.get(em);
+
+        return (GesuchDokument) reader.createQuery()
+            .forRevisionsOfEntity(GesuchDokument.class, true, false)
+            .add(AuditEntity.id().eq(gesuchDokumentId))
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getSingleResult();
+    }
 }
