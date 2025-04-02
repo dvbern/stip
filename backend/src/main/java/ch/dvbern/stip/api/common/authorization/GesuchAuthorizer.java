@@ -102,22 +102,22 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var gesuchTranche =
             gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            canUpdateAenderung(gesuchId, gesuchTranche);
+            canUpdateAenderung(gesuchTranche);
         } else {
-            canUpdateNormalTranche(gesuchId);
+            canUpdateNormalTranche(gesuchTranche);
 
         }
     }
 
     @Transactional
-    public void canUpdateTranche(final UUID gesuchId) {
-        canUpdateNormalTranche(gesuchId);
+    public void canUpdateTranche(final GesuchTranche gesuchTranche) {
+        canUpdateNormalTranche(gesuchTranche);
     }
 
     @Transactional
-    public void canUpdateAenderung(final UUID gesuchId, final GesuchTranche gesuchTranche) {
+    public void canUpdateAenderung(final GesuchTranche gesuchTranche) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchTranche.getGesuch();
 
         final BooleanSupplier benutzerCanEditAenderung = () -> gesuchTrancheStatusService.benutzerCanEdit(
             currentBenutzer,
@@ -152,9 +152,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateNormalTranche(final UUID gesuchId) {
+    public void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchTranche.getGesuch();
 
         if (
             isAdminOrSb(currentBenutzer)

@@ -107,7 +107,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto changeGesuchStatusToInBearbeitung(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -120,7 +120,7 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.changeGesuchStatusToNegativeVerfuegung(
             gesuchId,
             ausgewaehlterGrundDto.getDecisionId()
@@ -133,7 +133,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
@@ -143,7 +143,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -154,7 +154,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersendet(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToVersendet(gesuchId);
         gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -197,7 +197,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -208,7 +208,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
@@ -403,7 +403,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto bearbeitungAbschliessen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
 
         gesuchTrancheValidatorService.validateBearbeitungAbschliessen(gesuchTranche);
 
@@ -420,7 +420,7 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -430,7 +430,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdateTranche(gesuchId);
+        gesuchAuthorizer.canUpdateTranche(gesuchTranche);
         return gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
     }
 
