@@ -4426,8 +4426,6 @@ components:
         - vorname
         - elternTyp
         - sozialhilfebeitraege
-        - ergaenzungsleistungen
-        - wohnkosten
       type: object
       properties:
         vorname:
