@@ -17,14 +17,6 @@
 
 package ch.dvbern.stip.api.sozialdienstbenutzer.service;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import javax.net.ssl.SSLContext;
-
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
@@ -55,6 +47,14 @@ import org.keycloak.admin.client.ClientBuilderWrapper;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.UserRepresentation;
+
+import javax.net.ssl.SSLContext;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -188,7 +188,6 @@ public class SozialdienstBenutzerService {
             welcomeMailDto.setEmail(sozialdienstBenutzer.getEmail());
             welcomeMailDto.setRedirectUri(sozialdienstBenutzerCreateDto.getRedirectUri());
             mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
-            // keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
 
             return sozialdienstBenutzerMapper.toDto(sozialdienstBenutzer);
         }
