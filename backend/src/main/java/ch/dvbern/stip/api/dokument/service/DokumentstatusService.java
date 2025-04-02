@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers.DokumentstatusChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -36,13 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class DokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
     private final Instance<DokumentstatusChangeHandler> handlers;
-
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchDokumentId(
-        UUID gesuchDokumentId
-    ) {
-        return dokumentKommentarService
-            .getAllKommentareForGesuchDokument(gesuchDokumentId);
-    }
 
     public void triggerStatusChangeNoComment(
         final GesuchDokument gesuchDokument,

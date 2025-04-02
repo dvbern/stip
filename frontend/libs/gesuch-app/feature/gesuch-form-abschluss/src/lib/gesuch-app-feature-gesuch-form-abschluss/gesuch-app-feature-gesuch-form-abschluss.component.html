@@ -57,7 +57,7 @@
                 <span [innerHTML]="'shared.form.abschluss.ready' | translate"></span>
               </dv-shared-ui-info-container>
 
-              @if (einreichenView.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
+              @if (einreichenView.isFehlendeDokumente) {
                 <button
                   type="submit"
                   class="btn btn-primary mt-4"

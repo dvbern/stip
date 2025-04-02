@@ -41,6 +41,7 @@ public class AkzeptiertHandler implements GesuchTrancheStatusStateChangeHandler 
         Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         GesuchTranche gesuchTranche
     ) {
+        gesuchTranche.getGesuch().setNachfristDokumente(null);
         gesuchTrancheService.aenderungEinbinden(gesuchTranche);
     }
 }

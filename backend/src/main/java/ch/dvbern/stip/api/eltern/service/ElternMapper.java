@@ -52,7 +52,10 @@ public interface ElternMapper {
             }
         }
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
-            if (elternUpdateDto.getId() != null) {
+            if (
+                elternUpdateDto.getId() != null && elternSet.stream()
+                    .anyMatch(eltern -> eltern.getId().equals(elternUpdateDto.getId()))
+            ) {
                 Eltern found = elternSet.stream()
                     .filter(eltern -> eltern.getId().equals(elternUpdateDto.getId()))
                     .findFirst()
@@ -62,7 +65,11 @@ public interface ElternMapper {
                 elternSet.remove(found);
                 elternSet.add(partialUpdate(elternUpdateDto, found));
             } else {
-                elternSet.add(partialUpdate(elternUpdateDto, new Eltern()));
+                final var newEltern = new Eltern();
+                partialUpdate(elternUpdateDto, newEltern);
+                newEltern.setId(null);
+                newEltern.getAdresse().setId(null);
+                elternSet.add(newEltern);
             }
         }
         return elternSet;

@@ -27,6 +27,11 @@ async function setup(abschlussPhase: AbschlussPhase) {
             loading: false,
             abschlussPhase,
             specialValidationErrors: [],
+            invalidFormularSteps: [],
+            isFehlendeDokumente: false,
+            permissions: {
+              canFreigeben: true,
+            },
             gesuchStatus: 'IN_BEARBEITUNG_GS',
           }),
           einreicheOperationIsInProgressSig:

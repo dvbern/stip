@@ -47,7 +47,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
   templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [GesuchStore, BerechnungStore],
+  providers: [BerechnungStore],
 })
 export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   @Input() option?: VerfuegungOption;
