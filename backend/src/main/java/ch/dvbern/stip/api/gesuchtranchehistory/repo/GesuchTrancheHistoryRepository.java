@@ -62,6 +62,25 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getLatestRevisionWhereStatusChangedTo(
+        final UUID gesuchTrancheId,
+        final GesuchTrancheStatus gesuchTrancheStatus
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
+            .add(AuditEntity.property("status").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
     public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
     }
@@ -70,7 +89,7 @@ public class GesuchTrancheHistoryRepository {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
-    private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
+    public Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {

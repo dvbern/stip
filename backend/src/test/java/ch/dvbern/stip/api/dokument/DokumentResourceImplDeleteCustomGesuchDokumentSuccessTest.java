@@ -32,6 +32,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -140,7 +141,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+        final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -149,6 +150,40 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .body()
             .as(NullableGesuchDokumentDto.class);
         assertThat(result.getValue().getCustomDokumentTyp().getType(), is("test"));
+    }
+
+    // testAsSB
+    // delete custom
+    // b: no files -> ok
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
+    void test_delete_required_custom_gesuchdokument_should_success() {
+        dokumentApiSpec.deleteCustomDokumentTyp()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    // testAsGS
+    // new document should appear in required documents
+    // upload
+    @Test
+    @TestAsGesuchsteller
+    @Order(7)
+    void test_get_required_custom_gesuchdokuments_should_be_empty() {
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDto.class);
+        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

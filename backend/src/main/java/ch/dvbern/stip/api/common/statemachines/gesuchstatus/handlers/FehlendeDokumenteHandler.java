@@ -17,17 +17,12 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
-    private final NotificationService notificationService;
-    private final MailService mailService;
+    private final GesuchService gesuchService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -46,26 +40,12 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        setDefaultNachfristDokumente(gesuch);
+        gesuchService.setDefaultNachfristDokumente(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
-        sendFehlendeDokumenteNotifications(gesuch);
-    }
-
-    private void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
-        notificationService.createMissingDocumentNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
-    }
-
-    private void setDefaultNachfristDokumente(Gesuch gesuch) {
-        if (Objects.isNull(gesuch.getNachfristDokumente())) {
-            gesuch
-                .setNachfristDokumente(
-                    LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
-                );
-        }
+        gesuchService.sendFehlendeDokumenteNotifications(gesuch);
     }
 }

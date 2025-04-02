@@ -1,0 +1,82 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-3">
+    <createTable tableName="beschwerde_verlauf_entry">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="beschwerde_verlauf_entryPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="beschwerde_set_to" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="kommentar" type="VARCHAR(2000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-4">
+    <createTable tableName="beschwerde_verlauf_entry_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="beschwerde_set_to" type="BOOLEAN"/>
+      <column name="kommentar" type="VARCHAR(2000)"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-5">
+    <addColumn tableName="gesuch">
+      <column name="beschwerde_haengig" type="boolean">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-6">
+    <addColumn tableName="gesuch_aud">
+      <column name="beschwerde_haengig" type="boolean"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-7">
+    <addPrimaryKey columnNames="rev, id" constraintName="beschwerde_verlauf_entry_audPK" tableName="beschwerde_verlauf_entry_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-10">
+    <createIndex indexName="IX_beschwerde_verlauf_entry_mandant" tableName="beschwerde_verlauf_entry">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-17">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="beschwerde_verlauf_entry" constraintName="FK_beschwerde_verlauf_entry_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1743081222451-18">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="beschwerde_verlauf_entry_aud" constraintName="FKad4kkrmnwj2ylnmupndrjeh0b" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+</databaseChangeLog>

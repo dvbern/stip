@@ -147,7 +147,7 @@ class GesuchUpdateNachristDokumenteTest {
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.remove(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTyp()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -165,7 +165,7 @@ class GesuchUpdateNachristDokumenteTest {
                 .assertThat()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
         });
-        var dok = dokumentApiSpec.getGesuchDokumenteForTyp()
+        var dok = dokumentApiSpec.getGesuchDokumentForTypSB()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
