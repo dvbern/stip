@@ -28,19 +28,14 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
-import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -91,90 +86,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         // Gesuchsteller can only read their own Gesuch
         if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canUpdateTranche(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
-        final var gesuchTranche =
-            gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            canUpdateAenderung(gesuchTranche);
-        } else {
-            canUpdateNormalTranche(gesuchTranche);
-
-        }
-    }
-
-    @Transactional
-    public void canUpdateTranche(final GesuchTranche gesuchTranche) {
-        canUpdateNormalTranche(gesuchTranche);
-    }
-
-    @Transactional
-    public void canUpdateAenderung(final GesuchTranche gesuchTranche) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchTranche.getGesuch();
-
-        final BooleanSupplier benutzerCanEditAenderung = () -> gesuchTrancheStatusService.benutzerCanEdit(
-            currentBenutzer,
-            gesuchTranche
-                .getStatus()
-        );
-
-        final BooleanSupplier isAdminOrSBCanEdit =
-            () -> isAdminOrSb(currentBenutzer) && !GESUCHSTELLER_CAN_EDIT.contains(gesuchTranche.getStatus())
-            && benutzerCanEditAenderung.getAsBoolean();
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && benutzerCanEditAenderung.getAsBoolean();
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            && benutzerCanEditAenderung.getAsBoolean();
-
-        if (
-            isMitarbeiterAndCanEdit.getAsBoolean()
-            || isGesuchstellerAndCanEdit.getAsBoolean() && !isAdminOrSb(currentBenutzer)
-        ) {
-            return;
-        }
-
-        if (isAdminOrSBCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        throw new UnauthorizedException();
-    }
-
-    @Transactional
-    public void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchTranche.getGesuch();
-
-        if (
-            isAdminOrSb(currentBenutzer)
-            && gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
-        ) {
-            return;
-        }
-
-        final BooleanSupplier benutzerCanEdit =
-            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus());
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && benutzerCanEdit.getAsBoolean();
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            && benutzerCanEdit.getAsBoolean();
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 

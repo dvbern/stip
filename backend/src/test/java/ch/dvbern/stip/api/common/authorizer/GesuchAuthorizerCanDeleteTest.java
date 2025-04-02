@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -52,6 +53,7 @@ class GesuchAuthorizerCanDeleteTest {
     private Benutzer adminBenutzer;
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
+    private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
     private GesuchTrancheStatusService gesuchTrancheStatusService;
 
@@ -109,6 +111,15 @@ class GesuchAuthorizerCanDeleteTest {
             null
         );
 
+        trancheAuthorizer = new GesuchTrancheAuthorizer(
+            benutzerService,
+            gesuchTrancheRepository,
+            gesuchRepository,
+            sozialdienstService,
+            gesuchStatusService,
+            gesuchTrancheStatusService
+        );
+
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
@@ -126,7 +137,7 @@ class GesuchAuthorizerCanDeleteTest {
         gesuchTranche.setGesuch(gesuch);
 
         // assert
-        assertDoesNotThrow(() -> authorizer.canUpdateTranche(gesuchTranche));
+        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTranche(gesuchTranche));
     }
 
     @Test
