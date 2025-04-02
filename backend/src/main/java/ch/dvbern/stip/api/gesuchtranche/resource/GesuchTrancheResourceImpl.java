@@ -143,21 +143,21 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAkzeptieren(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungAkzeptieren(aenderungId);
     }
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
     }
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungManuellAnpassen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
     }
 }

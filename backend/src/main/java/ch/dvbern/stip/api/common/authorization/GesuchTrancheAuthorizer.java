@@ -70,7 +70,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdate(final UUID gesuchTrancheId) {
+    public void canUpdateTrancheStatus(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (isAdminOrSb(currentBenutzer)) {

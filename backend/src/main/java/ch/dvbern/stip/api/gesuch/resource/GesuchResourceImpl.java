@@ -439,7 +439,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
         gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
