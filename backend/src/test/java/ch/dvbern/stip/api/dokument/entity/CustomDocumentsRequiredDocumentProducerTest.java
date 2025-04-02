@@ -58,7 +58,10 @@ class CustomDocumentsRequiredDocumentProducerTest {
     void customDocumentsShouldBeRequiredTest() {
         // arrange
         final var customDokumentTyp = new CustomDokumentTyp().setType("test").setDescription("description");
-        when(service.getAllCustomDokumentTypsOfTranche(any())).thenReturn(List.of(customDokumentTyp));
+        final var customGesuchDokument =
+            new GesuchDokument().setCustomDokumentTyp(customDokumentTyp).setGesuchTranche(tranche);
+
+        when(tranche.getGesuchDokuments()).thenReturn(List.of(customGesuchDokument));
 
         // act
         final var requiredCustomDocuments = producer.getRequiredDocuments(tranche);

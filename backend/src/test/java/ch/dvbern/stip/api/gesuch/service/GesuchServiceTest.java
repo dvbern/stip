@@ -911,7 +911,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.getValidationErrors().size(),
@@ -957,7 +957,7 @@ class GesuchServiceTest {
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
-        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
         assertThat(
             reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -1658,7 +1658,6 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
-
         Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
 

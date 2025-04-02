@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.dokument.util;
 import java.util.List;
 
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
@@ -55,5 +56,28 @@ public class GesuchDokumentCopyUtil {
         copy.setDescription(source.getDescription());
         copy.setGesuchDokument(source.getGesuchDokument());
         return copy;
+    }
+
+    public GesuchDokument createCopy(final GesuchDokument source) {
+        final var copy = new GesuchDokument();
+        copyValues(source, copy);
+        return copy;
+    }
+
+    public void copyValues(final Dokument source, final Dokument target) {
+        target.setFilepath(source.getFilepath());
+        target.setFilename(source.getFilename());
+        target.setFilesize(source.getFilesize());
+        target.setObjectId(source.getObjectId());
+    }
+
+    public void copyValues(final GesuchDokument source, final GesuchDokument target) {
+        target.setDokumentTyp(source.getDokumentTyp());
+        target.setGesuchTranche(source.getGesuchTranche());
+        target.setDokumentTyp(source.getDokumentTyp());
+        target.setStatus(source.getStatus());
+        if (source.getCustomDokumentTyp() != null) {
+            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()));
+        }
     }
 }

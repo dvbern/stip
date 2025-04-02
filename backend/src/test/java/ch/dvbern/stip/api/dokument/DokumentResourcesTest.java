@@ -144,7 +144,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(4)
     void test_list_and_read_dokument_for_gesuch() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getGesuchDokumenteForTyp()
+        var dokumentDtoList = dokumentApiSpec.getGesuchDokumentForTypSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(TestUtil.PEEK_IF_ENV_SET)

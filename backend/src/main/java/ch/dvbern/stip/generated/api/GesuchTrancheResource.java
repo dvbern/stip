@@ -78,9 +78,14 @@ public interface GesuchTrancheResource {
     void deleteAenderung(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
-    @Path("/{gesuchTrancheId}/einreichen/validieren")
+    @Path("/{gesuchTrancheId}/einreichen/validieren/gs")
     @Produces({ "application/json", "text/plain" })
-    ValidationReportDto gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    ValidationReportDto gesuchTrancheEinreichenValidierenGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchTrancheId}/einreichen/validieren/sb")
+    @Produces({ "application/json", "text/plain" })
+    ValidationReportDto gesuchTrancheEinreichenValidierenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/gs/{gesuchId}")
@@ -93,22 +98,32 @@ public interface GesuchTrancheResource {
     GesuchTrancheListDto getAllTranchenForGesuchSB(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumenteToUpload")
+    @Path("/{gesuchTrancheId}/dokumenteToUpload/gs")
     @Produces({ "application/json", "text/plain" })
-    DokumenteToUploadDto getDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    DokumenteToUploadDto getDocumentsToUploadGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumente/{dokumentTyp}")
+    @Path("/{gesuchTrancheId}/dokumenteToUpload/sb")
     @Produces({ "application/json", "text/plain" })
-    GesuchDokumentDto getGesuchDokument(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp);
+    DokumenteToUploadDto getDocumentsToUploadSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchTrancheId}/dokumente")
+    @Path("/{gesuchTrancheId}/dokumente/gs")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentDto> getGesuchDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    List<GesuchDokumentDto> getGesuchDokumenteGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/validatePages/{gesuchTrancheId}")
+    @Path("/{gesuchTrancheId}/dokumente/sb")
+    @Produces({ "application/json", "text/plain" })
+    List<GesuchDokumentDto> getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/validatePages/{gesuchTrancheId}/gs")
     @Produces({ "application/json" })
-    ValidationReportDto validateGesuchTranchePages(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    ValidationReportDto validateGesuchTranchePagesGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/validatePages/{gesuchTrancheId}/sb")
+    @Produces({ "application/json" })
+    ValidationReportDto validateGesuchTranchePagesSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }

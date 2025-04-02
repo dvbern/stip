@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
@@ -83,6 +82,20 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuchSB(gesuchId);
     }
 
+    @RolesAllowed(GS_GESUCH_READ)
+    @Override
+    public DokumenteToUploadDto getDocumentsToUploadGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getDokumenteToUploadGS(gesuchTrancheId);
+    }
+
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @Override
+    public DokumenteToUploadDto getDocumentsToUploadSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.getDokumenteToUploadSB(gesuchTrancheId);
+    }
+
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto createGesuchTrancheCopy(
@@ -104,31 +117,45 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public List<GesuchDokumentDto> getGesuchDokumente(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
+    @RolesAllowed(GS_GESUCH_READ)
+    public ValidationReportDto gesuchTrancheEinreichenValidierenGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        return gesuchTrancheService.einreichenValidierenGS(gesuchTrancheId);
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchDokumentDto getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public ValidationReportDto gesuchTrancheEinreichenValidierenSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        return gesuchTrancheService.einreichenValidierenSB(gesuchTrancheId);
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public DokumenteToUploadDto getDocumentsToUpload(UUID gesuchTrancheId) {
+    @RolesAllowed(GS_GESUCH_READ)
+    public List<GesuchDokumentDto> getGesuchDokumenteGS(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getDokumenteToUpload(gesuchTrancheId);
+        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTrancheId);
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public ValidationReportDto validateGesuchTranchePages(UUID gesuchTrancheId) {
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public List<GesuchDokumentDto> getGesuchDokumenteSB(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.validatePages(gesuchTrancheId);
+        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public ValidationReportDto validateGesuchTranchePagesGS(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.validatePagesGS(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public ValidationReportDto validateGesuchTranchePagesSB(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+        return gesuchTrancheService.validatePagesSB(gesuchTrancheId);
     }
 
     @Override
@@ -154,13 +181,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheAuthorizer.canFehlendeDokumenteUebermitteln(gesuchTrancheId);
         gesuchTrancheService.aenderungFehlendeDokumenteUebermitteln(gesuchTrancheId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
-    }
-
-    @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public ValidationReportDto gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
     }
 
     @Override

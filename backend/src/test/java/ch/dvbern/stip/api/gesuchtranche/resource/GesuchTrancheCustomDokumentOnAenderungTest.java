@@ -288,7 +288,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
         MatcherAssert.assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+        final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

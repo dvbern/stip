@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuchtranche.repo;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -41,12 +40,12 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
 
     private static final QGesuchTranche gesuchTranche = QGesuchTranche.gesuchTranche;
 
-    public Stream<GesuchTranche> findForGesuch(final UUID gesuchId) {
+    public List<GesuchTranche> findForGesuch(final UUID gesuchId) {
         return new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
             .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
-            .stream();
+            .fetch();
     }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {

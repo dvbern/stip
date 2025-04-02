@@ -17,12 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -65,22 +62,23 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    public Stream<GesuchTranche> getWhereStatusChangeHappenedBefore(
-        final List<UUID> ids,
-        final GesuchTrancheStatus gesuchTrancheStatus,
-        final LocalDateTime dueDate
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getLatestRevisionWhereStatusChangedTo(
+        final UUID gesuchTrancheId,
+        final GesuchTrancheStatus gesuchTrancheStatus
     ) {
         final var reader = AuditReaderFactory.get(em);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, true, true)
-            .add(AuditEntity.property("id").in(ids))
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
             .add(AuditEntity.property("status").hasChanged())
-            .add(AuditEntity.property("timestampMutiert").lt(dueDate))
+            .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1)
             .getResultList()
-            .stream();
+            .stream()
+            .findFirst();
     }
 
     public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
@@ -91,7 +89,7 @@ public class GesuchTrancheHistoryRepository {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
-    private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
+    public Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {

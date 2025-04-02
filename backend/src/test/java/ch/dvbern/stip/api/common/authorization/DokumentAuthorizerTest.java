@@ -66,6 +66,7 @@ class DokumentAuthorizerTest {
             null,
             gesuchDokumentRepository,
             null,
+            null,
             null
         );
     }

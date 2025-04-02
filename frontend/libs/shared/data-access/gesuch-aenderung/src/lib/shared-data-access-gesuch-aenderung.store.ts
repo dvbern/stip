@@ -6,7 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
@@ -16,6 +16,7 @@ import {
   GesuchTrancheStatus,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
@@ -108,18 +109,21 @@ export class GesuchAenderungStore extends signalStore(
         }));
       }),
       switchMap((req) => {
-        const serviceMap = {
-          'gesuch-app': 'getAllTranchenForGesuchGS$',
-          'sachbearbeitung-app': 'getAllTranchenForGesuchSB$',
-        } satisfies Record<AppType, keyof GesuchTrancheService>;
-        return this.gesuchTrancheService[serviceMap[this.config.appType]](
+        const params = [
           req,
           undefined,
           undefined,
           {
             context: shouldIgnoreNotFoundErrorsIf(true),
           },
-        ).pipe(map((tranchen) => tranchen ?? []));
+        ] as const;
+        const serviceCall$ = byAppType(this.config.appType, {
+          'gesuch-app': () =>
+            this.gesuchTrancheService.getAllTranchenForGesuchGS$(...params),
+          'sachbearbeitung-app': () =>
+            this.gesuchTrancheService.getAllTranchenForGesuchSB$(...params),
+        });
+        return serviceCall$.pipe().pipe(map((tranchen) => tranchen ?? []));
       }),
       handleApiResponse((tranchen) => {
         patchState(this, () => ({

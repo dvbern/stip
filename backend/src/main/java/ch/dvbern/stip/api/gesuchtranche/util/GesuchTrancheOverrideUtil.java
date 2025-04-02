@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
@@ -100,11 +99,5 @@ public class GesuchTrancheOverrideUtil {
 
         // Darlehen
         DarlehenCopyUtil.copyValues(source.getDarlehen(), target.getDarlehen());
-
-        target.getTranche()
-            .getGesuchDokuments()
-            .forEach(gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND));
-
-        // TODO KSTIP-1998: Reset the Dokumente as well
     }
 }
