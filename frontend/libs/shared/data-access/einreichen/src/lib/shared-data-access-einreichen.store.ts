@@ -133,12 +133,13 @@ export class EinreichenStore extends signalStore(
 
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
-    const { trancheSetting } = this.gesuchViewSig();
+    const { isFehlendeDokumente, permissions, trancheSetting } =
+      this.gesuchViewSig();
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
-    const hasNoDokumenteToUebermitteln =
-      gesuch?.gesuchStatus !== 'FEHLENDE_DOKUMENTE' ||
-      this.dokumentsStore.dokumenteCanFlagsSig().gsCanDokumenteUebermitteln;
+    const hasDokumenteToUebermitteln =
+      isFehlendeDokumente &&
+      !this.dokumentsStore.dokumenteCanFlagsSig().gsCanDokumenteUebermitteln;
 
     const routesSuffix = trancheSetting?.routesSuffix;
     const error = validationReport
@@ -173,11 +174,12 @@ export class EinreichenStore extends signalStore(
         validationReport,
         gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
       ),
+      permissions,
+      isFehlendeDokumente,
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
-        isComplete:
-          hasNoValidationErrors(error) && hasNoDokumenteToUebermitteln,
+        isComplete: hasNoValidationErrors(error) && !hasDokumenteToUebermitteln,
         checkAenderung: trancheTyp === 'AENDERUNG',
       }),
     };

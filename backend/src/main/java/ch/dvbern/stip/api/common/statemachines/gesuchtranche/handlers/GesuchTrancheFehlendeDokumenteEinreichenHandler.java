@@ -18,22 +18,25 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
+@Slf4j
 @RequiredArgsConstructor
-public class AkzeptiertHandler implements GesuchTrancheStatusStateChangeHandler {
-    private final GesuchTrancheService gesuchTrancheService;
+public class GesuchTrancheFehlendeDokumenteEinreichenHandler implements GesuchTrancheStatusStateChangeHandler {
+    private final NotificationService notificationService;
 
     @Override
     public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
-        return transition.getSource() == GesuchTrancheStatus.UEBERPRUEFEN &&
-        transition.getDestination() == GesuchTrancheStatus.AKZEPTIERT;
+        return transition.getTrigger() == GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
+        && transition.getSource() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+        && transition.getDestination() == GesuchTrancheStatus.UEBERPRUEFEN;
     }
 
     @Override
@@ -41,7 +44,6 @@ public class AkzeptiertHandler implements GesuchTrancheStatusStateChangeHandler 
         Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         GesuchTranche gesuchTranche
     ) {
-        gesuchTranche.getGesuch().setNachfristDokumente(null);
-        gesuchTrancheService.aenderungEinbinden(gesuchTranche);
+        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuchTranche.getGesuch());
     }
 }

@@ -81,10 +81,10 @@ public class DokumentResourceImpl implements DokumentResource {
     private final BenutzerService benutzerService;
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
+    private final DokumentAuthorizer dokumentAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
-    private final DokumentAuthorizer dokumentAuthorizer;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
@@ -109,6 +109,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD)
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+        dokumentAuthorizer.canUpload(gesuchTrancheId);
         gesuchDokumentAuthorizer.canCreateGesuchDokument(gesuchTrancheId);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
@@ -162,14 +163,14 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
     ) {
-        gesuchDokumentAuthorizer.canGesuchDokumentAblehnen(gesuchDokumentId);
+        gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
     @Override
     @RolesAllowed(DOKUMENT_ABLEHNEN_AKZEPTIEREN)
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
-        gesuchDokumentAuthorizer.canGesuchDokumentAkzeptieren(gesuchDokumentId);
+        gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 

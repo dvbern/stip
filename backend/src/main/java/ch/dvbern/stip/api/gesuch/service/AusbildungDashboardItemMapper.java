@@ -85,7 +85,12 @@ public abstract class AusbildungDashboardItemMapper {
         final var offeneAenderung = gesuchTranchen.stream()
             .filter(
                 tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN)
+                && Set
+                    .of(
+                        GesuchTrancheStatus.IN_BEARBEITUNG_GS,
+                        GesuchTrancheStatus.UEBERPRUEFEN,
+                        GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+                    )
                     .contains(tranche.getStatus())
             )
             .findFirst()
