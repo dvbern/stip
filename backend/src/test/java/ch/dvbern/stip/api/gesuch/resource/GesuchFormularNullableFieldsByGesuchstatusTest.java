@@ -289,7 +289,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(20)
     void gesuchEinreichenValidationShouldFail() {
-        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
+        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -337,7 +337,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         currentFormular.setElterns(eltern);
 
         // validation should still fail
-        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
+        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -366,7 +366,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(23)
     void gesuchEinreichenValidationShouldSuccess() {
-        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
+        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -436,7 +436,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
 
     private ValidationReportDto getValidationReport() {
         return gesuchTrancheApiSpec
-            .validateGesuchTranchePages()
+            .validateGesuchTranchePagesGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -448,7 +448,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
 
     private void validatePage(final boolean allowWarnings) {
         final var report = gesuchTrancheApiSpec
-            .validateGesuchTranchePages()
+            .validateGesuchTranchePagesGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
