@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.benutzer.service;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import io.quarkus.narayana.jta.QuarkusTransaction;
@@ -29,8 +31,6 @@ import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Singleton
 @Startup
