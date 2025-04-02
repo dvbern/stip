@@ -507,6 +507,52 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: einreichedatumManuellAendern
+  '/gesuch/{gesuchId}/beschwerde':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Returns all the BeschwerdeVerlaufEntrys for a given Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllBeschwerdeVerlaufEntrys
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Creates a new BeschwerdeVerlaufEntry for a given Gesuch
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBeschwerdeVerlaufEntry
   /stip-decision/all:
     get:
       tags:
@@ -3950,6 +3996,7 @@ components:
         - startDate
         - endDate
         - canGetBerechnung
+        - beschwerdeHaengig
       type: object
       properties:
         id:
@@ -3963,6 +4010,8 @@ components:
         endDate:
           $ref: '#/components/schemas/LocalDate'
         canGetBerechnung:
+          type: boolean
+        beschwerdeHaengig:
           type: boolean
     FallDashboardItem:
       required:
@@ -6176,6 +6225,31 @@ components:
       properties:
         canAendern:
           type: boolean
+    BeschwerdeVerlaufEntryCreate:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+      properties:
+        kommentar:
+          type: string
+        beschwerdeSetTo:
+          type: boolean
+    BeschwerdeVerlaufEntry:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+        - timestampErstellt
+        - userErstellt
+      allOf:
+        - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        userErstellt:
+          type: string
     NachfristAendernRequest:
       type: object
       required:

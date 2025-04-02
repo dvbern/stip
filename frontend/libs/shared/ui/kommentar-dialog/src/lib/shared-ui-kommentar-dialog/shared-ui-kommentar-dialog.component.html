@@ -11,7 +11,9 @@
   <h1 class="title h5 mb-4 d-flex">
     {{ dialogData.titleKey | translate }}
   </h1>
-  <p class="content mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
+  @if (dialogData.messageKey) {
+    <p class="content mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
+  }
 
   <form [formGroup]="form" class="mt-4" data-testid="form-kommentar-dialog-form" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
