@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.service.DarlehenMapperImpl;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -735,6 +736,7 @@ class GesuchFormularMapperTest {
         mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
         mapper.familiensituationMapper = new FamiliensituationMapperImpl();
         mapper.gesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
+        mapper.gesuchDokumentKommentarRepository = Mockito.mock(GesuchDokumentKommentarRepository.class);
 
         return mapper;
     }
