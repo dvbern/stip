@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
+import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
@@ -45,6 +47,8 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -101,6 +105,8 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BenutzerService benutzerService;
     private final GesuchValidatorService gesuchValidatorService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final BeschwerdeverlaufService beschwerdeverlaufService;
+    private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -161,6 +167,16 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
+        UUID gesuchId,
+        BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto
+    ) {
+        beschwerdeVerlaufAuthorizer.canCreate();
+        return beschwerdeverlaufService.createBeschwerdeVerlaufEntry(gesuchId, beschwerdeVerlaufEntryCreateDto);
+    }
+
+    @Override
     @RolesAllowed(GS_GESUCH_CREATE)
     public UUID createGesuch(GesuchCreateDto gesuchCreateDto) {
         gesuchAuthorizer.canCreate();
@@ -190,6 +206,13 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         gesuchAuthorizer.canUpdateEinreichedatum(gesuchId);
         return gesuchService.einreichedatumManuellAendern(gesuchId, einreichedatumAendernRequestDto);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
+        beschwerdeVerlaufAuthorizer.canRead();
+        return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
     }
 
     @Override

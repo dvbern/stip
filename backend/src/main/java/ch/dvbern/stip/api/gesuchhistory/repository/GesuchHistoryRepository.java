@@ -93,4 +93,21 @@ public class GesuchHistoryRepository {
             .stream()
             .findFirst();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getRevisionWhereStatusChangedTo(final UUID gesuchId, final Gesuchstatus gesuchStatus) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
 }

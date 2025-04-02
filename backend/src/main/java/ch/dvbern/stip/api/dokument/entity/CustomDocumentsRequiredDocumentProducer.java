@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
@@ -35,7 +36,11 @@ public class CustomDocumentsRequiredDocumentProducer implements RequiredCustomDo
 
     @Override
     public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
-        final var allCustomDokumentTyps = customDokumentTypService.getAllCustomDokumentTypsOfTranche(tranche.getId());
+        final var allCustomDokumentTyps = tranche.getGesuchDokuments()
+            .stream()
+            .map(GesuchDokument::getCustomDokumentTyp)
+            .filter(Objects::nonNull)
+            .toList();
         if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }

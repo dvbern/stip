@@ -4,6 +4,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import {
   sharedDataAccessGesuchEffects,
   sharedDataAccessGesuchsFeature,
@@ -22,5 +23,6 @@ export const appConfig: ApplicationConfig = {
     provideState(sharedDataAccessGesuchsFeature),
     provideEffects(sharedDataAccessGesuchEffects),
     provideAnimations(),
+    GesuchStore,
   ],
 };

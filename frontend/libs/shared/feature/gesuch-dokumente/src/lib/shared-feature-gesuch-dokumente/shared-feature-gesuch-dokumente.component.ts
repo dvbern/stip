@@ -318,25 +318,31 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
+        tranchenTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          // Also load the required documents again
+          this.dokumentsStore.getDokumenteAndRequired$({
+            gesuchTrancheId: trancheId,
+          });
         },
       });
     }
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
         trancheId,
+        trancheTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

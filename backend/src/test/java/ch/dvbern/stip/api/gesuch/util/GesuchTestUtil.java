@@ -22,11 +22,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -52,6 +54,25 @@ public class GesuchTestUtil {
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(setupValidPersonInAusbildung());
         gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
+
+        gesuchFormular.getFamiliensituation().setElternVerheiratetZusammen(false);
+        gesuchFormular.getFamiliensituation().setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        gesuchFormular.getFamiliensituation().setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+
+        gesuchFormular.getPartner().setVorname("a");
+        gesuchFormular.getPartner().setNachname("a");
+        gesuchFormular.getPartner().setGeburtsdatum(LocalDate.of(1990, 1, 1));
+        gesuchFormular.getAuszahlung().setVorname("a");
+        gesuchFormular.getAuszahlung().setNachname("a");
+        gesuchFormular.getAuszahlung().setIban("CH4489144522237167913");
+        gesuchFormular.getEinnahmenKosten().setRenten(0);
+        gesuchFormular.getEinnahmenKosten().setFahrkosten(0);
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(2023);
+        gesuchFormular.getEinnahmenKosten().setVerdienstRealisiert(false);
+        gesuchFormular.getEinnahmenKosten().setNettoerwerbseinkommen(0);
+        gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
+        gesuchFormular.getAuszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        gesuch.setGesuchNummer("23");
 
         return gesuch;
     }

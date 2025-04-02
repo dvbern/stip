@@ -7,7 +7,10 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
-import { mockedGesuchAppWritableGesuchState } from '@dv/shared/pattern/jest-test-setup';
+import {
+  mockedGesuchAppWritableGesuchState,
+  provideCompileTimeConfig,
+} from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
@@ -27,6 +30,7 @@ async function setup() {
     ],
     providers: [
       provideHttpClient(),
+      provideCompileTimeConfig(),
       provideMockStore({
         initialState: {
           language: {
