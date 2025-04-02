@@ -18,7 +18,9 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
@@ -26,6 +28,7 @@ import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -82,22 +85,37 @@ public abstract class AusbildungDashboardItemMapper {
         final var offeneAenderung = gesuchTranchen.stream()
             .filter(
                 tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN)
+                && Set
+                    .of(
+                        GesuchTrancheStatus.IN_BEARBEITUNG_GS,
+                        GesuchTrancheStatus.UEBERPRUEFEN,
+                        GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+                    )
                     .contains(tranche.getStatus())
             )
             .findFirst()
             .orElse(null);
 
-        final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
-            .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
-            .map(
-                tranche -> ImmutablePair.of(
-                    tranche.getId(),
-                    gesuchTrancheService.getAllRequiredDokumentTypes(tranche.getId()).size()
+        Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount = Optional.empty();
+
+        final boolean anyFehlendeDokumente = gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE; // ||
+                                                                                                          // gesuchTranchen.stream().anyMatch(gesuchTrancheSlimDto
+                                                                                                          // ->
+                                                                                                          // gesuchTrancheSlimDto.getStatus()
+                                                                                                          // ==
+                                                                                                          // GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        if (!anyFehlendeDokumente) {
+            missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
+                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
+                .map(
+                    tranche -> ImmutablePair.of(
+                        tranche.getId(),
+                        gesuchTrancheService.getAllRequiredDokumentTypes(tranche.getId()).size()
+                    )
                 )
-            )
-            .filter(pair -> pair.getRight() > 0)
-            .findFirst();
+                .filter(pair -> pair.getRight() > 0)
+                .findFirst();
+        }
 
         return gesuchDashboardItemMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount);
     }

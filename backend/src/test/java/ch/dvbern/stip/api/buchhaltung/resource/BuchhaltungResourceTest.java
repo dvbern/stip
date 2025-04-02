@@ -151,7 +151,7 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(6)
     void gesuchDokumenteAkzeptieren() {
-        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumente()
+        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

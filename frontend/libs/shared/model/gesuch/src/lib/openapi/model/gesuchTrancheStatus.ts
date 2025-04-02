@@ -10,13 +10,14 @@
  * Do not edit the class manually.
  */
 
-export type GesuchTrancheStatus = 'IN_BEARBEITUNG_GS' | 'UEBERPRUEFEN' | 'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT';
+export type GesuchTrancheStatus = 'IN_BEARBEITUNG_GS' | 'UEBERPRUEFEN' | 'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT' | 'FEHLENDE_DOKUMENTE';
 
 export const GesuchTrancheStatus = {
     IN_BEARBEITUNG_GS: 'IN_BEARBEITUNG_GS' as GesuchTrancheStatus,
     UEBERPRUEFEN: 'UEBERPRUEFEN' as GesuchTrancheStatus,
     MANUELLE_AENDERUNG: 'MANUELLE_AENDERUNG' as GesuchTrancheStatus,
     AKZEPTIERT: 'AKZEPTIERT' as GesuchTrancheStatus,
-    ABGELEHNT: 'ABGELEHNT' as GesuchTrancheStatus
+    ABGELEHNT: 'ABGELEHNT' as GesuchTrancheStatus,
+    FEHLENDE_DOKUMENTE: 'FEHLENDE_DOKUMENTE' as GesuchTrancheStatus
 };
 

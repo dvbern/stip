@@ -164,6 +164,7 @@ public class GesuchTrancheTruncateService {
                     .minusMonths(1)
                     .with(lastDayOfMonth())
             );
+        gesuchTrancheRepository.persist(newNewTranche);
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(existingTranche, newNewTranche);
 
         return newNewTranche;

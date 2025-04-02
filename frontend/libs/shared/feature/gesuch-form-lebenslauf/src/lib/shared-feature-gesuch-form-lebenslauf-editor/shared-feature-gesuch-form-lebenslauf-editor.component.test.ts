@@ -10,6 +10,7 @@ import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
+  provideCompileTimeConfig,
 } from '@dv/shared/pattern/jest-test-setup';
 import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
@@ -27,6 +28,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
     ],
     providers: [
       provideHttpClient(),
+      provideCompileTimeConfig(),
       provideMockStore({
         initialState: {
           benutzers: {

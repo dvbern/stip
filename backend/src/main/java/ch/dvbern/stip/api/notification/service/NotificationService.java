@@ -35,7 +35,6 @@ import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +45,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void deleteNotificationsForGesuch(final UUID gesuchId) {
         notificationRepository.deleteAllForGesuch(gesuchId);
     }
