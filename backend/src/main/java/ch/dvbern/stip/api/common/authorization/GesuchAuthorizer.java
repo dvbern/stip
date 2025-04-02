@@ -125,10 +125,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
                 .getStatus()
         );
 
-        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
-            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
-            || benutzerCanEditAenderung.getAsBoolean();
-
         final BooleanSupplier isAdminOrSBCanEdit =
             () -> isAdminOrSb(currentBenutzer) && !GESUCHSTELLER_CAN_EDIT.contains(gesuchTranche.getStatus())
             && benutzerCanEditAenderung.getAsBoolean();
