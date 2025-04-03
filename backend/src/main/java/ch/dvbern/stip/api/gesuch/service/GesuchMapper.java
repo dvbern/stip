@@ -103,14 +103,21 @@ public abstract class GesuchMapper {
     boolean getCanGetBerechnung(Gesuch gesuch) {
         boolean canGetBerechnung = true;
 
-        try {
-            ValidatorUtil.validate(
-                validator,
-                gesuch.getLatestGesuchTranche().getGesuchFormular(),
-                List.of(SteuerdatenPageValidation.class, GesuchNachInBearbeitungSBValidationGroup.class)
-            );
-        } catch (ValidationsException e) {
+        if (gesuch.getAusbildung().isAusbildungNichtGefunden()) {
             canGetBerechnung = false;
+        }
+
+        for (var gesuchTranche : gesuch.getGesuchTranchen()) {
+            try {
+                ValidatorUtil.validate(
+                    validator,
+                    gesuchTranche.getGesuchFormular(),
+                    List.of(SteuerdatenPageValidation.class, GesuchNachInBearbeitungSBValidationGroup.class)
+                );
+            } catch (ValidationsException e) {
+                canGetBerechnung = false;
+                break;
+            }
         }
 
         return canGetBerechnung;

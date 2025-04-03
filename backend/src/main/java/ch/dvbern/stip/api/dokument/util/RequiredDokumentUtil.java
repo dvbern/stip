@@ -105,7 +105,7 @@ public class RequiredDokumentUtil {
             .stream()
             .filter(
                 gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
-                && gesuchDokument.getDokumente().size() > 0
+                && !gesuchDokument.getDokumente().isEmpty()
             )
             .count() > 0;
     }

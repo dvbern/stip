@@ -230,7 +230,7 @@
       "@dv/shared/util/maskito-util": ["libs/shared/util/maskito-util/src/index.ts"],
       "@dv/shared/util/paginator-translation": ["libs/shared/util/paginator-translation/src/index.ts"],
       "@dv/shared/util/remote-data": ["libs/shared/util/remote-data/src/index.ts"],
-      "@dv/shared/util/tenant-cache": ["libs/shared/util/tenant-cache/src/index.ts"],
+      "@dv/shared/util/tenant-config": ["libs/shared/util/tenant-config/src/index.ts"],
       "@dv/shared/util/unsaved-changes": ["libs/shared/util/unsaved-changes/src/index.ts"],
       "@dv/shared/util/validator-ahv": ["libs/shared/util/validator-ahv/src/index.ts"],
       "@dv/shared/util/validator-date": ["libs/shared/util/validator-date/src/index.ts"],

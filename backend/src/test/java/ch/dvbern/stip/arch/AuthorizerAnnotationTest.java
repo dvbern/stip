@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-public class AuthorizerAnnotationTest {
+class AuthorizerAnnotationTest {
     private static final Set<String> ANONYMOUS_METHODS = new HashSet<>(
         List.of(
             "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant",
