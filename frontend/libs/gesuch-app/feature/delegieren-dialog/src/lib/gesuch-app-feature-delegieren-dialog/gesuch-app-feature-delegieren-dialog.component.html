@@ -1,4 +1,4 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="p-4 rounded tw-relative tw-flex tw-w-full tw-max-w-[700px] tw-flex-col tw-rounded-sm tw-p-4">
   <button
     type="button"
     (click)="cancel()"
@@ -57,7 +57,6 @@
     <dv-shared-ui-form-address
       class="tw-col-span-full tw-w-full"
       [group]="form.controls.adresse"
-      [changes]="undefined"
       [laender]="laenderSig()"
       [language]="languageSig()"
     />

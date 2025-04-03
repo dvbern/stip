@@ -65,7 +65,6 @@ export interface DelegierenDialogResult {
     SharedUiFormAddressComponent,
   ],
   templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
-  styleUrl: './gesuch-app-feature-delegieren-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
@@ -93,7 +92,7 @@ export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
     return dialog.open<
       GesuchAppFeatureDelegierenDialogComponent,
       DelegierenDialogResult
-    >(GesuchAppFeatureDelegierenDialogComponent, { width: '700px' });
+    >(GesuchAppFeatureDelegierenDialogComponent);
   }
 
   form = this.formBuilder.group({
