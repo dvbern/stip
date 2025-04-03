@@ -59,6 +59,10 @@ public class GesuchTrancheValidatorService {
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
             List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
+        statusToValidationGroups.put(
+            GesuchTrancheStatus.IN_BEARBEITUNG_GS,
+            List.of(GesuchFehlendeDokumenteValidationGroup.class)
+        );
     }
 
     private final Validator validator;
