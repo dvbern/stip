@@ -29,9 +29,9 @@ class ValidateUpdateLegalityUtilTest {
     @CsvSource(
         {
             // role, dtoValue, existingValue, defaultValue, expected
-            "Gesuchsteller,1,2,0,2",
-            "Sachbearbeiter,1,2,0,1",
-            "Admin,1,2,0,1",
+            "V0_Gesuchsteller,1,2,0,2",
+            "V0_Sachbearbeiter,1,2,0,1",
+            "V0_Sachbearbeiter-Admin,1,2,0,1",
         }
     )
     @ParameterizedTest
@@ -56,9 +56,9 @@ class ValidateUpdateLegalityUtilTest {
     @CsvSource(
         {
             // role,dtoValue,defaultValue,expected
-            "Gesuchsteller,1,0,0",
-            "Sachbearbeiter,1,0,1",
-            "Admin,1,0,1"
+            "V0_Gesuchsteller,1,0,0",
+            "V0_Sachbearbeiter,1,0,1",
+            "V0_Sachbearbeiter-Admin,1,0,1"
         }
     )
     @ParameterizedTest
@@ -82,9 +82,9 @@ class ValidateUpdateLegalityUtilTest {
     @CsvSource(
         {
             // role,defaultValue,expected
-            "Gesuchsteller,0,0",
-            "Sachbearbeiter,0,0",
-            "Admin,0,0"
+            "V0_Gesuchsteller,0,0",
+            "V0_Sachbearbeiter,0,0",
+            "V0_Sachbearbeiter-Admin,0,0"
         }
     )
     @ParameterizedTest

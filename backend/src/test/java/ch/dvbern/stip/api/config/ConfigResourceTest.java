@@ -20,11 +20,11 @@ package ch.dvbern.stip.api.config;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.ConfigurationApiSpec;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class ConfigResourceTest {
     @Test
     void testGetDeploymentConfig() {
         var response = configurationApiSpec.getDeploymentConfig()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()

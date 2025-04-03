@@ -56,17 +56,7 @@ public class FallRepository implements BaseRepository<Fall> {
         return query.stream();
     }
 
-    public Optional<Fall> findFallForGsOptional(UUID gesuchstellerId) {
+    public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
-    }
-
-    public Optional<Fall> getFallForGesuchsteller(final UUID gesuchstellerId) {
-        final var fall = QFall.fall;
-
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(fall)
-            .where(fall.gesuchsteller.id.eq(gesuchstellerId))
-            .stream()
-            .findFirst();
     }
 }

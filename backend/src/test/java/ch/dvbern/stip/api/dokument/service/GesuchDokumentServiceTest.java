@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -45,6 +46,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -66,7 +68,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -104,6 +105,9 @@ class GesuchDokumentServiceTest {
 
     @Inject
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+
+    @Inject
+    GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     private final UUID id = UUID.randomUUID();
     @Inject
@@ -194,14 +198,6 @@ class GesuchDokumentServiceTest {
 
     @TestAsSachbearbeiter
     @Test
-    void getKommentareWhenNoEntriesExist(){
-        when(gesuchDokumentKommentarRepository.getByGesuchDokumentId(any())).thenReturn(null);
-        assertDoesNotThrow(() -> gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()));
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID()).size(), notNullValue());
-    }
-
-    @TestAsSachbearbeiter
-    @Test
     void akzeptierenCreatesCommentWithNull() {
         // Arrange
         mockedDokument = (GesuchDokument) new GesuchDokument()
@@ -229,7 +225,6 @@ class GesuchDokumentServiceTest {
         // Arrange
         final var gsDokService = new GesuchDokumentServiceMock(
             new GesuchDokumentMapperImpl(dokumentMapper, customDokumentMapper),
-            dokumentMapper,
             dokumentRepository,
             gesuchDokumentRepository,
             null,
@@ -239,13 +234,23 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new GesuchDokumentKommentarService(
                     null,
-                    gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
+                    gesuchDokumentKommentarRepository,
+                    null,
+                    new GesuchDokumentKommentarMapperImpl(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
                 ),
                 null
             ),
             null,
             null,
-            null, null
+            null,
+            null,
+            null,
+            null
         );
 
         gesuchDokumente = new HashMap<>();
@@ -325,7 +330,7 @@ class GesuchDokumentServiceTest {
         // send missing files to GS
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertThrows(
-            ForbiddenException.class,
+            jakarta.ws.rs.ForbiddenException.class,
             () -> customGesuchDokumentTypAuthorizer
                 .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
@@ -334,7 +339,6 @@ class GesuchDokumentServiceTest {
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
         public GesuchDokumentServiceMock(
         GesuchDokumentMapper gesuchDokumentMapper,
-        DokumentMapper dokumentMapper,
         DokumentRepository dokumentRepository,
         GesuchDokumentRepository gesuchDokumentRepository,
         GesuchRepository gesuchRepository,
@@ -345,11 +349,12 @@ class GesuchDokumentServiceTest {
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
-        RequiredDokumentService requiredDokumentService
+        RequiredDokumentService requiredDokumentService,
+        GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository,
+        DokumentHistoryRepository dokumentHistoryRepository
         ) {
             super(
                 gesuchDokumentMapper,
-                dokumentMapper,
                 dokumentRepository,
                 gesuchDokumentRepository,
                 customDocumentTypRepository,
@@ -360,7 +365,9 @@ class GesuchDokumentServiceTest {
                 dokumentstatusService,
                 requiredDokumentService,
                 antivirus,
-                gesuchDokumentKommentarRepository
+                gesuchDokumentKommentarRepository,
+                gesuchTrancheHistoryRepository,
+                dokumentHistoryRepository
             );
         }
 

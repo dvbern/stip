@@ -18,13 +18,11 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +35,32 @@ public class FallAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
 
-    @Transactional
-    public void canRead(final UUID fallId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+    public void canCreate() {
+        permitAll();
+    }
 
-        // Admins and Sachbearbeiter can always read every Fall
-        if (isAdminOrSb(currentBenutzer)) {
+    @Transactional
+    public void sbCanGet() {
+        if (isAdminSbOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
 
-        final var fall = fallRepository.requireById(fallId);
+        forbidden();
+    }
+
+    @Transactional
+    public void gsCanGet() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!isGesuchsteller(currentBenutzer)) {
+            forbidden();
+        }
+
+        final var fallOpt = fallRepository.findFallForGsOptional(currentBenutzer.getId());
+        if (fallOpt.isEmpty()) {
+            return;
+        }
+
+        final var fall = fallOpt.get();
         if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)) {
             return;
         }
@@ -56,6 +70,6 @@ public class FallAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 }

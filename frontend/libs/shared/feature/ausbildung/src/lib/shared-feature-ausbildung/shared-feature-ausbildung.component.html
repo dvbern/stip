@@ -319,7 +319,12 @@
 
     @if (isEditableSig()) {
       <div class="md:tw-col-span-2 lg:tw-col-span-3">
-        <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="form.invalid">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          data-testid="button-save"
+          [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending)"
+        >
           {{ 'shared.form.save' | translate }}
         </button>
       </div>

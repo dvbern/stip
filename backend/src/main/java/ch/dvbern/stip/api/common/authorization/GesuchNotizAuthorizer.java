@@ -25,8 +25,8 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -37,33 +37,41 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final GesuchStatusService gesuchStatusService;
 
+    public void canGet() {
+        permitAll();
+    }
+
+    @Transactional
     public void canUpdate(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (notiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ)) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 
+    @Transactional
     public void canDelete(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (notiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ)) {
-            throw new ForbiddenException();
+            forbidden();
         }
         canUpdate(notizId);
     }
 
+    @Transactional
     public void canSetAnswer(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (Objects.nonNull(notiz.getAntwort())) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 
+    @Transactional
     public void canCreate(final UUID gesuchId, final GesuchNotizTyp typ) {
         if (typ == GesuchNotizTyp.JURISTISCHE_NOTIZ) {
             final var gesuch = gesuchRepository.requireById(gesuchId);
             if (!gesuchStatusService.canFire(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG)) {
-                throw new ForbiddenException();
+                forbidden();
             }
         }
     }

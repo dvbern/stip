@@ -48,7 +48,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -144,7 +143,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -213,7 +212,7 @@ class GesuchTrancheCreateTest {
         addDocument(tranchen.getTranchen().get(1).getId());
 
         var documentsToUploadOfTranche1 =
-            gesuchTrancheApiSpec.getDocumentsToUpload()
+            gesuchTrancheApiSpec.getDocumentsToUploadSB()
                 .gesuchTrancheIdPath(tranchen.getTranchen().get(0).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
@@ -222,7 +221,7 @@ class GesuchTrancheCreateTest {
                 .as(DokumenteToUploadDtoSpec.class);
         assertThat(documentsToUploadOfTranche1.getRequired().size(), is(0));
         var documentsToUploadOfTranche2 =
-            gesuchTrancheApiSpec.getDocumentsToUpload()
+            gesuchTrancheApiSpec.getDocumentsToUploadSB()
                 .gesuchTrancheIdPath(tranchen.getTranchen().get(1).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
@@ -232,7 +231,7 @@ class GesuchTrancheCreateTest {
         assertThat(documentsToUploadOfTranche2.getRequired().size(), is(1));
 
         // verify that the superflous document only gets deleted on the correct tranche - not on both...
-        var dokumentsOfTranche1 = gesuchTrancheApiSpec.getGesuchDokumente()
+        var dokumentsOfTranche1 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(tranchen.getTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -241,7 +240,7 @@ class GesuchTrancheCreateTest {
             .extract()
             .body()
             .as(GesuchDokumentDto[].class);
-        var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumente()
+        var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(tranchen.getTranchen().get(1).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -293,7 +292,7 @@ class GesuchTrancheCreateTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
@@ -313,7 +312,7 @@ class GesuchTrancheCreateTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());

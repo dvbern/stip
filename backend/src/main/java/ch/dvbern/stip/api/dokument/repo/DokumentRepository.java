@@ -25,5 +25,4 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DokumentRepository implements BaseRepository<Dokument> {
-
 }

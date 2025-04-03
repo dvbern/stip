@@ -128,7 +128,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         // act
-        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
 
@@ -141,7 +141,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(true));
 
@@ -149,7 +149,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of(new CustomDokumentTyp()));
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
     }
@@ -166,7 +166,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuch.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
         // act
-        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
@@ -180,7 +180,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
@@ -190,7 +190,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
 
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
@@ -201,7 +201,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.ABGELEHNT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
@@ -212,14 +212,14 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         tranche2.setTyp(GesuchTrancheTyp.AENDERUNG);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
         // arrange
         tranche2.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
@@ -230,7 +230,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setDokumente(List.of(new Dokument()));
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
@@ -243,7 +243,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
     }
@@ -262,7 +262,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
-        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(true));
 
@@ -272,7 +272,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.ABGELEHNT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
 
@@ -285,7 +285,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
 
@@ -299,7 +299,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
         gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
         // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUpload(tranche1.getId());
+        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
     }

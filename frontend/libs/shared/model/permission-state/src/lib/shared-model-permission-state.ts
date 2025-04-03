@@ -98,10 +98,11 @@ export const permissionTableByAppType = {
  * @see {@link permissionTableByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WD   ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF  ', [sb]: '     ' },
   UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
+  FEHLENDE_DOKUMENTE: /** */ { [gs]: ' D   ', [sb]: '     ' },
   AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
-  ABGELEHNT: /**          */ { [gs]: 'W    ', [sb]: '     ' },
+  ABGELEHNT: /**          */ { [gs]: 'WD   ', [sb]: '     ' },
   MANUELLE_AENDERUNG: /** */ { [gs]: '     ', [sb]: '     ' },
 } as const satisfies Record<
   GesuchTrancheStatus,
@@ -114,16 +115,20 @@ export const preparePermissions = (
   appType: AppType | undefined,
   rolesMap: RolesMap,
 ) => {
-  if (!gesuch || !appType) return { readonly: false, permissions: {} };
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
-  const tranchePermissions = getTranchePermissions(gesuch, appType, rolesMap);
-  const permissions =
-    trancheTyp === 'AENDERUNG' ? tranchePermissions : gesuchPermissions;
+  if (!gesuch || !appType)
+    return { readonly: false, permissions: {} as PermissionMap };
+  const getPermissions = {
+    TRANCHE: () => getGesuchPermissions(gesuch, appType, rolesMap),
+    AENDERUNG: () => getTranchePermissions(gesuch, appType, rolesMap),
+    INITIAL: () => getGesuchPermissions(gesuch, appType, rolesMap),
+  } satisfies Record<GesuchUrlType, unknown>;
+  const { permissions, status } = getPermissions[trancheTyp ?? 'TRANCHE']();
   const canWrite = permissions.canWrite ?? true;
 
   return {
     readonly: trancheTyp === 'INITIAL' || !canWrite,
     permissions,
+    isFehlendeDokumente: status === 'FEHLENDE_DOKUMENTE',
   };
 };
 
@@ -137,12 +142,20 @@ export const getGesuchPermissions = (
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
-): PermissionMap => {
-  if (!gesuch || !appType) return {};
+): { permissions: PermissionMap; status?: Gesuchstatus } => {
+  if (!gesuch || !appType) return { permissions: {} };
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
   const permissions = parsePermissions(state);
-  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
+  return {
+    permissions: applyDelegatedPermission(
+      permissions,
+      gesuch,
+      appType,
+      rolesMap,
+    ),
+    status: gesuch.gesuchStatus,
+  };
 };
 
 /**
@@ -155,15 +168,23 @@ export const getTranchePermissions = (
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
-): PermissionMap => {
-  if (!gesuch || !appType) return {};
+): { permissions: PermissionMap; status?: GesuchTrancheStatus } => {
+  if (!gesuch || !appType) return { permissions: {} };
 
   const state =
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
     ];
   const permissions = parsePermissions(state);
-  return applyDelegatedPermission(permissions, gesuch, appType, rolesMap);
+  return {
+    permissions: applyDelegatedPermission(
+      permissions,
+      gesuch,
+      appType,
+      rolesMap,
+    ),
+    status: gesuch.gesuchTrancheToWorkWith.status,
+  };
 };
 
 /**
@@ -183,10 +204,9 @@ export const canCurrentlyEdit = (
   }
 
   return (
-    // OK if it is not delegated and current user is not a sozialdienst-mitarbeiter
-    (!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] !== true) ||
+    !delegierung ||
     // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-    (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
+    (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
   );
 };
 
@@ -209,4 +229,22 @@ const applyDelegatedPermission = (
     canUploadDocuments: false,
     canFreigeben: false,
   };
+};
+
+/**
+ * Used to define values that are accessed by the app type
+ *
+ * @example
+ * ```ts
+ * byAppType(this.config.appType, {
+ *   'gesuch-app': () => this.trancheService.getGesuchDokumenteGS$(...),
+ *   'sachbearbeitung-app': () => this.trancheService.getGesuchDokumenteSB$(...),
+ * })()
+ * ```
+ */
+export const byAppType = <R>(
+  appType: AppType,
+  map: Record<AppType, () => R>,
+) => {
+  return map[appType]();
 };

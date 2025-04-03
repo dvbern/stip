@@ -18,7 +18,9 @@
 package ch.dvbern.stip.api.fall.service;
 
 import java.util.List;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.IdEncryptionService;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -58,6 +60,11 @@ public class FallService {
         return fallMapper.toDto(
             fallRepository.findFallForGsOptional(gesuchstellerId).orElse(null)
         );
+    }
+
+    public boolean hasAktiveAusbildung(final UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+        return fall.getAusbildungs().stream().anyMatch(ausbildung -> ausbildung.getStatus() == AusbildungsStatus.AKTIV);
     }
 
     private String createFallNummer() {

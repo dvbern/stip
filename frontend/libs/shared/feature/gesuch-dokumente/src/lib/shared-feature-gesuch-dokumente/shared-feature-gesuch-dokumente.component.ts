@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -72,8 +73,8 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private destroyRef = inject(DestroyRef);
   private config = inject(SharedModelCompileTimeConfig);
+  private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -204,7 +205,10 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        filter(() => this.config.isSachbearbeitungApp),
+      )
       .subscribe((gesuchId) => {
         this.dokumentsStore.getAdditionalDokumente$({
           gesuchId,
@@ -314,25 +318,31 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
+        tranchenTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          // Also load the required documents again
+          this.dokumentsStore.getDokumenteAndRequired$({
+            gesuchTrancheId: trancheId,
+          });
         },
       });
     }
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
         trancheId,
+        trancheTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

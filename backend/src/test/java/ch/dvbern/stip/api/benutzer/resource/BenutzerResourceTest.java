@@ -28,12 +28,12 @@ import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungSt
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.hamcrest.MatcherAssert;
@@ -68,7 +68,7 @@ class BenutzerResourceTest {
     @Order(1)
     void test_get_me() {
         final var benutzerDto = api.prepareCurrentBenutzer()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -87,7 +87,7 @@ class BenutzerResourceTest {
     @Order(2)
     void test_get_me2() {
         final var benutzerDto = api.prepareCurrentBenutzer()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -104,7 +104,7 @@ class BenutzerResourceTest {
     @TestAsSachbearbeiter
     void findSachbearbeitende() {
         var sachbearbeiterListe = api.getSachbearbeitende()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -122,12 +122,12 @@ class BenutzerResourceTest {
         api.createOrUpdateSachbearbeiterStammdaten()
             .benutzerIdPath(sachbearbeiterUUID)
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         var sachbearbeiterListe = api.getSachbearbeitende()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -154,12 +154,12 @@ class BenutzerResourceTest {
 
         api.createOrUpdateSachbearbeiterStammdatenList()
             .body(updateDtos)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         final var sachbearbeiterListe = api.getSachbearbeitende()
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -172,7 +172,7 @@ class BenutzerResourceTest {
         );
         final var myZuordnung = api.getSachbearbeiterStammdaten()
             .benutzerIdPath(me.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())

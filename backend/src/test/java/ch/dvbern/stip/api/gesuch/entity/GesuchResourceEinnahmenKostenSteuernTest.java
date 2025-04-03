@@ -31,7 +31,6 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -75,7 +74,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     void gesuchTrancheCreated() {
         gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -119,13 +118,13 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()

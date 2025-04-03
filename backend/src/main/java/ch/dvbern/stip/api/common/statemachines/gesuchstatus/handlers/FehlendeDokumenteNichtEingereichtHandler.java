@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class FehlendeDokumenteNichtEingereichtHandler implements GesuchStatusStateChangeHandler {
     private final NotificationService notificationService;
     private final MailService mailService;
+    private final GesuchService gesuchService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -42,7 +44,9 @@ public class FehlendeDokumenteNichtEingereichtHandler implements GesuchStatusSta
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
+        gesuch.setNachfristDokumente(null);
         gesuch.setEinreichedatum(null);
+        gesuchService.resetGesuchZurueckweisen(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 }

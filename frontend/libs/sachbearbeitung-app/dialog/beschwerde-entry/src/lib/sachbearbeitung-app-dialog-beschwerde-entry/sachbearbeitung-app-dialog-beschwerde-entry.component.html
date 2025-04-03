@@ -1,0 +1,45 @@
+<section class="tw-relative tw-flex tw-shrink tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="close()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ 'sachbearbeitung-app.infos.beschwerde.infoDialog.title' | translate }}
+  </h1>
+  <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.beschwerde.datum' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.beschwerde.user' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.userErstellt }}</dd>
+
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.beschwerde.title' | translate }}
+    </dt>
+    <dd class="tw-font-normal">
+      {{ 'sachbearbeitung-app.infos.beschwerde.title.' + dialogData.beschwerdeSetTo | translate }}
+    </dd>
+
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.beschwerde.kommentar' | translate }}
+    </dt>
+    <dd
+      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-h-[50dvh] tw-max-w-[520px] tw-overflow-auto tw-whitespace-pre-wrap tw-break-words tw-font-normal"
+      [innerText]="dialogData.kommentar"
+    ></dd>
+  </dl>
+
+  <div class="tw-mt-10 tw-flex tw-justify-end">
+    <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
+      {{ 'shared.close' | translate }}
+    </button>
+  </div>
+</section>

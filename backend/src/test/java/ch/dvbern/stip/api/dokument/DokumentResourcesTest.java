@@ -42,10 +42,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -104,7 +100,7 @@ class DokumentResourcesTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
@@ -131,7 +127,6 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(3)
     void test_create_dokument_for_gesuch() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_FILE_LOCATION);
         dokumentApiSpec.createDokument();
         given()
@@ -149,10 +144,10 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(4)
     void test_list_and_read_dokument_for_gesuch() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getGesuchDokumenteForTyp()
+        var dokumentDtoList = dokumentApiSpec.getGesuchDokumentForTypSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -166,7 +161,7 @@ class DokumentResourcesTest {
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -177,7 +172,7 @@ class DokumentResourcesTest {
         dokumentApiSpec.getDokument()
             .tokenQuery(token)
             .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -190,7 +185,7 @@ class DokumentResourcesTest {
     void test_delete_dokument() {
         dokumentApiSpec.deleteDokument()
             .dokumentIdPath(dokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }

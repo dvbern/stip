@@ -25,6 +25,8 @@ import lombok.Getter;
 
 @Getter
 public class ValidationsException extends RuntimeException {
+    public static final String ENTITY_NOT_VALID_MESSAGE = "Die Entität ist nicht valid";
+
     private final transient Set<ConstraintViolation<?>> violations;
 
     public ValidationsException(String message, Set<? extends ConstraintViolation<?>> violations) {

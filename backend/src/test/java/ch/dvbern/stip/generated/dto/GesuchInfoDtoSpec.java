@@ -35,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG,
+  GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -57,6 +58,9 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_GET_BERECHNUNG = "canGetBerechnung";
   private Boolean canGetBerechnung;
+
+  public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
+  private Boolean beschwerdeHaengig;
 
   public GesuchInfoDtoSpec() {
   }
@@ -216,6 +220,32 @@ public class GesuchInfoDtoSpec {
     this.canGetBerechnung = canGetBerechnung;
   }
 
+
+  public GesuchInfoDtoSpec beschwerdeHaengig(Boolean beschwerdeHaengig) {
+    
+    this.beschwerdeHaengig = beschwerdeHaengig;
+    return this;
+  }
+
+   /**
+   * Get beschwerdeHaengig
+   * @return beschwerdeHaengig
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getBeschwerdeHaengig() {
+    return beschwerdeHaengig;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
+    this.beschwerdeHaengig = beschwerdeHaengig;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -230,12 +260,13 @@ public class GesuchInfoDtoSpec {
         Objects.equals(this.gesuchStatus, gesuchInfo.gesuchStatus) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
-        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung);
+        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
+        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig);
   }
 
   @Override
@@ -248,6 +279,7 @@ public class GesuchInfoDtoSpec {
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
+    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("}");
     return sb.toString();
   }
