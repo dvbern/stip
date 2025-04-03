@@ -103,7 +103,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   isBeschwerdeHaengigSig = computed(() => {
     const beschwerdeHaengig =
       this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
-    console.log('beschwerdeHaengig', { beschwerdeHaengig });
     return beschwerdeHaengig;
   });
   isLoadingSig = computed(() => {
