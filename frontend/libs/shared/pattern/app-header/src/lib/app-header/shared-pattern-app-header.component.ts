@@ -31,7 +31,7 @@ import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
-import { SharedUtilTenantCacheService } from '@dv/shared/util/tenant-cache';
+import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
   selector: 'dv-shared-pattern-app-header',
@@ -65,7 +65,7 @@ export class SharedPatternAppHeaderComponent {
   private oauthService = inject(OAuthService);
   private store = inject(Store);
   private cd = inject(ChangeDetectorRef);
-  private tenantCacheService = inject(SharedUtilTenantCacheService);
+  private tenantCacheService = inject(SharedUtilTenantConfigService);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   languageSig = this.store.selectSignal(selectLanguage);
