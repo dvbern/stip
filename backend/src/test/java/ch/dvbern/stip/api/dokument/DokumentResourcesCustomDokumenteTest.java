@@ -37,7 +37,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
@@ -51,12 +50,9 @@ import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -66,7 +62,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -145,7 +140,7 @@ class DokumentResourcesCustomDokumenteTest {
         customDokumentTypCreateDtoSpec.setTrancheId(gesuchTrancheId);
         final var createdGesuchDokumentWithCustomType = dokumentApiSpec.createCustomDokumentTyp()
             .body(customDokumentTypCreateDtoSpec)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -159,9 +154,9 @@ class DokumentResourcesCustomDokumenteTest {
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
 
-        final var result = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+        final var result = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .statusCode(Status.OK.getStatusCode())
             .extract()
@@ -176,17 +171,17 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        final var result = requiredDocuments.getCustomDokumentTyps();
-        assertThat(result.size(), is(greaterThan(0)));
+        var result = requiredDocuments.getCustomDokumentTyps();
+        assertThat(result.size(), is(0));
     }
 
     // testAsGS
@@ -195,7 +190,6 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(8)
     void test_upload_custom_gesuchdokuments() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
     }
@@ -206,9 +200,9 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(9)
     void test_get_required_custom_gesuchdokuments_should_not_appear() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -227,64 +221,26 @@ class DokumentResourcesCustomDokumenteTest {
     void test_delete_required_custom_gesuchdokument_typ_should_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
             .customDokumentTypIdPath(customDokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-
-        assertThat(customDocumentTypes.length, is(greaterThan(0)));
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(11)
-    void test_read_custom_gesuchdokument() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+    void test_read_custom_gesuchdokument_null() throws IOException {
+        var nullableDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(customDokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
             .as(NullableGesuchDokumentDtoSpec.class)
-            .getValue()
-            .getDokumente();
+            .getValue();
 
-        assertThat(dokumentDtoList.size(), is(1));
-
-        dokumentId = dokumentDtoList.get(0).getId();
-
-        final var token = dokumentApiSpec.getDokumentDownloadToken()
-            .dokumentIdPath(dokumentId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(FileDownloadTokenDtoSpec.class)
-            .getToken();
-
-        final var actualFileContent = dokumentApiSpec.getDokument()
-            .tokenQuery(token)
-            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .asString();
-
-        final var expectedFileContent = readPngFileData();
-        assertThat(expectedFileContent, is(actualFileContent));
+        assertThat(nullableDokumentDto, Matchers.nullValue());
     }
 
     @Test
@@ -294,7 +250,7 @@ class DokumentResourcesCustomDokumenteTest {
         var allDokTypesExceptOne = Arrays.stream(DokumentTypDtoSpec.values()).toList();
         var modifiableDokTypeList = new ArrayList<>(allDokTypesExceptOne);
         modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumenteForTyp()
+            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
                 .dokumentTypPath(dokType)
                 .gesuchTrancheIdPath(gesuchTrancheId)
                 .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -326,22 +282,64 @@ class DokumentResourcesCustomDokumenteTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
+    @Test
+    @TestAsGesuchsteller
+    @Order(14)
+    void test_read_custom_gesuchdokument() throws IOException {
+        var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDtoSpec.class)
+            .getValue()
+            .getDokumente();
+
+        assertThat(dokumentDtoList.size(), is(1));
+
+        dokumentId = dokumentDtoList.get(0).getId();
+
+        final var token = dokumentApiSpec.getDokumentDownloadToken()
+            .dokumentIdPath(dokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(FileDownloadTokenDtoSpec.class)
+            .getToken();
+
+        final var actualFileContent = dokumentApiSpec.getDokument()
+            .tokenQuery(token)
+            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .asString();
+
+        final var expectedFileContent = readPngFileData();
+        assertThat(expectedFileContent, is(actualFileContent));
+    }
+
     // testAsGS
     // delete file
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
     void test_delete_required_custom_gesuchdokuments() {
         dokumentApiSpec.deleteDokument()
             .dokumentIdPath(dokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
     @TestAsAdmin
-    @Order(15)
+    @Order(16)
     void delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
@@ -351,7 +349,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void reset() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
@@ -360,14 +358,14 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void fillGesuch_2() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(19)
     void gesuchEinreichen_2() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -379,7 +377,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(19)
+    @Order(20)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -399,28 +397,17 @@ class DokumentResourcesCustomDokumenteTest {
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(20)
+    @Order(21)
     void test_delete_required_custom_gesuchdokument_should_success() {
         // first, prepare a new custom gesuch dokument type
         test_create_custom_gesuchdokument();
 
         dokumentApiSpec.deleteCustomDokumentTyp()
             .customDokumentTypIdPath(customDokumentId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(customDocumentTypes.length, is(0));
     }
 
     // testAsGS
@@ -428,11 +415,11 @@ class DokumentResourcesCustomDokumenteTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(21)
+    @Order(22)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())

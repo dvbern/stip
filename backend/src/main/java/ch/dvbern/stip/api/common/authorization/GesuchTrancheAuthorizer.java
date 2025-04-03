@@ -17,20 +17,22 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -59,7 +61,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -86,6 +88,47 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
+        forbidden();
+    }
+
+    @Transactional
+    public void canFehlendeDokumenteUebermitteln(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+
+        var someGesuchDokumentsNotAcceptedOrRejected = gesuch.getGesuchTranchen()
+            .stream()
+            .anyMatch(
+                gesuchTranche1 -> gesuchTranche1.getGesuchDokuments()
+                    .stream()
+                    .anyMatch(
+                        gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND
+                        && !gesuchDokument.getDokumente().isEmpty()
+                    )
+            );
+
+        if (someGesuchDokumentsNotAcceptedOrRejected) {
+            throw new ForbiddenException();
+        }
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isAdminOrSb(currentBenutzer)) {
+            throw new UnauthorizedException();
+        }
+
+        if (
+            (Objects.requireNonNull(gesuchTranche.getTyp()) == GesuchTrancheTyp.TRANCHE)
+            && (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB)
+        ) {
+            return;
+        }
+        if (
+            (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        ) {
+            return;
+        }
+
         throw new UnauthorizedException();
     }
 
@@ -94,7 +137,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         canRead(gesuchTrancheId);
         final var aenderung = gesuchTrancheRepository.requireAenderungById(gesuchTrancheId);
         if (!GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(aenderung.getStatus())) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -111,14 +154,32 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
         // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (!isAuthorizedForCurrentOperation) {
-            throw new UnauthorizedException();
+            forbidden();
         }
 
         if (
             (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) ||
             (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)
         ) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void canAenderungFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        if (
+            !(AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+                gesuchTranche.getGesuch(),
+                sozialdienstService
+            )
+            || AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuchTranche.getGesuch()))
+        ) {
             throw new UnauthorizedException();
+        }
+        if (gesuchTranche.getStatus() != GesuchTrancheStatus.FEHLENDE_DOKUMENTE) {
+            throw new ForbiddenException();
         }
     }
 
@@ -129,11 +190,11 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             gesuchTranche.getGesuchDokuments()
                 .stream()
                 .anyMatch(
-                    gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                    gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND
                     && gesuchDokument.getDokumente().isEmpty()
                 )
         ) {
-            throw new ForbiddenException();
+            forbidden();
         }
     }
 }

@@ -68,7 +68,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
     getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
-        this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });
@@ -110,11 +110,12 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   fehlendeDokumenteEinreichen() {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId, trancheSetting } = this.gesuchViewSig();
 
-    if (trancheId) {
+    if (trancheId && trancheSetting) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
+        tranchenTyp: trancheSetting.type,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

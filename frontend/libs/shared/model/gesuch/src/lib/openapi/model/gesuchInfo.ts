@@ -18,6 +18,7 @@ export interface GesuchInfo {
     startDate: string;
     endDate: string;
     canGetBerechnung: boolean;
+    beschwerdeHaengig: boolean;
 }
 
 

@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -37,11 +38,14 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
     user = "jurist",
     roles = {
         OidcConstants.ROLE_JURIST,
-        "AUSBILDUNG_CREATE",
-        "AUSBILDUNG_READ",
-        "AUSBILDUNG_UPDATE",
-        "AUSBILDUNG_DELETE",
-        "GESUCH_READ"
+        OidcPermissions.NOTIZ_CREATE,
+        OidcPermissions.NOTIZ_UPDATE,
+        OidcPermissions.STAMMDATEN_CREATE,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.STAMMDATEN_UPDATE,
+        OidcPermissions.STAMMDATEN_DELETE,
+        OidcPermissions.JURIST_GESUCH_READ,
+        "default-roles-bern"
     }
 )
 @OidcSecurity(

@@ -36,6 +36,13 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
+        path: BESCHWERDEN_ROUTE.route + '/:id',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/infos-beschwerde').then(
+            (m) => m.sachbearbeitungAppFeatureInfosBeschwerdeRoutes,
+          ),
+      },
+      {
         path: BUCHHALTUNG_ROUTE.route + '/:id',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-buchhaltung').then(
@@ -44,10 +51,6 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
       },
       {
         path: DARLEHEN_ROUTE.route + '/:id',
-        component: SharedUiCommingSoonComponent,
-      },
-      {
-        path: BESCHWERDEN_ROUTE.route + '/:id',
         component: SharedUiCommingSoonComponent,
       },
       {

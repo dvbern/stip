@@ -19,13 +19,11 @@ package ch.dvbern.stip.api.stammdaten.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
 class StammdatenResourceImplTest {
@@ -40,7 +38,7 @@ class StammdatenResourceImplTest {
 
     @TestAsSachbearbeiter
     @Test
-    void getLaenderasBS() {
-        assertThrows(ForbiddenException.class, () -> stammdatenResource.getLaender());
+    void getLaenderasSB() {
+        assertNotNull(stammdatenResource.getLaender());
     }
 }

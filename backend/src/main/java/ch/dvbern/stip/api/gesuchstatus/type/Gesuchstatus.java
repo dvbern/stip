@@ -45,8 +45,19 @@ public enum Gesuchstatus {
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE =
-        EnumSet.of(IN_BEARBEITUNG_GS, FEHLENDE_DOKUMENTE);
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_UPLOAD_DOCUMENT = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE
+        )
+    );
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
@@ -57,7 +68,13 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.of(
-                IN_BEARBEITUNG_SB
+                IN_BEARBEITUNG_SB,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                VERSANDBEREIT,
+                VERSENDET,
+                NICHT_ANSPRUCHSBERECHTIGT
             )
         );
 
@@ -116,7 +133,8 @@ public enum Gesuchstatus {
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH,
             Gesuchstatus.GESUCH_ABGELEHNT,
-            Gesuchstatus.NEGATIVE_VERFUEGUNG
+            Gesuchstatus.NEGATIVE_VERFUEGUNG,
+            Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT
         )
     );
 
@@ -154,7 +172,23 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR = Collections.unmodifiableSet(
+        EnumSet.of(
+            BEREIT_FUER_BEARBEITUNG,
+            IN_BEARBEITUNG_SB,
+            JURISTISCHE_ABKLAERUNG,
+            IN_FREIGABE,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            VERSANDBEREIT,
+            VERFUEGT,
+            VERSENDET,
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }
+
 }

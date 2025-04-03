@@ -188,6 +188,7 @@ public class SozialdienstBenutzerService {
             welcomeMailDto.setEmail(sozialdienstBenutzer.getEmail());
             welcomeMailDto.setRedirectUri(sozialdienstBenutzerCreateDto.getRedirectUri());
             mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
+            // todo KSTIP-????:
             // keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
 
             return sozialdienstBenutzerMapper.toDto(sozialdienstBenutzer);

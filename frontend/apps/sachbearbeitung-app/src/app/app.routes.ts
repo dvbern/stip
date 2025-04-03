@@ -6,13 +6,6 @@ import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
-    path: 'sachbearbeitung-app-feature-infos-admin',
-    loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/infos-admin').then(
-        (m) => m.sachbearbeitungAppFeatureInfosAdminRoutes,
-      ),
-  },
-  {
     path: 'unauthorized',
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/unauthorized').then(
@@ -24,37 +17,22 @@ export const appRoutes: Route[] = [
     canActivate: [
       hasBenutzer,
       hasRoles(
-        ['Admin', 'Jurist', 'Sachbearbeiter', 'Sozialdienst-Admin'],
+        [
+          'V0_Sachbearbeiter-Admin',
+          'V0_Jurist',
+          'V0_Sachbearbeiter',
+          'V0_Sozialdienst-Admin',
+        ],
         '/unauthorized',
       ),
     ],
     children: [
       {
-        path: 'sachbearbeitung-app-feature-infos-notizen',
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
-            (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,
-          ),
-      },
-      {
-        path: 'sachbearbeitung-app-feature-administration-sozialdienst',
-        loadChildren: () =>
-          import(
-            '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
-          ).then(
-            (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
-          ),
-      },
-      {
-        path: 'sachbearbeitung-app-feature-infos-protokoll',
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/infos-protokoll').then(
-            (m) => m.sachbearbeitungAppFeatureInfosProtokollRoutes,
-          ),
-      },
-      {
         path: 'administration',
-        canActivate: [hasBenutzer, hasRoles(['Admin', 'Sozialdienst-Admin'])],
+        canActivate: [
+          hasBenutzer,
+          hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Sozialdienst-Admin']),
+        ],
         title: 'sachbearbeitung-app.admin.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/administration').then(
@@ -69,7 +47,7 @@ export const appRoutes: Route[] = [
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,
-          hasRoles(['Sachbearbeiter'], '/administration'),
+          hasRoles(['V0_Sachbearbeiter', 'V0_Jurist'], '/administration'),
         ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>

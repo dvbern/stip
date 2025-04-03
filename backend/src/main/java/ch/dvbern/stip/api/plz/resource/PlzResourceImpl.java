@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.plz.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.PlzAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.generated.api.PlzResource;
@@ -36,12 +36,13 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 @Slf4j
 @Validated
 public class PlzResourceImpl implements PlzResource {
+    private final PlzAuthorizer plzAuthorizer;
     private final PlzService plzService;
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<PlzDto> getPlz() {
+        plzAuthorizer.canGet();
         return plzService.getAllPlz();
     }
 }

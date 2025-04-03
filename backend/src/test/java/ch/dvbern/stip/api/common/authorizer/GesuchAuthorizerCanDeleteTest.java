@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.UnauthorizedException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -126,7 +126,7 @@ class GesuchAuthorizerCanDeleteTest {
     void canReadChangesTest() {
         // arrange
         final var uuid = UUID.randomUUID();
-        assertThrows(UnauthorizedException.class, () -> authorizer.canReadChanges(uuid));
+        assertThrows(ForbiddenException.class, () -> authorizer.canReadChanges(uuid));
 
         when(benutzerService.getCurrentBenutzer()).thenReturn(sbBenutzer);
 
@@ -156,7 +156,7 @@ class GesuchAuthorizerCanDeleteTest {
         final var uuid = UUID.randomUUID();
 
         // assert
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             authorizer.canDelete(uuid);
         });
     }

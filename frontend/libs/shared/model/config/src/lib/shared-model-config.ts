@@ -20,3 +20,9 @@ export class SharedModelCompileTimeConfig {
 }
 
 export const SHARED_MODEL_CONFIG_RESOURCE = `/config/deployment`;
+
+export const tenantKeys = ['bern', 'dv'] as const;
+export type TenantKey = (typeof tenantKeys)[number];
+export const isTenantKey = (key: string): key is TenantKey => {
+  return tenantKeys.includes(key as TenantKey);
+};
