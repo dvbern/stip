@@ -135,7 +135,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
         if (
             isMitarbeiterAndCanEdit.getAsBoolean()
-            || isGesuchstellerAndCanEdit.getAsBoolean() && !isAdminOrSb(currentBenutzer)
+            || isGesuchstellerAndCanEdit.getAsBoolean()
         ) {
             return;
         }
@@ -144,7 +144,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     private void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {

@@ -39,10 +39,10 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import io.quarkus.security.UnauthorizedException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,7 +114,7 @@ class GesuchAuthorizerUpdateAenderungTest {
 
         GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
-            assertThrows(UnauthorizedException.class, () -> {
+            assertThrows(ForbiddenException.class, () -> {
                 gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
             });
 
@@ -128,13 +128,13 @@ class GesuchAuthorizerUpdateAenderungTest {
         });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
 
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
 
         });
@@ -156,7 +156,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzer);
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
         });
     }
@@ -176,20 +176,20 @@ class GesuchAuthorizerUpdateAenderungTest {
 
         SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
-            assertThrows(UnauthorizedException.class, () -> {
+            assertThrows(ForbiddenException.class, () -> {
                 gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
 
             });
         });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
 
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
 
         });
