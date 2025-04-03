@@ -18,11 +18,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
-import { debounceTime, map } from 'rxjs';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { debounceTime, map, startWith } from 'rxjs';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { SharedModelBenutzer } from '@dv/shared/model/benutzer';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -37,6 +38,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 const INPUT_DELAY = 600;
+const ROLE_TRANSATION_PREFIX = 'shared.role.';
 
 @Component({
   standalone: true,
@@ -68,6 +70,7 @@ const INPUT_DELAY = 600;
 export class BenutzerOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
+  private translate = inject(TranslateService);
   store = inject(BenutzerverwaltungStore);
   destroyRef = inject(DestroyRef);
 
@@ -88,26 +91,44 @@ export class BenutzerOverviewComponent {
       map(() => this.filterForm.getRawValue()),
     ),
   );
+  private rolesTranslationsSig = toSignal(
+    this.translate.onLangChange.pipe(
+      startWith({
+        translations:
+          this.translate.translations[
+            this.translate.currentLang ?? this.translate.defaultLang
+          ],
+      }),
+      map(({ translations }) =>
+        Object.entries<string>(translations).filter(([key]) =>
+          key.startsWith(ROLE_TRANSATION_PREFIX),
+        ),
+      ),
+    ),
+  );
   benutzerListDataSourceSig = computed(() => {
     const benutzers = this.store.benutzers();
-    console.log('Benutzerdaten aus API', benutzers);
     const datasource = new MatTableDataSource(benutzers.data);
     const sort = this.sortSig();
     const paginator = this.paginatorSig();
+    const rolesTranslations = this.rolesTranslationsSig();
 
     datasource.filterPredicate = (data, filter) => {
       const { name, roles } = JSON.parse(filter);
       if (name && !data.name.toLowerCase().includes(name.toLowerCase())) {
         return false;
       }
-      if (roles) {
-        const roleNames = [...data.roles.compact, ...data.roles.full]
-          .map((role) => role.name.toLowerCase())
-          .join(',');
-        console.log(roleNames, 'Roles');
-        if (!roleNames.includes(roles.toLowerCase())) {
-          return false;
-        }
+      if (roles && rolesTranslations) {
+        const roleNames = data.roles.full
+          .map((role) =>
+            rolesTranslations.find(
+              ([key]) => key === ROLE_TRANSATION_PREFIX + role.name,
+            ),
+          )
+          .filter(isDefined);
+        return roleNames.some(([, role]) =>
+          role.toLowerCase().includes(roles.toLowerCase()),
+        );
       }
       return true;
     };
