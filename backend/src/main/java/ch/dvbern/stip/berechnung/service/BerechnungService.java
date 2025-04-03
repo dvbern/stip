@@ -71,9 +71,10 @@ import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 @RequiredArgsConstructor
 @Slf4j
 public class BerechnungService {
-    private static final List<String> BERECHNUNG_MODEL_NAMES =
-        List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
     private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
+
+    private static final List<String> BERECHNUNG_MODEL_NAMES =
+        List.of(STIPENDIUM_DECISION_NAME, "Familienbudget", "PersoenlichesBudget");
 
     private final PersonenImHaushaltService personenImHaushaltService;
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
