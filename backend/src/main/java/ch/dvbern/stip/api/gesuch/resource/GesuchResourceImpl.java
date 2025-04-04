@@ -74,6 +74,7 @@ import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -352,7 +353,7 @@ public class GesuchResourceImpl implements GesuchResource {
         try {
             byteStream = gesuchService.getBerechnungsblattByteStream(gesuchId);
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO KSTIP-????: Handle with different exception
+            throw new InternalServerErrorException(e);
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
