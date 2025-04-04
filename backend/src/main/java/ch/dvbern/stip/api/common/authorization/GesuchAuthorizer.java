@@ -190,10 +190,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
         forbidden();
     }
 
