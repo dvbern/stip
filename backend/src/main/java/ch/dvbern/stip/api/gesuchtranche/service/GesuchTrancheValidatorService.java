@@ -48,8 +48,6 @@ public class GesuchTrancheValidatorService {
         new EnumMap<>(GesuchTrancheStatus.class);
 
     static {
-        statusToValidationGroups
-            .put(GesuchTrancheStatus.IN_BEARBEITUNG_GS, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
@@ -57,10 +55,6 @@ public class GesuchTrancheValidatorService {
         );
         statusToValidationGroups.put(
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
-            List.of(GesuchFehlendeDokumenteValidationGroup.class)
-        );
-        statusToValidationGroups.put(
-            GesuchTrancheStatus.IN_BEARBEITUNG_GS,
             List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
     }
