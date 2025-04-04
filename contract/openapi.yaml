@@ -553,6 +553,51 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createBeschwerdeVerlaufEntry
+  '/gesuch/{gesuchId}/beschwerdeentscheid':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeEntscheid'
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBeschwerdeEntscheid
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+    get:
+      tags:
+        - Gesuch
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeschwerdeEntscheid'
+          description: Returns all BeschwerdeEntscheide of a Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllBeschwerdeentscheideForGesuch
   /stip-decision/all:
     get:
       tags:
@@ -3941,6 +3986,20 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
+    BeschwerdeEntscheid:
+      title: Root Type for BeschwerdeEntscheid
+      type: object
+      required:
+        - kommentar
+        - fileUpload
+        - isBeschwerdeErfolgreich
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+        isBeschwerdeErfolgreich:
+          type: boolean
     Gesuch:
       required:
         - fallId
