@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
@@ -83,6 +84,12 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
+    @Path("/{gesuchId}/beschwerdeentscheid")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "isBeschwerdeErfolgreich")  Boolean isBeschwerdeErfolgreich);
+
+    @POST
     @Path("/{gesuchId}/beschwerde")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
@@ -129,6 +136,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/beschwerdeentscheid")
+    @Produces({ "application/json", "text/plain" })
+    List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")
