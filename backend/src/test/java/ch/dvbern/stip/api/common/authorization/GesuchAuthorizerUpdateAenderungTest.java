@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -46,6 +42,10 @@ import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN;
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.IN_BEARBEITUNG_GS;
@@ -144,7 +144,7 @@ class GesuchAuthorizerUpdateAenderungTest {
     @Description(
         "Despite containing GS Role in default roles, SB (of this Gesuch) should be able to update when in GesuchTrancheStatus IN_BEARBEITUNG_GS"
     )
-    void canUpdateAenderungasInBearbeitungGSAsSBOfGesuch() {
+    void canUpdateAenderungAsInBearbeitungGSAsSBOfGesuch() {
         Benutzer benutzer = benutzerService.getCurrentBenutzer();
 
         // add role GS to SB, as it is existing in default roles
@@ -154,6 +154,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER);
         benutzer.setRollen(Set.of(gsRole, sbRole));
 
+        // set sb to be GS of gesuch
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzer);
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
@@ -179,6 +180,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER);
         benutzer.setRollen(Set.of(gsRole, sbRole));
 
+        // current sb is NOT GS of gesuch
         gesuch.getAusbildung().getFall().setGesuchsteller(anotherBenutzer);
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
