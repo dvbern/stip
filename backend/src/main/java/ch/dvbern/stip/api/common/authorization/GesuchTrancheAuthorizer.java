@@ -119,28 +119,28 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
                 .getStatus()
         );
 
-        final BooleanSupplier isGesuchstellerAndCanEdit =
+        if (!benutzerCanEditAenderung.getAsBoolean()) {
+            forbidden();
+        }
+
+        final BooleanSupplier isGesuchstellerOfGesuch =
             () -> (AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch))
-            && benutzerCanEditAenderung.getAsBoolean();
+            || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch));
 
-        final BooleanSupplier isAdminOrSbAndCanEdit =
-            () -> isGesuchstellerAndCanEdit.getAsBoolean() && isAdminOrSb(currentBenutzer) // isSBOfGesuch (GS & SB in
-                                                                                           // same Person)
-            && benutzerCanEditAenderung.getAsBoolean();
+        final BooleanSupplier isAdminOrSbOfGesuch =
+            () -> isGesuchstellerOfGesuch.getAsBoolean() && isAdminOrSb(currentBenutzer);
 
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && benutzerCanEditAenderung.getAsBoolean();
+        final BooleanSupplier isMitarbeiterOfSozialdienst = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
 
         if (
-            isMitarbeiterAndCanEdit.getAsBoolean()
-            || isGesuchstellerAndCanEdit.getAsBoolean()
+            isMitarbeiterOfSozialdienst.getAsBoolean()
+            || isGesuchstellerOfGesuch.getAsBoolean()
         ) {
             return;
         }
 
-        if (isAdminOrSbAndCanEdit.getAsBoolean()) {
+        if (isAdminOrSbOfGesuch.getAsBoolean()) {
             return;
         }
 
