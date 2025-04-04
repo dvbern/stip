@@ -121,7 +121,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
                 .getStatus()
         );
 
-        final BooleanSupplier isAdminOrSBCanEdit =
+        final BooleanSupplier isAdminOrSbAndCanEdit =
             () -> isAdminOrSb(currentBenutzer) && !GESUCHSTELLER_CAN_EDIT.contains(gesuchTranche.getStatus())
             && benutzerCanEditAenderung.getAsBoolean();
 
@@ -140,7 +140,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (isAdminOrSBCanEdit.getAsBoolean()) {
+        if (isAdminOrSbAndCanEdit.getAsBoolean()) {
             return;
         }
 
