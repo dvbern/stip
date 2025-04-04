@@ -74,7 +74,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   @Input({ required: true }) group!: AddresseFormGroup;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
-  @Input() changes?: Partial<Adresse> | undefined;
+  @Input() changes?: Partial<Adresse>;
 
   private countriesService = inject(SharedUtilCountriesService);
   private laender$ = new BehaviorSubject<Land[]>([]);
