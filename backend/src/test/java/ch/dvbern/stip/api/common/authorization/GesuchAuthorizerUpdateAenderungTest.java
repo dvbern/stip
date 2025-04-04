@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -46,6 +42,10 @@ import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN;
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.IN_BEARBEITUNG_GS;
@@ -109,7 +109,7 @@ class GesuchAuthorizerUpdateAenderungTest {
 
     @TestAsSachbearbeiter
     @Test
-    void canUpdateAenderungasSB() {
+    void canUpdateAenderungAsSB() {
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzerService.getCurrentBenutzer());
 
         GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
