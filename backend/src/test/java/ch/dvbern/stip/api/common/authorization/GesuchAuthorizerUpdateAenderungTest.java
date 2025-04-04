@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -42,10 +46,6 @@ import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN;
 import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.IN_BEARBEITUNG_GS;
@@ -112,12 +112,14 @@ class GesuchAuthorizerUpdateAenderungTest {
     void canUpdateAenderungAsSB() {
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzerService.getCurrentBenutzer());
 
-        GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
-            aenderung.setStatus(trancheStatus);
-            assertThrows(ForbiddenException.class, () -> {
-                gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
+        GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.stream()
+            .filter(trancheStatus -> trancheStatus != IN_BEARBEITUNG_GS)
+            .forEach(trancheStatus -> {
+                aenderung.setStatus(trancheStatus);
+                assertThrows(ForbiddenException.class, () -> {
+                    gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
+                });
             });
-        });
 
         SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
@@ -140,17 +142,44 @@ class GesuchAuthorizerUpdateAenderungTest {
     @TestAsSachbearbeiter
     @Test
     @Description(
-        "Despite containing GS Role in default roles, SB should not be able to update when in GesuchTrancheStatus IN_BEARBEITUNG_GS"
+        "Despite containing GS Role in default roles, SB (of this Gesuch) should be able to update when in GesuchTrancheStatus IN_BEARBEITUNG_GS"
     )
-    void canNotUpdateAenderungasInBearbeitungGSAsSB() {
+    void canUpdateAenderungasInBearbeitungGSAsSBOfGesuch() {
         Benutzer benutzer = benutzerService.getCurrentBenutzer();
+
         // add role GS to SB, as it is existing in default roles
         Rolle gsRole = new Rolle();
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
         Rolle sbRole = new Rolle();
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER);
         benutzer.setRollen(Set.of(gsRole, sbRole));
+
         gesuch.getAusbildung().getFall().setGesuchsteller(benutzer);
+
+        aenderung.setStatus(IN_BEARBEITUNG_GS);
+        assertDoesNotThrow(() -> {
+            gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
+        });
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description(
+        "Despite containing GS Role in default roles, SB (of another Gesuch) should not be able to update when in GesuchTrancheStatus IN_BEARBEITUNG_GS"
+    )
+    void canNotUpdateAenderungasInBearbeitungGSAsSBOfAnotherGesuch() {
+        Benutzer benutzer = benutzerService.getCurrentBenutzer();
+        Benutzer anotherBenutzer = benutzerService.getCurrentBenutzer();
+        anotherBenutzer.setId(UUID.randomUUID());
+        anotherBenutzer.setKeycloakId(UUID.randomUUID().toString());
+        // add role GS to SB, as it is existing in default roles
+        Rolle gsRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
+        Rolle sbRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER);
+        benutzer.setRollen(Set.of(gsRole, sbRole));
+
+        gesuch.getAusbildung().getFall().setGesuchsteller(anotherBenutzer);
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
@@ -170,12 +199,17 @@ class GesuchAuthorizerUpdateAenderungTest {
             });
         });
 
-        SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
-            aenderung.setStatus(trancheStatus);
-            assertThrows(ForbiddenException.class, () -> {
-                gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
+        // todo: KSTIP-2091: remove filter clause when double roles (GS & SB) are not existing anymre.
+        // until then, an SB should also be able to update an aenderung IN_BEARBEITUNG_GS when he/she is the GS of a
+        // gesuch
+        SACHBEARBEITER_CAN_EDIT.stream()
+            .filter(trancheStatus -> trancheStatus != IN_BEARBEITUNG_GS)
+            .forEach(trancheStatus -> {
+                aenderung.setStatus(trancheStatus);
+                assertThrows(ForbiddenException.class, () -> {
+                    gesuchTrancheAuthorizer.canUpdateTranche(aenderung);
+                });
             });
-        });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(ForbiddenException.class, () -> {

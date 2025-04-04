@@ -39,8 +39,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT;
-
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
@@ -121,17 +119,19 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
                 .getStatus()
         );
 
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> (AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+            || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch))
+            && benutzerCanEditAenderung.getAsBoolean();
+
         final BooleanSupplier isAdminOrSbAndCanEdit =
-            () -> isAdminOrSb(currentBenutzer) && !GESUCHSTELLER_CAN_EDIT.contains(gesuchTranche.getStatus())
+            () -> isGesuchstellerAndCanEdit.getAsBoolean() && isAdminOrSb(currentBenutzer) // isSBOfGesuch (GS & SB in
+                                                                                           // same Person)
             && benutzerCanEditAenderung.getAsBoolean();
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
         && benutzerCanEditAenderung.getAsBoolean();
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            && benutzerCanEditAenderung.getAsBoolean();
 
         if (
             isMitarbeiterAndCanEdit.getAsBoolean()
