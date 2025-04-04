@@ -44,8 +44,7 @@ public enum GesuchTrancheStatus {
     public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             UEBERPRUEFEN,
-            MANUELLE_AENDERUNG,
-            IN_BEARBEITUNG_GS // todo KSTIP-2091: remove as soon as doulbe role (GS & SB) are not existing anymore
+            MANUELLE_AENDERUNG
         )
     );
 

@@ -124,11 +124,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         }
 
         final BooleanSupplier isGesuchstellerOfGesuch =
-            () -> (AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            || AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch));
-
-        final BooleanSupplier isAdminOrSbOfGesuch =
-            () -> isGesuchstellerOfGesuch.getAsBoolean() && isAdminOrSb(currentBenutzer);
+            () -> (AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch));
 
         final BooleanSupplier isMitarbeiterOfSozialdienst = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
@@ -140,7 +136,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (isAdminOrSbOfGesuch.getAsBoolean()) {
+        if (isAdminOrSb(currentBenutzer)) {
             return;
         }
 
