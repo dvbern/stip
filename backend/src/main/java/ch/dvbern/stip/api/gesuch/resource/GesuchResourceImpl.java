@@ -45,24 +45,6 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
-import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
-import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
-import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
-import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchInfoDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
-import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -75,10 +57,12 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
@@ -168,6 +152,16 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    public Uni<Response> createBeschwerdeEntscheid(
+        UUID gesuchId,
+        String kommentar,
+        FileUpload fileUpload,
+        Boolean isBeschwerdeErfolgreich
+    ) {
+        return null;
+    }
+
+    @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
         UUID gesuchId,
@@ -214,6 +208,11 @@ public class GesuchResourceImpl implements GesuchResource {
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         beschwerdeVerlaufAuthorizer.canRead();
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
+    }
+
+    @Override
+    public List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(UUID gesuchId) {
+        return List.of();
     }
 
     @Override
