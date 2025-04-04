@@ -29,8 +29,10 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -55,6 +57,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     private GesuchTrancheRepository gesuchTrancheRepository;
     private GesuchRepository gesuchRepository;
     private SozialdienstService sozialdienstService;
+    private GesuchStatusService gesuchStatusService;
+    private GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @BeforeEach
     void setup() {
@@ -79,6 +83,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
+        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -93,7 +99,9 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             benutzerService,
             gesuchTrancheRepository,
             gesuchRepository,
-            sozialdienstService
+            sozialdienstService,
+            gesuchStatusService,
+            gesuchTrancheStatusService
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
