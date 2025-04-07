@@ -87,7 +87,7 @@ public interface GesuchResource {
     @Path("/{gesuchId}/beschwerdeentscheid")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "isBeschwerdeErfolgreich")  Boolean isBeschwerdeErfolgreich);
+    io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "isBeschwerdeErfolgreich")  Boolean isBeschwerdeErfolgreich,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @POST
     @Path("/{gesuchId}/beschwerde")

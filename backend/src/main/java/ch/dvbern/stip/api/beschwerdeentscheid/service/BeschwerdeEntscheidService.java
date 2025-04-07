@@ -1,0 +1,117 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.beschwerdeentscheid.service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
+import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
+import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
+import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+public class BeschwerdeEntscheidService {
+    private final BeschwerdeEntscheidRepository beschwerdeEntscheidRepository;
+    private final BeschwerdeEntscheidMapper beschwerdeEntscheidMapper;
+
+    public static final String BESCHWERDEENTSCHEID_DOKUMENT_PATH = "beschwerdeentscheid/";
+
+    private final GesuchRepository gesuchRepository;
+    private final DokumentRepository dokumentRepository;
+    private final Antivirus antivirus;
+    private final ConfigService configService;
+    private final S3AsyncClient s3;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchStatusService gesuchStatusService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
+
+    @Transactional
+    public Uni<Response> createBeschwerdeEntscheid(final UUID gesuchId, final BeschwerdeEntscheidDto dto) {
+        // todo: add authorization
+        var beschwerdeEntscheid = beschwerdeEntscheidMapper.toNewEntity(dto);
+        beschwerdeEntscheid.setGesuch(gesuchRepository.requireById(gesuchId));
+
+        return DokumentUploadUtil.validateScanUploadDokument(
+            dto.getFileUpload(),
+            s3,
+            configService,
+            antivirus,
+            BESCHWERDEENTSCHEID_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                beschwerdeEntscheid,
+                dto.getFileUpload(),
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
+
+    }
+
+    @Transactional
+    public List<BeschwerdeEntscheidDto> getAllBeschwerdeEntscheids(final UUID gesuchId) {
+        // todo: add authorization
+        return beschwerdeEntscheidRepository.findByGesuchId(gesuchId)
+            .stream()
+            .map(beschwerdeEntscheidMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void uploadDokument(
+        final BeschwerdeEntscheid beschwerdeEntscheid,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        final var beschwerdeentscheid = createNewBeschwerdeEntscheid(beschwerdeEntscheid);
+
+        final var dokument = new Dokument()
+            .setFilename(fileUpload.fileName())
+            .setFilesize(String.valueOf(fileUpload.size()))
+            .setFilepath(BESCHWERDEENTSCHEID_DOKUMENT_PATH)
+            .setObjectId(objectId);
+
+        beschwerdeentscheid.getDokumente().add(dokument);
+        dokumentRepository.persist(dokument);
+    }
+
+    private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {
+        beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
+        return beschwerdeEntscheid;
+    }
+
+}

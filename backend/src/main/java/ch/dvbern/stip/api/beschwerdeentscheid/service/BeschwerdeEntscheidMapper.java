@@ -17,14 +17,15 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
-import ch.dvbern.stip.api.beschwerdeentscheid.BeschwerdeEntscheid;
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = DokumentMapper.class)
 public interface BeschwerdeEntscheidMapper {
     BeschwerdeEntscheid toNewEntity(final BeschwerdeEntscheidDto createDto);
 
-    BeschwerdeEntscheidDto toDto(final BeschwerdeEntscheid createDto);
+    BeschwerdeEntscheidDto toDto(final BeschwerdeEntscheid beschwerdeEntscheid);
 }

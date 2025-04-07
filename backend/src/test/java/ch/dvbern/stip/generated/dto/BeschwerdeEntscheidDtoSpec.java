@@ -29,8 +29,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_FILE_UPLOAD,
-  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH
+  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH,
+  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_FILE_UPLOAD
 })
 @JsonTypeName("BeschwerdeEntscheid")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -38,11 +38,11 @@ public class BeschwerdeEntscheidDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
-  public static final String JSON_PROPERTY_FILE_UPLOAD = "fileUpload";
-  private File fileUpload;
-
   public static final String JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH = "isBeschwerdeErfolgreich";
   private Boolean isBeschwerdeErfolgreich;
+
+  public static final String JSON_PROPERTY_FILE_UPLOAD = "fileUpload";
+  private File fileUpload;
 
   public BeschwerdeEntscheidDtoSpec() {
   }
@@ -73,32 +73,6 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  public BeschwerdeEntscheidDtoSpec fileUpload(File fileUpload) {
-    
-    this.fileUpload = fileUpload;
-    return this;
-  }
-
-   /**
-   * Get fileUpload
-   * @return fileUpload
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public File getFileUpload() {
-    return fileUpload;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFileUpload(File fileUpload) {
-    this.fileUpload = fileUpload;
-  }
-
-
   public BeschwerdeEntscheidDtoSpec isBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
     
     this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
@@ -124,6 +98,32 @@ public class BeschwerdeEntscheidDtoSpec {
     this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
   }
 
+
+  public BeschwerdeEntscheidDtoSpec fileUpload(File fileUpload) {
+    
+    this.fileUpload = fileUpload;
+    return this;
+  }
+
+   /**
+   * Get fileUpload
+   * @return fileUpload
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public File getFileUpload() {
+    return fileUpload;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFileUpload(File fileUpload) {
+    this.fileUpload = fileUpload;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,13 +134,13 @@ public class BeschwerdeEntscheidDtoSpec {
     }
     BeschwerdeEntscheidDtoSpec beschwerdeEntscheid = (BeschwerdeEntscheidDtoSpec) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
-        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload) &&
-        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich);
+        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
+        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, fileUpload, isBeschwerdeErfolgreich);
+    return Objects.hash(kommentar, isBeschwerdeErfolgreich, fileUpload);
   }
 
   @Override
@@ -148,8 +148,8 @@ public class BeschwerdeEntscheidDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BeschwerdeEntscheidDtoSpec {\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("}");
     return sb.toString();
   }

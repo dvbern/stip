@@ -15,25 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.beschwerdeentscheid;
+package ch.dvbern.stip.api.beschwerdeentscheid.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 
@@ -44,10 +48,17 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
         @Index(name = "IX_beschwerde_entscheid_mandant", columnList = "mandant")
     }
 )
-// @Audited
+@Audited
 @Getter
 @Setter
 public class BeschwerdeEntscheid extends AbstractMandantEntity {
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_beschwerde_entscheid__gesuch_id"), nullable = false
+    )
+    private Gesuch gesuch;
+
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @NotNull
     @Column(name = "kommentar", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
@@ -55,7 +66,7 @@ public class BeschwerdeEntscheid extends AbstractMandantEntity {
 
     @NotNull
     @Column(name = "is_beschwerde_erfolgreich", nullable = false)
-    private boolean isBeschwerdeErfolgreich;
+    private Boolean isBeschwerdeErfolgreich;
 
     @OneToMany
     @JoinTable(

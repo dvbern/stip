@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
@@ -172,6 +173,9 @@ public class Gesuch extends AbstractMandantEntity {
 
     @Column(name = "beschwerde_haengig", nullable = false)
     private boolean beschwerdeHaengig;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private List<BeschwerdeEntscheid> beschwerdeEntscheids = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

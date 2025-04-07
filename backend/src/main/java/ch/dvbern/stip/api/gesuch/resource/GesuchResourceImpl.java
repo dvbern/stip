@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
@@ -45,6 +46,25 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -92,6 +112,8 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
+    private final BeschwerdeEntscheidService beschwerdeEntscheidService;
+    // todo add authorizer
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -151,14 +173,17 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
+    @Blocking
     @Override
     public Uni<Response> createBeschwerdeEntscheid(
         UUID gesuchId,
         String kommentar,
-        FileUpload fileUpload,
-        Boolean isBeschwerdeErfolgreich
+        Boolean isBeschwerdeErfolgreich,
+        FileUpload fileUpload
     ) {
-        return null;
+        // todo add auth
+        final var dto = new BeschwerdeEntscheidDto(kommentar, isBeschwerdeErfolgreich, fileUpload);
+        return beschwerdeEntscheidService.createBeschwerdeEntscheid(gesuchId, dto);
     }
 
     @Override
@@ -212,7 +237,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     public List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(UUID gesuchId) {
-        return List.of();
+        // todo: add auth
+        return beschwerdeEntscheidService.getAllBeschwerdeEntscheids(gesuchId);
     }
 
     @Override

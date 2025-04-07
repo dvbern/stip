@@ -877,8 +877,8 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
      * @see #kommentarForm  (required)
-     * @see #fileUploadMultiPart  (required)
      * @see #isBeschwerdeErfolgreichForm  (required)
+     * @see #fileUploadMultiPart  (optional)
      */
     public static class CreateBeschwerdeEntscheidOper implements Oper {
 
@@ -942,7 +942,7 @@ public class GesuchApiSpec {
          /**
          * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
          * @see #reqSpec for customise
-         * @param fileUpload (File)  (required)
+         * @param fileUpload (File)  (optional)
          * @return operation
          */
          public CreateBeschwerdeEntscheidOper fileUploadMultiPart(File fileUpload) {

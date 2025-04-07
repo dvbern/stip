@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BeschwerdeEntscheidDto  implements Serializable {
   private @Valid String kommentar;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
   private @Valid Boolean isBeschwerdeErfolgreich;
+  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
 
   /**
    **/
@@ -44,25 +44,6 @@ public class BeschwerdeEntscheidDto  implements Serializable {
 
   /**
    **/
-  public BeschwerdeEntscheidDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
-    this.fileUpload = fileUpload;
-    return this;
-  }
-
-  
-  @JsonProperty("fileUpload")
-  @NotNull
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
-    return fileUpload;
-  }
-
-  @JsonProperty("fileUpload")
-  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
-    this.fileUpload = fileUpload;
-  }
-
-  /**
-   **/
   public BeschwerdeEntscheidDto isBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
     this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
     return this;
@@ -80,6 +61,24 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
   }
 
+  /**
+   **/
+  public BeschwerdeEntscheidDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
+    return this;
+  }
+
+  
+  @JsonProperty("fileUpload")
+  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+    return fileUpload;
+  }
+
+  @JsonProperty("fileUpload")
+  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -91,13 +90,13 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     }
     BeschwerdeEntscheidDto beschwerdeEntscheid = (BeschwerdeEntscheidDto) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
-        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload) &&
-        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich);
+        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
+        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, fileUpload, isBeschwerdeErfolgreich);
+    return Objects.hash(kommentar, isBeschwerdeErfolgreich, fileUpload);
   }
 
   @Override
@@ -106,8 +105,8 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     sb.append("class BeschwerdeEntscheidDto {\n");
     
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("}");
     return sb.toString();
   }

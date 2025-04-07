@@ -3987,19 +3987,21 @@ components:
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
     BeschwerdeEntscheid:
-      title: Root Type for BeschwerdeEntscheid
-      type: object
       required:
         - kommentar
-        - fileUpload
         - isBeschwerdeErfolgreich
+      type: object
       properties:
         kommentar:
           type: string
-        fileUpload:
-          $ref: '#/components/schemas/FileUpload'
         isBeschwerdeErfolgreich:
           type: boolean
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+#        dokumente:
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/Dokument'
     Gesuch:
       required:
         - fallId
