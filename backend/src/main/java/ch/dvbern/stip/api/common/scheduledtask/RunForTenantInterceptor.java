@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Priority(Interceptor.Priority.PLATFORM_AFTER + 10)
 public class RunForTenantInterceptor {
     @AroundInvoke
-    public Object aroundInvoke(final InvocationContext invocationContext) throws Exception {
+    public Object aroundInvoke(final InvocationContext invocationContext) {
         final var annotation = invocationContext.getMethod().getAnnotation(RunForTenant.class);
 
         AtomicReference<Object> proceed = new AtomicReference<>();

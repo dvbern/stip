@@ -26,7 +26,8 @@ public enum GesuchTrancheStatus {
     UEBERPRUEFEN,
     MANUELLE_AENDERUNG,
     AKZEPTIERT,
-    ABGELEHNT;
+    ABGELEHNT,
+    FEHLENDE_DOKUMENTE;
 
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
         EnumSet.of(
@@ -52,7 +53,8 @@ public enum GesuchTrancheStatus {
             IN_BEARBEITUNG_GS,
             UEBERPRUEFEN,
             AKZEPTIERT,
-            ABGELEHNT
+            ABGELEHNT,
+            FEHLENDE_DOKUMENTE
         )
     );
 }

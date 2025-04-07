@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -52,6 +53,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -86,6 +88,11 @@ public class Gesuch extends AbstractMandantEntity {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
     private Ausbildung ausbildung;
+
+    @Nullable
+    @Future
+    @Column(name = "nachfrist_dokumente")
+    private LocalDate nachfristDokumente;
 
     @NotNull
     @ManyToOne(optional = false)
@@ -159,6 +166,12 @@ public class Gesuch extends AbstractMandantEntity {
     @Nullable
     @Column(name = "einreichedatum")
     private LocalDate einreichedatum;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private List<BeschwerdeVerlaufEntry> beschwerdeVerlauf = new ArrayList<>();
+
+    @Column(name = "beschwerde_haengig", nullable = false)
+    private boolean beschwerdeHaengig;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

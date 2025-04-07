@@ -39,6 +39,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid DelegierungDto delegierung;
+  private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
 
   /**
@@ -269,6 +270,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
+  public GesuchWithChangesDto nachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("nachfristDokumente")
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+  @JsonProperty("nachfristDokumente")
+  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
+  /**
+   **/
   public GesuchWithChangesDto changes(List<GesuchTrancheDto> changes) {
     this.changes = changes;
     return this;
@@ -323,12 +342,13 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
+        Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
         Objects.equals(this.changes, gesuchWithChanges.changes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes);
   }
 
   @Override
@@ -348,6 +368,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
+    sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("}");
     return sb.toString();

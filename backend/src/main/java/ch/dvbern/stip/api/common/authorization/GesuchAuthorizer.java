@@ -29,13 +29,13 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -45,6 +45,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchStatusService gesuchStatusService;
+    private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
@@ -53,7 +54,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canGetBerechnung(final UUID gesuchID) {
         final var gesuch = gesuchRepository.requireById(gesuchID);
         if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
-            throw new UnauthorizedException();
+            forbidden();
         }
     }
 
@@ -61,10 +62,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canReadChanges(final UUID gesuchID) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
-        throw new UnauthorizedException();
+
+        forbidden();
     }
 
     @Transactional
@@ -87,48 +89,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
-    }
-
-    @Transactional
-    public void canUpdate(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
-        final var gesuchTranche =
-            gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
-        canUpdate(gesuchId, gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
-    }
-
-    @Transactional
-    public void canUpdate(final UUID gesuchId) {
-        canUpdate(gesuchId, false);
-    }
-
-    @Transactional
-    public void canUpdate(final UUID gesuchId, final boolean aenderung) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        // TODO KSTIP-1967: Authorizer aktualisieren
-        if (isAdminOrSb(currentBenutzer)) {
-            return;
-        }
-
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
-            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && benutzerCanEditInStatusOrAenderung.getAsBoolean();
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -154,7 +115,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -176,7 +137,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -199,7 +160,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional
@@ -209,6 +170,54 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
+    }
+
+    @Transactional
+    public void canCreateAenderung(UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
+
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+        && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    public void canGetGsDashboard() {
+        permitAll();
+    }
+
+    public void gsCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanGetGesuche() {
+        permitAll();
+    }
+
+    public void sbCanReadTranche(final UUID aenderungId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(aenderungId);
+        canRead(gesuchTranche.getGesuch().getId());
+    }
+
+    @Transactional
+    public void canUpdateEinreichefrist(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            !SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuch.getGesuchStatus())
+            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+        ) {
+            forbidden();
+        }
     }
 }

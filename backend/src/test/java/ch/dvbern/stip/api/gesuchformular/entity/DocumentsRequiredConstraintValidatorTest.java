@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -61,6 +62,7 @@ class DocumentsRequiredConstraintValidatorTest {
         var normalGesuchDokuments = new ArrayList<GesuchDokument>();
         Arrays.stream(DokumentTyp.values()).toList().forEach(dokumentType -> {
             GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
             gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
@@ -87,6 +89,7 @@ class DocumentsRequiredConstraintValidatorTest {
         givenTypes.remove(types.get(0));
         givenTypes.forEach(dokumentType -> {
             GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
             gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
@@ -116,6 +119,7 @@ class DocumentsRequiredConstraintValidatorTest {
         var normalGesuchDokuments = new ArrayList<GesuchDokument>();
         Arrays.stream(DokumentTyp.values()).toList().forEach(dokumentType -> {
             GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
             gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
@@ -136,6 +140,7 @@ class DocumentsRequiredConstraintValidatorTest {
         givenTypes.remove(types.get(0));
         givenTypes.forEach(dokumentType -> {
             GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
             gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
@@ -153,6 +158,7 @@ class DocumentsRequiredConstraintValidatorTest {
         var normalGesuchDokuments = new ArrayList<GesuchDokument>();
         Arrays.stream(DokumentTyp.values()).toList().forEach(dokumentType -> {
             GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
             gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);

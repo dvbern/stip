@@ -120,7 +120,7 @@ class GesuchTrancheAenderungTest {
         createAenderungsanstrag()
             .then()
             .assertThat()
-            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @TestAsSachbearbeiter
@@ -147,7 +147,7 @@ class GesuchTrancheAenderungTest {
             gesuch.getId(),
             UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
             TestUtil.getTestPng()
-        );
+        ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -257,7 +257,7 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -320,7 +320,7 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 

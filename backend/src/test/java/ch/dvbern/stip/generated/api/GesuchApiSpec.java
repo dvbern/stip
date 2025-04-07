@@ -15,6 +15,8 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
@@ -30,6 +32,7 @@ import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.NachfristAendernRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDashboardColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
@@ -86,6 +89,7 @@ public class GesuchApiSpec {
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersandbereit(),
                 changeGesuchStatusToVersendet(),
+                createBeschwerdeVerlaufEntry(),
                 createGesuch(),
                 deleteGesuch(),
                 einreichedatumManuellAendern(),
@@ -93,6 +97,7 @@ public class GesuchApiSpec {
                 gesuchFehlendeDokumenteUebermitteln(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
+                getAllBeschwerdeVerlaufEntrys(),
                 getBerechnungForGesuch(),
                 getBerechnungsBlattForGesuch(),
                 getBerechnungsblattDownloadToken(),
@@ -106,7 +111,8 @@ public class GesuchApiSpec {
                 getInitialTrancheChangesByGesuchId(),
                 getSbAenderungChanges(),
                 getStatusProtokoll(),
-                updateGesuch()
+                updateGesuch(),
+                updateNachfristDokumente()
         );
     }
 
@@ -142,6 +148,10 @@ public class GesuchApiSpec {
         return new ChangeGesuchStatusToVersendetOper(createReqSpec());
     }
 
+    public CreateBeschwerdeVerlaufEntryOper createBeschwerdeVerlaufEntry() {
+        return new CreateBeschwerdeVerlaufEntryOper(createReqSpec());
+    }
+
     public CreateGesuchOper createGesuch() {
         return new CreateGesuchOper(createReqSpec());
     }
@@ -168,6 +178,10 @@ public class GesuchApiSpec {
 
     public GesuchZurueckweisenOper gesuchZurueckweisen() {
         return new GesuchZurueckweisenOper(createReqSpec());
+    }
+
+    public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
+        return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
@@ -224,6 +238,10 @@ public class GesuchApiSpec {
 
     public UpdateGesuchOper updateGesuch() {
         return new UpdateGesuchOper(createReqSpec());
+    }
+
+    public UpdateNachfristDokumenteOper updateNachfristDokumente() {
+        return new UpdateNachfristDokumenteOper(createReqSpec());
     }
 
     /**
@@ -843,6 +861,90 @@ public class GesuchApiSpec {
         }
     }
     /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (optional)
+     * return BeschwerdeVerlaufEntryDtoSpec
+     */
+    public static class CreateBeschwerdeVerlaufEntryOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateBeschwerdeVerlaufEntryOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/{gesuchId}/beschwerde
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/{gesuchId}/beschwerde
+         * @param handler handler
+         * @return BeschwerdeVerlaufEntryDtoSpec
+         */
+        public BeschwerdeVerlaufEntryDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BeschwerdeVerlaufEntryDtoSpec> type = new TypeRef<BeschwerdeVerlaufEntryDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param beschwerdeVerlaufEntryCreateDtoSpec (BeschwerdeVerlaufEntryCreateDtoSpec)  (optional)
+         * @return operation
+         */
+        public CreateBeschwerdeVerlaufEntryOper body(BeschwerdeVerlaufEntryCreateDtoSpec beschwerdeVerlaufEntryCreateDtoSpec) {
+            reqSpec.setBody(beschwerdeVerlaufEntryCreateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateBeschwerdeVerlaufEntryOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateBeschwerdeVerlaufEntryOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateBeschwerdeVerlaufEntryOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Creates a new Gesuch
      * 
      *
@@ -1359,6 +1461,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchZurueckweisenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return List&lt;BeschwerdeVerlaufEntryDtoSpec&gt;
+     */
+    public static class GetAllBeschwerdeVerlaufEntrysOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllBeschwerdeVerlaufEntrysOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/beschwerde
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/beschwerde
+         * @param handler handler
+         * @return List&lt;BeschwerdeVerlaufEntryDtoSpec&gt;
+         */
+        public List<BeschwerdeVerlaufEntryDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<BeschwerdeVerlaufEntryDtoSpec>> type = new TypeRef<List<BeschwerdeVerlaufEntryDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetAllBeschwerdeVerlaufEntrysOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllBeschwerdeVerlaufEntrysOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllBeschwerdeVerlaufEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -2513,6 +2688,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public UpdateGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Nachfrist der nachzureichenden Dokumente anpassen
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * @see #body  (optional)
+     */
+    public static class UpdateNachfristDokumenteOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/nachfristDokumente";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateNachfristDokumenteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/nachfristDokumente
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param nachfristAendernRequestDtoSpec (NachfristAendernRequestDtoSpec)  (optional)
+         * @return operation
+         */
+        public UpdateNachfristDokumenteOper body(NachfristAendernRequestDtoSpec nachfristAendernRequestDtoSpec) {
+            reqSpec.setBody(nachfristAendernRequestDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateNachfristDokumenteOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateNachfristDokumenteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateNachfristDokumenteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

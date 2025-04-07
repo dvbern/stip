@@ -40,7 +40,7 @@ public class GesuchFormularValidatorService {
 
         final var svNummer = pia.getSozialversicherungsnummer();
         final var gesuche = gesuchRepository.findGesucheBySvNummer(svNummer);
-        if (gesuche.anyMatch(gesuch -> gesuch.getGesuchStatus().isEingereicht() && gesuch.getId() != gesuchId)) {
+        if (gesuche.anyMatch(gesuch -> gesuch.getGesuchStatus().isEingereicht() && !gesuch.getId().equals(gesuchId))) {
             throw new CustomValidationsException(
                 "Person in Ausbildung (via SV-Nummer) already has a eingereicht Gesuch",
                 new CustomConstraintViolation(

@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.gesuchsperioden.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.GesuchsperiodeAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
@@ -43,66 +43,67 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 @RequiredArgsConstructor
 @Validated
 public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
+    private final GesuchsperiodeAuthorizer gesuchsperiodeAuthorizer;
     private final GesuchsperiodenService gesuchsperiodenService;
 
-    @RolesAllowed(STAMMDATEN_CREATE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_CREATE)
     public GesuchsperiodeWithDatenDto createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
+        gesuchsperiodeAuthorizer.canCreate();
         return gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
     }
 
-    @RolesAllowed(STAMMDATEN_DELETE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_DELETE)
     public void deleteGesuchsperiode(UUID gesuchsperiodeId) {
+        gesuchsperiodeAuthorizer.canDelete(gesuchsperiodeId);
         gesuchsperiodenService.deleteGesuchsperiode(gesuchsperiodeId);
     }
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<GesuchsperiodeDto> getAktiveGesuchsperioden() {
+        gesuchsperiodeAuthorizer.canRead();
         return gesuchsperiodenService.getAllActive();
     }
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public GesuchsperiodeWithDatenDto getGesuchsperiode(UUID gesuchsperiodeId) {
+        gesuchsperiodeAuthorizer.canRead();
         return gesuchsperiodenService.getGesuchsperiode(gesuchsperiodeId)
             .orElseThrow(NotFoundException::new);
     }
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public List<GesuchsperiodeDto> getGesuchsperioden() {
+        gesuchsperiodeAuthorizer.canRead();
         return gesuchsperiodenService.getAllGesuchsperioden();
     }
 
-    @RolesAllowed(STAMMDATEN_READ)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public NullableGesuchsperiodeWithDatenDto getLatest() {
+        gesuchsperiodeAuthorizer.canRead();
         final var gesuchsperiode = gesuchsperiodenService.getLatest();
         return new NullableGesuchsperiodeWithDatenDto(gesuchsperiode);
     }
 
     @Override
-    @AllowAll
     @RolesAllowed(STAMMDATEN_UPDATE)
     public GesuchsperiodeWithDatenDto publishGesuchsperiode(UUID gesuchperiodeId) {
+        gesuchsperiodeAuthorizer.canPublish();
         return gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
     }
 
-    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
-    @AllowAll
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public GesuchsperiodeWithDatenDto updateGesuchsperiode(
         UUID gesuchsperiodeId,
         GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto
     ) {
+        gesuchsperiodeAuthorizer.canUpdate(gesuchsperiodeId);
         return gesuchsperiodenService.updateGesuchsperiode(gesuchsperiodeId, gesuchsperiodeUpdateDto);
     }
 }

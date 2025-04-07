@@ -33,9 +33,10 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.UnauthorizedException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -53,6 +54,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
 
     private GesuchRepository gesuchRepository;
     private GesuchTrancheRepository gesuchTrancheRepository;
+    private GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @BeforeEach
     void setUp() {
@@ -75,6 +77,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
 
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
         final var sozialdienstService = Mockito.mock(SozialdienstService.class);
@@ -93,6 +96,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
             gesuchRepository,
             gesuchTrancheRepository,
             gesuchStatusService,
+            gesuchTrancheStatusService,
             fallRepository,
             sozialdienstService,
             null
@@ -111,7 +115,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     void testGesuchStatusCorrectForBerechnung() {
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertThrows(UnauthorizedException.class, () -> {
+        assertThrows(ForbiddenException.class, () -> {
             authorizer.canGetBerechnung(gesuch.getId());
         });
         Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {

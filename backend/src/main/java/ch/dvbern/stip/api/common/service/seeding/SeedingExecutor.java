@@ -17,12 +17,15 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +42,7 @@ public class SeedingExecutor {
     @RunForTenant(MandantIdentifier.BERN)
     public void seedForBern() {
         LOG.info("SeedingExecutor starting execution for Bern");
-        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
+        doSeed();
         LOG.info("SeedingExecutor finished execution for Bern");
     }
 
@@ -47,7 +50,21 @@ public class SeedingExecutor {
     @RunForTenant(MandantIdentifier.DV)
     public void seedForDv() {
         LOG.info("SeedingExecutor starting execution for DV");
-        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
+        doSeed();
         LOG.info("SeedingExecutor finished execution for DV");
+    }
+
+    private void doSeed() {
+        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(seeder -> {
+            if (shouldSeed(seeder.getProfiles())) {
+                seeder.seed();
+            } else {
+                LOG.info("Skipping seeder for profiles {} due to config", ConfigUtils.getProfiles());
+            }
+        });
+    }
+
+    private boolean shouldSeed(final List<String> profilesToSeedOn) {
+        return !Collections.disjoint(ConfigUtils.getProfiles(), profilesToSeedOn);
     }
 }
