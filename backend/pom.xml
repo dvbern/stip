@@ -362,6 +362,11 @@
       <artifactId>bouncy-castle-adapter</artifactId>
       <version>${itext.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>svg</artifactId>
+      <version>${itext.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
