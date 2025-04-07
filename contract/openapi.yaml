@@ -4516,6 +4516,8 @@ components:
           $ref: '#/components/schemas/Sprache'
         zustaendigerKanton:
           $ref: '#/components/schemas/ZustaendigerKanton'
+        zustaendigeKESB:
+          $ref: '#/components/schemas/ZustaendigeKESB'
     Benutzer:
       type: object
       allOf:
@@ -5989,6 +5991,11 @@ components:
       enum:
         - BERN
         - ANDERER_KANTON
+      type: string
+    ZustaendigeKESB:
+      enum:
+        - KESB_BERN
+        - KESB_ANDERER_KANTON
       type: string
     StipDecision:
       enum:
