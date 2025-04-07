@@ -17,11 +17,7 @@
 
 package ch.dvbern.stip.api.pdf;
 
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
+// spotless:off
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -38,16 +34,23 @@ import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.svg.converter.SvgConverter;
-import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.event.Observes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+// spotless:on
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -66,27 +69,6 @@ public class PdfService {
 
     PdfFont pdfFont = null;
     PdfFont pdfFontBold = null;
-
-    public void onStart(@Observes StartupEvent event) {
-        try {
-            Locale locale = new Locale("de", "CH");
-
-            ByteArrayOutputStream pdfOutput = createPdf(locale);
-
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-            String timestamp = now.format(formatter);
-
-            String outputFileName = "generated-" + timestamp + ".pdf";
-            File outputFile = new File(outputFileName);
-            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                pdfOutput.writeTo(fos);
-            }
-            LOG.info("PDF created: {}", outputFile.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public ByteArrayOutputStream createPdf(final Locale locale)
     throws Exception {

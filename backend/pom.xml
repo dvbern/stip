@@ -517,6 +517,7 @@
         <configuration>
           <ratchetFrom>origin/main</ratchetFrom>
           <java>
+            <toggleOffOn />
             <excludes>
               <include>src/**/generated/**/*.*</include>
             </excludes>
