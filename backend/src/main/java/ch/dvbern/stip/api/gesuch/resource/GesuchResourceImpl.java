@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
@@ -113,7 +114,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
-    // todo add authorizer
+    private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -175,13 +176,14 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Blocking
     @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
     public Uni<Response> createBeschwerdeEntscheid(
         UUID gesuchId,
         String kommentar,
         Boolean isBeschwerdeErfolgreich,
         FileUpload fileUpload
     ) {
-        // todo add auth
+        beschwerdeEntscheidAuthorizer.canCreate(gesuchId);
         return beschwerdeEntscheidService
             .createBeschwerdeEntscheid(gesuchId, kommentar, isBeschwerdeErfolgreich, fileUpload);
     }
@@ -235,9 +237,10 @@ public class GesuchResourceImpl implements GesuchResource {
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
     }
 
+    @RolesAllowed(SB_GESUCH_UPDATE)
     @Override
     public List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(UUID gesuchId) {
-        // todo: add auth
+        beschwerdeEntscheidAuthorizer.canRead();
         return beschwerdeEntscheidService.getAllBeschwerdeEntscheids(gesuchId);
     }
 

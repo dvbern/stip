@@ -29,9 +29,6 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
@@ -59,9 +56,6 @@ public class BeschwerdeEntscheidService {
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-    private final GesuchStatusService gesuchStatusService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public Uni<Response> createBeschwerdeEntscheid(
@@ -70,7 +64,6 @@ public class BeschwerdeEntscheidService {
         final Boolean isBeschwerdeErfolgreich,
         final FileUpload fileUpload
     ) {
-        // todo: add authorization
         var beschwerdeEntscheid = new BeschwerdeEntscheid();
         beschwerdeEntscheid.setIsBeschwerdeErfolgreich(isBeschwerdeErfolgreich);
         beschwerdeEntscheid.setKommentar(kommentar);
@@ -92,7 +85,6 @@ public class BeschwerdeEntscheidService {
 
     @Transactional
     public List<BeschwerdeEntscheidDto> getAllBeschwerdeEntscheids(final UUID gesuchId) {
-        // todo: add authorization
         return beschwerdeEntscheidRepository.findByGesuchId(gesuchId)
             .stream()
             .map(beschwerdeEntscheidMapper::toDto)
@@ -119,7 +111,6 @@ public class BeschwerdeEntscheidService {
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
-
         return DokumentDownloadUtil.getDokument(
             s3,
             configService.getBucketName(),
