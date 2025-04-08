@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -34,11 +35,13 @@ import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryReposito
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -112,6 +115,18 @@ public class BeschwerdeEntscheidService {
 
         beschwerdeentscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
+    }
+
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+
+        return DokumentDownloadUtil.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            BESCHWERDEENTSCHEID_DOKUMENT_PATH,
+            dokument.getFilename()
+        );
     }
 
     private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {

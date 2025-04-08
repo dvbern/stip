@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import com.mchange.io.FileUtils;
@@ -48,8 +50,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static ch.dvbern.stip.api.dokument.type.DokumentArt.BESCHWERDE_ENTSCHEID;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -68,6 +72,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
+    private UUID dokumentId;
 
     @Test
     @TestAsGesuchsteller
@@ -116,9 +121,32 @@ class GesuchResourceBeschwerdeEntscheidTest {
         assertThat(entry.getKommentar(), is("test"));
         assertThat(entry.getIsBeschwerdeErfolgreich(), is(true));
         assertThat(entry.getDokumente().size(), is(1));
+        dokumentId = entry.getDokumente().get(0).getId();
     }
 
-    // todo: test read file
+    @Test
+    @TestAsSachbearbeiter
+    @Order(4)
+    void getBeschwerdeEntscheidDokumentTest() throws IOException {
+        final var token = dokumentApiSpec.getDokumentDownloadToken()
+            .dokumentIdPath(dokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(FileDownloadTokenDtoSpec.class)
+            .getToken();
+
+        dokumentApiSpec.getDokument()
+            .tokenQuery(token)
+            .dokumentArtPath(BESCHWERDE_ENTSCHEID)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .body(equalTo(readPngFileData()));
+    }
 
     @Test
     @TestAsAdmin
