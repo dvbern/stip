@@ -81,7 +81,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
-import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
@@ -409,13 +408,16 @@ public class TestUtil {
     public static ValidatableResponse uploadBeschwerdeEntscheid(
         final GesuchApiSpec gesuchApiSpec,
         final UUID gesuchId,
-        final BeschwerdeEntscheidDtoSpec dto
+        final Boolean isBeschwerdeErfolgreich,
+        final String kommentar,
+        final File fileUpload
     ) {
         return gesuchApiSpec.createBeschwerdeEntscheid()
             .gesuchIdPath(gesuchId)
-            .isBeschwerdeErfolgreichForm(dto.getIsBeschwerdeErfolgreich())
-            .kommentarForm(dto.getKommentar())
-            .reqSpec(req -> req.addMultiPart("fileUpload", dto.getFileUpload(), "image/png"))
+            .isBeschwerdeErfolgreichForm(isBeschwerdeErfolgreich)
+            .kommentarForm(kommentar)
+            // .fileUploadMultiPart(fileUpload)
+            .reqSpec(req -> req.addMultiPart("fileUpload", fileUpload, "image/png"))
             .execute(PEEK_IF_ENV_SET)
             .then();
     }

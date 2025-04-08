@@ -182,8 +182,8 @@ public class GesuchResourceImpl implements GesuchResource {
         FileUpload fileUpload
     ) {
         // todo add auth
-        final var dto = new BeschwerdeEntscheidDto(kommentar, isBeschwerdeErfolgreich, fileUpload);
-        return beschwerdeEntscheidService.createBeschwerdeEntscheid(gesuchId, dto);
+        return beschwerdeEntscheidService
+            .createBeschwerdeEntscheid(gesuchId, kommentar, isBeschwerdeErfolgreich, fileUpload);
     }
 
     @Override

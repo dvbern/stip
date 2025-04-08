@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BeschwerdeEntscheidDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid Boolean isBeschwerdeErfolgreich;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
+  private @Valid List<DokumentDto> dokumente = new ArrayList<>();
 
   /**
    **/
@@ -63,22 +67,39 @@ public class BeschwerdeEntscheidDto  implements Serializable {
 
   /**
    **/
-  public BeschwerdeEntscheidDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
-    this.fileUpload = fileUpload;
+  public BeschwerdeEntscheidDto dokumente(List<DokumentDto> dokumente) {
+    this.dokumente = dokumente;
     return this;
   }
 
   
-  @JsonProperty("fileUpload")
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
-    return fileUpload;
+  @JsonProperty("dokumente")
+  @NotNull
+  public List<DokumentDto> getDokumente() {
+    return dokumente;
   }
 
-  @JsonProperty("fileUpload")
-  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
-    this.fileUpload = fileUpload;
+  @JsonProperty("dokumente")
+  public void setDokumente(List<DokumentDto> dokumente) {
+    this.dokumente = dokumente;
   }
 
+  public BeschwerdeEntscheidDto addDokumenteItem(DokumentDto dokumenteItem) {
+    if (this.dokumente == null) {
+      this.dokumente = new ArrayList<>();
+    }
+
+    this.dokumente.add(dokumenteItem);
+    return this;
+  }
+
+  public BeschwerdeEntscheidDto removeDokumenteItem(DokumentDto dokumenteItem) {
+    if (dokumenteItem != null && this.dokumente != null) {
+      this.dokumente.remove(dokumenteItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -91,12 +112,12 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     BeschwerdeEntscheidDto beschwerdeEntscheid = (BeschwerdeEntscheidDto) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
         Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
-        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload);
+        Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, isBeschwerdeErfolgreich, fileUpload);
+    return Objects.hash(kommentar, isBeschwerdeErfolgreich, dokumente);
   }
 
   @Override
@@ -106,7 +127,7 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
-    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
+    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

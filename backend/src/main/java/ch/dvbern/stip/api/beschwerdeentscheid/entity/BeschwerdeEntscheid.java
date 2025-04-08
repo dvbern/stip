@@ -35,7 +35,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
@@ -51,6 +53,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Audited
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BeschwerdeEntscheid extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

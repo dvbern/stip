@@ -51,7 +51,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -93,11 +92,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Order(2)
     void createBeschwerdeEntscheid() {
         final var file = TestUtil.getTestPng();
-        var createBeschwerdeEntscheidDto = new BeschwerdeEntscheidDtoSpec();
-        createBeschwerdeEntscheidDto.setKommentar("test");
-        createBeschwerdeEntscheidDto.setFileUpload(file);
-        createBeschwerdeEntscheidDto.setIsBeschwerdeErfolgreich(true);
-        TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), createBeschwerdeEntscheidDto)
+        TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), true, "test", file)
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
@@ -120,8 +115,10 @@ class GesuchResourceBeschwerdeEntscheidTest {
         final var entry = entrys[0];
         assertThat(entry.getKommentar(), is("test"));
         assertThat(entry.getIsBeschwerdeErfolgreich(), is(true));
-        assertThat(entry.getFileUpload(), is(notNullValue()));
+        assertThat(entry.getDokumente().size(), is(1));
     }
+
+    // todo: test read file
 
     @Test
     @TestAsAdmin

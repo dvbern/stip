@@ -15,12 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -30,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_KOMMENTAR,
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH,
-  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_FILE_UPLOAD
+  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("BeschwerdeEntscheid")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -41,8 +44,8 @@ public class BeschwerdeEntscheidDtoSpec {
   public static final String JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH = "isBeschwerdeErfolgreich";
   private Boolean isBeschwerdeErfolgreich;
 
-  public static final String JSON_PROPERTY_FILE_UPLOAD = "fileUpload";
-  private File fileUpload;
+  public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  private List<DokumentDtoSpec> dokumente;
 
   public BeschwerdeEntscheidDtoSpec() {
   }
@@ -99,29 +102,37 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  public BeschwerdeEntscheidDtoSpec fileUpload(File fileUpload) {
+  public BeschwerdeEntscheidDtoSpec dokumente(List<DokumentDtoSpec> dokumente) {
     
-    this.fileUpload = fileUpload;
+    this.dokumente = dokumente;
+    return this;
+  }
+
+  public BeschwerdeEntscheidDtoSpec addDokumenteItem(DokumentDtoSpec dokumenteItem) {
+    if (this.dokumente == null) {
+      this.dokumente = new ArrayList<>();
+    }
+    this.dokumente.add(dokumenteItem);
     return this;
   }
 
    /**
-   * Get fileUpload
-   * @return fileUpload
+   * Get dokumente
+   * @return dokumente
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public File getFileUpload() {
-    return fileUpload;
+  public List<DokumentDtoSpec> getDokumente() {
+    return dokumente;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFileUpload(File fileUpload) {
-    this.fileUpload = fileUpload;
+  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setDokumente(List<DokumentDtoSpec> dokumente) {
+    this.dokumente = dokumente;
   }
 
   @Override
@@ -135,12 +146,12 @@ public class BeschwerdeEntscheidDtoSpec {
     BeschwerdeEntscheidDtoSpec beschwerdeEntscheid = (BeschwerdeEntscheidDtoSpec) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
         Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
-        Objects.equals(this.fileUpload, beschwerdeEntscheid.fileUpload);
+        Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, isBeschwerdeErfolgreich, fileUpload);
+    return Objects.hash(kommentar, isBeschwerdeErfolgreich, dokumente);
   }
 
   @Override
@@ -149,7 +160,7 @@ public class BeschwerdeEntscheidDtoSpec {
     sb.append("class BeschwerdeEntscheidDtoSpec {\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
-    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
+    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -61,25 +61,30 @@ public class BeschwerdeEntscheidService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
-    public Uni<Response> createBeschwerdeEntscheid(final UUID gesuchId, final BeschwerdeEntscheidDto dto) {
+    public Uni<Response> createBeschwerdeEntscheid(
+        final UUID gesuchId,
+        final String kommentar,
+        final Boolean isBeschwerdeErfolgreich,
+        final FileUpload fileUpload
+    ) {
         // todo: add authorization
-        var beschwerdeEntscheid = beschwerdeEntscheidMapper.toNewEntity(dto);
+        var beschwerdeEntscheid = new BeschwerdeEntscheid();
+        beschwerdeEntscheid.setIsBeschwerdeErfolgreich(isBeschwerdeErfolgreich);
+        beschwerdeEntscheid.setKommentar(kommentar);
         beschwerdeEntscheid.setGesuch(gesuchRepository.requireById(gesuchId));
-
         return DokumentUploadUtil.validateScanUploadDokument(
-            dto.getFileUpload(),
+            fileUpload,
             s3,
             configService,
             antivirus,
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
             objectId -> uploadDokument(
                 beschwerdeEntscheid,
-                dto.getFileUpload(),
+                fileUpload,
                 objectId
             ),
             throwable -> LOG.error(throwable.getMessage())
         );
-
     }
 
     @Transactional
