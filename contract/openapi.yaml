@@ -561,7 +561,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/BeschwerdeEntscheid'
+              $ref: '#/components/schemas/BeschwerdeEntscheidCreate'
       parameters:
         - $ref: '#/components/parameters/gesuchId'
       responses:
@@ -3986,10 +3986,11 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
-    BeschwerdeEntscheid:
+    BeschwerdeEntscheidCreate:
       required:
         - kommentar
         - isBeschwerdeErfolgreich
+        - fileUpload
       type: object
       properties:
         kommentar:
@@ -3998,10 +3999,21 @@ components:
           type: boolean
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
-#        dokumente:
-#          type: array
-#          items:
-#            $ref: '#/components/schemas/Dokument'
+    BeschwerdeEntscheid:
+      required:
+        - kommentar
+        - isBeschwerdeErfolgreich
+        - dokumente
+      type: object
+      properties:
+        kommentar:
+          type: string
+        isBeschwerdeErfolgreich:
+          type: boolean
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Gesuch:
       required:
         - fallId
