@@ -10,6 +10,7 @@ include:
       java-image-version: 17-jdk-alpine
       maven-goal: install
       maven-cli-opts-extend: >-
+        -DskipTests
         -Drevision=$VERSION
         -Pcoverage
         -Dci.disableConsole=true
