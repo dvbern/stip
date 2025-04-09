@@ -1,3 +1,19 @@
 {
-  "app-name": "Stipends Online"
+  "app-name": "Stipends Online",
+
+  "sozialdienst-app.header.antraege": "Demandes",
+  "sozialdienst-app.header.administration": "Administration",
+
+  "sozialdienst-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
+
+  "sozialdienst-app.admin.sozialdienstBenutzer.route.overview": "Gestion des utilisateurs",
+  "sozialdienst-app.admin.sozialdienstBenutzer.create": "Créer",
+  "sozialdienst-app.admin.sozialdienstBenutzer.edit": "Modifier",
+  "sozialdienst-app.admin.sozialdienstBenutzer.name.label": "Nom",
+  "sozialdienst-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
+  "sozialdienst-app.admin.sozialdienstBenutzer.vorname.label": "Prénom",
+  "sozialdienst-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
+  "sozialdienst-app.admin.sozialdienstBenutzer.table.erstellen": "Créer",
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.title": "Supprimer l'employé du service social",
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Voulez-vous vraiment supprimer l'employé du service social \"{{ name }}\" ?"
 }

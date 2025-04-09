@@ -193,6 +193,13 @@
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
+  "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",
+  "shared.admin.sozialdienst.sozialdienstGeloescht": "Le service social a été supprimé avec succès",
+  "shared.admin.sozialdienst.sozialdienstAktualisiert": "Le service social a été mis à jour avec succès",
+  "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
+  "shared.admin.sozialdienstBenutzer.erstellt": "L'employé du service social a été créé avec succès",
+  "shared.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
+
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande. Veuillez vérifier vos saisies dans:",
   "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",

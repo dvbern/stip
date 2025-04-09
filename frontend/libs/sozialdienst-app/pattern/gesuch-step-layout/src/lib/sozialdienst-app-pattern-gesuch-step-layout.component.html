@@ -9,8 +9,21 @@
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
+      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
+          <i class="material-symbols-rounded text-white me-2">list</i>
+          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+        </div>
+        <a
+          routerLink="/administration"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-overview"
+        >
+          <i class="material-symbols-rounded text-white me-2">settings</i>
+          <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+        </a>
+      </div>
       <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
-      <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
       <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
     </dv-shared-pattern-app-header>
 

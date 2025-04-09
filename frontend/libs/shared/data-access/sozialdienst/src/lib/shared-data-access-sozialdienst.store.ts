@@ -225,7 +225,7 @@ export class SozialdienstStore extends signalStore(
                           this.globalNotificationStore.createSuccessNotification(
                             {
                               messageKey:
-                                'sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt',
+                                'shared.admin.sozialdienst.sozialdienstErstellt',
                             },
                           );
                           onAfterSave?.(sozialdienst.id);
@@ -285,7 +285,7 @@ export class SozialdienstStore extends signalStore(
                       onSuccess: () => {
                         this.globalNotificationStore.createSuccessNotification({
                           messageKey:
-                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
+                            'shared.admin.sozialdienst.sozialdienstAktualisiert',
                         });
                       },
                       onFailure: () => {
@@ -356,7 +356,7 @@ export class SozialdienstStore extends signalStore(
                       if (wasSuccessfull) {
                         this.globalNotificationStore.createSuccessNotification({
                           messageKey:
-                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
+                            'shared.admin.sozialdienst.sozialdienstAdminErsetzt',
                         });
                       }
                     },
@@ -395,7 +395,7 @@ export class SozialdienstStore extends signalStore(
                   this.loadAllSozialdienste$();
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey:
-                      'sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht',
+                      'shared.admin.sozialdienst.sozialdienstGeloescht',
                   });
                 },
                 onFailure: () => {
@@ -527,7 +527,7 @@ export class SozialdienstStore extends signalStore(
                 onSuccess: () => {
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey:
-                      'sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert',
+                      'shared.admin.sozialdienstBenutzer.aktualisiert',
                   });
                 },
               },
@@ -560,8 +560,7 @@ export class SozialdienstStore extends signalStore(
               {
                 onSuccess: (sozialdienstBenutzer) => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt',
+                    messageKey: 'shared.admin.sozialdienstBenutzer.erstellt',
                   });
                   onAfterSave?.(sozialdienstBenutzer.id);
                 },

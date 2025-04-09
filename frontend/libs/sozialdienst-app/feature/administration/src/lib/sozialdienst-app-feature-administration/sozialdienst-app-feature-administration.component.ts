@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { SachbearbeitungAppPatternAdministrationLayoutComponent } from '@dv/sachbearbeitung-app/pattern/administration-layout';
 import { AdminOption } from '@dv/shared/model/router';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
+import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/sozialdienst-app/pattern/administration-layout';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-administration',
+  selector: 'dv-sozialdienst-app-feature-administration',
   standalone: true,
   imports: [
     CommonModule,
     SharedUiRouterOutletWrapperComponent,
-    SachbearbeitungAppPatternAdministrationLayoutComponent,
+    SozialdienstAppPatternAdministrationLayoutComponent,
   ],
-  templateUrl: './sachbearbeitung-app-feature-administration.component.html',
+  templateUrl: './sozialdienst-app-feature-administration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationComponent {
