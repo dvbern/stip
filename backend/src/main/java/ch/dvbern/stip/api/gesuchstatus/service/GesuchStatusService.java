@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchstatus.service;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
@@ -35,6 +30,7 @@ import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
+import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
@@ -43,7 +39,14 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
+
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchStatusService {
@@ -51,6 +54,7 @@ public class GesuchStatusService {
     private final MailService mailService;
     private final NotificationService notificationService;
     private final GesuchHistoryService gesuchHistoryService;
+    private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
 
     private final Instance<GesuchStatusStateChangeHandler> handlers;
 
@@ -70,8 +74,15 @@ public class GesuchStatusService {
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
         if (kommentarDto != null && sendNotificationIfPossible) {
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            sendStandardNotificationEmailForGesuch(gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
+        }
+    }
+
+    protected void sendStandardNotificationEmailForGesuch(final Gesuch gesuch) {
+        if (!mailAlreadySentCheckerService.isAlreadyMailSent()) {
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            mailAlreadySentCheckerService.setAlreadyMailSent(true);
         }
     }
 
