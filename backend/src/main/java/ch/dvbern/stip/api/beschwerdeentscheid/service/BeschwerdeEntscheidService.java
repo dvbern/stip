@@ -23,13 +23,16 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
+import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -50,12 +53,14 @@ public class BeschwerdeEntscheidService {
     private final BeschwerdeEntscheidMapper beschwerdeEntscheidMapper;
 
     public static final String BESCHWERDEENTSCHEID_DOKUMENT_PATH = "beschwerdeentscheid/";
+    private static final String BESCHWERDEVERLAUF_TITEL = "Beschwerdeentscheid hochgeladen";
 
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
+    private final BeschwerdeverlaufService beschwerdeverlaufService;
 
     @Transactional
     public Uni<Response> createBeschwerdeEntscheid(
@@ -107,6 +112,8 @@ public class BeschwerdeEntscheidService {
 
         beschwerdeentscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
+
+        createBeschwerdeverlaufEntry(beschwerdeEntscheid);
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
@@ -120,9 +127,21 @@ public class BeschwerdeEntscheidService {
         );
     }
 
+    private void createBeschwerdeverlaufEntry(BeschwerdeEntscheid beschwerdeEntscheid) {
+        var createDto = new BeschwerdeVerlaufEntryCreateDto();
+        createDto.setBeschwerdeSetTo(beschwerdeEntscheid.getGesuch().isBeschwerdeHaengig());
+        createDto.setKommentar(beschwerdeEntscheid.getKommentar());
+        // todo: what about this flag?!
+        beschwerdeverlaufService.createBeschwerdeVerlaufEntry(beschwerdeEntscheid.getGesuch().getId(), createDto);
+    }
+
     private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {
         beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
         return beschwerdeEntscheid;
+    }
+
+    private void setGesuchToBereitFuerBearbeitung(Gesuch gesuch) {
+        // todo: set gesuchstatus
     }
 
 }
