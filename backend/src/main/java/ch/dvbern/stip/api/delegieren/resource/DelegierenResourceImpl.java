@@ -41,6 +41,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @RolesAllowed(GS_GESUCH_UPDATE)
     public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
-        delegierenService.delegateFall(fallId, sozialdienstId);
+        delegierenService.delegateFall(fallId, sozialdienstId, delegierungCreateDto);
     }
 }

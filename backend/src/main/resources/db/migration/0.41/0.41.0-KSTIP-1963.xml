@@ -71,4 +71,11 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="1742993576437-2" author="Juri Furer">
+        <addColumn tableName="delegierung_aud">
+            <column name="delegierung_angenommen" type="boolean">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
