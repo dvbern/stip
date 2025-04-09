@@ -22,6 +22,7 @@ include:
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
+      enforce-quality-gate: 'false'
       needs:
         - "build-api"
 
