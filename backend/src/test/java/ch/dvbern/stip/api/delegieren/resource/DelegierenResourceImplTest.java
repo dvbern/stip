@@ -104,7 +104,8 @@ class DelegierenResourceImplTest {
         TestUtil.executeAndAssert(
             delegierenApiSpec.fallDelegieren()
                 .fallIdPath(fall.getId())
-                .sozialdienstIdPath(sozialdienst.getId()),
+                .sozialdienstIdPath(sozialdienst.getId())
+                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
             Response.Status.UNAUTHORIZED.getStatusCode()
         );
     }
