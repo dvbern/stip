@@ -716,7 +716,10 @@
                     UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
                     DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
                     SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
-                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType</schemaMappings>
+                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
+                    ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
+                    ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -741,6 +744,9 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
+                  <additionalProperties>
+                    removeEnumValuePrefix=false
+                  </additionalProperties>
                 </configuration>
               </execution>
               <execution>
@@ -776,6 +782,9 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
+                  <additionalProperties>
+                    removeEnumValuePrefix=false
+                  </additionalProperties>
                 </configuration>
               </execution>
             </executions>
