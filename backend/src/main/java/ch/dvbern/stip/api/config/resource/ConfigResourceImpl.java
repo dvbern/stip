@@ -32,7 +32,6 @@ public class ConfigResourceImpl implements ConfigurationResource {
 
     @Override
     public DeploymentConfigDto getDeploymentConfig() {
-        throw new RuntimeException("Sentry, where art thou?");
-        // return configService.getDeploymentConfiguration();
+        return configService.getDeploymentConfiguration();
     }
 }
