@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class DelegierenApiSpec {
      *
      * @see #fallIdPath Die ID vom Fall (required)
      * @see #sozialdienstIdPath  (required)
+     * @see #body  (required)
      */
     public static class FallDelegierenOper implements Oper {
 
@@ -91,6 +93,7 @@ public class DelegierenApiSpec {
 
         public FallDelegierenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -104,6 +107,15 @@ public class DelegierenApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param delegierungCreateDtoSpec (DelegierungCreateDtoSpec)  (required)
+         * @return operation
+         */
+        public FallDelegierenOper body(DelegierungCreateDtoSpec delegierungCreateDtoSpec) {
+            reqSpec.setBody(delegierungCreateDtoSpec);
+            return this;
         }
 
         public static final String FALL_ID_PATH = "fallId";
