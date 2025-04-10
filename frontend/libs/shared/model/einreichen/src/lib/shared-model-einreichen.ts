@@ -43,6 +43,7 @@ const AbschlussPhaseMap = {
   // ---------------------------------------------------------------------
   TRANCHE_IN_BEARBEITUNG_GS /**               */: { [gs]: _R_, [sb]: ___ },
   TRANCHE_UEBERPRUEFEN /**                    */: { [gs]: S__, [sb]: _R_ },
+  TRANCHE_FEHLENDE_DOKUMENTE /**              */: { [gs]: __F, [sb]: S__ },
   TRANCHE_ABGELEHNT /**                       */: { [gs]: S__, [sb]: S__ },
   TRANCHE_AKZEPTIERT /**                      */: { [gs]: S__, [sb]: S__ },
   TRANCHE_MANUELLE_AENDERUNG /**              */: { [gs]: S__, [sb]: S__ },

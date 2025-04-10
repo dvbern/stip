@@ -1,14 +1,11 @@
 import { Route } from '@angular/router';
 
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-
 import { SachbearbeitungAppFeatureCockpitComponent } from './sachbearbeitung-app-feature-cockpit/sachbearbeitung-app-feature-cockpit.component';
 
 export const sachbearbeitungAppFeatureCockpitRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [GesuchStore],
     children: [
       {
         path: '',

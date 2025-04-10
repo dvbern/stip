@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.ws.rs.ForbiddenException;
@@ -51,7 +53,9 @@ class GesuchAuthorizerCanDeleteTest {
     private Benutzer adminBenutzer;
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
+    private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
+    private GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @BeforeEach
     void setUp() {
@@ -68,6 +72,7 @@ class GesuchAuthorizerCanDeleteTest {
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
+        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
         final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
@@ -100,9 +105,19 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchRepository,
             gesuchTrancheRepository,
             gesuchStatusService,
+            gesuchTrancheStatusService,
             fallRepository,
             sozialdienstService,
             null
+        );
+
+        trancheAuthorizer = new GesuchTrancheAuthorizer(
+            benutzerService,
+            gesuchTrancheRepository,
+            gesuchRepository,
+            sozialdienstService,
+            gesuchStatusService,
+            gesuchTrancheStatusService
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -117,9 +132,12 @@ class GesuchAuthorizerCanDeleteTest {
     void canUpdateOwnTest() {
         // arrange
         final var uuid = UUID.randomUUID();
+        var gesuchTranche = new GesuchTranche();
+        gesuchTranche.setId(uuid);
+        gesuchTranche.setGesuch(gesuch);
 
         // assert
-        assertDoesNotThrow(() -> authorizer.canUpdate(uuid));
+        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTranche(gesuchTranche));
     }
 
     @Test

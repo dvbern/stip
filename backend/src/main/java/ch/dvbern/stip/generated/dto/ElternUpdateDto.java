@@ -30,13 +30,13 @@ public class ElternUpdateDto  implements Serializable {
   private @Valid Boolean ausweisbFluechtling;
   private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
   private @Valid String nachname;
-  private @Valid Integer ergaenzungsleistungen;
   private @Valid Boolean sozialhilfebeitraege;
-  private @Valid Integer wohnkosten;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
   private @Valid String sozialversicherungsnummer;
   private @Valid UUID id;
+  private @Valid Integer ergaenzungsleistungen;
+  private @Valid Integer wohnkosten;
 
   /**
    **/
@@ -192,26 +192,6 @@ public class ElternUpdateDto  implements Serializable {
   }
 
   /**
-   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
-   **/
-  public ElternUpdateDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
-    return this;
-  }
-
-  
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
-    return ergaenzungsleistungen;
-  }
-
-  @JsonProperty("ergaenzungsleistungen")
-  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
-  }
-
-  /**
    **/
   public ElternUpdateDto sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
@@ -228,26 +208,6 @@ public class ElternUpdateDto  implements Serializable {
   @JsonProperty("sozialhilfebeitraege")
   public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
-  }
-
-  /**
-   * Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen
-   **/
-  public ElternUpdateDto wohnkosten(Integer wohnkosten) {
-    this.wohnkosten = wohnkosten;
-    return this;
-  }
-
-  
-  @JsonProperty("wohnkosten")
-  @NotNull
-  public Integer getWohnkosten() {
-    return wohnkosten;
-  }
-
-  @JsonProperty("wohnkosten")
-  public void setWohnkosten(Integer wohnkosten) {
-    this.wohnkosten = wohnkosten;
   }
 
   /**
@@ -324,6 +284,44 @@ public class ElternUpdateDto  implements Serializable {
     this.id = id;
   }
 
+  /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
+   **/
+  public ElternUpdateDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+    return this;
+  }
+
+  
+  @JsonProperty("ergaenzungsleistungen")
+  public Integer getErgaenzungsleistungen() {
+    return ergaenzungsleistungen;
+  }
+
+  @JsonProperty("ergaenzungsleistungen")
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+  /**
+   * Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen
+   **/
+  public ElternUpdateDto wohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnkosten")
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+  @JsonProperty("wohnkosten")
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -342,18 +340,18 @@ public class ElternUpdateDto  implements Serializable {
         Objects.equals(this.ausweisbFluechtling, elternUpdate.ausweisbFluechtling) &&
         Objects.equals(this.elternTyp, elternUpdate.elternTyp) &&
         Objects.equals(this.nachname, elternUpdate.nachname) &&
-        Objects.equals(this.ergaenzungsleistungen, elternUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.sozialhilfebeitraege, elternUpdate.sozialhilfebeitraege) &&
-        Objects.equals(this.wohnkosten, elternUpdate.wohnkosten) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, elternUpdate.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, elternUpdate.identischerZivilrechtlicherWohnsitzPLZ) &&
         Objects.equals(this.sozialversicherungsnummer, elternUpdate.sozialversicherungsnummer) &&
-        Objects.equals(this.id, elternUpdate.id);
+        Objects.equals(this.id, elternUpdate.id) &&
+        Objects.equals(this.ergaenzungsleistungen, elternUpdate.ergaenzungsleistungen) &&
+        Objects.equals(this.wohnkosten, elternUpdate.wohnkosten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, geburtsdatum, ausweisbFluechtling, elternTyp, nachname, ergaenzungsleistungen, sozialhilfebeitraege, wohnkosten, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, geburtsdatum, ausweisbFluechtling, elternTyp, nachname, sozialhilfebeitraege, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id, ergaenzungsleistungen, wohnkosten);
   }
 
   @Override
@@ -369,13 +367,13 @@ public class ElternUpdateDto  implements Serializable {
     sb.append("    ausweisbFluechtling: ").append(toIndentedString(ausweisbFluechtling)).append("\n");
     sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
-    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("}");
     return sb.toString();
   }

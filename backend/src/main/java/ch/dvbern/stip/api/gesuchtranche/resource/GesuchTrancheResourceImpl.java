@@ -23,14 +23,17 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -41,6 +44,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AENDERUNG_EINREICHEN;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
@@ -50,6 +54,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Validated
 public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     private final GesuchTrancheService gesuchTrancheService;
+    private final GesuchService gesuchService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
 
@@ -59,7 +64,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         UUID gesuchId,
         CreateAenderungsantragRequestDto createAenderungsantragRequestDto
     ) {
-        gesuchAuthorizer.canUpdate(gesuchId, true);
+        gesuchAuthorizer.canCreateAenderung(gesuchId);
         return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
     }
 
@@ -114,14 +119,14 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public ValidationReportDto gesuchTrancheEinreichenValidierenGS(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidierenGS(gesuchTrancheId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public ValidationReportDto gesuchTrancheEinreichenValidierenSB(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidierenSB(gesuchTrancheId);
     }
 
@@ -161,23 +166,41 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     }
 
     @Override
+    @RolesAllowed(GS_GESUCH_UPDATE)
+    public GesuchDto aenderungFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canAenderungFehlendeDokumenteEinreichen(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
+        return gesuchTrancheService.aenderungFehlendeDokumenteEinreichen(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public GesuchWithChangesDto aenderungFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchTrancheAuthorizer.canFehlendeDokumenteUebermitteln(gesuchTrancheId);
+        gesuchTrancheService.aenderungFehlendeDokumenteUebermitteln(gesuchTrancheId);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
+    }
+
+    @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAkzeptieren(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungAkzeptieren(aenderungId);
     }
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
     }
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchTrancheDto aenderungManuellAnpassen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(aenderungId);
         return gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
     }
 }

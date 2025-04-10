@@ -24,6 +24,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
@@ -47,12 +48,14 @@ public class GesuchTrancheValidatorService {
         new EnumMap<>(GesuchTrancheStatus.class);
 
     static {
-        statusToValidationGroups
-            .put(GesuchTrancheStatus.IN_BEARBEITUNG_GS, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
             List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
+        );
+        statusToValidationGroups.put(
+            GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
+            List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
     }
 

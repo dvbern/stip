@@ -215,6 +215,7 @@
   "gesuch-app.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "gesuch-app.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
   "gesuch-app.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
+  "gesuch-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Eingereicht",
@@ -746,10 +747,10 @@
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Notiz",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Juristische Notiz",
 
-  "shared.role.Admin": "Admin",
-  "shared.role.Jurist": "Jurist",
-  "shared.role.Sachbearbeiter": "Sachbearbeiter",
-  "shared.role.Gesuchsteller": "Gesuchsteller",
+  "shared.role.V0_Sachbearbeiter-Admin": "Admin",
+  "shared.role.V0_Jurist": "Jurist",
+  "shared.role.V0_Sachbearbeiter": "Sachbearbeiter",
+  "shared.role.V0_Gesuchsteller": "Gesuchsteller",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",

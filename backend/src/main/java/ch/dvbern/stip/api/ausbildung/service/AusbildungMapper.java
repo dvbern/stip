@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import jakarta.inject.Inject;
-import jakarta.validation.Validator;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -47,9 +46,6 @@ import static ch.dvbern.stip.api.ausbildung.entity.AusbildungBesuchtBMSValidatio
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
-
-    @Inject
-    Validator validator;
 
     @Mapping(
         source = "ausbildungBegin",

@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -34,9 +35,10 @@ public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
+    private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
 
     @Transactional
-    public void delegateFall(final UUID fallId, final UUID sozialdienstId) {
+    public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
         final var fall = fallRepository.requireById(fallId);
         if (fall.getDelegierung() != null) {
             throw new BadRequestException();
@@ -45,7 +47,8 @@ public class DelegierenService {
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var newDelegierung = new Delegierung()
             .setDelegierterFall(fall)
-            .setSozialdienst(sozialdienst);
+            .setSozialdienst(sozialdienst)
+            .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
 
         delegierungRepository.persist(newDelegierung);
     }

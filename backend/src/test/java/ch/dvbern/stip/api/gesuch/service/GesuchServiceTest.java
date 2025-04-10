@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -939,7 +940,11 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
+                .map(x -> {
+                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche);
+                    gesuchDokument.addDokument(new Dokument());
+                    return gesuchDokument;
+                })
                 .toList()
         );
 

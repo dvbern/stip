@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -38,6 +39,8 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -72,6 +75,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheOverrideUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
@@ -153,6 +157,7 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
+    private final MailService mailService;
     private final DokumentRepository dokumentRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
@@ -418,7 +423,6 @@ public class GesuchService {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
         fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
-
         return fallDashboardItemDtos;
     }
 
@@ -752,7 +756,9 @@ public class GesuchService {
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
-        if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+        final var statesWhereCurrentIsReturned =
+            List.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
             aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         }
 
@@ -808,6 +814,22 @@ public class GesuchService {
     }
 
     @Transactional
+    public void checkForFehlendeDokumenteOnAllAenderungen() {
+        final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
+
+        final var toUpdate =
+            gesuchTranchenToCheck.stream()
+                .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isAfter(LocalDate.now()))
+                .toList();
+        if (!toUpdate.isEmpty()) {
+            gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
+            );
+        }
+    }
+
+    @Transactional
     public GesuchDto einreichedatumManuellAendern(
         final UUID gesuchId,
         final EinreichedatumAendernRequestDto dto
@@ -849,6 +871,20 @@ public class GesuchService {
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
+        notificationService.createMissingDocumentNotification(gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+    }
+
+    public void setDefaultNachfristDokumente(Gesuch gesuch) {
+        if (Objects.isNull(gesuch.getNachfristDokumente())) {
+            gesuch
+                .setNachfristDokumente(
+                    LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+                );
+        }
     }
 
     @Transactional

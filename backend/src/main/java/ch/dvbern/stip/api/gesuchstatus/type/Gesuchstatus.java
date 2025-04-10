@@ -74,7 +74,8 @@ public enum Gesuchstatus {
                 WARTEN_AUF_UNTERSCHRIFTENBLATT,
                 VERSANDBEREIT,
                 VERSENDET,
-                NICHT_ANSPRUCHSBERECHTIGT
+                NICHT_ANSPRUCHSBERECHTIGT,
+                ANSPRUCH_MANUELL_PRUEFEN
             )
         );
 
@@ -133,7 +134,8 @@ public enum Gesuchstatus {
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH,
             Gesuchstatus.GESUCH_ABGELEHNT,
-            Gesuchstatus.NEGATIVE_VERFUEGUNG
+            Gesuchstatus.NEGATIVE_VERFUEGUNG,
+            Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT
         )
     );
 

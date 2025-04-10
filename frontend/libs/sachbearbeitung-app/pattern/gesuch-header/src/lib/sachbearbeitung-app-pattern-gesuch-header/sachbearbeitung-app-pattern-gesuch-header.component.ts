@@ -10,6 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,6 +38,7 @@ import {
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
@@ -52,12 +54,13 @@ import { isPending } from '@dv/shared/util/remote-data';
     TranslatePipe,
     RouterLink,
     RouterLinkActive,
+    MatChipsModule,
     MatMenuModule,
     MatTooltipModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
+    SharedUiLoadingComponent,
   ],
-  providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -99,8 +102,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     return canViewBerechnung;
   });
+  isBeschwerdeHaengigSig = computed(() => {
+    const beschwerdeHaengig =
+      this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
+    return beschwerdeHaengig;
+  });
   isLoadingSig = computed(() => {
-    return isPending(this.gesuchStore.gesuchInfo());
+    return (
+      isPending(this.gesuchStore.gesuchInfo()) ||
+      isPending(this.gesuchStore.lastStatusChange())
+    );
   });
 
   isInfosRouteSig = computed(() => {

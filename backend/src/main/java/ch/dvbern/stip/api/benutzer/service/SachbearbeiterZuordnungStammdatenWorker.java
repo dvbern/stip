@@ -71,10 +71,6 @@ public class SachbearbeiterZuordnungStammdatenWorker {
         );
     }
 
-    private void run(final String tenantId, final Runnable runnable) {
-        run(tenantId, runnable, null);
-    }
-
     private void run(final String tenantId, final Runnable body, final @Nullable Runnable tail) {
         executor.executeBlocking(() -> {
             try {

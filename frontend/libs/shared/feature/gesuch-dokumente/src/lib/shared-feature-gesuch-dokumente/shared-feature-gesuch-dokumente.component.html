@@ -72,8 +72,7 @@
 
 <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
   @let dokumente = dokumentsStore.dokuments();
-  <!-- @let missingDocuments = dokumentsToUpload?.required?.length ?? 0; -->
-  @if (gesuch.permissions.canFreigeben) {
+  @if (!gesuch.isFehlendeDokumente) {
     <button
       type="button"
       class="btn btn-primary"
@@ -83,15 +82,17 @@
     >
       {{ 'shared.form.gonext' | translate }}
     </button>
-  }
-  @if (gesuch.permissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
+  } @else {
     <button
       type="button"
       class="btn btn-primary"
       (click)="fehlendeDokumenteEinreichen()"
       data-testid="button-save"
       [disabled]="
-        (dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig() || !canGSSendMissingDocumentsSig()
+        (dokumente | rdIsPending) ||
+        !gesuch.permissions.canUploadDocuments ||
+        dokumentsStore.hasGSAussstehendeDokumentsSig() ||
+        !canGSSendMissingDocumentsSig()
       "
     >
       {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}

@@ -126,7 +126,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
         createAenderungsanstrag()
             .then()
             .assertThat()
-            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @TestAsSachbearbeiter

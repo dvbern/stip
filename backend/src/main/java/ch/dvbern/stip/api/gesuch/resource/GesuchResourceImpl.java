@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
+import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
@@ -45,6 +47,8 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
+import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -70,6 +74,7 @@ import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -101,13 +106,15 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BenutzerService benutzerService;
     private final GesuchValidatorService gesuchValidatorService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final BeschwerdeverlaufService beschwerdeverlaufService;
+    private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto changeGesuchStatusToInBearbeitung(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -120,7 +127,7 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.changeGesuchStatusToNegativeVerfuegung(
             gesuchId,
             ausgewaehlterGrundDto.getDecisionId()
@@ -133,7 +140,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
@@ -143,7 +150,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -154,10 +161,20 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersendet(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToVersendet(gesuchId);
         gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
+        UUID gesuchId,
+        BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto
+    ) {
+        beschwerdeVerlaufAuthorizer.canCreate();
+        return beschwerdeverlaufService.createBeschwerdeVerlaufEntry(gesuchId, beschwerdeVerlaufEntryCreateDto);
     }
 
     @Override
@@ -193,11 +210,18 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
+        beschwerdeVerlaufAuthorizer.canRead();
+        return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
+    }
+
+    @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -208,7 +232,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -288,7 +313,9 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_UPDATE, SB_GESUCH_UPDATE })
     public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        gesuchAuthorizer.canUpdate(gesuchId, gesuchUpdateDto);
+        final var gesuchTranche =
+            gesuchTrancheService.getGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
     }
 
@@ -326,7 +353,7 @@ public class GesuchResourceImpl implements GesuchResource {
         try {
             byteStream = gesuchService.getBerechnungsblattByteStream(gesuchId);
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO KSTIP-????: Handle with different exception
+            throw new InternalServerErrorException(e);
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
@@ -402,7 +429,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto bearbeitungAbschliessen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
 
         gesuchTrancheValidatorService.validateBearbeitungAbschliessen(gesuchTranche);
 
@@ -419,7 +446,7 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -429,14 +456,14 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         return gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
     }
 
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
         gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchService.getGesuchGS(gesuchTrancheId);

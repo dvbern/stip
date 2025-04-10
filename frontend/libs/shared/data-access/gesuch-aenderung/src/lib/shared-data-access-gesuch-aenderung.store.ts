@@ -44,10 +44,11 @@ export type AenderungChangeState = Extract<
 type AenderungCompletionState = 'open' | 'completed';
 const aenderungStatusMap = {
   IN_BEARBEITUNG_GS: null,
+  UEBERPRUEFEN: 'open',
+  FEHLENDE_DOKUMENTE: null,
   ABGELEHNT: null,
   AKZEPTIERT: 'completed',
   MANUELLE_AENDERUNG: 'completed',
-  UEBERPRUEFEN: 'open',
 } satisfies Record<GesuchTrancheStatus, AenderungCompletionState | null>;
 
 @Injectable({ providedIn: 'root' })

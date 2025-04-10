@@ -26,6 +26,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -57,6 +59,7 @@ import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -87,6 +90,8 @@ class DokumentResourceImplTest {
     GesuchFormularService gesuchFormularService;
     @InjectMock
     CustomDokumentTypService customDokumentTypService;
+    @InjectMock
+    DokumentAuthorizer dokumentAuthorizer;
     @InjectMock
     GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
@@ -119,18 +124,24 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
+        doNothing().when(gesuchDokumentAuthorizer).canGetGesuchDokumentKommentar(any());
         when(gesuchDokumentRepository.requireById(any())).thenReturn(
             new GesuchDokument()
-                .setGesuchTranche(new GesuchTranche()
-                    .setGesuch(new Gesuch()
-                        .setAusbildung(new Ausbildung()
-                            .setFall(new Fall()
-                                .setGesuchsteller((Benutzer) new Benutzer()
-                                    .setId(UUID.fromString(GESUCHSTELLER_TEST_ID))
+                .setGesuchTranche(
+                    new GesuchTranche()
+                        .setGesuch(
+                            new Gesuch()
+                                .setAusbildung(
+                                    new Ausbildung()
+                                        .setFall(
+                                            new Fall()
+                                                .setGesuchsteller(
+                                                    (Benutzer) new Benutzer()
+                                                        .setId(UUID.fromString(GESUCHSTELLER_TEST_ID))
+                                                )
+                                        )
                                 )
-                            )
                         )
-                    )
                 )
         );
 
@@ -157,6 +168,23 @@ class DokumentResourceImplTest {
             io.quarkus.security.ForbiddenException.class,
             () -> dokumentResource.gesuchDokumentAkzeptieren(UUID.randomUUID())
         );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void sbShouldBeAbleToDenyDocumentTest() {
+        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(), any());
+        doNothing().when(dokumentAuthorizer).canUpdateGesuchDokument(any());
+        doNothing().when(gesuchDokumentAuthorizer).canGetGesuchDokumentKommentar(any());
+        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void sbShouldBeAbleToAcceptDocumentTest() {
+        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
+        doNothing().when(dokumentAuthorizer).canUpdateGesuchDokument(any());
+        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 
     @TestAsGesuchsteller

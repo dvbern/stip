@@ -214,6 +214,7 @@
   "gesuch-app.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
   "gesuch-app.gesuch.status.tranche.AKZEPTIERT": "Accepté",
   "gesuch-app.gesuch.status.tranche.ABGELEHNT": "Rejeté",
+  "gesuch-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Documents manquants",
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
@@ -744,10 +745,10 @@
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Note",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Legal Note",
 
-  "shared.role.Admin": "Admin",
-  "shared.role.Jurist": "Juriste",
-  "shared.role.Sachbearbeiter": "Gestionnaire de dossier",
-  "shared.role.Gesuchsteller": "Requérant",
+  "shared.role.V0_Sachbearbeiter-Admin": "Admin",
+  "shared.role.V0_Jurist": "Juriste",
+  "shared.role.V0_Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.V0_Gesuchsteller": "Requérant",
 
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",

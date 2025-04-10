@@ -7,6 +7,11 @@ import { DateFormatVariant, getFormatDef, parseDateForVariant } from '../index';
 
 type NullableString = string | null | undefined;
 
+export const MIN_AGE_GESUCHSSTELLER = 10;
+export const MAX_AGE_GESUCHSSTELLER = 130;
+export const MEDIUM_AGE_GESUCHSSTELLER = 20;
+export const BEGRUENDUNGSSCHREIBEN_AGE = 35;
+
 export function parseBackendLocalDateAndPrint(
   value: NullableString,
   locale: Language,

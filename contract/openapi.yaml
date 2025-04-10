@@ -507,6 +507,52 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: einreichedatumManuellAendern
+  '/gesuch/{gesuchId}/beschwerde':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Returns all the BeschwerdeVerlaufEntrys for a given Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllBeschwerdeVerlaufEntrys
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Creates a new BeschwerdeVerlaufEntry for a given Gesuch
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBeschwerdeVerlaufEntry
   /stip-decision/all:
     get:
       tags:
@@ -1690,6 +1736,12 @@ paths:
     post:
       tags:
       - Delegieren
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DelegierungCreate'
       responses:
         204:
           description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
@@ -2478,6 +2530,56 @@ paths:
       operationId: getBerechnungsBlattForGesuch
       summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungFehlendeDokumenteUebermitteln
+      summary: Dem GS übermitteln das Dokumente auf dieser Änderung nicht akzeptiert wurden
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Fehlende Dokumente eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungFehlendeDokumenteEinreichen
+      summary: Dem SB übermitteln das fehlende Dokumente auf dieser Änderung hochgeladen wurden
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs':
     get:
       tags:
@@ -3892,6 +3994,25 @@ components:
       properties:
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
+    DelegierungCreate:
+      required:
+        - anrede
+        - nachname
+        - vorname
+        - geburtsdatum
+        - adresse
+      type: object
+      properties:
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     GesuchInfo:
       required:
         - id
@@ -3900,6 +4021,7 @@ components:
         - startDate
         - endDate
         - canGetBerechnung
+        - beschwerdeHaengig
       type: object
       properties:
         id:
@@ -3913,6 +4035,8 @@ components:
         endDate:
           $ref: '#/components/schemas/LocalDate'
         canGetBerechnung:
+          type: boolean
+        beschwerdeHaengig:
           type: boolean
     FallDashboardItem:
       required:
@@ -4327,8 +4451,6 @@ components:
         - vorname
         - elternTyp
         - sozialhilfebeitraege
-        - ergaenzungsleistungen
-        - wohnkosten
       type: object
       properties:
         vorname:
@@ -5184,6 +5306,7 @@ components:
         - MANUELLE_AENDERUNG
         - AKZEPTIERT
         - ABGELEHNT
+        - FEHLENDE_DOKUMENTE
     GesuchTranche:
       required:
         - id
@@ -6134,6 +6257,31 @@ components:
       properties:
         canAendern:
           type: boolean
+    BeschwerdeVerlaufEntryCreate:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+      properties:
+        kommentar:
+          type: string
+        beschwerdeSetTo:
+          type: boolean
+    BeschwerdeVerlaufEntry:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+        - timestampErstellt
+        - userErstellt
+      allOf:
+        - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        userErstellt:
+          type: string
     NachfristAendernRequest:
       type: object
       required:
