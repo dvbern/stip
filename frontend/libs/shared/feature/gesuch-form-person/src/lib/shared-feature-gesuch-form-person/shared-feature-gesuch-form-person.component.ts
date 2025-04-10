@@ -214,6 +214,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     ausbildungsbegin = subDays(ausbildungsbegin, 1);
     const alter = getDateDifference(geburtstag, ausbildungsbegin)?.years ?? 0;
 
+    const isAgeValid =
+      alter >= MIN_AGE_GESUCHSSTELLER && alter <= MAX_AGE_GESUCHSSTELLER;
+
+    if (!isAgeValid) return null;
+
     return alter >= BEGRUENDUNGSSCHREIBEN_AGE
       ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
       : null;
