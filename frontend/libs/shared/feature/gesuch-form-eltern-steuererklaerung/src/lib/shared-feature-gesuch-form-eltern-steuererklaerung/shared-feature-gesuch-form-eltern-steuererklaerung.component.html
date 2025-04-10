@@ -32,13 +32,6 @@
             'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | translate
           }}</mat-radio-button>
         </div>
-
-        @if (steuererklaerungInBernDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
       </div>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -50,7 +43,21 @@
         "
       ></dv-shared-ui-form-zuvor-hint>
     </mat-radio-group>
+    @if (steuererklaerungInBernDocumentSig(); as options) {
+      <div class="row g-4 mt-1">
+        <div class="d-flex align-items-center gap-4">
+          <p
+            class="m-0"
+            [innerHTML]="'shared.form.eltern-steuererklaerung.file.' + typ + '_DOCUMENTUPLOAD' | translate"
+          ></p>
 
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1 mt-2"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        </div>
+      </div>
+    }
     <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
         <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">
