@@ -45,7 +45,8 @@
     </mat-radio-group>
     @if (steuererklaerungInBernDocumentSig(); as options) {
       <div class="row g-4 mt-1">
-        <div class="d-flex align-items-center gap-4">
+        -
+        <div class="d-flex align-items-center gap-4 col-12 col-md-6">
           <p
             class="m-0"
             [innerHTML]="'shared.form.eltern-steuererklaerung.file.' + typ + '_DOCUMENTUPLOAD' | translate"
