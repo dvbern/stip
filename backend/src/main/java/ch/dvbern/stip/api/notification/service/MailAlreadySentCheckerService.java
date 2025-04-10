@@ -25,5 +25,5 @@ import lombok.Setter;
 @Setter
 @RequestScoped
 public class MailAlreadySentCheckerService {
-    private boolean isAlreadyMailSent;
+    private boolean isAlreadyMailSent = false;
 }
