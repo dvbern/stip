@@ -66,4 +66,3 @@ export const PATTERN_EMAIL = new RegExp(
   ),
   'i',
 );
-// export const PATTERN_EMAIL = [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
