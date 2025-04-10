@@ -15,9 +15,10 @@
           <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
         </div>
         <a
+          *dvHasRoles="['V0_Sozialdienst-Admin']"
           routerLink="/administration"
           class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-          data-testid="gesuch-step-nav-overview"
+          data-testid="gesuch-step-nav-administration"
         >
           <i class="material-symbols-rounded text-white me-2">settings</i>
           <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
