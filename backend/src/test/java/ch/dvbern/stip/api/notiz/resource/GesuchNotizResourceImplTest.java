@@ -41,6 +41,8 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -55,6 +57,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -284,6 +288,16 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(GesuchNotizDto.class);
+
+        // Gesuchstatus should be set to JURISTISCHE_ABKLAERUNG after the creation
+        final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.JURISTISCHE_ABKLAERUNG));
     }
 
     // get all notizen as SB
@@ -368,6 +382,16 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
         assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
+
+        // Gesuchstatus should be set to BEREIT_FUER_BEARBEITUNG after the answer
+        final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
     }
 
     // get all notizen as SB
