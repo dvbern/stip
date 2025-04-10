@@ -23,7 +23,7 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.0.7</quarkiverse.sentry.version>
+    <quarkiverse.sentry.version>2.1.3</quarkiverse.sentry.version>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
