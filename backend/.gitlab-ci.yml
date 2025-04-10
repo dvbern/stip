@@ -10,7 +10,6 @@ include:
       java-image-version: 17-jdk-alpine
       maven-goal: install
       maven-cli-opts-extend: >-
-        -DskipTests
         -Drevision=$VERSION
         -Pcoverage
         -Dci.disableConsole=true
@@ -22,7 +21,6 @@ include:
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
-      enforce-quality-gate: 'false'
       needs:
         - "build-api"
 
