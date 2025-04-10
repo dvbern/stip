@@ -132,7 +132,7 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
+    public List<GesuchTrancheListDto> getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
         var gesuchToWorkWith = gesuchRepository.requireById(gesuchId);
 
         if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuchToWorkWith)) {
@@ -156,9 +156,11 @@ public class GesuchTrancheService {
                 .toList()
         );
 
-        return gesuchTrancheMapper.toListDto(
-            allTranchenOut,
-            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+        return List.of(
+            gesuchTrancheMapper.toListDto(
+                allTranchenOut,
+                currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+            )
         );
     }
 

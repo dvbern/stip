@@ -71,7 +71,7 @@ class GesuchTrancheAenderungTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private GesuchTrancheListDtoSpec gesuchtranchen;
+    private GesuchTrancheListDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec gesuchWithChanges;
 
@@ -237,7 +237,7 @@ class GesuchTrancheAenderungTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec.class);
+            .as(GesuchTrancheListDtoSpec[].class);
     }
 
     @Test
@@ -245,7 +245,7 @@ class GesuchTrancheAenderungTest {
     @Order(12)
     @Description("The another GS must not be able do delete a Aenderung'")
     void deleteAenderungByOtherUserTest() {
-        final var aenderung = gesuchtranchen.getTranchen()
+        final var aenderung = gesuchtranchen[0].getTranchen()
             .stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
             .findFirst()
@@ -271,8 +271,8 @@ class GesuchTrancheAenderungTest {
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
+            .as(GesuchTrancheListDtoSpec[].class)[0]
+                .getTranchen();
         int count = gesuchtranchen.size();
         final var aenderung = gesuchtranchen.stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
@@ -293,8 +293,8 @@ class GesuchTrancheAenderungTest {
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
+            .as(GesuchTrancheListDtoSpec[].class)[0]
+                .getTranchen();
         assertThat(gesuchtranchen).hasSizeLessThan(count);
     }
 
@@ -309,8 +309,8 @@ class GesuchTrancheAenderungTest {
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getTranchen();
+            .as(GesuchTrancheListDtoSpec[].class)[0]
+                .getTranchen();
         final var tranche = gesuchtranchen.stream()
             .filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE)
             .findFirst()

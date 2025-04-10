@@ -993,7 +993,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return GesuchTrancheListDtoSpec
+     * return List&lt;GesuchTrancheListDtoSpec&gt;
      */
     public static class GetAllTranchenForGesuchGSOper implements Oper {
 
@@ -1023,10 +1023,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/gs/{gesuchId}
          * @param handler handler
-         * @return GesuchTrancheListDtoSpec
+         * @return List&lt;GesuchTrancheListDtoSpec&gt;
          */
-        public GesuchTrancheListDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchTrancheListDtoSpec> type = new TypeRef<GesuchTrancheListDtoSpec>(){};
+        public List<GesuchTrancheListDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchTrancheListDtoSpec>> type = new TypeRef<List<GesuchTrancheListDtoSpec>>(){};
             return execute(handler).as(type);
         }
 

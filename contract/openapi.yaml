@@ -3095,7 +3095,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchTrancheList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchTrancheList'
           description: Alle GesuchTranchen fuer ein Gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
