@@ -411,7 +411,6 @@ class GesuchNotizResourceImplTest {
 
     /**
      * Only juristische notizen are allowed to be answered
-     * expected BAD_REQUEST because of constraint validation
      */
     @Test
     @TestAsJurist
@@ -426,7 +425,7 @@ class GesuchNotizResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     /**
