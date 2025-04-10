@@ -32,7 +32,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ZustaendigerKantonConstraintValidator.class)
 @Documented
-public @interface ZustaendigerKantonRequiredIfNiederlassungsstatusIsFluechtling {
+public @interface ZustaendigerKantonConstraint {
 
     String message() default VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
 

@@ -17,17 +17,17 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
+import java.util.Objects;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ZustaendigerKantonConstraintValidator
-    implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
+public class ZustaendigeKESBConstraintValidator
+    implements ConstraintValidator<ZustaendigeKESBConstraint, PersonInAusbildung> {
     @Override
     public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() == null)
+        if (!pia.isVormundschaft())
             return true;
-        return !(pia.getNiederlassungsstatus().equals(Niederlassungsstatus.FLUECHTLING)
-        && pia.getZustaendigerKanton() == null);
+        return Objects.nonNull(pia.getZustaendigeKESB());
     }
 }

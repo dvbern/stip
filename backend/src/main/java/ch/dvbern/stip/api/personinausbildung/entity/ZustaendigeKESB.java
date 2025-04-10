@@ -17,17 +17,7 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
-public class ZustaendigerKantonConstraintValidator
-    implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
-    @Override
-    public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() == null)
-            return true;
-        return !(pia.getNiederlassungsstatus().equals(Niederlassungsstatus.FLUECHTLING)
-        && pia.getZustaendigerKanton() == null);
-    }
+public enum ZustaendigeKESB {
+    KESB_BERN,
+    KESB_ANDERER_KANTON
 }
