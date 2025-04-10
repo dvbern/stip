@@ -567,38 +567,38 @@
             class="d-none d-xl-block col-xl-4"
           ></div>
         }
-
-        <!-- ZUSTAENDIGE KESB -->
-        @if (!hiddenFieldsSetSig().has(form.controls.zustaendigeKESB)) {
-          <div class="row g-4 mt-1">
-            <div class="d-none-lg col-md-6 col-xl-4"></div>
-            <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
-                <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
-                <mat-select
-                  formControlName="zustaendigerKanton"
-                  data-testid="form-person-zustaendigerKanton"
-                  [placeholder]="'shared.form.select.empty' | translate"
-                >
-                  @for (kesb of zustaendigeKESBValues; track $index) {
-                    <mat-option [value]="kesb" [attr.data-testid]="kesb">
-                      {{ 'shared.form.person.zustaendigerKanton.' + kesb | translate }}
-                    </mat-option>
-                  }
-                </mat-select>
-                <mat-hint
-                  *dvZuvorHint="
-                    view.formChanges?.zustaendigeKESB | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
-                  "
-                ></mat-hint>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-        }
       </div>
+
+      <!-- ZUSTAENDIGE KESB -->
+      @if (!hiddenFieldsSetSig().has(form.controls.zustaendigeKESB)) {
+        <div class="row g-4 mt-1">
+          <div class="d-none-lg col-md-6 col-xl-4"></div>
+          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.person.zustaendigeKESB.label' | translate }}</mat-label>
+              <mat-select
+                formControlName="zustaendigeKESB"
+                data-testid="form-person-zustaendigeKESB"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
+                @for (kesb of zustaendigeKESBValues; track $index) {
+                  <mat-option [value]="kesb" [attr.data-testid]="kesb">
+                    {{ 'shared.form.person.zustaendigeKESB.' + kesb | translate }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-hint
+                *dvZuvorHint="
+                  view.formChanges?.zustaendigeKESB | translateChange: 'shared.form.person.zustaendigeKESB.$VALUE'
+                "
+              ></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      }
 
       <!-- WOHNSITZ AUFTEILUNG -->
       @if (wohnsitzHelper.showWohnsitzSplitterSig()) {

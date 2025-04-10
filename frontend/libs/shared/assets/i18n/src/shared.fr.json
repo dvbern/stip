@@ -378,6 +378,9 @@
   "shared.form.person.zustaendigerKanton.label": "Canton responsable",
   "shared.form.person.zustaendigerKanton.BERN": "Canton de Berne",
   "shared.form.person.zustaendigerKanton.ANDERER_KANTON": "Autre canton",
+  "shared.form.person.zustaendigeKESB.label": "KESB responsable",
+  "shared.form.person.zustaendigeKESB.KESB_BERN": "KESB dans le canton de Berne",
+  "shared.form.person.zustaendigeKESB.KESB_ANDERER_KANTON": "KESB dans un autre canton",
 
   "shared.ausbildung.title": "Formation",
   "shared.ausbildung.saved.success": "Formation enregistrée avec succès",
