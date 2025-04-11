@@ -162,6 +162,7 @@ public class GesuchTrancheService {
         );
     }
 
+    @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
         final var allTranchenList = gesuchTrancheRepository.findForGesuch(gesuchId);
         final var allTranchenFromGesuchInStatusVerfuegt =
