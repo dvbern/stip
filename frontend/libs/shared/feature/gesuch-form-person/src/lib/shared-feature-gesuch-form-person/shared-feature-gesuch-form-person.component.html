@@ -281,7 +281,7 @@
               {{ 'shared.form.error.maxDatePast' | translate }}
             </mat-error>
           </mat-form-field>
-          @if (geburtstagDocumentOptionsSig(); as options) {
+          @if (this.form.controls.geburtsdatum.valid && geburtstagDocumentOptionsSig(); as options) {
             <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
           }
         </div>
