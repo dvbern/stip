@@ -87,6 +87,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -189,6 +190,17 @@ class GesuchValidatorTest {
         Gesuch gesuch = prepareDummyGesuch();
         gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         assertAllMessagesPresent(constraintMessages, gesuch);
+    }
+
+    @Test
+    void testNullFieldValidationErrorForPersonInAusbildungZustaendigeKESB() {
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        // If vormundschaft is required then the zustaendigeKESB needs to be set
+        personInAusbildung.setVormundschaft(true);
+
+        Gesuch gesuch = prepareDummyGesuch();
+        gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        assertOneMessage(VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE, gesuch, true);
     }
 
     @Test
