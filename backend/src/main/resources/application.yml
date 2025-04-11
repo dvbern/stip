@@ -251,7 +251,7 @@ quarkus:
   quarkus:
     log:
       sentry:
-        ~: 'false'
+        enabled: false
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:
