@@ -5345,8 +5345,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
-        initialTranche:
-          $ref: '#/components/schemas/GesuchTrancheSlim'
+        initialTranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:

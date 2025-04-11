@@ -140,8 +140,8 @@ public class GesuchTrancheService {
                 gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT).orElseThrow();
         }
         final var allTranchenList = gesuchToWorkWith.getGesuchTranchen();
-        final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+        final var allTranchenFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
 
         final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
         allTranchenOut.addAll(
@@ -158,14 +158,14 @@ public class GesuchTrancheService {
 
         return gesuchTrancheMapper.toListDto(
             allTranchenOut,
-            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+            allTranchenFromGesuchInStatusVerfuegt
         );
     }
 
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
         final var allTranchenList = gesuchTrancheRepository.findForGesuch(gesuchId);
-        final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+        final var allTranchenFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
         final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
         allTranchenOut.addAll(
             allTranchenList.stream()
@@ -181,7 +181,7 @@ public class GesuchTrancheService {
 
         return gesuchTrancheMapper.toListDto(
             allTranchenOut,
-            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+            allTranchenFromGesuchInStatusVerfuegt
         );
     }
 

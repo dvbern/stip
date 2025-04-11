@@ -17,7 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,6 +87,10 @@ public class GesuchTrancheHistoryRepository {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
     }
 
+    public List<GesuchTranche> getAllTranchenWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
+        return findAllGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
+    }
+
     public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
@@ -95,6 +101,16 @@ public class GesuchTrancheHistoryRepository {
     ) {
         return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
             .flatMap(Gesuch::getNewestGesuchTranche);
+    }
+
+    public List<GesuchTranche> findAllGesuchTrancheOfGesuchInStatus(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        var tranchen = new ArrayList<GesuchTranche>();
+        gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
+            .ifPresent(gesuch -> tranchen.addAll(gesuch.getGesuchTranchen()));
+        return tranchen;
     }
 
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
