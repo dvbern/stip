@@ -28,8 +28,6 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.CLAIM_AHV_NUMMER;
-import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
 
 @Retention(RetentionPolicy.RUNTIME)
