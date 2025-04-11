@@ -13,39 +13,40 @@
     [dvSharedUiFormReadonly]="view.readonly"
   >
     <!-- steuererklaerungInBern -->
-    <mat-radio-group
-      class="d-block col-12 col-md-6"
-      formControlName="steuererklaerungInBern"
-      data-testid="form-eltern-steuererklaerung-steuererklaerungInBern"
-      dvSharedUiFormField
-    >
-      <label>{{
-        'shared.form.eltern-steuerdaten.steuererklaerungInBern.label'
-          | translate: { prefix: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.' + typ | translate }
-      }}</label>
-      <div class="d-flex gap-2 col-12 pe-md-3 justify-content-between">
-        <div class="d-flex flex-column">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.eltern-steuerdaten.steuererklaerungInBern.true' | translate
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{
-            'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | translate
-          }}</mat-radio-button>
+    <div class="row">
+      <mat-radio-group
+        class="d-block col-12 col-md-6"
+        formControlName="steuererklaerungInBern"
+        data-testid="form-eltern-steuererklaerung-steuererklaerungInBern"
+        dvSharedUiFormField
+      >
+        <label>{{
+          'shared.form.eltern-steuerdaten.steuererklaerungInBern.label'
+            | translate: { prefix: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.' + typ | translate }
+        }}</label>
+        <div class="d-flex gap-2 col-12 pe-md-3 justify-content-between">
+          <div class="d-flex flex-column">
+            <mat-radio-button data-testid="yes" [value]="true">{{
+              'shared.form.eltern-steuerdaten.steuererklaerungInBern.true' | translate
+            }}</mat-radio-button>
+            <mat-radio-button data-testid="no" [value]="false">{{
+              'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | translate
+            }}</mat-radio-button>
+          </div>
         </div>
-      </div>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="
-          changes?.steuererklaerungInBern
-            | translateChange: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.$VALUE'
-        "
-      ></dv-shared-ui-form-zuvor-hint>
-    </mat-radio-group>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="
+            changes?.steuererklaerungInBern
+              | translateChange: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.$VALUE'
+          "
+        ></dv-shared-ui-form-zuvor-hint>
+      </mat-radio-group>
+    </div>
     @if (steuererklaerungInBernDocumentSig(); as options) {
       <div class="row g-4 mt-1">
-        -
         <div class="d-flex align-items-center gap-4 col-12 col-md-6">
           <p
             class="m-0"
