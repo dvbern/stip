@@ -11,7 +11,7 @@ INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, 
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
                       benutzereinstellungen_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae7', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Adusernn', 'Aduservn', '756.3333.3333.35', 'AKTIV', 'bern',
+        'Admin', 0, 'Adusernn', 'Aduservn', , 'AKTIV', 'bern',
         'be468db0-017e-4516-b2bb-6077bae8d79a', 'Benutzer');
 
 -- This user is used as the Gesuchsteller in the tests
@@ -19,21 +19,21 @@ INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, 
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
                       benutzereinstellungen_id, keycloak_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae5', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Nell', 'Frédéric', '756.1234.5678.90', 'AKTIV', 'bern',
+        'Admin', 0, 'Nell', 'Frédéric', , 'AKTIV', 'bern',
         '92486d34-083a-4eb2-b676-f160a99512ba', '9477487f-3ac4-4d02-b57c-e0cefb292ae5', 'Benutzer');
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
                       benutzereinstellungen_id, keycloak_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae3', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Gesuchsteller 2', 'Hans', '756.9217.0769.85', 'AKTIV', 'bern',
+        'Admin', 0, 'Gesuchsteller 2', 'Hans', , 'AKTIV', 'bern',
         'be468db0-017e-4516-b2bb-6077bae8d78a', '9477487f-3ac4-4d02-b57c-e0cefb292ae3', 'Benutzer');
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
                       benutzereinstellungen_id, keycloak_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae9', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Sachbearbeiter', 'Hans', '756.4444.4444.46', 'AKTIV', 'bern',
+        'Admin', 0, 'Sachbearbeiter', 'Hans', , 'AKTIV', 'bern',
         'be468db0-017e-4516-b2bb-6077bae8d71a', 'ea75c9be-35a0-4ae6-9383-a3459501596b', 'Benutzer');
 INSERT INTO rolle (timestamp_erstellt, timestamp_mutiert, version, id, keycloak_identifier, mandant, user_erstellt,
                    user_mutiert)
@@ -45,7 +45,7 @@ INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, 
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
                       benutzereinstellungen_id, dtype)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae4', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Test', 'Admin', '756.2222.2222.24', 'AKTIV', 'bern',
+        'Admin', 0, 'Test', 'Admin', , 'AKTIV', 'bern',
         'be468db0-017e-4516-b2bb-6077bae8d70a', 'Benutzer');
 
 INSERT INTO benutzer_rollen (benutzer_id, rolle_id)

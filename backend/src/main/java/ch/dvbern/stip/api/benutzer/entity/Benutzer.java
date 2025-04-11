@@ -79,12 +79,6 @@ public class Benutzer extends AbstractMandantEntity {
     @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
-    @AhvConstraint(optional = true)
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Nullable
-    private String sozialversicherungsnummer;
-
     @NotNull
     @Column(name = "benutzer_status", nullable = false)
     @Enumerated(EnumType.STRING)
