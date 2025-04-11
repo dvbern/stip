@@ -243,7 +243,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec[].class)[0];
+            .as(GesuchTrancheListDtoSpec.class);
         final var aenderung = gesuchtranchen.getTranchen()
             .stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)

@@ -90,7 +90,7 @@ public interface GesuchTrancheResource {
     @GET
     @Path("/gs/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchTrancheListDto> getAllTranchenForGesuchGS(@PathParam("gesuchId") UUID gesuchId);
+    GesuchTrancheListDto getAllTranchenForGesuchGS(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/sb/{gesuchId}")

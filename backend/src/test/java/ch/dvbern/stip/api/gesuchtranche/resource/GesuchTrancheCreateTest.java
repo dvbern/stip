@@ -266,8 +266,8 @@ class GesuchTrancheCreateTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchTrancheListDtoSpec[].class);
-        assertThat(result[0].getTranchen().size(), is(1));
+            .as(GesuchTrancheListDtoSpec.class);
+        assertThat(result.getTranchen().size(), is(1));
     }
 
     @Test
