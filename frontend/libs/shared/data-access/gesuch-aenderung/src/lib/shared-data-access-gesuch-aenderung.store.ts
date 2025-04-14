@@ -96,9 +96,14 @@ export class GesuchAenderungStore extends signalStore(
     };
   });
 
-  initialTrancheViewSig = computed(() => {
+  initialTranchenViewSig = computed(() => {
     const list = this.cachedTranchenList();
-    return list.data?.initialTranche ?? null;
+    const length = list.data?.tranchen?.length ?? 0;
+    return {
+      list: list.data?.initialTranchen ?? null,
+      hasTranchen: !!length,
+      hasMultiple: length > 1,
+    };
   });
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(

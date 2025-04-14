@@ -201,10 +201,10 @@ export const loadGesuch = createEffect(
         const services$ = {
           AENDERUNG: (appType: AppType) => aenderungServices$[appType],
           TRANCHE: (appType: AppType) => trancheServices$[appType],
-          INITIAL: () => () =>
-            gesuchService.getInitialTrancheChangesByGesuchId$(
+          INITIAL: () => (gesuchTrancheId: string) =>
+            gesuchService.getInitialTrancheChanges$(
               {
-                gesuchId: id,
+                gesuchTrancheId,
               },
               undefined,
               undefined,
