@@ -256,7 +256,7 @@ public class TestcaseSeeding extends Seeder {
                     classLoader.getResourceAsStream(String.format("/seeding/gesuch/%s/%s.json", currentTenant, toLoad))
             ) {
                 if (is == null) {
-                    LOG.warn("Tried to load testcase {}.json but cannot find it", toLoad);
+                    LOG.info("Tried to load testcase {}.json but cannot find it", toLoad);
                     continue;
                 }
 
