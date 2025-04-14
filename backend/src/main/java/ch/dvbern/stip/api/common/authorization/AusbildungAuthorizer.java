@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -86,32 +87,22 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
-        // Only an Sb can edit a ausbildung, and only if it has at most one gesuch, at most one tranche anD the
-        // gesuch is in the state IN_BEARBEITUNG_SB or ABKLAERUNG_DURCH_RECHSTABTEILUNG
-
-        if (!isAdminOrSb(currentBenutzer)) {
-            return false;
-        }
-
-        if (ausbildung.getGesuchs().isEmpty()) {
-            return true;
-        }
-
         if (ausbildung.getGesuchs().size() > 1) {
             return false;
         }
 
         final var gesuch = ausbildung.getGesuchs().get(0);
 
-        if (gesuch.getGesuchTranchen().isEmpty()) {
+        if (isGesuchsteller(currentBenutzer) && gesuch.getEinreichedatum() == null) {
             return true;
         }
 
-        if (gesuch.getGesuchTranchen().size() > 1) {
-            return false;
+        if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            return true;
         }
 
-        return gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus());
+        return false;
+
     }
 
     public void canUpdate(final UUID ausbildungId) {
