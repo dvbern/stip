@@ -11,7 +11,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { AdminOptions } from '@dv/sachbearbeitung-app/model/administration';
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 import {
   SharedPatternAppHeaderComponent,
@@ -22,9 +21,10 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-pattern-administration-layout',
+  selector: 'dv-sozialdienst-app-pattern-administration-layout',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,14 +39,14 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiHasRolesDirective,
   ],
   templateUrl:
-    './sachbearbeitung-app-pattern-administration-layout.component.html',
+    './sozialdienst-app-pattern-administration-layout.component.html',
   styleUrls: [
-    './sachbearbeitung-app-pattern-administration-layout.component.scss',
+    './sozialdienst-app-pattern-administration-layout.component.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SharedUtilHeaderService],
 })
-export class SachbearbeitungAppPatternAdministrationLayoutComponent {
+export class SozialdienstAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;
   @Output() navClicked = new EventEmitter<{ value: boolean }>();
 
