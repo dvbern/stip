@@ -15,6 +15,7 @@ test.describe('Sachbearbeiter App: Sozialdienst-Mitarbeiter', () => {
     page.goto('/');
     const admin = new AdminPO(page);
 
+    await admin.goToAdmin();
     // Step 1: Erstellen ========================================================
     await admin.sozialdienstMitarbeiter.goToCreate();
     await admin.sozialdienstMitarbeiter.fillOutNewSozialdienstMitarbeiterForm({

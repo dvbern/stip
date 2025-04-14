@@ -1,6 +1,6 @@
 <ng-template dvHeaderSuffix>
   @if (store.sozialdienstBenutzer(); as view) {
-    - {{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.' + modeSig() | translate }}
+    - {{ 'sozialdienst-app.admin.sozialdienstBenutzer.' + modeSig() | translate }}
   }
 </ng-template>
 
@@ -18,7 +18,7 @@
       <!-- Name -->
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label' | translate }}</mat-label>
+          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.nachname.label' | translate }}</mat-label>
           <input
             formControlName="nachname"
             data-testid="form-sozialdienst-mitarbeiter-nachname"
@@ -34,7 +34,7 @@
       <!-- Vorname -->
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label' | translate }}</mat-label>
+          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.vorname.label' | translate }}</mat-label>
           <input
             formControlName="vorname"
             data-testid="form-sozialdienst-mitarbeiter-vorname"
@@ -56,7 +56,7 @@
       >
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>
-            {{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.email.label' | translate }}
+            {{ 'sozialdienst-app.admin.sozialdienstBenutzer.email.label' | translate }}
           </mat-label>
           <input
             data-testid="form-sozialdienst-mitarbeiter-email"

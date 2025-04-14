@@ -6,7 +6,6 @@ import {
   OPTION_EU_EFTA_LAENDER,
   OPTION_GESUCHSPERIODEN,
   OPTION_SOZIALDIENST,
-  OPTION_SOZIALDIENST_BENUTZER,
 } from '@dv/sachbearbeitung-app/model/administration';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
@@ -22,24 +21,8 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
       ),
   },
   {
-    path: OPTION_SOZIALDIENST_BENUTZER.route,
-    canActivate: [hasRoles(['V0_Sozialdienst-Admin'], '/unauthorized')],
-    loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-sozialdienst-benutzer'
-      ).then(
-        (m) =>
-          m.sachbearbeitungAppFeatureAdministrationSozialdienstBenutzerRoutes,
-      ),
-  },
-  {
     path: OPTION_AUSBILDUNGSSTAETTE.route,
-    canActivate: [
-      hasRoles(
-        ['V0_Sachbearbeiter-Admin'],
-        '/administration/' + OPTION_SOZIALDIENST_BENUTZER.route,
-      ),
-    ],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette'

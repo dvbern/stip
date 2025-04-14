@@ -22,6 +22,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern.Flag;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class SozialdienstBenutzer extends Benutzer {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
+    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE, flags = { Flag.CASE_INSENSITIVE })
     @Column(name = "email", nullable = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String email;
 }

@@ -61,7 +61,7 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canSetAnswer(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
-        if (Objects.nonNull(notiz.getAntwort())) {
+        if (Objects.nonNull(notiz.getAntwort()) || !notiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ)) {
             forbidden();
         }
     }

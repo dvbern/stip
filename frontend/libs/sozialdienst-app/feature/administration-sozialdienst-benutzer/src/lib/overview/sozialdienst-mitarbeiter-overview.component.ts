@@ -35,6 +35,7 @@ import {
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 const INPUT_DELAY = 600;
 
@@ -60,6 +61,7 @@ const INPUT_DELAY = 600;
   ],
   templateUrl: './sozialdienst-mitarbeiter-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [paginatorTranslationProvider()],
 })
 export class SozialdienstMitarbeiterOverviewComponent {
   private dialog = inject(MatDialog);
@@ -121,10 +123,8 @@ export class SozialdienstMitarbeiterOverviewComponent {
 
   deleteBenutzer(benutzer: SozialdienstBenutzer) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title:
-        'sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.title',
-      message:
-        'sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.text',
+      title: 'sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.title',
+      message: 'sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text',
       translationObject: benutzer,
     })
       .afterClosed()
