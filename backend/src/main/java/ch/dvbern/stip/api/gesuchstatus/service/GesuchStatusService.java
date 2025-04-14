@@ -43,9 +43,7 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchStatusService {
