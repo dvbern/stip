@@ -42,6 +42,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern.Flag;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,7 +101,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
-    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
+    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE, flags = { Flag.CASE_INSENSITIVE })
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "email", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String email;

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { AdminOption } from '@dv/sachbearbeitung-app/model/administration';
 import { SachbearbeitungAppPatternAdministrationLayoutComponent } from '@dv/sachbearbeitung-app/pattern/administration-layout';
+import { AdminOption } from '@dv/shared/model/router';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({

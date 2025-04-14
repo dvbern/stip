@@ -1,13 +1,4 @@
-import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
-
-export type AdminOption = {
-  type: 'PARENT';
-  route: string;
-  translationKey: string;
-  titleTranslationKey: string;
-  iconSymbolName: string;
-  allowedRoles: AvailableBenutzerRole[];
-};
+import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 
 export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
   type: 'PARENT',
@@ -67,16 +58,6 @@ export const OPTION_SOZIALDIENST: AdminOption = {
   allowedRoles: ['V0_Sachbearbeiter-Admin'],
 };
 
-export const OPTION_SOZIALDIENST_BENUTZER: AdminOption = {
-  type: 'PARENT',
-  route: 'sozialdienst-benutzer',
-  translationKey: 'sachbearbeitung-app.admin.option.sozialdienstBenutzer',
-  titleTranslationKey:
-    'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
-  iconSymbolName: 'people',
-  allowedRoles: ['V0_Sozialdienst-Admin'],
-};
-
 export const AdminOptions = [
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
@@ -84,15 +65,7 @@ export const AdminOptions = [
   OPTION_EU_EFTA_LAENDER,
   OPTION_BENUTZERVERWALTUNG,
   OPTION_SOZIALDIENST,
-  OPTION_SOZIALDIENST_BENUTZER,
 ];
-
-export type ChildAdminOption = {
-  type: 'CHILD';
-  route: string;
-  titleTranslationKey: string;
-  parentRoute: string;
-};
 
 export const CHILD_OPTION_GESUCHSJAHRE = (
   titleTranslationKey: string,
@@ -129,11 +102,3 @@ export const CHILD_OPTION_SOZIALDIENST = (
   titleTranslationKey,
   parentRoute: OPTION_SOZIALDIENST.route,
 });
-
-export const OPTION_SOZIALDIENST_BENUTZER_DETAIL: ChildAdminOption = {
-  type: 'CHILD',
-  parentRoute: OPTION_SOZIALDIENST.route,
-  route: 'sozialdienst-benutzer',
-  titleTranslationKey:
-    'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
-};

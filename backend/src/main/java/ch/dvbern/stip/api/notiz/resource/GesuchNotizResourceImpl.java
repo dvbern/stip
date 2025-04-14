@@ -53,7 +53,10 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
     ) {
         authorizer.canSetAnswer(notizId);
-        return service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId);
+        final var gesuch = service.getGesuchOfNotiz(notizId);
+        final var answeredNotiz = service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId);
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId());
+        return answeredNotiz;
     }
 
     @Override

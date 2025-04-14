@@ -1,12 +1,12 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
+/* eslint-disable */
 export default {
-  displayName:
-    'sachbearbeitung-app-feature-administration-sozialdienst-benutzer',
+  displayName: 'sozialdienst-app-feature-administration',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/feature/administration-sozialdienst-benutzer',
+    '../../../../coverage/libs/sozialdienst-app/feature/administration',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [
