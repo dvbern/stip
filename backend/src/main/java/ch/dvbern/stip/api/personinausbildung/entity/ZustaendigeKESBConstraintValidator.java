@@ -27,7 +27,7 @@ public class ZustaendigeKESBConstraintValidator
     @Override
     public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
         if (!pia.isVormundschaft())
-            return true;
+            return Objects.isNull(pia.getZustaendigeKESB());
         return Objects.nonNull(pia.getZustaendigeKESB());
     }
 }
