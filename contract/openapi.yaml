@@ -1984,9 +1984,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
-  '/gesuch/changes/{gesuchId}':
+  '/gesuch/changes/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -2009,8 +2009,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getInitialTrancheChangesByGesuchId
-      summary: Returns the inital tranche changes by GesuchId
+      operationId: getInitialTrancheChanges
+      summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
         parameters:
           - name: gesuchTrancheId
