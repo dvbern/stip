@@ -17,13 +17,21 @@
 
 package ch.dvbern.stip.api.notification.service;
 
+import io.quarkus.arc.profile.IfBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @RequestScoped
 public class MailAlreadySentCheckerService {
-    private boolean isAlreadyMailSent = false;
+    private boolean standardNotificationSent = false;
+
+    public void sentStandardNotification() {
+        standardNotificationSent = true;
+    }
+
+    @IfBuildProfile("test")
+    public void resetSentStandardNotification() {
+        standardNotificationSent = false;
+    }
 }
