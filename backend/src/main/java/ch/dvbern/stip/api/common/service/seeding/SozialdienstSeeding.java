@@ -50,9 +50,9 @@ public class SozialdienstSeeding extends Seeder {
 
     private static final Map<String, String> KEYCLOAK_IDS = Map.of(
         MandantIdentifier.BERN.getIdentifier(),
-        "7a72b682-f4dc-4b72-9d26-dbdc19246b7d",
+        "7d115bec-5ccd-4643-8bb3-da8999017369",
         MandantIdentifier.DV.getIdentifier(),
-        "8982b682-f4dc-4b72-9d26-dbdc19246b7e"
+        "8297d66c-eb83-47e7-bdf6-e494eac6aa67"
     );
 
     @Override
