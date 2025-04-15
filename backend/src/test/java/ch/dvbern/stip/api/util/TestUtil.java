@@ -207,7 +207,9 @@ public class TestUtil {
     public static Optional<FallDtoSpec> getFall(final FallApiSpec fallApiSpec) {
         final var response = fallApiSpec.getFallForGs()
             .execute(PEEK_IF_ENV_SET)
-            .then();
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
 
         var stringBody = response.extract().body().asString();
         if (stringBody == null || stringBody.isEmpty()) {
