@@ -169,4 +169,5 @@ export * from './welcomeMail';
 export * from './wohnsitz';
 export * from './wohnsitzKanton';
 export * from './zivilstand';
+export * from './zustaendigeKESB';
 export * from './zustaendigerKanton';

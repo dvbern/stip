@@ -19,16 +19,15 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 
 import java.util.Objects;
 
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ZustaendigerKantonConstraintValidator
-    implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
+public class ZustaendigeKESBConstraintValidator
+    implements ConstraintValidator<ZustaendigeKESBConstraint, PersonInAusbildung> {
     @Override
     public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() != Niederlassungsstatus.FLUECHTLING)
-            return Objects.isNull(pia.getZustaendigerKanton());
-        return Objects.nonNull(pia.getZustaendigerKanton());
+        if (!pia.isVormundschaft())
+            return Objects.isNull(pia.getZustaendigeKESB());
+        return Objects.nonNull(pia.getZustaendigeKESB());
     }
 }

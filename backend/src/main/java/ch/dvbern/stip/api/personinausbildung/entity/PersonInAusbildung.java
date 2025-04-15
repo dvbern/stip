@@ -54,7 +54,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VAL
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EMAIL_MESSAGE;
 
 @Audited
-@ZustaendigerKantonRequiredIfNiederlassungsstatusIsFluechtling
+@ZustaendigerKantonConstraint
+@ZustaendigeKESBConstraint
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
@@ -150,4 +151,9 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "zustaendiger_kanton")
     private ZustaendigerKanton zustaendigerKanton;
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    @Column(name = "zustaendige_kesb")
+    private ZustaendigeKESB zustaendigeKESB;
 }
