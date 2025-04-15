@@ -11,7 +11,7 @@
   class="mt-4"
   (ngSubmit)="handleSubmit()"
 >
-  @if (store.sozialdienstBenutzer() | rdIsPendingWithoutCache) {
+  @if (store.sozialdienstBenutzer() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <div class="row g-4">
@@ -80,7 +80,7 @@
       <dv-shared-ui-form-save
         class="mt-4"
         [disabled]="form.invalid || form.pristine"
-        [loading]="store.sozialdienstBenutzer() | rdIsPending"
+        [loading]="store.sozialdienstBenutzer() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>
     }
   }
