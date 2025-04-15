@@ -75,8 +75,8 @@ class BenutzerResourceTest {
 
         me = benutzerDto;
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
+        assertThat(benutzerDto.getVorname()).isEqualTo("Frédéric");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Nell");
     }
 
     @Test
