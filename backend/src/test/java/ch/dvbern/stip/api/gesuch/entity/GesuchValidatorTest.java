@@ -48,6 +48,8 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
+import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
@@ -57,6 +59,8 @@ import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AHV_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
@@ -87,6 +91,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -166,8 +171,18 @@ class GesuchValidatorTest {
         assertAllMessagesPresent(constraintMessages, gesuch);
     }
 
-    @Test
-    void testNullFieldValidationErrorForPersonInAusbildungZustaendigerKantonRequired() {
+    @ParameterizedTest
+    @CsvSource(
+        {
+            // niederlassungsstatus | zustaendigerKanton
+            "FLUECHTLING,",
+            "NIEDERLASSUNGSBEWILLIGUNG_C,BERN"
+        }
+    )
+    void testNullFieldValidationErrorForPersonInAusbildungZustaendigerKantonRequired(
+        Niederlassungsstatus niederlassungsstatus,
+        ZustaendigerKanton zustaendigerKanton
+    ) {
         String[] constraintMessages =
             { VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
                 VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE,
@@ -184,11 +199,34 @@ class GesuchValidatorTest {
         personInAusbildung.setNationalitaet(Land.FR);
         personInAusbildung.setHeimatort("");
         // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
-        personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING);
+        personInAusbildung.setNiederlassungsstatus(niederlassungsstatus);
+        personInAusbildung.setZustaendigerKanton(zustaendigerKanton);
 
         Gesuch gesuch = prepareDummyGesuch();
         gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         assertAllMessagesPresent(constraintMessages, gesuch);
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        value = {
+            // vormundschaft | zustaendigeKESB
+            "true,",
+            "false, KESB_BERN"
+        }
+    )
+    void testNullFieldValidationErrorForPersonInAusbildungZustaendigeKESB(
+        boolean vormundschaft,
+        ZustaendigeKESB zustaendigeKESB
+    ) {
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        // If vormundschaft is required then the zustaendigeKESB needs to be set and vice versa
+        personInAusbildung.setVormundschaft(vormundschaft);
+        personInAusbildung.setZustaendigeKESB(zustaendigeKESB);
+
+        Gesuch gesuch = prepareDummyGesuch();
+        gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        assertOneMessage(VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE, gesuch, true);
     }
 
     @Test

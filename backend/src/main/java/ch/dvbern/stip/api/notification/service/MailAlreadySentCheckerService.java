@@ -15,20 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.notification.service;
 
-import java.util.Objects;
+import io.quarkus.arc.profile.IfBuildProfile;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.Getter;
 
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+@Getter
+@RequestScoped
+public class MailAlreadySentCheckerService {
+    private boolean standardNotificationSent = false;
 
-public class ZustaendigerKantonConstraintValidator
-    implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
-    @Override
-    public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() != Niederlassungsstatus.FLUECHTLING)
-            return Objects.isNull(pia.getZustaendigerKanton());
-        return Objects.nonNull(pia.getZustaendigerKanton());
+    public void sentStandardNotification() {
+        standardNotificationSent = true;
+    }
+
+    @IfBuildProfile("test")
+    public void resetSentStandardNotification() {
+        standardNotificationSent = false;
     }
 }
