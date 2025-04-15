@@ -93,7 +93,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var gesuch = ausbildung.getGesuchs().get(0);
 
-        if (isGesuchsteller(currentBenutzer) && gesuch.getEinreichedatum() == null) {
+        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && gesuch.getEinreichedatum() == null) {
             return true;
         }
 
