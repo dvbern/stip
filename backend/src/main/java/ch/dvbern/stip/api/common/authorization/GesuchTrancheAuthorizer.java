@@ -267,16 +267,16 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
-                gesuchTranche.getGesuch(),
-                sozialdienstService
-            );
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE;
 
         final BooleanSupplier isGesuchsteller =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuchTranche.getGesuch());
+            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
+            && gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE;
 
         final BooleanSupplier anyDocumentsAusstehendOrMissing = () -> gesuchTranche.getGesuchDokuments()
             .stream()
