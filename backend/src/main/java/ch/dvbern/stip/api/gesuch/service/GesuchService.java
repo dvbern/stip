@@ -753,6 +753,53 @@ public class GesuchService {
     }
 
     @Transactional
+    public Gesuch fetchGesuchOfTranche(final UUID trancheId) {
+        // prevent a NOT_FOUND error (e.g. when tranche has been deleted/overwritten) by loading the first known
+        // revision.
+        // todo: test if a 404 gets thrown for inexistent trancheId
+        final var tranche = gesuchTrancheHistoryRepository.getInitialRevision(trancheId);
+        // fetch the gesuch of this tranche
+        return tranche.getGesuch();
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
+        final var gesuch = fetchGesuchOfTranche(trancheId);
+
+        final var currentTrancheFromGesuchInStatusEingereicht =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                .get()
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst();
+
+        final var foundGesuchInStatusVerfuegt =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+        if (foundGesuchInStatusVerfuegt.isEmpty()) {
+            throw new ForbiddenException();
+        }
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            foundGesuchInStatusVerfuegt.get()
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst();
+
+        if (currentTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
+            throw new ForbiddenException();
+        }
+
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuch,
+            // tranche to work with -> findByTrancheId
+            currentTrancheFromGesuchInStatusVerfuegt.orElse(null),
+            // changes
+            currentTrancheFromGesuchInStatusEingereicht.orElse(null)
+        );
+    }
+
+    @Transactional
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 

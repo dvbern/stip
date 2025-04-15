@@ -134,13 +134,14 @@ public class GesuchVerfuegtSeveralInitialTranchenTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
+        gesuchWithChanges =
+            gesuchApiSpec.getInitialTrancheChanges()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 

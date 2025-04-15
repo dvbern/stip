@@ -70,6 +70,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canReadGesuchOfTranche(final UUID trancheId) {
+        final var gesuch = gesuchService.fetchGesuchOfTranche(trancheId);
+        canRead(gesuch.getId());
+    }
+
+    @Transactional
     public void canRead(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
