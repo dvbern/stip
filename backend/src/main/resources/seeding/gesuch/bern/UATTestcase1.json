@@ -90,6 +90,7 @@
         "wohnsitzAnteilMutter": null,
         "wohnsitzAnteilVater": null,
         "vormundschaft": true,
+        "zustaendigeKESB":  "KESB_BERN",
         "identischerZivilrechtlicherWohnsitzOrt": null,
         "identischerZivilrechtlicherWohnsitzPLZ": null
       },

@@ -1,3 +1,19 @@
 {
-  "app-name": "Stipendien Online"
+  "app-name": "Stipendien Online",
+
+  "sozialdienst-app.header.antraege": "Anträge",
+  "sozialdienst-app.header.administration": "Administration",
+
+  "sozialdienst-app.admin.option.sozialdienstBenutzer": "Benutzerverwaltung",
+
+  "sozialdienst-app.admin.sozialdienstBenutzer.route.overview": "Benutzerverwaltung",
+  "sozialdienst-app.admin.sozialdienstBenutzer.create": "Erstellen",
+  "sozialdienst-app.admin.sozialdienstBenutzer.edit": "Bearbeiten",
+  "sozialdienst-app.admin.sozialdienstBenutzer.name.label": "Name",
+  "sozialdienst-app.admin.sozialdienstBenutzer.nachname.label": "Name",
+  "sozialdienst-app.admin.sozialdienstBenutzer.vorname.label": "Vorname",
+  "sozialdienst-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
+  "sozialdienst-app.admin.sozialdienstBenutzer.table.erstellen": "Erstellen",
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.title": "Sozialdienst Arbeiter löschen",
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?"
 }

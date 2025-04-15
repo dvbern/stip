@@ -11,11 +11,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import {
-  AdminOption,
-  AdminOptions,
-  ChildAdminOption,
-} from '@dv/sachbearbeitung-app/model/administration';
+import { AdminOptions } from '@dv/sachbearbeitung-app/model/administration';
+import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,

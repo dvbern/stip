@@ -1,0 +1,93 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" position="end">
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()"></dv-shared-pattern-mobile-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <dv-shared-pattern-app-header (openSidenav)="sidenav.open()">
+      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+        <a
+          routerLink="/"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-overview"
+        >
+          <i class="material-symbols-rounded text-white me-2">list</i>
+          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+        </a>
+        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
+          <i class="material-symbols-rounded text-white me-2">settings</i>
+          <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+        </div>
+      </div>
+    </dv-shared-pattern-app-header>
+
+    <ng-template #navigation>
+      <div class="sidenav p-4">
+        @for (option of options; track $index) {
+          @let isActive = route.isActive(option.route, false);
+          <a
+            *dvHasRoles="option.allowedRoles"
+            type="button"
+            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+            [class.btn-light]="!isActive"
+            [class.shadow-none]="!isActive"
+            (click)="navClicked.emit({ value: true })"
+            [routerLink]="['/', 'administration', option.route]"
+            routerLinkActive="active"
+            [attr.data-testid]="'option-nav-' + option.route"
+          >
+            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+            <span class="text-start">
+              {{ option.translationKey | translate }}
+            </span>
+          </a>
+        }
+      </div>
+    </ng-template>
+
+    <!-- MAIN CONTENT -->
+    <main class="page-body">
+      <div class="d-flex h-100">
+        <!-- left step nav (Desktop) -->
+        <div class="d-none d-lg-block border-end bg-white">
+          <ng-container *ngTemplateOutlet="navigation"></ng-container>
+        </div>
+        <div class="container mb-5 pt-lg-4 px-lg-4">
+          <!-- step header (mobile) -->
+          <div
+            class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
+          >
+            <ng-container *ngTemplateOutlet="navigation"></ng-container>
+          </div>
+
+          <!-- title (desktop) -->
+          @if (option) {
+            <div class="d-none d-lg-flex justify-content-start align-items-center">
+              @if (option.type === 'PARENT') {
+                <dv-shared-ui-icon-chip class="step-icon me-3">
+                  <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
+                </dv-shared-ui-icon-chip>
+              } @else {
+                <a
+                  [routerLink]="option.parentRoute"
+                  class="btn btn-link text-decoration-none fw-normal p-2 d-flex align-items-center shadow-none tw-mr-2 tw-border-none"
+                  data-testid="gesuch-step-nav-overview"
+                >
+                  <i class="material-symbols-rounded text-black me-2">arrow_back</i>
+                </a>
+              }
+
+              <h2 class="fw-bold m-0" data-testid="step-title">
+                {{ option.titleTranslationKey | translate }}
+                <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+              </h2>
+            </div>
+          }
+
+          <div>
+            <ng-content></ng-content>
+          </div>
+        </div>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

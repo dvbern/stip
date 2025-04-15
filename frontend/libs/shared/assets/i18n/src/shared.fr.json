@@ -193,6 +193,13 @@
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
+  "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",
+  "shared.admin.sozialdienst.sozialdienstGeloescht": "Le service social a été supprimé avec succès",
+  "shared.admin.sozialdienst.sozialdienstAktualisiert": "Le service social a été mis à jour avec succès",
+  "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
+  "shared.admin.sozialdienstBenutzer.erstellt": "L'employé du service social a été créé avec succès",
+  "shared.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
+
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande. Veuillez vérifier vos saisies dans:",
   "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",
@@ -378,6 +385,9 @@
   "shared.form.person.zustaendigerKanton.label": "Canton responsable",
   "shared.form.person.zustaendigerKanton.BERN": "Canton de Berne",
   "shared.form.person.zustaendigerKanton.ANDERER_KANTON": "Autre canton",
+  "shared.form.person.zustaendigeKESB.label": "KESB responsable",
+  "shared.form.person.zustaendigeKESB.KESB_BERN": "KESB dans le canton de Berne",
+  "shared.form.person.zustaendigeKESB.KESB_ANDERER_KANTON": "KESB dans un autre canton",
 
   "shared.ausbildung.title": "Formation",
   "shared.ausbildung.saved.success": "Formation enregistrée avec succès",
@@ -516,10 +526,14 @@
   "shared.form.eltern-steuerdaten.veranlagungscode.label": "Code de taxation",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER": "Déclaration d'impôts du père",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER_DESCRIPTION": "Veuillez télécharger la déclaration fiscale de votre père. Si aucune déclaration fiscale n'a été remplie, veuillez remplir le <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">document</a> et télécharger le document rempli à la place de la déclaration fiscale.",
+  "shared.form.eltern-steuererklaerung.file.VATER_DOCUMENTUPLOAD": "Veuillez télécharger la déclaration de revenus de votre père. S'ils n'ont pas rempli de déclaration d'impôts, remplissez ce qui suit et téléchargez le <a href=\"https://www.be.ch/ausbildungsbeitraege\" target=\"_blank\" rel=\"noopener\">document</a> rempli à la place de la déclaration d'impôts.",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER": "Déclaration d'impôts du mère",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER_DESCRIPTION": "Veuillez télécharger la déclaration fiscale de votre mère. Si aucune déclaration fiscale n'a été remplie, veuillez remplir le <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">document</a> et télécharger le document rempli à la place de la déclaration fiscale.",
+  "shared.form.eltern-steuererklaerung.file.MUTTER_DOCUMENTUPLOAD": "Veuillez télécharger la déclaration de revenus de votre mère. S'ils n'ont pas rempli de déclaration d'impôts, remplissez ce qui suit et téléchargez le <a href=\"https://www.be.ch/ausbildungsbeitraege\" target=\"_blank\" rel=\"noopener\">document</a> rempli à la place de la déclaration d'impôts.",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE": "Déclaration d'impôts du parents",
   "shared.form.eltern-steuererklaerung.file.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE_DESCRIPTION": "Veuillez télécharger la déclaration fiscale de vos parents. Si aucune déclaration fiscale n'a été remplie, veuillez remplir le <a href=\"https://www.bkd.be.ch/de/start/dienstleistungen/foerderung-und-unterstuetzung/ausbildungsbeitraege.html\" target=\"_blank\" rel=\"noopener\">document</a> et télécharger le document rempli à la place de la déclaration fiscale.",
+  "shared.form.eltern-steuererklaerung.file.FAMILIE_DOCUMENTUPLOAD": "Veuillez télécharger la déclaration de revenus de vos parents.. S'ils n'ont pas rempli de déclaration d'impôts, remplissez ce qui suit et téléchargez le <a href=\"https://www.be.ch/ausbildungsbeitraege\" target=\"_blank\" rel=\"noopener\">document</a> rempli à la place de la déclaration d'impôts.",
+
   "shared.geschwister.title": "Frères et sœurs",
   "shared.form.geschwister.top.info": "N'indiquez que les frères et sœurs en âge préscolaire, scolarisés ou en formation. Veuillez également indiquer vos demi-frères et sœurs et vos beaux-frères et belles-sœurs.",
   "shared.form.geschwister.name": "Nom",
