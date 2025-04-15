@@ -4752,8 +4752,6 @@ components:
         - vorname
       type: object
       properties:
-        sozialversicherungsnummer:
-          type: string
         vorname:
           type: string
         nachname:

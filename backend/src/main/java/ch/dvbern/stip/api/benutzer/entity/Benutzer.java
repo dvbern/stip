@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -78,12 +77,6 @@ public class Benutzer extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
-
-    @AhvConstraint(optional = true)
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Nullable
-    private String sozialversicherungsnummer;
 
     @NotNull
     @Column(name = "benutzer_status", nullable = false)

@@ -25,7 +25,6 @@ public class BenutzerDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid UUID id;
-  private @Valid String sozialversicherungsnummer;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
 
@@ -88,24 +87,6 @@ public class BenutzerDto  implements Serializable {
 
   /**
    **/
-  public BenutzerDto sozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-    return this;
-  }
-
-  
-  @JsonProperty("sozialversicherungsnummer")
-  public String getSozialversicherungsnummer() {
-    return sozialversicherungsnummer;
-  }
-
-  @JsonProperty("sozialversicherungsnummer")
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
-
-  /**
-   **/
   public BenutzerDto benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
     this.benutzereinstellungen = benutzereinstellungen;
     return this;
@@ -153,14 +134,13 @@ public class BenutzerDto  implements Serializable {
     return Objects.equals(this.vorname, benutzer.vorname) &&
         Objects.equals(this.nachname, benutzer.nachname) &&
         Objects.equals(this.id, benutzer.id) &&
-        Objects.equals(this.sozialversicherungsnummer, benutzer.sozialversicherungsnummer) &&
         Objects.equals(this.benutzereinstellungen, benutzer.benutzereinstellungen) &&
         Objects.equals(this.sachbearbeiterZuordnungStammdaten, benutzer.sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, id, sozialversicherungsnummer, benutzereinstellungen, sachbearbeiterZuordnungStammdaten);
+    return Objects.hash(vorname, nachname, id, benutzereinstellungen, sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
@@ -171,7 +151,6 @@ public class BenutzerDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("    sachbearbeiterZuordnungStammdaten: ").append(toIndentedString(sachbearbeiterZuordnungStammdaten)).append("\n");
     sb.append("}");

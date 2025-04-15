@@ -28,8 +28,6 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.CLAIM_AHV_NUMMER;
-import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_AHV_NUMMER;
 import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -65,7 +63,6 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
 @OidcSecurity(
     claims = {
         @Claim(key = "sub", value = GESUCHSTELLER_2_TEST_ID),
-        @Claim(key = CLAIM_AHV_NUMMER, value = GESUCHSTELLER_2_TEST_AHV_NUMMER),
         @Claim(key = "family_name", value = "Gesuchsteller 2"),
         @Claim(key = "given_name", value = "Hans")
     }
