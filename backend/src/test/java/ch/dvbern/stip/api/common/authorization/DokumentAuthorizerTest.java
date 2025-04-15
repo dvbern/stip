@@ -42,7 +42,7 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 
-public class DokumentAuthorizerTest {
+class DokumentAuthorizerTest {
     private DokumentAuthorizer dokumentAuthorizer;
 
     private GesuchDokument gesuchDokument;
