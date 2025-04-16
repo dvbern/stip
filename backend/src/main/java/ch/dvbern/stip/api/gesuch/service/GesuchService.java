@@ -758,6 +758,7 @@ public class GesuchService {
         // revision.
         // todo: test if a 404 gets thrown for inexistent trancheId
         final var tranche = gesuchTrancheHistoryRepository.getInitialRevision(trancheId);
+        // final var tranche = gesuchTrancheRepository.requireById(trancheId);
         // fetch the gesuch of this tranche
         return tranche.getGesuch();
     }
@@ -778,6 +779,7 @@ public class GesuchService {
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
         if (foundGesuchInStatusVerfuegt.isEmpty()) {
             throw new ForbiddenException();
+
         }
         final var currentTrancheFromGesuchInStatusVerfuegt =
             foundGesuchInStatusVerfuegt.get()

@@ -45,6 +45,8 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -52,6 +54,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -176,6 +179,9 @@ class GesuchTrancheCreateTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
+    UUID tranche1Id;
+    UUID tranche2Id;
+
     @Test
     @TestAsSachbearbeiter
     @Order(9)
@@ -190,11 +196,88 @@ class GesuchTrancheCreateTest {
             .body()
             .as(GesuchTrancheListDtoSpec.class);
         assertThat(result.getTranchen().size(), is(2));
+        tranche1Id = result.getTranchen().get(0).getId();
+        tranche2Id = result.getTranchen().get(1).getId();
+    }
+
+    @TestAsSachbearbeiter
+    @Order(10)
+    @Test
+    void makeGesuchVerfuegt() {
+        // TODO KSTIP-1631: Make Gesuch the correct state
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+
+        // Upload Unterschriftenblatt to "skip" Verfuegt state
+        TestUtil.uploadUnterschriftenblatt(
+            dokumentApiSpec,
+            gesuch.getId(),
+            UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
+            TestUtil.getTestPng()
+        ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
+
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+        var gesuchWithChanges =
+            gesuchApiSpec.getInitialTrancheChanges()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchWithChangesDtoSpec.class);
+        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(11)
+    void getInitialTrancheChangesAsSBInGesuchstatusEingereicht() {
+        // test for each tranche if SB gets correct status
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(tranche1Id)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(tranche2Id)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(12)
+    void getInitialTrancheChangesAsGSInGesuchstatusEingereicht() {
+        // test for each tranche if SB gets correct status
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(tranche1Id)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(tranche2Id)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(13)
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
         var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -254,7 +337,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(11)
+    @Order(14)
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2
@@ -267,7 +350,7 @@ class GesuchTrancheCreateTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getTranchen().size(), is(1));
+        assertThat(result.getTranchen().size(), is(2));
     }
 
     @Test
