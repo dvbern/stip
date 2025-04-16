@@ -813,17 +813,19 @@ public class GesuchService {
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
         final var toUpdate =
             gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
+        final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
+        final var toUpdateVerfuegt = toUpdate.stream().filter(gesuch -> gesuch.isVerfuegt()).toList();
 
-        // var gesuchStatusChangeEvent = GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE;
-        // if (gesuch.isVerfuegt()) {
-        // gesuchStatusChangeEvent =
-        // GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH;
-        // }
-
-        if (!toUpdate.isEmpty()) {
+        if (!toUpdateEingereicht.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
-                toUpdate,
+                toUpdateEingereicht,
                 GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
+            );
+        }
+        if (!toUpdateVerfuegt.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdateVerfuegt,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
             );
         }
     }
