@@ -422,6 +422,7 @@ public class GesuchService {
             .toList();
     }
 
+    @Transactional
     public List<FallDashboardItemDto> getFallDashboardItemDtos() {
         List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
         final var benutzer = benutzerService.getCurrentBenutzer();

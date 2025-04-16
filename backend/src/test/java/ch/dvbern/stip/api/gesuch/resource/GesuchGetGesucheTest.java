@@ -215,7 +215,7 @@ class GesuchGetGesucheTest {
 
         final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
-        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.EINGEREICHT));
 
         // since every document is uploaded by GS, there should not be any document missing
         assertThat(gesuchDashboardItem.getMissingDocuments(), is(nullValue()));

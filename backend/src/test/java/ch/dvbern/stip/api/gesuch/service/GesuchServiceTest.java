@@ -1442,8 +1442,11 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
-            .thenReturn(GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT).getNewestGesuchTranche());
+            .thenReturn(gesuchToReturn.getNewestGesuchTranche());
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuchToReturn));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory IS queried AND the gesuch in state EINGEREICHT is returned
@@ -1453,7 +1456,7 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     @Test
     @Description("getGesuchGS should contain possible changes / current Gesuch when in status VERFUEGT")
-    void getGesuchGSShouldReturnActualGesuchWhenInStatusVerfuegt() {
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusStipendienanspruch() {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
@@ -1463,7 +1466,7 @@ class GesuchServiceTest {
         );
         Fall fall = new Fall();
         fall.setSachbearbeiterZuordnung(zuordnung);
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.STIPENDIENANSPRUCH);
         gesuch.getAusbildung().setFall(fall);
         gesuch.setEinreichedatum(LocalDate.now());
 
@@ -1479,6 +1482,9 @@ class GesuchServiceTest {
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
             )
         );
+        final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuchToReturn));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
@@ -1544,6 +1550,8 @@ class GesuchServiceTest {
         );
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(eingereichtesGesuch));
         var gesuchGS = gesuchService
             .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));

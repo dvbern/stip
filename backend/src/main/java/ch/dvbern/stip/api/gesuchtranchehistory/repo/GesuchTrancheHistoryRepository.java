@@ -86,6 +86,26 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getEarliestRevisionWhereStatusChangedTo(
+        final UUID gesuchTrancheId,
+        final GesuchTrancheStatus gesuchTrancheStatus
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
+            .add(AuditEntity.property("status").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    @Transactional
     public Optional<GesuchTranche> getGesuchTrancheAtRevision(final UUID gesuchTrancheId, final Integer revision) {
         @SuppressWarnings("unchecked")
         final Optional<GesuchTranche> gesuchTrancheOpt = AuditReaderFactory.get(em)
