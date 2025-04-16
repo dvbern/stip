@@ -911,11 +911,6 @@ public class GesuchService {
 
         gesuchDokumentKommentarService.deleteForGesuchTrancheId(toTranche.getId());
 
-        // toTranche.getGesuchDokuments()
-        // .forEach(
-        // gesuchDokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId())
-        // );
-
         toTranche.setGueltigkeit(fromTranche.getGueltigkeit());
 
         GesuchTrancheOverrideUtil.overrideGesuchFormular(
@@ -925,39 +920,34 @@ public class GesuchService {
 
         // Dokumente
         // Remove new but not then doks
-        // final var dokumentIdsNow = toTranche.getGesuchDokuments()
-        // .stream()
-        // .flatMap(
-        // gesuchDokument -> gesuchDokument.getDokumente()
-        // .stream()
-        // .map(
-        // Dokument::getId
-        // )
-        // )
-        // .toList();
-        //
-        // final var dokumentIdsThen = fromTranche.getGesuchDokuments()
-        // .stream()
-        // .flatMap(
-        // gesuchDokument -> gesuchDokument.getDokumente()
-        // .stream()
-        // .map(
-        // Dokument::getId
-        // )
-        // )
-        // .toList();
+        final var dokumentIdsNow = toTranche.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .stream()
+                    .map(
+                        Dokument::getId
+                    )
+            )
+            .toList();
 
-        // final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s ->
-        // !dokumentIdsThen.contains(s)).toList();
+        final var dokumentIdsThen = fromTranche.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokument.getDokumente()
+                    .stream()
+                    .map(
+                        Dokument::getId
+                    )
+            )
+            .toList();
 
-        // final List<String> dokumentObjectIdsToBeDeleted = new ArrayList<>();
-        // dokumentIdsNowButNotThen
-        // .forEach(
-        // uuid -> dokumentObjectIdsToBeDeleted
-        // .add(gesuchDokumentService.deleteDokument(uuid, toTranche.getId()))
-        // );
-        //
-        // gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIdsToBeDeleted);
+        final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
+
+        dokumentIdsNowButNotThen
+            .forEach(
+                uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId())
+            );
 
         // Restore then but not now doks
 
