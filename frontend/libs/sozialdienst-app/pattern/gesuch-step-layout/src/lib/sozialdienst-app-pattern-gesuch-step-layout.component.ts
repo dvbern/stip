@@ -38,6 +38,7 @@ import {
 } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
@@ -57,9 +58,10 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternAppHeaderComponent,
     SharedPatternGesuchStepNavComponent,
     SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderPartsDirective,
     SharedUiProgressBarComponent,
     SharedUiIconChipComponent,
-    SharedPatternAppHeaderPartsDirective,
+    SharedUiHasRolesDirective,
   ],
   templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

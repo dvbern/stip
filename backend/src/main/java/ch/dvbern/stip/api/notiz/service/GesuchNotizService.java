@@ -68,6 +68,11 @@ public class GesuchNotizService {
     }
 
     @Transactional
+    public Gesuch getGesuchOfNotiz(final UUID notizId) {
+        return gesuchNotizRepository.requireById(notizId).getGesuch();
+    }
+
+    @Transactional
     public void delete(final UUID gesuchNotizId) {
         final var notiz = gesuchNotizRepository.requireById(gesuchNotizId);
         gesuchNotizRepository.delete(notiz);

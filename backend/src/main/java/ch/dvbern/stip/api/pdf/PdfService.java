@@ -27,9 +27,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.api.common.i18n.translations.TL;
-import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -74,42 +71,38 @@ public class PdfService {
 
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
+    private static final String RECHTSMITTELBELEHRUNG = "Rechtsmittelbelehrung";
+    private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
+
     PdfFont pdfFont = null;
     PdfFont pdfFontBold = null;
 
-    public ByteArrayOutputStream createPdf(final Locale locale)
-    throws Exception {
+    public ByteArrayOutputStream createPdf(final Locale locale) throws IOException {
         FontProgram font = FontProgramFactory.createFont(FONT_PATH);
         FontProgram fontBold = FontProgramFactory.createFont(FONT_BOLD_PATH);
 
         pdfFont = PdfFontFactory.createFont(font);
         pdfFontBold = PdfFontFactory.createFont(fontBold);
 
-        TL translator = TLProducer.defaultBundle()
-            .forAppLanguage(
-                AppLanguages.fromLocale(locale)
-            );
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(out);
-        PdfDocument pdfDocument = new PdfDocument(writer);
-        Document document = new Document(pdfDocument, PAGE_SIZE);
 
-        float leftMargin = document.getLeftMargin();
+        try (
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument, PAGE_SIZE);
+        ) {
+            float leftMargin = document.getLeftMargin();
 
-        Image logo = getLogo(pdfDocument, "src/main/resources/images/bern_logo.svg");
-        logo.setMarginLeft(-25);
-        logo.setMarginTop(-35);
-        document.add(logo);
+            Image logo = getLogo(pdfDocument, "src/main/resources/images/bern_logo.svg");
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+            document.add(logo);
 
-        header(document, pdfFont, leftMargin);
+            header(document, pdfFont, leftMargin);
+            negativeVerfuegung(leftMargin, document);
+            rechtsmittelbelehrung(locale, document, leftMargin);
+        }
 
-        negativeVerfuegung(leftMargin, document);
-
-        rechtsmittelbelehrung(locale, document, leftMargin);
-
-        document.close();
-        pdfDocument.close();
-        writer.close();
         return out;
     }
 
@@ -117,7 +110,7 @@ public class PdfService {
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
         document.add(
-            createParagraph(pdfFontBold, FONT_SIZE_BIG, leftMargin, "Rechtsmittelbelehrung".toUpperCase(locale))
+            createParagraph(pdfFontBold, FONT_SIZE_BIG, leftMargin, RECHTSMITTELBELEHRUNG.toUpperCase(locale))
                 .setUnderline()
                 .setPaddingTop(20)
         );
@@ -140,7 +133,7 @@ public class PdfService {
         );
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2."));
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, "Rechtsmittelbelehrung"));
+        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, RECHTSMITTELBELEHRUNG));
         mainTable.addCell(
             createCell(
                 pdfFont,
@@ -246,8 +239,8 @@ public class PdfService {
         document.add(createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, "TEXTBAUSTEIN"));
 
         Link ausbildungsbeitraegeUri = new Link(
-            "www.be.ch/ausbildungsbeitraege",
-            PdfAction.createURI("www.be.ch/ausbildungsbeitraege")
+            AUSBILDUNGSBEITRAEGE_LINK,
+            PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK)
         );
         Paragraph apology = createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
             .add(
@@ -296,7 +289,7 @@ public class PdfService {
         signatureTable.setMarginBottom(20);
         document.add(signatureTable);
 
-        String[] addons = { "Rechtsmittelbelehrung", "Kopie an: Eltern" };
+        String[] addons = { RECHTSMITTELBELEHRUNG, "Kopie an: Eltern" };
 
         for (String addon : addons) {
             document.add(
@@ -335,7 +328,7 @@ public class PdfService {
         );
 
         Link ausbildungsbeitraegeUri =
-            new Link("www.be.ch/ausbildungsbeitraege", PdfAction.createURI("www.be.ch/ausbildungsbeitraege"));
+            new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
         Paragraph uriParagraph = new Paragraph()
             .add(ausbildungsbeitraegeUri);
 

@@ -1,5 +1,5 @@
 <form [formGroup]="form" data-testid="form-sozialdienst-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
-  @if (store.sozialdienst() | rdIsPending) {
+  @if (store.sozialdienst() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <!-- Name -->
@@ -136,7 +136,7 @@
       <dv-shared-ui-form-save
         class="mt-4"
         [disabled]="form.invalid || form.pristine"
-        [loading]="store.sozialdienst() | rdIsPending"
+        [loading]="store.sozialdienst() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>
     }
   }
