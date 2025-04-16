@@ -57,7 +57,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-public class GesuchVerfuegtSeveralInitialTranchenTest {
+class GesuchVerfuegtSeveralInitialTranchenTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
@@ -158,7 +158,7 @@ public class GesuchVerfuegtSeveralInitialTranchenTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(tranchen.getInitialTranchen().size()).isEqualTo(2);
+        assertThat(tranchen.getInitialTranchen()).hasSize(2);
     }
 
     @Test
