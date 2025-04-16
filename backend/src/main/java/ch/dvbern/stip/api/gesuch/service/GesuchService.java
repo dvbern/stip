@@ -1000,6 +1000,7 @@ public class GesuchService {
             } else {
                 final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument);
                 targetGesuchDokumente.add(newGesuchDokument);
+                newGesuchDokument.setGesuchTranche(toTranche);
                 gesuchDokumentRepository.persist(newGesuchDokument);
                 sourceGesuchDokument.getDokumente()
                     .forEach(
