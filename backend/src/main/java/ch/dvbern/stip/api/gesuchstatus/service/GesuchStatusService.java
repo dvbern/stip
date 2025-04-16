@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuchstatus.service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -31,7 +30,6 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
@@ -41,7 +39,6 @@ import com.github.oxo42.stateless4j.StateMachine;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -50,7 +47,6 @@ public class GesuchStatusService {
     private final GesuchValidatorService validationService;
     private final MailService mailService;
     private final NotificationService notificationService;
-    private final GesuchHistoryService gesuchHistoryService;
 
     private final Instance<GesuchStatusStateChangeHandler> handlers;
 
@@ -59,7 +55,7 @@ public class GesuchStatusService {
         triggerStateMachineEventWithComment(gesuch, event, null, false);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void triggerStateMachineEventWithComment(
         final Gesuch gesuch,
         final GesuchStatusChangeEvent event,
@@ -105,8 +101,8 @@ public class GesuchStatusService {
         return editStates.contains(gesuchstatus);
     }
 
-    public boolean canChangeEinreichedatum(final UUID gesuchId, final Gesuchstatus gesuchstatus) {
-        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !gesuchHistoryService.wasVerfuegt(gesuchId);
+    public boolean canChangeEinreichedatum(final boolean wasVerfuegt, final Gesuchstatus gesuchstatus) {
+        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !wasVerfuegt;
     }
 
     public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {

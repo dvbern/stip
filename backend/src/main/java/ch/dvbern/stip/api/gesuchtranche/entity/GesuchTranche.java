@@ -100,6 +100,7 @@ public class GesuchTranche extends AbstractMandantEntity {
     private String comment;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
+    // @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
     private @Valid List<GesuchDokument> gesuchDokuments = new ArrayList<>();
 
     @NotNull

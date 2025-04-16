@@ -17,16 +17,17 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -34,24 +35,44 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheHistoryService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
+    private final GesuchHistoryService gesuchHistoryService;
 
-    public GesuchTranche getCurrentOrEingereichtTrancheForGS(final UUID gesuchTrancheId) {
+    public GesuchTranche getCurrentOrHistoricalTrancheForGS(final UUID gesuchTrancheId) {
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
-                gesuchTranche =
-                    gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                        .orElseThrow();
-            }
-        } else if (
+        if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
         ) {
-            gesuchTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId);
+            return gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId);
+        }
+        final var gesuchToReturnFrom =
+            gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchTranche.getGesuch().getId());
+
+        return gesuchToReturnFrom
+            .getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche1 -> gesuchTranche1.getId().equals(gesuchTrancheId))
+            .findFirst()
+            .orElse(
+                gesuchToReturnFrom.getGesuchTranchen().get(0)
+            );
+    }
+
+    public Optional<Integer> getHistoricalTrancheRevisionForGS(final UUID gesuchTrancheId) {
+        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        ) {
+            return gesuchTrancheHistoryRepository
+                .getLatestRevisionWhereStatusChangedTo(gesuchTranche.getId(), GesuchTrancheStatus.UEBERPRUEFEN);
         }
 
-        return gesuchTranche;
+        return gesuchHistoryService.getHistoricalGesuchRevisionForGS(gesuchTranche.getGesuch().getId());
+    }
+
+    @Transactional
+    public Optional<GesuchTranche> getGesuchTrancheAtRevision(final UUID gesuchTrancheId, final Integer revision) {
+        return gesuchTrancheHistoryRepository.getGesuchTrancheAtRevision(gesuchTrancheId, revision);
     }
 }

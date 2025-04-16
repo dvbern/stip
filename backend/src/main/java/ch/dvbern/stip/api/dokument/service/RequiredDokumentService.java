@@ -83,16 +83,25 @@ public class RequiredDokumentService {
         final var containsUnprocessedGesuchDokuments =
             gesuch.getGesuchTranchen()
                 .stream()
+                .filter(
+                    gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                    && gesuchTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN)
+                )
                 .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithFiles);
 
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
             .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
 
-        final var containsAenderungenNOTInStateUeberpruefen =
-            RequiredDokumentUtil.containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
+        final var containsAenderungenPendingOnGs =
+            gesuch.getGesuchTranchen()
+                .stream()
+                .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+                .anyMatch(
+                    tranche -> GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(tranche.getStatus())
+                );
 
-        if (containsAenderungenNOTInStateUeberpruefen) {
+        if (containsAenderungenPendingOnGs) {
             return false;
         }
 

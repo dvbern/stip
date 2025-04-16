@@ -173,6 +173,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "beschwerde_haengig", nullable = false)
     private boolean beschwerdeHaengig;
 
+    @Column(name = "verfuegt", nullable = false)
+    private boolean verfuegt = false;
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))

@@ -78,11 +78,27 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
+            .permit(
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
+                Gesuchstatus.KEIN_STIPENDIENANSPRUCH
+            )
+            .permit(
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+                Gesuchstatus.STIPENDIENANSPRUCH
+            );
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
+                Gesuchstatus.KEIN_STIPENDIENANSPRUCH
+            )
+            .permit(
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+                Gesuchstatus.STIPENDIENANSPRUCH
+            );
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
@@ -110,8 +126,13 @@ public class GesuchStatusConfigProducer {
 
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
-        config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
-        config.configure(Gesuchstatus.STIPENDIENANSPRUCH);
+
+        config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
+            .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        config.configure(Gesuchstatus.STIPENDIENANSPRUCH)
+            .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB);
+
         config.configure(Gesuchstatus.GESUCH_ABGELEHNT);
 
         for (final var status : Gesuchstatus.values()) {

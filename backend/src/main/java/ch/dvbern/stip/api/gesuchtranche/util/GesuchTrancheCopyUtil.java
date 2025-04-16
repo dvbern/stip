@@ -224,7 +224,7 @@ public class GesuchTrancheCopyUtil {
         return new DateRange(startDate, roundedEndDate);
     }
 
-    GesuchFormular copy(final GesuchFormular other) {
+    public GesuchFormular copy(final GesuchFormular other) {
         final var copy = new GesuchFormular();
 
         // PiA und PiA Adresse

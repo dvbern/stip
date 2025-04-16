@@ -77,7 +77,7 @@ public class GesuchDokumentCopyUtil {
         target.setDokumentTyp(source.getDokumentTyp());
         target.setStatus(source.getStatus());
         if (source.getCustomDokumentTyp() != null) {
-            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()));
+            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()).setGesuchDokument(source));
         }
     }
 }

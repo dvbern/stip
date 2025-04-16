@@ -38,7 +38,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN,
-  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN,
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT
 })
 @JsonTypeName("DokumenteToUpload")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -60,6 +61,9 @@ public class DokumenteToUploadDtoSpec {
 
   public static final String JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN = "sbCanBearbeitungAbschliessen";
   private Boolean sbCanBearbeitungAbschliessen;
+
+  public static final String JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT = "sbCanUploadUnterschriftenblatt";
+  private Boolean sbCanUploadUnterschriftenblatt;
 
   public DokumenteToUploadDtoSpec() {
   }
@@ -243,6 +247,32 @@ public class DokumenteToUploadDtoSpec {
     this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
   }
 
+
+  public DokumenteToUploadDtoSpec sbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+    
+    this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
+    return this;
+  }
+
+   /**
+   * Get sbCanUploadUnterschriftenblatt
+   * @return sbCanUploadUnterschriftenblatt
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getSbCanUploadUnterschriftenblatt() {
+    return sbCanUploadUnterschriftenblatt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+    this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -257,12 +287,13 @@ public class DokumenteToUploadDtoSpec {
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter) &&
         Objects.equals(this.sbCanFehlendeDokumenteUebermitteln, dokumenteToUpload.sbCanFehlendeDokumenteUebermitteln) &&
         Objects.equals(this.gsCanDokumenteUebermitteln, dokumenteToUpload.gsCanDokumenteUebermitteln) &&
-        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen);
+        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen) &&
+        Objects.equals(this.sbCanUploadUnterschriftenblatt, dokumenteToUpload.sbCanUploadUnterschriftenblatt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen);
+    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen, sbCanUploadUnterschriftenblatt);
   }
 
   @Override
@@ -275,6 +306,7 @@ public class DokumenteToUploadDtoSpec {
     sb.append("    sbCanFehlendeDokumenteUebermitteln: ").append(toIndentedString(sbCanFehlendeDokumenteUebermitteln)).append("\n");
     sb.append("    gsCanDokumenteUebermitteln: ").append(toIndentedString(gsCanDokumenteUebermitteln)).append("\n");
     sb.append("    sbCanBearbeitungAbschliessen: ").append(toIndentedString(sbCanBearbeitungAbschliessen)).append("\n");
+    sb.append("    sbCanUploadUnterschriftenblatt: ").append(toIndentedString(sbCanUploadUnterschriftenblatt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

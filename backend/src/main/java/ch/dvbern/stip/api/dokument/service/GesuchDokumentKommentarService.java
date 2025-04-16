@@ -24,19 +24,14 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -53,8 +48,7 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
+    private final CustomDokumentTypRepository customDokumentTypRepository;
 
     @Transactional
     public void deleteForGesuchDokument(UUID gesuchDokumentId) {
@@ -70,11 +64,13 @@ public class GesuchDokumentKommentarService {
     }
 
     @Transactional
-    public void copyKommentareFromTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
-        final var fromDokumentKommentars = getAllKommentareForGesuchTrancheId(fromTranche.getId());
+    public void copyKommentareToTranche(
+        final List<GesuchDokumentKommentar> gesuchDokumentKommentars,
+        GesuchTranche toTranche
+    ) {
         final var toGesuchDokuments = toTranche.getGesuchDokuments();
 
-        for (final var fromKommentar : fromDokumentKommentars) {
+        for (final var fromKommentar : gesuchDokumentKommentars) {
             for (final var toGesuchDokument : toGesuchDokuments) {
                 final var fromGesuchDokument = fromKommentar.getGesuchDokument();
 
@@ -100,10 +96,21 @@ public class GesuchDokumentKommentarService {
     }
 
     @Transactional
-    public List<GesuchDokumentKommentar> getAllKommentareForGesuchTrancheId(
-        final UUID gesuchTrancheId
+    public void copyKommentareFromTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
+        List<GesuchDokumentKommentar> gesuchDokumentKommentars = fromTranche.getGesuchDokuments()
+            .stream()
+            .flatMap(
+                gesuchDokument -> gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokument.getId())
+                    .stream()
+            )
+            .toList();
+        copyKommentareToTranche(gesuchDokumentKommentars, toTranche);
+    }
+
+    @Transactional
+    public List<GesuchDokumentKommentar> getAllKommentareForGesuchTranche(
+        final GesuchTranche gesuchTranche
     ) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
         ArrayList<GesuchDokumentKommentar> kommentars = new ArrayList<>();
         gesuchDokuments.stream()
@@ -122,35 +129,20 @@ public class GesuchDokumentKommentarService {
         }
 
         var gesuchTranche = gesuchTrancheRepository.requireById(gesuchDokument.getGesuchTranche().getId());
-        Integer gesuchTrancheRevision = null;
-        final var gesuch = gesuchTranche.getGesuch();
-        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
-                final var gesuchTrancheFehlendeDokumentRevisionOpt = gesuchHistoryRepository
-                    .getRevisionWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.FEHLENDE_DOKUMENTE);
-                gesuchTrancheRevision = gesuchTrancheFehlendeDokumentRevisionOpt.orElseGet(
-                    () -> gesuchHistoryRepository
-                        .getRevisionWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
-                        .orElseThrow()
-                );
-            }
-        } else if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
-        ) {
-            gesuchTrancheRevision =
-                gesuchTrancheHistoryRepository
-                    .getLatestRevisionWhereStatusChangedTo(gesuchTranche.getId(), GesuchTrancheStatus.UEBERPRUEFEN)
-                    .orElseThrow();
-            // TODO KSTIP-1910: add handling for tranche status Fehlende Dokumente
-        }
+        var gesuchTrancheRevision =
+            gesuchTrancheHistoryService.getHistoricalTrancheRevisionForGS(gesuchTranche.getId());
 
         List<GesuchDokumentKommentar> gesuchDokumentKommentars =
             gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokumentId);
 
-        if (Objects.nonNull(gesuchTrancheRevision)) {
+        if (gesuchTrancheRevision.isPresent()) {
             gesuchDokumentKommentars = gesuchDokumentKommentarHistoryRepository
-                .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokumentId, gesuchTrancheRevision);
+                .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokumentId, gesuchTrancheRevision.get())
+                .stream()
+                .filter(
+                    gesuchDokumentKommentars::contains
+                )
+                .toList();
         }
 
         return gesuchDokumentKommentars.stream()

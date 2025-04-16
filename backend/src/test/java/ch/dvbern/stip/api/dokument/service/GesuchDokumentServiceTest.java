@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
@@ -46,7 +45,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -97,21 +96,13 @@ class GesuchDokumentServiceTest {
     @Inject
     GesuchDokumentService gesuchDokumentService;
 
-    @Inject
-    BenutzerService benutzerService;
-
     @InjectMock
     GesuchTrancheRepository gesuchTrancheRepository;
 
     @Inject
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
-    @Inject
-    GesuchDokumentKommentarService gesuchDokumentKommentarService;
-
     private final UUID id = UUID.randomUUID();
-    @Inject
-    DokumentstatusService dokumentstatusService;
 
     private GesuchDokument mockedDokument;
     private GesuchDokumentKommentar comment;
@@ -239,8 +230,6 @@ class GesuchDokumentServiceTest {
                     new GesuchDokumentKommentarMapperImpl(),
                     null,
                     null,
-                    null,
-                    null,
                     null
                 ),
                 null
@@ -350,8 +339,8 @@ class GesuchDokumentServiceTest {
         CustomDokumentTypRepository customDocumentTypRepository,
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
         RequiredDokumentService requiredDokumentService,
-        GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository,
-        DokumentHistoryRepository dokumentHistoryRepository
+        DokumentHistoryRepository dokumentHistoryRepository,
+        GesuchTrancheHistoryService gesuchTrancheHistoryService
         ) {
             super(
                 gesuchDokumentMapper,
@@ -366,8 +355,8 @@ class GesuchDokumentServiceTest {
                 requiredDokumentService,
                 antivirus,
                 gesuchDokumentKommentarRepository,
-                gesuchTrancheHistoryRepository,
-                dokumentHistoryRepository
+                dokumentHistoryRepository,
+                gesuchTrancheHistoryService
             );
         }
 

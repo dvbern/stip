@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -25,33 +27,32 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandler {
+public class AenderungZurueckweisenHandler implements GesuchStatusStateChangeHandler {
     private final GesuchService gesuchService;
+
+    private static final Set<GesuchStatusChangeEvent> POSSIBLE_TRIGGERS = Set.of(
+        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+    );
+    private static final Set<Gesuchstatus> POSSIBLE_DESTINATIONS =
+        Set.of(Gesuchstatus.STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        final var source = transition.getSource();
-        final var handlesSource = switch (source) {
-            case IN_BEARBEITUNG_SB, FEHLENDE_DOKUMENTE -> true;
-            default -> false;
-        };
-
-        return handlesSource && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
+        return transition.getSource() == Gesuchstatus.IN_BEARBEITUNG_SB
+        && POSSIBLE_TRIGGERS.contains(transition.getTrigger())
+        && POSSIBLE_DESTINATIONS.contains(transition.getDestination());
     }
 
     @Transactional
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
+        if (!gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
-        gesuch.setEinreichedatum(null);
-        gesuch.setNachfristDokumente(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
     }
 }

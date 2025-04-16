@@ -40,8 +40,8 @@ public enum Gesuchstatus {
     FEHLENDE_DOKUMENTE,
     NICHT_ANSPRUCHSBERECHTIGT,
     NICHT_BEITRAGSBERECHTIGT,
-    KEIN_STIPENDIENANSPRUCH,
     STIPENDIENANSPRUCH,
+    KEIN_STIPENDIENANSPRUCH,
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
@@ -76,16 +76,6 @@ public enum Gesuchstatus {
                 VERSENDET,
                 NICHT_ANSPRUCHSBERECHTIGT,
                 ANSPRUCH_MANUELL_PRUEFEN
-            )
-        );
-
-    public static final Set<Gesuchstatus> SB_IS_EDITING_GESUCH =
-        Collections.unmodifiableSet(
-            EnumSet.of(
-                IN_BEARBEITUNG_SB,
-                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-                BEREIT_FUER_BEARBEITUNG,
-                IN_FREIGABE
             )
         );
 
@@ -145,7 +135,8 @@ public enum Gesuchstatus {
             VERSANDBEREIT,
             VERSENDET,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            STIPENDIENANSPRUCH
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
         )
     );
 
@@ -183,6 +174,31 @@ public enum Gesuchstatus {
             VERSANDBEREIT,
             VERFUEGT,
             VERSENDET,
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCHSTELLER_RECEIVES_CURRENT_GESUCH = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE,
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCH_VERFUEGUNG_ABGESCHLOSSEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            STIPENDIENANSPRUCH,
+            KEIN_STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCH_GESUCHSTATUS_GS_VISIBLE = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            EINGEREICHT,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH
         )
