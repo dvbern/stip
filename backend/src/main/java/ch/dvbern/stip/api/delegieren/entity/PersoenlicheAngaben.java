@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.delegieren.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -38,7 +39,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class PersoenlicheAngaben {
+public class PersoenlicheAngaben implements Serializable {
     @NotNull
     @Column(name = "anrede", nullable = false)
     @Enumerated(EnumType.STRING)

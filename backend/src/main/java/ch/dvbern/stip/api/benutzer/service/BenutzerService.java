@@ -104,7 +104,6 @@ public class BenutzerService {
         newBenutzer.setKeycloakId(jsonWebToken.getSubject());
         newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
         newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
-        newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
         newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
         newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
 
