@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorizer;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -35,6 +37,7 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +71,15 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         UUID currentBenutzerId = UUID.randomUUID();
         currentBenutzer.setId(currentBenutzerId);
 
+        gesuch = new Gesuch()
+            .setAusbildung(
+                new Ausbildung()
+                    .setFall(
+                        new Fall()
+                            .setGesuchsteller(currentBenutzer)
+                    )
+            );
+
         gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
             .setTyp(GesuchTrancheTyp.AENDERUNG)
@@ -86,15 +98,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
         gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
-        gesuch = new Gesuch()
-            .setAusbildung(
-                new Ausbildung()
-                    .setFall(
-                        new Fall()
-                            .setGesuchsteller(currentBenutzer)
-                    )
-            );
-
         authorizer = new GesuchTrancheAuthorizer(
             benutzerService,
             gesuchTrancheRepository,
@@ -107,6 +110,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
+        when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
     }
@@ -190,5 +194,63 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
+    }
+
+    @Test
+    void gsCannotAenderungEinreichenWhenGesuchDelegated() {
+        // arrange
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
+        currentBenutzer.setRollen(
+            Set.of(
+                new Rolle()
+                    .setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER)
+            )
+        );
+        Fall fall = new Fall();
+        fall.setGesuchsteller(new Benutzer());
+        Sozialdienst sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        Delegierung delegierung = new Delegierung();
+        delegierung.setSozialdienst(sozialdienst);
+        fall.setDelegierung(delegierung);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        ausbildung.setGesuchs(List.of(gesuch));
+        gesuch.setAusbildung(ausbildung);
+
+        final var uuid = UUID.randomUUID();
+        when(gesuchTrancheStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
+        // gesuchTrancheRepository.requireAenderungById(gesuchTrancheId)
+        // assert
+        assertThrows(ForbiddenException.class, () -> authorizer.canAenderungEinreichen(uuid));
+    }
+
+    @Test
+    void sozialdienstMitarbeiterCanAenderungEinreichenWhenGesuchDelegated() {
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
+        // arrange
+        currentBenutzer.setRollen(
+            Set.of(
+                new Rolle()
+                    .setKeycloakIdentifier(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
+            )
+        );
+        Fall fall = new Fall();
+        fall.setGesuchsteller(new Benutzer());
+        Sozialdienst sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        Delegierung delegierung = new Delegierung();
+        delegierung.setSozialdienst(sozialdienst);
+        fall.setDelegierung(delegierung);
+        Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        ausbildung.setGesuchs(List.of(gesuch));
+        gesuch.setAusbildung(ausbildung);
+        fall.setAusbildungs(Set.of(ausbildung));
+
+        final var uuid = UUID.randomUUID();
+        when(gesuchTrancheStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
+        // assert
+        assertDoesNotThrow(() -> authorizer.canAenderungEinreichen(uuid));
     }
 }
