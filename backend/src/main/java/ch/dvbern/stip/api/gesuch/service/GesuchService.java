@@ -757,7 +757,9 @@ public class GesuchService {
         // prevent a NOT_FOUND error (e.g. when tranche has been deleted/overwritten) by loading the first known
         // revision.
         // todo: test if a 404 gets thrown for inexistent trancheId
-        final var tranche = gesuchTrancheHistoryRepository.getInitialRevision(trancheId);
+        final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId); // todo where id = id order by
+                                                                                         // rev desc -> 1.result
+
         // final var tranche = gesuchTrancheRepository.requireById(trancheId);
         // fetch the gesuch of this tranche
         return tranche.getGesuch();

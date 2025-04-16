@@ -52,6 +52,17 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
+    public GesuchTranche getLatestRevision(final UUID gesuchTrancheId) {
+        final var reader = AuditReaderFactory.get(em);
+
+        return (GesuchTranche) reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
     public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
         return (GesuchTranche) reader.createQuery()
