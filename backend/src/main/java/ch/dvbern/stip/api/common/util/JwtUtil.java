@@ -15,25 +15,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.util;
+package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @UtilityClass
-public class GesuchDokumentKommentarCopyUtil {
-    public GesuchDokumentKommentar createCopy(
-        final GesuchDokumentKommentar source,
-        final GesuchDokument destinationGesuchDokument
-    ) {
-        final var copy = new GesuchDokumentKommentar();
+public class JwtUtil {
+    public String extractUsernameFromJwt(final Instance<JsonWebToken> token) {
+        if (token != null && token.isResolvable()) {
+            final var jwt = token.get();
+            final var givenName = jwt.getClaim(Claims.given_name);
+            final var familyName = jwt.getClaim(Claims.family_name);
+            if (givenName == null && familyName == null) {
+                return "System";
+            }
 
-        copy.setGesuchDokument(destinationGesuchDokument);
-        copy.setKommentar(source.getKommentar());
-        copy.setDokumentstatus(source.getDokumentstatus());
-        copy.setAutor(source.getAutor());
-
-        return copy;
+            return givenName + " " + familyName;
+        } else {
+            return "System";
+        }
     }
 }
