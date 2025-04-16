@@ -28,7 +28,7 @@
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.11.3</quarkus.platform.version>
+    <quarkus.platform.version>3.12.3</quarkus.platform.version>
     <querydsl.version>5.0.0</querydsl.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <rest-assured.version>4.5.1</rest-assured.version>
