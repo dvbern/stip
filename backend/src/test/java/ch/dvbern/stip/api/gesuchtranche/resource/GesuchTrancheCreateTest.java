@@ -45,6 +45,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -166,8 +167,8 @@ class GesuchTrancheCreateTest {
     @Order(8)
     void createTrancheSuccess() {
         final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
-        createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb());
-        createGesuchTrancheRequestDtoSpec.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(5));
+        createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(2));
+        createGesuchTrancheRequestDtoSpec.setEnd(null);
         createGesuchTrancheRequestDtoSpec.setComment("Bla");
 
         gesuchTrancheApiSpec.createGesuchTrancheCopy()
@@ -181,6 +182,9 @@ class GesuchTrancheCreateTest {
 
     UUID tranche1Id;
     UUID tranche2Id;
+    UUID overwrittenTrancheId;
+
+    GesuchTrancheSlimDtoSpec trancheToOverwrite;
 
     @Test
     @TestAsSachbearbeiter
@@ -198,10 +202,42 @@ class GesuchTrancheCreateTest {
         assertThat(result.getTranchen().size(), is(2));
         tranche1Id = result.getTranchen().get(0).getId();
         tranche2Id = result.getTranchen().get(1).getId();
+
+        trancheToOverwrite = result.getTranchen().get(0);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void overwriteTranche() {
+        final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
+        createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
+        createGesuchTrancheRequestDtoSpec.setComment("Overwritten");
+
+        gesuchTrancheApiSpec.createGesuchTrancheCopy()
+            .gesuchIdPath(gesuch.getId())
+            .body(createGesuchTrancheRequestDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        // verify that the tranche has been overwritten
+        var result = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchTrancheListDtoSpec.class);
+        assertThat(result.getTranchen().size(), is(2));
+        tranche1Id = result.getTranchen().get(0).getId();
+        overwrittenTrancheId = result.getTranchen().get(1).getId();
     }
 
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(11)
     @Test
     void makeGesuchVerfuegt() {
         // TODO KSTIP-1631: Make Gesuch the correct state
@@ -239,7 +275,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void getInitialTrancheChangesAsSBInGesuchstatusEingereicht() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -248,6 +284,13 @@ class GesuchTrancheCreateTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(overwrittenTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        // the initial tranche 2 is not present anymore (but in history)
         gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(tranche2Id)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -258,7 +301,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(13)
     void getInitialTrancheChangesAsGSInGesuchstatusEingereicht() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -277,7 +320,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(14)
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
         var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -337,7 +380,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2

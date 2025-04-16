@@ -58,6 +58,7 @@ public class GesuchTrancheHistoryRepository {
         return (GesuchTranche) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, true)
             .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("gesuch").isNotNull())
             .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1)
             .getSingleResult();

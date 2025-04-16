@@ -758,16 +758,22 @@ public class GesuchService {
         // revision.
         // todo: test if a 404 gets thrown for inexistent trancheId
         final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId); // todo where id = id order by
-                                                                                         // rev desc -> 1.result
-
-        // final var tranche = gesuchTrancheRepository.requireById(trancheId);
-        // fetch the gesuch of this tranche
-        return tranche.getGesuch();
+        // fetch the gesuchId of this tranche
+        // then fetch current gesuch data (because gesuch of audited tranche could still be in other state than VERFUEGT
+        final var gesuchId = tranche.getGesuch().getId(); // rev desc -> 1.result
+        return gesuchRepository.requireById(gesuchId);
     }
 
     @Transactional
     public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
         final var gesuch = fetchGesuchOfTranche(trancheId);
+        final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId);
+
+        // check if queried tranche has existed/ been overwritten
+        // else: wrong trancheId is queried
+        if (Objects.isNull(tranche)) {
+            throw new NotFoundException();
+        }
 
         final var currentTrancheFromGesuchInStatusEingereicht =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
@@ -783,15 +789,22 @@ public class GesuchService {
             throw new ForbiddenException();
 
         }
-        final var currentTrancheFromGesuchInStatusVerfuegt =
+        var currentTrancheFromGesuchInStatusVerfuegt =
             foundGesuchInStatusVerfuegt.get()
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
                 .findFirst();
 
+        // e.g. if tranche ist not existing anymore (overwritten)
         if (currentTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
-            throw new ForbiddenException();
+            return gesuchMapperUtil.toWithChangesDto(
+                gesuch,
+                // tranche to work with -> findByTrancheId
+                tranche,
+                // changes
+                currentTrancheFromGesuchInStatusEingereicht.orElse(null)
+            );
         }
 
         return gesuchMapperUtil.toWithChangesDto(
