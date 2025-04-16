@@ -108,6 +108,7 @@ import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
@@ -754,13 +755,17 @@ public class GesuchService {
 
     @Transactional
     public Gesuch fetchGesuchOfTranche(final UUID trancheId) {
-        // prevent a NOT_FOUND error (e.g. when tranche has been deleted/overwritten) by loading the first known
-        // revision.
-        // todo: test if a 404 gets thrown for inexistent trancheId
-        final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId); // todo where id = id order by
+        GesuchTranche tranche;
+        try {
+            tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId);
+        } catch (final NoResultException e) {
+            throw new NotFoundException();
+        }
+
         // fetch the gesuchId of this tranche
-        // then fetch current gesuch data (because gesuch of audited tranche could still be in other state than VERFUEGT
-        final var gesuchId = tranche.getGesuch().getId(); // rev desc -> 1.result
+        // then fetch current gesuch data
+        // (because gesuch of audited tranche could still be in other state than VERFUEGT)
+        final var gesuchId = tranche.getGesuch().getId();
         return gesuchRepository.requireById(gesuchId);
     }
 

@@ -43,7 +43,6 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -90,8 +89,11 @@ class GesuchTrancheCreateTest {
 
     private GesuchDtoSpec gesuch;
 
-    private GesuchTrancheDtoSpec tranche1;
-    private GesuchTrancheDtoSpec tranche2;
+    private UUID tranche1Id;
+    private UUID tranche2Id;
+    private UUID overwrittenTrancheId;
+
+    private GesuchTrancheSlimDtoSpec trancheToOverwrite;
 
     @Test
     @TestAsGesuchsteller
@@ -179,12 +181,6 @@ class GesuchTrancheCreateTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
     }
-
-    UUID tranche1Id;
-    UUID tranche2Id;
-    UUID overwrittenTrancheId;
-
-    GesuchTrancheSlimDtoSpec trancheToOverwrite;
 
     @Test
     @TestAsSachbearbeiter
@@ -300,22 +296,16 @@ class GesuchTrancheCreateTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(13)
-    void getInitialTrancheChangesAsGSInGesuchstatusEingereicht() {
+    void getInitialTrancheChangesWithInvalidTrancheId() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(tranche1Id)
+            .gesuchTrancheIdPath(UUID.randomUUID())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
-        gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(tranche2Id)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
