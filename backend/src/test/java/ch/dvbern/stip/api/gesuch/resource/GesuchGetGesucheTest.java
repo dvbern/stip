@@ -47,6 +47,7 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.response.ResponseBody;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -327,7 +328,7 @@ class GesuchGetGesucheTest {
             .pageQuery(0)
             .pageSizeQuery(configService.getMaxAllowedPageSize())
             .typQuery(GesuchTrancheTypDtoSpec.TRANCHE)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
