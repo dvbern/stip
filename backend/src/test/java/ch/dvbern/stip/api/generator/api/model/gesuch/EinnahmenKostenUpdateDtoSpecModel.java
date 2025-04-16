@@ -34,6 +34,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setAusbildungskostenTertiaerstufe(2500);
             model.setFahrkosten(2500);
             model.setWohnkosten(2500);
+            model.setWgWohnend(false);
             model.setVerdienstRealisiert(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
