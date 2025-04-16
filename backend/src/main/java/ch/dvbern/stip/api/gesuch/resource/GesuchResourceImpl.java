@@ -253,7 +253,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
+    @RolesAllowed(SB_GESUCH_READ)
     public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
         gesuchAuthorizer.canReadGesuchOfTranche(gesuchTrancheId);
         return gesuchService.getChangesByTrancheId(gesuchTrancheId);
