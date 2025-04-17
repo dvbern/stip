@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -105,18 +104,6 @@ public class GesuchDokumentKommentarService {
             )
             .toList();
         copyKommentareToTranche(gesuchDokumentKommentars, toTranche);
-    }
-
-    @Transactional
-    public List<GesuchDokumentKommentar> getAllKommentareForGesuchTranche(
-        final GesuchTranche gesuchTranche
-    ) {
-        final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
-        ArrayList<GesuchDokumentKommentar> kommentars = new ArrayList<>();
-        gesuchDokuments.stream()
-            .map(dokument -> gesuchDokumentKommentarRepository.getByGesuchDokumentId(dokument.getId()))
-            .forEach(kommentars::addAll);
-        return kommentars;
     }
 
     @Transactional
