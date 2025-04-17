@@ -202,9 +202,7 @@ public class GesuchTrancheService {
         );
 
         try {
-            gesuch
-                .getGesuchTranchen()
-                .forEach(gesuchTrancheValidatorService::validateBearbeitungAbschliessen);
+            gesuchTrancheValidatorService.validateBearbeitungAbschliessen(gesuch);
         } catch (ValidationsException ex) {
             dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(false);
         }

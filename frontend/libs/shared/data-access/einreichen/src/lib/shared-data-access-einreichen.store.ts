@@ -261,7 +261,7 @@ export class EinreichenStore extends signalStore(
             ...requestArgs,
           ),
         'sachbearbeitung-app': () =>
-          this.gesuchTrancheService.validateGesuchTranchePagesSB$(
+          this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
             ...requestArgs,
           ),
       });
