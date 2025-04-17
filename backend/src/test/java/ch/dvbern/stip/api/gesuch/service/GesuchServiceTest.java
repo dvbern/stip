@@ -910,6 +910,7 @@ class GesuchServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
@@ -950,6 +951,7 @@ class GesuchServiceTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
