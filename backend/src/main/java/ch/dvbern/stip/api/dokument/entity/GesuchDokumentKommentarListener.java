@@ -18,11 +18,13 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.util.JwtUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.PrePersist;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+@ApplicationScoped
 public class GesuchDokumentKommentarListener {
     @Inject
     Instance<JsonWebToken> token;
