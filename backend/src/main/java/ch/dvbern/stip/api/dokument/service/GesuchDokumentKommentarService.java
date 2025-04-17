@@ -84,7 +84,11 @@ public class GesuchDokumentKommentarService {
                     && (Objects.equals(
                         fromGesuchDokument.getCustomDokumentTyp().getType(),
                         toGesuchDokument.getCustomDokumentTyp().getType()
-                    ))
+                    )
+                    && (Objects.equals(
+                        fromGesuchDokument.getCustomDokumentTyp().getDescription(),
+                        toGesuchDokument.getCustomDokumentTyp().getDescription()
+                    )))
                 ) {
                     final var newKommentar =
                         GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);

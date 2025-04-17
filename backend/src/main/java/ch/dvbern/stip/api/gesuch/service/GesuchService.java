@@ -1044,7 +1044,7 @@ public class GesuchService {
             .getId();
 
         final Integer revisionToResetTo = gesuchTrancheHistoryRepository
-            .getLatestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
+            .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
             .orElseThrow()
         - 1;
 
