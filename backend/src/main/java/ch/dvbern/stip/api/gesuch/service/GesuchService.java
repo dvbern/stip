@@ -1087,6 +1087,7 @@ public class GesuchService {
                 gesuchTrancheToRevertTo.getComment()
             );
             newTranche.setGesuch(gesuch);
+            newTranche.setStatus(gesuchTrancheToRevertTo.getStatus());
             newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
 
             gesuch.getGesuchTranchen().add(newTranche);

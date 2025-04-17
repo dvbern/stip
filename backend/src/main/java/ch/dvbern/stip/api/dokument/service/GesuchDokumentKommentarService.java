@@ -120,9 +120,8 @@ public class GesuchDokumentKommentarService {
             gesuchDokument = gesuchDokumentHistoryRepository.findInHistoryById(gesuchDokumentId);
         }
 
-        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchDokument.getGesuchTranche().getId());
         var gesuchTrancheRevision =
-            gesuchTrancheHistoryService.getHistoricalTrancheRevisionForGS(gesuchTranche.getId());
+            gesuchTrancheHistoryService.getHistoricalTrancheRevisionForGS(gesuchDokument.getGesuchTranche().getId());
 
         List<GesuchDokumentKommentar> gesuchDokumentKommentars =
             gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokumentId);

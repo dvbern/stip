@@ -69,7 +69,7 @@ public class GesuchTrancheHistoryService {
     }
 
     public Optional<Integer> getHistoricalTrancheRevisionForGS(final UUID gesuchTrancheId) {
-        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        var gesuchTranche = getLatestTrancheForGs(gesuchTrancheId);
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
