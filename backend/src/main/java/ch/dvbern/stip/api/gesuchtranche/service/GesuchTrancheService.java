@@ -327,7 +327,8 @@ public class GesuchTrancheService {
 
     @Transactional
     public ValidationReportDto validatePagesSB(final UUID gesuchTrancheId) {
-        final var gesuchFormular = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
+        final var gesuchFormular =
+            gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId).getGesuchFormular();
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
@@ -562,7 +563,7 @@ public class GesuchTrancheService {
     }
 
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTrancheForGs(trancheId);
         return einreichenValidationReport(gesuchTranche);
     }
 
