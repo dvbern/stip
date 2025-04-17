@@ -25,6 +25,7 @@ public final class OidcConstants {
     public static final String ROLE_FREIGABESTELLE = "Freigabestelle";
     public static final String ROLE_SOZIALDIENST_MITARBEITER = "V0_Sozialdienst-Mitarbeiter";
     public static final String ROLE_SOZIALDIENST_ADMIN = "V0_Sozialdienst-Admin";
+    public static final String ROLE_SUPER_USER = "V0_Super-User";
 
     public static final String REQUIRED_ACTION_UPDATE_PASSWORD = "UPDATE_PASSWORD";
 
