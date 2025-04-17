@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { DelegierungCreate } from '../model/delegierungCreate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -27,6 +28,7 @@ export interface DelegierenServiceFallDelegierenRequestParams {
     /** Die ID vom Fall */
     fallId: string;
     sozialdienstId: string;
+    delegierungCreate: DelegierungCreate;
 }
 
 
@@ -110,6 +112,10 @@ export class DelegierenService {
         if (sozialdienstId === null || sozialdienstId === undefined) {
             throw new Error('Required parameter sozialdienstId was null or undefined when calling fallDelegieren$.');
         }
+        const delegierungCreate = requestParameters.delegierungCreate;
+        if (delegierungCreate === null || delegierungCreate === undefined) {
+            throw new Error('Required parameter delegierungCreate was null or undefined when calling fallDelegieren$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -144,6 +150,15 @@ export class DelegierenService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -159,6 +174,7 @@ export class DelegierenService {
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: delegierungCreate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

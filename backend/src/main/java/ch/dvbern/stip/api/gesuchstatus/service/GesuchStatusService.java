@@ -97,6 +97,9 @@ public class GesuchStatusService {
         if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
             editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
         }
+        if (identifiers.contains(OidcConstants.ROLE_SUPER_USER)) {
+            editStates.addAll(List.of(Gesuchstatus.values()));
+        }
 
         return editStates.contains(gesuchstatus);
     }

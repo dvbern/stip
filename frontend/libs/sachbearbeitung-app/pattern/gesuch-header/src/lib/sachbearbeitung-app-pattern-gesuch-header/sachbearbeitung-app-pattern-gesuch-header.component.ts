@@ -38,6 +38,7 @@ import {
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
@@ -58,6 +59,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatTooltipModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,7 +108,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return beschwerdeHaengig;
   });
   isLoadingSig = computed(() => {
-    return isPending(this.gesuchStore.gesuchInfo());
+    return (
+      isPending(this.gesuchStore.gesuchInfo()) ||
+      isPending(this.gesuchStore.lastStatusChange())
+    );
   });
 
   isInfosRouteSig = computed(() => {
@@ -135,7 +140,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       () => {
         const gesuchTrancheId = this.gesuchTrancheIdSig();
         if (gesuchTrancheId) {
-          this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+          this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
         }
       },
       { allowSignalWrites: true },

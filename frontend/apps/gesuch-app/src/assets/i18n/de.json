@@ -48,6 +48,8 @@
   "gesuch-app.dashboard.aenderung.delete.dialog.title": "Änderung löschen",
   "gesuch-app.dashboard.aenderung.delete.dialog.message": "Wollen sie wirklich die Änderung löschen? Sie werden alle Daten verlieren",
 
+  "gesuch-app.delegieren-dialog.submit": "Delegieren",
+
   "gesuch-app.ausbildung.dialog.title": "Ausbildung für Stipendium erfassen",
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",

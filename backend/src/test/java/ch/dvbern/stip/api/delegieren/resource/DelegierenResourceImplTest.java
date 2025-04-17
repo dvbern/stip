@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.generator.api.model.delegieren.DelegierungCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
@@ -103,7 +104,8 @@ class DelegierenResourceImplTest {
         TestUtil.executeAndAssert(
             delegierenApiSpec.fallDelegieren()
                 .fallIdPath(fall.getId())
-                .sozialdienstIdPath(sozialdienst.getId()),
+                .sozialdienstIdPath(sozialdienst.getId())
+                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
             Response.Status.UNAUTHORIZED.getStatusCode()
         );
     }
@@ -115,7 +117,8 @@ class DelegierenResourceImplTest {
         TestUtil.executeAndAssert(
             delegierenApiSpec.fallDelegieren()
                 .fallIdPath(fall.getId())
-                .sozialdienstIdPath(sozialdienst.getId()),
+                .sozialdienstIdPath(sozialdienst.getId())
+                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
             Response.Status.NO_CONTENT.getStatusCode()
         );
     }

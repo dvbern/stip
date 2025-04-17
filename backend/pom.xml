@@ -23,7 +23,7 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.0.7</quarkiverse.sentry.version>
+    <quarkiverse.sentry.version>2.1.3</quarkiverse.sentry.version>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -716,7 +716,10 @@
                     UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
                     DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
                     SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
-                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType</schemaMappings>
+                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
+                    ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
+                    ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -741,6 +744,9 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
+                  <additionalProperties>
+                    removeEnumValuePrefix=false
+                  </additionalProperties>
                 </configuration>
               </execution>
               <execution>
@@ -776,6 +782,9 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
+                  <additionalProperties>
+                    removeEnumValuePrefix=false
+                  </additionalProperties>
                 </configuration>
               </execution>
             </executions>

@@ -24,6 +24,7 @@ describe('email pattern', () => {
   it('good &', () => testInput('aaa&asdsads@sdsdsd.com', true));
   it('good short', () => testInput('h@dvbern.ch', true));
   it('good short', () => testInput('h@b.ch', true));
+  it('good big letter', () => testInput('Heinz.mueller@dvbern.ch', true));
 
   // ungueltige Zeichen
   it('special characters mix', () =>

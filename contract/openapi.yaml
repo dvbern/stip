@@ -1736,6 +1736,12 @@ paths:
     post:
       tags:
       - Delegieren
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DelegierungCreate'
       responses:
         204:
           description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
@@ -3991,6 +3997,25 @@ components:
       properties:
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
+    DelegierungCreate:
+      required:
+        - anrede
+        - nachname
+        - vorname
+        - geburtsdatum
+        - adresse
+      type: object
+      properties:
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     GesuchInfo:
       required:
         - id
@@ -4616,6 +4641,8 @@ components:
           $ref: '#/components/schemas/Sprache'
         zustaendigerKanton:
           $ref: '#/components/schemas/ZustaendigerKanton'
+        zustaendigeKESB:
+          $ref: '#/components/schemas/ZustaendigeKESB'
     Benutzer:
       type: object
       allOf:
@@ -4728,8 +4755,6 @@ components:
         - vorname
       type: object
       properties:
-        sozialversicherungsnummer:
-          type: string
         vorname:
           type: string
         nachname:
@@ -6090,6 +6115,11 @@ components:
       enum:
         - BERN
         - ANDERER_KANTON
+      type: string
+    ZustaendigeKESB:
+      enum:
+        - KESB_BERN
+        - KESB_ANDERER_KANTON
       type: string
     StipDecision:
       enum:

@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
+import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
@@ -24,6 +25,19 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/gesuch-form').then(
             (m) => m.sozialdienstAppFeatureGesuchFormRoutes,
+          ),
+      },
+      {
+        path: 'administration',
+        canActivate: [hasBenutzer, hasRoles(['V0_Sozialdienst-Admin'])],
+        title: 'sachbearbeitung-app.admin.title',
+        loadComponent: () =>
+          import('@dv/sozialdienst-app/feature/administration').then(
+            (m) => m.SachbearbeitungAppFeatureAdministrationComponent,
+          ),
+        loadChildren: () =>
+          import('@dv/sozialdienst-app/feature/administration').then(
+            (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
           ),
       },
     ],

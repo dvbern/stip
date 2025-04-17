@@ -29,10 +29,7 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: 'administration',
-        canActivate: [
-          hasBenutzer,
-          hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Sozialdienst-Admin']),
-        ],
+        canActivate: [hasBenutzer, hasRoles(['V0_Sachbearbeiter-Admin'])],
         title: 'sachbearbeitung-app.admin.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/administration').then(

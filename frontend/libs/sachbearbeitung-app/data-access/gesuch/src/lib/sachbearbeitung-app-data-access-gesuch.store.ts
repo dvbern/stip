@@ -22,6 +22,7 @@ import {
   handleApiResponse,
   initial,
   isPending,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
@@ -49,7 +50,7 @@ export class GesuchStore extends signalStore(
     <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
     (source$: Observable<T & { onSuccess?: (data?: R) => void }>) => {
       return source$.pipe(
-        tap(() => patchState(this, { lastStatusChange: initial() })),
+        tap(() => patchState(this, { lastStatusChange: pending() })),
         switchMap(({ onSuccess, ...params }) =>
           handler$(params as T).pipe(
             handleApiResponse(

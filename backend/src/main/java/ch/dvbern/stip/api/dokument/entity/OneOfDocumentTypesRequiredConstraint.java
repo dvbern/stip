@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = OneOfDocumentTypesRequiredConstraintValidator.class)
 @Documented
 public @interface OneOfDocumentTypesRequiredConstraint {
-    String message() default VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
+    String message() default VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS;
 
     Class<?>[] groups() default {};
 

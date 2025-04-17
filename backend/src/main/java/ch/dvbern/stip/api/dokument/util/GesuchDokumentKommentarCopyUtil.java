@@ -32,6 +32,7 @@ public class GesuchDokumentKommentarCopyUtil {
         copy.setGesuchDokument(destinationGesuchDokument);
         copy.setKommentar(source.getKommentar());
         copy.setDokumentstatus(source.getDokumentstatus());
+        copy.setAutor(source.getAutor());
 
         return copy;
     }
