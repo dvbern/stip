@@ -1418,6 +1418,8 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
         when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
         // act
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
 
@@ -1452,7 +1454,10 @@ class GesuchServiceTest {
             .thenReturn(gesuchToReturn.getNewestGesuchTranche());
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuchToReturn));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+            .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory IS queried AND the gesuch in state EINGEREICHT is returned
@@ -1481,6 +1486,8 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
         when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
@@ -1553,7 +1560,9 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
         when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
-            .thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+            .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),

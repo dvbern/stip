@@ -137,12 +137,6 @@ class GesuchTrancheAenderungEinbindenTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
-        // gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-        // .gesuchIdPath(gesuch.getId())
-        // .execute(TestUtil.PEEK_IF_ENV_SET)
-        // .then()
-        // .assertThat()
-        // .statusCode(Response.Status.FORBIDDEN.getStatusCode());
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(

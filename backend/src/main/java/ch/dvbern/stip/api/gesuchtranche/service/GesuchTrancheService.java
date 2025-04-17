@@ -186,10 +186,9 @@ public class GesuchTrancheService {
         final Gesuch gesuch,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
-        dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(false);
-        if (Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus())) {
-            dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(!gesuch.isVerfuegt());
-        }
+        final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
+        || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
+        dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
 
         dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
             requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuch)
