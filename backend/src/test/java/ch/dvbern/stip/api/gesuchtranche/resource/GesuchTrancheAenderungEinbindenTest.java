@@ -218,7 +218,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
-                    .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
+                    .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(4))
                     .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis())
             )
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -334,7 +334,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
+        assertThat(gesuchtranchen.getTranchen()).hasSize(3);
     }
 
     @Test
