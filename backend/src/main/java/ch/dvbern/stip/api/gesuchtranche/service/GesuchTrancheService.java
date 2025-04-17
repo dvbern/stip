@@ -455,7 +455,7 @@ public class GesuchTrancheService {
         gesuchFormularUpdateDto.setElterns(new ArrayList<>(List.of()));
         aenderung.getGesuchFormular().getElterns().clear();
         for (final var eltern : lastFreigegebenFormular.getElterns()) {
-            gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern));
+            gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern).id(null));
         }
         gesuchFormularUpdateDto.setAuszahlung(auszahlungMapper.toUpdateDto(lastFreigegebenFormular.getAuszahlung()));
         gesuchFormularUpdateDto
