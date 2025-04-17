@@ -92,6 +92,7 @@ public class GesuchDokumentKommentarService {
                 ) {
                     final var newKommentar =
                         GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);
+                    toGesuchDokument.getCustomDokumentTyp().setGesuchDokument(toGesuchDokument);
                     gesuchDokumentKommentarRepository.persist(newKommentar);
                 }
             }

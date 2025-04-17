@@ -1013,7 +1013,7 @@ public class GesuchService {
 
             } else {
                 final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
-                targetGesuchDokumente.add(newGesuchDokument);
+                // targetGesuchDokumente.add(newGesuchDokument);
                 gesuchDokumentRepository.persist(newGesuchDokument);
                 sourceGesuchDokument.getDokumente()
                     .forEach(
@@ -1077,6 +1077,8 @@ public class GesuchService {
 
         Map<UUID, List<GesuchDokumentKommentar>> trancheIdGesuchDokumentKommentarsMap = new HashMap<>();
 
+        // We need to fetch comments before making changes to the gesuch as otherwise hibernate would commit those
+        // changes at the getGesuchDokumentKommentarOfGesuchDokumentAtRevision calls
         for (var gesuchTranche : gesuchToRevertTo.getGesuchTranchen()) {
             List<GesuchDokumentKommentar> gesuchDokumentKommentars = gesuchTranche.getGesuchDokuments()
                 .stream()
@@ -1092,72 +1094,48 @@ public class GesuchService {
             );
         }
 
-        final var tranchenToRevertToIds =
-            gesuchToRevertTo.getGesuchTranchen().stream().map(GesuchTranche::getId).toList();
-
-        final var tranchenToDrop = gesuch.getGesuchTranchen()
-            .stream()
-            .filter(gesuchTranche -> !tranchenToRevertToIds.contains(gesuchTranche.getId()))
-            .toList();
+        final var tranchenToDrop = new ArrayList<>(gesuch.getGesuchTranchen());
 
         for (final var trancheToDrop : tranchenToDrop) {
             gesuchTrancheService.dropGesuchTranche(trancheToDrop);
         }
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
-            final var gesuchTrancheToRevertOpt = gesuch.getGesuchTranchen()
-                .stream()
-                .filter(gesuchTranche -> gesuchTranche.getId().equals(gesuchTrancheToRevertTo.getId()))
-                .findFirst();
-            if (gesuchTrancheToRevertOpt.isEmpty()) {
-                final var newTranche = new GesuchTranche();
-                newTranche.setGueltigkeit(gesuchTrancheToRevertTo.getGueltigkeit());
-                newTranche.setComment(gesuchTrancheToRevertTo.getComment());
-                newTranche.setGesuchFormular(GesuchTrancheCopyUtil.copy(gesuchTrancheToRevertTo.getGesuchFormular()));
-                newTranche.getGesuchFormular().setTranche(newTranche);
-                newTranche.setGesuch(gesuch);
-                newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
+            final var newTranche = new GesuchTranche();
+            newTranche.setGueltigkeit(gesuchTrancheToRevertTo.getGueltigkeit());
+            newTranche.setComment(gesuchTrancheToRevertTo.getComment());
+            newTranche.setGesuchFormular(GesuchTrancheCopyUtil.copy(gesuchTrancheToRevertTo.getGesuchFormular()));
+            newTranche.getGesuchFormular().setTranche(newTranche);
+            newTranche.setGesuch(gesuch);
+            newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
 
-                gesuch.getGesuchTranchen().add(newTranche);
+            gesuch.getGesuchTranchen().add(newTranche);
 
-                gesuchTrancheRepository.persist(newTranche);
+            gesuchTrancheRepository.persist(newTranche);
 
-                for (var sourceGesuchDokument : gesuchTrancheToRevertTo.getGesuchDokuments()) {
-                    final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, newTranche);
-                    newTranche.getGesuchDokuments().add(newGesuchDokument);
-                    if (Objects.nonNull(newGesuchDokument.getCustomDokumentTyp())) {
-                        newGesuchDokument.getCustomDokumentTyp().setGesuchDokument(newGesuchDokument);
-                    }
-                    gesuchDokumentRepository.persist(newGesuchDokument);
-                    sourceGesuchDokument.getDokumente()
-                        .forEach(
-                            dokument -> {
-                                final var newDokument = new Dokument();
-                                GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                                newGesuchDokument.addDokument(newDokument);
-                                dokumentRepository.persist(newDokument);
-                            }
-                        );
+            for (var sourceGesuchDokument : gesuchTrancheToRevertTo.getGesuchDokuments()) {
+                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, newTranche);
+                newTranche.getGesuchDokuments().add(newGesuchDokument);
+                if (Objects.nonNull(newGesuchDokument.getCustomDokumentTyp())) {
+                    newGesuchDokument.getCustomDokumentTyp().setGesuchDokument(newGesuchDokument);
                 }
-
-                gesuchDokumentKommentarService
-                    .copyKommentareToTranche(
-                        trancheIdGesuchDokumentKommentarsMap.get(gesuchTrancheToRevertTo.getId()),
-                        newTranche
-                    );
-            } else {
-                var gesuchTrancheToRevert = gesuchTrancheToRevertOpt.get();
-
-                resetGesuchTrancheToTranche(gesuchTrancheToRevertTo, gesuchTrancheToRevert);
-                gesuchTrancheToRevert.setStatus(gesuchTrancheToRevertTo.getStatus());
-                gesuchTrancheRepository.persistAndFlush(gesuchTrancheToRevert);
-
-                gesuchDokumentKommentarService
-                    .copyKommentareFromTrancheToTranche(
-                        gesuchTrancheToRevertTo,
-                        gesuchTrancheToRevert
+                gesuchDokumentRepository.persist(newGesuchDokument);
+                sourceGesuchDokument.getDokumente()
+                    .forEach(
+                        dokument -> {
+                            final var newDokument = new Dokument();
+                            GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                            newGesuchDokument.addDokument(newDokument);
+                            dokumentRepository.persist(newDokument);
+                        }
                     );
             }
+
+            gesuchDokumentKommentarService
+                .copyKommentareToTranche(
+                    trancheIdGesuchDokumentKommentarsMap.get(gesuchTrancheToRevertTo.getId()),
+                    newTranche
+                );
         }
 
         gesuch.setNachfristDokumente(gesuchToRevertTo.getNachfristDokumente());
