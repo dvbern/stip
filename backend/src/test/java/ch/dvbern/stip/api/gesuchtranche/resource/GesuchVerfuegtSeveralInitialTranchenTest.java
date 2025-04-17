@@ -99,7 +99,6 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     @Order(6)
     @Test
     void makeGesuchVerfuegt() {
-        // TODO KSTIP-1631: Make Gesuch the correct state
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

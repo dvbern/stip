@@ -31,6 +31,8 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -53,15 +55,19 @@ public class GesuchTrancheHistoryRepository {
     }
 
     public GesuchTranche getLatestRevision(final UUID gesuchTrancheId) {
-        final var reader = AuditReaderFactory.get(em);
+        try {
+            final var reader = AuditReaderFactory.get(em);
 
-        return (GesuchTranche) reader.createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, true, true)
-            .add(AuditEntity.id().eq(gesuchTrancheId))
-            .add(AuditEntity.property("gesuch").isNotNull())
-            .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
-            .getSingleResult();
+            return (GesuchTranche) reader.createQuery()
+                .forRevisionsOfEntity(GesuchTranche.class, true, true)
+                .add(AuditEntity.id().eq(gesuchTrancheId))
+                .add(AuditEntity.property("gesuch").isNotNull())
+                .addOrder(AuditEntity.revisionNumber().desc())
+                .setMaxResults(1)
+                .getSingleResult();
+        } catch (final NoResultException e) {
+            throw new NotFoundException();
+        }
     }
 
     public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
