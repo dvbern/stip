@@ -404,7 +404,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
 
         gesuchAuthorizer.canRead(gesuchId);

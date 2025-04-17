@@ -1101,11 +1101,11 @@ public class GesuchService {
         }
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
-            final var newTranche = new GesuchTranche();
-            newTranche.setGueltigkeit(gesuchTrancheToRevertTo.getGueltigkeit());
-            newTranche.setComment(gesuchTrancheToRevertTo.getComment());
-            newTranche.setGesuchFormular(GesuchTrancheCopyUtil.copy(gesuchTrancheToRevertTo.getGesuchFormular()));
-            newTranche.getGesuchFormular().setTranche(newTranche);
+            final var newTranche = GesuchTrancheCopyUtil.copyTrancheExceptGesuchDokuments(
+                gesuchTrancheToRevertTo,
+                gesuchTrancheToRevertTo.getGueltigkeit(),
+                gesuchTrancheToRevertTo.getComment()
+            );
             newTranche.setGesuch(gesuch);
             newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
 

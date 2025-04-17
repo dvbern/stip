@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,6 +50,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final GesuchStatusService gesuchStatusService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
+    private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
     public void canRead(final UUID gesuchTrancheId) {
@@ -58,7 +60,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+        final var gesuch = gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId).getGesuch();
         if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
             return;
         }

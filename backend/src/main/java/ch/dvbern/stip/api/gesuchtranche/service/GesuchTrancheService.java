@@ -120,6 +120,10 @@ public class GesuchTrancheService {
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
 
+    public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
+        return gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId);
+    }
+
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
     }

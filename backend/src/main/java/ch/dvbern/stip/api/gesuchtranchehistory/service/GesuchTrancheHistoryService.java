@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -37,8 +37,18 @@ public class GesuchTrancheHistoryService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchHistoryService gesuchHistoryService;
 
+    public GesuchTranche getLatestTrancheForGs(final UUID gesuchTrancheId) {
+        final var gesuchTrancheOpt = gesuchTrancheRepository.findByIdOptional(gesuchTrancheId);
+        return gesuchTrancheOpt.orElse(
+            gesuchTrancheHistoryRepository.getLatestExistingVersionOfTranche(gesuchTrancheId)
+                .orElseThrow(
+                    NotFoundException::new
+                )
+        );
+    }
+
     public GesuchTranche getCurrentOrHistoricalTrancheForGS(final UUID gesuchTrancheId) {
-        var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        var gesuchTranche = getLatestTrancheForGs(gesuchTrancheId);
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
@@ -69,10 +79,5 @@ public class GesuchTrancheHistoryService {
         }
 
         return gesuchHistoryService.getHistoricalGesuchRevisionForGS(gesuchTranche.getGesuch().getId());
-    }
-
-    @Transactional
-    public Optional<GesuchTranche> getGesuchTrancheAtRevision(final UUID gesuchTrancheId, final Integer revision) {
-        return gesuchTrancheHistoryRepository.getGesuchTrancheAtRevision(gesuchTrancheId, revision);
     }
 }

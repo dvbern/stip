@@ -32,6 +32,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 
 @ApplicationScoped
@@ -136,6 +137,22 @@ public class GesuchTrancheHistoryRepository {
     ) {
         return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
             .flatMap(Gesuch::getNewestGesuchTranche);
+    }
+
+    @Transactional
+    public Optional<GesuchTranche> getLatestExistingVersionOfTranche(final UUID gesuchTrancheId) {
+        @SuppressWarnings("unchecked")
+        final Optional<GesuchTranche> gesuchTrancheOpt = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+        return gesuchTrancheOpt;
     }
 
     @Transactional
