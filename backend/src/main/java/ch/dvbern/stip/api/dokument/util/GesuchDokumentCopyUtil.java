@@ -41,7 +41,7 @@ public class GesuchDokumentCopyUtil {
             copy.setGesuchTranche(targetTranche);
             copy.setDokumentTyp(original.getDokumentTyp());
             if (original.getCustomDokumentTyp() != null) {
-                copy.setCustomDokumentTyp(copyCustomDokumentTyp(original.getCustomDokumentTyp()));
+                copy.setCustomDokumentTyp(copyCustomDokumentTyp(original.getCustomDokumentTyp(), copy));
             }
             copy.setStatus(original.getStatus());
             original.getDokumente().forEach(copy::addDokument);
@@ -50,17 +50,20 @@ public class GesuchDokumentCopyUtil {
         }).toList();
     }
 
-    public CustomDokumentTyp copyCustomDokumentTyp(final CustomDokumentTyp source) {
+    public CustomDokumentTyp copyCustomDokumentTyp(
+        final CustomDokumentTyp source,
+        final GesuchDokument targetGesuchDokument
+    ) {
         var copy = new CustomDokumentTyp();
         copy.setType(source.getType());
         copy.setDescription(source.getDescription());
-        copy.setGesuchDokument(source.getGesuchDokument());
+        copy.setGesuchDokument(targetGesuchDokument);
         return copy;
     }
 
-    public GesuchDokument createCopy(final GesuchDokument source) {
+    public GesuchDokument createCopy(final GesuchDokument source, final GesuchTranche targetTranche) {
         final var copy = new GesuchDokument();
-        copyValues(source, copy);
+        copyValues(source, copy, targetTranche);
         return copy;
     }
 
@@ -71,13 +74,17 @@ public class GesuchDokumentCopyUtil {
         target.setObjectId(source.getObjectId());
     }
 
-    public void copyValues(final GesuchDokument source, final GesuchDokument target) {
+    public void copyValues(
+        final GesuchDokument source,
+        final GesuchDokument target,
+        final GesuchTranche targetTranche
+    ) {
         target.setDokumentTyp(source.getDokumentTyp());
-        target.setGesuchTranche(source.getGesuchTranche());
+        target.setGesuchTranche(targetTranche);
         target.setDokumentTyp(source.getDokumentTyp());
         target.setStatus(source.getStatus());
         if (source.getCustomDokumentTyp() != null) {
-            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp()).setGesuchDokument(source));
+            target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp(), target));
         }
     }
 }

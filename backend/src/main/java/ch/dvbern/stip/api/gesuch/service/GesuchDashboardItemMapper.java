@@ -86,7 +86,7 @@ public abstract class GesuchDashboardItemMapper {
 
     @Named("getGesuchStatus")
     Gesuchstatus getGesuchstatus(Gesuch gesuch) {
-        if (Gesuchstatus.GESUCH_GESUCHSTATUS_GS_VISIBLE.contains(gesuch.getGesuchStatus())) {
+        if (Gesuchstatus.GESUCHSTELLER_RECEIVES_CURRENT_GESUCH.contains(gesuch.getGesuchStatus())) {
             return gesuch.getGesuchStatus();
         }
         return Gesuchstatus.EINGEREICHT;

@@ -540,8 +540,15 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var gesuchStatusChangeEvent = GesuchStatusChangeEvent.IN_BEARBEITUNG_GS;
         if (gesuch.isVerfuegt()) {
+            var verfuegtGesuch = gesuchHistoryRepository
+                .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+                .orElseThrow(NotFoundException::new);
             gesuchStatusChangeEvent =
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH;
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH;
+            if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
+                gesuchStatusChangeEvent =
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH;
+            }
         }
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, gesuchStatusChangeEvent, kommentarDto, true);
@@ -593,7 +600,7 @@ public class GesuchService {
             return;
         }
 
-        if (unterschriftenblattService.requiredUnterschriftenblaetterExist(gesuch) || gesuch.isVerfuegt()) {
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(
@@ -815,7 +822,21 @@ public class GesuchService {
         final var toUpdate =
             gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
         final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
-        final var toUpdateVerfuegt = toUpdate.stream().filter(gesuch -> gesuch.isVerfuegt()).toList();
+        final var toUpdateVerfuegt = toUpdate.stream().filter(Gesuch::isVerfuegt).toList();
+
+        final var toUpdateStipendienAnspruch = new ArrayList<Gesuch>();
+        final var toUpdateKeinStipendienAnspruch = new ArrayList<Gesuch>();
+
+        for (var gesuch : toUpdateVerfuegt) {
+            var verfuegtGesuch = gesuchHistoryRepository
+                .getLatestWhereStatusChangedToOneOf(gesuch.getId(), Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+                .orElseThrow(NotFoundException::new);
+            if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.STIPENDIENANSPRUCH) {
+                toUpdateStipendienAnspruch.add(gesuch);
+            } else if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
+                toUpdateKeinStipendienAnspruch.add(gesuch);
+            }
+        }
 
         if (!toUpdateEingereicht.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
@@ -823,10 +844,16 @@ public class GesuchService {
                 GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
             );
         }
-        if (!toUpdateVerfuegt.isEmpty()) {
+        if (!toUpdateStipendienAnspruch.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+            );
+        }
+        if (!toUpdateKeinStipendienAnspruch.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdateVerfuegt,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
             );
         }
     }
@@ -919,7 +946,7 @@ public class GesuchService {
         );
 
         // Dokumente
-        // Remove new but not then doks
+        // Remove doks that exist now but didn't exist then (i.e. past)
         final var dokumentIdsNow = toTranche.getGesuchDokuments()
             .stream()
             .flatMap(
@@ -949,8 +976,7 @@ public class GesuchService {
                 uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId())
             );
 
-        // Restore then but not now doks
-
+        // Remove doks that existed then (i.e. past) but not now
         toTranche.getGesuchDokuments()
             .removeIf(
                 gesuchDokument -> !fromTranche.getGesuchDokuments().contains(gesuchDokument)
@@ -966,10 +992,8 @@ public class GesuchService {
                         .findFirst();
                 replacement.ifPresent(
                     gesuchDokument -> {
-                        GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument);
-                        gesuchDokument.setGesuchTranche(toTranche);
+                        GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument, toTranche);
                         if (Objects.nonNull(gesuchDokument.getCustomDokumentTyp())) {
-                            gesuchDokument.getCustomDokumentTyp().setGesuchDokument(gesuchDokument);
                             customDokumentTypRepository.persist(gesuchDokument.getCustomDokumentTyp());
                         }
                         gesuchDokumentRepository.persist(gesuchDokument);
@@ -988,9 +1012,8 @@ public class GesuchService {
                 );
 
             } else {
-                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument);
+                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
                 targetGesuchDokumente.add(newGesuchDokument);
-                newGesuchDokument.setGesuchTranche(toTranche);
                 gesuchDokumentRepository.persist(newGesuchDokument);
                 sourceGesuchDokument.getDokumente()
                     .forEach(
@@ -1100,8 +1123,7 @@ public class GesuchService {
                 gesuchTrancheRepository.persist(newTranche);
 
                 for (var sourceGesuchDokument : gesuchTrancheToRevertTo.getGesuchDokuments()) {
-                    final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument);
-                    newGesuchDokument.setGesuchTranche(newTranche);
+                    final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, newTranche);
                     newTranche.getGesuchDokuments().add(newGesuchDokument);
                     if (Objects.nonNull(newGesuchDokument.getCustomDokumentTyp())) {
                         newGesuchDokument.getCustomDokumentTyp().setGesuchDokument(newGesuchDokument);

@@ -197,15 +197,6 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCH_GESUCHSTATUS_GS_VISIBLE = Collections.unmodifiableSet(
-        EnumSet.of(
-            IN_BEARBEITUNG_GS,
-            EINGEREICHT,
-            STIPENDIENANSPRUCH,
-            KEIN_STIPENDIENANSPRUCH
-        )
-    );
-
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }

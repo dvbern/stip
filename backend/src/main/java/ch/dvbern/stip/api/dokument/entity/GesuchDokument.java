@@ -60,7 +60,7 @@ import org.hibernate.envers.Audited;
 @OneOfDocumentTypesRequiredConstraint
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 

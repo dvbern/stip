@@ -1075,7 +1075,7 @@ class GesuchServiceTest {
     void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(true);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(any())).thenReturn(true);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
@@ -1088,7 +1088,7 @@ class GesuchServiceTest {
     void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(false);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(any())).thenReturn(false);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(

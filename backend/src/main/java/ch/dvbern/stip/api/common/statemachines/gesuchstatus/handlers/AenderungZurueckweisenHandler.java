@@ -34,8 +34,8 @@ public class AenderungZurueckweisenHandler implements GesuchStatusStateChangeHan
     private final GesuchService gesuchService;
 
     private static final Set<GesuchStatusChangeEvent> POSSIBLE_TRIGGERS = Set.of(
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
     );
     private static final Set<Gesuchstatus> POSSIBLE_DESTINATIONS =
         Set.of(Gesuchstatus.STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH);

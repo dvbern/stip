@@ -103,9 +103,12 @@ public abstract class AusbildungDashboardItemMapper {
 
         Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount = Optional.empty();
 
-        final boolean anyFehlendeDokumente = gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE;
-        // || gesuchTranchen.stream().anyMatch(gesuchTrancheSlimDto -> gesuchTrancheSlimDto.getStatus() ==
-        // GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        final boolean anyFehlendeDokumente = gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE
+        || gesuchTranchen.stream()
+            .anyMatch(
+                gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+            );
+
         if (!anyFehlendeDokumente) {
             missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
                 .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))

@@ -173,6 +173,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "beschwerde_haengig", nullable = false)
     private boolean beschwerdeHaengig;
 
+    /**
+     * Gesuch was verfuegt at least once in the past
+     */
     @Column(name = "verfuegt", nullable = false)
     private boolean verfuegt = false;
 
