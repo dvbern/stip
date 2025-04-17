@@ -41,6 +41,7 @@ import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
@@ -89,6 +90,7 @@ class GesuchTrancheAenderungEinbindenTest {
     private GesuchWithChangesDtoSpec gesuchWithChanges;
     private GesuchTrancheDtoSpec aenderung;
     private UUID customDokumentId;
+    private UUID aenderungId;
 
     @Test
     @TestAsGesuchsteller
@@ -232,6 +234,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .extract()
             .body()
             .as(GesuchTrancheDtoSpec.class);
+        aenderungId = aenderung.getId();
     }
 
     @Test
@@ -239,7 +242,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Order(7)
     void aenderungEinreichen() {
         gesuchTrancheApiSpec.aenderungEinreichen()
-            .aenderungIdPath(aenderung.getId())
+            .aenderungIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -273,7 +276,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Order(9)
     void aenderungFehlendeDokumenteUebermitteln() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteUebermitteln()
-            .gesuchTrancheIdPath(aenderung.getId())
+            .gesuchTrancheIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -293,7 +296,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Order(11)
     void aenderungFehlendeDokumenteEinreichen() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteEinreichen()
-            .gesuchTrancheIdPath(aenderung.getId())
+            .gesuchTrancheIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -320,7 +323,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuchTrancheApiSpec.aenderungAkzeptieren()
-            .aenderungIdPath(aenderung.getId())
+            .aenderungIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -379,8 +382,25 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsGesuchsteller
     @Order(13)
     void aenderungEinreichenAgain() {
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+        aenderungId = fallDashboardItems[0].getAusbildungDashboardItems()
+            .get(0)
+            .getGesuchs()
+            .get(0)
+            .getOffeneAenderung()
+            .getId();
+
         gesuchTrancheApiSpec.aenderungEinreichen()
-            .aenderungIdPath(aenderung.getId())
+            .aenderungIdPath(
+                aenderungId
+            )
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -394,7 +414,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Order(14)
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
-            .aenderungIdPath(aenderung.getId())
+            .aenderungIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
