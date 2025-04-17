@@ -742,14 +742,8 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
-        final var gesuch = fetchGesuchOfTranche(trancheId);
         final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId);
-
-        // check if queried tranche has existed/ been overwritten
-        // else: wrong trancheId is queried
-        if (Objects.isNull(tranche)) {
-            throw new NotFoundException();
-        }
+        final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
