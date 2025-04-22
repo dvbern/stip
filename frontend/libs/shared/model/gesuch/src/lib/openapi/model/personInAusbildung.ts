@@ -11,6 +11,7 @@
  */
 import { Adresse } from './adresse';
 import { ZustaendigerKanton } from './zustaendigerKanton';
+import { ZustaendigeKESB } from './zustaendigeKESB';
 import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
 import { Zivilstand } from './zivilstand';
@@ -60,6 +61,7 @@ export interface PersonInAusbildung {
     identischerZivilrechtlicherWohnsitzPLZ?: string;
     korrespondenzSprache: Sprache;
     zustaendigerKanton?: ZustaendigerKanton;
+    zustaendigeKESB?: ZustaendigeKESB;
 }
 
 

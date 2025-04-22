@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
 import ch.dvbern.stip.generated.api.DelegierenResource;
+import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
-    public void fallDelegieren(UUID fallId, UUID sozialdienstId) {
+    public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
-        delegierenService.delegateFall(fallId, sozialdienstId);
+        delegierenService.delegateFall(fallId, sozialdienstId, delegierungCreateDto);
     }
 }

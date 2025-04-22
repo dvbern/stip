@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * BenutzerDtoSpec
  */
 @JsonPropertyOrder({
-  BenutzerDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
   BenutzerDtoSpec.JSON_PROPERTY_VORNAME,
   BenutzerDtoSpec.JSON_PROPERTY_NACHNAME,
   BenutzerDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN,
@@ -40,9 +39,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("Benutzer")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class BenutzerDtoSpec {
-  public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
-  private String sozialversicherungsnummer;
-
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
@@ -60,32 +56,6 @@ public class BenutzerDtoSpec {
 
   public BenutzerDtoSpec() {
   }
-
-  public BenutzerDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
-    
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-    return this;
-  }
-
-   /**
-   * Get sozialversicherungsnummer
-   * @return sozialversicherungsnummer
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getSozialversicherungsnummer() {
-    return sozialversicherungsnummer;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
-
 
   public BenutzerDtoSpec vorname(String vorname) {
     
@@ -225,8 +195,7 @@ public class BenutzerDtoSpec {
       return false;
     }
     BenutzerDtoSpec benutzer = (BenutzerDtoSpec) o;
-    return Objects.equals(this.sozialversicherungsnummer, benutzer.sozialversicherungsnummer) &&
-        Objects.equals(this.vorname, benutzer.vorname) &&
+    return Objects.equals(this.vorname, benutzer.vorname) &&
         Objects.equals(this.nachname, benutzer.nachname) &&
         Objects.equals(this.benutzereinstellungen, benutzer.benutzereinstellungen) &&
         Objects.equals(this.id, benutzer.id) &&
@@ -235,14 +204,13 @@ public class BenutzerDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, vorname, nachname, benutzereinstellungen, id, sachbearbeiterZuordnungStammdaten);
+    return Objects.hash(vorname, nachname, benutzereinstellungen, id, sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BenutzerDtoSpec {\n");
-    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");

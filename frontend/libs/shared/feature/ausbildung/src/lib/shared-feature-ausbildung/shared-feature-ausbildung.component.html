@@ -1,5 +1,5 @@
 @if (
-  (ausbildungStore.ausbildung() | rdIsPendingWithoutCache) ||
+  (ausbildungStore.ausbildung() | rdIsPendingWithoutCache: { ignoreInitial: true }) ||
   (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache)
 ) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
@@ -323,7 +323,7 @@
           type="submit"
           class="btn btn-primary"
           data-testid="button-save"
-          [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending)"
+          [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending: { ignoreInitial: true })"
         >
           {{ 'shared.form.save' | translate }}
         </button>

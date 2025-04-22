@@ -3,32 +3,57 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {
   CachedRemoteData,
   RemoteData,
+  isInitial,
   isPending,
   isPendingWithoutCache,
 } from '@dv/shared/util/remote-data';
 
+/**
+ * Pipe to check if a RemoteData is pending or initial.
+ *
+ * It is possible to ignore the initial state by passing the `ignoreInitial` option.
+ *
+ * @example
+ * if (someRdSig() | rdIsPending) { ...
+ *
+ * @example
+ * if (someRdSig() | rdIsPending: { ignoreInitial: true }) { ...
+ */
 @Pipe({
   standalone: true,
   name: 'rdIsPending',
 })
 export class SharedUiRdIsPendingPipe implements PipeTransform {
-  transform<T>(value: RemoteData<T> | CachedRemoteData<T>): boolean {
-    return isPending(value);
+  transform<T>(
+    value: RemoteData<T> | CachedRemoteData<T>,
+    opts?: { ignoreInitial?: boolean },
+  ): boolean {
+    return (!opts?.ignoreInitial && isInitial(value)) || isPending(value);
   }
 }
 
 /**
- * Only returns `true` if the `data` field is `undefined` and `remote data` is pending.
- * Else if the `data` field is not `undefined` and `remote data` is pending, it returns `false`.
+ * Pipe to check if a RemoteData is pending without cache or initial.
  *
- * Useful to not show a spinner if the data is already there but the request is still pending.
+ * It is possible to ignore the initial state by passing the `ignoreInitial` option.
+ *
+ * @example
+ * if (someRdSig() | rdIsPendingWithoutCache) { ...
+ *
+ * @example
+ * if (someRdSig() | rdIsPendingWithoutCache: { ignoreInitial: true }) { ...
  */
 @Pipe({
   standalone: true,
   name: 'rdIsPendingWithoutCache',
 })
 export class SharedUiRdIsPendingWithoutCachePipe implements PipeTransform {
-  transform<T>(value: CachedRemoteData<T>): boolean {
-    return isPendingWithoutCache(value);
+  transform<T>(
+    value: CachedRemoteData<T>,
+    opts?: { ignoreInitial?: boolean },
+  ): boolean {
+    return (
+      (!opts?.ignoreInitial && isInitial(value)) || isPendingWithoutCache(value)
+    );
   }
 }

@@ -59,6 +59,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.niederlassungsstatus.required.null.message}";
     public static final String VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.zustaendigerkanton.required.null.message}";
+    public static final String VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE =
+        "{jakarta.validation.constraints.zustaendigeKESB.required.null.message}";
     public static final String VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.wohnsitzanteil.required.message}";
     public static final String VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE =
@@ -124,6 +126,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.einnahmen.kosten.alimente.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_RENTEN_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}";
+    public static final String VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.einnahmen.kosten.wgWohnend.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_WOHNKOSTEN_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.wohnkosten.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_REQUIRED_MESSAGE =
@@ -169,6 +173,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.endDate.after.message}";
     public static final String VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
+    public static final String VALIDATION_EINNAHMEN_KOSTEN_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.einnahmen.kosten.auswaertigeMittagessenProWoche.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_BETREUUNGSKOSTEN_KINDER_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.betreuungskostenKinder.required.message}";
     public static final String VALIDATION_DOCUMENTS_REQUIRED_MESSAGE =
@@ -177,6 +183,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.ausbildungsort.if.swiss.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
+    public static final String VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS =
+        "{jakarta.validation.constraints.gesuchFormular.documents.oneOfDocumentTypes.required.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
     public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE = "{" +

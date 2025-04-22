@@ -102,7 +102,7 @@ quarkus:
 #    instrumentation: true
   log:
     sentry:
-      ~: 'true'
+      enabled: true
       dsn: '${STIP_SENTRY_DSN}'
       traces-sample-rate: 1.0
       environment: '${KSTIP_ENVIRONMENT}'
@@ -207,8 +207,8 @@ quarkus:
   quarkus:
     log:
       sentry:
-        ~: 'false'
-        debug: 'true'
+        enabled: false
+        debug: true
     http:
       enable-compression: true
       compress-media-types:
@@ -251,7 +251,7 @@ quarkus:
   quarkus:
     log:
       sentry:
-        ~: 'false'
+        enabled: false
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:

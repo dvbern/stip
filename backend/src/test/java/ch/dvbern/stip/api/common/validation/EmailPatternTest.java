@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.is;
 public class EmailPatternTest {
 
     public static boolean checkEmailPattern(String emailAddress) {
-        return Pattern.compile(EMAIL_VALIDATION_PATTERN)
+        return Pattern.compile(EMAIL_VALIDATION_PATTERN, Pattern.CASE_INSENSITIVE)
             .matcher(emailAddress)
             .matches();
     }
@@ -49,6 +49,7 @@ public class EmailPatternTest {
         assertThat(checkEmailPattern("heinz.mueller@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("heinz-mueller@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("heinz_mueller@dvbern.ch"), is(true));
+        assertThat(checkEmailPattern("Heinz_mueller@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("aaa|asdsads@sdsdsd.com"), is(true));
         assertThat(checkEmailPattern("heinz-mueller+001@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("aaa%asdsads@sdsdsd.com"), is(true));

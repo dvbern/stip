@@ -21,12 +21,10 @@ import java.io.File;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MailTemplate.MailTemplateInstance;
@@ -43,11 +41,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MailService {
     private final Mailer mailer;
-    private final TL tl;
     private final ReactiveMailer reactiveMailer;
-    private final ConfigService configService;
     private final TenantConfigService tenantConfigService;
-    private final TenantService tenantService;
+    private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
 
     public void sendStandardNotificationEmails(
         final String nachname,
@@ -58,6 +54,13 @@ public class MailService {
         if (recipients.isEmpty()) {
             throw new IllegalArgumentException("recipients cannot be empty");
         }
+
+        if (mailAlreadySentCheckerService.isStandardNotificationSent()) {
+            LOG.info("Trying to send standard notification mail, although one has already been sent this request");
+            return;
+        }
+
+        mailAlreadySentCheckerService.sentStandardNotification();
 
         Templates.getStandardNotification(nachname, vorname, language)
             .to(recipients.get(0))

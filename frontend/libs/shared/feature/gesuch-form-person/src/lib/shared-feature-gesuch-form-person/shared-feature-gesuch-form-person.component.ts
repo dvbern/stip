@@ -46,6 +46,7 @@ import {
   Wohnsitz,
   WohnsitzKanton,
   Zivilstand,
+  ZustaendigeKESB,
   ZustaendigerKanton,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
@@ -82,6 +83,10 @@ import {
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
+  BEGRUENDUNGSSCHREIBEN_AGE,
+  MAX_AGE_GESUCHSSTELLER,
+  MEDIUM_AGE_GESUCHSSTELLER,
+  MIN_AGE_GESUCHSSTELLER,
   dateFromDateString,
   dateFromMonthYearString,
   getDateDifference,
@@ -96,11 +101,6 @@ import {
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
-
-const MIN_AGE_GESUCHSSTELLER = 10;
-const MAX_AGE_GESUCHSSTELLER = 130;
-const MEDIUM_AGE_GESUCHSSTELLER = 20;
-const BEGRUENDUNGSSCHREIBEN_AGE = 35;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
@@ -149,6 +149,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly zivilstandValues = Object.values(Zivilstand);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
   readonly zugstaendigerKantonValues = Object.values(ZustaendigerKanton);
+  readonly zustaendigeKESBValues = Object.values(ZustaendigeKESB);
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
@@ -297,6 +298,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     zustaendigerKanton: this.formBuilder.control<
       ZustaendigerKanton | undefined
     >(undefined),
+    zustaendigeKESB: this.formBuilder.control<ZustaendigeKESB | undefined>(
+      undefined,
+    ),
   });
 
   wohnsitzHelper = prepareWohnsitzForm({
@@ -558,6 +562,26 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    effect(
+      () => {
+        this.gotReenabledSig();
+        const vormundschaft = !!this.vormundschaftChangedSig();
+
+        // Beistandschaft = True -> required zuständiger KESB
+        this.formUtils.setRequired(
+          this.form.controls.zustaendigeKESB,
+          vormundschaft,
+        );
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.zustaendigeKESB,
+          visible: vormundschaft,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
     // einresiedatum warning
     const einreisedatumChangedSig = toSignal(
       this.form.controls.einreisedatum.valueChanges,
@@ -652,6 +676,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith?.id,
+      blabla: gesuch?.gesuchTrancheToWorkWith?.id,
       gesuchFormular: {
         ...gesuchFormular,
         personInAusbildung: {

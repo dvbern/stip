@@ -1,3 +1,4 @@
 username=stip
 password=stip
 url=jdbc:postgresql://localhost:5432/stip
+preserveSchemaCase=true

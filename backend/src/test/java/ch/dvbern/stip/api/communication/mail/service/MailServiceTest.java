@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -62,6 +63,9 @@ class MailServiceTest {
 
     @Inject
     MailService mailService;
+
+    @Inject
+    MailAlreadySentCheckerService mailAlreadySentCheckerService;
 
     @BeforeEach
     void init() {
@@ -185,6 +189,28 @@ class MailServiceTest {
                 .translate("stip.standard.notification")
         );
         assertThat(actual.getHtml()).contains(TEST_STANDARD_EMAIL_DE_STRING);
+
+        mailService.sendStandardNotificationEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
+        sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
+        Assertions.assertEquals(1, sent.size());
+    }
+
+    @Test
+    void sendStandardNotificationDeFr() {
+        mailService.sendStandardNotificationEmail("", "", TEST_EMAIL, AppLanguages.DE);
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
+        Assertions.assertEquals(1, sent.size());
+        MailMessage actual = sent.get(0);
+        actual.getSubject();
+        assertThat(actual.getSubject()).isNotBlank();
+        assertThat(actual.getSubject()).isEqualTo(
+            TLProducer.defaultBundle()
+                .forAppLanguage(AppLanguages.DE)
+                .translate("stip.standard.notification")
+        );
+        assertThat(actual.getHtml()).contains(TEST_STANDARD_EMAIL_DE_STRING);
+
+        mailAlreadySentCheckerService.resetSentStandardNotification();
 
         mailService.sendStandardNotificationEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
         sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);

@@ -206,9 +206,6 @@ public class SozialdienstBenutzerService {
         var userRep = new UserRepresentation();
         userRep.setFirstName(sozialdienstBenutzerUpdateDto.getVorname());
         userRep.setLastName(sozialdienstBenutzerUpdateDto.getNachname());
-        userRep.setUsername(sozialdienstBenutzer.getEmail());
-        userRep.setEmail(sozialdienstBenutzer.getEmail());
-        userRep.setEmailVerified(true);
         keycloakUsersResource.get(sozialdienstBenutzer.getKeycloakId()).update(userRep);
 
         return sozialdienstBenutzerMapper

@@ -74,7 +74,8 @@ public enum Gesuchstatus {
                 WARTEN_AUF_UNTERSCHRIFTENBLATT,
                 VERSANDBEREIT,
                 VERSENDET,
-                NICHT_ANSPRUCHSBERECHTIGT
+                NICHT_ANSPRUCHSBERECHTIGT,
+                ANSPRUCH_MANUELL_PRUEFEN
             )
         );
 

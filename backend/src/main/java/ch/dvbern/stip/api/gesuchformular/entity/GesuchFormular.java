@@ -95,6 +95,12 @@ import org.hibernate.envers.Audited;
         GeschwisterPageValidation.class
     }, property = "geschwisters"
 )
+@EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
 @LebenslaufLuckenlosConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -120,6 +126,12 @@ import org.hibernate.envers.Audited;
     }, property = "darlehen"
 )
 @EinnahmenKostenWohnkostenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenWgWohnendRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class

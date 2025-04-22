@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchvalidation.service;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -28,16 +29,22 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValid
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Validator;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchValidatorService {
     private static final Map<Gesuchstatus, List<Class<?>>> statusToValidationGroups = new EnumMap<>(Gesuchstatus.class);
-    private final GesuchTrancheRepository gesuchTrancheRepository;
+
+    public static final List<Class<?>> SB_ABSCHLIESSEN_VALIDATION_GROUPS = List.of(
+        Default.class,
+        GesuchEinreichenValidationGroup.class,
+        GesuchDokumentsAcceptedValidationGroup.class,
+        GesuchNachInBearbeitungSBValidationGroup.class
+    );
     static {
         statusToValidationGroups.put(Gesuchstatus.EINGEREICHT, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups
@@ -46,22 +53,8 @@ public class GesuchValidatorService {
             Gesuchstatus.FEHLENDE_DOKUMENTE,
             List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
-        statusToValidationGroups.put(
-            Gesuchstatus.VERFUEGT,
-            List.of(
-                GesuchEinreichenValidationGroup.class,
-                GesuchDokumentsAcceptedValidationGroup.class,
-                GesuchNachInBearbeitungSBValidationGroup.class
-            )
-        );
-        statusToValidationGroups.put(
-            Gesuchstatus.IN_FREIGABE,
-            List.of(
-                GesuchEinreichenValidationGroup.class,
-                GesuchDokumentsAcceptedValidationGroup.class,
-                GesuchNachInBearbeitungSBValidationGroup.class
-            )
-        );
+        statusToValidationGroups.put(Gesuchstatus.VERFUEGT, SB_ABSCHLIESSEN_VALIDATION_GROUPS);
+        statusToValidationGroups.put(Gesuchstatus.IN_FREIGABE, SB_ABSCHLIESSEN_VALIDATION_GROUPS);
         statusToValidationGroups.put(
             Gesuchstatus.VERSENDET,
             List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
@@ -71,8 +64,10 @@ public class GesuchValidatorService {
     private final Validator validator;
 
     public void validateGesuchForStatus(final Gesuch toValidate, final Gesuchstatus status) {
-        final var validationGroups = statusToValidationGroups.getOrDefault(status, List.of());
+        final var validationGroups = Stream.concat(
+            Stream.of(Default.class),
+            statusToValidationGroups.getOrDefault(status, List.of()).stream()
+        ).toList();
         ValidatorUtil.validate(validator, toValidate, validationGroups);
     }
-
 }
