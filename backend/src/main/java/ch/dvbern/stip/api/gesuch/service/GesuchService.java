@@ -993,7 +993,6 @@ public class GesuchService {
 
             } else {
                 final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
-                // targetGesuchDokumente.add(newGesuchDokument);
                 gesuchDokumentRepository.persist(newGesuchDokument);
                 sourceGesuchDokument.getDokumente()
                     .forEach(
