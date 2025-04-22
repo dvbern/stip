@@ -15,18 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.service;
+package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
-import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import ch.dvbern.stip.api.common.util.JwtUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.persistence.PrePersist;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
-@Mapper(config = MappingConfig.class)
-public interface GesuchDokumentKommentarMapper {
-    @Mapping(source = "autor", target = "userErstellt")
-    GesuchDokumentKommentarDto toDto(GesuchDokumentKommentar kommentar);
+@ApplicationScoped
+public class GesuchDokumentKommentarListener {
+    @Inject
+    Instance<JsonWebToken> token;
 
-    GesuchDokumentKommentar toEntity(GesuchDokumentKommentarDto kommentarDto);
+    @PrePersist
+    protected void prePersist(final GesuchDokumentKommentar gesuchDokumentKommentar) {
+        if (gesuchDokumentKommentar.getAutor() == null) {
+            gesuchDokumentKommentar.setAutor(JwtUtil.extractUsernameFromJwt(token));
+        }
+    }
 }

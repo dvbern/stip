@@ -543,6 +543,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationEinnahmenKostenPersonInAusbildung() {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
+        personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -568,6 +569,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationDarlehenPersonInAusbildungMinderjaehrig() {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(16));
+        personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -621,6 +623,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationDarlehenPersonInAusbildungVolljaehrig() {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(18));
+        personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);

@@ -17,17 +17,25 @@
 
 package ch.dvbern.stip.api.common.util;
 
-public final class OidcConstants {
-    public static final String ROLE_GESUCHSTELLER = "V0_Gesuchsteller";
-    public static final String ROLE_SACHBEARBEITER = "V0_Sachbearbeiter";
-    public static final String ROLE_ADMIN = "V0_Sachbearbeiter-Admin";
-    public static final String ROLE_JURIST = "V0_Jurist";
-    public static final String ROLE_FREIGABESTELLE = "Freigabestelle";
-    public static final String ROLE_SOZIALDIENST_MITARBEITER = "V0_Sozialdienst-Mitarbeiter";
-    public static final String ROLE_SOZIALDIENST_ADMIN = "V0_Sozialdienst-Admin";
-    public static final String ROLE_SUPER_USER = "V0_Super-User";
+import jakarta.enterprise.inject.Instance;
+import lombok.experimental.UtilityClass;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
-    public static final String REQUIRED_ACTION_UPDATE_PASSWORD = "UPDATE_PASSWORD";
+@UtilityClass
+public class JwtUtil {
+    public String extractUsernameFromJwt(final Instance<JsonWebToken> token) {
+        if (token != null && token.isResolvable()) {
+            final var jwt = token.get();
+            final var givenName = jwt.getClaim(Claims.given_name);
+            final var familyName = jwt.getClaim(Claims.family_name);
+            if (givenName == null && familyName == null) {
+                return "System";
+            }
 
-    private OidcConstants() {}
+            return givenName + " " + familyName;
+        } else {
+            return "System";
+        }
+    }
 }
