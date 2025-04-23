@@ -76,6 +76,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
@@ -431,7 +432,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
 
         gesuchAuthorizer.canRead(gesuchId);
@@ -476,6 +477,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
+    @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {

@@ -21,7 +21,11 @@ import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import jakarta.ws.rs.BadRequestException;
 
 public interface GesuchStatusStateChangeHandler
     extends StateChangeHandler<Gesuchstatus, GesuchStatusChangeEvent, Gesuch> {
+    default void illegalHandleCall() {
+        throw new BadRequestException();
+    }
 }

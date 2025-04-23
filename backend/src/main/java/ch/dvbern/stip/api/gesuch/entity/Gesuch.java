@@ -177,6 +177,12 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<BeschwerdeEntscheid> beschwerdeEntscheids = new ArrayList<>();
 
+    /**
+     * Gesuch was verfuegt at least once in the past
+     */
+    @Column(name = "verfuegt", nullable = false)
+    private boolean verfuegt = false;
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))
