@@ -33,6 +33,8 @@ public class GesuchDokumentKommentarCopyUtil {
         copy.setKommentar(source.getKommentar());
         copy.setDokumentstatus(source.getDokumentstatus());
         copy.setAutor(source.getAutor());
+        copy.setTimestampErstellt(source.getTimestampErstellt());
+        copy.setTimestampMutiert(source.getTimestampMutiert());
 
         return copy;
     }

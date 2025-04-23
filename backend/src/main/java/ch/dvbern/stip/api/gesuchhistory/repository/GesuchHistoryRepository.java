@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchhistory.repository;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -94,6 +95,26 @@ public class GesuchHistoryRepository {
             .findFirst();
     }
 
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getLatestWhereStatusChangedToOneOf(
+        final UUID gesuchId,
+        final Collection<Gesuchstatus> gesuchStatus
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").in(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
     @SuppressWarnings("unchecked")
     public Optional<Integer> getRevisionWhereStatusChangedTo(final UUID gesuchId, final Gesuchstatus gesuchStatus) {
         final var reader = AuditReaderFactory.get(entityManager);
@@ -110,4 +131,58 @@ public class GesuchHistoryRepository {
             .stream()
             .findFirst();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getRevisionWhereStatusChangedToOneOf(
+        final UUID gesuchId,
+        final Collection<Gesuchstatus> gesuchStatus
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").in(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getEarliestRevisionWhereStatusChangedAfterRevision(
+        final UUID gesuchId,
+        final Integer revisionNumber
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.revisionNumber().gt(revisionNumber))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    public Optional<Gesuch> getGesuchAtRevision(final UUID gesuchId, final Integer revisionNumber) {
+        @SuppressWarnings("unchecked")
+        final Optional<Gesuch> revision = AuditReaderFactory.get(entityManager)
+            .createQuery()
+            .forEntitiesAtRevision(Gesuch.class, revisionNumber)
+            .add(AuditEntity.id().eq(gesuchId))
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+        return revision;
+    }
+
 }

@@ -119,7 +119,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public ValidationReportDto gesuchTrancheEinreichenValidierenGS(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidierenGS(gesuchTrancheId);
     }
 
