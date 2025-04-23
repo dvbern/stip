@@ -54,11 +54,11 @@
               (view.gesuchStatus === 'FEHLENDE_DOKUMENTE' || view.gesuchStatus === 'IN_BEARBEITUNG_GS')
             ) {
               <dv-shared-ui-icon-badge type="info" class="tw-min-w-[138px]">
-                {{ 'gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | translate }}
+                {{ 'shared.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | translate }}
               </dv-shared-ui-icon-badge>
             } @else {
               <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-[138px]">
-                {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
+                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | translate }}
               </dv-shared-ui-icon-badge>
             }
           } @else {
