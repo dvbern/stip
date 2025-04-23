@@ -31,12 +31,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class SAPUtils {
+    private long generateSecureRandomLong() {
+        SecureRandom secureRandom = new SecureRandom();
+        return secureRandom.nextLong();
+    }
+
     public BigDecimal generateDeliveryId() {
         return BigDecimal.valueOf(Math.abs(generateSecureRandomLong()));
     }
 
     public String generateExtId() {
-        return String.valueOf(BigDecimal.valueOf(Math.abs(generateSecureRandomLong())));
+        return generateDeliveryId().toString();
     }
 
     public void logAsWarningIfNoAction(Response response) {
@@ -49,20 +54,17 @@ public class SAPUtils {
     public boolean noSapActionHasBeenPerformed(Response response) {
         if (response.getEntity() instanceof VendorPostingCreateResponse entity) {
             return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
-        } else if (response.getEntity() instanceof BusinessPartnerCreateResponse entity) {
-            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
-        } else if (response.getEntity() instanceof BusinessPartnerChangeResponse entity) {
-            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
-        } else if (response.getEntity() instanceof BusinessPartnerReadResponse entity) {
+        }
+        if (response.getEntity() instanceof BusinessPartnerCreateResponse entity) {
             return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
         }
-
+        if (response.getEntity() instanceof BusinessPartnerChangeResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
+        }
+        if (response.getEntity() instanceof BusinessPartnerReadResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
+        }
         return false;
-    }
-
-    private long generateSecureRandomLong() {
-        SecureRandom secureRandom = new SecureRandom();
-        return secureRandom.nextLong();
     }
 
     private boolean isSuccess(final String rawMessageType) {
