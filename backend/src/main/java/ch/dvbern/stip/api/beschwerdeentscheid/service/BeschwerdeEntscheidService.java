@@ -139,9 +139,11 @@ public class BeschwerdeEntscheidService {
         var createDto = new BeschwerdeVerlaufEntryCreateDto();
         createDto.setBeschwerdeSetTo(beschwerdeEntscheid.getGesuch().isBeschwerdeHaengig());
         createDto.setKommentar(beschwerdeEntscheid.getKommentar());
-        // todo: what about this flag?!
         beschwerdeverlaufService
-            .createBeschwerdeVerlaufEntryIgnoreFlagValidation(beschwerdeEntscheid.getGesuch().getId(), createDto);
+            .createBeschwerdeVerlaufEntryIgnoreBeschwerdeHaengigFlag(
+                beschwerdeEntscheid.getGesuch().getId(),
+                createDto
+            );
     }
 
     private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {

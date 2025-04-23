@@ -62,13 +62,11 @@ public class BeschwerdeverlaufService {
     }
 
     @Transactional
-    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntryIgnoreFlagValidation(
+    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntryIgnoreBeschwerdeHaengigFlag(
         final UUID gesuchId,
         final BeschwerdeVerlaufEntryCreateDto createDto
     ) {
         var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuch.setBeschwerdeHaengig(createDto.getBeschwerdeSetTo());
-
         var entry = beschwerdeverlaufMapper.toEntity(createDto);
         entry.setGesuch(gesuch);
         beschwerdeverlaufRepository.persistAndFlush(entry);
