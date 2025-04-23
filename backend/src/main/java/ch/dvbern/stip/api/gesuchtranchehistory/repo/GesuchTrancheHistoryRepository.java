@@ -54,7 +54,7 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    public GesuchTranche getLatestRevision(final UUID gesuchTrancheId) {
+    public GesuchTranche getLatestVersion(final UUID gesuchTrancheId) {
         try {
             final var reader = AuditReaderFactory.get(em);
 

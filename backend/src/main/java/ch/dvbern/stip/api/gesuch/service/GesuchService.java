@@ -732,7 +732,7 @@ public class GesuchService {
 
     @Transactional
     public Gesuch fetchGesuchOfTranche(final UUID trancheId) {
-        GesuchTranche tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId);
+        GesuchTranche tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
         // fetch the gesuchId of this tranche
         // then fetch current gesuch data
         // (because gesuch of audited tranche could still be in other state than VERFUEGT)
@@ -742,7 +742,7 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
-        final var tranche = gesuchTrancheHistoryRepository.getLatestRevision(trancheId);
+        final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
         final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
