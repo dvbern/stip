@@ -106,7 +106,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -744,13 +743,9 @@ public class GesuchService {
                 .findFirst();
 
         final var foundGesuchInStatusVerfuegt =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-        if (foundGesuchInStatusVerfuegt.isEmpty()) {
-            throw new ForbiddenException();
-
-        }
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).get();
         var requestedTrancheFromGesuchInStatusVerfuegt =
-            foundGesuchInStatusVerfuegt.get()
+            foundGesuchInStatusVerfuegt
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
