@@ -152,12 +152,7 @@ public class BeschwerdeEntscheidService {
     }
 
     private void setGesuchToBereitFuerBearbeitung(Gesuch gesuch) {
-        // todo: clarify status changes
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-    }
-
-    public RestMulti<Buffer> getBeschwerdeVerlaufDokument(UUID dokumentId) {
-        return getDokument(dokumentId);
     }
 
 }
