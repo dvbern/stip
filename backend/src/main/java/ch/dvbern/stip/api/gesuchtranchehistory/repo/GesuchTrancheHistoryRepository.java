@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
@@ -36,6 +30,12 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -101,10 +101,6 @@ public class GesuchTrancheHistoryRepository {
             .findFirst();
     }
 
-    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
-        return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
-    }
-
     public List<GesuchTranche> getAllTranchenWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
         return findAllGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
     }
@@ -125,10 +121,9 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
-        var tranchen = new ArrayList<GesuchTranche>();
-        gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
-            .ifPresent(gesuch -> tranchen.addAll(gesuch.getGesuchTranchen()));
-        return tranchen;
+        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
+            .map(Gesuch::getGesuchTranchen)
+            .orElse(new ArrayList<>());
     }
 
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
