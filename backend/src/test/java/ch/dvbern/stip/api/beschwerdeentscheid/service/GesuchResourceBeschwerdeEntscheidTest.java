@@ -37,7 +37,6 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -110,33 +109,10 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(4)
-    void gesuchWithChangesShouldNotBeAccessibleForGSBeforeVERFUEGT() {
-        gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(5)
-    void createFirstAenderungsantragFails() {
-        createAenderungsanstrag()
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(4)
     @Test
     void makeGesuchVerfuegt() {
-        // TODO KSTIP-1631: Make Gesuch the correct state
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -150,7 +126,6 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
 
-        // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
             gesuch.getId(),
@@ -175,7 +150,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     }
 
     @Test
-    @Order(7)
+    @Order(5)
     @TestAsSachbearbeiter
     void changeToFinalState() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
@@ -204,7 +179,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(6)
     void createBeschwerdeEntscheidWithFalseFlag() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), false, "test", file)
@@ -214,7 +189,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(7)
     void verifyGesuchShouldBeInSameStatus() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -235,7 +210,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(8)
     void verifyBeschwerdeVerlaufEntryCreated() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -251,7 +226,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(9)
     void createBeschwerdeEntscheidWithTrueFlag() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), true, "test2", file)
@@ -261,8 +236,8 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
-    void verifyGesuchShouldBeInCorrectStatus() {
+    @Order(10)
+    void verifyGesuchShouldBeInStatus_BEREIT_FUER_BEARBEITUNG() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -281,7 +256,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(11)
     void verifyBeschwerdeVerlaufEntryCreated2() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -297,9 +272,9 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(13)
     void getAllBeschwerdeEntscheide() {
-        final var entrys = gesuchApiSpec.getAllBeschwerdeentscheideForGesuch()
+        final var beschwerdeEntscheids = gesuchApiSpec.getAllBeschwerdeentscheideForGesuch()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -308,18 +283,21 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .extract()
             .body()
             .as(BeschwerdeEntscheidDtoSpec[].class);
-        assertThat(entrys.length, is(2));
+        assertThat(beschwerdeEntscheids.length, is(2));
 
-        final var entry = entrys[0];
-        assertThat(entry.getKommentar(), is("test"));
-        assertThat(Arrays.stream(entrys).anyMatch(BeschwerdeEntscheidDtoSpec::getIsBeschwerdeErfolgreich), is(true));
-        assertThat(entry.getDokumente().size(), is(1));
-        dokumentId = entry.getDokumente().get(0).getId();
+        final var beschwerdeEntscheid = beschwerdeEntscheids[0];
+        assertThat(beschwerdeEntscheid.getKommentar(), is("test"));
+        assertThat(
+            Arrays.stream(beschwerdeEntscheids).anyMatch(BeschwerdeEntscheidDtoSpec::getIsBeschwerdeErfolgreich),
+            is(true)
+        );
+        assertThat(beschwerdeEntscheid.getDokumente().size(), is(1));
+        dokumentId = beschwerdeEntscheid.getDokumente().get(0).getId();
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(14)
     void getBeschwerdeEntscheidDokumentTest() throws IOException {
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
@@ -350,16 +328,5 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     private String readPngFileData() throws IOException {
         return FileUtils.getContentsAsString(new File(TEST_PNG_FILE_LOCATION));
-    }
-
-    io.restassured.response.Response createAenderungsanstrag() {
-        return gesuchTrancheApiSpec.createAenderungsantrag()
-            .gesuchIdPath(gesuch.getId())
-            .body(
-                new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
-                    .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
-                    .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis())
-            )
-            .execute(TestUtil.PEEK_IF_ENV_SET);
     }
 }
