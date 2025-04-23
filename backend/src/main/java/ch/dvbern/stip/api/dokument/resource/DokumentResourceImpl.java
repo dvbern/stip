@@ -196,15 +196,15 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
-
+        dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         return switch (dokumentArt) {
             case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
-            case BESCHWERDE_ENTSCHEID -> getBeschwerdeVerlaufDokument(dokumentId);
+            case BESCHWERDE_ENTSCHEID -> getBeschwerdeEntscheidDokument(dokumentId);
         };
     }
 
-    private RestMulti<Buffer> getBeschwerdeVerlaufDokument(UUID dokumentId) {
+    private RestMulti<Buffer> getBeschwerdeEntscheidDokument(UUID dokumentId) {
         beschwerdeEntscheidAuthorizer.canRead();
         return beschwerdeEntscheidService.getDokument(dokumentId);
     }

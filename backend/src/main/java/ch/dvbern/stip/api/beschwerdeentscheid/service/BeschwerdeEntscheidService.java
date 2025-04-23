@@ -31,6 +31,8 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -61,6 +63,8 @@ public class BeschwerdeEntscheidService {
     private final ConfigService configService;
     private final S3AsyncClient s3;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
+
+    private final GesuchStatusService gesuchStatusService;
 
     @Transactional
     public Uni<Response> createBeschwerdeEntscheid(
@@ -113,6 +117,10 @@ public class BeschwerdeEntscheidService {
         beschwerdeentscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
 
+        if (beschwerdeEntscheid.getIsBeschwerdeErfolgreich()) {
+            setGesuchToBereitFuerBearbeitung(beschwerdeentscheid.getGesuch());
+        }
+
         createBeschwerdeverlaufEntry(beschwerdeEntscheid);
     }
 
@@ -132,7 +140,8 @@ public class BeschwerdeEntscheidService {
         createDto.setBeschwerdeSetTo(beschwerdeEntscheid.getGesuch().isBeschwerdeHaengig());
         createDto.setKommentar(beschwerdeEntscheid.getKommentar());
         // todo: what about this flag?!
-        beschwerdeverlaufService.createBeschwerdeVerlaufEntry(beschwerdeEntscheid.getGesuch().getId(), createDto);
+        beschwerdeverlaufService
+            .createBeschwerdeVerlaufEntryIgnoreFlagValidation(beschwerdeEntscheid.getGesuch().getId(), createDto);
     }
 
     private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {
@@ -141,7 +150,12 @@ public class BeschwerdeEntscheidService {
     }
 
     private void setGesuchToBereitFuerBearbeitung(Gesuch gesuch) {
-        // todo: set gesuchstatus
+        // todo: clarify status changes
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
+
+    public RestMulti<Buffer> getBeschwerdeVerlaufDokument(UUID dokumentId) {
+        return getDokument(dokumentId);
     }
 
 }

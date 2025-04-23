@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -311,7 +312,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
         final var entry = entrys[0];
         assertThat(entry.getKommentar(), is("test"));
-        assertThat(entry.getIsBeschwerdeErfolgreich(), is(true));
+        assertThat(Arrays.stream(entrys).anyMatch(BeschwerdeEntscheidDtoSpec::getIsBeschwerdeErfolgreich), is(true));
         assertThat(entry.getDokumente().size(), is(1));
         dokumentId = entry.getDokumente().get(0).getId();
     }

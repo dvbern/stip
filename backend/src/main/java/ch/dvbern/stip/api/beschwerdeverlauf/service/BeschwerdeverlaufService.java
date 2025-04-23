@@ -61,4 +61,18 @@ public class BeschwerdeverlaufService {
         return beschwerdeverlaufMapper.toDto(entry);
     }
 
+    @Transactional
+    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntryIgnoreFlagValidation(
+        final UUID gesuchId,
+        final BeschwerdeVerlaufEntryCreateDto createDto
+    ) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuch.setBeschwerdeHaengig(createDto.getBeschwerdeSetTo());
+
+        var entry = beschwerdeverlaufMapper.toEntity(createDto);
+        entry.setGesuch(gesuch);
+        beschwerdeverlaufRepository.persistAndFlush(entry);
+        return beschwerdeverlaufMapper.toDto(entry);
+    }
+
 }

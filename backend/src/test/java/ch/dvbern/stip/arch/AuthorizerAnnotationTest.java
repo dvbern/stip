@@ -42,7 +42,6 @@ class AuthorizerAnnotationTest {
     private static final Set<String> ANONYMOUS_METHODS = new HashSet<>(
         List.of(
             "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant",
-            "ch.dvbern.stip.api.dokument.resource.DokumentResourceImpl.getBeschwerdeEntscheidDokument",
             "ch.dvbern.stip.api.gesuch.resource.GesuchResourceImpl.getBerechnungsBlattForGesuch",
             "ch.dvbern.stip.api.config.resource.ConfigResourceImpl.getDeploymentConfig"
         )
