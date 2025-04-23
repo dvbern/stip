@@ -167,14 +167,12 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.form.controls.alimentenregelungExistiert.valueChanges,
   );
 
-  alimentenBeitraegeSig = toSignal(
-    this.form.controls.erhalteneAlimentebeitraege.valueChanges,
-  );
-
   alimenteDocumentSig = this.createUploadOptionsSig(() => {
-    const alimente = fromFormatedNumber(this.alimentenBeitraegeSig() ?? '0');
+    const alimentenRegelungExisitert = this.alimentenregelungExistiertSig();
 
-    return alimente > 0 ? DokumentTyp.KINDER_ALIMENTENVERORDUNG : null;
+    return alimentenRegelungExisitert
+      ? DokumentTyp.KINDER_ALIMENTENVERORDUNG
+      : null;
   });
 
   alimentenregelungExistiertChangeSig = computed(() => {

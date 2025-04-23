@@ -37,6 +37,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -70,7 +71,13 @@ class CopyUtilTest {
                 .forEach(
                     constraintViolation -> assertThat(
                         constraintViolation.getMessageTemplate(),
-                        is(oneOf(VALIDATION_DOCUMENTS_REQUIRED_MESSAGE, VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE))
+                        is(
+                            oneOf(
+                                VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
+                                VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE,
+                                VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE
+                            )
+                        )
                     )
                 );
         }

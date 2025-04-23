@@ -58,10 +58,6 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.service.PageValidationUtil;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -492,22 +488,6 @@ public class GesuchService {
             kommentarDto,
             false
         );
-    }
-
-    @Transactional
-    public void validateBearbeitungAbschliessen(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
-        validationGroups.add(LebenslaufItemPageValidation.class);
-        validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
-
-        Set<ConstraintViolation<GesuchFormular>> violations =
-            validator.validate(gesuchFormular, validationGroups.toArray(new Class<?>[0]));
-        if (!violations.isEmpty()) {
-            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
-        }
     }
 
     @Transactional

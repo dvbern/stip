@@ -31,7 +31,7 @@ test.describe('Tranche erstellen', () => {
     const urls = getE2eUrls();
 
     const requiredDokumenteResponse = page.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumenteToUpload',
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
 
     // Upload all GS-Dokumente =================================================

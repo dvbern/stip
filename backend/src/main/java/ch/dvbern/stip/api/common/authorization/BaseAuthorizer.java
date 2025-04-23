@@ -51,6 +51,10 @@ public class BaseAuthorizer {
         return isGesuchsteller(currentBenutzer) && !isAdmin(currentBenutzer);
     }
 
+    protected boolean isSuperUser(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasRole(OidcConstants.ROLE_SUPER_USER);
+    }
+
     protected void permitAll() {
         // Noop, since an action is allowed if not exception is thrown
     }

@@ -143,7 +143,7 @@ test.describe('Neues gesuch erstellen', () => {
     await darlehenPO.fillDarlehenForm(darlehen);
 
     const requiredDokumenteResponse = page.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumenteToUpload',
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
     await darlehenPO.elems.buttonSaveContinue.click();
 
@@ -185,12 +185,11 @@ test.describe('Neues gesuch erstellen', () => {
     // set to bearbeiten
     const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
 
-    // commented out since geusch is in allready in bereit für Bearbeitung, but that might change in the future
-    // await headerNavPO.elems.aktionMenu.click();
-    // await headerNavPO.elems
-    //   .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
-    //   .click();
-    // await page.getByTestId('dialog-confirm').click();
+    await headerNavPO.elems.aktionMenu.click();
+    await headerNavPO.elems
+      .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
+      .click();
+    await page.getByTestId('dialog-confirm').click();
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
@@ -206,7 +205,9 @@ test.describe('Neues gesuch erstellen', () => {
     await expectStepTitleToContainText('Steuerdaten Mutter', page);
     const steuerDatenPO = new SteuerdatenPO(page);
     await steuerDatenPO.fillSteuerdaten(steuerdaten);
+    const steuerdatenResponse = page.waitForResponse('**/api/v1/steuerdaten/*');
     await steuerDatenPO.elems.buttonSaveContinue.click();
+    await steuerdatenResponse;
 
     // Go to Berechnung ===========================================================
     // will log the user out if verfuegung is not available yet!
