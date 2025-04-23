@@ -112,6 +112,7 @@ import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -736,7 +737,7 @@ public class GesuchService {
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
-                .get()
+                .orElseThrow(ForbiddenException::new)
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
