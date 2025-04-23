@@ -59,7 +59,7 @@ public class BeschwerdeEntscheid extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_beschwerde_entscheid__gesuch_id"), nullable = false
+        name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_beschwerde_entscheid_gesuch_id"), nullable = false
     )
     private Gesuch gesuch;
 
