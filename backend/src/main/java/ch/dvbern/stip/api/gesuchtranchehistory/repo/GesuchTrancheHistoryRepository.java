@@ -17,6 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
@@ -30,12 +36,6 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor

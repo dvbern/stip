@@ -241,7 +241,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(

@@ -109,6 +109,7 @@ class GesuchAuthorizerCanDeleteTest {
             null,
             fallRepository,
             sozialdienstService,
+            null,
             null
         );
 

@@ -100,6 +100,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
             null,
             fallRepository,
             sozialdienstService,
+            null,
             null
         );
 

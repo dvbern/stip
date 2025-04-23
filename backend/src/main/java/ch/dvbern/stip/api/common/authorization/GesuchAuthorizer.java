@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryReposito
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
@@ -53,6 +55,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
@@ -87,6 +90,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canReadGesuchOfTranche(final UUID trancheId) {
         final var gesuch = fetchGesuchOfTranche(trancheId);
         canRead(gesuch.getId());
+    }
+
+    @Transactional
+    public void canReadInitialTranche(final UUID trancheId) {
+        final var gesuch = fetchGesuchOfTranche(trancheId);
+        if (gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).isEmpty()) {
+            throw new BadRequestException();
+        }
+
     }
 
     @Transactional
