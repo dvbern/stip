@@ -97,6 +97,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
             gesuchTrancheRepository,
             gesuchStatusService,
             gesuchTrancheStatusService,
+            null,
             fallRepository,
             sozialdienstService,
             null

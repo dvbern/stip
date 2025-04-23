@@ -49,7 +49,7 @@ class GesuchAuthorizerCanUpdateEinreichefristTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         benutzerService = Mockito.mock(BenutzerService.class);
         when(gesuchRepository.requireById(Mockito.any())).thenReturn(gesuch);
-        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, null, null, null, null, null, null);
+        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, null, null, null, null, null, null, null);
     }
 
     @Test
