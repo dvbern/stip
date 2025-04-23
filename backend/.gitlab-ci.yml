@@ -7,7 +7,7 @@ include:
     inputs:
       name: build-api
       context-dir: backend
-      java-image-version: 21-jdk-alpine
+      java-image-version: 17-jdk-alpine
       maven-goal: install
       maven-cli-opts-extend: >-
         -Drevision=$VERSION

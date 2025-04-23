@@ -90,7 +90,7 @@ public class GesuchTrancheTruncateService {
         );
 
         for (final var tranche : tranchenToCheck) {
-            if (tranche.getGueltigkeit().months() <= 0) {
+            if (tranche.getGueltigkeit().getMonths() <= 0) {
                 toRemove.add(tranche);
                 gesuchDokumentKommentarService.deleteForGesuchTrancheId(tranche.getId());
 

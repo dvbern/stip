@@ -29,7 +29,6 @@ import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -94,7 +93,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
-    @PermitAll
     public BenutzerDto prepareCurrentBenutzer() {
         benutzerAuthorizer.canPrepare();
         return benutzerService.getOrCreateAndUpdateCurrentBenutzer();

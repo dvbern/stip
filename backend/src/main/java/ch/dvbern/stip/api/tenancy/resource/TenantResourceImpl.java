@@ -21,7 +21,6 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.TenantResource;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +32,6 @@ public class TenantResourceImpl implements TenantResource {
     private final TenantService tenantService;
 
     @Override
-    @PermitAll
     public TenantInfoDto getCurrentTenant() {
         return tenantService.getCurrentTenant();
     }

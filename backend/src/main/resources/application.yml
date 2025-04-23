@@ -257,7 +257,7 @@ quarkus:
       database:
         generation: 'drop-and-create'
     oidc:
-      auth-server-url: '${keycloak.url:replaced-by-test-resource}/realms/quarkus/'
+      auth-server-url: '${keycloak.url}/realms/quarkus/'
       client-id: '${keycloak.client-id}'
       application-type: service
     s3:

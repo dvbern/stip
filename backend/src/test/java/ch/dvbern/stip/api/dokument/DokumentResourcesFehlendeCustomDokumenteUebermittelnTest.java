@@ -47,6 +47,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
+import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -584,5 +585,9 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
 
     private String readFileData() throws IOException {
         return Files.readString(new File(TEST_FILE_LOCATION).toPath());
+    }
+
+    private String readPngFileData() throws IOException {
+        return FileUtils.getContentsAsString(new File(TEST_PNG_FILE_LOCATION));
     }
 }

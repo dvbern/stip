@@ -40,7 +40,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
-import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
+import io.quarkus.keycloak.admin.client.common.KeycloakAdminClientConfig;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -86,14 +86,14 @@ public class SozialdienstBenutzerService {
         // TODO: When we upgrade to a quarkus version using hibernate 7 we will be able to use the newer keycloak
         // admin client which will allow us to easily configure the truststore and secure the connection
         return KeycloakBuilder.builder()
-            .clientId(config.clientId())
-            .clientSecret(config.clientSecret().orElse(null))
-            .grantType(config.grantType().asString())
-            .username(config.username().orElse(null))
-            .password(config.password().orElse(null))
-            .realm(config.realm())
-            .serverUrl(config.serverUrl().orElse(null))
-            .scope(config.scope().orElse(null))
+            .clientId(config.clientId)
+            .clientSecret(config.clientSecret.orElse(null))
+            .grantType(config.grantType.asString())
+            .username(config.username.orElse(null))
+            .password(config.password.orElse(null))
+            .realm(config.realm)
+            .serverUrl(config.serverUrl.orElse(null))
+            .scope(config.scope.orElse(null))
             .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
             .build();
     }

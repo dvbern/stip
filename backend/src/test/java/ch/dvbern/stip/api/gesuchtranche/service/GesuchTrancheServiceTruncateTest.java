@@ -249,7 +249,7 @@ class GesuchTrancheServiceTruncateTest {
             is(LocalDate.of(2024, 2, 1).with(lastDayOfMonth()))
         );
         assertThat(
-            existingTranche2.getGueltigkeit().months(),
+            existingTranche2.getGueltigkeit().getMonths(),
             is(0)
         );
     }
