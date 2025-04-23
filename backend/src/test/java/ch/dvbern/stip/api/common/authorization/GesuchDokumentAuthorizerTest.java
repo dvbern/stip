@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -44,13 +45,13 @@ class GesuchDokumentAuthorizerTest {
     private GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     private GesuchDokument gesuchDokument;
+    private BenutzerService benutzerService;
+    private Benutzer mockBenutzer;
 
     @BeforeEach
     void setUp() {
-        final var benutzerService = Mockito.mock(BenutzerService.class);
-        final var mockBenutzer = new Benutzer();
-        mockBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
-        Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
+        // setup default benutzer for the moment
+        setupSBBenutzer();
 
         final var gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchDokument = new GesuchDokument();
@@ -71,9 +72,34 @@ class GesuchDokumentAuthorizerTest {
         );
     }
 
+    private void setupSBBenutzer() {
+        setupBenutzerOfRole(OidcConstants.ROLE_SACHBEARBEITER);
+    }
+
+    private void setupGSBenutzer() {
+        setupBenutzerOfRole(OidcConstants.ROLE_GESUCHSTELLER);
+    }
+
+    private void setupSozMABenutzer() {
+        setupBenutzerOfRole(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
+    }
+
+    private void setupBenutzerOfRole(final String role) {
+        benutzerService = Mockito.mock(BenutzerService.class);
+        mockBenutzer = new Benutzer();
+        mockBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(role)));
+        Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
+    }
+
+    /**
+     * Test Authorizer as Sachbearbeiter
+     */
+
     @Test
-    void gesuchDokumentOfTrancheSuccess() {
+    @Description("An SB can update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_SB")
+    void canUpdateGesuchDokumentShouldSuccessAsSBForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_SB() {
         // arrange
+        setupSBBenutzer();
         gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
 
@@ -83,8 +109,10 @@ class GesuchDokumentAuthorizerTest {
     }
 
     @Test
-    void gesuchDokumentOfTrancheFail() {
+    @Description("An SB can NOT update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldFailAsSBForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_GS() {
         // arrange
+        setupSBBenutzer();
         gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
 
@@ -94,8 +122,10 @@ class GesuchDokumentAuthorizerTest {
     }
 
     @Test
-    void gesuchDokumentOfAenderungSuccess() {
+    @Description("An SB can update a GesuchDokument of an aenderung when TrancheStatus is UEBERPRUEFEN")
+    void canUpdateGesuchDokumentShouldSuccessAsSBForAenderungOfTrancheStatus_UEBERPRUEFEN() {
         // arrange
+        setupSBBenutzer();
         gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
 
@@ -105,8 +135,121 @@ class GesuchDokumentAuthorizerTest {
     }
 
     @Test
-    void gesuchDokumentOfAenderungFail() {
+    @Description("An SB can NOT update a GesuchDokument of an aenderung when TrancheStatus is IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldFailAsSBForAenderungOfTrancheStatus_IN_BEARBEITUNG_GS() {
         // arrange
+        setupSBBenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    /**
+     * Test Authorizer as Gesuchsteller
+     */
+    @Test
+    @Description("A GS can NOT update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_SB")
+    void canUpdateGesuchDokumentShouldFailAsGSForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_SB() {
+        // arrange
+        setupGSBenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("A GS can update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldSuccessAsGSForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_GS() {
+        // arrange
+        setupGSBenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("A GS can NOT update a GesuchDokument of an aenderung when TrancheStatus is UEBERPRUEFEN")
+    void canUpdateGesuchDokumentShouldFailAsGSForAenderungOfTrancheStatus_UEBERPRUEFEN() {
+        // arrange
+        setupGSBenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("An GS can update a GesuchDokument of an aenderung when TrancheStatus is IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldSuccessAsGSForAenderungOfTrancheStatus_IN_BEARBEITUNG_GS() {
+        // arrange
+        setupGSBenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    /**
+     * Test Authorizer as Sozialdienstmitarbeiter
+     */
+
+    @Test
+    @Description("A GS can NOT update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_SB")
+    void canUpdateGesuchDokumentShouldFailAsSozMAForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_SB() {
+        // arrange
+        setupSozMABenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("A GS can update a GesuchDokument of a tranche when gesuch is in Gesuchstatus IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldSuccessAsAsSozMAForNormalTrancheOfGesuchstatus_IN_BEARBEITUNG_GS() {
+        // arrange
+        setupSozMABenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("A GS can NOT update a GesuchDokument of an aenderung when TrancheStatus is UEBERPRUEFEN")
+    void canUpdateGesuchDokumentShouldFailAsSozMAForAenderungOfTrancheStatus_UEBERPRUEFEN() {
+        // arrange
+        setupSozMABenutzer();
+        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+
+        // act/assert
+        final var dokumentId = UUID.randomUUID();
+        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    }
+
+    @Test
+    @Description("An GS can update a GesuchDokument of an aenderung when TrancheStatus is IN_BEARBEITUNG_GS")
+    void canUpdateGesuchDokumentShouldSuccessAsSozMAForAenderungOfTrancheStatus_IN_BEARBEITUNG_GS() {
+        // arrange
+        setupSozMABenutzer();
         gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
 
