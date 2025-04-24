@@ -220,4 +220,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             forbidden();
         }
     }
+
+    @Transactional
+    public void canBearbeitungAbschliessen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS) {
+            return;
+        }
+        forbidden();
+    }
 }
