@@ -238,6 +238,7 @@
       "@dv/shared/util/validator-range": ["libs/shared/util/validator-range/src/index.ts"],
       "@dv/shared/util/validator-steuerdaten": ["libs/shared/util/validator-steuerdaten/src/index.ts"],
       "@dv/shared/util/validator-telefon-nummer": ["libs/shared/util/validator-telefon-nummer/src/index.ts"],
+      "@dv/sozialdienst-app/data-access/delegation": ["libs/sozialdienst-app/data-access/delegation/src/index.ts"],
       "@dv/sozialdienst-app/feature/administration": ["libs/sozialdienst-app/feature/administration/src/index.ts"],
       "@dv/sozialdienst-app/feature/administration-sozialdienst-benutzer": ["libs/sozialdienst-app/feature/administration-sozialdienst-benutzer/src/index.ts"],
       "@dv/sozialdienst-app/feature/cockpit": ["libs/sozialdienst-app/feature/cockpit/src/index.ts"],

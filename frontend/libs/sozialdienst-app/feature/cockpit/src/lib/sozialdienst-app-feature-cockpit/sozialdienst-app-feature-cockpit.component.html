@@ -27,7 +27,42 @@
 
     <!-- MAIN CONTENT -->
     <main class="page-body">
-      <dv-shared-ui-comming-soon class="tw-flex tw-p-5"></dv-shared-ui-comming-soon>
+      <div class="container">
+        <div
+          class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
+          [formGroup]="quickFilterForm"
+        >
+          @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
+            <button
+              type="button"
+              (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
+              class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+              [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
+              [class.btn-danger]="radio.checked"
+              [class.btn-light]="!radio.checked"
+            >
+              <dv-shared-ui-icon-chip class="me-3 chip">
+                <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
+              </dv-shared-ui-icon-chip>
+              <div class="flex-grow-1 tw-text-start tw-leading-4">
+                <span class="fw-bold fs-7 mb-0">
+                  {{ 'sozialdienst-app.cockpit.quick-filter.' + quickFilter.typ | translate }}
+                </span>
+                <input
+                  #radio
+                  class="fs-7 cdk-visually-hidden"
+                  type="radio"
+                  name="query"
+                  labelPosition="before"
+                  formControlName="query"
+                  [value]="quickFilter.typ"
+                  [attr.aria-label]="'sozialdienst-app.cockpit.quick-filter.label.' + quickFilter.typ | translate"
+                />
+              </div>
+            </button>
+          }
+        </div>
+      </div>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

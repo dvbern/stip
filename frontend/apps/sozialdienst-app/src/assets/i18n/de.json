@@ -15,5 +15,8 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
   "sozialdienst-app.admin.sozialdienstBenutzer.table.erstellen": "Erstellen",
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.title": "Sozialdienst Arbeiter löschen",
-  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?"
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
+
+  "sozialdienst-app.cockpit.quick-filter.ALLE": "Alle",
+  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche"
 }

@@ -147,6 +147,7 @@
     },
     "yaml.maxItemsComputed": 10000,
     "testing.automaticallyOpenTestResults": "neverOpen",
-    "angular.forceStrictTemplates": true
+    "angular.forceStrictTemplates": true,
+    "git.blame.statusBarItem.enabled": false
   }
 }
