@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +57,7 @@ class GesuchAuthorizerCanDeleteTest {
     private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
     private GesuchTrancheStatusService gesuchTrancheStatusService;
+    private GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @BeforeEach
     void setUp() {
@@ -73,6 +75,8 @@ class GesuchAuthorizerCanDeleteTest {
         adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
         gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
+
+        gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
 
         final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
@@ -117,7 +121,8 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchRepository,
             sozialdienstService,
             gesuchStatusService,
-            gesuchTrancheStatusService
+            gesuchTrancheStatusService,
+            gesuchTrancheHistoryService
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);

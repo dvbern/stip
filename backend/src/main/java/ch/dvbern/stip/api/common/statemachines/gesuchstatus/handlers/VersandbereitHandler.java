@@ -17,36 +17,25 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
+@Slf4j
 @RequiredArgsConstructor
-public class FehlendeDokumenteNichtEingereichtHandler implements GesuchStatusStateChangeHandler {
-    private final NotificationService notificationService;
-    private final MailService mailService;
-    private final GesuchService gesuchService;
-
+public class VersandbereitHandler implements GesuchStatusStateChangeHandler {
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
-        && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
+        return transition.getDestination() == Gesuchstatus.VERSANDBEREIT;
     }
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
-        gesuch.setNachfristDokumente(null);
-        gesuch.setEinreichedatum(null);
-        gesuchService.resetGesuchZurueckweisen(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        gesuch.setVerfuegt(true);
     }
 }

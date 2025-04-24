@@ -40,13 +40,12 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -84,8 +83,8 @@ public class GesuchDokumentService {
     private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
+    private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
     public Uni<Response> getUploadCustomDokumentUni(
@@ -192,29 +191,24 @@ public class GesuchDokumentService {
 
         if (gesuchDokumentOptional.isPresent()) {
             final var gesuchDokument = gesuchDokumentOptional.get();
-            final var gesuchTranche = gesuchDokument.getGesuchTranche();
-            final var gesuch = gesuchTranche.getGesuch();
-            if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
-                var trancheInStatusEingereicht =
-                    gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                        .orElseThrow();
-                final var dto = trancheInStatusEingereicht.getGesuchDokuments()
-                    .stream()
-                    .filter(
-                        gDok -> Objects.equals(
-                            gDok.getId(),
-                            gesuchDokument.getId()
-                        )
-                    )
-                    .findFirst()
-                    .map(gesuchDokumentMapper::toDto)
-                    .orElse(null);
-                return new NullableGesuchDokumentDto(dto);
-            }
-        }
 
-        final var dto = gesuchDokumentOptional.map(gesuchDokumentMapper::toDto).orElse(null);
-        return new NullableGesuchDokumentDto(dto);
+            final var gesuchTranche = gesuchTrancheHistoryService
+                .getCurrentOrHistoricalTrancheForGS(gesuchDokument.getGesuchTranche().getId());
+            final var dto = gesuchTranche.getGesuchDokuments()
+                .stream()
+                .filter(
+                    gDok -> Objects.equals(
+                        gDok.getId(),
+                        gesuchDokument.getId()
+                    )
+                )
+                .findFirst()
+                .map(gesuchDokumentMapper::toDto)
+                .orElse(null);
+            return new NullableGesuchDokumentDto(dto);
+
+        }
+        return new NullableGesuchDokumentDto(null);
     }
 
     @Transactional
@@ -233,20 +227,14 @@ public class GesuchDokumentService {
         final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp
     ) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        if (GesuchStatusUtil.gsReceivesGesuchdataOfStateEingereicht(gesuch)) {
-            var trancheInStatusEingereicht =
-                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
-                    .orElseThrow();
-            final var gesuchDokument = trancheInStatusEingereicht.getGesuchDokuments()
-                .stream()
-                .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
-                .findFirst();
-            final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
-            return new NullableGesuchDokumentDto(dto);
-        }
-        return findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
+
+        final var gesuchDokument = gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+            .findFirst();
+        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
     }
 
     @Transactional

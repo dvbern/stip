@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.ZustaendigerKantonDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -45,7 +44,8 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid Boolean vormundschaft;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
-  private @Valid ZustaendigerKantonDto zustaendigerKanton;
+  private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton;
+  private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
 
   /**
    **/
@@ -464,20 +464,38 @@ public class PersonInAusbildungDto  implements Serializable {
 
   /**
    **/
-  public PersonInAusbildungDto zustaendigerKanton(ZustaendigerKantonDto zustaendigerKanton) {
+  public PersonInAusbildungDto zustaendigerKanton(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton) {
     this.zustaendigerKanton = zustaendigerKanton;
     return this;
   }
 
   
   @JsonProperty("zustaendigerKanton")
-  public ZustaendigerKantonDto getZustaendigerKanton() {
+  public ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton getZustaendigerKanton() {
     return zustaendigerKanton;
   }
 
   @JsonProperty("zustaendigerKanton")
-  public void setZustaendigerKanton(ZustaendigerKantonDto zustaendigerKanton) {
+  public void setZustaendigerKanton(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton) {
     this.zustaendigerKanton = zustaendigerKanton;
+  }
+
+  /**
+   **/
+  public PersonInAusbildungDto zustaendigeKESB(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB) {
+    this.zustaendigeKESB = zustaendigeKESB;
+    return this;
+  }
+
+  
+  @JsonProperty("zustaendigeKESB")
+  public ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB getZustaendigeKESB() {
+    return zustaendigeKESB;
+  }
+
+  @JsonProperty("zustaendigeKESB")
+  public void setZustaendigeKESB(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB) {
+    this.zustaendigeKESB = zustaendigeKESB;
   }
 
 
@@ -512,12 +530,13 @@ public class PersonInAusbildungDto  implements Serializable {
         Objects.equals(this.vormundschaft, personInAusbildung.vormundschaft) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildung.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildung.identischerZivilrechtlicherWohnsitzPLZ) &&
-        Objects.equals(this.zustaendigerKanton, personInAusbildung.zustaendigerKanton);
+        Objects.equals(this.zustaendigerKanton, personInAusbildung.zustaendigerKanton) &&
+        Objects.equals(this.zustaendigeKESB, personInAusbildung.zustaendigeKESB);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton, zustaendigeKESB);
   }
 
   @Override
@@ -548,6 +567,7 @@ public class PersonInAusbildungDto  implements Serializable {
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    zustaendigerKanton: ").append(toIndentedString(zustaendigerKanton)).append("\n");
+    sb.append("    zustaendigeKESB: ").append(toIndentedString(zustaendigeKESB)).append("\n");
     sb.append("}");
     return sb.toString();
   }

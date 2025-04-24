@@ -17,19 +17,14 @@
 
 package ch.dvbern.stip.api.gesuch.util;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchStatusUtil {
-    public boolean gsReceivesGesuchdataOfStateEingereicht(final Gesuch gesuch) {
-        // only show actual data to GS if Gesuch is NOT EINGEREICHT or VERFUEGT or further
-        final var wasOnceEingereicht = Objects.nonNull(gesuch.getEinreichedatum());
-
-        return wasOnceEingereicht && Gesuchstatus.SB_IS_EDITING_GESUCH.contains(gesuch.getGesuchStatus());
+    public boolean gsReceivesCurrentGesuch(final Gesuchstatus gesuchstatus) {
+        return Gesuchstatus.GESUCHSTELLER_RECEIVES_CURRENT_GESUCH.contains(gesuchstatus);
     }
 
     public boolean sbReceivesChanges(final Gesuch gesuch) {

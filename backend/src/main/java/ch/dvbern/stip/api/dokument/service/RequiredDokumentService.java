@@ -70,31 +70,42 @@ public class RequiredDokumentService {
     public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
         if (
             (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB)
-            && (gesuch.getGesuchTranchen()
+            && gesuch.getGesuchTranchen()
                 .stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN))
+                .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
         ) {
             return false;
         }
+
+        final var containsAenderungenPendingOnGs =
+            gesuch.getGesuchTranchen()
+                .stream()
+                .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+                .anyMatch(
+                    tranche -> GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(tranche.getStatus())
+                );
+
+        if (containsAenderungenPendingOnGs) {
+            return false;
+        }
+
         final var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
 
-        // GesuchDokuments in status AUSSTEHEND with files attached
+        // GesuchDokuments in status AUSSTEHEND with files attached of Tranchen that are Typ Tranche or Typ aenderung in
+        // status Ueberpruefen
         final var containsUnprocessedGesuchDokuments =
             gesuch.getGesuchTranchen()
                 .stream()
+                .filter(
+                    gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                    && gesuchTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN)
+                )
                 .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithFiles);
 
         final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
             .stream()
             .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
-
-        final var containsAenderungenNOTInStateUeberpruefen =
-            RequiredDokumentUtil.containsAenderungNOTInTrancheStatus(gesuch, GesuchTrancheStatus.UEBERPRUEFEN);
-
-        if (containsAenderungenNOTInStateUeberpruefen) {
-            return false;
-        }
 
         final var shouldFehlendeDokumenteUebermitteln =
             isAnyDocumentStillRequired

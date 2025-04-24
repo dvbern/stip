@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -51,6 +52,9 @@ public abstract class AusbildungDashboardItemMapper {
 
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
+
+    @Inject
+    GesuchTrancheMapper gesuchTrancheMapper;
 
     @Mapping(
         target = "ausbildungBegin",
@@ -80,7 +84,7 @@ public abstract class AusbildungDashboardItemMapper {
     }
 
     GesuchDashboardItemDto map(final Gesuch gesuch) {
-        final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
+        final var gesuchTranchen = gesuch.getGesuchTranchen();
 
         final var offeneAenderung = gesuchTranchen.stream()
             .filter(
@@ -93,17 +97,18 @@ public abstract class AusbildungDashboardItemMapper {
                     )
                     .contains(tranche.getStatus())
             )
+            .map(gesuchTrancheMapper::toSlimDto)
             .findFirst()
             .orElse(null);
 
         Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount = Optional.empty();
 
-        final boolean anyFehlendeDokumente = gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE; // ||
-                                                                                                          // gesuchTranchen.stream().anyMatch(gesuchTrancheSlimDto
-                                                                                                          // ->
-                                                                                                          // gesuchTrancheSlimDto.getStatus()
-                                                                                                          // ==
-                                                                                                          // GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        final boolean anyFehlendeDokumente = gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE
+        || gesuchTranchen.stream()
+            .anyMatch(
+                gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+            );
+
         if (!anyFehlendeDokumente) {
             missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
                 .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))

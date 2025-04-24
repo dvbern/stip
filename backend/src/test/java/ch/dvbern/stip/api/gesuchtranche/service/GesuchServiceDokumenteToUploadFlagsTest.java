@@ -221,14 +221,14 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
-        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
+        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
 
         /*
          * check that all files have been processed by SB
          */
         // arrange
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
-        gesuchDokumentOfTranche2.setDokumente(List.of(new Dokument()));
+        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentOfTranche1.setDokumente(List.of(new Dokument()));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
@@ -240,12 +240,13 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuchDokumentOfTranche2.setDokumente(List.of());
+        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
-        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(true));
+        assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
     }
 
     @Test

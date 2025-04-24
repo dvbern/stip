@@ -18,11 +18,13 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
@@ -38,6 +40,7 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 
+@EntityListeners(GesuchDokumentKommentarListener.class)
 @Audited
 @Entity
 @Table(
@@ -66,4 +69,9 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "kommentar", nullable = true, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String kommentar;
+
+    @NotNull
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "autor", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String autor;
 }

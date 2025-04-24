@@ -22,17 +22,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchHistoryService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
+    private final GesuchRepository gesuchRepository;
     private final StatusprotokollMapper statusprotokollMapper;
 
     @Transactional
@@ -48,7 +52,41 @@ public class GesuchHistoryService {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
     }
 
-    public boolean wasVerfuegt(final UUID gesuchId) {
-        return getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT).isPresent();
+    public Gesuch getCurrentOrHistoricalGesuchForGS(final UUID gesuchId) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus())) {
+            return gesuch;
+        }
+
+        if (gesuch.isVerfuegt()) {
+            return gesuchHistoryRepository
+                .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+                .orElseThrow(NotFoundException::new);
+        }
+
+        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT)
+            .orElseThrow(NotFoundException::new);
     }
+
+    public Optional<Integer> getHistoricalGesuchRevisionForGS(final UUID gesuchId) {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        if (GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus())) {
+            return Optional.empty();
+        }
+
+        if (gesuch.isVerfuegt()) {
+            return gesuchHistoryRepository
+                .getRevisionWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN);
+        }
+
+        final var gesuchTrancheFehlendeDokumentRevisionOpt = gesuchHistoryRepository
+            .getRevisionWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.FEHLENDE_DOKUMENTE);
+
+        if (gesuchTrancheFehlendeDokumentRevisionOpt.isPresent()) {
+            return gesuchTrancheFehlendeDokumentRevisionOpt;
+        }
+        return gesuchHistoryRepository.getRevisionWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
 }
