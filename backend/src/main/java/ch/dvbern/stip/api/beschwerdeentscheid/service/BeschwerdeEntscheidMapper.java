@@ -25,7 +25,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MappingConfig.class, uses = DokumentMapper.class)
 public interface BeschwerdeEntscheidMapper {
-    // BeschwerdeEntscheid toNewEntity(final BeschwerdeEntscheidCreateDto createDto);
-
     BeschwerdeEntscheidDto toDto(final BeschwerdeEntscheid beschwerdeEntscheid);
 }

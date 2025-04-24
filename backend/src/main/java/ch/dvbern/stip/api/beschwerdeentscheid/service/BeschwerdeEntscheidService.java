@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
@@ -97,7 +96,7 @@ public class BeschwerdeEntscheidService {
         return beschwerdeEntscheidRepository.findByGesuchId(gesuchId)
             .stream()
             .map(beschwerdeEntscheidMapper::toDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Transactional
