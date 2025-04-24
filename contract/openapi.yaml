@@ -553,7 +553,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createBeschwerdeVerlaufEntry
-  '/gesuch/{gesuchId}/beschwerdeentscheid':
+  '/gesuch/{gesuchId}/beschwerde-entscheid':
     post:
       tags:
         - Gesuch

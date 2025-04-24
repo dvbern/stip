@@ -883,7 +883,7 @@ public class GesuchApiSpec {
     public static class CreateBeschwerdeEntscheidOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerdeentscheid";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde-entscheid";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -896,7 +896,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/beschwerdeentscheid
+         * POST /gesuch/{gesuchId}/beschwerde-entscheid
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1658,7 +1658,7 @@ public class GesuchApiSpec {
     public static class GetAllBeschwerdeentscheideForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerdeentscheid";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde-entscheid";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1670,7 +1670,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/beschwerdeentscheid
+         * GET /gesuch/{gesuchId}/beschwerde-entscheid
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1681,7 +1681,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/beschwerdeentscheid
+         * GET /gesuch/{gesuchId}/beschwerde-entscheid
          * @param handler handler
          * @return List&lt;BeschwerdeEntscheidDtoSpec&gt;
          */

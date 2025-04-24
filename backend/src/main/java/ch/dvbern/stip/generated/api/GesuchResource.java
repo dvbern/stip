@@ -84,7 +84,7 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/{gesuchId}/beschwerdeentscheid")
+    @Path("/{gesuchId}/beschwerde-entscheid")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "isBeschwerdeErfolgreich")  Boolean isBeschwerdeErfolgreich,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
@@ -138,7 +138,7 @@ public interface GesuchResource {
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/beschwerdeentscheid")
+    @Path("/{gesuchId}/beschwerde-entscheid")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
