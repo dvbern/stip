@@ -3958,6 +3958,7 @@ components:
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
+        - verfuegt
       type: object
       properties:
         fallId:
@@ -3989,6 +3990,8 @@ components:
           $ref: '#/components/schemas/Delegierung'
         nachfristDokumente:
           $ref: '#/components/schemas/LocalDate'
+        verfuegt:
+          type: boolean
     Delegierung:
       type: object
       properties:
@@ -4638,6 +4641,8 @@ components:
           $ref: '#/components/schemas/Sprache'
         zustaendigerKanton:
           $ref: '#/components/schemas/ZustaendigerKanton'
+        zustaendigeKESB:
+          $ref: '#/components/schemas/ZustaendigeKESB'
     Benutzer:
       type: object
       allOf:
@@ -4750,8 +4755,6 @@ components:
         - vorname
       type: object
       properties:
-        sozialversicherungsnummer:
-          type: string
         vorname:
           type: string
         nachname:
@@ -6115,6 +6118,11 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    ZustaendigeKESB:
+      enum:
+        - KESB_BERN
+        - KESB_ANDERER_KANTON
+      type: string
     StipDecision:
       enum:
         - GESUCH_VALID
@@ -6175,6 +6183,8 @@ components:
         gsCanDokumenteUebermitteln:
           type: boolean
         sbCanBearbeitungAbschliessen:
+          type: boolean
+        sbCanUploadUnterschriftenblatt:
           type: boolean
     SapStatus:
       enum:

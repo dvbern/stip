@@ -32,7 +32,7 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   test.slow();
   const urls = getE2eUrls();
   const requiredDokumenteResponse = page.waitForResponse(
-    '**/api/v1/gesuchtranche/*/dokumenteToUpload',
+    '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
   );
 
   // Upload all GS-Dokumente =================================================
@@ -77,21 +77,23 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   // accept all documents =================================================
   const stepsNavPO = new StepsNavPO(page);
   const requiredDokumenteResp = page.waitForResponse(
-    '**/api/v1/gesuchtranche/*/dokumenteToUpload',
+    '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
   );
   await stepsNavPO.elems.dokumente.first().click();
   await expectStepTitleToContainText('Dokumente', page);
   await requiredDokumenteResp;
 
+  await expect(page.getByTestId('dokument-akzeptieren').first()).toBeVisible();
   const acceptDocumentsButtons = await page
     .getByTestId('dokument-akzeptieren')
     .count();
+  expect(acceptDocumentsButtons).toBeGreaterThan(0);
   for (let i = 0; i < acceptDocumentsButtons; i++) {
     const documentsToUploadReq = page.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumenteToUpload',
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
     const dokumenteReq = page.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumente',
+      '**/api/v1/gesuchtranche/*/dokumente/*',
     );
     await page.getByTestId('dokument-akzeptieren').first().click();
     await Promise.all([documentsToUploadReq, dokumenteReq]);
@@ -177,7 +179,14 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await stepsNavPO.elems.person.first().click();
   await expectStepTitleToContainText('Person in Ausbildung', page);
   await personPO.elems.nachname.fill('E2E-Changed-2');
+
+  const personSaveResponse = page.waitForResponse(
+    (r) =>
+      r.url().includes('/api/v1/gesuch') && r.request().method() === 'PATCH',
+  );
   await personPO.elems.buttonSaveContinue.click();
+  await personSaveResponse;
+
   // verify the change
   await stepsNavPO.elems.person.first().click();
   await expectStepTitleToContainText('Person in Ausbildung', page);

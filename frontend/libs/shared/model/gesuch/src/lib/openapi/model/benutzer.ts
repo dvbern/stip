@@ -15,7 +15,6 @@ import { SachbearbeiterZuordnungStammdaten } from './sachbearbeiterZuordnungStam
 export interface Benutzer { 
     id: string;
     sachbearbeiterZuordnungStammdaten?: SachbearbeiterZuordnungStammdaten;
-    sozialversicherungsnummer?: string;
     vorname: string;
     nachname: string;
     benutzereinstellungen?: BenutzereinstellungenUpdate;

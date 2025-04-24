@@ -36,6 +36,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
+  private @Valid Boolean verfuegt;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid DelegierungDto delegierung;
@@ -214,6 +215,25 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   /**
+   **/
+  public GesuchWithChangesDto verfuegt(Boolean verfuegt) {
+    this.verfuegt = verfuegt;
+    return this;
+  }
+
+  
+  @JsonProperty("verfuegt")
+  @NotNull
+  public Boolean getVerfuegt() {
+    return verfuegt;
+  }
+
+  @JsonProperty("verfuegt")
+  public void setVerfuegt(Boolean verfuegt) {
+    this.verfuegt = verfuegt;
+  }
+
+  /**
    * Zuständiger Sachbearbeiter des Gesuchs
    **/
   public GesuchWithChangesDto bearbeiter(String bearbeiter) {
@@ -339,6 +359,7 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.id, gesuchWithChanges.id) &&
         Objects.equals(this.aenderungsdatum, gesuchWithChanges.aenderungsdatum) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuchWithChanges.gesuchTrancheToWorkWith) &&
+        Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt) &&
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
@@ -348,7 +369,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes);
   }
 
   @Override
@@ -365,6 +386,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
+    sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");

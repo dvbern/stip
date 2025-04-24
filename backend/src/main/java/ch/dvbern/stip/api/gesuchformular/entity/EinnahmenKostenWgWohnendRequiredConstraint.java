@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,17 +26,18 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ZustaendigerKantonConstraintValidator.class)
+@Constraint(validatedBy = EinnahmenKostenWgWohnendRequiredConstraintValidator.class)
 @Documented
-public @interface ZustaendigerKantonRequiredIfNiederlassungsstatusIsFluechtling {
-
-    String message() default VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
+public @interface EinnahmenKostenWgWohnendRequiredConstraint {
+    String message() default VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String property() default "";
 }

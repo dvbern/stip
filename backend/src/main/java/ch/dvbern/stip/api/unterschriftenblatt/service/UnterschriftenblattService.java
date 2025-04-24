@@ -173,12 +173,12 @@ public class UnterschriftenblattService {
     }
 
     @Transactional
-    public boolean requiredUnterschriftenblaetterExist(final Gesuch gesuch) {
+    public boolean requiredUnterschriftenblaetterExistOrIsVerfuegt(final Gesuch gesuch) {
         final var required = getUnterschriftenblaetterToUpload(gesuch);
         final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
 
         final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
-        return existingSet.containsAll(required);
+        return existingSet.containsAll(required) || gesuch.isVerfuegt();
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

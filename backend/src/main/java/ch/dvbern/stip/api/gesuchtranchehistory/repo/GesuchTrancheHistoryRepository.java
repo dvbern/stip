@@ -32,9 +32,11 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 
 @ApplicationScoped
@@ -43,6 +45,7 @@ public class GesuchTrancheHistoryRepository {
     private final EntityManager em;
     private final GesuchHistoryService gesuchHistoryService;
 
+    @Transactional
     public GesuchTranche getInitialRevision(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
 
@@ -70,6 +73,7 @@ public class GesuchTrancheHistoryRepository {
         }
     }
 
+    @Transactional
     public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
         return (GesuchTranche) reader.createQuery()
@@ -82,6 +86,7 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
+    @Transactional
     @SuppressWarnings("unchecked")
     public Optional<Integer> getLatestRevisionWhereStatusChangedTo(
         final UUID gesuchTrancheId,
@@ -101,14 +106,55 @@ public class GesuchTrancheHistoryRepository {
             .findFirst();
     }
 
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getEarliestRevisionWhereStatusChangedTo(
+        final UUID gesuchTrancheId,
+        final GesuchTrancheStatus gesuchTrancheStatus
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
+            .add(AuditEntity.property("status").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    @Transactional
+    public Optional<GesuchTranche> getGesuchTrancheAtRevision(final UUID gesuchTrancheId, final Integer revision) {
+        @SuppressWarnings("unchecked")
+        final Optional<GesuchTranche> gesuchTrancheOpt = AuditReaderFactory.get(em)
+            .createQuery()
+            .forEntitiesAtRevision(GesuchTranche.class, revision)
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+        return gesuchTrancheOpt;
+    }
+
+    @Transactional
+    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
+        return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
+    }
+
     public List<GesuchTranche> getAllTranchenWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
         return findAllGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
     }
 
+    @Transactional
     public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
+    @Transactional
     public Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
@@ -126,6 +172,23 @@ public class GesuchTrancheHistoryRepository {
             .orElse(new ArrayList<>());
     }
 
+    @Transactional
+    public Optional<GesuchTranche> getLatestExistingVersionOfTranche(final UUID gesuchTrancheId) {
+        @SuppressWarnings("unchecked")
+        final Optional<GesuchTranche> gesuchTrancheOpt = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+        return gesuchTrancheOpt;
+    }
+
+    @Transactional
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus

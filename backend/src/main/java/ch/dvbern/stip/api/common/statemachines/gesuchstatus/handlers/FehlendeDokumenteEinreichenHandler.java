@@ -42,10 +42,10 @@ public class FehlendeDokumenteEinreichenHandler implements GesuchStatusStateChan
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
+        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuch);
     }
 }

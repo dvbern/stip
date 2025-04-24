@@ -128,7 +128,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canDelete(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isAdminOrSb(currentBenutzer) || isSuperUser(currentBenutzer)) {
             return;
         }
 

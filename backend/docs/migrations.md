@@ -1,6 +1,8 @@
 # Migrations
 We use Liquibase to generate and ultimately apply our migrations. The Liquibase base changelog is in the `db/migration` directory of the resources, the baseline migration is also in that directory.
 
+Ensure that you have the `liquibase.properties` file, you can use the `liquibase.properties-template` as a base.
+
 ## Generating a new Migration
 We use the Liquibase Maven plugin to automatically generate changelogs based on the DB and the JPA entities, where the JPA entities are our source of truth. To do this, execute
 

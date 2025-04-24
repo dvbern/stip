@@ -387,6 +387,9 @@
   "shared.form.person.zustaendigerKanton.label": "Zuständiger Kanton",
   "shared.form.person.zustaendigerKanton.BERN": "Bern",
   "shared.form.person.zustaendigerKanton.ANDERER_KANTON": "Anderer Kanton",
+  "shared.form.person.zustaendigeKESB.label": "Zuständige KESB",
+  "shared.form.person.zustaendigeKESB.KESB_BERN": "KESB im Kanton Bern",
+  "shared.form.person.zustaendigeKESB.KESB_ANDERER_KANTON": "KESP in einem anderen Kanton",
 
   "shared.ausbildung.title": "Ausbildung",
   "shared.ausbildung.saved.success": "Ausbildung wurde erfolgreich gespeichert",

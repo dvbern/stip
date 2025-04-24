@@ -28,11 +28,8 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 
@@ -123,15 +120,5 @@ public class RequiredDokumentUtil {
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT));
-    }
-
-    public boolean containsAenderungNOTInTrancheStatus(
-        final Gesuch gesuch,
-        final GesuchTrancheStatus trancheStatus
-    ) {
-        return gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG))
-            .anyMatch(tranche -> !tranche.getStatus().equals(trancheStatus));
     }
 }

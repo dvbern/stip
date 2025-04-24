@@ -91,7 +91,7 @@ class UnterschriftenblattResourceTest {
 
     @Test
     @Order(3)
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     void toUploadContainsCorrectType() {
         getAndCheckDokumenteToUpload();
     }
@@ -124,7 +124,7 @@ class UnterschriftenblattResourceTest {
 
     @Test
     @Order(6)
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     void toUploadStillContainsCorrectType() {
         getAndCheckDokumenteToUpload();
     }
@@ -185,7 +185,7 @@ class UnterschriftenblattResourceTest {
     }
 
     private void getAndCheckDokumenteToUpload() {
-        final var toUpload = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        final var toUpload = gesuchTrancheApiSpec.getDocumentsToUploadSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

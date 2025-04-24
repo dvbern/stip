@@ -49,7 +49,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_EINREICHEDATUM,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_DELEGIERUNG,
-  GesuchWithChangesDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_VERFUEGT
 })
 @JsonTypeName("GesuchWithChanges")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -95,6 +96,9 @@ public class GesuchWithChangesDtoSpec {
 
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
   private LocalDate nachfristDokumente;
+
+  public static final String JSON_PROPERTY_VERFUEGT = "verfuegt";
+  private Boolean verfuegt;
 
   public GesuchWithChangesDtoSpec() {
   }
@@ -470,6 +474,32 @@ public class GesuchWithChangesDtoSpec {
     this.nachfristDokumente = nachfristDokumente;
   }
 
+
+  public GesuchWithChangesDtoSpec verfuegt(Boolean verfuegt) {
+    
+    this.verfuegt = verfuegt;
+    return this;
+  }
+
+   /**
+   * Get verfuegt
+   * @return verfuegt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERFUEGT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getVerfuegt() {
+    return verfuegt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERFUEGT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVerfuegt(Boolean verfuegt) {
+    this.verfuegt = verfuegt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -492,12 +522,13 @@ public class GesuchWithChangesDtoSpec {
         Objects.equals(this.gesuchTrancheToWorkWith, gesuchWithChanges.gesuchTrancheToWorkWith) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
-        Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente);
+        Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
+        Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
+    return Objects.hash(changes, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -518,6 +549,7 @@ public class GesuchWithChangesDtoSpec {
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
+    sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
