@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -64,6 +59,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -368,13 +368,6 @@ class GesuchTrancheAenderungEinbindenTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        // var gesuchWithChangesOfTranche2 = gesuchApiSpec.getInitialTrancheChanges()
-        // .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(1).getId())
-        // .execute(TestUtil.PEEK_IF_ENV_SET)
-        // .then()
-        // .extract()
-        // .body()
-        // .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getGesuchStatus())
             .isIn(List.of(GesuchstatusDtoSpec.STIPENDIENANSPRUCH, GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH));
     }
