@@ -258,7 +258,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
         gesuchAuthorizer.canReadGesuchOfTranche(gesuchTrancheId);
         gesuchAuthorizer.canReadInitialTranche(gesuchTrancheId);
-        return gesuchService.getChangesByTrancheId(gesuchTrancheId);
+        return gesuchService.getChangesByInitialTrancheId(gesuchTrancheId);
     }
 
     @Override

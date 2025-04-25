@@ -727,7 +727,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
+    public GesuchWithChangesDto getChangesByInitialTrancheId(UUID trancheId) {
         final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
         final var gesuch = tranche.getGesuch();
 
