@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -57,10 +61,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
