@@ -20,10 +20,6 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
           title: 'shared.lebenslauf.title',
           component: SharedFeatureGesuchFormLebenslaufComponent,
           runGuardsAndResolvers: 'always',
-          data: {
-            // reinitialize when navigated to the same route
-            shouldReuseRoute: false,
-          },
         }),
       ),
     ],
