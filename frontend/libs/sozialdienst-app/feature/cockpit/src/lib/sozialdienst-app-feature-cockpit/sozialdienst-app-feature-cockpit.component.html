@@ -28,6 +28,7 @@
     <!-- MAIN CONTENT -->
     <main class="page-body">
       <div class="container">
+        <!-- filters -->
         <div
           class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
           [formGroup]="quickFilterForm"
@@ -61,6 +62,346 @@
               </div>
             </button>
           }
+        </div>
+
+        <!-- table -->
+        <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
+          {{ 'sozialdienst-app.cockpit.gesuche' | translate }}
+        </h1>
+
+        <div class="tw-dv-table tw-my-6">
+          <table
+            [dvSharedUiFocusableList]="items"
+            [dataSource]="faelleDataSourceSig()"
+            data-testid="cockpit-table"
+            mat-table
+            matSort
+            (matSortChange)="sortData($event)"
+            tabindex="0"
+          >
+            <caption class="cdk-visually-hidden">
+              {{
+                'sozialdienst-app.cockpit.table.description' | translate
+              }}
+            </caption>
+
+            <ng-container matColumnDef="FALLNUMMER">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <label class="pe-none" for="fallNummer">{{ 'sozialdienst-app.cockpit.table.fall' | translate }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="fallNummer"
+                      matInput
+                      [dvMaxLength]="'small'"
+                      class="tw-w-full"
+                      formControlName="fallNummer"
+                      data-testid="cockpit-filter-fall"
+                      (click)="$event.stopPropagation()"
+                    />
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="filterForm.controls.fallNummer.reset()"
+                    [valueSig]="filterForm.controls.fallNummer.value"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let gesuch; dataSource: faelleDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                <a
+                  [routerLink]="
+                    gesuch.typ === 'AENDERUNG'
+                      ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
+                      : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
+                  "
+                  (click)="$event.stopPropagation()"
+                >
+                  {{ gesuch.fallNummer }}
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PIA_NACHNAME">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <label class="pe-none" for="piaNachname">{{
+                  'sozialdienst-app.cockpit.table.nachname' | translate
+                }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="piaNachname"
+                      class="tw-w-full"
+                      matInput
+                      dvMaxLength
+                      formControlName="piaNachname"
+                      (click)="$event.stopPropagation()"
+                    />
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="filterForm.controls.piaNachname.reset()"
+                    [valueSig]="filterForm.controls.piaNachname.value"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                class="tw-whitespace-nowrap"
+                [dvTruncateTooltip]="fall.piaNachname"
+              >
+                {{ fall.piaNachname }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PIA_VORNAME">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <label class="pe-none" for="piaVorname">{{
+                  'sozialdienst-app.cockpit.table.vorname' | translate
+                }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="piaVorname"
+                      class="tw-w-full"
+                      matInput
+                      dvMaxLength
+                      formControlName="piaVorname"
+                      (click)="$event.stopPropagation()"
+                    />
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="filterForm.controls.piaVorname.reset()"
+                    [valueSig]="filterForm.controls.piaVorname.value"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                class="tw-max-w-32 tw-whitespace-nowrap"
+                [dvTruncateTooltip]="fall.piaVorname"
+              >
+                {{ fall.piaVorname }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PIA_GEBURTSDATUM">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [start]="'desc'"
+                class="filtered tw-w-40 tw-whitespace-nowrap"
+                example="01.01.2000"
+              >
+                <label class="pe-none" for="piaGeburtsdatum">{{
+                  'sozialdienst-app.cockpit.table.geburtsdatum' | translate
+                }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="piaGeburtsdatum"
+                      class="tw-w-full"
+                      matInput
+                      [dvMaxLength]="'small'"
+                      formControlName="piaGeburtsdatum"
+                      [matDatepicker]="geburtsdatumDatepicker"
+                      (click)="$event.stopPropagation()"
+                    />
+                    <button
+                      matIconSuffix
+                      type="button"
+                      class="btn btn-link text-muted !tw-p-1"
+                      [attr.aria-label]="'shared.ui.open-date-picker'"
+                      (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
+                    >
+                      <dv-shared-ui-icon-chip class="fs-8">
+                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      </dv-shared-ui-icon-chip>
+                    </button>
+                    <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="filterForm.controls.piaGeburtsdatum.reset()"
+                    [valueSig]="filterForm.controls.piaGeburtsdatum.value"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-whitespace-nowrap">
+                {{ fall.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
+              </td>
+            </ng-container>
+
+            <!-- wohnort -->
+            <ng-container matColumnDef="PIA_WOHNORT">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <label class="pe-none" for="piaWohnort">{{
+                  'sozialdienst-app.cockpit.table.wohnort' | translate
+                }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="piaWohnort"
+                      class="tw-w-full"
+                      matInput
+                      dvMaxLength
+                      formControlName="piaWohnort"
+                      (click)="$event.stopPropagation()"
+                    />
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="filterForm.controls.piaWohnort.reset()"
+                    [valueSig]="filterForm.controls.piaWohnort.value"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                class="tw-max-w-32 tw-whitespace-nowrap"
+                [dvTruncateTooltip]="fall.piaWohnort"
+              >
+                {{ fall.piaWohnort }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="STATUS">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+                {{ 'sozialdienst-app.cockpit.table.status' | translate }}
+                <mat-form-field class="tw-w-full">
+                  <mat-select
+                    [aria-label]="'sozialdienst-app.cockpit.table.status' | translate"
+                    formControlName="status"
+                    (click)="$event.stopPropagation()"
+                    class="!tw-font-normal"
+                    [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | translate"
+                    panelClass="table-select"
+                  >
+                    <mat-option [value]="null">
+                      {{ 'sozialdienst-app.cockpit.no-status-filter' | translate }}
+                    </mat-option>
+                    @for (status of statusValuesSig().status; track status) {
+                      <mat-option [value]="status">
+                        {{ 'sozialdienst-app.fall.status.' + statusValuesSig().typ + '.' + status | translate }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                class="tw-w-48 tw-whitespace-nowrap"
+              >
+                {{ fall.translationKey | translate }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="LETZTE_AKTIVITAET">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                [start]="'desc'"
+                class="filtered tw-w-40 tw-whitespace-nowrap"
+              >
+                <label class="pe-none" for="letzteAktivitaet">{{
+                  'sozialdienst-app.cockpit.table.letzteAktivitaet' | translate
+                }}</label>
+                <div class="tw-relative tw-flex">
+                  <mat-form-field>
+                    <input
+                      id="letzteAktivitaet"
+                      class="range"
+                      matInput
+                      dvMaxLength
+                      [value]="letzteAktivitaetRangeSig()"
+                      disabled
+                      (click)="$event.stopPropagation()"
+                    />
+                    <button
+                      matIconSuffix
+                      type="button"
+                      class="btn btn-link text-muted !tw-p-1"
+                      [attr.aria-label]="'shared.ui.open-date-picker'"
+                      (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
+                    >
+                      <dv-shared-ui-icon-chip class="fs-8">
+                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      </dv-shared-ui-icon-chip>
+                    </button>
+                    <mat-date-range-input
+                      class="w-100 d-none"
+                      [rangePicker]="letzteAktivitaetRangePicker"
+                      (click)="$event.stopPropagation()"
+                    >
+                      <input
+                        [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
+                        matStartDate
+                        [placeholder]="'shared.label.von' | translate"
+                      />
+                      <input
+                        [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
+                        matEndDate
+                        [placeholder]="'shared.label.bis' | translate"
+                      />
+                    </mat-date-range-input>
+                    <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
+                  </mat-form-field>
+                  <dv-shared-ui-clear-button
+                    class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                    (clear)="
+                      filterStartEndForm.controls.letzteAktivitaetFrom.reset();
+                      filterStartEndForm.controls.letzteAktivitaetTo.reset()
+                    "
+                    [valueSig]="[
+                      filterStartEndForm.controls.letzteAktivitaetFrom.value,
+                      filterStartEndForm.controls.letzteAktivitaetTo.value,
+                    ]"
+                  ></dv-shared-ui-clear-button>
+                </div>
+              </th>
+              <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-whitespace-nowrap">
+                {{ fall.letzteAktivitaet | date: 'dd.MM.yyyy' }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              dvSharedUiFocusableListItem
+              mat-row
+              tabindex="-1"
+              *dvMatRowDef="let fall; dataSource: faelleDataSourceSig(); columns: displayedColumns"
+              [routerLink]="
+                fall.typ === 'AENDERUNG'
+                  ? ['/gesuch', 'info', fall.id, 'aenderung', fall.trancheId]
+                  : ['/gesuch', 'info', fall.id, 'tranche', fall.trancheId]
+              "
+              class="highlightable"
+            ></tr>
+            <tr class="mat-mdc-row" *matNoDataRow>
+              <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                {{ 'shared.table.noData' | translate }}
+              </td>
+            </tr>
+          </table>
+
+          <!-- [length]="gesuchStore.cockpitViewSig().faelle?.totalEntries" -->
+          <mat-paginator
+            showFirstLastButtons
+            [pageSizeOptions]="pageSizes"
+            [pageSize]="pageSize() ?? defaultPageSize"
+            [pageIndex]="page() ?? 0"
+            (page)="paginate($event)"
+          ></mat-paginator>
         </div>
       </div>
     </main>

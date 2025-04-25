@@ -72,7 +72,6 @@ import {
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiTableHeaderFilterComponent } from '@dv/shared/ui/table-header-filter';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
@@ -144,11 +143,7 @@ type DashboardFormFields =
     SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
-    RouterModule,
-    A11yModule,
     SharedUiIconChipComponent,
-    MatPaginatorModule,
-    SharedUiTableHeaderFilterComponent,
     SharedUiClearButtonComponent,
     SachbearbeitungAppPatternOverviewLayoutComponent,
   ],
