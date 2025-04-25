@@ -17,31 +17,29 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandler {
+public class GesuchFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusStateChangeHandler {
+    private final NotificationService notificationService;
+    private final MailService mailService;
     private final GesuchService gesuchService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        final var source = transition.getSource();
-        final var handlesSource = switch (source) {
-            case IN_BEARBEITUNG_SB, FEHLENDE_DOKUMENTE -> true;
-            default -> false;
-        };
-
-        return handlesSource && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
+        return transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
+        && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
     }
 
     @Transactional
@@ -50,8 +48,10 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
         if (gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
-        gesuch.setEinreichedatum(null);
+        notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
         gesuch.setNachfristDokumente(null);
+        gesuch.setEinreichedatum(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 }

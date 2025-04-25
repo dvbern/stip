@@ -29,6 +29,7 @@ public class DokumenteToUploadDto  implements Serializable {
   private @Valid Boolean sbCanFehlendeDokumenteUebermitteln;
   private @Valid Boolean gsCanDokumenteUebermitteln;
   private @Valid Boolean sbCanBearbeitungAbschliessen;
+  private @Valid Boolean sbCanUploadUnterschriftenblatt;
 
   /**
    **/
@@ -186,6 +187,24 @@ public class DokumenteToUploadDto  implements Serializable {
     this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
   }
 
+  /**
+   **/
+  public DokumenteToUploadDto sbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+    this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
+    return this;
+  }
+
+  
+  @JsonProperty("sbCanUploadUnterschriftenblatt")
+  public Boolean getSbCanUploadUnterschriftenblatt() {
+    return sbCanUploadUnterschriftenblatt;
+  }
+
+  @JsonProperty("sbCanUploadUnterschriftenblatt")
+  public void setSbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+    this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -201,12 +220,13 @@ public class DokumenteToUploadDto  implements Serializable {
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter) &&
         Objects.equals(this.sbCanFehlendeDokumenteUebermitteln, dokumenteToUpload.sbCanFehlendeDokumenteUebermitteln) &&
         Objects.equals(this.gsCanDokumenteUebermitteln, dokumenteToUpload.gsCanDokumenteUebermitteln) &&
-        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen);
+        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen) &&
+        Objects.equals(this.sbCanUploadUnterschriftenblatt, dokumenteToUpload.sbCanUploadUnterschriftenblatt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen);
+    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen, sbCanUploadUnterschriftenblatt);
   }
 
   @Override
@@ -220,6 +240,7 @@ public class DokumenteToUploadDto  implements Serializable {
     sb.append("    sbCanFehlendeDokumenteUebermitteln: ").append(toIndentedString(sbCanFehlendeDokumenteUebermitteln)).append("\n");
     sb.append("    gsCanDokumenteUebermitteln: ").append(toIndentedString(gsCanDokumenteUebermitteln)).append("\n");
     sb.append("    sbCanBearbeitungAbschliessen: ").append(toIndentedString(sbCanBearbeitungAbschliessen)).append("\n");
+    sb.append("    sbCanUploadUnterschriftenblatt: ").append(toIndentedString(sbCanUploadUnterschriftenblatt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

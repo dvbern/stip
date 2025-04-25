@@ -3958,6 +3958,7 @@ components:
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
+        - verfuegt
       type: object
       properties:
         fallId:
@@ -3989,6 +3990,8 @@ components:
           $ref: '#/components/schemas/Delegierung'
         nachfristDokumente:
           $ref: '#/components/schemas/LocalDate'
+        verfuegt:
+          type: boolean
     Delegierung:
       type: object
       properties:
@@ -6178,6 +6181,8 @@ components:
         gsCanDokumenteUebermitteln:
           type: boolean
         sbCanBearbeitungAbschliessen:
+          type: boolean
+        sbCanUploadUnterschriftenblatt:
           type: boolean
     SapStatus:
       enum:

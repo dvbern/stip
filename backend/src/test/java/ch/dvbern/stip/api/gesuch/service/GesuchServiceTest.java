@@ -42,7 +42,6 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
@@ -69,6 +68,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -195,8 +195,8 @@ class GesuchServiceTest {
     @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
 
-    @Inject
-    GesuchDokumentService gesuchDokumentService;
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     static final String TENANT_ID = "bern";
 
@@ -910,6 +910,7 @@ class GesuchServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
@@ -950,6 +951,7 @@ class GesuchServiceTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
@@ -1075,7 +1077,7 @@ class GesuchServiceTest {
     void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(true);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(any())).thenReturn(true);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
@@ -1088,7 +1090,7 @@ class GesuchServiceTest {
     void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(false);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(any())).thenReturn(false);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
@@ -1415,7 +1417,11 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-
+        when(gesuchTrancheRepository.findByIdOptional(any()))
+            .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
         // act
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
 
@@ -1442,8 +1448,18 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheRepository.findByIdOptional(any()))
+            .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
-            .thenReturn(GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT).getNewestGesuchTranche());
+            .thenReturn(gesuchToReturn.getNewestGesuchTranche());
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuchToReturn));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+            .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory IS queried AND the gesuch in state EINGEREICHT is returned
@@ -1453,7 +1469,7 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     @Test
     @Description("getGesuchGS should contain possible changes / current Gesuch when in status VERFUEGT")
-    void getGesuchGSShouldReturnActualGesuchWhenInStatusVerfuegt() {
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusStipendienanspruch() {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
@@ -1463,12 +1479,17 @@ class GesuchServiceTest {
         );
         Fall fall = new Fall();
         fall.setSachbearbeiterZuordnung(zuordnung);
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.STIPENDIENANSPRUCH);
         gesuch.getAusbildung().setFall(fall);
         gesuch.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheRepository.findByIdOptional(any()))
+            .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
@@ -1479,6 +1500,9 @@ class GesuchServiceTest {
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
             )
         );
+        final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(gesuchToReturn));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
@@ -1535,6 +1559,12 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        when(gesuchTrancheRepository.findByIdOptional(any()))
+            .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
+        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+            .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
@@ -1544,6 +1574,8 @@ class GesuchServiceTest {
         );
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
+        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+            .thenReturn(Optional.of(eingereichtesGesuch));
         var gesuchGS = gesuchService
             .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));

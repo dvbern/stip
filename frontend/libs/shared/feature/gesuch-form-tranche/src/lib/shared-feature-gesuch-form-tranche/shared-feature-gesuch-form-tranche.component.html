@@ -169,6 +169,7 @@
           class="btn btn-link"
           data-testid="aenderung-manually-change"
           type="button"
+          [disabled]="hasValidationErrors"
           (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
         >
           {{ 'shared.form.aenderung.action.manuallyChange' | translate }}

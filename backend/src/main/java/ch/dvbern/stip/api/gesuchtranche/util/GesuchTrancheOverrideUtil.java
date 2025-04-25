@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
+import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungCopyUtil;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -96,6 +97,9 @@ public class GesuchTrancheOverrideUtil {
 
         // Steuerdaten
         SteuerdatenCopyUtil.doOverrideOfSet(target.getSteuerdaten(), source.getSteuerdaten());
+
+        // Steuererklaerung
+        SteuererklaerungCopyUtil.doOverrideOfSet(target.getSteuererklaerung(), source.getSteuererklaerung());
 
         // Darlehen
         DarlehenCopyUtil.copyValues(source.getDarlehen(), target.getDarlehen());

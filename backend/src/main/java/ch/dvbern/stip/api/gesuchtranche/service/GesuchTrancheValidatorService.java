@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -52,7 +53,19 @@ public class GesuchTrancheValidatorService {
         statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
         statusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
-            List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
+            List.of(
+                GesuchEinreichenValidationGroup.class,
+                GesuchNachInBearbeitungSBValidationGroup.class,
+                GesuchDokumentsAcceptedValidationGroup.class
+            )
+        );
+        statusToValidationGroups.put(
+            GesuchTrancheStatus.MANUELLE_AENDERUNG,
+            List.of(
+                GesuchEinreichenValidationGroup.class,
+                GesuchNachInBearbeitungSBValidationGroup.class,
+                GesuchDokumentsAcceptedValidationGroup.class
+            )
         );
         statusToValidationGroups.put(
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,

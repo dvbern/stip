@@ -45,7 +45,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH,
   GesuchDtoSpec.JSON_PROPERTY_EINREICHEDATUM,
   GesuchDtoSpec.JSON_PROPERTY_DELEGIERUNG,
-  GesuchDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE
+  GesuchDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
+  GesuchDtoSpec.JSON_PROPERTY_VERFUEGT
 })
 @JsonTypeName("Gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -88,6 +89,9 @@ public class GesuchDtoSpec {
 
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
   private LocalDate nachfristDokumente;
+
+  public static final String JSON_PROPERTY_VERFUEGT = "verfuegt";
+  private Boolean verfuegt;
 
   public GesuchDtoSpec() {
   }
@@ -429,6 +433,32 @@ public class GesuchDtoSpec {
     this.nachfristDokumente = nachfristDokumente;
   }
 
+
+  public GesuchDtoSpec verfuegt(Boolean verfuegt) {
+    
+    this.verfuegt = verfuegt;
+    return this;
+  }
+
+   /**
+   * Get verfuegt
+   * @return verfuegt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERFUEGT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getVerfuegt() {
+    return verfuegt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERFUEGT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVerfuegt(Boolean verfuegt) {
+    this.verfuegt = verfuegt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -450,12 +480,13 @@ public class GesuchDtoSpec {
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
         Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
         Objects.equals(this.delegierung, gesuch.delegierung) &&
-        Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente);
+        Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente) &&
+        Objects.equals(this.verfuegt, gesuch.verfuegt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -475,6 +506,7 @@ public class GesuchDtoSpec {
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
+    sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

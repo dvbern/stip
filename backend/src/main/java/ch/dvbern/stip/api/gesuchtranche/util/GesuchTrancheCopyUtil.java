@@ -170,16 +170,25 @@ public class GesuchTrancheCopyUtil {
         final DateRange createDateRange,
         final String comment
     ) {
-        final var newTranche = new GesuchTranche();
-        newTranche.setGueltigkeit(createDateRange);
-        newTranche.setComment(comment);
-        newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        final var newTranche = copyTrancheExceptGesuchDokuments(original, createDateRange, comment);
         newTranche.setGesuchDokuments(
             GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
                 newTranche,
                 original.getGesuchDokuments()
             )
         );
+        return newTranche;
+    }
+
+    public GesuchTranche copyTrancheExceptGesuchDokuments(
+        final GesuchTranche original,
+        final DateRange createDateRange,
+        final String comment
+    ) {
+        final var newTranche = new GesuchTranche();
+        newTranche.setGueltigkeit(createDateRange);
+        newTranche.setComment(comment);
+        newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
         newTranche.getGesuchFormular().setTranche(newTranche);
         newTranche.setGesuch(original.getGesuch());
         return newTranche;
@@ -224,7 +233,7 @@ public class GesuchTrancheCopyUtil {
         return new DateRange(startDate, roundedEndDate);
     }
 
-    GesuchFormular copy(final GesuchFormular other) {
+    public GesuchFormular copy(final GesuchFormular other) {
         final var copy = new GesuchFormular();
 
         // PiA und PiA Adresse

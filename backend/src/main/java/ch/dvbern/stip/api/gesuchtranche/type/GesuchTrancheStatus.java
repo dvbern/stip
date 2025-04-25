@@ -57,4 +57,11 @@ public enum GesuchTrancheStatus {
             FEHLENDE_DOKUMENTE
         )
     );
+
+    public static final Set<GesuchTrancheStatus> GESUCHSTELLER_PENDING = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS,
+            FEHLENDE_DOKUMENTE
+        )
+    );
 }

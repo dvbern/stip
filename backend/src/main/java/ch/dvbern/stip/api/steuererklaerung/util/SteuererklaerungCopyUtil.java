@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.steuererklaerung.util;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.util.OverrideUtil;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import lombok.experimental.UtilityClass;
 
@@ -27,10 +28,13 @@ import lombok.experimental.UtilityClass;
 public class SteuererklaerungCopyUtil {
     public Steuererklaerung createCopy(final Steuererklaerung other) {
         final var copy = new Steuererklaerung();
-        copy.setSteuerdatenTyp(other.getSteuerdatenTyp());
-        copy.setSteuererklaerungInBern(other.getSteuererklaerungInBern());
-
+        copyValues(other, copy);
         return copy;
+    }
+
+    private void copyValues(final Steuererklaerung source, final Steuererklaerung target) {
+        target.setSteuerdatenTyp(source.getSteuerdatenTyp());
+        target.setSteuererklaerungInBern(source.getSteuererklaerungInBern());
     }
 
     public Set<Steuererklaerung> createCopySet(final Set<Steuererklaerung> other) {
@@ -40,5 +44,17 @@ public class SteuererklaerungCopyUtil {
         }
 
         return copy;
+    }
+
+    public void doOverrideOfSet(
+        final Set<Steuererklaerung> targetSteuererklaerung,
+        final Set<Steuererklaerung> sourceSteuererklaerung
+    ) {
+        OverrideUtil.doOverrideOfSet(
+            targetSteuererklaerung,
+            sourceSteuererklaerung,
+            SteuererklaerungCopyUtil::copyValues,
+            SteuererklaerungCopyUtil::createCopy
+        );
     }
 }
