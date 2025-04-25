@@ -108,8 +108,6 @@ class GesuchAuthorizerCanDeleteTest {
             benutzerService,
             gesuchRepository,
             gesuchTrancheRepository,
-            gesuchStatusService,
-            gesuchTrancheStatusService,
             null,
             fallRepository,
             sozialdienstService,
