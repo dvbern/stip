@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.service.DarlehenMapperImpl;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -64,6 +65,10 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapperImpl;
+import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
+import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
@@ -82,6 +87,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
@@ -91,6 +97,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 
 class GesuchFormularMapperTest {
+    private List<Unterschriftenblatt> unterschriftenblaetterByDokumentTypes = new ArrayList<>();
+
     @Test
     void resetElternRemovesVaterTest() {
         // Arrange
@@ -565,6 +573,39 @@ class GesuchFormularMapperTest {
     }
 
     @Test
+    void resetUnnecessaryUnterschriftenblaetter() {
+        // Arrange
+        final var gesuch = new Gesuch();
+        final var unterschriftenblatt = new Unterschriftenblatt();
+        final var tranche = new GesuchTranche();
+        final var formular = new GesuchFormular();
+        final var mapper = createMapper();
+
+        // Setup
+        gesuch.setId(UUID.randomUUID());
+        unterschriftenblatt.setDokumentTyp(UnterschriftenblattDokumentTyp.MUTTER);
+        unterschriftenblatt.setGesuch(gesuch);
+        unterschriftenblaetterByDokumentTypes.add(unterschriftenblatt);
+        gesuch.setUnterschriftenblaetter(unterschriftenblaetterByDokumentTypes);
+        tranche.setGesuch(gesuch);
+        formular.setTranche(tranche);
+        tranche.setGesuchFormular(formular);
+        gesuch.setGesuchTranchen(List.of(tranche));
+
+        // Assert
+        assertThat(formular.getTranche().getGesuch().getUnterschriftenblaetter().size(), is(1));
+
+        // Act
+        mapper.resetUnterschriftenblaetter(formular);
+
+        // Assert
+        assertThat(formular.getTranche().getGesuch().getUnterschriftenblaetter().size(), is(0));
+
+        // Cleanup
+        unterschriftenblaetterByDokumentTypes.clear();
+    }
+
+    @Test
     void dontSetAuszahlungAdresseOnUpdate() {
         // Arrange
         final var piaAdresse = new AdresseDto();
@@ -705,9 +746,25 @@ class GesuchFormularMapperTest {
 
     GesuchFormularMapper createMapper() {
         final var ausbildungMapperImplMock = Mockito.mock(AusbildungMapperImpl.class);
+        final var unterschriftenblattRepositoryMock = Mockito.mock(UnterschriftenblattRepository.class);
+        Mockito.doReturn(unterschriftenblaetterByDokumentTypes.stream())
+            .when(unterschriftenblattRepositoryMock)
+            .findByGesuchAndDokumentTypes(any(), any());
 
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
         Mockito.doReturn(true).when(ausbildungAuthorizerMock).canUpdateCheck(any());
+
+        final var s3 = Mockito.mock(S3AsyncClient.class);
+        final var unterschriftenblattService = new UnterschriftenblattService(
+            null, unterschriftenblattRepositoryMock, null, null, Mockito.mock(ConfigService.class), s3, null, null,
+            null, null, null
+        );
+        final var unterschriftenblattServiceMock = Mockito.spy(unterschriftenblattService);
+        Mockito.doReturn(List.of(UnterschriftenblattDokumentTyp.GEMEINSAM))
+            .when(
+                unterschriftenblattServiceMock
+            )
+            .getUnterschriftenblaetterToUpload(any());
 
         try {
             var ausbildungAuthorizerField = AusbildungMapper.class.getDeclaredField("ausbildungAuthorizer");
@@ -734,6 +791,7 @@ class GesuchFormularMapperTest {
 
         // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
         mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+        mapper.unterschriftenblattService = unterschriftenblattServiceMock;
         mapper.familiensituationMapper = new FamiliensituationMapperImpl();
         mapper.gesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
         mapper.gesuchDokumentKommentarRepository = Mockito.mock(GesuchDokumentKommentarRepository.class);
