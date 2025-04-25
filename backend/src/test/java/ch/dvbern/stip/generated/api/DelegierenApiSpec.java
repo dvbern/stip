@@ -14,6 +14,11 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDtoSpec;
+import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
+import ch.dvbern.stip.generated.dto.SozDashboardColumnDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -57,12 +62,17 @@ public class DelegierenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                fallDelegieren()
+                fallDelegieren(),
+                getDelegierungSoz()
         );
     }
 
     public FallDelegierenOper fallDelegieren() {
         return new FallDelegierenOper(createReqSpec());
+    }
+
+    public GetDelegierungSozOper getDelegierungSoz() {
+        return new GetDelegierungSozOper(createReqSpec());
     }
 
     /**
@@ -156,6 +166,223 @@ public class DelegierenApiSpec {
          * @return operation
          */
         public FallDelegierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns a list of Faelle with Delegierung
+     * 
+     *
+     * @see #getDelegierungSozQueryTypePath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #piaWohnortQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * return PaginatedSozDashboardDtoSpec
+     */
+    public static class GetDelegierungSozOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/delegierung/{getDelegierungSozQueryType}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDelegierungSozOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /delegierung/{getDelegierungSozQueryType}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /delegierung/{getDelegierungSozQueryType}
+         * @param handler handler
+         * @return PaginatedSozDashboardDtoSpec
+         */
+        public PaginatedSozDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSozDashboardDtoSpec> type = new TypeRef<PaginatedSozDashboardDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH = "getDelegierungSozQueryType";
+
+        /**
+         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeDtoSpec)  (required)
+         * @return operation
+         */
+        public GetDelegierungSozOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
+            reqSpec.addPathParam(GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH, getDelegierungSozQueryType);
+            return this;
+        }
+
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
+
+        /**
+         * @param fallNummer (String)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String PIA_WOHNORT_QUERY = "piaWohnort";
+
+        /**
+         * @param piaWohnort (String)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper piaWohnortQuery(Object... piaWohnort) {
+            reqSpec.addQueryParam(PIA_WOHNORT_QUERY, piaWohnort);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (String)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetDelegierungSozOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetDelegierungSozOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (SozDashboardColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDelegierungSozOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDelegierungSozOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDelegierungSozOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

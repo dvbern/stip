@@ -1754,6 +1754,47 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: fallDelegieren
+  /delegierung/{getDelegierungSozQueryType}:
+    get:
+      tags:
+        - Delegieren
+      parameters:
+        - name: getDelegierungSozQueryType
+          schema:
+            $ref: '#/components/schemas/GetDelegierungSozQueryType'
+          in: path
+          required: true
+        - $ref: '#/components/parameters/fallNummer'
+        - $ref: '#/components/parameters/piaNachname'
+        - $ref: '#/components/parameters/piaVorname'
+        - $ref: '#/components/parameters/piaGeburtsdatum'
+        - $ref: '#/components/parameters/piaWohnort'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/letzteAktivitaetFrom'
+        - $ref: '#/components/parameters/letzteAktivitaetTo'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SozDashboardColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSozDashboard'
+          description: Returns FallWithDelegierung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDelegierungSoz
+      summary: Returns a list of Faelle with Delegierung
   /stammdaten/land:
     get:
       tags:
@@ -3567,6 +3608,11 @@ components:
         - ALLE_MEINE
         - ALLE
       type: string
+    GetDelegierungSozQueryType:
+      enum:
+        - ALLE_BEARBEITBAR_MEINE
+        - ALLE
+      type: string
     GueltigkeitStatus:
       enum:
         - ENTWURF
@@ -3700,6 +3746,21 @@ components:
           type: string
         mandant:
           type: string
+    FallWithDelegierung:
+      required:
+        - id
+        - fallNummer
+        - mandant
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        mandant:
+          type: string
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
     Gesuchsjahr:
       type: object
       required:
@@ -6058,6 +6119,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SbDashboardGesuch'
+    PaginatedSozDashboard:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/FallWithDelegierung'
     SbDashboardGesuch:
       type: object
       required:
@@ -6106,6 +6175,15 @@ components:
         - PIA_GEBURTSDATUM
         - STATUS
         - BEARBEITER
+        - LETZTE_AKTIVITAET
+    SozDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - PIA_WOHNORT
+        - STATUS
         - LETZTE_AKTIVITAET
     SortOrder:
       enum:
@@ -6382,6 +6460,11 @@ components:
     piaVorname:
       in: query
       name: piaVorname
+      schema:
+        type: string
+    piaWohnort:
+      in: query
+      name: piaWohnort
       schema:
         type: string
     piaGeburtsdatum:

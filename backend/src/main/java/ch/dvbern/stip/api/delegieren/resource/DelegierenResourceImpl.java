@@ -17,15 +17,21 @@
 
 package ch.dvbern.stip.api.delegieren.resource;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DelegierenResource;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
+import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
+import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
@@ -42,5 +48,26 @@ public class DelegierenResourceImpl implements DelegierenResource {
     public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
         delegierenService.delegateFall(fallId, sozialdienstId, delegierungCreateDto);
+    }
+
+    @Override
+    public PaginatedSozDashboardDto getDelegierungSoz(
+        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        @NotNull Integer page,
+        @NotNull Integer pageSize,
+        String fallNummer,
+        String piaNachname,
+        String piaVorname,
+        LocalDate piaGeburtsdatum,
+        String piaWohnort,
+        String status,
+        LocalDate letzteAktivitaetFrom,
+        LocalDate letzteAktivitaetTo,
+        SozDashboardColumnDto sortColumn,
+        SortOrder sortOrder
+    ) {
+
+        // TODO Auto-generated method stub
+        return new PaginatedSozDashboardDto();
     }
 }
