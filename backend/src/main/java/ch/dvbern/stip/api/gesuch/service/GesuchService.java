@@ -764,7 +764,7 @@ public class GesuchService {
             // tranche to work with -> findByTrancheId
             requestedTrancheFromGesuchInStatusVerfuegt.orElseThrow(BadRequestException::new),
             // changes
-            requestedTrancheFromGesuchInStatusEingereicht.orElseThrow(BadRequestException::new)
+            requestedTrancheFromGesuchInStatusEingereicht.orElse(null)
         );
     }
 
