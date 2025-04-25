@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -61,6 +57,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -271,7 +271,7 @@ class GesuchTrancheCreateTest {
     @Test
     @TestAsSachbearbeiter
     @Order(12)
-    void getInitialTrancheChangesAsSBInGesuchstatusEingereicht() {
+    void getInitialTrancheChangesAsSBInGesuchstatusEingereichtShouldThrow() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(tranche1Id)
@@ -284,7 +284,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
         // the initial tranche 2 is not present anymore (but in history)
         gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(tranche2Id)

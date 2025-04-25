@@ -73,7 +73,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    private Gesuch fetchGesuchOfTranche(final UUID trancheId) {
+    protected Gesuch fetchGesuchOfTranche(final UUID trancheId) {
         GesuchTranche tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
         // fetch the gesuchId of this tranche
         // then fetch current gesuch data

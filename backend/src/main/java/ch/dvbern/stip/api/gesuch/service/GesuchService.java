@@ -762,9 +762,9 @@ public class GesuchService {
         return gesuchMapperUtil.toWithChangesDto(
             gesuch,
             // tranche to work with -> findByTrancheId
-            requestedTrancheFromGesuchInStatusVerfuegt.orElse(null),
+            requestedTrancheFromGesuchInStatusVerfuegt.orElseThrow(BadRequestException::new),
             // changes
-            requestedTrancheFromGesuchInStatusEingereicht.orElse(null)
+            requestedTrancheFromGesuchInStatusEingereicht.orElseThrow(BadRequestException::new)
         );
     }
 
