@@ -213,8 +213,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
-      case 'VERSENDET':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
+        break;
+      case 'VERSENDET':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+          },
+        });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
