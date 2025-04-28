@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDto;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
@@ -21,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DelegierungDto  implements Serializable {
   private @Valid SozialdienstSlimDto sozialdienst;
+  private @Valid Boolean delegierungAngenommen;
+  private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
 
   /**
    **/
@@ -40,6 +43,42 @@ public class DelegierungDto  implements Serializable {
     this.sozialdienst = sozialdienst;
   }
 
+  /**
+   **/
+  public DelegierungDto delegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierungAngenommen")
+  public Boolean getDelegierungAngenommen() {
+    return delegierungAngenommen;
+  }
+
+  @JsonProperty("delegierungAngenommen")
+  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+  }
+
+  /**
+   **/
+  public DelegierungDto persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+    return this;
+  }
+
+  
+  @JsonProperty("persoenlicheAngaben")
+  public PersoenlicheAngabenDto getPersoenlicheAngaben() {
+    return persoenlicheAngaben;
+  }
+
+  @JsonProperty("persoenlicheAngaben")
+  public void setPersoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -50,12 +89,14 @@ public class DelegierungDto  implements Serializable {
       return false;
     }
     DelegierungDto delegierung = (DelegierungDto) o;
-    return Objects.equals(this.sozialdienst, delegierung.sozialdienst);
+    return Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
+        Objects.equals(this.delegierungAngenommen, delegierung.delegierungAngenommen) &&
+        Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialdienst);
+    return Objects.hash(sozialdienst, delegierungAngenommen, persoenlicheAngaben);
   }
 
   @Override
@@ -64,6 +105,8 @@ public class DelegierungDto  implements Serializable {
     sb.append("class DelegierungDto {\n");
     
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
+    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
+    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("}");
     return sb.toString();
   }

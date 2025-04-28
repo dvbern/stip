@@ -4,7 +4,11 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { DelegationService } from '@dv/shared/model/gesuch';
+import {
+  DelegierenService,
+  DelegierenServiceGetDelegierungSozRequestParams,
+  PaginatedSozDashboard,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   RemoteData,
@@ -12,16 +16,16 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
-  pending,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
 type DelegationState = {
-  cachedDelegation: CachedRemoteData<unknown>;
+  faelleWithDelegierung: CachedRemoteData<PaginatedSozDashboard>;
   delegation: RemoteData<unknown>;
 };
 
 const initialState: DelegationState = {
-  cachedDelegation: initial(),
+  faelleWithDelegierung: initial(),
   delegation: initial(),
 };
 
@@ -31,81 +35,32 @@ export class DelegationStore extends signalStore(
   withState(initialState),
   withDevtools('DelegationStore'),
 ) {
-  private delegationService = inject(DelegationService);
+  private delegierenService = inject(DelegierenService);
 
-  cachedDelegationListViewSig = computed(() => {
-    return fromCachedDataSig(this.cachedDelegation);
+  cockpitViewSig = computed(() => {
+    return {
+      faelleWithDelegierung: fromCachedDataSig(this.faelleWithDelegierung),
+      loading: isPending(this.faelleWithDelegierung()),
+    };
   });
 
-  delegationViewSig = computed(() => {
-    return this.delegation.data();
-  });
-
-  loadCachedDelegation$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDelegation: cachedPending(state.cachedDelegation),
-        }));
-      }),
-      switchMap(() =>
-        this.delegationService
-          .getDelegation$()
-          .pipe(
-            handleApiResponse((cachedDelegation) =>
-              patchState(this, { cachedDelegation }),
+  loadFaelleWithDelegierung$ =
+    rxMethod<DelegierenServiceGetDelegierungSozRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            faelleWithDelegierung: cachedPending(state.faelleWithDelegierung),
+          }));
+        }),
+        switchMap((params) =>
+          this.delegierenService
+            .getDelegierungSoz$(params)
+            .pipe(
+              handleApiResponse((faelleWithDelegierung) =>
+                patchState(this, { faelleWithDelegierung }),
+              ),
             ),
-          ),
+        ),
       ),
-    ),
-  );
-
-  loadDelegation$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          delegation: pending(),
-        }));
-      }),
-      switchMap(() =>
-        this.delegationService
-          .getDelegation$()
-          .pipe(
-            handleApiResponse((delegation) => patchState(this, { delegation })),
-          ),
-      ),
-    ),
-  );
-
-  saveDelegation$ = rxMethod<{
-    delegationId: string;
-    values: unknown;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDelegation: cachedPending(state.cachedDelegation),
-        }));
-      }),
-      switchMap(({ delegationId, values }) =>
-        this.delegationService
-          .updateDelegation$({
-            delegationId,
-            payload: values,
-          })
-          .pipe(
-            handleApiResponse(
-              (delegation) => {
-                patchState(this, { delegation });
-              },
-              {
-                onSuccess: (delegation) => {
-                  // Do something after save, like showing a notification
-                },
-              },
-            ),
-          ),
-      ),
-    ),
-  );
+    );
 }

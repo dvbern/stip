@@ -214,6 +214,7 @@
       "@dv/shared/util-fn/comp-test": ["libs/shared/util-fn/comp-test/src/index.ts"],
       "@dv/shared/util-fn/e2e-util": ["libs/shared/util-fn/e2e-util/src/index.ts"],
       "@dv/shared/util-fn/error-transformer": ["libs/shared/util-fn/error-transformer/src/index.ts"],
+      "@dv/shared/util-fn/filter-util": ["libs/shared/util-fn/filter-util/src/index.ts"],
       "@dv/shared/util-fn/gesuch-util": ["libs/shared/util-fn/gesuch-util/src/index.ts"],
       "@dv/shared/util-fn/keycloak-helper": ["libs/shared/util-fn/keycloak-helper/src/index.ts"],
       "@dv/shared/util-fn/local-storage-helper": ["libs/shared/util-fn/local-storage-helper/src/index.ts"],
@@ -244,6 +245,7 @@
       "@dv/sozialdienst-app/feature/cockpit": ["libs/sozialdienst-app/feature/cockpit/src/index.ts"],
       "@dv/sozialdienst-app/feature/gesuch-form": ["libs/sozialdienst-app/feature/gesuch-form/src/index.ts"],
       "@dv/sozialdienst-app/model/administration": ["libs/sozialdienst-app/model/administration/src/index.ts"],
+      "@dv/sozialdienst-app/model/delegation": ["libs/sozialdienst-app/model/delegation/src/index.ts"],
       "@dv/sozialdienst-app/pattern/administration-layout": ["libs/sozialdienst-app/pattern/administration-layout/src/index.ts"],
       "@dv/sozialdienst-app/pattern/gesuch-step-layout": ["libs/sozialdienst-app/pattern/gesuch-step-layout/src/index.ts"],
       "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]

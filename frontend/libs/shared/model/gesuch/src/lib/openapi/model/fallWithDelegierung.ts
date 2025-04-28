@@ -15,6 +15,7 @@ export interface FallWithDelegierung {
     id: string;
     fallNummer: string;
     mandant: string;
-    delegierung?: Delegierung;
+    delegierung: Delegierung;
+    letzteAktivitaet: string;
 }
 

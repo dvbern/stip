@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Delegierung } from './delegierung';
 import { GesuchTranche } from './gesuchTranche';
 import { Gesuchstatus } from './gesuchstatus';
 import { Gesuchsperiode } from './gesuchsperiode';
+import { DelegierungSlim } from './delegierungSlim';
 
 export interface GesuchWithChanges { 
     fallId: string;
@@ -29,8 +29,9 @@ export interface GesuchWithChanges {
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
     einreichedatum?: string;
-    delegierung?: Delegierung;
+    delegierung?: DelegierungSlim;
     nachfristDokumente?: string;
+    verfuegt: boolean;
     changes?: Array<GesuchTranche>;
 }
 

@@ -64,6 +64,11 @@ import {
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
@@ -81,11 +86,9 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
+import { restrictNumberParam } from '@dv/shared/util-fn/filter-util';
 
-const PAGE_SIZES = [10, 20, 50];
-const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
-const INPUT_DELAY = 600;
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -615,15 +618,3 @@ const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
 ) => {
   return value;
 };
-
-const restrictNumberParam =
-  (restriction: { max: number; min: number }) =>
-  (value: number | undefined) => {
-    if (!isDefined(value)) {
-      return undefined;
-    }
-    if (+value > restriction.max) {
-      return restriction.max;
-    }
-    return +value < restriction.min ? restriction.min : +value;
-  };

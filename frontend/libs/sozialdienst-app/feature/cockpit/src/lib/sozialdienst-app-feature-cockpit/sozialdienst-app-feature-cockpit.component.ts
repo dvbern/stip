@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  InputSignal,
   QueryList,
   ViewChildren,
   computed,
@@ -32,11 +33,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  GesuchFilter,
-  GesuchServiceGetGesucheSbRequestParams,
+  DelegierenServiceGetDelegierungSozRequestParams,
+  FallWithDelegierung,
+  GetDelegierungSozQueryType,
+  SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { isDefined } from '@dv/shared/model/type-util';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
@@ -54,28 +57,14 @@ import {
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
+import { restrictNumberParam } from '@dv/shared/util-fn/filter-util';
+import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 
-// todo: move to shared
-const PAGE_SIZES = [10, 20, 50];
-const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
-const INPUT_DELAY = 600;
+const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
 
-// todo: move to shared
-const restrictNumberParam =
-  (restriction: { max: number; min: number }) =>
-  (value: number | undefined) => {
-    if (!isDefined(value)) {
-      return undefined;
-    }
-    if (+value > restriction.max) {
-      return restriction.max;
-    }
-    return +value < restriction.min ? restriction.min : +value;
-  };
-
-// todo: move to shared and narrow down type
-const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
+const createQuery = <
+  T extends Partial<DelegierenServiceGetDelegierungSozRequestParams>,
+>(
   value: T,
 ) => {
   return value;
@@ -123,10 +112,10 @@ export class SozialdienstAppFeatureCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);
   private formBuilder = inject(NonNullableFormBuilder);
   private permissionStore = inject(PermissionStore);
-
-  closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
-
   private router = inject(Router);
+
+  delegationStore = inject(DelegationStore);
+  closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
 
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -140,15 +129,7 @@ export class SozialdienstAppFeatureCockpitComponent {
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = [
-    'FALLNUMMER',
-    'PIA_NACHNAME',
-    'PIA_VORNAME',
-    'PIA_GEBURTSDATUM',
-    'PIA_WOHNORT',
-    'STATUS',
-    'LETZTE_AKTIVITAET',
-  ];
+  displayedColumns = Object.keys(SozDashboardColumn);
 
   // todo: type annotation once available
   filterForm = this.formBuilder.group({
@@ -157,6 +138,7 @@ export class SozialdienstAppFeatureCockpitComponent {
     piaVorname: [<string | undefined>undefined],
     piaGeburtsdatum: [<Date | undefined>undefined],
     piaWohnort: [<string | undefined>undefined],
+    // todo: Status (Delegation / Delegationsanfrage)
     status: [<any | undefined>undefined],
   });
 
@@ -167,17 +149,17 @@ export class SozialdienstAppFeatureCockpitComponent {
   });
 
   quickFilterForm = this.formBuilder.group({
-    query: [<GesuchFilter | undefined>undefined],
+    query: [<GetDelegierungSozQueryType | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
-
+  dataSoruce = new MatTableDataSource<FallWithDelegierung>([]);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
 
   quickFilters: {
-    typ: GesuchFilter;
+    typ: GetDelegierungSozQueryType;
     icon: string;
     roles: SozialdienstBenutzerRole[];
   }[] = [
@@ -247,7 +229,7 @@ export class SozialdienstAppFeatureCockpitComponent {
   });
 
   faelleDataSourceSig = computed(() => {
-    const dataSource = new MatTableDataSource<any>([]);
+    const dataSource = new MatTableDataSource<FallWithDelegierung>([]);
     return dataSource;
   });
 

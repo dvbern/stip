@@ -10,11 +10,8 @@
  * Do not edit the class manually.
  */
 import { SozialdienstSlim } from './sozialdienstSlim';
-import { PersoenlicheAngaben } from './persoenlicheAngaben';
 
-export interface Delegierung { 
+export interface DelegierungSlim { 
     sozialdienst?: SozialdienstSlim;
-    delegierungAngenommen?: boolean;
-    persoenlicheAngaben?: PersoenlicheAngaben;
 }
 

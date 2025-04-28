@@ -9,12 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SozialdienstSlim } from './sozialdienstSlim';
-import { PersoenlicheAngaben } from './persoenlicheAngaben';
+import { Adresse } from './adresse';
+import { Anrede } from './anrede';
 
-export interface Delegierung { 
-    sozialdienst?: SozialdienstSlim;
-    delegierungAngenommen?: boolean;
-    persoenlicheAngaben?: PersoenlicheAngaben;
+export interface PersoenlicheAngaben { 
+    anrede: Anrede;
+    nachname: string;
+    vorname: string;
+    geburtsdatum: string;
+    adresse: Adresse;
 }
+
+
 

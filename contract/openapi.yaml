@@ -3751,6 +3751,8 @@ components:
         - id
         - fallNummer
         - mandant
+        - delegierung
+        - letzteAktivitaet
       type: object
       properties:
         id:
@@ -3761,6 +3763,8 @@ components:
           type: string
         delegierung:
           $ref: '#/components/schemas/Delegierung'
+        letzteAktivitaet:
+          $ref: '#/components/schemas/LocalDate'
     Gesuchsjahr:
       type: object
       required:
@@ -4048,12 +4052,40 @@ components:
           format: date
           type: string
         delegierung:
-          $ref: '#/components/schemas/Delegierung'
+          $ref: '#/components/schemas/DelegierungSlim'
         nachfristDokumente:
           $ref: '#/components/schemas/LocalDate'
         verfuegt:
           type: boolean
+    PersoenlicheAngaben:
+      required:
+        - anrede
+        - nachname
+        - vorname
+        - geburtsdatum
+        - adresse
+      type: object
+      properties:
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     Delegierung:
+      type: object
+      properties:
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
+        delegierungAngenommen:
+          type: boolean
+        persoenlicheAngaben:
+          $ref: '#/components/schemas/PersoenlicheAngaben'
+    DelegierungSlim:
       type: object
       properties:
         sozialdienst:
@@ -4120,7 +4152,7 @@ components:
           items:
             $ref: '#/components/schemas/Notification'
         delegierung:
-          $ref: '#/components/schemas/Delegierung'
+          $ref: '#/components/schemas/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
       properties:
