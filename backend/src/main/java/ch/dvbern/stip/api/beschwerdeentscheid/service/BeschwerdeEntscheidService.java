@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
@@ -46,6 +43,9 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+import java.util.List;
+import java.util.UUID;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -54,7 +54,6 @@ public class BeschwerdeEntscheidService {
     private final BeschwerdeEntscheidMapper beschwerdeEntscheidMapper;
 
     public static final String BESCHWERDEENTSCHEID_DOKUMENT_PATH = "beschwerdeentscheid/";
-    private static final String BESCHWERDEVERLAUF_TITEL = "Beschwerdeentscheid hochgeladen";
 
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
