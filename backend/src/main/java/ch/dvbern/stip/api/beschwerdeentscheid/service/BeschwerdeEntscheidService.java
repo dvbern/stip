@@ -103,7 +103,9 @@ public class BeschwerdeEntscheidService {
         final FileUpload fileUpload,
         final String objectId
     ) {
-        final var beschwerdeentscheid = createNewBeschwerdeEntscheid(beschwerdeEntscheid);
+        beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
+
+        final var beschwerdeentscheid = beschwerdeEntscheidRepository.findById(beschwerdeEntscheid.getId());
 
         final var dokument = new Dokument()
             .setFilename(fileUpload.fileName())
@@ -141,11 +143,6 @@ public class BeschwerdeEntscheidService {
                 beschwerdeEntscheid.getGesuch().getId(),
                 createDto
             );
-    }
-
-    private BeschwerdeEntscheid createNewBeschwerdeEntscheid(final BeschwerdeEntscheid beschwerdeEntscheid) {
-        beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
-        return beschwerdeEntscheid;
     }
 
     private void setGesuchToBereitFuerBearbeitung(Gesuch gesuch) {
