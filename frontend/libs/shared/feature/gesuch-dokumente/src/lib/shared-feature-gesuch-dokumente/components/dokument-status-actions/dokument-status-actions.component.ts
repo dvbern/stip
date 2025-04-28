@@ -10,7 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
+import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 
 @Component({
   selector: 'dv-dokument-status-actions',
@@ -19,7 +19,7 @@ import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
     CommonModule,
     TranslatePipe,
     SharedUiIconBadgeComponent,
-    SharedUiPrefixAppTypePipe,
+    SharedUiReplaceAppTypePipe,
   ],
   templateUrl: './dokument-status-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,12 +1,11 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'gesuch-app-feature-gesuch-form-abschluss',
+  displayName: 'shared-feature-gesuch-form-abschluss',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/gesuch-app/feature/gesuch-form-abschluss',
+    '../../../../coverage/libs/shared/feature/gesuch-form-abschluss',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [
