@@ -284,7 +284,7 @@ class GesuchTrancheCreateTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
         // the initial tranche 2 is not present anymore (but in history)
         gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(tranche2Id)
