@@ -106,7 +106,7 @@ public class BeschwerdeEntscheidService {
     }
 
     @Transactional
-    public void uploadDokument(
+    protected void uploadDokument(
         final BeschwerdeEntscheid beschwerdeEntscheid,
         final FileUpload fileUpload,
         final String objectId
