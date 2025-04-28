@@ -74,6 +74,14 @@ public class BeschwerdeEntscheidService {
         beschwerdeEntscheid.setBeschwerdeErfolgreich(isBeschwerdeErfolgreich);
         beschwerdeEntscheid.setKommentar(kommentar);
         beschwerdeEntscheid.setGesuch(gesuchRepository.requireById(gesuchId));
+        beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
+
+        if (beschwerdeEntscheid.isBeschwerdeErfolgreich()) {
+            setGesuchToBereitFuerBearbeitung(beschwerdeEntscheid.getGesuch());
+        }
+
+        createBeschwerdeverlaufEntry(beschwerdeEntscheid);
+
         return DokumentUploadUtil.validateScanUploadDokument(
             fileUpload,
             s3,
@@ -103,24 +111,14 @@ public class BeschwerdeEntscheidService {
         final FileUpload fileUpload,
         final String objectId
     ) {
-        beschwerdeEntscheidRepository.persistAndFlush(beschwerdeEntscheid);
-
-        final var beschwerdeentscheid = beschwerdeEntscheidRepository.findById(beschwerdeEntscheid.getId());
-
         final var dokument = new Dokument()
             .setFilename(fileUpload.fileName())
             .setFilesize(String.valueOf(fileUpload.size()))
             .setFilepath(BESCHWERDEENTSCHEID_DOKUMENT_PATH)
             .setObjectId(objectId);
 
-        beschwerdeentscheid.getDokumente().add(dokument);
+        beschwerdeEntscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
-
-        if (beschwerdeEntscheid.isBeschwerdeErfolgreich()) {
-            setGesuchToBereitFuerBearbeitung(beschwerdeentscheid.getGesuch());
-        }
-
-        createBeschwerdeverlaufEntry(beschwerdeEntscheid);
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
