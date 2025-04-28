@@ -116,7 +116,7 @@ public class BeschwerdeEntscheidService {
         beschwerdeentscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
 
-        if (beschwerdeEntscheid.getBeschwerdeErfolgreich()) {
+        if (beschwerdeEntscheid.isBeschwerdeErfolgreich()) {
             setGesuchToBereitFuerBearbeitung(beschwerdeentscheid.getGesuch());
         }
 
