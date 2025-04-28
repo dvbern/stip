@@ -123,26 +123,26 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="PIA_NACHNAME">
+                <ng-container matColumnDef="NACHNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
-                    <label class="pe-none" for="piaNachname">{{
+                    <label class="pe-none" for="nachname">{{
                       'sozialdienst-app.cockpit.table.nachname' | translate
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
                         <input
-                          id="piaNachname"
+                          id="nachname"
                           class="tw-w-full"
                           matInput
                           dvMaxLength
-                          formControlName="piaNachname"
+                          formControlName="nachname"
                           (click)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-                        (clear)="filterForm.controls.piaNachname.reset()"
-                        [valueSig]="filterForm.controls.piaNachname.value"
+                        (clear)="filterForm.controls.nachname.reset()"
+                        [valueSig]="filterForm.controls.nachname.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
@@ -156,26 +156,26 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="PIA_VORNAME">
+                <ng-container matColumnDef="VORNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
-                    <label class="pe-none" for="piaVorname">{{
+                    <label class="pe-none" for="vorname">{{
                       'sozialdienst-app.cockpit.table.vorname' | translate
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
                         <input
-                          id="piaVorname"
+                          id="vorname"
                           class="tw-w-full"
                           matInput
                           dvMaxLength
-                          formControlName="piaVorname"
+                          formControlName="vorname"
                           (click)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-                        (clear)="filterForm.controls.piaVorname.reset()"
-                        [valueSig]="filterForm.controls.piaVorname.value"
+                        (clear)="filterForm.controls.vorname.reset()"
+                        [valueSig]="filterForm.controls.vorname.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
@@ -189,7 +189,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="PIA_GEBURTSDATUM">
+                <ng-container matColumnDef="GEBURTSDATUM">
                   <th
                     mat-header-cell
                     *matHeaderCellDef
@@ -198,17 +198,17 @@
                     class="filtered tw-w-40 tw-whitespace-nowrap"
                     example="01.01.2000"
                   >
-                    <label class="pe-none" for="piaGeburtsdatum">{{
+                    <label class="pe-none" for="geburtsdatum">{{
                       'sozialdienst-app.cockpit.table.geburtsdatum' | translate
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
                         <input
-                          id="piaGeburtsdatum"
+                          id="geburtsdatum"
                           class="tw-w-full"
                           matInput
                           [dvMaxLength]="'small'"
-                          formControlName="piaGeburtsdatum"
+                          formControlName="geburtsdatum"
                           [matDatepicker]="geburtsdatumDatepicker"
                           (click)="$event.stopPropagation()"
                         />
@@ -227,8 +227,8 @@
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-                        (clear)="filterForm.controls.piaGeburtsdatum.reset()"
-                        [valueSig]="filterForm.controls.piaGeburtsdatum.value"
+                        (clear)="filterForm.controls.geburtsdatum.reset()"
+                        [valueSig]="filterForm.controls.geburtsdatum.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
@@ -238,26 +238,24 @@
                 </ng-container>
 
                 <!-- wohnort -->
-                <ng-container matColumnDef="PIA_WOHNORT">
+                <ng-container matColumnDef="WOHNORT">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
-                    <label class="pe-none" for="piaWohnort">{{
-                      'sozialdienst-app.cockpit.table.wohnort' | translate
-                    }}</label>
+                    <label class="pe-none" for="ort">{{ 'sozialdienst-app.cockpit.table.wohnort' | translate }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
                         <input
-                          id="piaWohnort"
+                          id="ort"
                           class="tw-w-full"
                           matInput
                           dvMaxLength
-                          formControlName="piaWohnort"
+                          formControlName="ort"
                           (click)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-                        (clear)="filterForm.controls.piaWohnort.reset()"
-                        [valueSig]="filterForm.controls.piaWohnort.value"
+                        (clear)="filterForm.controls.ort.reset()"
+                        [valueSig]="filterForm.controls.ort.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
@@ -343,12 +341,12 @@
                           (click)="$event.stopPropagation()"
                         >
                           <input
-                            [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
+                            [formControl]="filterFromToForm.controls.letzteAktivitaetFrom"
                             matStartDate
                             [placeholder]="'shared.label.von' | translate"
                           />
                           <input
-                            [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
+                            [formControl]="filterFromToForm.controls.letzteAktivitaetTo"
                             matEndDate
                             [placeholder]="'shared.label.bis' | translate"
                           />
@@ -358,12 +356,12 @@
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
                         (clear)="
-                          filterStartEndForm.controls.letzteAktivitaetFrom.reset();
-                          filterStartEndForm.controls.letzteAktivitaetTo.reset()
+                          filterFromToForm.controls.letzteAktivitaetFrom.reset();
+                          filterFromToForm.controls.letzteAktivitaetTo.reset()
                         "
                         [valueSig]="[
-                          filterStartEndForm.controls.letzteAktivitaetFrom.value,
-                          filterStartEndForm.controls.letzteAktivitaetTo.value,
+                          filterFromToForm.controls.letzteAktivitaetFrom.value,
+                          filterFromToForm.controls.letzteAktivitaetTo.value,
                         ]"
                       ></dv-shared-ui-clear-button>
                     </div>

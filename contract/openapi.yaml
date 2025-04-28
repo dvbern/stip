@@ -6211,10 +6211,10 @@ components:
     SozDashboardColumn:
       enum:
         - FALLNUMMER
-        - PIA_NACHNAME
-        - PIA_VORNAME
-        - PIA_GEBURTSDATUM
-        - PIA_WOHNORT
+        - NACHNAME
+        - VORNAME
+        - GEBURTSDATUM
+        - WOHNORT
         - STATUS
         - LETZTE_AKTIVITAET
     SortOrder:

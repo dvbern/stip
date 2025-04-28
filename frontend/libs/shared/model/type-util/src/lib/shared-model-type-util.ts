@@ -37,3 +37,11 @@ export const ifPropsAreDefined = <T extends Record<string, unknown>>(
  */
 export const compareById = <T extends { id: string | number }>(a: T, b: T) =>
   a.id === b.id;
+
+/**
+ * A type that appends 'From' and 'To' to a given string
+ * @example
+ * type MyType = AppendStartEnd<'date'>; // 'dateFrom' | 'dateTo'
+ * type MyType2 = AppendStartEnd<'date' | 'time'>; // 'dateFrom' | 'dateTo' | 'timeFrom' | 'timeTo'
+ */
+export type AppendFromTo<T extends string> = `${T}From` | `${T}To`;

@@ -26,12 +26,7 @@ import {
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {
-  MatSort,
-  MatSortModule,
-  Sort,
-  SortDirection,
-} from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
@@ -42,8 +37,6 @@ import {
   differenceInCalendarYears,
   differenceInDays,
   format,
-  isValid,
-  toDate,
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -63,7 +56,7 @@ import {
   SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
+import { AppendFromTo, isDefined } from '@dv/shared/model/type-util';
 import {
   DEFAULT_PAGE_SIZE,
   INPUT_DELAY,
@@ -85,8 +78,17 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-import { toBackendLocalDate } from '@dv/shared/util/validator-date';
-import { restrictNumberParam } from '@dv/shared/util-fn/filter-util';
+import {
+  getDiffFormat,
+  parseDate,
+  toBackendLocalDate,
+} from '@dv/shared/util/validator-date';
+import {
+  inverseSortMap,
+  makeEmptyStringPropertiesNull,
+  restrictNumberParam,
+  sortMap,
+} from '@dv/shared/util-fn/filter-util';
 
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 
@@ -101,7 +103,6 @@ const statusByTyp = {
 
 type DashboardFormStatus = Gesuchstatus | GesuchTrancheStatus;
 
-type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
 type DashboardEntry = Omit<
   SbDashboardGesuch,
   'id' | 'gesuchTrancheId' | 'gesuchStatus' | 'trancheStatus'
@@ -113,7 +114,7 @@ type DashboardEntryFields = keyof DashboardEntry;
  */
 type StartEndFields = keyof Pick<DashboardEntry, 'letzteAktivitaet'>;
 type DashboardFormSimpleFields = Exclude<DashboardEntryFields, StartEndFields>;
-type DashboardFormStartEndFields = AppendStartEnd<StartEndFields>;
+type DashboardFormStartEndFields = AppendFromTo<StartEndFields>;
 type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
@@ -557,40 +558,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   }
 }
 
-const getDiffFormat = (
-  date: Date,
-  difference: { months: number; years: number },
-) => {
-  let value = format(date, 'dd.');
-  if (difference.months > 0) {
-    value += format(date, 'MM.');
-  }
-  if (difference.years > 0) {
-    value += format(date, 'yy');
-  }
-  return value;
-};
-
-const sortMap = {
-  ['']: undefined,
-  asc: 'ASCENDING',
-  desc: 'DESCENDING',
-} satisfies Record<SortDirection, SortOrder | undefined>;
-const inverseSortMap = {
-  ASCENDING: 'asc',
-  DESCENDING: 'desc',
-} satisfies Record<SortOrder, SortDirection>;
-
-const makeEmptyStringPropertiesNull = <T extends object>(obj: T): T => {
-  return Object.entries(obj).reduce(
-    (acc, [key, value]) => ({
-      ...acc,
-      [key]: value === '' ? null : value,
-    }),
-    {} as T,
-  );
-};
-
 const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
   if (typ && Object.keys(GesuchTrancheTyp).includes(typ)) {
     return typ as GesuchTrancheTyp;
@@ -604,13 +571,6 @@ const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
     return undefined;
   }
   return status as Gesuchstatus;
-};
-
-const parseDate = (date: string | undefined): Date | undefined => {
-  if (!date || isValid(date)) {
-    return undefined;
-  }
-  return toDate(date);
 };
 
 const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
