@@ -17,15 +17,10 @@
 
 package ch.dvbern.stip.api.beschwerdeverlauf.entity;
 
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -59,4 +54,12 @@ public class BeschwerdeVerlaufEntry extends AbstractMandantEntity {
         name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_beschwerde_verlauf_entry_gesuch_id"), nullable = false
     )
     private Gesuch gesuch;
+
+    @Nullable
+    @OneToOne
+    @JoinColumn(
+        name = "beschwerde_entscheid_id",
+        foreignKey = @ForeignKey(name = "FK_beschwerde_verlauf_entry_beschwerde_entscheid_id"), nullable = true
+    )
+    private BeschwerdeEntscheid beschwerdeEntscheid;
 }

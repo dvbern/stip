@@ -6354,6 +6354,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
       properties:
+        beschwerdeEntscheid:
+          $ref: '#/components/schemas/BeschwerdeEntscheid'
         timestampErstellt:
           type: string
           format: date-time

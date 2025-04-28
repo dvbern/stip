@@ -228,6 +228,9 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .body()
             .as(BeschwerdeVerlaufEntryDtoSpec[].class);
         assertThat(beschwerdeVerlaufEntries.length, is(1));
+        final var entry = beschwerdeVerlaufEntries[0];
+        assertThat(entry.getBeschwerdeEntscheid().getBeschwerdeErfolgreich(), is(false));
+        assertThat(entry.getBeschwerdeEntscheid().getDokumente().size(), is(1));
     }
 
     @Test
