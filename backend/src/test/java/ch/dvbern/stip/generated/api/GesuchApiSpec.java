@@ -877,7 +877,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
      * @see #kommentarForm  (required)
-     * @see #isBeschwerdeErfolgreichForm  (required)
+     * @see #beschwerdeErfolgreichForm  (required)
      * @see #fileUploadMultiPart  (required)
      */
     public static class CreateBeschwerdeEntscheidOper implements Oper {
@@ -928,14 +928,14 @@ public class GesuchApiSpec {
             return this;
          }
 
-         public static final String IS_BESCHWERDE_ERFOLGREICH_FORM = "isBeschwerdeErfolgreich";
+         public static final String BESCHWERDE_ERFOLGREICH_FORM = "beschwerdeErfolgreich";
 
          /**
-         * @param isBeschwerdeErfolgreich (Boolean)  (required)
+         * @param beschwerdeErfolgreich (Boolean)  (required)
          * @return operation
          */
-         public CreateBeschwerdeEntscheidOper isBeschwerdeErfolgreichForm(Object... isBeschwerdeErfolgreich) {
-            reqSpec.addFormParam(IS_BESCHWERDE_ERFOLGREICH_FORM, isBeschwerdeErfolgreich);
+         public CreateBeschwerdeEntscheidOper beschwerdeErfolgreichForm(Object... beschwerdeErfolgreich) {
+            reqSpec.addFormParam(BESCHWERDE_ERFOLGREICH_FORM, beschwerdeErfolgreich);
             return this;
          }
 

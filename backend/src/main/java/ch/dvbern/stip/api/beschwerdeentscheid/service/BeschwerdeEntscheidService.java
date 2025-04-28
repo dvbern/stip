@@ -73,7 +73,7 @@ public class BeschwerdeEntscheidService {
         final FileUpload fileUpload
     ) {
         var beschwerdeEntscheid = new BeschwerdeEntscheid();
-        beschwerdeEntscheid.setIsBeschwerdeErfolgreich(isBeschwerdeErfolgreich);
+        beschwerdeEntscheid.setBeschwerdeErfolgreich(isBeschwerdeErfolgreich);
         beschwerdeEntscheid.setKommentar(kommentar);
         beschwerdeEntscheid.setGesuch(gesuchRepository.requireById(gesuchId));
         return DokumentUploadUtil.validateScanUploadDokument(
@@ -116,7 +116,7 @@ public class BeschwerdeEntscheidService {
         beschwerdeentscheid.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
 
-        if (beschwerdeEntscheid.getIsBeschwerdeErfolgreich()) {
+        if (beschwerdeEntscheid.getBeschwerdeErfolgreich()) {
             setGesuchToBereitFuerBearbeitung(beschwerdeentscheid.getGesuch());
         }
 

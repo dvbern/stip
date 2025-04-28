@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH,
+  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_BESCHWERDE_ERFOLGREICH,
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("BeschwerdeEntscheid")
@@ -41,8 +41,8 @@ public class BeschwerdeEntscheidDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
-  public static final String JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH = "isBeschwerdeErfolgreich";
-  private Boolean isBeschwerdeErfolgreich;
+  public static final String JSON_PROPERTY_BESCHWERDE_ERFOLGREICH = "beschwerdeErfolgreich";
+  private Boolean beschwerdeErfolgreich;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
   private List<DokumentDtoSpec> dokumente;
@@ -76,29 +76,29 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  public BeschwerdeEntscheidDtoSpec isBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
+  public BeschwerdeEntscheidDtoSpec beschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
     
-    this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
+    this.beschwerdeErfolgreich = beschwerdeErfolgreich;
     return this;
   }
 
    /**
-   * Get isBeschwerdeErfolgreich
-   * @return isBeschwerdeErfolgreich
+   * Get beschwerdeErfolgreich
+   * @return beschwerdeErfolgreich
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH)
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ERFOLGREICH)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getIsBeschwerdeErfolgreich() {
-    return isBeschwerdeErfolgreich;
+  public Boolean getBeschwerdeErfolgreich() {
+    return beschwerdeErfolgreich;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_BESCHWERDE_ERFOLGREICH)
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ERFOLGREICH)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
-    this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
+  public void setBeschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+    this.beschwerdeErfolgreich = beschwerdeErfolgreich;
   }
 
 
@@ -145,13 +145,13 @@ public class BeschwerdeEntscheidDtoSpec {
     }
     BeschwerdeEntscheidDtoSpec beschwerdeEntscheid = (BeschwerdeEntscheidDtoSpec) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
-        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
+        Objects.equals(this.beschwerdeErfolgreich, beschwerdeEntscheid.beschwerdeErfolgreich) &&
         Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, isBeschwerdeErfolgreich, dokumente);
+    return Objects.hash(kommentar, beschwerdeErfolgreich, dokumente);
   }
 
   @Override
@@ -159,7 +159,7 @@ public class BeschwerdeEntscheidDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BeschwerdeEntscheidDtoSpec {\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
+    sb.append("    beschwerdeErfolgreich: ").append(toIndentedString(beschwerdeErfolgreich)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();

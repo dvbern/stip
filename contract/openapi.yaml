@@ -3996,26 +3996,26 @@ components:
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
-        - isBeschwerdeErfolgreich
+        - beschwerdeErfolgreich
         - fileUpload
       type: object
       properties:
         kommentar:
           type: string
-        isBeschwerdeErfolgreich:
+        beschwerdeErfolgreich:
           type: boolean
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
     BeschwerdeEntscheid:
       required:
         - kommentar
-        - isBeschwerdeErfolgreich
+        - beschwerdeErfolgreich
         - dokumente
       type: object
       properties:
         kommentar:
           type: string
-        isBeschwerdeErfolgreich:
+        beschwerdeErfolgreich:
           type: boolean
         dokumente:
           type: array

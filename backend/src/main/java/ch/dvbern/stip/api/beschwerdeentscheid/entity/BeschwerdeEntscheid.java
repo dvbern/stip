@@ -69,8 +69,8 @@ public class BeschwerdeEntscheid extends AbstractMandantEntity {
     private String kommentar;
 
     @NotNull
-    @Column(name = "is_beschwerde_erfolgreich", nullable = false)
-    private Boolean isBeschwerdeErfolgreich;
+    @Column(name = "beschwerde_erfolgreich", nullable = false)
+    private Boolean beschwerdeErfolgreich;
 
     @OneToMany
     @JoinTable(

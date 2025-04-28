@@ -17,6 +17,11 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -52,11 +57,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.dokument.type.DokumentArt.BESCHWERDE_ENTSCHEID;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
@@ -191,7 +191,9 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Description("Verify the Gesuchstatus has not changed, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false had been created")
+    @Description(
+        "Verify the Gesuchstatus has not changed, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false had been created"
+    )
     @Order(7)
     void verifyGesuchShouldBeInSameStatus() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
@@ -241,7 +243,9 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Description("Verify the Gesuchstatus has been set to BEREIT_FUER_BEARBEITUNG, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true had been created")
+    @Description(
+        "Verify the Gesuchstatus has been set to BEREIT_FUER_BEARBEITUNG, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true had been created"
+    )
     @Order(10)
     void verifyGesuchShouldBeInStatus_BEREIT_FUER_BEARBEITUNG() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
@@ -296,7 +300,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
         final var beschwerdeEntscheid = beschwerdeEntscheids[0];
         assertThat(beschwerdeEntscheid.getKommentar(), is("test"));
         assertThat(
-            Arrays.stream(beschwerdeEntscheids).anyMatch(BeschwerdeEntscheidDtoSpec::getIsBeschwerdeErfolgreich),
+            Arrays.stream(beschwerdeEntscheids).anyMatch(BeschwerdeEntscheidDtoSpec::getBeschwerdeErfolgreich),
             is(true)
         );
         assertThat(beschwerdeEntscheid.getDokumente().size(), is(1));

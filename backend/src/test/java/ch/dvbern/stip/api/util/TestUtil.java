@@ -414,7 +414,7 @@ public class TestUtil {
     ) {
         return gesuchApiSpec.createBeschwerdeEntscheid()
             .gesuchIdPath(gesuchId)
-            .isBeschwerdeErfolgreichForm(isBeschwerdeErfolgreich)
+            .beschwerdeErfolgreichForm(isBeschwerdeErfolgreich)
             .kommentarForm(kommentar)
             // .fileUploadMultiPart(fileUpload)
             .reqSpec(req -> req.addMultiPart("fileUpload", fileUpload, "image/png"))

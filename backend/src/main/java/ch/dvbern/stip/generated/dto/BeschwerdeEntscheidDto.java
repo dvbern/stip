@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BeschwerdeEntscheidDto  implements Serializable {
   private @Valid String kommentar;
-  private @Valid Boolean isBeschwerdeErfolgreich;
+  private @Valid Boolean beschwerdeErfolgreich;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
 
   /**
@@ -48,21 +48,21 @@ public class BeschwerdeEntscheidDto  implements Serializable {
 
   /**
    **/
-  public BeschwerdeEntscheidDto isBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
-    this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
+  public BeschwerdeEntscheidDto beschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+    this.beschwerdeErfolgreich = beschwerdeErfolgreich;
     return this;
   }
 
   
-  @JsonProperty("isBeschwerdeErfolgreich")
+  @JsonProperty("beschwerdeErfolgreich")
   @NotNull
-  public Boolean getIsBeschwerdeErfolgreich() {
-    return isBeschwerdeErfolgreich;
+  public Boolean getBeschwerdeErfolgreich() {
+    return beschwerdeErfolgreich;
   }
 
-  @JsonProperty("isBeschwerdeErfolgreich")
-  public void setIsBeschwerdeErfolgreich(Boolean isBeschwerdeErfolgreich) {
-    this.isBeschwerdeErfolgreich = isBeschwerdeErfolgreich;
+  @JsonProperty("beschwerdeErfolgreich")
+  public void setBeschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+    this.beschwerdeErfolgreich = beschwerdeErfolgreich;
   }
 
   /**
@@ -111,13 +111,13 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     }
     BeschwerdeEntscheidDto beschwerdeEntscheid = (BeschwerdeEntscheidDto) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
-        Objects.equals(this.isBeschwerdeErfolgreich, beschwerdeEntscheid.isBeschwerdeErfolgreich) &&
+        Objects.equals(this.beschwerdeErfolgreich, beschwerdeEntscheid.beschwerdeErfolgreich) &&
         Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, isBeschwerdeErfolgreich, dokumente);
+    return Objects.hash(kommentar, beschwerdeErfolgreich, dokumente);
   }
 
   @Override
@@ -126,7 +126,7 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     sb.append("class BeschwerdeEntscheidDto {\n");
     
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    isBeschwerdeErfolgreich: ").append(toIndentedString(isBeschwerdeErfolgreich)).append("\n");
+    sb.append("    beschwerdeErfolgreich: ").append(toIndentedString(beschwerdeErfolgreich)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();
