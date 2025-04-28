@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
@@ -43,9 +46,6 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import java.util.List;
-import java.util.UUID;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -61,7 +61,6 @@ public class BeschwerdeEntscheidService {
     private final ConfigService configService;
     private final S3AsyncClient s3;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
-
     private final GesuchStatusService gesuchStatusService;
 
     @Transactional
