@@ -31,6 +31,7 @@ export interface GesuchWithChanges {
     einreichedatum?: string;
     delegierung?: Delegierung;
     nachfristDokumente?: string;
+    verfuegt: boolean;
     changes?: Array<GesuchTranche>;
 }
 
