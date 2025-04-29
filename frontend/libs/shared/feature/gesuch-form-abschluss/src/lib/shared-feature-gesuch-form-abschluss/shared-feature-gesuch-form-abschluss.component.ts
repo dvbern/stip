@@ -29,7 +29,7 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
-  selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
+  selector: 'dv-shared-feature-gesuch-form-abschluss',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,10 +39,10 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
   ],
-  templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
+  templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
+export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);

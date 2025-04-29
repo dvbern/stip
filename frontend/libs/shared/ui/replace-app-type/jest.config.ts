@@ -1,11 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-ui-prefix-app-type',
+  displayName: 'shared-ui-replace-app-type',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/ui/prefix-app-type',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/replace-app-type',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [
