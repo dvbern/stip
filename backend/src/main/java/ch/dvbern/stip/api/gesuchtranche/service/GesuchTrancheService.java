@@ -561,6 +561,7 @@ public class GesuchTrancheService {
         return einreichenValidationReport(gesuchTranche);
     }
 
+    @Transactional
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTrancheForGs(trancheId);
         return einreichenValidationReport(gesuchTranche);
