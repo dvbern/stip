@@ -17,20 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -121,6 +107,20 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -740,24 +740,13 @@ public class GesuchService {
                 .findFirst();
 
         final var foundGesuchInStatusVerfuegt =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).get();
+            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).get();
         var requestedTrancheFromGesuchInStatusVerfuegt =
             foundGesuchInStatusVerfuegt
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
                 .findFirst();
-
-        // e.g. if tranche ist not existing anymore (overwritten)
-        if (requestedTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
-            return gesuchMapperUtil.toWithChangesDto(
-                gesuch,
-                // tranche to work with -> findByTrancheId
-                tranche,
-                // changes
-                requestedTrancheFromGesuchInStatusEingereicht.orElse(null)
-            );
-        }
 
         return gesuchMapperUtil.toWithChangesDto(
             gesuch,

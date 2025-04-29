@@ -285,13 +285,8 @@ class GesuchTrancheCreateTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
-        // the initial tranche 2 is not present anymore (but in history)
-        gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(tranche2Id)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+        // the initial tranche 2 (tranche2id) is not present anymore and has never been verfuegt
+        // so it will not appear in initialTrancheChanges
     }
 
     @Test
