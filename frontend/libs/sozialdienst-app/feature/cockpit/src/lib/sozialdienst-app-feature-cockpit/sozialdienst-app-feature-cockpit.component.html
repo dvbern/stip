@@ -375,6 +375,20 @@
                   </td>
                 </ng-container>
 
+                <!-- aktionen -->
+                <ng-container matColumnDef="AKTIONEN">
+                  <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap"></th>
+                  <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-w-11">
+                    <button
+                      type="button"
+                      class="dv-icon-button dv-icon-button-md text-info mt-2"
+                      (click)="openDialog(fall); $event.stopPropagation()"
+                    >
+                      <span class="material-symbols-rounded"> info </span>
+                    </button>
+                  </td>
+                </ng-container>
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <!-- todo: add corret link -->
                 <tr

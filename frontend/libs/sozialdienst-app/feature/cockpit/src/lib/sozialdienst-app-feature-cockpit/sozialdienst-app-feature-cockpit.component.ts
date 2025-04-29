@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   QueryList,
   ViewChildren,
@@ -12,9 +13,10 @@ import {
   input,
   viewChild,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
@@ -83,6 +85,7 @@ import {
   restrictNumberParam,
 } from '@dv/shared/util-fn/filter-util';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
+import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
 import {
   LetzteAktivitaetFromToKeys,
   SozCockitComponentInputs,
@@ -90,6 +93,30 @@ import {
 } from '@dv/sozialdienst-app/model/delegation';
 
 const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
+
+// todo: remove this dummy data
+const dummyFallWithDelegierung: FallWithDelegierung = {
+  id: 'sdfsdf-sdfsfd-sdf-sdf-sdf',
+  fallNummer: 'A123456',
+  mandant: 'sdflkf-flj-lk',
+  delegierung: {
+    delegierungAngenommen: true,
+    persoenlicheAngaben: {
+      nachname: 'Mustermann',
+      vorname: 'Max',
+      geburtsdatum: '1990-01-01',
+      adresse: {
+        strasse: 'Musterstraße',
+        hausnummer: '1',
+        plz: '12345',
+        ort: 'Musterstadt',
+        land: 'CH',
+      },
+      anrede: 'HERR',
+    },
+  },
+  letzteAktivitaet: new Date().toISOString(),
+};
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-cockpit',
@@ -137,6 +164,8 @@ export class SozialdienstAppFeatureCockpitComponent
   private permissionStore = inject(PermissionStore);
   private router = inject(Router);
   private store = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private dialog = inject(MatDialog);
   delegationStore = inject(DelegationStore);
   versionSig = this.store.selectSignal(selectVersion);
 
@@ -170,7 +199,7 @@ export class SozialdienstAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(SozDashboardColumn);
+  displayedColumns = [...Object.keys(SozDashboardColumn), 'AKTIONEN'];
 
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
@@ -280,9 +309,8 @@ export class SozialdienstAppFeatureCockpitComponent
   );
 
   faelleDataSourceSig = computed(() => {
-    const faelle =
-      this.delegationStore.cockpitViewSig().paginatedSozDashboard?.entries ??
-      [];
+    const faelle = this.delegationStore.cockpitViewSig().paginatedSozDashboard
+      ?.entries ?? [dummyFallWithDelegierung];
 
     const dataSource = new MatTableDataSource<FallWithDelegierung>(faelle);
     return dataSource;
@@ -415,6 +443,13 @@ export class SozialdienstAppFeatureCockpitComponent
       },
       { allowSignalWrites: true },
     );
+  }
+
+  openDialog(fall: FallWithDelegierung) {
+    DelegierungDialogComponent.open(this.dialog, { fall })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {});
   }
 
   private getInputs() {

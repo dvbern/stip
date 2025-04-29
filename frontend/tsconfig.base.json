@@ -243,6 +243,7 @@
       "@dv/sozialdienst-app/feature/administration": ["libs/sozialdienst-app/feature/administration/src/index.ts"],
       "@dv/sozialdienst-app/feature/administration-sozialdienst-benutzer": ["libs/sozialdienst-app/feature/administration-sozialdienst-benutzer/src/index.ts"],
       "@dv/sozialdienst-app/feature/cockpit": ["libs/sozialdienst-app/feature/cockpit/src/index.ts"],
+      "@dv/sozialdienst-app/feature/delegierung-dialog": ["libs/sozialdienst-app/feature/delegierung-dialog/src/index.ts"],
       "@dv/sozialdienst-app/feature/gesuch-form": ["libs/sozialdienst-app/feature/gesuch-form/src/index.ts"],
       "@dv/sozialdienst-app/model/administration": ["libs/sozialdienst-app/model/administration/src/index.ts"],
       "@dv/sozialdienst-app/model/delegation": ["libs/sozialdienst-app/model/delegation/src/index.ts"],

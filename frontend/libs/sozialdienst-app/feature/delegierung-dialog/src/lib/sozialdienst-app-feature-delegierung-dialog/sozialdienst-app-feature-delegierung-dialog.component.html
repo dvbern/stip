@@ -1,0 +1,104 @@
+<section class="p-4 rounded tw-relative tw-flex tw-w-full tw-max-w-[700px] tw-flex-col">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="title h3 mb-4 d-flex">
+    {{ 'shared.form.shared.section.personal-details' | translate }}
+  </h1>
+
+  <form
+    [formGroup]="form"
+    data-testid="form-delegieren-form"
+    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    novalidate
+  >
+    <!-- Anrede -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.form.person.salutation.label' | translate }}</mat-label>
+      <mat-select
+        formControlName="anrede"
+        data-testid="form-delegieren-anrede"
+        [placeholder]="'shared.form.select.empty' | translate"
+      >
+        @for (a of anredeValues; track $index) {
+          <mat-option [attr.data-testid]="a" [value]="a">
+            {{ 'shared.form.select.salutation.' + (a | lowercase) | translate }}
+          </mat-option>
+        }
+      </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- nachname -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+      <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
+      <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegieren-nachname" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Vorname -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
+      <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegieren-vorname" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <dv-shared-ui-form-address
+      class="tw-col-span-full tw-w-full"
+      [group]="form.controls.adresse"
+      [laender]="laenderSig()"
+      [language]="languageSig()"
+    />
+
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
+
+      <input
+        matInput
+        [dvMaxLength]="'small'"
+        placeholder="dd.mm.yyyy"
+        formControlName="geburtsdatum"
+        data-testid="form-delegieren-geburtsdatum"
+        (blur)="onGeburtsdatumBlur()"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ 'shared.form.error.dateFormat' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDate'">
+        {{ 'shared.form.error.minDatePast' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDatePast' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="d-flex mt-4 justify-content-between tw-col-span-full">
+      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button
+        type="submit"
+        data-testid="dialog-submit"
+        [disabled]="form.invalid"
+        class="btn btn-primary ms-2"
+        (click)="confirm()"
+      >
+        {{ 'computer.says.no' | translate }}
+      </button>
+    </div>
+  </form>
+</section>
