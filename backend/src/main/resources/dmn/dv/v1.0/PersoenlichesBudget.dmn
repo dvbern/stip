@@ -507,18 +507,10 @@
               <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
-          <dmn:input id="_22970A3C-37B5-4A87-8D5E-077939EFA8BA">
-            <dmn:inputExpression id="_34602761-E928-4C3C-9128-0517CD4EBE33" typeRef="boolean">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.eigenerHaushalt</dmn:text>
-            </dmn:inputExpression>
-          </dmn:input>
           <dmn:output id="_7BF9E136-8D05-4550-98B9-12844CC7B850" />
           <dmn:annotation name="annotation-1" />
           <dmn:rule id="_33B94626-548B-4C4E-9BA3-7203025DC79B">
             <dmn:inputEntry id="_9E6F708A-5F8E-47FC-B53E-42E8110635AA">
-              <dmn:text>true</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_71240F4D-042D-4C1D-A9FE-38996AC44426">
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_D57DB552-DA8F-4BB1-AA11-A2A00439AFAE">
@@ -530,10 +522,7 @@
           </dmn:rule>
           <dmn:rule id="_4E039B03-DD9B-4486-B814-4616AD6D2790">
             <dmn:inputEntry id="_C7CA36DE-0141-45B5-9740-B4D3082E2C95">
-              <dmn:text>-</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_802E0AC6-5929-4B10-A642-C2F806E7228E">
-              <dmn:text>-</dmn:text>
+              <dmn:text>false</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_0A627A14-8330-4705-833C-833DAA2D4236">
               <dmn:text>InputPersoenlichesbudget.antragssteller.ausbildungskosten</dmn:text>
@@ -564,18 +553,10 @@
               <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
-          <dmn:input id="_388B2390-B919-41E2-94B1-50A986AFF191">
-            <dmn:inputExpression id="_51EA7B75-DA66-4D34-98E2-4EF995EC8E9C" typeRef="boolean">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.eigenerHaushalt</dmn:text>
-            </dmn:inputExpression>
-          </dmn:input>
           <dmn:output id="_368414F7-691B-4738-8D67-7A3F3238BAC7" />
           <dmn:annotation name="annotation-1" />
           <dmn:rule id="_E88E771A-F02D-44DD-9CAC-FF9C0A03CEEB">
             <dmn:inputEntry id="_610F74B8-5DB8-49ED-B2B2-D6EE1EF73FB4">
-              <dmn:text>true</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_6086625D-F8C2-4DCC-8AD3-8DD0BB5F0C0A">
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_C4E8AC5A-6B22-4607-BC2A-29CE99EF2246">
@@ -587,10 +568,7 @@
           </dmn:rule>
           <dmn:rule id="_C0E0693A-0AC6-4BF2-B705-B91335D9F24B">
             <dmn:inputEntry id="_9477C671-927F-48B1-A050-A276F9B28D9A">
-              <dmn:text>-</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_BD233732-9C4E-4C99-83DF-960A8827EF8E">
-              <dmn:text>-</dmn:text>
+              <dmn:text>false</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_9366B2ED-C41F-41BB-83C4-436F0A5297AB">
               <dmn:text>InputPersoenlichesbudget.antragssteller.fahrkosten</dmn:text>
@@ -977,7 +955,7 @@
     <dmn:knowledgeRequirement id="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
       <dmn:requiredKnowledge href="#_9105DA37-1603-4F9E-AA31-9E007A7058EC" />
     </dmn:knowledgeRequirement>
-    <dmn:decisionTable id="_FBB12748-492E-49B0-B458-1732D261263A" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row" label="PersoenlichesbudgetBerechnet" typeRef="number">
+    <dmn:decisionTable id="_FBB12748-492E-49B0-B458-1732D261263A" hitPolicy="FIRST" preferredOrientation="Rule-as-Row" label="PersoenlichesbudgetBerechnet" typeRef="number">
       <dmn:input id="_0C8AD661-C6D0-4C62-B0F4-43E795CB8DD6">
         <dmn:inputExpression id="_3B4CC586-C003-4B9F-AF97-8E34B90A9731" typeRef="boolean">
           <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
@@ -1159,8 +1137,7 @@
             <kie:width>377</kie:width>
             <kie:width>190</kie:width>
           </kie:ComponentWidths>
-          <kie:ComponentWidths dmnElementRef="_F3CA5F50-CB7F-4F83-AD61-F386E6CF5809">
-          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_F3CA5F50-CB7F-4F83-AD61-F386E6CF5809" />
           <kie:ComponentWidths dmnElementRef="_A9BF879C-6930-4F20-9597-5B989B5A92B4">
             <kie:width>190</kie:width>
           </kie:ComponentWidths>
@@ -1172,8 +1149,7 @@
             <kie:width>359</kie:width>
             <kie:width>371</kie:width>
           </kie:ComponentWidths>
-          <kie:ComponentWidths dmnElementRef="_3506322D-A197-483A-8ED8-391880918F6D">
-          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_3506322D-A197-483A-8ED8-391880918F6D" />
           <kie:ComponentWidths dmnElementRef="_26ACC6F8-8DCE-4B3E-8754-013C29AB452F">
             <kie:width>371</kie:width>
           </kie:ComponentWidths>
