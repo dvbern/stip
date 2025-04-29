@@ -17,7 +17,9 @@
 
 package ch.dvbern.stip.api.common.repo;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
@@ -27,5 +29,9 @@ public interface BaseRepository<T extends AbstractEntity> extends PanacheReposit
 
     default T requireById(UUID id) {
         return findByIdOptional(id).orElseThrow(NotFoundException::new);
+    }
+
+    default Stream<T> requireAllById(final List<UUID> ids) {
+        return list("id in ?1", ids).stream();
     }
 }
