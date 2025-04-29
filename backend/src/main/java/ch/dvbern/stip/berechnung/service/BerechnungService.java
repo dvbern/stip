@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -61,6 +63,7 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kie.api.builder.Message;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.DMNDecisionResult.DecisionEvaluationStatus;
@@ -534,32 +537,35 @@ public class BerechnungService {
         }
 
         final var listener = new DefaultDMNRuntimeEventListener() {
-            final List<AfterEvaluateDecisionEvent> decisionNodeList = new ArrayList<>();
-            final List<DMNDecisionResult> unsuccessfulResults = new ArrayList<>();
+            final HashSet<AfterEvaluateDecisionEvent> decisionNodeSet = new HashSet<>();
+            final HashSet<DMNDecisionResult> failedResultsSet = new HashSet<>();
 
             @Override
             public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
-                decisionNodeList.add(event);
-                unsuccessfulResults.addAll(event.getResult().getDecisionResults());
+                decisionNodeSet.add(event);
+                event.getResult()
+                    .getDecisionResults()
+                    .stream()
+                    .filter(r -> r.getEvaluationStatus() == DecisionEvaluationStatus.FAILED)
+                    .forEach(failedResultsSet::add);
             }
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
-        if (
-            listener.unsuccessfulResults.stream()
-                .anyMatch(
-                    dmnDecisionResult -> dmnDecisionResult
-                        .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
-                )
-        ) {
+        if (!listener.failedResultsSet.isEmpty()) {
             LOG.warn(
                 "DMN evaluation had decision results that did not succeed: {}",
+                Arrays.toString(listener.failedResultsSet.toArray())
+            );
+            LOG.warn(
+                "DMN evaluation Messages: {}",
                 Arrays.toString(
-                    listener.unsuccessfulResults.stream()
-                        .filter(
-                            dmnDecisionResult -> dmnDecisionResult
-                                .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
-                        )
+                    Stream.concat(
+                        listener.failedResultsSet.stream()
+                            .flatMap(d -> d.getMessages().stream()),
+                        result.getMessages().stream()
+                    )
+                        .map(Message::getText)
                         .toArray()
                 )
             );
@@ -570,7 +576,9 @@ public class BerechnungService {
             throw new AppErrorException("Result of Stipendienberechnung was null!");
         }
 
-        return new BerechnungResult(stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeList);
+        return new BerechnungResult(
+            stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeSet.stream().toList()
+        );
     }
 
     boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDate eingereicht) {
