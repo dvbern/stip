@@ -18,5 +18,18 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
 
   "sozialdienst-app.cockpit.quick-filter.ALLE": "Alle",
-  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche"
+  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche",
+
+  "sozialdienst-app.cockpit.table.description": "Beschreibung der Tabelle",
+  "sozialdienst-app.cockpit.table.fall": "Fallnummer",
+  "sozialdienst-app.cockpit.table.nachname": "Nachname",
+  "sozialdienst-app.cockpit.table.vorname": "Vorname",
+  "sozialdienst-app.cockpit.table.geburtsdatum": "Geburtsdatum",
+  "sozialdienst-app.cockpit.table.wohnort": "Wohnort",
+  "sozialdienst-app.cockpit.table.delegierungAngenommen": "Angenommen",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ABGELEHNT": "Abgelehnt",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANGENOMMEN": "Angenommen",
+  "sozialdienst-app.cockpit.no-status-filter": "Kein Statusfilter",
+  "sozialdienst-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
+  "sozialdienst-app.cockpit.delegationen": "Delegationen"
 }

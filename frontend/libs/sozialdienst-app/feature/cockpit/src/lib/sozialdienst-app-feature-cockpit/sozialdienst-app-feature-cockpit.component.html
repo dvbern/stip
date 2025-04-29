@@ -66,7 +66,7 @@
 
         <!-- table -->
         <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
-          {{ 'sozialdienst-app.cockpit.gesuche' | translate }}
+          {{ 'sozialdienst-app.cockpit.delegationen' | translate }}
         </h1>
 
         <div class="tw-dv-table tw-my-6">
@@ -271,34 +271,39 @@
 
                 <ng-container matColumnDef="STATUS">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
-                    {{ 'sozialdienst-app.cockpit.table.status' | translate }}
+                    {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | translate }}
                     <mat-form-field class="tw-w-full">
                       <mat-select
-                        [aria-label]="'sozialdienst-app.cockpit.table.status' | translate"
-                        formControlName="status"
+                        [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | translate"
+                        formControlName="delegierungAngenommen"
                         (click)="$event.stopPropagation()"
                         class="!tw-font-normal"
                         [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | translate"
                         panelClass="table-select"
                       >
-                        <mat-option [value]="null">
+                        <mat-option [value]="undefined">
                           {{ 'sozialdienst-app.cockpit.no-status-filter' | translate }}
                         </mat-option>
-                        @for (status of statusValuesSig().status; track status) {
-                          <mat-option [value]="status">
-                            {{ 'sozialdienst-app.fall.status.' + statusValuesSig().typ + '.' + status | translate }}
+
+                        @for (status of statusValues; track status.key) {
+                          <mat-option [value]="status.value">
+                            {{ 'sozialdienst-app.cockpit.table.delegierung.' + status.key | translate }}
                           </mat-option>
                         }
                       </mat-select>
                     </mat-form-field>
+                    <div>{{ filterForm.controls.delegierungAngenommen.value }}</div>
                   </th>
-                  <!-- todo: add status, fallnr is not correct -->
                   <td
                     mat-cell
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
                     class="tw-w-48 tw-whitespace-nowrap"
                   >
-                    {{ fall.fallNummer | translate }}
+                    {{
+                      fall.delegierung.delegierungAngenommen
+                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANGENOMMEN' | translate)
+                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ABGELEHNT' | translate)
+                    }}
                   </td>
                 </ng-container>
 
@@ -396,16 +401,17 @@
             }
           </form>
 
-          <!-- [length]="gesuchStore.cockpitViewSig().faelle?.totalEntries" -->
           <mat-paginator
             showFirstLastButtons
             [pageSizeOptions]="pageSizes"
             [pageSize]="pageSize() ?? defaultPageSize"
             [pageIndex]="page() ?? 0"
+            [length]="delegationStore.cockpitViewSig().paginatedSozDashboard?.totalEntries ?? 0"
             (page)="paginate($event)"
           ></mat-paginator>
         </div>
       </div>
+      <dv-shared-ui-version-text [version]="versionSig()" class="text-muted"></dv-shared-ui-version-text>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

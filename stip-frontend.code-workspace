@@ -124,7 +124,15 @@
           "url": "http://localhost:4201",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
-        }
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "Soz Edge",
+          "url": "http://localhost:4202",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
       ]
     },
     "editor.formatOnSave": true,

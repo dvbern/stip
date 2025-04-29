@@ -29,6 +29,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import {
   differenceInCalendarMonths,
@@ -36,8 +37,10 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
+import { fi } from 'date-fns/locale';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
@@ -69,8 +72,18 @@ import {
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { getDiffFormat } from '@dv/shared/util/validator-date';
-import { restrictNumberParam } from '@dv/shared/util-fn/filter-util';
+import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import {
+  getDiffFormat,
+  parseDate,
+  toBackendLocalDate,
+} from '@dv/shared/util/validator-date';
+import {
+  inverseSortMap,
+  makeEmptyStringPropertiesNull,
+  restrictNumberParam,
+} from '@dv/shared/util-fn/filter-util';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import {
   LetzteAktivitaetFromToKeys,
@@ -79,14 +92,6 @@ import {
 } from '@dv/sozialdienst-app/model/delegation';
 
 const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
-
-const createQuery = <
-  T extends Partial<DelegierenServiceGetDelegierungSozRequestParams>,
->(
-  value: T,
-) => {
-  return value;
-};
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-cockpit',
@@ -124,6 +129,7 @@ const createQuery = <
   ],
   templateUrl: './sozialdienst-app-feature-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideDvDateAdapter(), paginatorTranslationProvider()],
 })
 export class SozialdienstAppFeatureCockpitComponent
   implements SozCockitComponentInputs, OnInit
@@ -132,7 +138,9 @@ export class SozialdienstAppFeatureCockpitComponent
   private formBuilder = inject(NonNullableFormBuilder);
   private permissionStore = inject(PermissionStore);
   private router = inject(Router);
+  private store = inject(Store);
   delegationStore = inject(DelegationStore);
+  versionSig = this.store.selectSignal(selectVersion);
 
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
@@ -158,7 +166,7 @@ export class SozialdienstAppFeatureCockpitComponent
   delegierungAngenommen = input<boolean | undefined, string | undefined>(
     undefined,
     {
-      transform: booleanAttribute,
+      transform: booleanOrUndefined,
     },
   );
 
@@ -245,37 +253,22 @@ export class SozialdienstAppFeatureCockpitComponent
     );
   });
 
-  // todo: is this even necessary?
-  statusValuesSig = computed(() => {
-    // const typ = this.typChangedSig();
-    // if (!typ) {
-    //   return null;
-    // }
-
-    // return {
-    //   typ: typ === 'AENDERUNG' ? 'tranche' : 'contract',
-    //   status: statusByTyp[typ],
-    // };
-
-    return {
-      typ: 'bla',
-      status: [
-        {
-          id: '1',
-          name: 'Status 1',
-        },
-        {
-          id: '2',
-          name: 'Status 2',
-        },
-      ],
-    };
-  });
+  // for delegierungAngenommen
+  statusValues = [
+    {
+      key: 'DELEGIERUNG_ANGENOMMEN',
+      value: true,
+    },
+    {
+      key: 'DELEGIERUNG_ABGELEHNT',
+      value: false,
+    },
+  ];
 
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
   );
-  filterStartEndFormChangedSig = toSignal(
+  filterFromToFormChangedSig = toSignal(
     this.filterFromToForm.valueChanges.pipe(
       distinctUntilChanged(
         (a, b) =>
@@ -288,9 +281,12 @@ export class SozialdienstAppFeatureCockpitComponent
     ),
   );
 
-  // todo: implement
   faelleDataSourceSig = computed(() => {
-    const dataSource = new MatTableDataSource<FallWithDelegierung>([]);
+    const faelle =
+      this.delegationStore.cockpitViewSig().paginatedSozDashboard?.entries ??
+      [];
+
+    const dataSource = new MatTableDataSource<FallWithDelegierung>(faelle);
     return dataSource;
   });
 
@@ -300,11 +296,178 @@ export class SozialdienstAppFeatureCockpitComponent
         this.sidenavSig().close();
       }
     });
+
+    // Handle the case where the page is higher than the total number of pages
+    effect(
+      () => {
+        const { page, pageSize } = this.getInputs();
+        const totalEntries =
+          this.delegationStore.cockpitViewSig().paginatedSozDashboard
+            ?.totalEntries;
+
+        if (
+          page &&
+          pageSize &&
+          totalEntries &&
+          page * pageSize > totalEntries
+        ) {
+          this.router.navigate(['.'], {
+            queryParams: {
+              page: Math.ceil(totalEntries / pageSize) - 1,
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    // Handle string filter form control changes
+    effect(
+      () => {
+        this.filterFormChangedSig();
+        const formValue = this.filterForm.getRawValue();
+        const query = createQuery({
+          fallNummer: formValue.fallNummer,
+          nachname: formValue.nachname,
+          vorname: formValue.vorname,
+          ort: formValue.ort,
+          delegierungAngenommen: formValue.delegierungAngenommen,
+          geburtsdatum: formValue.geburtsdatum
+            ? toBackendLocalDate(formValue.geburtsdatum)
+            : undefined,
+        });
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
+
+    // Handle from-to filter form control changes seperately
+    effect(
+      () => {
+        this.filterFromToFormChangedSig();
+        const formValue = this.filterFromToForm.getRawValue();
+        const query = createQuery({
+          letzteAktivitaetFrom:
+            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
+              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
+              : undefined,
+          letzteAktivitaetTo:
+            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
+              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
+              : undefined,
+        });
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      {
+        allowSignalWrites: true,
+      },
+    );
+
+    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
+    const quickFilterChanged = toSignal(
+      this.quickFilterForm.controls.query.valueChanges,
+    );
+    effect(
+      () => {
+        const query = quickFilterChanged();
+        if (!query) {
+          return;
+        }
+        this.router.navigate(['.'], {
+          queryParams: {
+            show: query === DEFAULT_FILTER ? undefined : query,
+          },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
+
+    // when the route param inputs change, load the data
+    effect(
+      () => {
+        const {
+          query,
+          filter,
+          fromToFilter,
+          sortColumn,
+          sortOrder,
+          page,
+          pageSize,
+        } = this.getInputs();
+
+        this.delegationStore.loadPaginatedSozDashboard$({
+          getDelegierungSozQueryType: query,
+          ...fromToFilter,
+          sortColumn,
+          sortOrder,
+          piaVorname: filter.vorname,
+          piaNachname: filter.nachname,
+          piaGeburtsdatum: filter.geburtsdatum,
+          fallNummer: filter.fallNummer,
+          status: parseBoolean(filter.delegierungAngenommen),
+          piaWohnort: filter.ort,
+          page: page ?? 0,
+          pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
+        });
+      },
+      { allowSignalWrites: true },
+    );
   }
 
-  private getInputs() {}
+  private getInputs() {
+    const query = this.showViewSig();
+    const filter = {
+      fallNummer: this.fallNummer(),
+      nachname: this.nachname(),
+      vorname: this.vorname(),
+      geburtsdatum: this.geburtsdatum(),
+      ort: this.ort(),
+      delegierungAngenommen: this.delegierungAngenommen(),
+    };
+    const fromToFilter = {
+      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
+      letzteAktivitaetTo: this.letzteAktivitaetFrom(),
+    };
+    const page = this.page();
+    const pageSize = this.pageSize();
+    const sortColumn = this.sortColumn();
+    const sortOrder = this.sortOrder();
 
-  sortData(event: Sort) {}
+    return {
+      query,
+      filter,
+      fromToFilter,
+      page,
+      pageSize,
+      sortColumn,
+      sortOrder,
+    };
+  }
+
+  sortData(event: Sort) {
+    this.router.navigate(['.'], {
+      queryParams: createQuery({
+        sortColumn: event.active as SozDashboardColumn,
+        sortOrder: event.direction as SortOrder,
+      }),
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
 
   paginate(event: PageEvent) {
     this.router.navigate(['.'], {
@@ -317,5 +480,52 @@ export class SozialdienstAppFeatureCockpitComponent
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const { query, filter, fromToFilter, sortColumn, sortOrder } =
+      this.getInputs();
+
+    this.quickFilterForm.reset({ query });
+    this.filterForm.reset({
+      ...filter,
+      delegierungAngenommen: filter.delegierungAngenommen,
+      geburtsdatum: parseDate(filter.geburtsdatum ?? ''),
+    });
+    this.filterFromToForm.reset({
+      ...fromToFilter,
+      letzteAktivitaetFrom: parseDate(fromToFilter.letzteAktivitaetFrom),
+      letzteAktivitaetTo: parseDate(fromToFilter.letzteAktivitaetTo),
+    });
+
+    if (sortColumn && sortOrder) {
+      this.sortSig().sort({
+        id: sortColumn,
+        start: inverseSortMap[sortOrder],
+        disableClear: false,
+      });
+    }
+
+    this.filterForm.markAllAsTouched();
+  }
 }
+
+const parseBoolean = (value: boolean | undefined): string | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+  return value ? 'true' : 'false';
+};
+
+const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+  return value === 'true' ? true : false;
+};
+
+const createQuery = <
+  T extends Partial<DelegierenServiceGetDelegierungSozRequestParams>,
+>(
+  value: T,
+) => {
+  return value;
+};

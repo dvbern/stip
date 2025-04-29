@@ -20,12 +20,12 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type DelegationState = {
-  faelleWithDelegierung: CachedRemoteData<PaginatedSozDashboard>;
+  paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
   delegation: RemoteData<unknown>;
 };
 
 const initialState: DelegationState = {
-  faelleWithDelegierung: initial(),
+  paginatedSozDashboard: initial(),
   delegation: initial(),
 };
 
@@ -39,27 +39,27 @@ export class DelegationStore extends signalStore(
 
   cockpitViewSig = computed(() => {
     return {
-      faelleWithDelegierung: fromCachedDataSig(this.faelleWithDelegierung),
-      loading: isPending(this.faelleWithDelegierung()),
+      paginatedSozDashboard: fromCachedDataSig(this.paginatedSozDashboard),
+      loading: isPending(this.paginatedSozDashboard()),
     };
   });
 
-  loadFaelleWithDelegierung$ =
+  loadPaginatedSozDashboard$ =
     rxMethod<DelegierenServiceGetDelegierungSozRequestParams>(
       pipe(
         tap(() => {
           patchState(this, (state) => ({
-            faelleWithDelegierung: cachedPending(state.faelleWithDelegierung),
+            paginatedSozDashboard: cachedPending(state.paginatedSozDashboard),
           }));
         }),
         switchMap((params) =>
-          this.delegierenService
-            .getDelegierungSoz$(params)
-            .pipe(
-              handleApiResponse((faelleWithDelegierung) =>
-                patchState(this, { faelleWithDelegierung }),
-              ),
+          this.delegierenService.getDelegierungSoz$(params).pipe(
+            handleApiResponse((paginatedSozDashboard) =>
+              patchState(this, {
+                paginatedSozDashboard: paginatedSozDashboard,
+              }),
             ),
+          ),
         ),
       ),
     );
