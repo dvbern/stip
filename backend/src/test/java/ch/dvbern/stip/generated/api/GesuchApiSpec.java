@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
-import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDtoSpec;
@@ -100,7 +99,6 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getAllBeschwerdeVerlaufEntrys(),
-                getAllBeschwerdeentscheideForGesuch(),
                 getBerechnungForGesuch(),
                 getBerechnungsBlattForGesuch(),
                 getBerechnungsblattDownloadToken(),
@@ -189,10 +187,6 @@ public class GesuchApiSpec {
 
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
-    }
-
-    public GetAllBeschwerdeentscheideForGesuchOper getAllBeschwerdeentscheideForGesuch() {
-        return new GetAllBeschwerdeentscheideForGesuchOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
@@ -1644,79 +1638,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetAllBeschwerdeVerlaufEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
-     * return List&lt;BeschwerdeEntscheidDtoSpec&gt;
-     */
-    public static class GetAllBeschwerdeentscheideForGesuchOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde-entscheid";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAllBeschwerdeentscheideForGesuchOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/beschwerde-entscheid
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/beschwerde-entscheid
-         * @param handler handler
-         * @return List&lt;BeschwerdeEntscheidDtoSpec&gt;
-         */
-        public List<BeschwerdeEntscheidDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<BeschwerdeEntscheidDtoSpec>> type = new TypeRef<List<BeschwerdeEntscheidDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
-         * @return operation
-         */
-        public GetAllBeschwerdeentscheideForGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAllBeschwerdeentscheideForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAllBeschwerdeentscheideForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

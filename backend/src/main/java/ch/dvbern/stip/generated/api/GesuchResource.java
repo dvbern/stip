@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
@@ -136,11 +135,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/{gesuchId}/beschwerde-entscheid")
-    @Produces({ "application/json", "text/plain" })
-    List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")

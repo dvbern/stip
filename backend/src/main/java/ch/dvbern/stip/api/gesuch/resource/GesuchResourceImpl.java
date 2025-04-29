@@ -49,7 +49,6 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
@@ -236,13 +235,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         beschwerdeVerlaufAuthorizer.canRead();
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
-    }
-
-    @RolesAllowed(SB_GESUCH_UPDATE)
-    @Override
-    public List<BeschwerdeEntscheidDto> getAllBeschwerdeentscheideForGesuch(UUID gesuchId) {
-        beschwerdeEntscheidAuthorizer.canRead();
-        return beschwerdeEntscheidService.getAllBeschwerdeEntscheids(gesuchId);
     }
 
     @Override

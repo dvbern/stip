@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -35,7 +34,6 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -282,38 +280,13 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .body()
             .as(BeschwerdeVerlaufEntryDtoSpec[].class);
         assertThat(beschwerdeVerlaufEntries.length, is(2));
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Description("Verify that both BeschwerdeEntscheide have been persited")
-    @Order(13)
-    void getAllBeschwerdeEntscheideShouldWorkTest() {
-        final var beschwerdeEntscheids = gesuchApiSpec.getAllBeschwerdeentscheideForGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(BeschwerdeEntscheidDtoSpec[].class);
-        assertThat(beschwerdeEntscheids.length, is(2));
-
-        final var beschwerdeEntscheid = beschwerdeEntscheids[0];
-        assertThat(beschwerdeEntscheid.getKommentar(), is("test"));
-        assertThat(
-            Arrays.stream(beschwerdeEntscheids).anyMatch(BeschwerdeEntscheidDtoSpec::getBeschwerdeErfolgreich),
-            is(true)
-        );
-        assertThat(beschwerdeEntscheid.getDokumente().size(), is(1));
-        dokumentId = beschwerdeEntscheid.getDokumente().get(0).getId();
+        dokumentId = beschwerdeVerlaufEntries[0].getBeschwerdeEntscheid().getDokumente().get(0).getId();
     }
 
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that the documents of a BeschwerdeEntscheid is available")
-    @Order(14)
+    @Order(12)
     void getBeschwerdeEntscheidDokumentTest() throws IOException {
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
