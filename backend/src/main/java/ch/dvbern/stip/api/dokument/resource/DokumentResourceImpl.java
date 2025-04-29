@@ -52,6 +52,7 @@ import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -194,6 +195,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Blocking
     @Override
+    @PermitAll
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
         return switch (dokumentArt) {
