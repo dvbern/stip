@@ -39,7 +39,9 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.RolleRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -47,6 +49,7 @@ import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -71,6 +74,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -104,6 +108,8 @@ public class TestcaseSeeding extends Seeder {
     private final AusbildungRepository ausbildungRepository;
     private final AusbildungMapper ausbildungMapper;
     private final TenantService tenantService;
+    private final RolleRepository rolleRepository;
+    private final ZuordnungService zuordnungService;
 
     @Override
     public int getPriority() {
@@ -201,6 +207,29 @@ public class TestcaseSeeding extends Seeder {
 
             index++;
         }
+
+        final var foundAdmin = benutzerRepository.findByRolle(OidcConstants.ROLE_ADMIN).findFirst();
+        if (foundAdmin.isEmpty()) {
+            final var adminRollen = rolleRepository.findByKeycloakIdentifier(Set.of(OidcConstants.ROLE_ADMIN));
+            Rolle adminRolle;
+            if (!adminRollen.isEmpty()) {
+                adminRolle = adminRollen.stream().findFirst().get();
+            } else {
+                adminRolle = new Rolle()
+                    .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN);
+                rolleRepository.persistAndFlush(adminRolle);
+            }
+
+            final var benutzer = new Benutzer()
+                .setNachname("Seeding")
+                .setVorname("Admin")
+                .setBenutzerStatus(BenutzerStatus.AKTIV)
+                .setRollen(Set.of(adminRolle))
+                .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));
+            benutzerRepository.persistAndFlush(benutzer);
+        }
+
+        zuordnungService.updateZuordnungOnAllFaelle();
     }
 
     @Override

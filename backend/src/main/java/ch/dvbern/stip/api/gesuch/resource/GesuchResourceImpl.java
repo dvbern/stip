@@ -71,6 +71,7 @@ import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -337,6 +338,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @Blocking
+    @PermitAll
     public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
         JsonWebToken jwt;
         try {
