@@ -24,11 +24,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -44,6 +46,7 @@ import org.hibernate.envers.query.AuditEntity;
 public class GesuchTrancheHistoryRepository {
     private final EntityManager em;
     private final GesuchHistoryService gesuchHistoryService;
+    private final GesuchDokumentMapper gesuchDokumentMapper;
 
     @Transactional
     public GesuchTranche getInitialRevision(final UUID gesuchTrancheId) {
@@ -71,6 +74,13 @@ public class GesuchTrancheHistoryRepository {
         } catch (final NoResultException e) {
             throw new NotFoundException();
         }
+    }
+
+    public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTrancheOfLatestRevision(final UUID gesuchTrancheId) {
+        return getLatestVersion(gesuchTrancheId).getGesuchDokuments()
+            .stream()
+            .map(gesuchDokumentMapper::toDto)
+            .toList();
     }
 
     @Transactional
