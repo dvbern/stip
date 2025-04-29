@@ -38,10 +38,8 @@ public class DokumentAuthorizerUtil {
                 onForbidden.run();
             }
 
-            final var isNotGesuchstellerButDelegierter =
-                !AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
-                && AuthorizerUtil
-                    .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+            final var isNotGesuchstellerButDelegierter = AuthorizerUtil
+                .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
 
             return canUploadOrDeleteCheck.getAsBoolean() && isNotGesuchstellerButDelegierter;
         }

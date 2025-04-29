@@ -77,6 +77,7 @@ public abstract class GesuchMapper {
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
+    @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
     public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
 
     @Named("getFullNameOfSachbearbeiter")

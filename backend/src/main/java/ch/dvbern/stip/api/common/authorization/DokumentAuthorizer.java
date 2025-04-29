@@ -93,4 +93,28 @@ public class DokumentAuthorizer extends BaseAuthorizer {
             );
         }
     }
+
+    @Transactional
+    public void canUpdateGesuchDokument(UUID gesuchDokumentId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isAdminOrSb(currentBenutzer)) {
+            throw new ForbiddenException();
+        }
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+
+        final var trancheTyp = gesuchDokument.getGesuchTranche().getTyp();
+
+        if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
+            AuthorizerUtil.gesuchStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche().getGesuch(),
+                List.of(Gesuchstatus.IN_BEARBEITUNG_SB)
+            );
+        } else if (trancheTyp == GesuchTrancheTyp.AENDERUNG) {
+            AuthorizerUtil.gesuchTrancheStatusOneOfOrElseThrow(
+                gesuchDokument.getGesuchTranche(),
+                List.of(GesuchTrancheStatus.UEBERPRUEFEN)
+            );
+        }
+    }
 }
