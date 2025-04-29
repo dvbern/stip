@@ -9,10 +9,10 @@ import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { AbschlussPhase } from '@dv/shared/model/einreichen';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 
-import { GesuchAppFeatureGesuchFormAbschlussComponent } from './gesuch-app-feature-gesuch-form-abschluss.component';
+import { SharedFeatureGesuchFormAbschlussComponent } from './shared-feature-gesuch-form-abschluss.component';
 
 async function setup(abschlussPhase: AbschlussPhase) {
-  return await render(GesuchAppFeatureGesuchFormAbschlussComponent, {
+  return await render(SharedFeatureGesuchFormAbschlussComponent, {
     imports: [
       TranslateTestingModule.withTranslations({}),
       NoopAnimationsModule,
@@ -59,7 +59,7 @@ async function setup(abschlussPhase: AbschlussPhase) {
   });
 }
 
-describe(GesuchAppFeatureGesuchFormAbschlussComponent.name, () => {
+describe(SharedFeatureGesuchFormAbschlussComponent.name, () => {
   it('should render a warning alert if the gesuch is not ready', async () => {
     const { getByTestId, detectChanges } = await setup('NOT_READY');
 

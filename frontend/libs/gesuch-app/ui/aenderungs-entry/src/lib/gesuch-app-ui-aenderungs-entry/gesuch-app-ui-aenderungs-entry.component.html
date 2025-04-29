@@ -34,7 +34,7 @@
       {{ 'gesuch-app.gesuch.status.tranche.' + tranche.status | translate }}
     </span>
     <div class="mb-3 tw-flex-grow"></div>
-    @if (tranche.status === 'IN_BEARBEITUNG_GS') {
+    @if (gesuch.canEdit) {
       <button
         type="button"
         class="btn btn-outline-primary mb-2 w-100"
@@ -48,7 +48,7 @@
       class="btn btn-primary w-100"
       [class.btn-outline-primary]="tranche.status !== 'IN_BEARBEITUNG_GS'"
       data-testid="cockpit-gesuch-edit"
-      [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
+      [routerLink]="['/gesuch', gesuch.id, 'aenderung', tranche.id]"
     >
       {{
         (tranche.status === 'IN_BEARBEITUNG_GS'

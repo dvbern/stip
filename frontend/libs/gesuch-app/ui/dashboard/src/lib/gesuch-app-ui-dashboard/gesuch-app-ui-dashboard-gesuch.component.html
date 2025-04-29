@@ -168,8 +168,8 @@
           <div class="divider me-4"></div>
           <dv-gesuch-app-ui-aenderungs-entry
             class="tw-flex tw-flex-1 tw-flex-col"
+            [gesuch]="gesuch"
             [tranche]="aenderung"
-            [gesuchId]="gesuch.id"
             (deleteAenderung)="deleteAenderung.emit($event)"
           ></dv-gesuch-app-ui-aenderungs-entry>
         }

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -66,14 +67,6 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canReadAllTyps() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminSbOrJurist(currentBenutzer)) {
-            forbidden();
-        }
-    }
-
-    @Transactional
     public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isAdminSbOrJurist(currentBenutzer)) {
@@ -83,7 +76,16 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var customDokumentTyp = customDokumentTypRepository.requireById(customDokumentTypId);
         final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
 
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        final BooleanSupplier isGesuchsteller = () -> AuthorizerUtil.isGesuchstellerOfFallWithoutDelegierung(
+            currentBenutzer,
+            gesuch.getAusbildung()
+                .getFall()
+        );
+
+        if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
             return;
         }
 

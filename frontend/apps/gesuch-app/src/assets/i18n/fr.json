@@ -50,8 +50,5 @@
 
   "gesuch-app.delegieren-dialog.submit": "Déléguer",
 
-  "gesuch-app.ausbildung.dialog.title": "Saisir une formation pour une bourse",
-
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En cours de vérification",
-  "gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN": "Présent"
+  "gesuch-app.ausbildung.dialog.title": "Saisir une formation pour une bourse"
 }

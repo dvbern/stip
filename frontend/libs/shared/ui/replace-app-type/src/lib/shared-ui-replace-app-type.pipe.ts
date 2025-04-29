@@ -3,13 +3,15 @@ import { Pipe, PipeTransform, inject } from '@angular/core';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 
 @Pipe({
-  name: 'prefixAppType',
+  name: 'replaceAppType',
   standalone: true,
 })
-export class SharedUiPrefixAppTypePipe implements PipeTransform {
+export class SharedUiReplaceAppTypePipe implements PipeTransform {
   private config = inject(SharedModelCompileTimeConfig);
 
-  transform(value: `$type.${string}`): string {
+  transform(
+    value: `${string}.$type.${string}` | `$type.${string}` | `${string}.$type`,
+  ): string {
     return `${value.replace('$type', this.config.appType)}`;
   }
 }

@@ -31,6 +31,7 @@ export interface Gesuch {
     einreichedatum?: string;
     delegierung?: Delegierung;
     nachfristDokumente?: string;
+    verfuegt: boolean;
 }
 
 
