@@ -58,8 +58,6 @@ class GesuchDokumentAuthorizerTest {
 
     @BeforeEach
     void setUp() {
-        // setup default benutzer for the moment
-        // setupSBBenutzer();
         benutzerService = Mockito.mock(BenutzerService.class);
 
         gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
@@ -81,18 +79,6 @@ class GesuchDokumentAuthorizerTest {
         );
     }
 
-    private void setupSBBenutzer() {
-        setupBenutzerOfRole(OidcConstants.ROLE_SACHBEARBEITER);
-    }
-
-    private void setupGSBenutzer() {
-        setupBenutzerOfRole(OidcConstants.ROLE_GESUCHSTELLER);
-    }
-
-    private void setupSozMABenutzer() {
-        setupBenutzerOfRole(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
-    }
-
     private void setupBenutzerOfRole(final String role) {
         benutzerService = Mockito.mock(BenutzerService.class);
         mockBenutzer = new Benutzer();
@@ -102,7 +88,7 @@ class GesuchDokumentAuthorizerTest {
 
     static Stream<Arguments> provideDataToSucceed() {
         return Stream.of(
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 // Setup for SB
                 .of(
                     OidcConstants.ROLE_SACHBEARBEITER,
@@ -112,7 +98,7 @@ class GesuchDokumentAuthorizerTest {
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 ),
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 // Setup for SB
                 .of(
                     OidcConstants.ROLE_SACHBEARBEITER,
@@ -124,7 +110,7 @@ class GesuchDokumentAuthorizerTest {
                 ),
             // Setup for Admin
 
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 // Setup for SB
                 .of(
                     OidcConstants.ROLE_ADMIN,
@@ -149,7 +135,7 @@ class GesuchDokumentAuthorizerTest {
 
     static Stream<Arguments> provideDataToFail() {
         return Stream.of(
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 .of(
                     OidcConstants.ROLE_GESUCHSTELLER,
                     GesuchTrancheTyp.TRANCHE,
@@ -158,7 +144,7 @@ class GesuchDokumentAuthorizerTest {
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 ),
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 .of(
                     OidcConstants.ROLE_GESUCHSTELLER,
                     GesuchTrancheTyp.AENDERUNG,
@@ -167,7 +153,7 @@ class GesuchDokumentAuthorizerTest {
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 ),
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 .of(
                     OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
                     GesuchTrancheTyp.TRANCHE,
@@ -176,7 +162,7 @@ class GesuchDokumentAuthorizerTest {
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 ),
-            org.junit.jupiter.params.provider.Arguments
+            Arguments
                 .of(
                     OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
                     GesuchTrancheTyp.AENDERUNG,
