@@ -56,17 +56,16 @@ public class DelegierenResourceImpl implements DelegierenResource {
         @NotNull Integer page,
         @NotNull Integer pageSize,
         String fallNummer,
-        String piaNachname,
-        String piaVorname,
-        LocalDate piaGeburtsdatum,
-        String piaWohnort,
-        String status,
+        String nachname,
+        String vorname,
+        LocalDate geburtsdatum,
+        String wohnort,
+        Boolean delegierungAngenommen,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
-
         // TODO Auto-generated method stub
         return new PaginatedSozDashboardDto();
     }

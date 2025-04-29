@@ -178,11 +178,11 @@ public class DelegierenApiSpec {
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
      * @see #fallNummerQuery  (optional)
-     * @see #piaNachnameQuery  (optional)
-     * @see #piaVornameQuery  (optional)
-     * @see #piaGeburtsdatumQuery  (optional)
-     * @see #piaWohnortQuery  (optional)
-     * @see #statusQuery  (optional)
+     * @see #nachnameQuery  (optional)
+     * @see #vornameQuery  (optional)
+     * @see #geburtsdatumQuery  (optional)
+     * @see #wohnortQuery  (optional)
+     * @see #delegierungAngenommenQuery  (optional)
      * @see #letzteAktivitaetFromQuery  (optional)
      * @see #letzteAktivitaetToQuery  (optional)
      * @see #sortColumnQuery  (optional)
@@ -246,58 +246,58 @@ public class DelegierenApiSpec {
             return this;
         }
 
-        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+        public static final String NACHNAME_QUERY = "nachname";
 
         /**
-         * @param piaNachname (String)  (optional)
+         * @param nachname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper piaNachnameQuery(Object... piaNachname) {
-            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+        public GetDelegierungSozOper nachnameQuery(Object... nachname) {
+            reqSpec.addQueryParam(NACHNAME_QUERY, nachname);
             return this;
         }
 
-        public static final String PIA_VORNAME_QUERY = "piaVorname";
+        public static final String VORNAME_QUERY = "vorname";
 
         /**
-         * @param piaVorname (String)  (optional)
+         * @param vorname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper piaVornameQuery(Object... piaVorname) {
-            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+        public GetDelegierungSozOper vornameQuery(Object... vorname) {
+            reqSpec.addQueryParam(VORNAME_QUERY, vorname);
             return this;
         }
 
-        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+        public static final String GEBURTSDATUM_QUERY = "geburtsdatum";
 
         /**
-         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @param geburtsdatum (LocalDate)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
-            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+        public GetDelegierungSozOper geburtsdatumQuery(Object... geburtsdatum) {
+            reqSpec.addQueryParam(GEBURTSDATUM_QUERY, geburtsdatum);
             return this;
         }
 
-        public static final String PIA_WOHNORT_QUERY = "piaWohnort";
+        public static final String WOHNORT_QUERY = "wohnort";
 
         /**
-         * @param piaWohnort (String)  (optional)
+         * @param wohnort (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper piaWohnortQuery(Object... piaWohnort) {
-            reqSpec.addQueryParam(PIA_WOHNORT_QUERY, piaWohnort);
+        public GetDelegierungSozOper wohnortQuery(Object... wohnort) {
+            reqSpec.addQueryParam(WOHNORT_QUERY, wohnort);
             return this;
         }
 
-        public static final String STATUS_QUERY = "status";
+        public static final String DELEGIERUNG_ANGENOMMEN_QUERY = "delegierungAngenommen";
 
         /**
-         * @param status (String)  (optional)
+         * @param delegierungAngenommen (Boolean)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper statusQuery(Object... status) {
-            reqSpec.addQueryParam(STATUS_QUERY, status);
+        public GetDelegierungSozOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
+            reqSpec.addQueryParam(DELEGIERUNG_ANGENOMMEN_QUERY, delegierungAngenommen);
             return this;
         }
 
