@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export type SozDashboardColumn = 'FALLNUMMER' | 'NACHNAME' | 'VORNAME' | 'GEBURTSDATUM' | 'WOHNORT' | 'STATUS' | 'LETZTE_AKTIVITAET';
+export type SozDashboardColumn = 'FALLNUMMER' | 'NACHNAME' | 'VORNAME' | 'GEBURTSDATUM' | 'WOHNORT' | 'DELEGIERUNG_ANGENOMMEN' | 'LETZTE_AKTIVITAET';
 
 export const SozDashboardColumn = {
     FALLNUMMER: 'FALLNUMMER' as SozDashboardColumn,
@@ -18,7 +18,7 @@ export const SozDashboardColumn = {
     VORNAME: 'VORNAME' as SozDashboardColumn,
     GEBURTSDATUM: 'GEBURTSDATUM' as SozDashboardColumn,
     WOHNORT: 'WOHNORT' as SozDashboardColumn,
-    STATUS: 'STATUS' as SozDashboardColumn,
+    DELEGIERUNG_ANGENOMMEN: 'DELEGIERUNG_ANGENOMMEN' as SozDashboardColumn,
     LETZTE_AKTIVITAET: 'LETZTE_AKTIVITAET' as SozDashboardColumn
 };
 

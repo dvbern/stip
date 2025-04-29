@@ -38,11 +38,11 @@ export interface DelegierenServiceFallDelegierenRequestParams {
 export interface DelegierenServiceGetDelegierungSozRequestParams {
     getDelegierungSozQueryType: GetDelegierungSozQueryType;
     fallNummer?: string;
-    piaNachname?: string;
-    piaVorname?: string;
-    piaGeburtsdatum?: string;
-    piaWohnort?: string;
-    status?: string;
+    nachname?: string;
+    vorname?: string;
+    geburtsdatum?: string;
+    wohnort?: string;
+    delegierungAngenommen?: boolean;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
     page: number;
@@ -219,11 +219,11 @@ export class DelegierenService {
             throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungSoz$.');
         }
         const fallNummer = requestParameters.fallNummer;
-        const piaNachname = requestParameters.piaNachname;
-        const piaVorname = requestParameters.piaVorname;
-        const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
-        const piaWohnort = requestParameters.piaWohnort;
-        const status = requestParameters.status;
+        const nachname = requestParameters.nachname;
+        const vorname = requestParameters.vorname;
+        const geburtsdatum = requestParameters.geburtsdatum;
+        const wohnort = requestParameters.wohnort;
+        const delegierungAngenommen = requestParameters.delegierungAngenommen;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const page = requestParameters.page;
@@ -242,25 +242,25 @@ export class DelegierenService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>fallNummer, 'fallNummer');
         }
-        if (piaNachname !== undefined && piaNachname !== null) {
+        if (nachname !== undefined && nachname !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>piaNachname, 'piaNachname');
+            <any>nachname, 'nachname');
         }
-        if (piaVorname !== undefined && piaVorname !== null) {
+        if (vorname !== undefined && vorname !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>piaVorname, 'piaVorname');
+            <any>vorname, 'vorname');
         }
-        if (piaGeburtsdatum !== undefined && piaGeburtsdatum !== null) {
+        if (geburtsdatum !== undefined && geburtsdatum !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>piaGeburtsdatum, 'piaGeburtsdatum');
+            <any>geburtsdatum, 'geburtsdatum');
         }
-        if (piaWohnort !== undefined && piaWohnort !== null) {
+        if (wohnort !== undefined && wohnort !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>piaWohnort, 'piaWohnort');
+            <any>wohnort, 'wohnort');
         }
-        if (status !== undefined && status !== null) {
+        if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>status, 'status');
+            <any>delegierungAngenommen, 'delegierungAngenommen');
         }
         if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

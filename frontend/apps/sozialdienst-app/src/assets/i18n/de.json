@@ -26,10 +26,10 @@
   "sozialdienst-app.cockpit.table.vorname": "Vorname",
   "sozialdienst-app.cockpit.table.geburtsdatum": "Geburtsdatum",
   "sozialdienst-app.cockpit.table.wohnort": "Wohnort",
-  "sozialdienst-app.cockpit.table.delegierungAngenommen": "Angenommen",
-  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ABGELEHNT": "Abgelehnt",
-  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANGENOMMEN": "Angenommen",
-  "sozialdienst-app.cockpit.no-status-filter": "Kein Statusfilter",
+  "sozialdienst-app.cockpit.table.delegierungAngenommen": "Art",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE": "Anfrage",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG": "Delegierung",
+  "sozialdienst-app.cockpit.no-status-filter": "Alle",
   "sozialdienst-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sozialdienst-app.cockpit.delegationen": "Delegationen"
+  "sozialdienst-app.cockpit.delegierungen": "Delegierungen"
 }

@@ -6,7 +6,6 @@ import {
   OnInit,
   QueryList,
   ViewChildren,
-  booleanAttribute,
   computed,
   effect,
   inject,
@@ -37,7 +36,6 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
-import { fi } from 'date-fns/locale';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { selectVersion } from '@dv/shared/data-access/config';
@@ -151,7 +149,7 @@ export class SozialdienstAppFeatureCockpitComponent
   nachname = input<string | undefined>(undefined);
   vorname = input<string | undefined>(undefined);
   geburtsdatum = input<string | undefined>(undefined);
-  ort = input<string | undefined>(undefined);
+  wohnort = input<string | undefined>(undefined);
   letzteAktivitaetFrom = input<string | undefined>(undefined);
   letzteAktivitaetTo = input<string | undefined>(undefined);
   page = input<number | undefined, string | undefined>(undefined, {
@@ -179,7 +177,7 @@ export class SozialdienstAppFeatureCockpitComponent
     nachname: [<string | undefined>undefined],
     vorname: [<string | undefined>undefined],
     geburtsdatum: [<Date | undefined>undefined],
-    ort: [<string | undefined>undefined],
+    wohnort: [<string | undefined>undefined],
     delegierungAngenommen: [<boolean | undefined>undefined],
   } satisfies Record<SozCockpitFilterFormKeys, unknown>);
 
@@ -256,11 +254,11 @@ export class SozialdienstAppFeatureCockpitComponent
   // for delegierungAngenommen
   statusValues = [
     {
-      key: 'DELEGIERUNG_ANGENOMMEN',
+      key: 'DELEGIERUNG',
       value: true,
     },
     {
-      key: 'DELEGIERUNG_ABGELEHNT',
+      key: 'DELEGIERUNG_ANFRAGE',
       value: false,
     },
   ];
@@ -329,11 +327,7 @@ export class SozialdienstAppFeatureCockpitComponent
         this.filterFormChangedSig();
         const formValue = this.filterForm.getRawValue();
         const query = createQuery({
-          fallNummer: formValue.fallNummer,
-          nachname: formValue.nachname,
-          vorname: formValue.vorname,
-          ort: formValue.ort,
-          delegierungAngenommen: formValue.delegierungAngenommen,
+          ...formValue,
           geburtsdatum: formValue.geburtsdatum
             ? toBackendLocalDate(formValue.geburtsdatum)
             : undefined,
@@ -411,15 +405,10 @@ export class SozialdienstAppFeatureCockpitComponent
 
         this.delegationStore.loadPaginatedSozDashboard$({
           getDelegierungSozQueryType: query,
+          ...filter,
           ...fromToFilter,
           sortColumn,
           sortOrder,
-          piaVorname: filter.vorname,
-          piaNachname: filter.nachname,
-          piaGeburtsdatum: filter.geburtsdatum,
-          fallNummer: filter.fallNummer,
-          status: parseBoolean(filter.delegierungAngenommen),
-          piaWohnort: filter.ort,
           page: page ?? 0,
           pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
         });
@@ -435,7 +424,7 @@ export class SozialdienstAppFeatureCockpitComponent
       nachname: this.nachname(),
       vorname: this.vorname(),
       geburtsdatum: this.geburtsdatum(),
-      ort: this.ort(),
+      wohort: this.wohnort(),
       delegierungAngenommen: this.delegierungAngenommen(),
     };
     const fromToFilter = {
@@ -507,13 +496,6 @@ export class SozialdienstAppFeatureCockpitComponent
     this.filterForm.markAllAsTouched();
   }
 }
-
-const parseBoolean = (value: boolean | undefined): string | undefined => {
-  if (value === undefined) {
-    return undefined;
-  }
-  return value ? 'true' : 'false';
-};
 
 const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
   if (value === undefined) {

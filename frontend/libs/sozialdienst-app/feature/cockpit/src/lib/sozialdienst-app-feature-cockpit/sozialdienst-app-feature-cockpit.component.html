@@ -66,7 +66,7 @@
 
         <!-- table -->
         <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
-          {{ 'sozialdienst-app.cockpit.delegationen' | translate }}
+          {{ 'sozialdienst-app.cockpit.delegierungen' | translate }}
         </h1>
 
         <div class="tw-dv-table tw-my-6">
@@ -248,14 +248,14 @@
                           class="tw-w-full"
                           matInput
                           dvMaxLength
-                          formControlName="ort"
+                          formControlName="wohnort"
                           (click)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-                        (clear)="filterForm.controls.ort.reset()"
-                        [valueSig]="filterForm.controls.ort.value"
+                        (clear)="filterForm.controls.wohnort.reset()"
+                        [valueSig]="filterForm.controls.wohnort.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
@@ -269,7 +269,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="STATUS">
+                <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
                     {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | translate }}
                     <mat-form-field class="tw-w-full">
@@ -292,7 +292,6 @@
                         }
                       </mat-select>
                     </mat-form-field>
-                    <div>{{ filterForm.controls.delegierungAngenommen.value }}</div>
                   </th>
                   <td
                     mat-cell
@@ -301,8 +300,8 @@
                   >
                     {{
                       fall.delegierung.delegierungAngenommen
-                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANGENOMMEN' | translate)
-                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ABGELEHNT' | translate)
+                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG' | translate)
+                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE' | translate)
                     }}
                   </td>
                 </ng-container>

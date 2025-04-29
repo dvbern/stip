@@ -29,6 +29,8 @@ export type FallWithDelegierungKeys = keyof Pick<
 >;
 
 export type OrtKey = keyof Pick<Adresse, 'ort'>;
+// prepend wohn
+export type WohnortKey = `wohn${OrtKey}`;
 
 export type LetzteAktivitaetKey = keyof Pick<
   FallWithDelegierung,
@@ -40,13 +42,13 @@ export type LetzteAktivitaetFromToKeys = AppendFromTo<LetzteAktivitaetKey>;
 export type SozCockpitFilterFormKeys =
   | FallWithDelegierungKeys
   | PersoehnelicheAngabenKeys
-  | OrtKey
+  | WohnortKey
   | StatusKey;
 
 export type SozCockpitFilterKeys =
   | FallWithDelegierungKeys
   | PersoehnelicheAngabenKeys
-  | OrtKey
+  | WohnortKey
   | LetzteAktivitaetFromToKeys;
 
 export type SozCockpitFilterInputs = Record<

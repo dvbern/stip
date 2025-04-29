@@ -1765,11 +1765,11 @@ paths:
           in: path
           required: true
         - $ref: '#/components/parameters/fallNummer'
-        - $ref: '#/components/parameters/piaNachname'
-        - $ref: '#/components/parameters/piaVorname'
-        - $ref: '#/components/parameters/piaGeburtsdatum'
-        - $ref: '#/components/parameters/piaWohnort'
-        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/nachname'
+        - $ref: '#/components/parameters/vorname'
+        - $ref: '#/components/parameters/geburtsdatum'
+        - $ref: '#/components/parameters/wohnort'
+        - $ref: '#/components/parameters/delegierungAngenommen'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/page'
@@ -6215,7 +6215,7 @@ components:
         - VORNAME
         - GEBURTSDATUM
         - WOHNORT
-        - STATUS
+        - DELEGIERUNG_ANGENOMMEN
         - LETZTE_AKTIVITAET
     SortOrder:
       enum:
@@ -6489,14 +6489,29 @@ components:
       name: piaNachname
       schema:
         type: string
+    nachname:
+      in: query
+      name: nachname
+      schema:
+        type: string
     piaVorname:
       in: query
       name: piaVorname
       schema:
         type: string
+    vorname:
+      in: query
+      name: vorname
+      schema:
+        type: string
     piaWohnort:
       in: query
       name: piaWohnort
+      schema:
+        type: string
+    wohnort:
+      in: query
+      name: wohnort
       schema:
         type: string
     piaGeburtsdatum:
@@ -6505,6 +6520,17 @@ components:
       schema:
         type: string
         format: date
+    geburtsdatum:
+      in: query
+      name: geburtsdatum
+      schema:
+        type: string
+        format: date
+    delegierungAngenommen:
+      in: query
+      name: delegierungAngenommen
+      schema:
+        type: boolean
     status:
       in: query
       name: status

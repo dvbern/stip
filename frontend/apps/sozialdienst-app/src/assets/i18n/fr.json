@@ -18,5 +18,18 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Voulez-vous vraiment supprimer l'employé du service social \"{{ name }}\" ?",
 
   "sozialdienst-app.cockpit.quick-filter.ALLE": "Tous",
-  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Mes demandes modifiables"
+  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Mes demandes modifiables",
+
+  "sozialdienst-app.cockpit.table.description": "Description de la table",
+  "sozialdienst-app.cockpit.table.fall": "Numéro de cas",
+  "sozialdienst-app.cockpit.table.nachname": "Nom de famille",
+  "sozialdienst-app.cockpit.table.vorname": "Prénom",
+  "sozialdienst-app.cockpit.table.geburtsdatum": "Date de naissance",
+  "sozialdienst-app.cockpit.table.wohnort": "Lieu de résidence",
+  "sozialdienst-app.cockpit.table.delegierungAngenommen": "Type",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE": "Demande",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG": "Délégation",
+  "sozialdienst-app.cockpit.no-status-filter": "Tous",
+  "sozialdienst-app.cockpit.table.letzteAktivitaet": "Dernière activité",
+  "sozialdienst-app.cockpit.delegierungen": "Délégations"
 }
