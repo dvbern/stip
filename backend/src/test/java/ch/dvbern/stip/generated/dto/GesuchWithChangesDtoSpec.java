@@ -37,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchWithChangesDtoSpec.JSON_PROPERTY_CHANGES,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_IS_INITIAL,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_ID,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
@@ -57,6 +58,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchWithChangesDtoSpec {
   public static final String JSON_PROPERTY_CHANGES = "changes";
   private List<GesuchTrancheDtoSpec> changes;
+
+  public static final String JSON_PROPERTY_IS_INITIAL = "isInitial";
+  private Boolean isInitial;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
@@ -134,6 +138,32 @@ public class GesuchWithChangesDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setChanges(List<GesuchTrancheDtoSpec> changes) {
     this.changes = changes;
+  }
+
+
+  public GesuchWithChangesDtoSpec isInitial(Boolean isInitial) {
+    
+    this.isInitial = isInitial;
+    return this;
+  }
+
+   /**
+   * Get isInitial
+   * @return isInitial
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IS_INITIAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getIsInitial() {
+    return isInitial;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IS_INITIAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsInitial(Boolean isInitial) {
+    this.isInitial = isInitial;
   }
 
 
@@ -510,6 +540,7 @@ public class GesuchWithChangesDtoSpec {
     }
     GesuchWithChangesDtoSpec gesuchWithChanges = (GesuchWithChangesDtoSpec) o;
     return Objects.equals(this.changes, gesuchWithChanges.changes) &&
+        Objects.equals(this.isInitial, gesuchWithChanges.isInitial) &&
         Objects.equals(this.fallId, gesuchWithChanges.fallId) &&
         Objects.equals(this.fallNummer, gesuchWithChanges.fallNummer) &&
         Objects.equals(this.ausbildungId, gesuchWithChanges.ausbildungId) &&
@@ -528,7 +559,7 @@ public class GesuchWithChangesDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -536,6 +567,7 @@ public class GesuchWithChangesDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchWithChangesDtoSpec {\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
+    sb.append("    isInitial: ").append(toIndentedString(isInitial)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");

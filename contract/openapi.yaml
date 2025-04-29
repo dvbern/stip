@@ -4116,6 +4116,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTranche'
+        isInitial:
+          type: boolean
     GesuchCreate:
       required:
         - ausbildungId

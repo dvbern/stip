@@ -753,7 +753,9 @@ public class GesuchService {
             // tranche to work with -> findByTrancheId
             requestedTrancheFromGesuchInStatusVerfuegt.orElseThrow(BadRequestException::new),
             // changes
-            requestedTrancheFromGesuchInStatusEingereicht.orElse(null)
+            requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
+            // make sure this flag is true whenever especially this endpoint is called
+            true
         );
     }
 

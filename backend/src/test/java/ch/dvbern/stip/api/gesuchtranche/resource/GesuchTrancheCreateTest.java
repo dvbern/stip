@@ -266,6 +266,8 @@ class GesuchTrancheCreateTest {
                 .body()
                 .as(GesuchWithChangesDtoSpec.class);
         Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+        // make sure this flag is true whenever especially this endpoint is called
+        Assertions.assertThat(gesuchWithChanges.getIsInitial()).isTrue();
     }
 
     @Test
