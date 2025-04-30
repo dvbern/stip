@@ -581,17 +581,25 @@ public class GesuchTrancheService {
 
     @Transactional
     public void dropGesuchTranche(final GesuchTranche gesuchTranche) {
-        gesuchDokumentKommentarService.deleteForGesuchTrancheId(gesuchTranche.getId());
-        gesuchTranche.getGesuchDokuments()
-            .forEach(
-                gesuchDokument -> {
-                    gesuchDokument.getDokumente()
-                        .forEach(dokument -> dokument.getGesuchDokumente().remove(gesuchDokument));
-                    gesuchDokumentRepository.deleteById(gesuchDokument.getId());
-                }
-            );
-        gesuchTranche.getGesuch().getGesuchTranchen().remove(gesuchTranche);
+        for (final var gesuchDokument : gesuchTranche.getGesuchDokuments()) {
+            gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
+        }
+
+        for (final var gesuchDokument : gesuchTranche.getGesuchDokuments()) {
+            for (final var dokument : gesuchDokument.getDokumente()) {
+                dokument.getGesuchDokumente().remove(gesuchDokument);
+            }
+
+            gesuchDokument.getDokumente().clear();
+        }
+
         gesuchTrancheRepository.delete(gesuchTranche);
+    }
+
+    @Transactional
+    public void dropGesuchTranche(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        dropGesuchTranche(gesuchTranche);
     }
 
     @Transactional

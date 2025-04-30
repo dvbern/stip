@@ -1049,9 +1049,8 @@ public class GesuchService {
     @Transactional(TxType.REQUIRES_NEW)
     public void resetGesuchZurueckweisenToVerfuegt(Gesuch gesuch) {
         final var tranchenIdsToDrop = doResetGesuchZurueckweisenToEingereicht(gesuch.getId());
-        final var tranchenToDrop = gesuchTrancheRepository.requireAllById(tranchenIdsToDrop).toList();
-        for (final var trancheToDrop : tranchenToDrop) {
-            gesuchTrancheRepository.delete(trancheToDrop);
+        for (final var trancheIdToDrop : tranchenIdsToDrop) {
+            gesuchTrancheService.dropGesuchTranche(trancheIdToDrop);
         }
     }
 
