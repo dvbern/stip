@@ -82,14 +82,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         return gesuchRepository.requireById(gesuchId);
     }
 
-    @Transactional
-    public void canReadGesuchOfTranche(final UUID trancheId) {
+    private void canReadGesuchOfTranche(final UUID trancheId) {
         final var gesuch = fetchGesuchOfTranche(trancheId);
         canRead(gesuch.getId());
     }
 
     @Transactional
     public void canReadInitialTranche(final UUID trancheId) {
+        canReadGesuchOfTranche(trancheId);
         final var gesuch = fetchGesuchOfTranche(trancheId);
         if (gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).isEmpty()) {
             throw new BadRequestException();
