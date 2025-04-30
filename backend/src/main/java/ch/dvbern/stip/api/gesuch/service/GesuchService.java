@@ -739,10 +739,9 @@ public class GesuchService {
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
                 .findFirst();
 
-        final var foundGesuchInStatusVerfuegt =
-            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).get();
         var requestedTrancheFromGesuchInStatusVerfuegt =
-            foundGesuchInStatusVerfuegt
+            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT)
+                .orElseThrow()
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
