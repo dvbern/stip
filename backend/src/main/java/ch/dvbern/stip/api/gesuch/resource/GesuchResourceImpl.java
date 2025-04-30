@@ -222,6 +222,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.canGesuchEinreichen(gesuchId);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
