@@ -12,10 +12,6 @@ export const sharedFeatureGesuchFormTrancheRoutes: Route[] = [
       ...idAndTrancheIdRoutes({
         title: 'shared.tranche.title',
         component: SharedFeatureGesuchFormTrancheComponent,
-        data: {
-          // reinitialize when navigated to the same route
-          shouldReuseRoute: false,
-        },
       }),
     ],
   },
