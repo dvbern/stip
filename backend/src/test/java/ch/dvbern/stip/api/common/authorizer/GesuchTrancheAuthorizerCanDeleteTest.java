@@ -117,7 +117,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuchTranche_inBearbeitungGS);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuchTranche_inBearbeitungGS);
     }
 
     @Test

@@ -123,7 +123,7 @@ public class GesuchTrancheService {
     private final GesuchMapperUtil gesuchMapperUtil;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
-        return gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId);
+        return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
     }
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
@@ -225,7 +225,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
@@ -333,7 +333,7 @@ public class GesuchTrancheService {
     @Transactional
     public ValidationReportDto validatePagesSB(final UUID gesuchTrancheId) {
         final var gesuchFormular =
-            gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId).getGesuchFormular();
+            gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuchFormular();
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
@@ -569,7 +569,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
-        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTrancheForGs(trancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         return einreichenValidationReport(gesuchTranche);
     }
 
