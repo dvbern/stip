@@ -101,7 +101,7 @@ const dummyFallWithDelegierung: FallWithDelegierung = {
   fallNummer: 'A123456',
   mandant: 'sdflkf-flj-lk',
   delegierung: {
-    delegierungAngenommen: true,
+    delegierungAngenommen: false,
     persoenlicheAngaben: {
       nachname: 'Mustermann',
       vorname: 'Max',
@@ -129,13 +129,11 @@ const dummyFallWithDelegierung: FallWithDelegierung = {
     MatSidenavModule,
     MatTableModule,
     MatSortModule,
-    // MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatSelectModule,
     MatTooltipModule,
-    // MatRadioModule,
     ReactiveFormsModule,
     RouterModule,
     MatPaginatorModule,
@@ -539,7 +537,7 @@ const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
   if (value === undefined) {
     return undefined;
   }
-  return value === 'true' ? true : false;
+  return value === 'true';
 };
 
 const createQuery = <

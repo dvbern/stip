@@ -8,16 +8,24 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h3 class="title h3 mb-4 d-flex">
-    {{ 'shared.form.shared.section.personal-details' | translate }}
-  </h3>
+  <!-- dialog  title  -->
+  <h1 class="title h2 tw-mb-8">
+    @if (dialogData.fall.delegierung.delegierungAngenommen) {
+      {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | translate }}
+    } @else {
+      {{ 'sozialdienst-app.cockpit.table.delegierung.title.anfrage' | translate }}
+    }
+  </h1>
 
   <!-- readonly angaben form -->
+  <h3 class="title h3">
+    {{ 'shared.form.shared.section.personal-details' | translate }}
+  </h3>
   <form
     [formGroup]="form"
     [dvSharedUiFormReadonly]="true"
     data-testid="form-delegierung-form"
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw-mt-4 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
     novalidate
   >
     <!-- fallNummer -->
@@ -101,16 +109,16 @@
   </form>
 
   <!-- horizontal line -->
-  <hr class="tw-my-8 tw-border-t-2 tw-border-t-gray-200" />
+  <hr class="tw-my-8 tw-border-t-2 tw-border-t-gray-500" />
 
   <!-- change zuweisung form -->
-  <h3 class="title h3 mb-4 d-flex">
+  <h3 class="title h3">
     {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | translate }}
   </h3>
   <form
     [formGroup]="zuweisungSozMitarbeiterForm"
     data-testid="form-sozMitarbeiter-form"
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw-mt-4 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
     novalidate
   >
     <!-- sozMitarbeiter Select -->
@@ -130,18 +138,6 @@
         }
       </mat-select>
     </mat-form-field>
-
-    <!-- <div class="tw-flex tw-h-[56px] tw-items-center">
-      <button
-        type="submit"
-        data-testid="sozMitarbeiter-submit"
-        [disabled]="zuweisungSozMitarbeiterForm.invalid"
-        class="btn btn-primary ms-2"
-        (click)="changeSozMitarbeiter()"
-      >
-        {{ 'sozialdienst-app.delegierung-dialog.changeZuweisung.submit' | translate }}
-      </button>
-    </div> -->
 
     <div class="d-flex mt-4 justify-content-between tw-col-span-full">
       <button type="button" data-testid="sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
