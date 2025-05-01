@@ -1037,7 +1037,7 @@ public class GesuchService {
         }
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void resetGesuchZurueckweisenToVerfuegt(Gesuch gesuch) {
         final var tranchenIdsToDrop = doResetGesuchZurueckweisenToEingereicht(gesuch.getId());
         for (final var trancheIdToDrop : tranchenIdsToDrop) {
@@ -1045,7 +1045,7 @@ public class GesuchService {
         }
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public List<UUID> doResetGesuchZurueckweisenToEingereicht(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var relevantAenderungId = gesuch.getGesuchTranchen()
