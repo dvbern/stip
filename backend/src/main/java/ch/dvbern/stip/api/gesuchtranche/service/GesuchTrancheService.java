@@ -225,7 +225,7 @@ public class GesuchTrancheService {
 
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId);
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
