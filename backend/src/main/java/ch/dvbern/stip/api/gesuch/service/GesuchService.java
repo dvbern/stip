@@ -745,12 +745,13 @@ public class GesuchService {
                 .getGesuchTranchen()
                 .stream()
                 .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(BadRequestException::new);
 
         return gesuchMapperUtil.toWithChangesDto(
-            gesuch,
+            requestedTrancheFromGesuchInStatusVerfuegt.getGesuch(),
             // tranche to work with -> findByTrancheId
-            requestedTrancheFromGesuchInStatusVerfuegt.orElseThrow(BadRequestException::new),
+            requestedTrancheFromGesuchInStatusVerfuegt,
             // changes
             requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
             // make sure this flag is true whenever especially this endpoint is called
