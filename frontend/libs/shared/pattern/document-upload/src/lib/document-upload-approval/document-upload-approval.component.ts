@@ -19,12 +19,12 @@ import {
 } from '@dv/shared/model/dokument';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
@@ -33,7 +33,7 @@ import { isInitial } from '@dv/shared/util/remote-data';
   imports: [
     CommonModule,
     SharedUiIconBadgeComponent,
-    SharedUiPrefixAppTypePipe,
+    SharedUiReplaceAppTypePipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     TranslatePipe,

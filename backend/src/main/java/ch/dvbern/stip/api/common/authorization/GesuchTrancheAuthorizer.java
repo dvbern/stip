@@ -218,6 +218,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canAenderungEinreichen(final UUID gesuchTrancheId) {
         canRead(gesuchTrancheId);
+        canUpdateAenderung(gesuchTrancheRepository.requireAenderungById(gesuchTrancheId));
         final var aenderung = gesuchTrancheRepository.requireAenderungById(gesuchTrancheId);
         if (!GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(aenderung.getStatus())) {
             forbidden();

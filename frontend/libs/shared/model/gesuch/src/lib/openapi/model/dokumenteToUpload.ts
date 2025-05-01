@@ -20,5 +20,6 @@ export interface DokumenteToUpload {
     sbCanFehlendeDokumenteUebermitteln?: boolean;
     gsCanDokumenteUebermitteln?: boolean;
     sbCanBearbeitungAbschliessen?: boolean;
+    sbCanUploadUnterschriftenblatt?: boolean;
 }
 
