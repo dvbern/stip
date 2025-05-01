@@ -141,6 +141,7 @@ const createTrancheSetting = (
   return gesuchTranche && gesuchUrlTyp
     ? ({
         type: gesuchTranche.typ,
+        gesuchUrlTyp,
         routesSuffix: [lowercased(gesuchUrlTyp), gesuchTranche.id],
       } as const)
     : null;
