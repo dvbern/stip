@@ -18,7 +18,7 @@ services:
         limits:
           memory: 2G
   localstack:
-    image: docker-registry.dvbern.ch/dockerhub/localstack/localstack:2.2.0
+    image: docker-registry.dvbern.ch/dockerhub/localstack/localstack:4.3.0
     ports:
       - "${STIP_LOCALSTACK_PORT}:4566"
     volumes:
