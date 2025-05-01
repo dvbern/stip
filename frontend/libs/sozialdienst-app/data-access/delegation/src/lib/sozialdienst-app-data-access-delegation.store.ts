@@ -8,10 +8,11 @@ import {
   DelegierenService,
   DelegierenServiceGetDelegierungSozRequestParams,
   PaginatedSozDashboard,
+  SozialdienstBenutzer,
+  SozialdienstService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
-  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
@@ -21,21 +22,24 @@ import {
 
 type DelegationState = {
   paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
-  delegation: RemoteData<unknown>;
+  sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
 };
 
 const initialState: DelegationState = {
   paginatedSozDashboard: initial(),
-  delegation: initial(),
+  sozialdienstBenutzerList: initial(),
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class DelegationStore extends signalStore(
   { protectedState: false },
   withState(initialState),
   withDevtools('DelegationStore'),
 ) {
   private delegierenService = inject(DelegierenService);
+  private sozialdienstService = inject(SozialdienstService);
 
   cockpitViewSig = computed(() => {
     return {
@@ -43,6 +47,32 @@ export class DelegationStore extends signalStore(
       loading: isPending(this.paginatedSozDashboard()),
     };
   });
+
+  sozialdienstMitrabeiterListSig = computed(() => {
+    return {
+      list: fromCachedDataSig(this.sozialdienstBenutzerList),
+      loading: isPending(this.sozialdienstBenutzerList()),
+    };
+  });
+
+  loadSozialdienstBenutzerList$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzerList: cachedPending(
+            state.sozialdienstBenutzerList,
+          ),
+        }));
+      }),
+      switchMap(() =>
+        this.sozialdienstService.getSozialdienstBenutzerList$().pipe(
+          handleApiResponse((benutzer) => {
+            patchState(this, { sozialdienstBenutzerList: benutzer });
+          }),
+        ),
+      ),
+    ),
+  );
 
   loadPaginatedSozDashboard$ =
     rxMethod<DelegierenServiceGetDelegierungSozRequestParams>(

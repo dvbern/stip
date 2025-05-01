@@ -31,5 +31,10 @@
   "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG": "Delegierung",
   "sozialdienst-app.cockpit.no-status-filter": "Alle",
   "sozialdienst-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sozialdienst-app.cockpit.delegierungen": "Delegierungen"
+  "sozialdienst-app.cockpit.delegierungen": "Delegierungen",
+
+  "sozialdienst-app.delegierung-dialog.zuweisung.title": "Zuweisung",
+  "sozialdienst-app.delegierung-dialog.fallNummer.label": "Fallnummer",
+  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Sozialdienstmitarbeiter",
+  "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern"
 }

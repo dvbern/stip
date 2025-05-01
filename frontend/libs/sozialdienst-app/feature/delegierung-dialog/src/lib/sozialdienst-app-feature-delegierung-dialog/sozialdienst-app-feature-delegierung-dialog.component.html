@@ -8,22 +8,33 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h3 mb-4 d-flex">
+  <h3 class="title h3 mb-4 d-flex">
     {{ 'shared.form.shared.section.personal-details' | translate }}
-  </h1>
+  </h3>
 
+  <!-- readonly angaben form -->
   <form
     [formGroup]="form"
-    data-testid="form-delegieren-form"
+    [dvSharedUiFormReadonly]="true"
+    data-testid="form-delegierung-form"
     class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
     novalidate
   >
-    <!-- Anrede -->
+    <!-- fallNummer -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.fallNummer.label' | translate }}</mat-label>
+      <input type="text" matInput dvMaxLength formControlName="fallNummer" data-testid="form-delegierung-fallNummer" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Anrede -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
       <mat-label>{{ 'shared.form.person.salutation.label' | translate }}</mat-label>
       <mat-select
         formControlName="anrede"
-        data-testid="form-delegieren-anrede"
+        data-testid="form-delegierung-anrede"
         [placeholder]="'shared.form.select.empty' | translate"
       >
         @for (a of anredeValues; track $index) {
@@ -40,7 +51,7 @@
     <!-- nachname -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-      <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegieren-nachname" />
+      <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegierung-nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -48,12 +59,13 @@
     <!-- Vorname -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-      <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegieren-vorname" />
+      <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegierung-vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
 
+    <!-- Adresse -->
     <dv-shared-ui-form-address
       class="tw-col-span-full tw-w-full"
       [group]="form.controls.adresse"
@@ -61,6 +73,7 @@
       [language]="languageSig()"
     />
 
+    <!-- Geburtsdatum -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
 
@@ -69,7 +82,7 @@
         [dvMaxLength]="'small'"
         placeholder="dd.mm.yyyy"
         formControlName="geburtsdatum"
-        data-testid="form-delegieren-geburtsdatum"
+        data-testid="form-delegierung-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -85,19 +98,63 @@
         {{ 'shared.form.error.maxDatePast' | translate }}
       </mat-error>
     </mat-form-field>
+  </form>
+
+  <!-- horizontal line -->
+  <hr class="tw-my-8 tw-border-t-2 tw-border-t-gray-200" />
+
+  <!-- change zuweisung form -->
+  <h3 class="title h3 mb-4 d-flex">
+    {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | translate }}
+  </h3>
+  <form
+    [formGroup]="zuweisungSozMitarbeiterForm"
+    data-testid="form-sozMitarbeiter-form"
+    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    novalidate
+  >
+    <!-- sozMitarbeiter Select -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | translate }}</mat-label>
+      <mat-select
+        formControlName="sozMitarbeiter"
+        data-testid="form-sozMitarbeiter-select"
+        [placeholder]="'shared.form.select.empty' | translate"
+        [compareWith]="compareById"
+      >
+        @for (sozMitarbeiter of delegationStore.sozialdienstMitrabeiterListSig().list; track sozMitarbeiter.id) {
+          <mat-option [value]="sozMitarbeiter.id" [attr.data-testid]="'sozMitarbeiter-' + sozMitarbeiter.id">
+            <span>{{ sozMitarbeiter.vorname }}</span>
+            <span> {{ sozMitarbeiter.nachname }}</span>
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <div class="tw-flex tw-h-[56px] tw-items-center">
+      <button
+        type="submit"
+        data-testid="sozMitarbeiter-submit"
+        [disabled]="zuweisungSozMitarbeiterForm.invalid"
+        class="btn btn-primary ms-2"
+        (click)="changeSozMitarbeiter()"
+      >
+        {{ 'sozialdienst-app.delegierung-dialog.changeZuweisung.submit' | translate }}
+      </button>
+    </div> -->
 
     <div class="d-flex mt-4 justify-content-between tw-col-span-full">
-      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+      <button type="button" data-testid="sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | translate }}
       </button>
       <button
         type="submit"
-        data-testid="dialog-submit"
-        [disabled]="form.invalid"
+        data-testid="sozMitarbeiter-submit"
+        [disabled]="zuweisungSozMitarbeiterForm.invalid"
         class="btn btn-primary ms-2"
-        (click)="confirm()"
+        (click)="changeSozMitarbeiter()"
       >
-        {{ 'computer.says.no' | translate }}
+        {{ 'sozialdienst-app.delegierung-dialog.changeZuweisung.submit' | translate }}
       </button>
     </div>
   </form>

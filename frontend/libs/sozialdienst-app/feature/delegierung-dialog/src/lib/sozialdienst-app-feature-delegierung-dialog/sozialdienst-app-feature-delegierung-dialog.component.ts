@@ -23,11 +23,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  SharedDataAccessStammdatenApiEvents,
-  selectLaender,
-} from '@dv/shared/data-access/stammdaten';
+import { selectLaender } from '@dv/shared/data-access/stammdaten';
 import { Anrede, FallWithDelegierung } from '@dv/shared/model/gesuch';
+import { compareById } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -42,11 +40,18 @@ import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
+  parseBackendLocalDateAndPrint,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 
 export interface DelegierungDialogData {
   fall: FallWithDelegierung;
+}
+
+export interface DelegierungDialogResult {
+  sozialdienstMitarbeiterId: string;
+  fallId: string;
 }
 
 @Component({
@@ -74,24 +79,28 @@ export class DelegierungDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private store = inject(Store);
+  delegationStore = inject(DelegationStore);
   dialogData = inject<DelegierungDialogData>(MAT_DIALOG_DATA);
 
   readonly anredeValues = Object.values(Anrede);
+
+  compareById = compareById;
 
   languageSig = this.store.selectSignal(selectLanguage);
   laenderSig = this.store.selectSignal(selectLaender);
 
   static open(dialog: MatDialog, data: DelegierungDialogData) {
-    return dialog.open<DelegierungDialogComponent, DelegierungDialogData>(
+    return dialog.open<
       DelegierungDialogComponent,
-      {
-        data,
-        width: '700px',
-      },
-    );
+      DelegierungDialogData,
+      DelegierungDialogResult
+    >(DelegierungDialogComponent, {
+      data,
+    });
   }
 
   form = this.formBuilder.group({
+    fallNummer: ['', [Validators.required]],
     anrede: this.formBuilder.control<Anrede>('' as Anrede, {
       validators: Validators.required,
     }),
@@ -120,6 +129,10 @@ export class DelegierungDialogComponent implements OnInit {
     ],
   });
 
+  zuweisungSozMitarbeiterForm = this.formBuilder.group({
+    sozMitarbeiter: [<string | undefined>undefined, [Validators.required]],
+  });
+
   onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
@@ -129,11 +142,32 @@ export class DelegierungDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
+    this.delegationStore.loadSozialdienstBenutzerList$();
+    this.form.patchValue({
+      fallNummer: this.dialogData.fall.fallNummer,
+      anrede: this.dialogData.fall.delegierung.persoenlicheAngaben?.anrede,
+      nachname: this.dialogData.fall.delegierung.persoenlicheAngaben?.nachname,
+      vorname: this.dialogData.fall.delegierung.persoenlicheAngaben?.vorname,
+      geburtsdatum: parseBackendLocalDateAndPrint(
+        this.dialogData.fall.delegierung.persoenlicheAngaben?.geburtsdatum,
+        this.languageSig(),
+      ),
+    });
+    if (this.dialogData.fall.delegierung.persoenlicheAngaben?.adresse) {
+      SharedUiFormAddressComponent.patchForm(
+        this.form.controls.adresse,
+        this.dialogData.fall.delegierung.persoenlicheAngaben.adresse,
+      );
+    }
   }
 
-  confirm() {
-    // todo: implement
+  changeSozMitarbeiter() {
+    const sozMitarbeiterId =
+      this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
+
+    if (sozMitarbeiterId) {
+      // do store action, and close on success!
+    }
   }
 
   cancel() {
