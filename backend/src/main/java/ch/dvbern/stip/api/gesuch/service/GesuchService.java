@@ -1092,7 +1092,7 @@ public class GesuchService {
             );
         }
 
-        final var tranchenToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
+        final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
             final var newTranche = GesuchTrancheCopyUtil.copyTrancheExceptGesuchDokuments(
@@ -1139,7 +1139,7 @@ public class GesuchService {
 
         gesuchRepository.persistAndFlush(gesuch);
 
-        return tranchenToDrop;
+        return tranchenIdsToDrop;
     }
 
     @Transactional

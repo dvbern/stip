@@ -64,21 +64,20 @@ public class SbDashboardQueryBuilder {
 
         query.join(gesuch.gesuchTranchen, tranche);
 
-        switch (trancheType) {
-            case AENDERUNG -> query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
-            case TRANCHE -> {
-                final var subTranche = new QGesuchTranche("subTranche");
-                query.where(
-                    tranche.id.in(
-                        JPAExpressions
-                            .select(subTranche.id)
-                            .from(subTranche)
-                            .where(subTranche.gesuch.id.eq(gesuch.id))
-                            .orderBy(subTranche.gueltigkeit.gueltigBis.desc())
-                            .limit(1)
-                    )
-                );
-            }
+        if (trancheType == GesuchTrancheTyp.AENDERUNG) {
+            query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
+        } else if (trancheType == GesuchTrancheTyp.TRANCHE) {
+            final var subTranche = new QGesuchTranche("subTranche");
+            query.where(
+                tranche.id.in(
+                    JPAExpressions
+                        .select(subTranche.id)
+                        .from(subTranche)
+                        .where(subTranche.gesuch.id.eq(gesuch.id))
+                        .orderBy(subTranche.gueltigkeit.gueltigBis.desc())
+                        .limit(1)
+                )
+            );
         }
 
         joinFormular(query);
