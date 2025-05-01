@@ -23,6 +23,9 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -35,6 +38,8 @@ public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
+    private final SozialdienstService sozialdienstService;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
 
     @Transactional
@@ -51,5 +56,13 @@ public class DelegierenService {
             .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
 
         delegierungRepository.persist(newDelegierung);
+    }
+
+    @Transactional
+    public void delegierterMitarbeiterAendern(final UUID delegierungId, final DelegierterMitarbeiterAendernDto dto) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+        final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
+
+        delegierung.setDelegierterMitarbeiter(mitarbeiter);
     }
 }

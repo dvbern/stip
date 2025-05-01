@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDtoSpec;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDtoSpec;
 import java.time.LocalDate;
@@ -62,9 +63,14 @@ public class DelegierenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                delegierterMitarbeiterAendern(),
                 fallDelegieren(),
                 getDelegierungSoz()
         );
+    }
+
+    public DelegierterMitarbeiterAendernOper delegierterMitarbeiterAendern() {
+        return new DelegierterMitarbeiterAendernOper(createReqSpec());
     }
 
     public FallDelegierenOper fallDelegieren() {
@@ -85,6 +91,79 @@ public class DelegierenApiSpec {
         return this;
     }
 
+    /**
+     * 
+     * 
+     *
+     * @see #delegierungIdPath Die ID vom Fall (required)
+     * @see #body  (required)
+     */
+    public static class DelegierterMitarbeiterAendernOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/delegierung/{delegierungId}/mitarbeiterDelegieren";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DelegierterMitarbeiterAendernOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /delegierung/{delegierungId}/mitarbeiterDelegieren
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param delegierterMitarbeiterAendernDtoSpec (DelegierterMitarbeiterAendernDtoSpec)  (required)
+         * @return operation
+         */
+        public DelegierterMitarbeiterAendernOper body(DelegierterMitarbeiterAendernDtoSpec delegierterMitarbeiterAendernDtoSpec) {
+            reqSpec.setBody(delegierterMitarbeiterAendernDtoSpec);
+            return this;
+        }
+
+        public static final String DELEGIERUNG_ID_PATH = "delegierungId";
+
+        /**
+         * @param delegierungId (UUID) Die ID vom Fall (required)
+         * @return operation
+         */
+        public DelegierterMitarbeiterAendernOper delegierungIdPath(Object delegierungId) {
+            reqSpec.addPathParam(DELEGIERUNG_ID_PATH, delegierungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DelegierterMitarbeiterAendernOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DelegierterMitarbeiterAendernOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * 
      * 

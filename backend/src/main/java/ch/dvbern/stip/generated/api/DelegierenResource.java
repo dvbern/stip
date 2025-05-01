@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import java.time.LocalDate;
@@ -23,6 +24,12 @@ import jakarta.validation.Valid;
 @Path("")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface DelegierenResource {
+
+    @POST
+    @Path("/delegierung/{delegierungId}/mitarbeiterDelegieren")
+    @Consumes({ "application/json" })
+    @Produces({ "text/plain" })
+    void delegierterMitarbeiterAendern(@PathParam("delegierungId") UUID delegierungId,@Valid @NotNull DelegierterMitarbeiterAendernDto delegierterMitarbeiterAendernDto);
 
     @POST
     @Path("/delegieren/{fallId}/{sozialdienstId}")
