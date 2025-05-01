@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class SbDashboardQueryBuilder {
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
     private static final QGesuch gesuch = QGesuch.gesuch;
     private static final QAusbildung ausbildung = QAusbildung.ausbildung;
-    private QGesuchTranche tranche;
+    private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
 
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
@@ -61,10 +62,24 @@ public class SbDashboardQueryBuilder {
             case ALLE -> gesuchRepository.getFindAlleQuery();
         };
 
-        tranche = switch (trancheType) {
-            case TRANCHE -> gesuch.latestGesuchTranche;
-            case AENDERUNG -> gesuch.aenderungZuUeberpruefen;
-        };
+        query.join(gesuch.gesuchTranchen, tranche);
+
+        switch (trancheType) {
+            case AENDERUNG -> query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
+            case TRANCHE -> {
+                final var subTranche = new QGesuchTranche("subTranche");
+                query.where(
+                    tranche.id.in(
+                        JPAExpressions
+                            .select(subTranche.id)
+                            .from(subTranche)
+                            .where(subTranche.gesuch.id.eq(gesuch.id))
+                            .orderBy(subTranche.gueltigkeit.gueltigBis.desc())
+                            .limit(1)
+                    )
+                );
+            }
+        }
 
         joinFormular(query);
         return query.where(
