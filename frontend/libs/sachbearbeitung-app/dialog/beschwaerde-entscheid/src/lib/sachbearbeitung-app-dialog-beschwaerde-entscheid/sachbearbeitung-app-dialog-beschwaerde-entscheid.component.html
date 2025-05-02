@@ -1,0 +1,68 @@
+<section class="tw-relative tw-flex tw-shrink tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="close()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ '' + 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+  </h1>
+
+  <form [formGroup]="form" (ngSubmit)="confirm()" class="tw-flex tw-flex-col tw-gap-3">
+    <input
+      #fileInput
+      formControlName="fileUpload"
+      class="tw-mb-4 tw-block"
+      type="file"
+      data-testid="file-input"
+      [attr.accept]="allowTypesSig()"
+    />
+
+    <mat-form-field>
+      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.kommentar.label' | translate }}</mat-label>
+      <textarea
+        formControlName="kommentar"
+        maxlength="2000"
+        data-testid="form-beschwerde-kommentar"
+        matInput
+        [dvMaxLength]="'large'"
+        type="text"
+        rows="4"
+      ></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-radio-group
+      formControlName="beschwerdeErfolgreich"
+      data-testid="form-geschwister-ausbildungssituation"
+      dvSharedUiFormField
+      class="col-12 col-xl-8"
+    >
+      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.erfolgreich' | translate }}</mat-label>
+      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
+        <div class="d-flex flex-column">
+          <mat-radio-button data-testid="yes" [value]="true">{{
+            'sachbearbeitung-app.infos.beschwerde.infoDialog.true' | translate
+          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{
+            'sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate
+          }}</mat-radio-button>
+        </div>
+      </div>
+    </mat-radio-group>
+
+    <div class="d-flex mt-4 justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
+        {{ 'shared.close' | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary ms-2" data-testid="dialog-confirm">
+        {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.confirm' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

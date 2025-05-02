@@ -269,7 +269,7 @@
             <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | translate }
             </mat-error>
             <mat-error *dvSharedUiFormMessageError="'dateFormat'">
               {{ 'shared.form.error.dateFormat' | translate }}
@@ -423,9 +423,7 @@
               </mat-error>
             </mat-form-field>
 
-            @if (heimatortDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
+            @if (heimatortDocumentOptionsSig(); as options) {}
             <button
               type="button"
               (click)="heimatortDialog.toggle()"

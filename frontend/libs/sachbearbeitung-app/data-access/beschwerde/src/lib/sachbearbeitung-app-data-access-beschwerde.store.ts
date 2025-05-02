@@ -94,4 +94,53 @@ export class BeschwerdeStore extends signalStore(
       ),
     ),
   );
+
+  createBeschwerdeEntscheid$ = rxMethod<{
+    gesuchId: string;
+    fileUpload: File;
+    kommentar: string;
+    beschwerdeErfolgreich: boolean;
+    onSucces?: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          beschwerde: cachedPending(state.beschwerde),
+        }));
+      }),
+      switchMap(
+        ({
+          gesuchId,
+          fileUpload,
+          kommentar,
+          beschwerdeErfolgreich,
+          onSucces,
+        }) =>
+          this.gesuchService
+            .createBeschwerdeEntscheid$({
+              gesuchId,
+              fileUpload,
+              kommentar,
+              beschwerdeErfolgreich,
+            })
+            .pipe(
+              handleApiResponse(
+                (beschwerde) => {
+                  patchState(this, { beschwerde });
+                },
+                {
+                  onSuccess: () => {
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey:
+                        'sachbearbeitung-app.infos.beschwerde.create.success.' +
+                        beschwerdeErfolgreich,
+                    });
+                    onSucces?.();
+                  },
+                },
+              ),
+            ),
+      ),
+    ),
+  );
 }
