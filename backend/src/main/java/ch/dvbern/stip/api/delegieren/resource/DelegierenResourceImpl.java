@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.delegieren.resource;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
@@ -34,6 +31,13 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE;
 
 @Validated
 @RequestScoped
