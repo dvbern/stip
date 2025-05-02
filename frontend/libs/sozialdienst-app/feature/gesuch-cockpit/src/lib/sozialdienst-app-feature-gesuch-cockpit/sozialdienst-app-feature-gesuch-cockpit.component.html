@@ -1,0 +1,145 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" position="end">
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
+    </dv-shared-pattern-mobile-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
+      <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
+      <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
+      <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
+    </dv-shared-pattern-app-header>
+
+    <!-- MAIN CONTENT -->
+    <main class="page-body">
+      <div class="bg-image">
+        <div class="gray-bg"></div>
+      </div>
+
+      <div class="container tw-my-12">
+        <h1 class="tw-mb-8 tw-text-white">
+          {{ 'gesuch-app.dashboard.welcome.titel' | translate: { name: benutzerNameSig() } }}
+        </h1>
+
+        @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
+          @let fall = dashboard.fall;
+          @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
+          <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
+            <!-- main column -->
+            <div class="tw-flex tw-flex-col tw-gap-8">
+              @if (dashboard.activeAusbildungen.length > 0) {
+                @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
+                  <dv-gesuch-app-ui-dashboard-ausbildung
+                    [ausbildungSig]="ausbildung"
+                    (deleteAusbildung)="deleteAusbildung($event)"
+                    (deleteGesuch)="deleteGesuch($event)"
+                    (aenderungMelden)="aenderungMelden($event)"
+                    (deleteAenderung)="deleteAenderung($event)"
+                  ></dv-gesuch-app-ui-dashboard-ausbildung>
+                }
+              } @else if (!delegierterSozialdienst) {
+                <button
+                  data-testid="cockpit-create-ausbildung"
+                  type="button"
+                  (click)="createAusbildung(fall.id)"
+                  class="btn btn-danger d-flex align-items-center tw-w-max"
+                >
+                  <dv-shared-ui-icon-chip>
+                    <i class="material-symbols-rounded">add</i>
+                  </dv-shared-ui-icon-chip>
+                  {{ 'gesuch-app.dashboard.ausbildung.create' | translate }}
+                </button>
+              }
+              @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
+                <dv-gesuch-app-ui-dashboard-compact-ausbildung
+                  [ausbildungSig]="ausbildung"
+                ></dv-gesuch-app-ui-dashboard-compact-ausbildung>
+              }
+            </div>
+
+            <!-- side column -->
+            <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
+              @let sozialdienste = sozialdienstStore.availableSozialdienste().data;
+              @if (sozialdienste && sozialdienste.length > 0) {
+                <!-- SOZIALDIENST DELEGIEREN -->
+                <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
+                  <h3 class="tw-mb-4 tw-flex tw-items-center">
+                    <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
+                      <i class="material-symbols-rounded fs-5">interpreter_mode</i>
+                    </dv-shared-ui-icon-chip>
+                    {{ 'gesuch-app.dashboard.gesuch.sozialdienst' | translate }}
+                  </h3>
+                  <div class="tw-flex tw-flex-col tw-gap-4">
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <mat-form-field class="tw-w-full">
+                        <mat-select
+                          #sozialdienst
+                          [placeholder]="'gesuch-app.dashboard.gesuch.sozialdienst-waehlen' | translate"
+                          [disabled]="delegierterSozialdienst"
+                          [value]="delegierterSozialdienst"
+                          [compareWith]="compareById"
+                        >
+                          @for (
+                            sozialdienst of sozialdienstStore.availableSozialdienste().data;
+                            track sozialdienst.id
+                          ) {
+                            <mat-option [value]="sozialdienst">{{ sozialdienst.name }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                      @if (sozialdienst.value && !delegierterSozialdienst) {
+                        <dv-shared-ui-clear-button
+                          class="tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center tw-rounded-full tw-bg-[--dv-overridden-body-bg] tw-text-white"
+                          [valueSig]="sozialdienst.value.id"
+                          (clear)="sozialdienst.value = null"
+                        ></dv-shared-ui-clear-button>
+                      }
+                    </div>
+                    @if (sozialdienst.value && !delegierterSozialdienst) {
+                      <button
+                        type="button"
+                        (click)="delegiereSozialdienst(fall.id, sozialdienst.value)"
+                        class="btn btn-primary"
+                      >
+                        {{ 'gesuch-app.dashboard.gesuch.delegieren' | translate }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- NACHRICHTEN -->
+              <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
+                <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
+              </div>
+
+              <!-- INFOS -->
+              <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
+                <h3 class="tw-mb-4">Allgemeine Informationen</h3>
+                <p>
+                  Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
+                  Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
+                  Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
+                  sind und weitere nützliche Grundlagen.
+                </p>
+                <a class="btn btn-outline-primary tw-mt-3 tw-w-full"> Stipendien und Darlehen </a>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- MOBILE NAV -->
+      <div class="mobile-nav-header"></div>
+      <div class="mobile-nav-content"></div>
+
+      <!-- DESKTOP HEADER (LEFT) -->
+      <div class="header-desktop-left d-flex flex-grow-1 ms-3"></div>
+
+      <!-- DESKTOP HEADER (RIGHT) -->
+      <div class="header-desktop-right d-flex gap-4 align-items-center"></div>
+      <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="text-white"></dv-shared-ui-version-text>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

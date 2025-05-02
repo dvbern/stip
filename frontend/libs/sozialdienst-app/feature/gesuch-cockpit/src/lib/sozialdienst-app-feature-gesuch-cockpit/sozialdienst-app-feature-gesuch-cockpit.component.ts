@@ -2,20 +2,22 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   computed,
   effect,
   inject,
+  input,
+  viewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { selectGesuchAppFeatureCockpitView } from '@dv/gesuch-app/feature/cockpit.selector';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
 import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
-import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import {
   GesuchAppUiDashboardAusbildungComponent,
   GesuchAppUiDashboardCompactAusbildungComponent,
@@ -32,30 +34,31 @@ import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
-  GesuchTrancheSlim,
   Gesuchsperiode,
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
+import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
-
-import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
 @Component({
-  selector: 'dv-gesuch-app-feature-cockpit',
+  selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
   standalone: true,
   imports: [
     CommonModule,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderComponent,
+
     TranslatePipe,
     MatSelectModule,
-    GesuchAppPatternMainLayoutComponent,
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
@@ -63,16 +66,14 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     GesuchAppUiDashboardAusbildungComponent,
     GesuchAppUiDashboardCompactAusbildungComponent,
   ],
-  providers: [
-    FallStore,
-    SozialdienstStore,
-    provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
-  ],
-  templateUrl: './gesuch-app-feature-cockpit.component.html',
-  styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
+  templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
+  styleUrl: './sozialdienst-app-feature-gesuch-cockpit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureCockpitComponent {
+export class SozialdienstAppFeatureGesuchCockpitComponent {
+  private sidenavSig = viewChild.required(MatSidenav);
+  closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
+
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
@@ -94,6 +95,12 @@ export class GesuchAppFeatureCockpitComponent {
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
+    effect(() => {
+      if (this.closeMenuSig()?.value) {
+        this.sidenavSig().close();
+      }
+    });
+
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
     this.fallStore.loadCurrentFall$();
     this.sozialdienstStore.loadAvailableSozialdienste$();
