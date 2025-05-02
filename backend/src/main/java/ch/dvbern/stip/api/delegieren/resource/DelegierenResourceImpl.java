@@ -32,7 +32,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
@@ -63,12 +62,13 @@ public class DelegierenResourceImpl implements DelegierenResource {
         delegierenService.delegierterMitarbeiterAendern(delegierungId, delegierterMitarbeiterAendernDto);
     }
 
-    @Override
     @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
+    @Override
     public PaginatedSozDashboardDto getDelegierungSoz(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
-        @NotNull Integer page,
-        @NotNull Integer pageSize,
+        UUID sozialdienstId,
+        Integer page,
+        Integer pageSize,
         String fallNummer,
         String nachname,
         String vorname,
@@ -83,6 +83,23 @@ public class DelegierenResourceImpl implements DelegierenResource {
         // todo: implement & use fallnr
         delegierenAuthorizer.canReadDelegierung();
         // TODO Auto-generated method stub
-        return new PaginatedSozDashboardDto();
+        // return new PaginatedSozDashboardDto();
+
+        return delegierenService.getDelegierungSoz(
+            sozialdienstId,
+            getDelegierungSozQueryType,
+            page,
+            pageSize,
+            fallNummer,
+            nachname,
+            vorname,
+            geburtsdatum,
+            wohnort,
+            delegierungAngenommen,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            sortColumn,
+            sortOrder
+        );
     }
 }

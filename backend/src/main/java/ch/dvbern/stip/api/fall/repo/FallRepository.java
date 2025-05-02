@@ -59,4 +59,9 @@ public class FallRepository implements BaseRepository<Fall> {
     public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
     }
+
+    // todo: improove
+    public Fall findByFallnummer(final String fallnummer) {
+        return findAll().stream().filter(fall -> fall.getFallNummer().equals(fallnummer)).findFirst().orElseThrow();
+    }
 }
