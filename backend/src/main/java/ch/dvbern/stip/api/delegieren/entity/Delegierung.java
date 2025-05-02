@@ -83,7 +83,7 @@ public class Delegierung extends AbstractMandantEntity {
     )
     private @Valid PersoenlicheAngaben persoenlicheAngaben;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(
         name = "delegierter_mitarbeiter_id",
         referencedColumnName = "id",
