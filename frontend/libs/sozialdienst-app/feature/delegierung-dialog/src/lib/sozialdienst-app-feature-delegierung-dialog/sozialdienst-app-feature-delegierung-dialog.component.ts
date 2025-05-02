@@ -162,11 +162,25 @@ export class DelegierungDialogComponent implements OnInit {
   }
 
   changeSozMitarbeiter() {
-    const sozMitarbeiterId =
+    const mitarbeiterId =
       this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
 
-    if (sozMitarbeiterId) {
-      // do store action, and close on success!
+    if (mitarbeiterId) {
+      // this.delegationStore
+      //   .delegierterMitarbeiterAendern$({
+      //     delegierterMitarbeiterAendern: {
+      //       mitarbeiterId,
+      //     },
+      //     delegierungId: this.dialogData.fall.delegierung.id,
+      //   })
+      //   .subscribe((result) => {
+      //     // if (result) {
+      //     //   this.dialogRef.close({
+      //     //     sozialdienstMitarbeiterId: sozMitarbeiterId,
+      //     //     fallId: this.dialogData.fall.id,
+      //     //   });
+      //     // }
+      //   });
     }
   }
 

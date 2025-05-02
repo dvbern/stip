@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   computed,
   effect,
   inject,
@@ -32,7 +31,6 @@ import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
-  GesuchTrancheSlim,
   Gesuchsperiode,
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
@@ -77,7 +75,6 @@ export class GesuchAppFeatureCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  // @Input({ required: true }) tranche?: GesuchTrancheSlim;
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);

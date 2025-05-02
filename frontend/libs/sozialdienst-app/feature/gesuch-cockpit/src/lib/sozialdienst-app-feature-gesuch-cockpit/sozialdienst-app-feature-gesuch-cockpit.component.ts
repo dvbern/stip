@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -11,7 +12,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { selectGesuchAppFeatureCockpitView } from '@dv/gesuch-app/feature/cockpit.selector';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -46,7 +46,6 @@ import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
-import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
@@ -60,7 +59,6 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
     TranslatePipe,
     MatSelectModule,
     SharedUiIconChipComponent,
-    SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
     GesuchAppUiDashboardAusbildungComponent,
@@ -83,7 +81,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   sozialdienstStore = inject(SozialdienstStore);
-  cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;

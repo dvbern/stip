@@ -95,7 +95,7 @@ public class DelegierenApiSpec {
      * 
      * 
      *
-     * @see #delegierungIdPath Die ID vom Fall (required)
+     * @see #delegierungIdPath Die ID der Delegierung (required)
      * @see #body  (required)
      */
     public static class DelegierterMitarbeiterAendernOper implements Oper {
@@ -136,7 +136,7 @@ public class DelegierenApiSpec {
         public static final String DELEGIERUNG_ID_PATH = "delegierungId";
 
         /**
-         * @param delegierungId (UUID) Die ID vom Fall (required)
+         * @param delegierungId (UUID) Die ID der Delegierung (required)
          * @return operation
          */
         public DelegierterMitarbeiterAendernOper delegierungIdPath(Object delegierungId) {

@@ -41,6 +41,7 @@ export * from './createGesuchTrancheRequest';
 export * from './customDokumentTyp';
 export * from './customDokumentTypCreate';
 export * from './darlehen';
+export * from './delegierterMitarbeiterAendern';
 export * from './delegierung';
 export * from './delegierungCreate';
 export * from './delegierungSlim';

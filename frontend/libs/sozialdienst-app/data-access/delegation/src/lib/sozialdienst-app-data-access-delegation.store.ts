@@ -6,6 +6,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   DelegierenService,
+  DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
   DelegierenServiceGetDelegierungSozRequestParams,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
@@ -23,11 +24,13 @@ import {
 type DelegationState = {
   paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
   sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
+  delegierterMitarbeiterAendernRequestState: CachedRemoteData<void>;
 };
 
 const initialState: DelegationState = {
   paginatedSozDashboard: initial(),
   sozialdienstBenutzerList: initial(),
+  delegierterMitarbeiterAendernRequestState: initial(),
 };
 
 @Injectable({
@@ -45,6 +48,12 @@ export class DelegationStore extends signalStore(
     return {
       paginatedSozDashboard: fromCachedDataSig(this.paginatedSozDashboard),
       loading: isPending(this.paginatedSozDashboard()),
+    };
+  });
+
+  aendernRequestStateSig = computed(() => {
+    return {
+      loading: isPending(this.delegierterMitarbeiterAendernRequestState()),
     };
   });
 
@@ -73,6 +82,28 @@ export class DelegationStore extends signalStore(
       ),
     ),
   );
+
+  delegierterMitarbeiterAendern$ =
+    rxMethod<DelegierenServiceDelegierterMitarbeiterAendernRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            delegierterMitarbeiterAendernRequestState: cachedPending(
+              state.delegierterMitarbeiterAendernRequestState,
+            ),
+          }));
+        }),
+        switchMap((params) =>
+          this.delegierenService.delegierterMitarbeiterAendern$(params).pipe(
+            handleApiResponse((response) =>
+              patchState(this, {
+                delegierterMitarbeiterAendernRequestState: response,
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
 
   loadPaginatedSozDashboard$ =
     rxMethod<DelegierenServiceGetDelegierungSozRequestParams>(
