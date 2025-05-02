@@ -1788,7 +1788,7 @@ paths:
             $ref: '#/components/schemas/GetDelegierungSozQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/fallNummer'
+        - $ref: '#/components/parameters/fallId'
         - $ref: '#/components/parameters/nachname'
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
@@ -4103,8 +4103,12 @@ components:
     Delegierung:
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
+        delegierterMitarbeiter:
+          $ref: '#/components/schemas/SozialdienstBenutzer'
         delegierungAngenommen:
           type: boolean
         persoenlicheAngaben:
