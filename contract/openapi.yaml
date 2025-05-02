@@ -1788,6 +1788,7 @@ paths:
             $ref: '#/components/schemas/GetDelegierungSozQueryType'
           in: path
           required: true
+        - $ref: '#/components/parameters/sozialdienstId'
         - $ref: '#/components/parameters/fallNummer'
         - $ref: '#/components/parameters/nachname'
         - $ref: '#/components/parameters/vorname'
