@@ -1754,6 +1754,30 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: fallDelegieren
+  /delegierung/{delegierungId}/mitarbeiterDelegieren:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    post:
+      tags:
+        - Delegieren
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DelegierterMitarbeiterAendern'
+      responses:
+        204:
+          description: Der delegierte Mitarbeiter wurde erfolgreich geandert
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: delegierterMitarbeiterAendern
   /delegierung/{getDelegierungSozQueryType}:
     get:
       tags:
@@ -4109,6 +4133,13 @@ components:
           $ref: '#/components/schemas/LocalDate'
         adresse:
           $ref: '#/components/schemas/Adresse'
+    DelegierterMitarbeiterAendern:
+      required:
+        - mitarbeiterId
+      type: object
+      properties:
+        mitarbeiterId:
+          $ref: '#/components/schemas/UUID'
     GesuchInfo:
       required:
         - id
@@ -6472,6 +6503,13 @@ components:
       in: path
       required: true
       description: Die ID vom Fall
+      schema:
+        $ref: '#/components/schemas/UUID'
+    delegierungId:
+      name: delegierungId
+      in: path
+      required: true
+      description: Die ID der Delegierung
       schema:
         $ref: '#/components/schemas/UUID'
     sortOrder:
