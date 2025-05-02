@@ -36,6 +36,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE;
 
 @Validated
@@ -63,6 +64,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
     }
 
     @Override
+    @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
     public PaginatedSozDashboardDto getDelegierungSoz(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
         @NotNull Integer page,
@@ -78,6 +80,8 @@ public class DelegierenResourceImpl implements DelegierenResource {
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
+        // todo: implement & use fallnr
+        delegierenAuthorizer.canReadDelegierung();
         // TODO Auto-generated method stub
         return new PaginatedSozDashboardDto();
     }
