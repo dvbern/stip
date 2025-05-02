@@ -44,6 +44,8 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canReadDelegierung() {
         // todo: implement
+        // check if sozialdienst is existing
+        // check if currentBenutzerIs benutzer of sozialdienst
         //
         // if
         // (!AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getDelegierterFall(),sozialdienstService))

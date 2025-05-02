@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
@@ -52,6 +53,7 @@ public class DelegierenService {
     private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
     private final ConfigService configService;
     private final DelegierungMapper delegierungMapper;
+    private final BenutzerService benutzerService;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -79,7 +81,6 @@ public class DelegierenService {
 
     @Transactional
     public PaginatedSozDashboardDto getDelegierungSoz(
-        UUID sozialdienstId,
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
         @NotNull Integer page,
         @NotNull Integer pageSize,
@@ -98,10 +99,17 @@ public class DelegierenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(currentBenutzer.getId());
+        final var sozialdienst = sozialdienstRepository.findAll()
+            .stream()
+            .filter(x -> x.getSozialdienstBenutzers().contains(sozialdienstBenutzer))
+            .findFirst();
+
+        // final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
 
         final var baseQuery = sozDashboardQueryBuilder
-            .baseQuery(getDelegierungSozQueryType, sozialdienst.getId());
+            .baseQuery(getDelegierungSozQueryType, sozialdienst.orElseThrow().getId());
 
         if (fallNummer != null) {
             sozDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);

@@ -66,7 +66,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @Override
     public PaginatedSozDashboardDto getDelegierungSoz(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
-        UUID sozialdienstId,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -86,7 +85,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
         // return new PaginatedSozDashboardDto();
 
         return delegierenService.getDelegierungSoz(
-            sozialdienstId,
             getDelegierungSozQueryType,
             page,
             pageSize,

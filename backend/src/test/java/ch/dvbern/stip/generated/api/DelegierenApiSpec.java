@@ -254,7 +254,6 @@ public class DelegierenApiSpec {
      * 
      *
      * @see #getDelegierungSozQueryTypePath  (required)
-     * @see #sozialdienstIdPath  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
      * @see #fallNummerQuery  (optional)
@@ -312,17 +311,6 @@ public class DelegierenApiSpec {
          */
         public GetDelegierungSozOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
             reqSpec.addPathParam(GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH, getDelegierungSozQueryType);
-            return this;
-        }
-
-        public static final String SOZIALDIENST_ID_PATH = "sozialdienstId";
-
-        /**
-         * @param sozialdienstId (UUID)  (required)
-         * @return operation
-         */
-        public GetDelegierungSozOper sozialdienstIdPath(Object sozialdienstId) {
-            reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
             return this;
         }
 

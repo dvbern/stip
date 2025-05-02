@@ -19,12 +19,10 @@ package ch.dvbern.stip.api.delegieren.repo;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
-import ch.dvbern.stip.api.gesuch.entity.QGesuch;
-import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,8 +35,11 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
     private final EntityManager entityManager;
     private static final QDelegierung qDelegierung = QDelegierung.delegierung;
 
-    public JPAQuery<Delegierung> getFindAlleMeineQuery(final UUID benutzerId, final UUID sozialdienstId) {
-        return addMeineFilter(benutzerId, getFindAlleOfSozialdienstQuery(sozialdienstId));
+    public JPAQuery<Delegierung> getFindAlleMeineQuery(
+        final SozialdienstBenutzer sozialdienstBenutzer,
+        final UUID sozialdienstId
+    ) {
+        return addMeineFilter(sozialdienstBenutzer, getFindAlleOfSozialdienstQuery(sozialdienstId));
     }
 
     public JPAQuery<Delegierung> getFindAlleOfSozialdienstQuery(UUID sozialdienstId) {
@@ -53,16 +54,12 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
         return query;
     }
 
-    private JPAQuery<Delegierung> addMeineFilter(final UUID benutzerId, final JPAQuery<Delegierung> query) {
-        final var gesuch = QGesuch.gesuch;
-        final var ausbildung = QAusbildung.ausbildung;
-        final var zuordnung = QZuordnung.zuordnung;
+    private JPAQuery<Delegierung> addMeineFilter(
+        final SozialdienstBenutzer sozialdienstBenutzer,
+        final JPAQuery<Delegierung> query
+    ) {
 
-        query.join(ausbildung)
-            .on(gesuch.ausbildung.id.eq(ausbildung.id))
-            .join(zuordnung)
-            .on(ausbildung.fall.id.eq(zuordnung.fall.id))
-            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
+        query.where(qDelegierung.sozialdienst.sozialdienstBenutzers.contains(sozialdienstBenutzer));
 
         return query;
     }

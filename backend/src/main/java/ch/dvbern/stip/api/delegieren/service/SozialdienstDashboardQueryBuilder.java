@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -36,14 +37,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SozialdienstDashboardQueryBuilder {
     private final BenutzerService benutzerService;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final DelegierungRepository delegierungRepository;
     private static final QDelegierung qDelegierung = QDelegierung.delegierung;
 
     public JPAQuery<Delegierung> baseQuery(final GetDelegierungSozQueryTypeDto queryType, final UUID sozialdienstId) {
-        final var meId = benutzerService.getCurrentBenutzer().getId();
+        final var me = benutzerService.getCurrentBenutzer();
+        final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(me.getId());
         final var query = switch (queryType) {
             case ALLE -> delegierungRepository.getFindAlleOfSozialdienstQuery(sozialdienstId);
-            case ALLE_BEARBEITBAR_MEINE -> delegierungRepository.getFindAlleMeineQuery(meId, sozialdienstId);
+            case ALLE_BEARBEITBAR_MEINE -> delegierungRepository
+                .getFindAlleMeineQuery(sozialdienstBenutzer, sozialdienstId);
         };
         return query;
     }
