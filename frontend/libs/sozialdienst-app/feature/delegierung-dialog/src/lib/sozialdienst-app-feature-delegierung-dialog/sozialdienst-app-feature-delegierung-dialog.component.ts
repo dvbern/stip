@@ -3,8 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
+  computed,
+  effect,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -30,9 +33,11 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { isPending, isSuccess } from '@dv/shared/util/remote-data';
 import {
   MAX_AGE_GESUCHSSTELLER,
   MEDIUM_AGE_GESUCHSSTELLER,
@@ -47,11 +52,6 @@ import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 
 export interface DelegierungDialogData {
   fall: FallWithDelegierung;
-}
-
-export interface DelegierungDialogResult {
-  sozialdienstMitarbeiterId: string;
-  fallId: string;
 }
 
 @Component({
@@ -71,12 +71,14 @@ export interface DelegierungDialogResult {
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
     SharedUiFormAddressComponent,
+    SharedUiFormSaveComponent,
   ],
   templateUrl: './sozialdienst-app-feature-delegierung-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DelegierungDialogComponent implements OnInit {
-  private dialogRef = inject(MatDialogRef);
+  private dialogRef =
+    inject<MatDialogRef<DelegierungDialogComponent, boolean>>(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private store = inject(Store);
   delegationStore = inject(DelegationStore);
@@ -84,6 +86,7 @@ export class DelegierungDialogComponent implements OnInit {
 
   readonly anredeValues = Object.values(Anrede);
 
+  isPending = isPending;
   compareById = compareById;
 
   languageSig = this.store.selectSignal(selectLanguage);
@@ -93,7 +96,7 @@ export class DelegierungDialogComponent implements OnInit {
     return dialog.open<
       DelegierungDialogComponent,
       DelegierungDialogData,
-      DelegierungDialogResult
+      boolean
     >(DelegierungDialogComponent, {
       data,
     });
@@ -133,12 +136,60 @@ export class DelegierungDialogComponent implements OnInit {
     sozMitarbeiter: [<string | undefined>undefined, [Validators.required]],
   });
 
+  sozMitarbeiterChangedSig = toSignal(
+    this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.valueChanges,
+  );
+
+  matDiaogBackdropClickedSig = toSignal(this.dialogRef.backdropClick());
+
+  showUnsavedChangesErrorSig = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _clicked = this.matDiaogBackdropClickedSig();
+
+    if (
+      this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value !==
+      this.dialogData.fall.delegierung.delegierterMitarbeiter?.id
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
   onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
       this.languageSig(),
     );
+  }
+
+  constructor() {
+    effect(() => {
+      const sozMitarbeiterId = this.sozMitarbeiterChangedSig();
+
+      if (
+        sozMitarbeiterId !==
+        this.dialogData.fall.delegierung.delegierterMitarbeiter?.id
+      ) {
+        this.dialogRef.disableClose = true;
+      } else {
+        this.dialogRef.disableClose = false;
+      }
+    });
+
+    effect(() => {
+      const sozialdienstMitarbeiterId =
+        this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
+
+      if (
+        isSuccess(this.delegationStore.delegierenState()) &&
+        sozialdienstMitarbeiterId
+      ) {
+        this.dialogRef.disableClose = false;
+        this.dialogRef.close(true);
+      }
+    });
   }
 
   ngOnInit() {
@@ -159,32 +210,32 @@ export class DelegierungDialogComponent implements OnInit {
         this.dialogData.fall.delegierung.persoenlicheAngaben.adresse,
       );
     }
+    if (this.dialogData.fall.delegierung.delegierterMitarbeiter?.id) {
+      this.zuweisungSozMitarbeiterForm.patchValue({
+        sozMitarbeiter:
+          this.dialogData.fall.delegierung.delegierterMitarbeiter.id,
+      });
+    }
   }
 
   changeSozMitarbeiter() {
     const mitarbeiterId =
       this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
 
-    if (mitarbeiterId) {
-      // this.delegationStore
-      //   .delegierterMitarbeiterAendern$({
-      //     delegierterMitarbeiterAendern: {
-      //       mitarbeiterId,
-      //     },
-      //     delegierungId: this.dialogData.fall.delegierung.id,
-      //   })
-      //   .subscribe((result) => {
-      //     // if (result) {
-      //     //   this.dialogRef.close({
-      //     //     sozialdienstMitarbeiterId: sozMitarbeiterId,
-      //     //     fallId: this.dialogData.fall.id,
-      //     //   });
-      //     // }
-      //   });
+    const delegierungId = this.dialogData.fall.delegierung.id;
+
+    if (mitarbeiterId && delegierungId) {
+      this.delegationStore.delegierterMitarbeiterAendern$({
+        delegierterMitarbeiterAendern: {
+          mitarbeiterId,
+        },
+        delegierungId,
+      });
     }
   }
 
   cancel() {
+    this.dialogRef.disableClose = false;
     this.dialogRef.close();
   }
 }

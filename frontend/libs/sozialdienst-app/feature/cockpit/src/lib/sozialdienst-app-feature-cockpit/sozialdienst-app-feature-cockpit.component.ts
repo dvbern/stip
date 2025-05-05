@@ -95,30 +95,6 @@ import {
 
 const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
 
-// todo: remove this dummy data
-const dummyFallWithDelegierung: FallWithDelegierung = {
-  id: 'sdfsdf-sdfsfd-sdf-sdf-sdf',
-  fallNummer: 'A123456',
-  mandant: 'sdflkf-flj-lk',
-  delegierung: {
-    delegierungAngenommen: false,
-    persoenlicheAngaben: {
-      nachname: 'Mustermann',
-      vorname: 'Max',
-      geburtsdatum: '1990-01-01',
-      adresse: {
-        strasse: 'Musterstraße',
-        hausnummer: '1',
-        plz: '12345',
-        ort: 'Musterstadt',
-        land: 'CH',
-      },
-      anrede: 'HERR',
-    },
-  },
-  letzteAktivitaet: new Date().toISOString(),
-};
-
 @Component({
   selector: 'dv-sozialdienst-app-feature-cockpit',
   standalone: true,
@@ -308,8 +284,8 @@ export class SozialdienstAppFeatureCockpitComponent
   );
 
   faelleDataSourceSig = computed(() => {
-    const faelle = this.delegationStore.cockpitViewSig().paginatedSozDashboard
-      ?.entries ?? [dummyFallWithDelegierung];
+    const faelle =
+      this.delegationStore.cockpitViewSig().paginatedSozDashboard?.entries;
 
     const dataSource = new MatTableDataSource<FallWithDelegierung>(faelle);
     return dataSource;
@@ -448,7 +424,29 @@ export class SozialdienstAppFeatureCockpitComponent
     DelegierungDialogComponent.open(this.dialog, { fall })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {});
+      .subscribe((result) => {
+        if (result) {
+          const {
+            query,
+            filter,
+            fromToFilter,
+            sortColumn,
+            sortOrder,
+            page,
+            pageSize,
+          } = this.getInputs();
+
+          this.delegationStore.loadPaginatedSozDashboard$({
+            getDelegierungSozQueryType: query,
+            ...filter,
+            ...fromToFilter,
+            sortColumn,
+            sortOrder,
+            page: page ?? 0,
+            pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
+          });
+        }
+      });
   }
 
   private getInputs() {

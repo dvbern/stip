@@ -67,6 +67,11 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   styleUrl: './sozialdienst-app-feature-gesuch-cockpit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    FallStore,
+    SozialdienstStore,
+    DashboardStore, // not sure if route or here, it's in route in gesuch-app
+  ],
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);
@@ -76,7 +81,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  // @Input({ required: true }) tranche?: GesuchTrancheSlim;
+  fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
+
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -86,9 +92,10 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
 
-  private gotNewFallSig = computed(() => {
-    return this.fallStore.currentFallViewSig()?.id;
-  });
+  // would get the fill of the currently logged in user
+  // private gotNewFallSig = computed(() => {
+  //   return this.fallStore.currentFallViewSig()?.id;
+  // });
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
@@ -104,9 +111,10 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
     effect(
       () => {
-        const fallId = this.gotNewFallSig();
+        const fallId = this.fallIdSig();
 
         if (fallId) {
+          // todo: adjust for soz
           this.dashboardStore.loadDashboard$();
         }
       },
@@ -116,6 +124,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     effect(
       () => {
         if (this.gesuchUpdatedSig()) {
+          // todo: adjust for soz
           this.dashboardStore.loadDashboard$();
         }
       },
@@ -125,6 +134,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   compareById = compareById;
 
+  // can soz mitarbeiter do this?
   createAusbildung(fallId: string) {
     GesuchAppDialogCreateAusbildungComponent.open(
       this.dialog,
@@ -227,6 +237,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
       });
   }
 
+  // remove for soz
   delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
     GesuchAppFeatureDelegierenDialogComponent.open(this.dialog)
       .afterClosed()

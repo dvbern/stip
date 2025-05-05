@@ -38,5 +38,6 @@
   "sozialdienst-app.delegierung-dialog.zuweisung.title": "Zuweisung",
   "sozialdienst-app.delegierung-dialog.fallNummer.label": "Fallnummer",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Sozialdienstmitarbeiter",
-  "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern"
+  "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern",
+  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Bitte speichern Sie die Änderungen, bevor Sie den Dialog schließen."
 }
