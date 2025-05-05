@@ -1,9 +1,11 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
 import {
@@ -19,9 +21,10 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -48,12 +51,13 @@ export interface BeschwerdeentscheidUploadDialogResult {
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatRadioModule,
+    A11yModule,
     ReactiveFormsModule,
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
-    MatRadioButton,
-    MatRadioGroup,
     SharedUiFormFieldDirective,
+    SharedUiDropFileComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-dialog-beschwaerde-entscheid.component.html',
@@ -76,6 +80,7 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
     kommentar: [<string | null>null, [Validators.required]],
     beschwerdeErfolgreich: [<boolean | null>null, Validators.required],
   });
+  selectedFileSig = signal<File | null>(null);
 
   static open(dialog: MatDialog, data: BeschwerdeentscheidUploadDialogData) {
     return dialog.open<
@@ -104,5 +109,24 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
 
   close() {
     this.dialogRef.close();
+  }
+
+  updateFileList(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (files && files.length > 0) {
+      this.selectedFileSig.set(files[0]);
+    } else {
+      this.selectedFileSig.set(null);
+    }
+  }
+
+  resetSelectedFile() {
+    this.selectedFileSig.set(null);
+    const input = this.fileInputSig()?.nativeElement;
+    if (input) {
+      input.value = '';
+    }
   }
 }
