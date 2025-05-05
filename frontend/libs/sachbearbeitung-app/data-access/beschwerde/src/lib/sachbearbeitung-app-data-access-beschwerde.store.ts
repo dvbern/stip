@@ -145,8 +145,7 @@ export class BeschwerdeStore extends signalStore(
                   onSuccess: () => {
                     this.globalNotificationStore.createSuccessNotification({
                       messageKey:
-                        'sachbearbeitung-app.infos.beschwerde-entscheid.create.success.' +
-                        beschwerdeErfolgreich,
+                        'sachbearbeitung-app.infos.beschwerde-entscheid.create.success',
                     });
                     onSucces?.();
                   },
