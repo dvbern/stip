@@ -299,7 +299,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void aenderungAkzeptieren() {
         var nullableGesuchDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(customDokumentId)
@@ -339,7 +339,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(13)
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
@@ -364,7 +364,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(13)
+    @Order(14)
     void aenderungEinreichenAgain() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -395,7 +395,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(15)
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -419,7 +419,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(16)
     @Test
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
@@ -431,7 +431,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @Test
-    @Order(16)
+    @Order(17)
     @TestAsSachbearbeiter
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()

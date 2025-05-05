@@ -22,9 +22,9 @@
     </button>
     <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
-        @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
+        @for (tranche of tranchenSig().list; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
+            [routerLink]="tranche.url"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="tranche-nav-menu-item"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"

@@ -24,26 +24,30 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class DokumentAuthorizerTest {
-    private GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
+    private DokumentAuthorizer dokumentAuthorizer;
 
     private GesuchDokument gesuchDokument;
+    private Gesuch gesuch;
+    private SozialdienstService sozialdienstService;
 
     @BeforeEach
     void setUp() {
@@ -52,66 +56,55 @@ class DokumentAuthorizerTest {
         mockBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
         Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
 
+        final var gesuchRepository = Mockito.mock(GesuchRepository.class);
+        sozialdienstService = Mockito.mock(SozialdienstService.class);
+
+        gesuch = TestUtil.getFullGesuch();
+        var fall = new Fall();
+        fall.setAusbildungs(Set.of(gesuch.getAusbildung()));
+        gesuch.getAusbildung().setFall(fall);
+
         final var gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(new GesuchTranche().setGesuch(new Gesuch()));
-        Mockito.when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
 
+        Mockito.when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
         final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
-
-        gesuchDokumentAuthorizer = new GesuchDokumentAuthorizer(
-            gesuchTrancheRepository,
-            benutzerService,
-            null,
-            gesuchDokumentRepository,
-            null,
-            null,
-            null
+        // skip this step in authorizer
+        Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(new GesuchTranche().setGesuch(gesuch));
+        dokumentAuthorizer = new DokumentAuthorizer(
+            gesuchRepository, benutzerService, gesuchTrancheRepository, gesuchDokumentRepository, sozialdienstService
         );
     }
 
     @Test
-    void gesuchDokumentOfTrancheSuccess() {
-        // arrange
-        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-
-        // act/assert
-        final var dokumentId = UUID.randomUUID();
-        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    void canUploadShouldSucceedWhenDelegatedAndSozialdienstMitarbeiter() {
+        setupSozialdienstMitarbeiter();
+        setupDelegation(gesuch.getAusbildung().getFall());
+        assertDoesNotThrow(() -> dokumentAuthorizer.canUpload(UUID.randomUUID()));
     }
 
-    @Test
-    void gesuchDokumentOfTrancheFail() {
-        // arrange
-        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuchDokument.getGesuchTranche().getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-
-        // act/assert
-        final var dokumentId = UUID.randomUUID();
-        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    private void setupDelegation(Fall fall) {
+        // sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst
+        Mockito.when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
+        var delegierung = new Delegierung();
+        var sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        delegierung.setSozialdienst(sozialdienst);
+        fall.setDelegierung(delegierung);
     }
 
-    @Test
-    void gesuchDokumentOfAenderungSuccess() {
-        // arrange
-        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
-
-        // act/assert
-        final var dokumentId = UUID.randomUUID();
-        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
-    }
-
-    @Test
-    void gesuchDokumentOfAenderungFail() {
-        // arrange
-        gesuchDokument.getGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuchDokument.getGesuchTranche().setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-
-        // act/assert
-        final var dokumentId = UUID.randomUUID();
-        assertThrows(IllegalStateException.class, () -> gesuchDokumentAuthorizer.canUpdateGesuchDokument(dokumentId));
+    private void setupSozialdienstMitarbeiter() {
+        final var benutzerService = Mockito.mock(BenutzerService.class);
+        final var mockBenutzer = new Benutzer();
+        // setup matching role & role in default_roles (Gesuchsteller)
+        mockBenutzer.setRollen(
+            Set.of(
+                new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
+                    .setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER)
+            )
+        );
+        Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
     }
 }

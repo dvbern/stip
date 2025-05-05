@@ -147,6 +147,22 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canGesuchEinreichen(final UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
     public void canCreate() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.findFallForGsOptional(currentBenutzer.getId());
@@ -247,5 +263,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         ) {
             forbidden();
         }
+    }
+
+    @Transactional
+    public void canBearbeitungAbschliessen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS) {
+            return;
+        }
+        forbidden();
     }
 }

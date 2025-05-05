@@ -39,7 +39,6 @@ import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
@@ -237,7 +236,6 @@ public class UnterschriftenblattService {
         for (final var unterschriftenblatt : toDelete) {
             toRemoveFromS3.addAll(unterschriftenblatt.getDokumente().stream().map(Dokument::getObjectId).toList());
             gesuch.getUnterschriftenblaetter().remove(unterschriftenblatt);
-            unterschriftenblatt.setGesuch(null);
             unterschriftenblattRepository.delete(unterschriftenblatt);
         }
 
@@ -249,22 +247,14 @@ public class UnterschriftenblattService {
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
-        final var gesuchThatWasVerfuegt =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-        GesuchTranche toGetFor = null;
-        if (gesuchThatWasVerfuegt.isPresent()) {
-            final var found = gesuchThatWasVerfuegt.get();
-            final var tranche = found.getGesuchTrancheValidOnDate(found.getGesuchStatusAenderungDatum().toLocalDate());
-            if (tranche.isPresent()) {
-                toGetFor = tranche.get();
-            }
+        if (gesuch.isVerfuegt()) {
+            return gesuch.getUnterschriftenblaetter().stream().map(Unterschriftenblatt::getDokumentTyp);
         }
 
-        if (toGetFor == null) {
-            toGetFor = gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new);
-        }
-
-        final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();
+        final var famsit = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getFamiliensituation();
         if (famsit == null) {
             return Stream.of();
         }
