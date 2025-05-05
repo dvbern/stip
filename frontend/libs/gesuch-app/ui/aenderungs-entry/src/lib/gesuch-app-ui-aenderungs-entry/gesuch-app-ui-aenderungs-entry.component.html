@@ -34,7 +34,7 @@
       {{ 'gesuch-app.gesuch.status.tranche.' + tranche.status | translate }}
     </span>
     <div class="mb-3 tw-flex-grow"></div>
-    @if (gesuch.canEdit) {
+    @if (gesuch.canDeleteAenderung) {
       <button
         type="button"
         class="btn btn-outline-primary mb-2 w-100"

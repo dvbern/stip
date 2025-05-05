@@ -81,6 +81,7 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -119,6 +120,7 @@ public class GesuchTrancheService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
+    private final Validator validator;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId);
@@ -597,7 +599,6 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchDto aenderungFehlendeDokumenteEinreichen(final UUID aenderungId) {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
-        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(aenderungsTranche);
         gesuchTrancheStatusService
             .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
         return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
