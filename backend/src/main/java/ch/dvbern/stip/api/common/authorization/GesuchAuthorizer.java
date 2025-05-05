@@ -197,17 +197,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void canGetSozMaDashboard(final UUID fallId) {
-        final var fall = fallRepository.requireById(fallId);
-        if (
-            AuthorizerUtil
-                .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)
-        ) {
-            return;
-        }
-        forbidden();
-    }
-
     public void gsCanGetGesuche() {
         permitAll();
     }
