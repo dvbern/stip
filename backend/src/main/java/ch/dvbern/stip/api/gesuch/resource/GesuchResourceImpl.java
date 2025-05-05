@@ -425,6 +425,13 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
+    @RolesAllowed(GS_GESUCH_READ)
+    @Override
+    public List<FallDashboardItemDto> getSozMaDashboard(UUID fallId) {
+        gesuchAuthorizer.canGetSozMaDashboard(fallId);
+        return gesuchService.getSozMaFallDashboardItemDtos(fallId);
+    }
+
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto bearbeitungAbschliessen(UUID gesuchTrancheId) {

@@ -428,6 +428,14 @@ public class GesuchService {
     }
 
     @Transactional
+    public List<FallDashboardItemDto> getSozMaFallDashboardItemDtos(UUID fallId) {
+        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
+        final var fall = fallRepository.requireById(fallId);
+        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
+        return fallDashboardItemDtos;
+    }
+
+    @Transactional
     public List<GesuchDto> findAllForFall(UUID fallId) {
         return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
     }

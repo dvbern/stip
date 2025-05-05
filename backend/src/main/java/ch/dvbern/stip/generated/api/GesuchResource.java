@@ -191,6 +191,11 @@ public interface GesuchResource {
     GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
+    @Path("/benutzer/me/soz-ma-dashboard/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    List<FallDashboardItemDto> getSozMaDashboard(@PathParam("fallId") UUID fallId);
+
+    @GET
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);

@@ -140,6 +140,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGsDashboard
       summary: Returns gesuche for dashboard filtered by gs
+  /gesuch/benutzer/me/soz-ma-dashboard/{fallId}:
+    get:
+      tags:
+        - Gesuch
+      parameters:
+        - name: fallId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FallDashboardItem'
+          description: Returns gesuche for dashboard filtered by sozialdienst mitarbeiter
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozMaDashboard
+      summary: Returns gesuche for dashboard filtered by gs
   /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
