@@ -89,7 +89,6 @@ public class GesuchApiSpec {
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersandbereit(),
                 changeGesuchStatusToVersendet(),
-                createBeschwerdeEntscheid(),
                 createBeschwerdeVerlaufEntry(),
                 createGesuch(),
                 deleteGesuch(),
@@ -147,10 +146,6 @@ public class GesuchApiSpec {
 
     public ChangeGesuchStatusToVersendetOper changeGesuchStatusToVersendet() {
         return new ChangeGesuchStatusToVersendetOper(createReqSpec());
-    }
-
-    public CreateBeschwerdeEntscheidOper createBeschwerdeEntscheid() {
-        return new CreateBeschwerdeEntscheidOper(createReqSpec());
     }
 
     public CreateBeschwerdeVerlaufEntryOper createBeschwerdeVerlaufEntry() {
@@ -861,105 +856,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToVersendetOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
-     * @see #kommentarForm  (required)
-     * @see #beschwerdeErfolgreichForm  (required)
-     * @see #fileUploadMultiPart  (required)
-     */
-    public static class CreateBeschwerdeEntscheidOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde-entscheid";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public CreateBeschwerdeEntscheidOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("text/plain");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /gesuch/{gesuchId}/beschwerde-entscheid
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
-         * @return operation
-         */
-        public CreateBeschwerdeEntscheidOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-         public static final String KOMMENTAR_FORM = "kommentar";
-
-         /**
-         * @param kommentar (String)  (required)
-         * @return operation
-         */
-         public CreateBeschwerdeEntscheidOper kommentarForm(Object... kommentar) {
-            reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
-            return this;
-         }
-
-         public static final String BESCHWERDE_ERFOLGREICH_FORM = "beschwerdeErfolgreich";
-
-         /**
-         * @param beschwerdeErfolgreich (Boolean)  (required)
-         * @return operation
-         */
-         public CreateBeschwerdeEntscheidOper beschwerdeErfolgreichForm(Object... beschwerdeErfolgreich) {
-            reqSpec.addFormParam(BESCHWERDE_ERFOLGREICH_FORM, beschwerdeErfolgreich);
-            return this;
-         }
-
-         /**
-         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
-         * @see #reqSpec for customise
-         * @param fileUpload (File)  (required)
-         * @return operation
-         */
-         public CreateBeschwerdeEntscheidOper fileUploadMultiPart(File fileUpload) {
-            reqSpec.addMultiPart(fileUpload);
-            return this;
-         }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public CreateBeschwerdeEntscheidOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public CreateBeschwerdeEntscheidOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -197,10 +197,6 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_CREATE_BESCHWERDE_ENTSCHEID = Collections.unmodifiableSet(
-        EnumSet.of(KEIN_STIPENDIENANSPRUCH, STIPENDIENANSPRUCH)
-    );
-
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }

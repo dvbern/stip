@@ -22,20 +22,8 @@
 
   <!-- Beschwerde Entscheid hochladen -->
   <h3 class="tw-mb-6 tw-mt-10">
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen' | translate }}
   </h3>
-  <p>
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | translate }}
-  </p>
-  <button
-    class="btn btn-primary"
-    type="button"
-    data-testid="button-beschwerde-entscheid-upload"
-    (click)="entscheidHochladen()"
-    [disabled]="!canCreateEntscheidSig()"
-  >
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload' | translate }}
-  </button>
 
   <!-- Beschwerde Verlauf -->
   <h3 class="tw-mb-6 tw-mt-10">
@@ -83,11 +71,7 @@
           {{ 'sachbearbeitung-app.infos.beschwerde.table.title' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
-          @if (beschwerde.beschwerdeEntscheid) {
-            {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | translate }}
-          } @else {
-            {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo | translate }}
-          }
+          {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo | translate }}
         </td>
       </ng-container>
 
@@ -111,40 +95,16 @@
         <th mat-header-cell *matHeaderCellDef>
           {{ 'sachbearbeitung-app.infos.beschwerde.table.successfull' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
-          @if (beschwerde.beschwerdeEntscheid) {
-            {{
-              beschwerde.beschwerdeEntscheid.beschwerdeErfolgreich
-                ? ('sachbearbeitung-app.infos.beschwerde.infoDialog.true' | translate)
-                : ('sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate)
-            }}
-          }
-        </td>
+        <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap"></td>
       </ng-container>
 
       <!-- Hochgeladenes Dokument -->
-
       <ng-container matColumnDef="document">
         <th mat-header-cell *matHeaderCellDef>
           {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
-          @let dokumentId = beschwerde.document?.id;
-
-          @if (dokumentId) {
-            <button
-              type="button"
-              class="btn btn-link fs-7 tw-p-4 tw-text-sm"
-              [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | translate"
-              [dvDownloadButton]="{
-                type: 'dokument',
-                id: dokumentId,
-                dokumentArt: 'BESCHWERDE_ENTSCHEID',
-              }"
-            >
-              <span class="material-symbols-rounded tw-align-middle">download</span>
-            </button>
-          }
+          <!-- use "<button [dvDownloadButton]" here once there are files to download -->
         </td>
       </ng-container>
 

@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.beschwerdeverlauf.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.repo.BeschwerdeVerlaufRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -58,20 +57,6 @@ public class BeschwerdeverlaufService {
 
         var entry = beschwerdeverlaufMapper.toEntity(createDto);
         entry.setGesuch(gesuch);
-        beschwerdeverlaufRepository.persistAndFlush(entry);
-        return beschwerdeverlaufMapper.toDto(entry);
-    }
-
-    @Transactional
-    public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntryWithBeschwerdeEntscheid(
-        final UUID gesuchId,
-        final BeschwerdeVerlaufEntryCreateDto createDto,
-        final BeschwerdeEntscheid beschwerdeEntscheid
-    ) {
-        var gesuch = gesuchRepository.requireById(gesuchId);
-        var entry = beschwerdeverlaufMapper.toEntity(createDto);
-        entry.setGesuch(gesuch);
-        entry.setBeschwerdeEntscheid(beschwerdeEntscheid);
         beschwerdeverlaufRepository.persistAndFlush(entry);
         return beschwerdeverlaufMapper.toDto(entry);
     }

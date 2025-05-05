@@ -39,7 +39,6 @@
       "@dv/sachbearbeitung-app/data-access/sachbearbeiter": ["libs/sachbearbeitung-app/data-access/sachbearbeiter/src/index.ts"],
       "@dv/sachbearbeitung-app/data-access/statusprotokoll": ["libs/sachbearbeitung-app/data-access/statusprotokoll/src/index.ts"],
       "@dv/sachbearbeitung-app/data-access/steuerdaten": ["libs/sachbearbeitung-app/data-access/steuerdaten/src/index.ts"],
-      "@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid": ["libs/sachbearbeitung-app/dialog/beschwaerde-entscheid/src/index.ts"],
       "@dv/sachbearbeitung-app/dialog/beschwerde-entry": ["libs/sachbearbeitung-app/dialog/beschwerde-entry/src/index.ts"],
       "@dv/sachbearbeitung-app/dialog/buchhaltung-info": ["libs/sachbearbeitung-app/dialog/buchhaltung-info/src/index.ts"],
       "@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur": ["libs/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur/src/index.ts"],

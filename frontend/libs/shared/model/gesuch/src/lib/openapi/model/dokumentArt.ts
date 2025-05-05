@@ -10,12 +10,11 @@
  * Do not edit the class manually.
  */
 
-export type DokumentArt = 'GESUCH_DOKUMENT' | 'UNTERSCHRIFTENBLATT' | 'CUSTOM_DOKUMENT' | 'BESCHWERDE_ENTSCHEID';
+export type DokumentArt = 'GESUCH_DOKUMENT' | 'UNTERSCHRIFTENBLATT' | 'CUSTOM_DOKUMENT';
 
 export const DokumentArt = {
     GESUCH_DOKUMENT: 'GESUCH_DOKUMENT' as DokumentArt,
     UNTERSCHRIFTENBLATT: 'UNTERSCHRIFTENBLATT' as DokumentArt,
-    CUSTOM_DOKUMENT: 'CUSTOM_DOKUMENT' as DokumentArt,
-    BESCHWERDE_ENTSCHEID: 'BESCHWERDE_ENTSCHEID' as DokumentArt
+    CUSTOM_DOKUMENT: 'CUSTOM_DOKUMENT' as DokumentArt
 };
 
