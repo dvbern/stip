@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
@@ -28,10 +32,6 @@ import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
