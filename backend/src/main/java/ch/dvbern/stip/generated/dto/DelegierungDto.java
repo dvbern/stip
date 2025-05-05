@@ -38,6 +38,7 @@ public class DelegierungDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }

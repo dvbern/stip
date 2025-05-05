@@ -4129,6 +4129,8 @@ components:
           $ref: '#/components/schemas/Adresse'
     Delegierung:
       type: object
+      required:
+        - id
       properties:
         id:
           $ref: '#/components/schemas/UUID'
