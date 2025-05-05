@@ -26,10 +26,7 @@
     </dt>
     <dd class="tw-font-normal">
       @if (dialogData.beschwerdeEntscheid) {
-        {{
-          'sachbearbeitung-app.infos.beschwerde-entscheid.title.' + dialogData.beschwerdeEntscheid.beschwerdeErfolgreich
-            | translate
-        }}
+        {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | translate }}
       } @else {
         {{ 'sachbearbeitung-app.infos.beschwerde.title.' + dialogData.beschwerdeSetTo | translate }}
       }

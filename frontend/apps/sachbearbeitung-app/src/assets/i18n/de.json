@@ -333,8 +333,7 @@
   "sachbearbeitung-app.infos.beschwerde.infoDialog.false": "Nein",
   "sachbearbeitung-app.infos.beschwerde.erfolgreich": "Beschwerde erfolgreich",
   "sachbearbeitung-app.infos.beschwerde.download": "Download Datei",
-  "sachbearbeitung-app.infos.beschwerde-entscheid.title.true": "Beschwerdeentscheid war Erfolgreich",
-  "sachbearbeitung-app.infos.beschwerde-entscheid.title.false": "Beschwerdeentscheid war nicht Erfolgreich",
+  "sachbearbeitung-app.infos.beschwerde-entscheid.title": "Beschwerdeentscheid hochgeladen",
   "sachbearbeitung-app.infos.beschwerde.entscheid-hochladen": "Beschwerdeeintscheid hochladen",
   "sachbearbeitung-app.infos.beschwerde-entscheid.create.success": "Beschwerdeentscheid wurde erfolgreich erstellt",
 

@@ -84,10 +84,7 @@
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
           @if (beschwerde.beschwerdeEntscheid) {
-            {{
-              'sachbearbeitung-app.infos.beschwerde-entscheid.title.' +
-                beschwerde.beschwerdeEntscheid.beschwerdeErfolgreich | translate
-            }}
+            {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | translate }}
           } @else {
             {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo | translate }}
           }

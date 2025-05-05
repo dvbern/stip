@@ -333,8 +333,7 @@
   "sachbearbeitung-app.infos.beschwerde.infoDialog.false": "No",
   "sachbearbeitung-app.infos.beschwerde.erfolgreich": "Recours couronné de succès",
   "sachbearbeitung-app.infos.beschwerde.download": "Télécharger le fichier",
-  "sachbearbeitung-app.infos.beschwerde-entscheid.title.true": "La décision sur le recours a été couronnée de succès",
-  "sachbearbeitung-app.infos.beschwerde-entscheid.title.false": "La décision sur le recours n'a pas été couronnée de succès",
+  "sachbearbeitung-app.infos.beschwerde-entscheid.title": "Décision de plainte téléchargée",
   "sachbearbeitung-app.infos.beschwerde.entscheid-hochladen": "Télécharger la décision de la plainte",
   "sachbearbeitung-app.infos.beschwerde-entscheid.create.success": "La décision de la plainte a été créée avec succès",
 
