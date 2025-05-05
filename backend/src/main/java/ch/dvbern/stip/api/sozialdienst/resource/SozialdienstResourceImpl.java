@@ -140,7 +140,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzerList() {
         sozialdienstAuthorizer.canGetSozialdienstBenutzer();
         return sozialdienstBenutzerService
-            .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin());
+            .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer());
     }
 
     @Override

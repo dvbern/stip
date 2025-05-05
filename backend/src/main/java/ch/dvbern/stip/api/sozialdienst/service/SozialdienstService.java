@@ -34,6 +34,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,6 +48,12 @@ public class SozialdienstService {
     public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         return getSozialdienstOfSozialdienstAdmin(currentBenutzer);
+    }
+
+    public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
+        final var sozialdienstBenutzer =
+            sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
+        return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
     }
 
     public Sozialdienst getSozialdienstOfSozialdienstAdmin(Benutzer benutzer) {

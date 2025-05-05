@@ -99,17 +99,10 @@ public class DelegierenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(currentBenutzer.getId());
-        final var sozialdienst = sozialdienstRepository.findAll()
-            .stream()
-            .filter(x -> x.getSozialdienstBenutzers().contains(sozialdienstBenutzer))
-            .findFirst();
-
-        // final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        final var sozialdienst = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer();
 
         final var baseQuery = sozDashboardQueryBuilder
-            .baseQuery(getDelegierungSozQueryType, sozialdienst.orElseThrow().getId());
+            .baseQuery(getDelegierungSozQueryType, sozialdienst.getId());
 
         if (fallNummer != null) {
             sozDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
