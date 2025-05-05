@@ -44,12 +44,11 @@ public class SozialdienstDashboardQueryBuilder {
     public JPAQuery<Delegierung> baseQuery(final GetDelegierungSozQueryTypeDto queryType, final UUID sozialdienstId) {
         final var me = benutzerService.getCurrentBenutzer();
         final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(me.getId());
-        final var query = switch (queryType) {
+        return switch (queryType) {
             case ALLE -> delegierungRepository.getFindAlleOfSozialdienstQuery(sozialdienstId);
             case ALLE_BEARBEITBAR_MEINE -> delegierungRepository
                 .getFindAlleMeineQuery(sozialdienstBenutzer, sozialdienstId);
         };
-        return query;
     }
 
     public void fallNummer(final JPAQuery<Delegierung> query, final String fallNummer) {

@@ -79,10 +79,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
-        // todo: implement & use fallnr
         delegierenAuthorizer.canReadDelegierung();
-        // TODO Auto-generated method stub
-        // return new PaginatedSozDashboardDto();
 
         return delegierenService.getDelegierungSoz(
             getDelegierungSozQueryType,
