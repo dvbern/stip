@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -83,16 +84,19 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         final DelegierterMitarbeiterAendernDto delegierterMitarbeiterAendernDto
     ) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
-        if (sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())) {
-            return;
-        }
+
+        final BooleanSupplier isCurrentBenutzerMitarbeiterOfSozialdienst =
+            () -> sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId());
 
         final var targetUser = sozialdienstBenutzerRepository.requireById(
             delegierterMitarbeiterAendernDto.getMitarbeiterId()
         );
+        final BooleanSupplier isTargetUserBenutzerOfSameSozialdienst = () -> sozialdienstService
+            .isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser);
 
         if (
-            sozialdienstService.isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser)
+            isCurrentBenutzerMitarbeiterOfSozialdienst.getAsBoolean()
+            && isTargetUserBenutzerOfSameSozialdienst.getAsBoolean()
         ) {
             return;
         }
