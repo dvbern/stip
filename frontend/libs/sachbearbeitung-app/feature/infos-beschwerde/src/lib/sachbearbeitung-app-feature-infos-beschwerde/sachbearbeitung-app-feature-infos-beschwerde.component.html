@@ -117,7 +117,7 @@
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
           @if (beschwerde.beschwerdeEntscheid) {
             {{
-              beschwerde.beschwerdeEntscheid?.beschwerdeErfolgreich
+              beschwerde.beschwerdeEntscheid.beschwerdeErfolgreich
                 ? ('sachbearbeitung-app.infos.beschwerde.infoDialog.true' | translate)
                 : ('sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate)
             }}
@@ -132,7 +132,7 @@
           {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
-          @let dokumentId = beschwerde.beschwerdeEntscheid?.dokumente?.[0]?.id;
+          @let dokumentId = beschwerde.document?.id;
 
           @if (dokumentId) {
             <button

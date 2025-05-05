@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -35,6 +35,19 @@ export class BeschwerdeStore extends signalStore(
 ) {
   private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+
+  beschwerdeVelaufSig = computed(() => {
+    const beschwerde = this.beschwerden.data();
+
+    if (!beschwerde) {
+      return [];
+    }
+
+    return beschwerde.map((entry) => ({
+      ...entry,
+      document: entry.beschwerdeEntscheid?.dokumente[0],
+    }));
+  });
 
   loadBeschwerden$ = rxMethod<{ gesuchId: string }>(
     pipe(
@@ -132,7 +145,7 @@ export class BeschwerdeStore extends signalStore(
                   onSuccess: () => {
                     this.globalNotificationStore.createSuccessNotification({
                       messageKey:
-                        'sachbearbeitung-app.infos.beschwerde.create.success.' +
+                        'sachbearbeitung-app.infos.beschwerde-entscheid.create.success.' +
                         beschwerdeErfolgreich,
                     });
                     onSucces?.();

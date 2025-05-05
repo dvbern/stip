@@ -269,7 +269,7 @@
             <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }
+              {{ 'shared.form.error.required' | translate }}
             </mat-error>
             <mat-error *dvSharedUiFormMessageError="'dateFormat'">
               {{ 'shared.form.error.dateFormat' | translate }}
@@ -281,7 +281,7 @@
               {{ 'shared.form.error.maxDatePast' | translate }}
             </mat-error>
           </mat-form-field>
-          @if (this.form.controls.geburtsdatum.valid && geburtstagDocumentOptionsSig(); as options) {
+          @if (geburtstagDocumentOptionsSig(); as options) {
             <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
           }
         </div>
@@ -423,7 +423,9 @@
               </mat-error>
             </mat-form-field>
 
-            @if (heimatortDocumentOptionsSig(); as options) {}
+            @if (heimatortDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+            }
             <button
               type="button"
               (click)="heimatortDialog.toggle()"
@@ -654,9 +656,11 @@
               ></dv-shared-pattern-document-upload>
             }
           </div>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
+          <div class="group-errors">
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </div>
         </mat-radio-group>
         <div class="d-none d-xl-block col-xl-4"></div>
         <div

@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  computed,
   inject,
   viewChild,
 } from '@angular/core';
@@ -13,24 +12,26 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+
+export type BeschwerdeentscheidUploadDialogData = {
+  allowedTypes: string[] | undefined;
+};
 
 export interface BeschwerdeentscheidUploadDialogResult {
   fileUpload: File;
@@ -44,7 +45,6 @@ export interface BeschwerdeentscheidUploadDialogResult {
   imports: [
     CommonModule,
     TranslatePipe,
-    SharedPatternDocumentUploadComponent,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -60,7 +60,6 @@ export interface BeschwerdeentscheidUploadDialogResult {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
-  private store = inject(Store);
   private dialogRef =
     inject<
       MatDialogRef<
@@ -69,40 +68,26 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
-  private deploymentConfigSig = this.store.selectSignal(
-    selectSharedDataAccessConfigsView,
-  );
 
+  dialogData = inject<BeschwerdeentscheidUploadDialogData>(MAT_DIALOG_DATA);
   fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
-  allowTypesSig = computed(() => {
-    return this.deploymentConfigSig().deploymentConfig?.allowedMimeTypes;
-  });
   form = this.formBuilder.group({
     fileUpload: [<File | undefined>undefined, Validators.required],
-    kommentar: [
-      <string | null>null,
-      [Validators.required, Validators.maxLength(2000)],
-    ],
+    kommentar: [<string | null>null, [Validators.required]],
     beschwerdeErfolgreich: [<boolean | null>null, Validators.required],
   });
 
-  static open(dialog: MatDialog) {
+  static open(dialog: MatDialog, data: BeschwerdeentscheidUploadDialogData) {
     return dialog.open<
       SachbearbeitungAppDialogBeschwaerdeEntscheidComponent,
-      undefined,
+      BeschwerdeentscheidUploadDialogData,
       BeschwerdeentscheidUploadDialogResult
-    >(SachbearbeitungAppDialogBeschwaerdeEntscheidComponent);
+    >(SachbearbeitungAppDialogBeschwaerdeEntscheidComponent, { data });
   }
 
   confirm() {
     this.form.markAllAsTouched();
     const fileUpload = this.fileInputSig()?.nativeElement?.files?.[0];
-    console.log('errors?', {
-      form: this.form,
-      errors: this.form.errors,
-      file: fileUpload,
-      input: this.fileInputSig(),
-    });
 
     if (this.form.invalid || !fileUpload) {
       return;

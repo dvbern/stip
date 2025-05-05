@@ -8,20 +8,27 @@
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ '' + 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
   </h1>
 
   <form [formGroup]="form" (ngSubmit)="confirm()" class="tw-flex tw-flex-col tw-gap-3">
     <input
       #fileInput
       formControlName="fileUpload"
-      class="tw-mb-4 tw-block"
+      class="tw-block"
       type="file"
       data-testid="file-input"
-      [attr.accept]="allowTypesSig()"
+      [attr.accept]="dialogData.allowedTypes"
     />
+    <div class="group-errors tw-text-sm">
+      <mat-error>
+        @if (form.touched && form.controls.fileUpload.touched && fileInput.files?.length === 0) {
+          {{ 'shared.form.error.required' | translate }}
+        }
+      </mat-error>
+    </div>
 
-    <mat-form-field>
+    <mat-form-field class="tw-mt-3 tw-w-full" dvSharedUiFormField>
       <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.kommentar.label' | translate }}</mat-label>
       <textarea
         formControlName="kommentar"
@@ -41,7 +48,7 @@
       formControlName="beschwerdeErfolgreich"
       data-testid="form-geschwister-ausbildungssituation"
       dvSharedUiFormField
-      class="col-12 col-xl-8"
+      class="tw-w-full"
     >
       <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.erfolgreich' | translate }}</mat-label>
       <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
@@ -53,6 +60,11 @@
             'sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate
           }}</mat-radio-button>
         </div>
+      </div>
+      <div class="group-errors">
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
       </div>
     </mat-radio-group>
 
