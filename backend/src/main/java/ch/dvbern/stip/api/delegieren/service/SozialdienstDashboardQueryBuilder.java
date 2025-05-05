@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
@@ -33,6 +29,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SozialdienstDashboardQueryBuilder {
@@ -44,12 +44,11 @@ public class SozialdienstDashboardQueryBuilder {
     public JPAQuery<Delegierung> baseQuery(final GetDelegierungSozQueryTypeDto queryType, final UUID sozialdienstId) {
         final var me = benutzerService.getCurrentBenutzer();
         final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(me.getId());
-        final var query = switch (queryType) {
+        return switch (queryType) {
             case ALLE -> delegierungRepository.getFindAlleOfSozialdienstQuery(sozialdienstId);
             case ALLE_BEARBEITBAR_MEINE -> delegierungRepository
                 .getFindAlleMeineQuery(sozialdienstBenutzer, sozialdienstId);
         };
-        return query;
     }
 
     public void fallNummer(final JPAQuery<Delegierung> query, final String fallNummer) {
