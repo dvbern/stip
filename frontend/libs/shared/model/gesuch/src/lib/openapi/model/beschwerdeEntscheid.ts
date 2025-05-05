@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BeschwerdeEntscheid } from './beschwerdeEntscheid';
+import { Dokument } from './dokument';
 
-export interface BeschwerdeVerlaufEntryAllOf { 
-    beschwerdeEntscheid?: BeschwerdeEntscheid;
-    timestampErstellt: string;
-    userErstellt: string;
+export interface BeschwerdeEntscheid { 
+    kommentar: string;
+    beschwerdeErfolgreich: boolean;
+    dokumente: Array<Dokument>;
 }
 
