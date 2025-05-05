@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -35,6 +35,19 @@ export class BeschwerdeStore extends signalStore(
 ) {
   private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+
+  beschwerdeVelaufSig = computed(() => {
+    const beschwerde = this.beschwerden.data();
+
+    if (!beschwerde) {
+      return [];
+    }
+
+    return beschwerde.map((entry) => ({
+      ...entry,
+      document: entry.beschwerdeEntscheid?.dokumente[0],
+    }));
+  });
 
   loadBeschwerden$ = rxMethod<{ gesuchId: string }>(
     pipe(
@@ -91,6 +104,55 @@ export class BeschwerdeStore extends signalStore(
               },
             ),
           ),
+      ),
+    ),
+  );
+
+  createBeschwerdeEntscheid$ = rxMethod<{
+    gesuchId: string;
+    fileUpload: File;
+    kommentar: string;
+    beschwerdeErfolgreich: boolean;
+    onSucces?: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          beschwerde: cachedPending(state.beschwerde),
+        }));
+      }),
+      switchMap(
+        ({
+          gesuchId,
+          fileUpload,
+          kommentar,
+          beschwerdeErfolgreich,
+          onSucces,
+        }) =>
+          this.gesuchService
+            .createBeschwerdeEntscheid$({
+              gesuchId,
+              fileUpload,
+              kommentar,
+              beschwerdeErfolgreich,
+            })
+            .pipe(
+              handleApiResponse(
+                (beschwerde) => {
+                  patchState(this, { beschwerde });
+                },
+                {
+                  onSuccess: () => {
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey:
+                        'sachbearbeitung-app.infos.beschwerde-entscheid.create.success.' +
+                        beschwerdeErfolgreich,
+                    });
+                    onSucces?.();
+                  },
+                },
+              ),
+            ),
       ),
     ),
   );

@@ -15,11 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.type;
+package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
-public enum DokumentArt {
-    GESUCH_DOKUMENT,
-    UNTERSCHRIFTENBLATT,
-    CUSTOM_DOKUMENT,
-    BESCHWERDE_ENTSCHEID
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.dokument.service.DokumentMapper;
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
+import org.mapstruct.Mapper;
+
+@Mapper(config = MappingConfig.class, uses = DokumentMapper.class)
+public interface BeschwerdeEntscheidMapper {
+    BeschwerdeEntscheidDto toDto(final BeschwerdeEntscheid beschwerdeEntscheid);
 }

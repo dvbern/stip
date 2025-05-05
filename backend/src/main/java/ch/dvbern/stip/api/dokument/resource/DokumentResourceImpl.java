@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
@@ -85,6 +87,8 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final BeschwerdeEntscheidService beschwerdeEntscheidService;
+    private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
@@ -192,10 +196,10 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
-
         return switch (dokumentArt) {
             case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
+            case BESCHWERDE_ENTSCHEID -> beschwerdeEntscheidService.getDokument(dokumentId);
         };
     }
 
