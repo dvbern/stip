@@ -1,5 +1,8 @@
 {
   "app-name": "Stipendien Online",
+  "gesuch-app.dashboard.title": "Dashboard",
+  "sozialdienst-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
+  "sozialdienst-app.dashboard.ausbildung.create": "Stipendium beantragen",
 
   "sozialdienst-app.header.antraege": "Anträge",
   "sozialdienst-app.header.administration": "Administration",

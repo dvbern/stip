@@ -1,0 +1,59 @@
+<!-- Änderung Titel -->
+<div class="tw-flex tw-flex-grow tw-flex-col">
+  <div class="tw-flex tw-items-baseline">
+    <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
+      <i class="material-symbols-rounded fs-5">edit</i>
+    </dv-shared-ui-icon-chip>
+    @if (tranche.status === 'IN_BEARBEITUNG_GS') {
+      <h3 data-testid="cockpit-periode-title">
+        <span>{{ 'shared.dashboard.aenderung.title' | translate }}</span>
+        <span>&nbsp;</span>
+      </h3>
+    } @else {
+      <div>
+        <h3 data-testid="cockpit-periode-title">
+          <span>{{ 'shared.dashboard.aenderung.title' | translate }}</span>
+          <span>&nbsp;</span>
+        </h3>
+        <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
+          <span>{{ tranche.gueltigAb | date: 'dd.MM.yyyy' }}</span>
+          <span> - </span>
+          <span>{{ tranche.gueltigBis | date: 'dd.MM.yyyy' }}</span>
+        </h6>
+      </div>
+    }
+  </div>
+
+  <!-- Status des Antrags -->
+  <div class="tw-flex tw-flex-grow tw-flex-col tw-align-top">
+    @if (tranche.comment) {
+      <span class="mt-4 fw-normal small">{{ tranche.comment }}</span>
+    }
+    <span class="mt-4 fw-normal small">{{ 'shared.dashboard.aenderung.status.title' | translate }}</span>
+    <span class="fw-medium">
+      {{ 'shared.gesuch.status.tranche.' + tranche.status | translate }}
+    </span>
+    <div class="mb-3 tw-flex-grow"></div>
+    @if (tranche.status === 'IN_BEARBEITUNG_GS') {
+      <button
+        type="button"
+        class="btn btn-outline-primary mb-2 w-100"
+        data-testid="shared.dashboard.aenderung.delete"
+        (click)="deleteAenderung.emit(tranche.id)"
+      >
+        <span>{{ 'shared.dashboard.aenderung.delete' | translate }}</span>
+      </button>
+    }
+    <a
+      class="btn btn-primary w-100"
+      [class.btn-outline-primary]="tranche.status !== 'IN_BEARBEITUNG_GS'"
+      data-testid="cockpit-gesuch-edit"
+      [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
+    >
+      {{
+        (tranche.status === 'IN_BEARBEITUNG_GS' ? 'shared.dashboard.aenderung.edit' : 'shared.dashboard.aenderung.open')
+          | translate
+      }}
+    </a>
+  </div>
+</div>

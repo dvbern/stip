@@ -5,7 +5,7 @@
 
   <div class="container tw-my-12">
     <h1 class="tw-mb-8 tw-text-white">
-      {{ 'gesuch-app.dashboard.welcome.titel' | translate: { name: benutzerNameSig() } }}
+      {{ 'gesuch-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
     </h1>
 
     @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
@@ -16,13 +16,13 @@
         <div class="tw-flex tw-flex-col tw-gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
             @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
-              <dv-gesuch-app-ui-dashboard-ausbildung
+              <dv-shared-ui-dashboard-ausbildung
                 [ausbildungSig]="ausbildung"
                 (deleteAusbildung)="deleteAusbildung($event)"
                 (deleteGesuch)="deleteGesuch($event)"
                 (aenderungMelden)="aenderungMelden($event)"
                 (deleteAenderung)="deleteAenderung($event)"
-              ></dv-gesuch-app-ui-dashboard-ausbildung>
+              ></dv-shared-ui-dashboard-ausbildung>
             }
           } @else if (!delegierterSozialdienst) {
             <button
@@ -38,9 +38,9 @@
             </button>
           }
           @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
-            <dv-gesuch-app-ui-dashboard-compact-ausbildung
+            <dv-shared-ui-dashboard-compact-ausbildung
               [ausbildungSig]="ausbildung"
-            ></dv-gesuch-app-ui-dashboard-compact-ausbildung>
+            ></dv-shared-ui-dashboard-compact-ausbildung>
           }
         </div>
 
@@ -54,14 +54,14 @@
                 <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
                   <i class="material-symbols-rounded fs-5">interpreter_mode</i>
                 </dv-shared-ui-icon-chip>
-                {{ 'gesuch-app.dashboard.gesuch.sozialdienst' | translate }}
+                {{ 'shared.dashboard.gesuch.sozialdienst' | translate }}
               </h3>
               <div class="tw-flex tw-flex-col tw-gap-4">
                 <div class="tw-flex tw-items-center tw-gap-2">
                   <mat-form-field class="tw-w-full">
                     <mat-select
                       #sozialdienst
-                      [placeholder]="'gesuch-app.dashboard.gesuch.sozialdienst-waehlen' | translate"
+                      [placeholder]="'shared.dashboard.gesuch.sozialdienst-waehlen' | translate"
                       [disabled]="delegierterSozialdienst"
                       [value]="delegierterSozialdienst"
                       [compareWith]="compareById"
@@ -85,7 +85,7 @@
                     (click)="delegiereSozialdienst(fall.id, sozialdienst.value)"
                     class="btn btn-primary"
                   >
-                    {{ 'gesuch-app.dashboard.gesuch.delegieren' | translate }}
+                    {{ 'shared.dashboard.gesuch.delegieren' | translate }}
                   </button>
                 }
               </div>

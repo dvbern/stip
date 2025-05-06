@@ -1,5 +1,3 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -16,11 +14,6 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
-import {
-  GesuchAppUiDashboardAusbildungComponent,
-  GesuchAppUiDashboardCompactAusbildungComponent,
-} from '@dv/gesuch-app/ui/dashboard';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessGesuchEvents,
@@ -28,6 +21,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
@@ -37,6 +31,10 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import {
+  SharedUiDashboardAusbildungComponent,
+  SharedUiDashboardCompactAusbildungComponent,
+} from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SozDashboardStore } from '@dv/sozialdienst-app/data-access/soz-dashboard';
@@ -54,8 +52,8 @@ import { SozDashboardStore } from '@dv/sozialdienst-app/data-access/soz-dashboar
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
-    GesuchAppUiDashboardAusbildungComponent,
-    GesuchAppUiDashboardCompactAusbildungComponent,
+    SharedUiDashboardAusbildungComponent,
+    SharedUiDashboardCompactAusbildungComponent,
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   styleUrl: './sozialdienst-app-feature-gesuch-cockpit.component.scss',
@@ -133,7 +131,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    GesuchAppDialogCreateAusbildungComponent.open(this.dialog, fallId)
+    SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
       .afterClosed()
       .subscribe(() => {
         this.dashboardStore.loadCachedSozDashboard$({ fallId });
@@ -174,8 +172,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.ausbildung.delete.dialog.title',
-      message: 'gesuch-app.dashboard.ausbildung.delete.dialog.message',
+      title: 'shared.dashboard.ausbildung.delete.dialog.title',
+      message: 'shared.dashboard.ausbildung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -194,8 +192,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   deleteGesuch(gesuchId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.gesuch.delete.dialog.title',
-      message: 'gesuch-app.dashboard.gesuch.delete.dialog.message',
+      title: 'shared.dashboard.gesuch.delete.dialog.title',
+      message: 'shared.dashboard.gesuch.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -211,8 +209,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.aenderung.delete.dialog.title',
-      message: 'gesuch-app.dashboard.aenderung.delete.dialog.message',
+      title: 'shared.dashboard.aenderung.delete.dialog.title',
+      message: 'shared.dashboard.aenderung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })

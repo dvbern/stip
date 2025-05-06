@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SharedUiStepFormButtonsComponent } from './shared-ui-step-form-buttons.component';
 
-describe('GesuchAppUiStepFormButtonsComponent', () => {
+describe('SharedUiStepFormButtonsComponent', () => {
   let component: SharedUiStepFormButtonsComponent;
   let fixture: ComponentFixture<SharedUiStepFormButtonsComponent>;
 
