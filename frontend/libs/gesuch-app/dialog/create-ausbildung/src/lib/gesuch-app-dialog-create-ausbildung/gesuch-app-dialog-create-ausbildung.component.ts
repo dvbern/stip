@@ -33,13 +33,11 @@ export class GesuchAppDialogCreateAusbildungComponent {
   }
 
   static open(matDialog: MatDialog, fallId: string) {
-    return matDialog
-      .open<GesuchAppDialogCreateAusbildungComponent, CreateAusbildungData>(
-        GesuchAppDialogCreateAusbildungComponent,
-        {
-          data: { fallId },
-        },
-      )
-      .afterClosed();
+    return matDialog.open<
+      GesuchAppDialogCreateAusbildungComponent,
+      CreateAusbildungData
+    >(GesuchAppDialogCreateAusbildungComponent, {
+      data: { fallId },
+    });
   }
 }

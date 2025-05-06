@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit,
   computed,
   effect,
@@ -22,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -76,7 +77,7 @@ export interface DelegierungDialogData {
   templateUrl: './sozialdienst-app-feature-delegierung-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DelegierungDialogComponent implements OnInit {
+export class DelegierungDialogComponent implements OnInit, OnDestroy {
   private dialogRef =
     inject<MatDialogRef<DelegierungDialogComponent, boolean>>(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
@@ -147,8 +148,10 @@ export class DelegierungDialogComponent implements OnInit {
     const _clicked = this.matDiaogBackdropClickedSig();
 
     if (
-      this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value !==
-      this.dialogData.fall.delegierung.delegierterMitarbeiter?.id
+      isDefined(
+        this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value,
+      ) !==
+      isDefined(this.dialogData.fall.delegierung.delegierterMitarbeiter?.id)
     ) {
       return true;
     } else {
@@ -179,13 +182,9 @@ export class DelegierungDialogComponent implements OnInit {
     });
 
     effect(() => {
-      const sozialdienstMitarbeiterId =
-        this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
+      const state = this.delegationStore.delegierenState();
 
-      if (
-        isSuccess(this.delegationStore.delegierenState()) &&
-        sozialdienstMitarbeiterId
-      ) {
+      if (!this.zuweisungSozMitarbeiterForm.pristine && isSuccess(state)) {
         this.dialogRef.disableClose = false;
         this.dialogRef.close(true);
       }
@@ -216,6 +215,10 @@ export class DelegierungDialogComponent implements OnInit {
           this.dialogData.fall.delegierung.delegierterMitarbeiter.id,
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.delegationStore.resetDelegierenState();
   }
 
   changeSozMitarbeiter() {

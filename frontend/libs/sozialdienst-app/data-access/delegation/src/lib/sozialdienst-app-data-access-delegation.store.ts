@@ -116,4 +116,10 @@ export class DelegationStore extends signalStore(
         ),
       ),
     );
+
+  resetDelegierenState() {
+    patchState(this, {
+      delegierenState: initial(),
+    });
+  }
 }

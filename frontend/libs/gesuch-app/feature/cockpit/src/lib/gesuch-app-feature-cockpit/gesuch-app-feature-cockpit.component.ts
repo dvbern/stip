@@ -119,12 +119,11 @@ export class GesuchAppFeatureCockpitComponent {
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    GesuchAppDialogCreateAusbildungComponent.open(
-      this.dialog,
-      fallId,
-    ).subscribe(() => {
-      this.dashboardStore.loadDashboard$();
-    });
+    GesuchAppDialogCreateAusbildungComponent.open(this.dialog, fallId)
+      .afterClosed()
+      .subscribe(() => {
+        this.dashboardStore.loadDashboard$();
+      });
   }
 
   trackByPerioden(
@@ -132,10 +131,6 @@ export class GesuchAppFeatureCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   handleLanguageChangeHeader(language: Language) {
@@ -208,6 +203,7 @@ export class GesuchAppFeatureCockpitComponent {
       confirmText: 'shared.form.delete',
     })
       .afterClosed()
+      // @scph: should we not use untilDestroyed here?
       .subscribe((result) => {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({

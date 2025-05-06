@@ -1,4 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
+
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -15,28 +16,20 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
 import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
-import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import {
   GesuchAppUiDashboardAusbildungComponent,
   GesuchAppUiDashboardCompactAusbildungComponent,
 } from '@dv/gesuch-app/ui/dashboard';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
-import { FallStore } from '@dv/shared/data-access/fall';
 import {
   SharedDataAccessGesuchEvents,
   selectLastUpdate,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
-import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
-import {
-  AenderungMelden,
-  Gesuchsperiode,
-  Sozialdienst,
-} from '@dv/shared/model/gesuch';
+import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
@@ -46,6 +39,7 @@ import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
+import { SozDashboardStore } from '@dv/sozialdienst-app/data-access/soz-dashboard';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
@@ -55,7 +49,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
-
     TranslatePipe,
     MatSelectModule,
     SharedUiIconChipComponent,
@@ -68,9 +61,9 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   styleUrl: './sozialdienst-app-feature-gesuch-cockpit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    FallStore,
-    SozialdienstStore,
-    DashboardStore, // not sure if route or here, it's in route in gesuch-app
+    // FallStore,
+    // SozialdienstStore,
+    SozDashboardStore, // not sure if route or here, it's in route in gesuch-app
   ],
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
@@ -83,19 +76,20 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
-  fallStore = inject(FallStore);
-  dashboardStore = inject(DashboardStore);
+  // fallStore = inject(FallStore);
+  dashboardStore = inject(SozDashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  sozialdienstStore = inject(SozialdienstStore);
+  // sozialdienstStore = inject(SozialdienstStore);
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
 
-  // would get the fill of the currently logged in user
+  // would get the fall of the currently logged in user
   // private gotNewFallSig = computed(() => {
   //   return this.fallStore.currentFallViewSig()?.id;
   // });
+
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
@@ -106,16 +100,19 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     });
 
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
-    this.fallStore.loadCurrentFall$();
-    this.sozialdienstStore.loadAvailableSozialdienste$();
+
+    // load the fall for the logged in user
+    // this.fallStore.loadCurrentFall$();
+
+    //  not needed here
+    // this.sozialdienstStore.loadAvailableSozialdienste$();
 
     effect(
       () => {
         const fallId = this.fallIdSig();
 
         if (fallId) {
-          // todo: adjust for soz
-          this.dashboardStore.loadDashboard$();
+          this.dashboardStore.loadCachedSozDashboard$({ fallId });
         }
       },
       { allowSignalWrites: true },
@@ -123,9 +120,10 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
     effect(
       () => {
-        if (this.gesuchUpdatedSig()) {
-          // todo: adjust for soz
-          this.dashboardStore.loadDashboard$();
+        const fallId = this.fallIdSig();
+
+        if (this.gesuchUpdatedSig() && fallId) {
+          this.dashboardStore.loadCachedSozDashboard$({ fallId });
         }
       },
       { allowSignalWrites: true },
@@ -134,14 +132,12 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   compareById = compareById;
 
-  // can soz mitarbeiter do this?
   createAusbildung(fallId: string) {
-    GesuchAppDialogCreateAusbildungComponent.open(
-      this.dialog,
-      fallId,
-    ).subscribe(() => {
-      this.dashboardStore.loadDashboard$();
-    });
+    GesuchAppDialogCreateAusbildungComponent.open(this.dialog, fallId)
+      .afterClosed()
+      .subscribe(() => {
+        this.dashboardStore.loadCachedSozDashboard$({ fallId });
+      });
   }
 
   trackByPerioden(
@@ -149,10 +145,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   handleLanguageChangeHeader(language: Language) {
@@ -226,11 +218,12 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     })
       .afterClosed()
       .subscribe((result) => {
-        if (result) {
+        const fallId = this.fallIdSig();
+        if (result && fallId) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
             onSuccess: () => {
-              this.dashboardStore.loadDashboard$();
+              this.dashboardStore.loadCachedSozDashboard$({ fallId });
             },
           });
         }
@@ -238,24 +231,24 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   }
 
   // remove for soz
-  delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
-    GesuchAppFeatureDelegierenDialogComponent.open(this.dialog)
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          const req = {
-            sozialdienstId: sozialdienst.id,
-            fallId,
-            delegierungCreate: result,
-          };
+  // delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
+  //   GesuchAppFeatureDelegierenDialogComponent.open(this.dialog)
+  //     .afterClosed()
+  //     .subscribe((result) => {
+  //       if (result) {
+  //         const req = {
+  //           sozialdienstId: sozialdienst.id,
+  //           fallId,
+  //           delegierungCreate: result,
+  //         };
 
-          this.sozialdienstStore.fallDelegieren$({
-            req,
-            onSuccess: () => {
-              this.dashboardStore.loadDashboard$();
-            },
-          });
-        }
-      });
-  }
+  //         this.sozialdienstStore.fallDelegieren$({
+  //           req,
+  //           onSuccess: () => {
+  //             this.dashboardStore.loadDashboard$();
+  //           },
+  //         });
+  //       }
+  //     });
+  // }
 }
