@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -55,18 +54,8 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canReadFallDashboard(final UUID fallId) {
-        final var currentSozialdienstMitarbeiter =
-            sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(ForbiddenException::new);
-        final var fall = fallRepository.requireById(fallId);
+    public void canReadFallDashboard() {
         canReadDelegierung();
-        if (fall.getDelegierung().getDelegierterMitarbeiter() == null) {
-            forbidden();
-        }
-        if (fall.getDelegierung().getDelegierterMitarbeiter().getId().equals(currentSozialdienstMitarbeiter.getId())) {
-            return;
-        }
-        forbidden();
     }
 
     @Transactional

@@ -133,11 +133,11 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
     }
 
     @Test
-    void canReadFallDashboard_shouldFail_asNOTDelegierterMitarbeiterOfSozialdienst() {
+    void canReadFallDashboard_shouldStillWork_asNOTDelegierterMitarbeiterOfSozialdienst() {
         // arrange
         setupSozialdienstMitarbeiter();
         setupDelegierung();
@@ -149,7 +149,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertThrows(ForbiddenException.class, () -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
     }
 
     @Test

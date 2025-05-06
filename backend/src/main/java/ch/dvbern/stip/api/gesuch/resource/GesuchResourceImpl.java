@@ -426,7 +426,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GS_GESUCH_READ)
     @Override
     public List<FallDashboardItemDto> getSozMaDashboard(UUID fallId) {
-        delegierenAuthorizer.canReadFallDashboard(fallId);
+        delegierenAuthorizer.canReadFallDashboard();
         return gesuchService.getSozMaFallDashboardItemDtos(fallId);
     }
 
