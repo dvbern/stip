@@ -17,7 +17,12 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'fall',
+        // @scph had is adding id here okay, since the pattern esle where is different, but then needs a redirect?
+        path: 'fall/:id',
+        loadComponent: () =>
+          import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
+            (m) => m.SozialdienstAppFeatureGesuchCockpitComponent,
+          ),
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
             (m) => m.sozialdienstAppFeatureGesuchCockpitRoutes,

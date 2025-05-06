@@ -18,7 +18,7 @@ describe('DelegationStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.delegation()).toEqual({
+    expect(store.paginatedSozDashboard()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

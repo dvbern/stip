@@ -117,7 +117,7 @@
                     class="tw-w-32 tw-whitespace-nowrap"
                   >
                     <!-- todo: add correct link params, fall nr is not correct -->
-                    <a [routerLink]="['/gesuch/info', fall.id, 'tranche']" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/fall', fall.id]" (click)="$event.stopPropagation()">
                       {{ fall.fallNummer }}
                     </a>
                   </td>
@@ -381,7 +381,7 @@
                   <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-w-11">
                     <button
                       type="button"
-                      class="dv-icon-button dv-icon-button-md text-info mt-2"
+                      class="dv-icon-button dv-icon-button-md text-info"
                       (click)="openDialog(fall); $event.stopPropagation()"
                     >
                       <span class="material-symbols-rounded"> info </span>
@@ -396,7 +396,7 @@
                   mat-row
                   tabindex="-1"
                   *dvMatRowDef="let fall; dataSource: faelleDataSourceSig(); columns: displayedColumns"
-                  [routerLink]="['/gesuch', 'info', fall.id, 'tranche']"
+                  [routerLink]="['/fall', fall.id]"
                   class="highlightable"
                 ></tr>
                 <tr class="mat-mdc-row" *matNoDataRow>

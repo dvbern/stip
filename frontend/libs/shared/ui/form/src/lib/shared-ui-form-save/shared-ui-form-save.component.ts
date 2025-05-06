@@ -20,6 +20,7 @@ export class SharedUiFormSaveComponent {
   @Input() labelKey = 'shared.form.save';
   @Input() loading = false;
   @Input() disabled = false;
+  @Input() prefixIcon = false;
 
-  @HostBinding('class') class = 'd-flex gap-3 flex-row align-items-start';
+  @HostBinding('class') class = 'tw-flex';
 }
