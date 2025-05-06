@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
@@ -37,9 +40,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
