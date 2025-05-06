@@ -60,6 +60,9 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
             sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(ForbiddenException::new);
         final var fall = fallRepository.requireById(fallId);
         canReadDelegierung();
+        if (fall.getDelegierung().getDelegierterMitarbeiter() == null) {
+            forbidden();
+        }
         if (fall.getDelegierung().getDelegierterMitarbeiter().getId().equals(currentSozialdienstMitarbeiter.getId())) {
             return;
         }
