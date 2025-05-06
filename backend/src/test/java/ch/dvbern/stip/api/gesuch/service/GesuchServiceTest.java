@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -50,6 +51,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -126,6 +128,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -197,6 +200,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheHistoryService gesuchTrancheHistoryService;
+
+    @InjectMock
+    FallRepository fallRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -1707,6 +1713,27 @@ class GesuchServiceTest {
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertNull(gesuch.getEinreichedatum());
+    }
+
+    @Test
+    @TestAsSozialdienstMitarbeiter
+    void getFallDashboardAsSozialdienstMitarbeiterTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setGesuchsteller(new Benutzer());
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(fallRepository.requireById(any())).thenReturn(fall);
+        final var result = gesuchService.getSozMaFallDashboardItemDtos(UUID.randomUUID());
+        assertNotNull(result);
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
