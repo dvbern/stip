@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.delegieren.resource;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
@@ -34,8 +31,11 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE;
 
 @Validated
@@ -62,7 +62,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         delegierenService.delegierterMitarbeiterAendern(delegierungId, delegierterMitarbeiterAendernDto);
     }
 
-    @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
+    @RolesAllowed(GS_GESUCH_READ)
     @Override
     public PaginatedSozDashboardDto getDelegierungSoz(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
