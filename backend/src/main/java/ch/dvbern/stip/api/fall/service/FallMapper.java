@@ -18,14 +18,20 @@
 package ch.dvbern.stip.api.fall.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.FallDto;
+import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { DelegierungMapper.class })
 public interface FallMapper {
 
     Fall toEntity(FallDto fallDto);
 
     FallDto toDto(Fall fall);
+
+    @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
+    FallWithDelegierungDto toFallWithDto(Fall fall);
 }

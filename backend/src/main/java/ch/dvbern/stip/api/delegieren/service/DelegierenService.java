@@ -17,21 +17,18 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
@@ -41,11 +38,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
+    private final FallMapper fallMapper;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
@@ -144,8 +145,7 @@ public class DelegierenService {
 
         sozDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
         final var results = baseQuery.stream()
-            // .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ)) // todo: use mapper
-            .map(this::toFallWith)
+            .map(delegierung -> fallMapper.toFallWithDto(delegierung.getDelegierterFall()))
             .toList();
 
         return new PaginatedSozDashboardDto(
@@ -154,15 +154,5 @@ public class DelegierenService {
             Math.toIntExact(countQuery.fetchFirst()),
             results
         );
-    }
-
-    private FallWithDelegierungDto toFallWith(final Delegierung delegierung) {
-        FallWithDelegierungDto fallWith = new FallWithDelegierungDto();
-        fallWith.setDelegierung(delegierungMapper.toDto(delegierung));
-        fallWith.setFallNummer(delegierung.getDelegierterFall().getFallNummer());
-        fallWith.setId(delegierung.getDelegierterFall().getId());
-        fallWith.setMandant(delegierung.getDelegierterFall().getMandant());
-        fallWith.setLetzteAktivitaet(delegierung.getTimestampMutiert().toLocalDate());
-        return fallWith;
     }
 }
