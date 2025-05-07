@@ -1,22 +1,22 @@
 {
-  "name": "gesuch-app-data-access-dashboard",
+  "name": "shared-data-access-dashboard",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/gesuch-app/data-access/dashboard/src",
+  "sourceRoot": "libs/shared/data-access/dashboard/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:gesuch-app"],
+  "tags": ["type:data-access", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/gesuch-app/data-access/dashboard/tsconfig.lib.json"
+        "tsConfig": "libs/shared/data-access/dashboard/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/gesuch-app/data-access/dashboard/jest.config.ts"
+        "jestConfig": "libs/shared/data-access/dashboard/jest.config.ts"
       }
     },
     "lint": {

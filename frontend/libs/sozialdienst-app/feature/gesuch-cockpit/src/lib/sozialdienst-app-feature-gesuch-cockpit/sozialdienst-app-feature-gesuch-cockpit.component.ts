@@ -36,7 +36,7 @@ import {
 } from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
-import { SozDashboardStore } from '@dv/sozialdienst-app/data-access/soz-dashboard';
+import { DashboardStore } from '@dv/shared-data-access-dashboard';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
@@ -55,7 +55,7 @@ import { SozDashboardStore } from '@dv/sozialdienst-app/data-access/soz-dashboar
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SozDashboardStore],
+  providers: [DashboardStore],
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);
@@ -67,7 +67,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
-  dashboardStore = inject(SozDashboardStore);
+  dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
@@ -90,7 +90,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
         const fallId = this.fallIdSig();
 
         if (fallId) {
-          this.dashboardStore.loadCachedSozDashboard$({ fallId });
+          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
         }
       },
       { allowSignalWrites: true },
@@ -101,7 +101,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
         const fallId = this.fallIdSig();
 
         if (this.gesuchUpdatedSig() && fallId) {
-          this.dashboardStore.loadCachedSozDashboard$({ fallId });
+          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
         }
       },
       { allowSignalWrites: true },
@@ -114,7 +114,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
       .afterClosed()
       .subscribe(() => {
-        this.dashboardStore.loadCachedSozDashboard$({ fallId });
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
       });
   }
 
@@ -201,7 +201,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
             onSuccess: () => {
-              this.dashboardStore.loadCachedSozDashboard$({ fallId });
+              this.dashboardStore.loadSozialdienstDashboard$({ fallId });
             },
           });
         }

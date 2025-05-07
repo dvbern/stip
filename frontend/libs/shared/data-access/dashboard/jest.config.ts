@@ -1,11 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sozialdienst-app-data-access-soz-dashboard',
+  displayName: 'shared-data-access-dashboard',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/sozialdienst-app/data-access/soz-dashboard',
+  coverageDirectory: '../../../../coverage/libs/shared/data-access/dashboard',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

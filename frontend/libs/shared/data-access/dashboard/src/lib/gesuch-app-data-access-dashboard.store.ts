@@ -30,19 +30,19 @@ import {
 } from '@dv/shared/util/remote-data';
 import { dateFromMonthYearString } from '@dv/shared/util/validator-date';
 
-type SozDashboardState = {
+type DashboardState = {
   dashboard: CachedRemoteData<FallDashboardItem[]>;
 };
 
-const initialState: SozDashboardState = {
+const initialState: DashboardState = {
   dashboard: initial(),
 };
 
 @Injectable()
-export class SozDashboardStore extends signalStore(
+export class DashboardStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('SozDashboardStore'),
+  withDevtools('DashboardStore'),
 ) {
   private gesuchService = inject(GesuchService);
   private appType = inject(SharedModelCompileTimeConfig).appType;
@@ -111,7 +111,24 @@ export class SozDashboardStore extends signalStore(
     }));
   });
 
-  loadCachedSozDashboard$ = rxMethod<{ fallId: string }>(
+  loadDashboard$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          dashboard: cachedPending(state.dashboard),
+        }));
+      }),
+      switchMap(() =>
+        this.gesuchService
+          .getGsDashboard$()
+          .pipe(
+            handleApiResponse((dashboard) => patchState(this, { dashboard })),
+          ),
+      ),
+    ),
+  );
+
+  loadSozialdienstDashboard$ = rxMethod<{ fallId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -122,9 +139,7 @@ export class SozDashboardStore extends signalStore(
         this.gesuchService
           .getSozMaDashboard$(params)
           .pipe(
-            handleApiResponse((cachedSozDashboard) =>
-              patchState(this, { dashboard: cachedSozDashboard }),
-            ),
+            handleApiResponse((dashboard) => patchState(this, { dashboard })),
           ),
       ),
     ),

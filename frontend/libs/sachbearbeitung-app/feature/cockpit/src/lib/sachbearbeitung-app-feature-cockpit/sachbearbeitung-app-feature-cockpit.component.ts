@@ -536,7 +536,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
       ...filter,
       piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
     });
-    // todo: is this conversion necessary?
     this.filterStartEndForm.reset({
       ...startEndFilter,
       letzteAktivitaetFrom: parseDate(

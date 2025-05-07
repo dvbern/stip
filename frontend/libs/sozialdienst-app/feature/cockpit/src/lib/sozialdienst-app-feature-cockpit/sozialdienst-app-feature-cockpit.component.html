@@ -116,7 +116,6 @@
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
                     class="tw-w-32 tw-whitespace-nowrap"
                   >
-                    <!-- todo: add correct link params, fall nr is not correct -->
                     <a [routerLink]="['/fall', fall.id]" (click)="$event.stopPropagation()">
                       {{ fall.fallNummer }}
                     </a>
@@ -390,7 +389,6 @@
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <!-- todo: add corret link -->
                 <tr
                   dvSharedUiFocusableListItem
                   mat-row
