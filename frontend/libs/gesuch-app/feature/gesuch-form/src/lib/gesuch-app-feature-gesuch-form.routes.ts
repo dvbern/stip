@@ -12,7 +12,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     },
     title: ABSCHLUSS.translationKey,
     loadChildren: () =>
-      import('@dv/gesuch-app/feature/gesuch-form-abschluss').then(
+      import('@dv/shared-feature-gesuch-form-abschluss').then(
         (m) => m.gesuchAppFeatureGesuchFormAbschlussRoutes,
       ),
   },
