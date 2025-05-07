@@ -5,7 +5,7 @@ export default {
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/lib/shared/feature/gesuch-form-abschluss',
+    '../../../../coverage/libs/shared/feature/gesuch-form-abschluss',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

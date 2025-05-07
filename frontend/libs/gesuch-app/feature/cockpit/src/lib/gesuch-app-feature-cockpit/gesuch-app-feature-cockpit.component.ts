@@ -14,6 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
   SharedDataAccessGesuchEvents,
@@ -42,7 +43,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
-import { DashboardStore } from '@dv/shared-data-access-dashboard';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
