@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -31,6 +32,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -81,10 +83,20 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         }
 
         final var customDokumentTyp = customDokumentTypRepository.requireById(customDokumentTypId);
-        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
+        final var gesuchTranche =
+            gesuchTrancheRepository.requireById(customDokumentTyp.getGesuchDokument().getGesuchTranche().getId());
 
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
-            return;
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+                gesuchTranche.getGesuch(),
+                sozialdienstService
+            );
+
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuchTranche.getGesuch());
+
+        if (!(isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean())) {
+            throw new ForbiddenException();
         }
 
         forbidden();
