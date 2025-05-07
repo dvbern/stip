@@ -24,7 +24,7 @@
                 (deleteAenderung)="deleteAenderung($event)"
               ></dv-shared-ui-dashboard-ausbildung>
             }
-          } @else if (!delegierterSozialdienst) {
+          } @else if (dashboard.canCreateAusbildung) {
             <button
               data-testid="cockpit-create-ausbildung"
               type="button"

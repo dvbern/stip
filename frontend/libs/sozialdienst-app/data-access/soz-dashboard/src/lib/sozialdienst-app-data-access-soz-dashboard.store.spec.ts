@@ -27,7 +27,7 @@ describe('SozDashboardStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.cachedSozDashboard()).toEqual({
+    expect(store.dashboard()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

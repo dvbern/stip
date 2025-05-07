@@ -18,7 +18,10 @@ import {
   GesuchDashboardItem,
   GesuchService,
 } from '@dv/shared/model/gesuch';
-import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
+import {
+  canCreateAusbildung,
+  canCurrentlyEdit,
+} from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -76,6 +79,7 @@ export class DashboardStore extends signalStore(
             rolesMap,
             fallItem.delegierung,
           );
+
           (ausbildung.status !== 'AKTIV'
             ? inactiveAusbildungen
             : activeAusbildungen
@@ -95,6 +99,11 @@ export class DashboardStore extends signalStore(
     return fallDashboardItems?.map((item) => ({
       fall: item.fall,
       delegierung: item.delegierung,
+      canCreateAusbildung: canCreateAusbildung(
+        this.appType,
+        rolesMap,
+        item.delegierung,
+      ),
       notifications: item.notifications,
       hasActiveAusbildungen: true,
       activeAusbildungen,

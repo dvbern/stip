@@ -22,10 +22,9 @@
           {{ 'sozialdienst-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
         </h1>
 
-        @for (dashboard of dashboardStore.sozDashboardViewSig(); track dashboard.fall.id) {
+        @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
           @let fall = dashboard.fall;
           @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
-          <pre>{{ delegierterSozialdienst | json }}</pre>
           <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
             <!-- main column -->
             <div class="tw-flex tw-flex-col tw-gap-8">
@@ -39,7 +38,7 @@
                     (deleteAenderung)="deleteAenderung($event)"
                   ></dv-shared-ui-dashboard-ausbildung>
                 }
-              } @else if (!delegierterSozialdienst) {
+              } @else if (dashboard.canCreateAusbildung) {
                 <button
                   data-testid="cockpit-create-ausbildung"
                   type="button"

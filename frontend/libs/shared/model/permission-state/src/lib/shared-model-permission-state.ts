@@ -211,6 +211,27 @@ export const canCurrentlyEdit = (
 };
 
 /**
+ * Check if the user is allowed to create an ausbildung
+ *
+ * if the user is a sozialdienst-mitarbeiter, he can create ausbildung
+ * if the user is not a sozialdienst-mitarbeiter and the gesuch is not delegated, he can create ausbildung
+ */
+export const canCreateAusbildung = (
+  appType: AppType,
+  rolesMap: RolesMap,
+  delegierung: DelegierungSlim | undefined,
+) => {
+  if (appType === 'sachbearbeitung-app') {
+    return true;
+  }
+
+  return (
+    rolesMap['V0_Sozialdienst-Mitarbeiter'] === true ||
+    (!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] !== true)
+  );
+};
+
+/**
  * Revoke writability and document upload permissions if the gesuch is delegated
  */
 const applyDelegatedPermission = (

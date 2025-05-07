@@ -202,7 +202,6 @@ export class GesuchAppFeatureCockpitComponent {
       confirmText: 'shared.form.delete',
     })
       .afterClosed()
-      // @scph: should we not use untilDestroyed here?
       .subscribe((result) => {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
