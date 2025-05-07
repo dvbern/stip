@@ -5,9 +5,11 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideMockStore } from '@ngrx/store/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   mockConfigsState,
   provideSharedPatternJestTestSetup,

@@ -14,7 +14,7 @@ export type CreateAusbildungData = {
 };
 
 @Component({
-  selector: 'dv-gesuch-app-dialog-create-ausbildung',
+  selector: 'dv-shared-dialog-create-ausbildung',
   standalone: true,
   imports: [CommonModule, TranslatePipe, SharedFeatureAusbildungComponent],
   templateUrl: './shared-dialog-create-ausbildung.component.html',

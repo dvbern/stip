@@ -7,10 +7,10 @@ import {
   output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
+import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
 
 @Component({
   selector: 'dv-shared-ui-dashboard-gesuch',

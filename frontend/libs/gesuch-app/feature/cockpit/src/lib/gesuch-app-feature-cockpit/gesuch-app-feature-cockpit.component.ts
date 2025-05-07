@@ -67,7 +67,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
-  styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureCockpitComponent {
