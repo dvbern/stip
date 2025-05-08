@@ -1,4 +1,4 @@
-<section class="tw-relative tw-flex tw-shrink tw-flex-col tw-rounded tw-p-12">
+<section class="tw-relative tw-flex tw-max-w-5xl tw-shrink tw-flex-col tw-rounded tw-p-12">
   <button
     type="button"
     (click)="close()"
@@ -25,14 +25,39 @@
       {{ 'sachbearbeitung-app.infos.beschwerde.title' | translate }}
     </dt>
     <dd class="tw-font-normal">
-      {{ 'sachbearbeitung-app.infos.beschwerde.title.' + dialogData.beschwerdeSetTo | translate }}
+      @if (dialogData.beschwerdeEntscheid) {
+        {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | translate }}
+      } @else {
+        {{ 'sachbearbeitung-app.infos.beschwerde.title.' + dialogData.beschwerdeSetTo | translate }}
+      }
     </dd>
+    @let document = dialogData.beschwerdeEntscheid?.dokumente?.[0];
+    @if (document) {
+      <dt class="tw-whitespace-normal tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.beschwerde.document' | translate }}
+      </dt>
+      <dd class="tw-truncate">
+        <button
+          type="button"
+          class="btn btn-link tw-flex tw-max-w-full tw-p-0"
+          [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.document' | translate"
+          [dvDownloadButton]="{
+            type: 'dokument',
+            id: document.id,
+            dokumentArt: 'BESCHWERDE_ENTSCHEID',
+          }"
+        >
+          <span class="tw-truncate" [title]="document.filename">{{ document.filename }}</span>
+          <span class="material-symbols-rounded tw-ml-1 tw-align-middle">download</span>
+        </button>
+      </dd>
+    }
 
     <dt class="tw-whitespace-nowrap tw-font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.kommentar' | translate }}
     </dt>
     <dd
-      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-h-[50dvh] tw-max-w-[520px] tw-overflow-auto tw-whitespace-pre-wrap tw-break-words tw-font-normal"
+      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-h-[50dvh] tw-overflow-auto tw-whitespace-pre-wrap tw-break-words tw-font-normal"
       [innerText]="dialogData.kommentar"
     ></dd>
   </dl>

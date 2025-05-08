@@ -363,7 +363,7 @@
     <dmn:informationRequirement id="_298B8608-E7E9-4FD0-A16E-C24C352B6581">
       <dmn:requiredDecision href="#_D678E05E-113E-4BF9-AA3B-49C4F2B1081B" />
     </dmn:informationRequirement>
-    <dmn:context id="_F1D17AB9-F16D-4019-899C-D4FBEB5C8239">
+    <dmn:context id="_F1D17AB9-F16D-4019-899C-D4FBEB5C8239" label="AusgabenPersoenlichesBudget" typeRef="number">
       <dmn:contextEntry id="_1AC83558-AFFC-434C-82D7-737451F64E33">
         <dmn:variable id="_3AD59E73-635B-469B-BD48-4F3D9680E70B" name="Grundbedarf" typeRef="number" />
         <dmn:decisionTable id="_6FB3E248-7FEF-4B57-9C2B-48A3000CEEF4" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
@@ -955,16 +955,24 @@
     <dmn:knowledgeRequirement id="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
       <dmn:requiredKnowledge href="#_9105DA37-1603-4F9E-AA31-9E007A7058EC" />
     </dmn:knowledgeRequirement>
-    <dmn:decisionTable id="_FBB12748-492E-49B0-B458-1732D261263A" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row" label="PersoenlichesbudgetBerechnet" typeRef="number">
+    <dmn:decisionTable id="_FBB12748-492E-49B0-B458-1732D261263A" hitPolicy="FIRST" preferredOrientation="Rule-as-Row" label="PersoenlichesbudgetBerechnet" typeRef="number">
       <dmn:input id="_0C8AD661-C6D0-4C62-B0F4-43E795CB8DD6">
         <dmn:inputExpression id="_3B4CC586-C003-4B9F-AF97-8E34B90A9731" typeRef="boolean">
           <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_C12E6DEF-6CFF-48EB-AD1F-8B39CF336B9E">
+        <dmn:inputExpression id="_DBE22E5F-2FE9-48F5-A814-077F8249F67B" typeRef="boolean">
+          <dmn:text>InputPersoenlichesbudget.antragssteller.eigenerHaushalt</dmn:text>
         </dmn:inputExpression>
       </dmn:input>
       <dmn:output id="_2EAD9444-4B32-4E67-93F9-838492EF547C" />
       <dmn:annotation name="annotation-1" />
       <dmn:rule id="_A7922650-4A69-4C50-9F6B-5D9E99144581">
         <dmn:inputEntry id="_49D11DD5-825A-4A7C-B845-E80375AFDB06">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_7B557FDA-74D2-47E8-B6AF-34D8661D947B">
           <dmn:text>true</dmn:text>
         </dmn:inputEntry>
         <dmn:outputEntry id="_04BFF2C0-7AF7-4873-9276-F1875447982B">
@@ -976,7 +984,10 @@
       </dmn:rule>
       <dmn:rule id="_AD7522A0-58AD-4B80-A683-B20ED92734FD">
         <dmn:inputEntry id="_34DE0D40-DBFC-4FFF-AC8C-FA74823CB1BE">
-          <dmn:text>false</dmn:text>
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_9B2E853A-97B3-41A1-B479-A0E68A25820A">
+          <dmn:text>-</dmn:text>
         </dmn:inputEntry>
         <dmn:outputEntry id="_3D41055F-A689-4D00-A1F0-EE3DA67AED11">
           <dmn:text>EinnahmenPersoenlichesBudget - AusgabenPersoenlichesBudget</dmn:text>
@@ -1069,6 +1080,7 @@
           <kie:ComponentWidths dmnElementRef="_F4421A24-82D5-4256-96B1-9634070EF583">
             <kie:width>50</kie:width>
             <kie:width>127</kie:width>
+            <kie:width>100</kie:width>
             <kie:width>126</kie:width>
             <kie:width>1708</kie:width>
           </kie:ComponentWidths>
@@ -1081,6 +1093,7 @@
           <kie:ComponentWidths dmnElementRef="_0A0C76ED-E6B7-4443-ABC9-DB4E4EE33C71">
             <kie:width>50</kie:width>
             <kie:width>446</kie:width>
+            <kie:width>100</kie:width>
             <kie:width>127</kie:width>
             <kie:width>1388</kie:width>
           </kie:ComponentWidths>
@@ -1146,6 +1159,7 @@
           <kie:ComponentWidths dmnElementRef="_FBB12748-492E-49B0-B458-1732D261263A">
             <kie:width>50</kie:width>
             <kie:width>690</kie:width>
+            <kie:width>100</kie:width>
             <kie:width>656</kie:width>
             <kie:width>318</kie:width>
           </kie:ComponentWidths>
