@@ -1,14 +1,23 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="over" position="end">
-    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
-      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
-    </dv-shared-pattern-mobile-sidenav>
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()"> </dv-shared-pattern-mobile-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
-      <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
-      <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
-      <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
+      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+        <a
+          routerLink="/"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-overview"
+        >
+          <i class="material-symbols-rounded text-white me-2">list</i>
+          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+        </a>
+        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
+          <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
+          <span>{{ 'sozialdienst-app.header.fall' | translate }}</span>
+        </div>
+      </div>
     </dv-shared-pattern-app-header>
 
     <!-- MAIN CONTENT -->
@@ -24,7 +33,6 @@
 
         @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
           @let fall = dashboard.fall;
-          @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
           <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
             <!-- main column -->
             <div class="tw-flex tw-flex-col tw-gap-8">

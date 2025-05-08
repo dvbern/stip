@@ -19,7 +19,6 @@ import {
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
-  canCreateAusbildung,
   canCurrentlyEdit,
   getGesuchPermissions,
   getTranchePermissions,
@@ -101,7 +100,7 @@ export class DashboardStore extends signalStore(
     return fallDashboardItems?.map((item) => ({
       fall: item.fall,
       delegierung: item.delegierung,
-      canCreateAusbildung: canCreateAusbildung(
+      canCreateAusbildung: canCurrentlyEdit(
         this.appType,
         rolesMap,
         item.delegierung,
