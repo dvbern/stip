@@ -11,6 +11,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -43,6 +44,7 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
@@ -60,12 +62,11 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 export class SozialdienstAppFeatureGesuchCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
+  fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
-
-  fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
