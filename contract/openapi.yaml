@@ -140,7 +140,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGsDashboard
       summary: Returns gesuche for dashboard filtered by gs
-  /gesuch/benutzer/me/soz-ma-dashboard/{fallId}:
+  /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}:
     get:
       tags:
         - Gesuch
@@ -165,7 +165,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSozMaDashboard
+      operationId: getSozialdienstMitarbeiterDashboard
       summary: Returns gesuche for dashboard filtered by gs
   /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:

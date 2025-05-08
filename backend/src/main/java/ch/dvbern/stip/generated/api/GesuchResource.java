@@ -197,9 +197,9 @@ public interface GesuchResource {
     GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
-    @Path("/benutzer/me/soz-ma-dashboard/{fallId}")
+    @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<FallDashboardItemDto> getSozMaDashboard(@PathParam("fallId") UUID fallId);
+    List<FallDashboardItemDto> getSozialdienstMitarbeiterDashboard(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

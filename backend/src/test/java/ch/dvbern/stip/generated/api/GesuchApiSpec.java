@@ -111,7 +111,7 @@ public class GesuchApiSpec {
                 getGsDashboard(),
                 getInitialTrancheChangesByGesuchId(),
                 getSbAenderungChanges(),
-                getSozMaDashboard(),
+                getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
                 updateGesuch(),
                 updateNachfristDokumente()
@@ -238,8 +238,8 @@ public class GesuchApiSpec {
         return new GetSbAenderungChangesOper(createReqSpec());
     }
 
-    public GetSozMaDashboardOper getSozMaDashboard() {
-        return new GetSozMaDashboardOper(createReqSpec());
+    public GetSozialdienstMitarbeiterDashboardOper getSozialdienstMitarbeiterDashboard() {
+        return new GetSozialdienstMitarbeiterDashboardOper(createReqSpec());
     }
 
     public GetStatusProtokollOper getStatusProtokoll() {
@@ -2662,22 +2662,22 @@ public class GesuchApiSpec {
      * @see #fallIdPath  (required)
      * return List&lt;FallDashboardItemDtoSpec&gt;
      */
-    public static class GetSozMaDashboardOper implements Oper {
+    public static class GetSozialdienstMitarbeiterDashboardOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/benutzer/me/soz-ma-dashboard/{fallId}";
+        public static final String REQ_URI = "/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetSozMaDashboardOper(RequestSpecBuilder reqSpec) {
+        public GetSozialdienstMitarbeiterDashboardOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/benutzer/me/soz-ma-dashboard/{fallId}
+         * GET /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2688,7 +2688,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me/soz-ma-dashboard/{fallId}
+         * GET /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}
          * @param handler handler
          * @return List&lt;FallDashboardItemDtoSpec&gt;
          */
@@ -2703,7 +2703,7 @@ public class GesuchApiSpec {
          * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetSozMaDashboardOper fallIdPath(Object fallId) {
+        public GetSozialdienstMitarbeiterDashboardOper fallIdPath(Object fallId) {
             reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
@@ -2713,7 +2713,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetSozMaDashboardOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetSozialdienstMitarbeiterDashboardOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2723,7 +2723,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetSozMaDashboardOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetSozialdienstMitarbeiterDashboardOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.delegieren.repo;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
@@ -26,8 +28,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
