@@ -129,7 +129,6 @@
         formControlName="sozMitarbeiter"
         data-testid="form-sozMitarbeiter-select"
         [placeholder]="'shared.form.select.empty' | translate"
-        [compareWith]="compareById"
       >
         @for (sozMitarbeiter of delegationStore.sozialdienstMitrabeiterListSig().list; track sozMitarbeiter.id) {
           <mat-option [value]="sozMitarbeiter.id" [attr.data-testid]="'sozMitarbeiter-' + sozMitarbeiter.id">
