@@ -1,11 +1,8 @@
 {
   "app-name": "Stipendien Online",
-  "gesuch-app.dashboard.title": "Dashboard",
+  "sozialdienst-app.dashboard.title": "Dashboard",
   "sozialdienst-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
   "sozialdienst-app.dashboard.ausbildung.create": "Stipendium beantragen",
-
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
-  "gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN": "Vorhanden",
 
   "sozialdienst-app.header.antraege": "Anträge",
   "sozialdienst-app.header.fall": "Fall",

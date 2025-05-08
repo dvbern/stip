@@ -199,8 +199,10 @@ export class SozialdienstAppFeatureCockpitComponent
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   showViewSig = computed<GetDelegierungSozQueryType>(() => {
+    const roles = this.permissionStore.rolesMapSig();
+
     const show = this.show();
-    return show ?? DEFAULT_FILTER;
+    return show ?? (roles['V0_Sozialdienst-Admin'] ? 'ALLE' : DEFAULT_FILTER);
   });
 
   dataSoruce = new MatTableDataSource<FallWithDelegierung>([]);

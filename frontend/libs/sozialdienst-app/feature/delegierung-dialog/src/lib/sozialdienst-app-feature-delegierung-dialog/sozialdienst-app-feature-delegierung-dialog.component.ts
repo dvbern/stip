@@ -29,7 +29,6 @@ import { subYears } from 'date-fns';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { selectLaender } from '@dv/shared/data-access/stammdaten';
 import { Anrede, FallWithDelegierung } from '@dv/shared/model/gesuch';
-import { compareById } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -88,7 +87,6 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   readonly anredeValues = Object.values(Anrede);
 
   isPending = isPending;
-  compareById = compareById;
 
   languageSig = this.store.selectSignal(selectLanguage);
   laenderSig = this.store.selectSignal(selectLaender);
