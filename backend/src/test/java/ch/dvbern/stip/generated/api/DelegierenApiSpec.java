@@ -65,7 +65,7 @@ public class DelegierenApiSpec {
         return Arrays.asList(
                 delegierterMitarbeiterAendern(),
                 fallDelegieren(),
-                getDelegierungSoz()
+                getDelegierungsOfSozialdienst()
         );
     }
 
@@ -77,8 +77,8 @@ public class DelegierenApiSpec {
         return new FallDelegierenOper(createReqSpec());
     }
 
-    public GetDelegierungSozOper getDelegierungSoz() {
-        return new GetDelegierungSozOper(createReqSpec());
+    public GetDelegierungsOfSozialdienstOper getDelegierungsOfSozialdienst() {
+        return new GetDelegierungsOfSozialdienstOper(createReqSpec());
     }
 
     /**
@@ -268,7 +268,7 @@ public class DelegierenApiSpec {
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
      */
-    public static class GetDelegierungSozOper implements Oper {
+    public static class GetDelegierungsOfSozialdienstOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/delegierung/{getDelegierungSozQueryType}";
@@ -276,7 +276,7 @@ public class DelegierenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDelegierungSozOper(RequestSpecBuilder reqSpec) {
+        public GetDelegierungsOfSozialdienstOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -309,7 +309,7 @@ public class DelegierenApiSpec {
          * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeDtoSpec)  (required)
          * @return operation
          */
-        public GetDelegierungSozOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
+        public GetDelegierungsOfSozialdienstOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
             reqSpec.addPathParam(GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH, getDelegierungSozQueryType);
             return this;
         }
@@ -320,7 +320,7 @@ public class DelegierenApiSpec {
          * @param fallNummer (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper fallNummerQuery(Object... fallNummer) {
+        public GetDelegierungsOfSozialdienstOper fallNummerQuery(Object... fallNummer) {
             reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
             return this;
         }
@@ -331,7 +331,7 @@ public class DelegierenApiSpec {
          * @param nachname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper nachnameQuery(Object... nachname) {
+        public GetDelegierungsOfSozialdienstOper nachnameQuery(Object... nachname) {
             reqSpec.addQueryParam(NACHNAME_QUERY, nachname);
             return this;
         }
@@ -342,7 +342,7 @@ public class DelegierenApiSpec {
          * @param vorname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper vornameQuery(Object... vorname) {
+        public GetDelegierungsOfSozialdienstOper vornameQuery(Object... vorname) {
             reqSpec.addQueryParam(VORNAME_QUERY, vorname);
             return this;
         }
@@ -353,7 +353,7 @@ public class DelegierenApiSpec {
          * @param geburtsdatum (LocalDate)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper geburtsdatumQuery(Object... geburtsdatum) {
+        public GetDelegierungsOfSozialdienstOper geburtsdatumQuery(Object... geburtsdatum) {
             reqSpec.addQueryParam(GEBURTSDATUM_QUERY, geburtsdatum);
             return this;
         }
@@ -364,7 +364,7 @@ public class DelegierenApiSpec {
          * @param wohnort (String)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper wohnortQuery(Object... wohnort) {
+        public GetDelegierungsOfSozialdienstOper wohnortQuery(Object... wohnort) {
             reqSpec.addQueryParam(WOHNORT_QUERY, wohnort);
             return this;
         }
@@ -375,7 +375,7 @@ public class DelegierenApiSpec {
          * @param delegierungAngenommen (Boolean)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
+        public GetDelegierungsOfSozialdienstOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
             reqSpec.addQueryParam(DELEGIERUNG_ANGENOMMEN_QUERY, delegierungAngenommen);
             return this;
         }
@@ -386,7 +386,7 @@ public class DelegierenApiSpec {
          * @param letzteAktivitaetFrom (LocalDate)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+        public GetDelegierungsOfSozialdienstOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
             reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
             return this;
         }
@@ -397,7 +397,7 @@ public class DelegierenApiSpec {
          * @param letzteAktivitaetTo (LocalDate)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+        public GetDelegierungsOfSozialdienstOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
             reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
             return this;
         }
@@ -408,7 +408,7 @@ public class DelegierenApiSpec {
          * @param page (Integer)  (required)
          * @return operation
          */
-        public GetDelegierungSozOper pageQuery(Object... page) {
+        public GetDelegierungsOfSozialdienstOper pageQuery(Object... page) {
             reqSpec.addQueryParam(PAGE_QUERY, page);
             return this;
         }
@@ -419,7 +419,7 @@ public class DelegierenApiSpec {
          * @param pageSize (Integer)  (required)
          * @return operation
          */
-        public GetDelegierungSozOper pageSizeQuery(Object... pageSize) {
+        public GetDelegierungsOfSozialdienstOper pageSizeQuery(Object... pageSize) {
             reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
             return this;
         }
@@ -430,7 +430,7 @@ public class DelegierenApiSpec {
          * @param sortColumn (SozDashboardColumnDtoSpec)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper sortColumnQuery(Object... sortColumn) {
+        public GetDelegierungsOfSozialdienstOper sortColumnQuery(Object... sortColumn) {
             reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
             return this;
         }
@@ -441,7 +441,7 @@ public class DelegierenApiSpec {
          * @param sortOrder (SortOrderDtoSpec)  (optional)
          * @return operation
          */
-        public GetDelegierungSozOper sortOrderQuery(Object... sortOrder) {
+        public GetDelegierungsOfSozialdienstOper sortOrderQuery(Object... sortOrder) {
             reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
             return this;
         }
@@ -451,7 +451,7 @@ public class DelegierenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDelegierungSozOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetDelegierungsOfSozialdienstOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -461,7 +461,7 @@ public class DelegierenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDelegierungSozOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetDelegierungsOfSozialdienstOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

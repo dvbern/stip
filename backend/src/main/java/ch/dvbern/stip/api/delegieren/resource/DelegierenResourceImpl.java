@@ -64,7 +64,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @RolesAllowed(GS_GESUCH_READ)
     @Override
-    public PaginatedSozDashboardDto getDelegierungSoz(
+    public PaginatedSozDashboardDto getDelegierungsOfSozialdienst(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,

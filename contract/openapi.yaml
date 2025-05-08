@@ -1866,7 +1866,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDelegierungSoz
+      operationId: getDelegierungsOfSozialdienst
       summary: Returns a list of Faelle with Delegierung
   /stammdaten/land:
     get:
