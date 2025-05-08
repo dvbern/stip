@@ -448,7 +448,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public List<FallDashboardItemDto> getSozialdienstMitarbeiterDashboard(UUID fallId) {
         delegierenAuthorizer.canReadFallDashboard();
-        return gesuchService.getSozMaFallDashboardItemDtos(fallId);
+        return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
     }
 
     @Override

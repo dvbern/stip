@@ -1732,7 +1732,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        final var result = gesuchService.getSozMaFallDashboardItemDtos(UUID.randomUUID());
+        final var result = gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(UUID.randomUUID());
         assertNotNull(result);
     }
 
