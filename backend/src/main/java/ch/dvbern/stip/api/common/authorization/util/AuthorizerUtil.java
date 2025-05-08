@@ -110,7 +110,7 @@ public class AuthorizerUtil {
         final SozialdienstService sozialdienstService
     ) {
         return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        || isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+        || isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
     }
 
     public boolean isDelegiert(final Gesuch gesuch) {
