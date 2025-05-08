@@ -155,18 +155,6 @@
           {{ 'shared.cancel' | translate }}
         </button>
 
-        <!-- <div>
-
-          <button
-            type="submit"
-            data-testid="sozMitarbeiter-submit"
-            [disabled]="zuweisungSozMitarbeiterForm.invalid || pending"
-            class="btn btn-primary"
-            (click)="changeSozMitarbeiter()"
-          >
-            {{ 'sozialdienst-app.delegierung-dialog.changeZuweisung.submit' | translate }}
-          </button>
-        </div> -->
         <dv-shared-ui-form-save
           [disabled]="zuweisungSozMitarbeiterForm.pristine"
           [loading]="pending"
