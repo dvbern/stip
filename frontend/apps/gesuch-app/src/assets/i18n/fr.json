@@ -4,8 +4,5 @@
   "gesuch-app.dashboard.welcome.title": "Bonjour, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Demander une bourse",
 
-  "gesuch-app.delegieren-dialog.submit": "Déléguer",
-
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En cours de vérification",
-  "gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN": "Présent"
+  "gesuch-app.delegieren-dialog.submit": "Déléguer"
 }

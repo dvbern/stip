@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
+import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
@@ -75,10 +77,12 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
@@ -106,6 +110,8 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BenutzerService benutzerService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
+    private final BeschwerdeEntscheidService beschwerdeEntscheidService;
+    private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final DelegierenAuthorizer delegierenAuthorizer;
 
     @Override
@@ -166,6 +172,20 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
+    @Blocking
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public Uni<Response> createBeschwerdeEntscheid(
+        UUID gesuchId,
+        String kommentar,
+        Boolean isBeschwerdeErfolgreich,
+        FileUpload fileUpload
+    ) {
+        beschwerdeEntscheidAuthorizer.canCreate(gesuchId);
+        return beschwerdeEntscheidService
+            .createBeschwerdeEntscheid(gesuchId, kommentar, isBeschwerdeErfolgreich, fileUpload);
+    }
+
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
@@ -220,6 +240,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.canGesuchEinreichen(gesuchId);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
@@ -436,6 +457,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.canBearbeitungAbschliessen(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);

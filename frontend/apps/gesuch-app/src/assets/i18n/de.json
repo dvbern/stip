@@ -4,8 +4,5 @@
   "gesuch-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Stipendium beantragen",
 
-  "gesuch-app.delegieren-dialog.submit": "Delegieren",
-
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
-  "gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN": "Vorhanden"
+  "gesuch-app.delegieren-dialog.submit": "Delegieren"
 }

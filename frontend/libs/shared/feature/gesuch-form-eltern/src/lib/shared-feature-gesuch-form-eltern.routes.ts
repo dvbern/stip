@@ -19,10 +19,6 @@ export const gesuchAppFeatureGesuchFormElternRoutes: Route[] = [
           title: 'shared.eltern.title',
           component: SharedFeatureGesuchFormElternComponent,
           runGuardsAndResolvers: 'always',
-          data: {
-            // reinitialize when navigated to the same route
-            shouldReuseRoute: false,
-          },
         }),
       ),
       // add more routes here (siblings)

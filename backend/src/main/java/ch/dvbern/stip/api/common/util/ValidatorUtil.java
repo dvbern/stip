@@ -52,4 +52,11 @@ public class ValidatorUtil {
             );
         }
     }
+
+    public <T> void throwIfEntityNotValid(final Validator validator, final T entity) {
+        var violations = validator.validate(entity);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
+        }
+    }
 }

@@ -13,6 +13,7 @@ export type SharedModelGsGesuchView = Modify<
     canEdit: boolean;
     canDelete: boolean;
     canCreateAenderung: boolean;
+    canDeleteAenderung: boolean;
     einreichefristAbgelaufen: boolean;
     reduzierterBeitrag: boolean;
     einreichefristDays: number | null;

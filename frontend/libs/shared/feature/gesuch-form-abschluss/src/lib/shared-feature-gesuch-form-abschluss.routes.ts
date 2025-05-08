@@ -4,7 +4,7 @@ import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
 import { SharedFeatureGesuchFormAbschlussComponent } from './shared-feature-gesuch-form-abschluss/shared-feature-gesuch-form-abschluss.component';
 
-export const gesuchAppFeatureGesuchFormAbschlussRoutes: Route[] = [
+export const sharedFeatureGesuchFormAbschlussRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',

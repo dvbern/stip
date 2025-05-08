@@ -9,6 +9,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
 import { GesuchTrancheSlim } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -20,7 +21,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiAenderungsEntryComponent {
+  @Input({ required: true }) gesuch!: SharedModelGsGesuchView;
   @Input({ required: true }) tranche!: GesuchTrancheSlim;
-  @Input({ required: true }) gesuchId!: string;
   @Output() deleteAenderung = new EventEmitter<string>();
 }
