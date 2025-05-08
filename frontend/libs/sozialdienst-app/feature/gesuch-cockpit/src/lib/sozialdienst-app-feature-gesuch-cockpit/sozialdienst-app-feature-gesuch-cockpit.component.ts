@@ -11,11 +11,11 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import {
   SharedDataAccessGesuchEvents,
   selectLastUpdate,
