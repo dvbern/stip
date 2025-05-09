@@ -3,6 +3,8 @@
   "gesuch-app.dashboard.title": "Dashboard",
   "gesuch-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Stipendium beantragen",
+  "gesuch-app.dashboard.fall.delegated.title": "Keine Ausbildung erfasst",
+  "gesuch-app.dashboard.fall.delegated.message": "Der Fall wurde Ihrem Sozialdienst delegiert. Die Ausbildung kann duch den Ihnen zugewiesenen Sozialdienst-Mitarbeiter erstellt werden.",
 
   "gesuch-app.delegieren-dialog.submit": "Delegieren"
 }

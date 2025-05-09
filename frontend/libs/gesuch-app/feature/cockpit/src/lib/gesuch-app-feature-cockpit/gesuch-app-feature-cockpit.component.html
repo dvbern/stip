@@ -3,7 +3,7 @@
     <div class="gray-bg"></div>
   </div>
 
-  <div class="container tw-my-12">
+  <div class="container tw-relative tw-my-12 tw-justify-between">
     <h1 class="tw-mb-8 tw-text-white">
       {{ 'gesuch-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
     </h1>
@@ -36,6 +36,18 @@
               </dv-shared-ui-icon-chip>
               {{ 'gesuch-app.dashboard.ausbildung.create' | translate }}
             </button>
+          } @else {
+            <div class="tw tw-block tw-rounded-lg tw-bg-white tw-p-6">
+              <h3 class="tw-mb-3 tw-flex tw-items-center tw-gap-4 tw-text-2xl">
+                <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
+                  <i class="material-symbols-rounded tw-text-2xl">school</i>
+                </dv-shared-ui-icon-chip>
+                {{ 'gesuch-app.dashboard.fall.delegated.title' | translate }}
+              </h3>
+              <p class="tw-mb-0">
+                {{ 'gesuch-app.dashboard.fall.delegated.message' | translate }}
+              </p>
+            </div>
           }
           @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
             <dv-shared-ui-dashboard-compact-ausbildung

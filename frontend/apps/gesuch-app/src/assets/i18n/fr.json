@@ -3,6 +3,8 @@
   "gesuch-app.dashboard.title": "Cockpit",
   "gesuch-app.dashboard.welcome.title": "Bonjour, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Demander une bourse",
+  "gesuch-app.dashboard.fall.delegated.title": "Aucune formation enregistrée",
+  "gesuch-app.dashboard.fall.delegated.message": "Le dossier a été délégué à votre service social. La formation peut être créée par l'employé du service social qui vous a été assigné.",
 
   "gesuch-app.delegieren-dialog.submit": "Déléguer"
 }
