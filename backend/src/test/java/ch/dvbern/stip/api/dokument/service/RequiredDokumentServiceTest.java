@@ -44,8 +44,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())),
-            null
+            new MockInstance(List.of(new MockDocumentProducer())), null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 

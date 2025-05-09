@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.net.ssl.SSLContext;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
@@ -106,6 +107,11 @@ public class SozialdienstBenutzerService {
         }
 
         return sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
+    }
+
+    @Transactional
+    public boolean isSozialdienstBenutzer(Benutzer benutzer) {
+        return Objects.nonNull(sozialdienstBenutzerRepository.findById(benutzer.getId()));
     }
 
     @Transactional

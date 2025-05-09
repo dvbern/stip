@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -34,6 +35,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +46,14 @@ public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
 
-    public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
+    public boolean getGSCanFehlendeDokumenteEinreichen(
+        final Gesuch gesuch,
+        final SozialdienstBenutzerService sozialdienstBenutzerService,
+        final BenutzerService benutzerService
+    ) {
+        if (isDelegated(gesuch)) {
+            return sozialdienstBenutzerService.isSozialdienstBenutzer(benutzerService.getCurrentBenutzer());
+        }
         if (
             (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE)
             && gesuch.getGesuchTranchen()
@@ -55,6 +64,10 @@ public class RequiredDokumentService {
         }
         var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
         return !isAnyDocumentStillRequired;
+    }
+
+    private boolean isDelegated(final Gesuch gesuch) {
+        return Objects.nonNull(gesuch.getAusbildung().getFall().getDelegierung());
     }
 
     private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
