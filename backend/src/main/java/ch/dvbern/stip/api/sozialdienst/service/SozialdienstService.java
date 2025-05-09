@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.sozialdienst.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -45,21 +44,10 @@ public class SozialdienstService {
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
-    public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        return getSozialdienstOfSozialdienstAdmin(currentBenutzer);
-    }
-
     public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
         final var sozialdienstBenutzer =
             sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
         return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
-    }
-
-    public Sozialdienst getSozialdienstOfSozialdienstAdmin(Benutzer benutzer) {
-        return sozialdienstRepository.getSozialdienstBySozialdienstAdmin(
-            sozialdienstBenutzerService.getSozialdienstBenutzerById(benutzer.getId())
-        );
     }
 
     @Transactional
