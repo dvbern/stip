@@ -35,6 +35,7 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   getRelativeTrancheRoute,
   urlAfterNavigationEnd,
@@ -78,6 +79,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private einreichenStore = inject(EinreichenStore);
+  private permissionStore = inject(PermissionStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
@@ -197,6 +199,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   });
 
   statusUebergaengeOptionsSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     const sbCanBearbeitungAbschliessen =
       this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
@@ -211,12 +214,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return {};
     }
 
-    const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
-      StatusUebergaengeOptions[status]({
-        hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
-        isInvalid: hasValidationErrors || hasValidationWarnings,
-      }),
-    );
+    const list = StatusUebergaengeMap[gesuchStatus]
+      ?.map((status) =>
+        StatusUebergaengeOptions[status]({
+          hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
+          isInvalid: hasValidationErrors || hasValidationWarnings,
+        }),
+      )
+      .filter((uebergang) =>
+        uebergang.allowedFor.every((role) => rolesMap[role]),
+      );
 
     return {
       list,

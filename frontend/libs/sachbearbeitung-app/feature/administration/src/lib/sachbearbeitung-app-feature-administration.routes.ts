@@ -22,7 +22,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_AUSBILDUNGSSTAETTE.route,
-    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
+    canActivate: [hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Jurist'])],
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette'
