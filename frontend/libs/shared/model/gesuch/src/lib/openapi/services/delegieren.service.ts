@@ -42,7 +42,7 @@ export interface DelegierenServiceFallDelegierenRequestParams {
     delegierungCreate: DelegierungCreate;
 }
 
-export interface DelegierenServiceGetDelegierungSozRequestParams {
+export interface DelegierenServiceGetDelegierungsOfSozialdienstRequestParams {
     getDelegierungSozQueryType: GetDelegierungSozQueryType;
     fallNummer?: string;
     nachname?: string;
@@ -302,13 +302,13 @@ export class DelegierenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDelegierungSoz$(requestParameters: DelegierenServiceGetDelegierungSozRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
-     public getDelegierungSoz$(requestParameters: DelegierenServiceGetDelegierungSozRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
-     public getDelegierungSoz$(requestParameters: DelegierenServiceGetDelegierungSozRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
-     public getDelegierungSoz$(requestParameters: DelegierenServiceGetDelegierungSozRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
         if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
-            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungSoz$.');
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienst$.');
         }
         const fallNummer = requestParameters.fallNummer;
         const nachname = requestParameters.nachname;
@@ -320,11 +320,11 @@ export class DelegierenService {
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getDelegierungSoz$.');
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienst$.');
         }
         const pageSize = requestParameters.pageSize;
         if (pageSize === null || pageSize === undefined) {
-            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungSoz$.');
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienst$.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;

@@ -189,7 +189,7 @@ export interface GesuchServiceGetSbAenderungChangesRequestParams {
     aenderungId: string;
 }
 
-export interface GesuchServiceGetSozMaDashboardRequestParams {
+export interface GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams {
     fallId: string;
 }
 
@@ -2636,13 +2636,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getSozMaDashboard$(requestParameters: GesuchServiceGetSozMaDashboardRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<FallDashboardItem>>;
-     public getSozMaDashboard$(requestParameters: GesuchServiceGetSozMaDashboardRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FallDashboardItem>>>;
-     public getSozMaDashboard$(requestParameters: GesuchServiceGetSozMaDashboardRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FallDashboardItem>>>;
-     public getSozMaDashboard$(requestParameters: GesuchServiceGetSozMaDashboardRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<FallDashboardItem>>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FallDashboardItem>>>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FallDashboardItem>>>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
-            throw new Error('Required parameter fallId was null or undefined when calling getSozMaDashboard$.');
+            throw new Error('Required parameter fallId was null or undefined when calling getSozialdienstMitarbeiterDashboard$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2690,7 +2690,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/benutzer/me/soz-ma-dashboard/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<FallDashboardItem>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

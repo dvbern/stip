@@ -138,7 +138,7 @@ export class DashboardStore extends signalStore(
       }),
       switchMap((params) =>
         this.gesuchService
-          .getSozMaDashboard$(params)
+          .getSozialdienstMitarbeiterDashboard$(params)
           .pipe(
             handleApiResponse((dashboard) => patchState(this, { dashboard })),
           ),

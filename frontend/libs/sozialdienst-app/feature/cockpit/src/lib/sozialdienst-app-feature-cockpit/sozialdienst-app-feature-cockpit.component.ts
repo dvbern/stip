@@ -45,7 +45,7 @@ import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stam
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  DelegierenServiceGetDelegierungSozRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
   FallWithDelegierung,
   GetDelegierungSozQueryType,
   SortOrder,
@@ -541,7 +541,8 @@ const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
 };
 
 const createQuery = <
-  T extends Partial<DelegierenServiceGetDelegierungSozRequestParams>,
+  T extends
+    Partial<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>,
 >(
   value: T,
 ) => {

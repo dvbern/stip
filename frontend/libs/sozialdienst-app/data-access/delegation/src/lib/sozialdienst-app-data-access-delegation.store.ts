@@ -7,7 +7,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import {
   DelegierenService,
   DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
-  DelegierenServiceGetDelegierungSozRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
   SozialdienstService,
@@ -98,7 +98,7 @@ export class DelegationStore extends signalStore(
     );
 
   loadPaginatedSozDashboard$ =
-    rxMethod<DelegierenServiceGetDelegierungSozRequestParams>(
+    rxMethod<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>(
       pipe(
         tap(() => {
           patchState(this, (state) => ({
@@ -106,7 +106,7 @@ export class DelegationStore extends signalStore(
           }));
         }),
         switchMap((params) =>
-          this.delegierenService.getDelegierungSoz$(params).pipe(
+          this.delegierenService.getDelegierungsOfSozialdienst$(params).pipe(
             handleApiResponse((paginatedSozDashboard) =>
               patchState(this, {
                 paginatedSozDashboard: paginatedSozDashboard,

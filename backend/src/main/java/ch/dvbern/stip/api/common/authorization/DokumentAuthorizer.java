@@ -70,7 +70,7 @@ public class DokumentAuthorizer extends BaseAuthorizer {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
         if (
-            !AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(
+            !AuthorizerUtil.isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(
                 gesuchTranche.getGesuch(),
                 currentBenutzer,
                 sozialdienstService
