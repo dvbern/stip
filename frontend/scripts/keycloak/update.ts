@@ -24,6 +24,7 @@ import {
 } from './types';
 config({ path: join(__dirname, '../../.env') });
 
+const URL_ENV = 'KEYCLOAK_ADMIN_URL';
 const USERNAME_ENV = 'KEYCLOAK_ADMIN_USERNAME';
 const PASSWORD_ENV = 'KEYCLOAK_ADMIN_PASSWORD';
 
@@ -31,6 +32,7 @@ allowInsecure();
 const env = process.env;
 
 const known = {
+  envs: ['DEV', 'UAT'],
   realms: ['bern', 'dv'],
 } as const;
 
@@ -38,17 +40,26 @@ const program = new Command();
 program.name('update-keycloak');
 
 program.exitOverride((err) => {
-  if (err.code === 'commander.missingMandatoryOptionValue') {
+  if (
+    [
+      'commander.optionMissingArgument',
+      'commander.missingMandatoryOptionValue',
+    ].includes(err.code)
+  ) {
     console.log('');
-    program.outputHelp();
+    program.outputHelp({ error: true });
     console.log('');
   }
   process.exit(err.exitCode);
 });
 
+const envOption = program
+  .createOption('-e, --env <env>', 'Which environment to use')
+  .makeOptionMandatory(true)
+  .choices(known.envs);
 const syncRolesCommand = program
   .command('sync-roles')
-  .requiredOption('-u, --url <url>', 'Keycloak URL')
+  .addOption(envOption)
   .addHelpText(
     'before',
     `Syncs roles and permissions in Keycloak using roles-map.ts as a reference.
@@ -60,19 +71,34 @@ This script will create missing roles and permissions, and repair composite role
     `
 
 Example call:
-  $ npm run sync-roles -- --url https://dev-auth-stip.apps.mercury.ocp.dvbern.ch
+  $ npm run sync-roles -- -e DEV
 `,
   );
 
 /**
  * Initialize the Keycloak admin client.
  */
-async function initKc(url: string) {
+async function initKc(target: (typeof known.envs)[number]) {
+  const KEYCLOAK_ADMIN_URL = env[`${URL_ENV}_${target}`];
+  const KEYCLOAK_ADMIN_USERNAME = env[`${USERNAME_ENV}_${target}`];
+  const KEYCLOAK_ADMIN_PASSWORD = env[`${PASSWORD_ENV}_${target}`];
+
+  const missingEnvs = [
+    [`${URL_ENV}_${target}`, KEYCLOAK_ADMIN_URL],
+    [`${USERNAME_ENV}_${target}`, KEYCLOAK_ADMIN_USERNAME],
+    [`${PASSWORD_ENV}_${target}`, KEYCLOAK_ADMIN_PASSWORD],
+  ]
+    .filter(([, env]) => !env)
+    .map(([env]) => env);
+  if (missingEnvs.length > 0) {
+    console.error('Missing environment variables:', missingEnvs);
+    console.error('Please check your .env file\n');
+    process.exit(1);
+  }
+
   const kcAdminClient = new KcAdminClient({
-    baseUrl: url,
+    baseUrl: KEYCLOAK_ADMIN_URL,
   });
-  const KEYCLOAK_ADMIN_USERNAME = env[`${USERNAME_ENV}_${'DEV'}`];
-  const KEYCLOAK_ADMIN_PASSWORD = env[`${PASSWORD_ENV}_${'DEV'}`];
   await kcAdminClient.auth({
     username: KEYCLOAK_ADMIN_USERNAME,
     password: KEYCLOAK_ADMIN_PASSWORD,
@@ -95,7 +121,7 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
       const roleRepresentation = allRolesOrPermissions.find(
         (r) => r.name === role,
       );
-      if (!roleRepresentation || !roleRepresentation.id) {
+      if (!roleRepresentation?.id) {
         console.warn(`Role ${role} not found`);
         return {
           type: 'NOT_FOUND',
@@ -153,8 +179,8 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
  * @param realm the realm to sync roles and permissions for
  */
 async function syncRoles(realm: string) {
-  const { url } = syncRolesCommand.opts();
-  const kcAdminClient = await initKc(url);
+  const { env } = syncRolesCommand.opts();
+  const kcAdminClient = await initKc(env);
   const {
     allRolesOrPermissionsMap,
     compositeRoles,

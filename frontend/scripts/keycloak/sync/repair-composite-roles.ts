@@ -31,61 +31,8 @@ export const repairCompositeRoles = async (
     compositeRoles.map((r) => r.name),
   );
   console.info('======================================');
-  let alreadyAsked = false;
   const repairIncompleteRoles = compositeRoles.map(
-    ({ role, name, children }) =>
-      async () => {
-        const permissions = PERMISSIONS_BY_ROLES[name]
-          ?.map((permission) => allRolesOrPermissionsMap[permission])
-          .filter(isDefined);
-
-        if (!permissions) {
-          return;
-        }
-
-        if (!role.id) {
-          console.error(`Role ${role.name} has no id`);
-          return;
-        }
-
-        const expected = permissions
-          .filter(isRoleOrPermission)
-          .map((p) => p.name)
-          .filter(isDefined);
-        const actual = children.map((p) => p.name).filter(isDefined);
-        const missingPermissions = expected
-          .filter((x) => !actual.includes(x))
-          .map((permission) => allRolesOrPermissionsMap[permission])
-          .filter(isDefined);
-
-        if (!missingPermissions.length) {
-          return;
-        }
-
-        console.info(
-          `${alreadyAsked ? '\n' : ''}Repairing composite role ${role.name} with permissions:`,
-          missingPermissions?.map((r) => r.name).filter(isDefined),
-        );
-        alreadyAsked = true;
-        if (
-          !(await confirm({
-            message: 'Are you sure you want to make these changes?',
-          }))
-        ) {
-          console.info('Cancelling role update...\n');
-          return null;
-        }
-
-        await kcAdminClient.roles.createComposite(
-          {
-            roleId: role.id,
-            realm,
-          },
-          missingPermissions,
-        );
-
-        return role.name;
-      },
+    repairRole(kcAdminClient, realm, allRolesOrPermissionsMap),
   );
 
   const repairedCompositeRoles: (CurrentRoleOrPermission | null)[] = [];
@@ -104,4 +51,75 @@ export const repairCompositeRoles = async (
   console.info('======================================\n');
 
   return repairedCompositeRoles;
+};
+
+/**
+ * Internal function that keeps track of the already asked state to for better line-breaking
+ */
+const repairRole = (
+  kcAdminClient: KeycloakAdminClient,
+  realm: string,
+  allRolesOrPermissionsMap: Partial<
+    Record<CurrentRoleOrPermission, RoleRepresentation>
+  >,
+) => {
+  let alreadyAsked = false;
+  return (params: {
+      role: NamedRoleRepresentation;
+      name: CurrentRole;
+      children: NamedRoleRepresentation[];
+    }) =>
+    async () => {
+      const { role, name, children } = params;
+      const permissions = PERMISSIONS_BY_ROLES[name]
+        ?.map((permission) => allRolesOrPermissionsMap[permission])
+        .filter(isDefined);
+
+      if (!permissions) {
+        return;
+      }
+
+      if (!role.id) {
+        console.error(`Role ${role.name} has no id`);
+        return;
+      }
+
+      const expected = permissions
+        .filter(isRoleOrPermission)
+        .map((p) => p.name)
+        .filter(isDefined);
+      const actual = children.map((p) => p.name).filter(isDefined);
+      const missingPermissions = expected
+        .filter((x) => !actual.includes(x))
+        .map((permission) => allRolesOrPermissionsMap[permission])
+        .filter(isDefined);
+
+      if (!missingPermissions.length) {
+        return;
+      }
+
+      console.info(
+        `${alreadyAsked ? '\n' : ''}Repairing composite role ${role.name} with permissions:`,
+        missingPermissions?.map((r) => r.name).filter(isDefined),
+      );
+      alreadyAsked = true;
+      if (
+        !(await confirm({
+          message: 'Are you sure you want to make these changes?',
+        }))
+      ) {
+        console.info('Cancelling role update...\n');
+        return null;
+      }
+
+      await kcAdminClient.roles.createComposite(
+        {
+          roleId: role.id,
+          realm,
+        },
+        missingPermissions,
+      );
+
+      return role.name;
+    };
 };
