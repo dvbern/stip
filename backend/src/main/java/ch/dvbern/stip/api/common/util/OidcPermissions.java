@@ -27,6 +27,7 @@ public final class OidcPermissions {
     public static final String SB_GESUCH_READ = "V0_GESUCH_READ_SB";
 
     public static final String JURIST_GESUCH_READ = "V0_GESUCH_READ_JURIST";
+    public static final String JURIST_GESUCH_UPDATE = "V0_GESUCH_WRITE_JURIST";
 
     public static final String ADMIN_GESUCH_DELETE = "V0_GESUCH_DELETE_ADMIN";
 
@@ -78,6 +79,11 @@ public final class OidcPermissions {
     public static final String SOZIALDIENSTBENUTZER_READ = "V0_SOZIALDIENSTBENUTZER_READ";
     public static final String SOZIALDIENSTBENUTZER_UPDATE = "V0_SOZIALDIENSTBENUTZER_UPDATE";
     public static final String SOZIALDIENSTBENUTZER_DELETE = "V0_SOZIALDIENSTBENUTZER_DELETE";
+
+    public static final String AUSBILDUNGSSTAETTE_CREATE = "V0_AUSBILDUNGSSTAETTE_CREATE";
+    public static final String AUSBILDUNGSSTAETTE_READ = "V0_AUSBILDUNGSSTAETTE_READ";
+    public static final String AUSBILDUNGSSTAETTE_UPDATE = "V0_AUSBILDUNGSSTAETTE_UPDATE";
+    public static final String AUSBILDUNGSSTAETTE_DELETE = "V0_AUSBILDUNGSSTAETTE_DELETE";
 
     public static final String STAMMDATEN_CREATE = "V0_STAMMDATEN_CREATE";
     public static final String STAMMDATEN_READ = "V0_STAMMDATEN_READ";

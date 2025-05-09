@@ -91,6 +91,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
@@ -238,7 +239,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(GS_GESUCH_UPDATE)
+    @RolesAllowed({ GS_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);

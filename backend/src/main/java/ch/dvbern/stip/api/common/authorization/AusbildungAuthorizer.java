@@ -101,6 +101,10 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return true;
         }
 
+        if (isJurist(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG) {
+            return true;
+        }
+
         return false;
 
     }

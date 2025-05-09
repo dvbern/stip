@@ -123,6 +123,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
+        if (isJurist(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG) {
+            return;
+        }
+
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
