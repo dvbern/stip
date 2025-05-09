@@ -38,11 +38,12 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
         OidcConstants.ROLE_JURIST,
         OidcPermissions.NOTIZ_CREATE,
         OidcPermissions.NOTIZ_UPDATE,
-        OidcPermissions.STAMMDATEN_CREATE,
-        OidcPermissions.STAMMDATEN_READ,
-        OidcPermissions.STAMMDATEN_UPDATE,
-        OidcPermissions.STAMMDATEN_DELETE,
+        OidcPermissions.AUSBILDUNGSSTAETTE_CREATE,
+        OidcPermissions.AUSBILDUNGSSTAETTE_READ,
+        OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE,
+        OidcPermissions.AUSBILDUNGSSTAETTE_DELETE,
         OidcPermissions.JURIST_GESUCH_READ,
+        OidcPermissions.JURIST_GESUCH_UPDATE,
         "default-roles-bern"
     }
 )
