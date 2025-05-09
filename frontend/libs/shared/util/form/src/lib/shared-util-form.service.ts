@@ -301,15 +301,19 @@ export class SharedUtilFormService {
 
   invalidateControlIfValidationFails<T extends FormGroup>(
     form: T,
-    expectedFields: KeysOfForm<T>[],
-    specialValidationErrors?: SpecialValidationError[],
-    /**
-     * A function that revises the value of the control and returns true if the value is valid
-     * The function serves as an additional check to determine if the control should be invalidated
-     * in case there are multiple controls with the same field name, for example in an array as geschwister.
-     */
-    validatorFn?: (value: string) => boolean,
+    affectedFields: KeysOfForm<T>[],
+    opts?: {
+      specialValidationErrors?: SpecialValidationError[];
+      /**
+       * A function that revises the value of the control and returns true if the value is valid
+       * The function serves as an additional check to determine if the control should be invalidated
+       * in case there are multiple controls with the same field name, for example in an array as geschwister.
+       */
+      validatorFn?: (value: unknown) => boolean;
+      beforeReset?: () => void;
+    },
   ) {
+    const { specialValidationErrors, validatorFn, beforeReset } = opts ?? {};
     if (!specialValidationErrors || specialValidationErrors.length === 0) {
       return;
     }
@@ -317,20 +321,24 @@ export class SharedUtilFormService {
     specialValidationErrors.forEach((error) => {
       const field = error.field;
       if (
-        expectedFields.findIndex((f) => f === field) >= 0 &&
+        affectedFields.findIndex((f) => f === field) >= 0 &&
         field in form.controls
       ) {
-        const control = form.get(field);
+        affectedFields.forEach((affectedField) => {
+          const control = form.get(affectedField as string);
 
-        if (validatorFn) {
-          if (!validatorFn(control?.value)) {
+          if (validatorFn) {
+            if (!validatorFn(control?.value)) {
+              beforeReset?.();
+              control?.reset();
+              control?.markAllAsTouched();
+            }
+          } else {
+            beforeReset?.();
+            control?.reset();
             control?.markAllAsTouched();
-            control?.patchValue(null);
           }
-        } else {
-          control?.markAllAsTouched();
-          control?.patchValue(null);
-        }
+        });
       }
     });
   }

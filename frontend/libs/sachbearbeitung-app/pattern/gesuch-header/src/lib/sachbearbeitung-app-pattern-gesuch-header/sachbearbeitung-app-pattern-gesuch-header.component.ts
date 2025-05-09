@@ -189,9 +189,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   availableTrancheInteractionSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
 
-    if (gesuchStatus === 'IN_BEARBEITUNG_SB') {
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
     } else {
       return null;
@@ -203,20 +204,24 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     const sbCanBearbeitungAbschliessen =
       this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
-
     const validations =
       this.einreichnenStore.validationViewSig().invalidFormularProps
         .validations;
-    const hasValidationErrors = !!validations.errors?.length;
-    const hasValidationWarnings = !!validations.warnings?.length;
 
     if (!gesuchStatus) {
       return {};
     }
 
+    const hasValidationErrors = !!validations.errors?.length;
+    const hasValidationWarnings = !!validations.warnings?.length;
+    const pendingRechtsabklaerung =
+      gesuchStatus === 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' &&
+      !rolesMap.V0_Jurist;
+
     const list = StatusUebergaengeMap[gesuchStatus]
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
+          pendingRechtsabklaerung,
           hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),

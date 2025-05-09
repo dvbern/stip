@@ -3,7 +3,7 @@
 
 <div class="tw-flex tw-gap-2">
   @if (dokument?.gesuchDokument?.id) {
-    @if (view.isSachbearbeitungApp && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
+    @if (view.canApproveDecline && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
       @switch (dokument?.gesuchDokument?.status) {
         @case ('AUSSTEHEND') {
           <button

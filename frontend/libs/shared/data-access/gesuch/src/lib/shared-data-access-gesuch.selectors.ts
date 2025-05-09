@@ -4,6 +4,7 @@ import { IChange, diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
@@ -148,8 +149,9 @@ const createTrancheSetting = (
 
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
+  selectSharedDataAccessBenutzersView,
   selectSharedDataAccessConfigsView,
-  (state, config) => {
+  (state, { rolesMap }, config) => {
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseFormStepsArray, [
           {
@@ -163,6 +165,7 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
 
     const steps = addStepsByAppType(
       sharedSteps,
+      rolesMap,
       state.steuerdatenTabs.data,
       config?.compileTimeConfig,
     );
@@ -247,6 +250,7 @@ const appendSteps = (
 
 function addStepsByAppType(
   sharedSteps: GesuchFormStep[],
+  rolesMap: RolesMap,
   steuerdatenTabs: SteuerdatenTyp[] | undefined,
   compileTimeConfig?: CompileTimeConfig,
 ) {
@@ -254,10 +258,12 @@ function addStepsByAppType(
     case 'gesuch-app':
       return [...sharedSteps, ABSCHLUSS];
     case 'sachbearbeitung-app': {
-      const steuerdatenSteps = steuerdatenTabs?.map((typ) => ({
-        step: ELTERN_STEUERDATEN_STEPS[typ],
-        type: typ,
-      }));
+      const steuerdatenSteps = rolesMap.V0_Sachbearbeiter
+        ? steuerdatenTabs?.map((typ) => ({
+            step: ELTERN_STEUERDATEN_STEPS[typ],
+            type: typ,
+          }))
+        : null;
       return steuerdatenSteps
         ? appendSteps(
             sharedSteps,

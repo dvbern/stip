@@ -384,6 +384,23 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    effect(() => {
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['ausbildungNichtGefunden', 'ausbildungsstaette'],
+        {
+          specialValidationErrors:
+            this.einreichenStore.validationViewSig().invalidFormularProps
+              .specialValidationErrors,
+          beforeReset: () => {
+            untracked(() => {
+              this.handleManuellChangedByUser();
+            });
+          },
+        },
+      );
+    });
+
     const isAusbildungAuslandSig = toSignal(
       this.form.controls.isAusbildungAusland.valueChanges.pipe(
         startWith(this.form.value.isAusbildungAusland),
@@ -553,6 +570,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             this.globalNotificationStore.createSuccessNotification({
               messageKey: 'shared.ausbildung.saved.success',
             });
+            this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           },
           onFailure,
         });

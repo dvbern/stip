@@ -140,7 +140,14 @@ type StatusUebergangOption = {
 /**
  * Options for the status transitions
  */
-export const StatusUebergaengeOptions = {
+export const StatusUebergaengeOptions: Record<
+  StatusUebergang,
+  (context?: {
+    hasAcceptedAllDokuments: boolean;
+    isInvalid: boolean;
+    pendingRechtsabklaerung: boolean;
+  }) => StatusUebergangOption
+> = {
   SET_TO_BEARBEITUNG: () =>
     ({
       icon: 'edit_note',
@@ -149,13 +156,13 @@ export const StatusUebergaengeOptions = {
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  EINGEREICHT: () =>
+  EINGEREICHT: (context?: { isInvalid: boolean }) =>
     ({
       icon: 'check_circle_outline',
       titleKey: 'EINGEREICHT',
       typ: 'EINGEREICHT',
       allowedFor: ['V0_Jurist'],
-      disabledReason: undefined,
+      disabledReason: context?.isInvalid ? 'VALIDIERUNG_FEHLER' : undefined,
     }) as const,
   BEARBEITUNG_ABSCHLIESSEN: (context?: {
     hasAcceptedAllDokuments: boolean;
@@ -208,12 +215,16 @@ export const StatusUebergaengeOptions = {
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  NEGATIVE_VERFUEGUNG_ERSTELLEN: () =>
+  NEGATIVE_VERFUEGUNG_ERSTELLEN: (context?: {
+    pendingRechtsabklaerung: boolean;
+  }) =>
     ({
       icon: 'block',
       titleKey: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
-      allowedFor: ['V0_Sachbearbeiter'],
-      disabledReason: undefined,
+      allowedFor: ['V0_Sachbearbeiter', 'V0_Jurist'],
+      disabledReason: context?.pendingRechtsabklaerung
+        ? 'ABKLAERUNG_DURCH_RECHSTABTEILUNG'
+        : undefined,
     }) as const,
-} satisfies Record<StatusUebergang, () => StatusUebergangOption>;
+};
