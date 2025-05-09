@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
@@ -32,6 +28,10 @@ import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -76,7 +76,7 @@ public class SozialdienstDashboardQueryBuilder {
         final LocalDate from,
         final LocalDate to
     ) {
-        query.where(qDelegierung.timestampMutiert.between(from.atStartOfDay(), to.atTime(LocalTime.MAX)));
+        query.where(qDelegierung.delegierterFall.ausbildungs.any().gesuchs.any().timestampMutiert.between(from.atStartOfDay(), to.atTime(LocalTime.MAX)));
     }
 
     public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
@@ -95,7 +95,7 @@ public class SozialdienstDashboardQueryBuilder {
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;
             case DELEGIERUNG_ANGENOMMEN -> qDelegierung.persoenlicheAngaben.adresse.ort;
             case GEBURTSDATUM -> qDelegierung.persoenlicheAngaben.geburtsdatum;
-            case LETZTE_AKTIVITAET -> qDelegierung.timestampMutiert;
+            case LETZTE_AKTIVITAET -> qDelegierung.delegierterFall.ausbildungs.any().gesuchs.any().timestampMutiert;
         };
 
         final var orderSpecifier = switch (sortOrder) {
