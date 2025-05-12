@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
@@ -88,6 +89,7 @@ const KnownErrorKeys = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     TranslatePipe,
     MatFormFieldModule,
     MatButtonModule,
@@ -377,8 +379,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               ausbildungsgang: ausbildungsgang?.id,
             });
           }
-        } else {
-          this.form.reset();
         }
       },
       { allowSignalWrites: true },

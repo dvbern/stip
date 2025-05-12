@@ -420,7 +420,10 @@
   "shared.form.ausbildung.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
   "shared.form.ausbildung.form.error.periodeNotFound": "Aucune période de bourse disponible n'a été trouvée pour la période spécifiée",
-  "shared.form.ausbildung.validation.notFound": "La formation doit encore être indiquée.",
+  "shared.form.ausbildung.validation.notFound": "La formation manquante doit encore être créée",
+  "shared.form.ausbildung.validation.notFound.part1": "La formation manquante doit encore être créée dans les",
+  "shared.form.ausbildung.validation.notFound.link": "centres de formation.",
+  "shared.form.ausbildung.validation.notFound.part2": "",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",

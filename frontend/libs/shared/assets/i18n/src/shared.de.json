@@ -420,7 +420,10 @@
   "shared.form.ausbildung.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
   "shared.form.ausbildung.form.error.periodeNotFound": "Für den angegebenen Zeitraum wurde keine verfügbare Stipendium-Periode gefunden",
-  "shared.form.ausbildung.validation.notFound": "Die Ausbildung muss noch angegeben werden.",
+  "shared.form.ausbildung.validation.notFound": "Die fehlende Ausbildung muss erstellt werden",
+  "shared.form.ausbildung.validation.notFound.part1": "Die fehlende Ausbildung muss noch bei den",
+  "shared.form.ausbildung.validation.notFound.link": "Ausbildungstaetten",
+  "shared.form.ausbildung.validation.notFound.part2": "erstellt werden.",
 
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",

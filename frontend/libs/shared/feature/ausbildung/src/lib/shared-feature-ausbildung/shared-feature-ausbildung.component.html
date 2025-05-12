@@ -229,7 +229,11 @@
           form.controls.ausbildungNichtGefunden.touched && form.controls.ausbildungNichtGefunden.errors?.['requiredOff']
         ) {
           <mat-error>
-            {{ 'shared.form.ausbildung.validation.notFound' | translate }}
+            {{ 'shared.form.ausbildung.validation.notFound.part1' | translate }}
+            <a [routerLink]="['/administration/ausbildungsstaette']">{{
+              'shared.form.ausbildung.validation.notFound.link' | translate
+            }}</a>
+            {{ 'shared.form.ausbildung.validation.notFound.part2' | translate }}
           </mat-error>
         }
       </div>
