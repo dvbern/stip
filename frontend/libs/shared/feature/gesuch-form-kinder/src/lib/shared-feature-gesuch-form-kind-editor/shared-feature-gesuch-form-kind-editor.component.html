@@ -94,9 +94,11 @@
             'shared.form.geschwister.ausbildungssituation.select.' + a | translate
           }}</mat-radio-button>
         }
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </div>
       </mat-radio-group>
       <mat-hint
         *dvZuvorHint="

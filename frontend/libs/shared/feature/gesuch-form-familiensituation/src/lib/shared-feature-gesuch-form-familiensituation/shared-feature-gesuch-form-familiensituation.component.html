@@ -50,9 +50,11 @@
               'shared.form.radio.no' | translate
             }}</mat-radio-button>
 
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
+            <div class="group-errors">
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </div>
           </mat-radio-group>
         </div>
 
@@ -102,9 +104,11 @@
                   ></dv-shared-pattern-document-upload>
                 }
               </div>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </div>
             </mat-radio-group>
 
             <div
@@ -183,9 +187,11 @@
                 'shared.form.radio.no' | translate
               }}</mat-radio-button>
 
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </div>
             </mat-radio-group>
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntVerstorben)) {
@@ -235,9 +241,11 @@
                   }}</mat-radio-button
                 >
 
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
+                <div class="group-errors">
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </div>
               </mat-radio-group>
 
               <div
@@ -284,9 +292,11 @@
                     ></dv-shared-pattern-document-upload>
                   }
                 </div>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
+                <div class="group-errors">
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </div>
               </mat-radio-group>
             </div>
           }
@@ -330,9 +340,11 @@
                   }}</mat-radio-button
                 >
 
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
+                <div class="group-errors">
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </div>
               </mat-radio-group>
             </div>
           }
@@ -383,9 +395,11 @@
                     ></dv-shared-pattern-document-upload>
                   }
                 </div>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
+                <div class="group-errors">
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </div>
               </mat-radio-group>
               <div
                 dvSharedUiInfoDialog
@@ -456,9 +470,11 @@
 
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
+          <div class="group-errors">
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </div>
         </mat-radio-group>
       </div>
     </ng-template>
@@ -479,9 +495,11 @@
 
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
+          <div class="group-errors">
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </div>
         </mat-radio-group>
       </div>
     </ng-template>
