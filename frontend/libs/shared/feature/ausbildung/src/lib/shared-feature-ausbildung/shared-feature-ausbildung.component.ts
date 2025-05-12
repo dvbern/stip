@@ -390,9 +390,11 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const nichtGefunden = this.ausbildungNichtGefundenChangedSig();
 
       if (!readonly && nichtGefunden) {
-        this.form.controls.ausbildungNichtGefunden.setErrors({
-          requiredOff: null,
-        });
+        const { errors } = this.form.controls.ausbildungNichtGefunden;
+        if (errors) {
+          delete errors['requiredOff'];
+          this.form.controls.ausbildungNichtGefunden.setErrors(errors);
+        }
         this.formUtils.invalidateControlIfValidationFails(
           this.form,
           ['ausbildungNichtGefunden', 'ausbildungsstaette'],
