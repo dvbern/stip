@@ -23,28 +23,100 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.util.TypeLiteral;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.when;
 
 class RequiredDokumentServiceTest {
     @Test
+    void setGSCanFehlendeDokumenteEinreichenToFalseForGSIfDelegated() {
+        // arrange
+        final var sozialdienstService = Mockito.mock(SozialdienstService.class);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
+
+        final var service = new RequiredDokumentService(
+            new MockInstance(List.of(new MockDocumentProducer())), null, sozialdienstService
+        );
+
+        // setup gs benutzer
+        var gsBenutzer = new Benutzer();
+        var gsRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
+        gsBenutzer.setRollen(Set.of(gsRole));
+        // setup gesuch with delegierung
+        var gesuch = new Gesuch();
+        var fall = new Fall();
+        fall.setGesuchsteller(gsBenutzer);
+        var ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        gesuch.setAusbildung(ausbildung);
+        var delegierung = new Delegierung();
+        delegierung.setSozialdienst(new Sozialdienst());
+        gesuch.getAusbildung().getFall().setDelegierung(delegierung);
+
+        // act & assert
+        assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, gsBenutzer), is(false));
+    }
+
+    @Test
+    void setGSCanFehlendeDokumenteEinreichenToTrueForSozialdienstmitarbeiterIfDelegated() {
+        // arrange
+        final var sozialdienstService = Mockito.mock(SozialdienstService.class);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
+
+        final var service = new RequiredDokumentService(
+            new MockInstance(List.of(new MockDocumentProducer())), null, sozialdienstService
+        );
+
+        // setup soz-ma benutzer
+        var sozMaBenutzer = new Benutzer();
+        var sozMaRole = new Rolle();
+        sozMaRole.setKeycloakIdentifier(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
+        sozMaBenutzer.setRollen(Set.of(sozMaRole));
+        // setup gesuch with delegierung
+        var gesuch = new Gesuch();
+        gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        var fall = new Fall();
+        fall.setGesuchsteller(sozMaBenutzer);
+        var ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        gesuch.setAusbildung(ausbildung);
+        var delegierung = new Delegierung();
+        delegierung.setSozialdienst(new Sozialdienst());
+        gesuch.getAusbildung().getFall().setDelegierung(delegierung);
+
+        // act & assert
+        assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, sozMaBenutzer), is(true));
+    }
+
+    @Test
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null
+            new MockInstance(List.of(new MockDocumentProducer())), null, null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -56,7 +128,7 @@ class RequiredDokumentServiceTest {
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockEmptyDocumentProducer())),
-            null
+            null, null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -67,7 +139,7 @@ class RequiredDokumentServiceTest {
     void oneExistingTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())),
-            null
+            null, null
         );
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));

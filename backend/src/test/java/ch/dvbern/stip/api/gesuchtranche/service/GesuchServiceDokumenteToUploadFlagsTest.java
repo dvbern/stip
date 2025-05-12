@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -43,6 +42,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import io.quarkus.test.InjectMock;
@@ -83,6 +83,9 @@ class GesuchServiceDokumenteToUploadFlagsTest {
     @InjectMock
     SozialdienstBenutzerService sozialdienstBenutzerService;
 
+    @InjectMock
+    SozialdienstService sozialdienstService;
+
     @Inject
     @InjectMocks
     GesuchTrancheService gesuchTrancheService;
@@ -106,7 +109,6 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         when(benutzerService.getCurrentBenutzer()).thenReturn(gsBenutzer);
         when(sozialdienstBenutzerService.isSozialdienstBenutzer(any())).thenReturn(false);
 
-
         // prepare a gesuch with 2 tranchen
         gesuch = new Gesuch().setGesuchTranchen(
             List.of(
@@ -115,6 +117,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
             )
         );
         var fall = new Fall();
+        fall.setGesuchsteller(gsBenutzer);
         var ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
@@ -169,7 +172,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any(),any())).thenCallRealMethod();
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenCallRealMethod();
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         // act
@@ -187,49 +190,12 @@ class GesuchServiceDokumenteToUploadFlagsTest {
     }
 
     @Test
-    void testGSCanNOTDokumenteUebermittelnWhenDelegated() {
-        /*
-         * Gesuchstatus must be EHLENDE_DOKUMENTE
-         */
-        // arrange
-        when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
-        when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
-        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        gesuch.getAusbildung().getFall().setDelegierung(new Delegierung());
-        // act
-        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
-
-        /*
-         * There must be NO required documents
-         */
-        // arrange
-        gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any(),any())).thenCallRealMethod();
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
-
-        // arrange
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of(new CustomDokumentTyp()));
-        // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(false));
-    }
-
-    @Test
     void sbCanFehlendeDokumenteUebermittelnTest() {
         /*
          * Gesuchstatus must be IN_BEARBEITUNG_SB
          */
         // arrange
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any(),any())).thenReturn(false);
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
         when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
@@ -324,7 +290,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          * all GesuchDokuments must be accepted
          */
         // arrange
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any(),any())).thenReturn(false);
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
         when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
         Mockito.doNothing().when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());

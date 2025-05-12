@@ -192,13 +192,14 @@ public class GesuchTrancheService {
         final Gesuch gesuch,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
+        final var benutzer = benutzerService.getCurrentBenutzer();
         final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
         || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
         dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
 
         dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
             requiredDokumentService
-                .getGSCanFehlendeDokumenteEinreichen(gesuch, sozialdienstBenutzerService, benutzerService)
+                .getGSCanFehlendeDokumenteEinreichen(gesuch, benutzer)
         );
 
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
