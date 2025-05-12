@@ -122,10 +122,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       <string | null>null,
       [Validators.required],
     ],
-    ausbildungskostenTertiaerstufe: [
-      <string | null>null,
-      [Validators.required],
-    ],
+    // ausbildungskostenTertiaerstufe: [
+    //   <string | null>null,
+    //   [Validators.required],
+    // ],
     fahrkosten: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     betreuungskostenKinder: [<string | null>null, [Validators.required]],
@@ -162,33 +162,41 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   languageSig = this.store.selectSignal(selectLanguage);
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private sekundarstufeZweiChangedSig = toSignal(
+
+  // ------------------------------------------------------------------------
+
+  private ausbilungskostenChangedSig = toSignal(
+    // todo: also rename control when Backend is ready
     this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
   );
-  sekundarstufeLimitSig = computed(() => {
-    const view = this.viewSig();
-    return view.gesuch?.gesuchsperiode.ausbKosten_SekII;
-  });
-  istSekundarstufeGroesserAlsLimitSig = computed(() => {
-    const value = this.sekundarstufeZweiChangedSig();
-    const limit = this.sekundarstufeLimitSig();
+
+  // ausbildungskostenLimitSig = computed(() => {
+  //   const view = this.vi
+  //   return view.gesuch?.gesuchsperiode.ausbKosten_SekII;
+  // });
+
+  istAusbildungskostenMoreThanLimitSig = computed(() => {
+    const value = this.ausbilungskostenChangedSig();
+    const limit = this.formStateSig().ausbildungsKostenLimit;
 
     return checkLimit(value, limit);
   });
 
-  private teritaerstufeChangedSig = toSignal(
-    this.form.controls.ausbildungskostenTertiaerstufe.valueChanges,
-  );
-  tertiaerstufeLimitSig = computed(() => {
-    const view = this.viewSig();
-    return view.gesuch?.gesuchsperiode.ausbKosten_Tertiaer;
-  });
-  istTeritaerstufeGroesserAlsLimitSig = computed(() => {
-    const value = this.teritaerstufeChangedSig();
-    const limit = this.tertiaerstufeLimitSig();
+  // private teritaerstufeChangedSig = toSignal(
+  //   this.form.controls.ausbildungskostenTertiaerstufe.valueChanges,
+  // );
+  // tertiaerstufeLimitSig = computed(() => {
+  //   const view = this.viewSig();
+  //   return view.gesuch?.gesuchsperiode.ausbKosten_Tertiaer;
+  // });
+  // istTeritaerstufeGroesserAlsLimitSig = computed(() => {
+  //   const value = this.teritaerstufeChangedSig();
+  //   const limit = this.tertiaerstufeLimitSig();
 
-    return checkLimit(value, limit);
-  });
+  //   return checkLimit(value, limit);
+  // });
+
+  // ------------------------------------------------------------
 
   maskitoNumber = maskitoNumber;
   hiddenFieldsSetSig = signal(new Set());
@@ -242,10 +250,19 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         ),
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
-    const willSekundarstufeZwei =
-      ausbildungsgang?.bildungskategorie.bildungsstufe === 'SEKUNDAR_2';
-    const willTertiaerstufe =
-      ausbildungsgang?.bildungskategorie.bildungsstufe === 'TERTIAER';
+
+    // const willSekundarstufeZwei =
+    //   ausbildungsgang?.bildungskategorie.bildungsstufe === 'SEKUNDAR_2';
+    // const willTertiaerstufe =
+    //   ausbildungsgang?.bildungskategorie.bildungsstufe === 'TERTIAER';
+
+    const aubildungsKostenMap = {
+      SEKUNDAR_2: gesuch?.gesuchsperiode.ausbKosten_SekII,
+      TERTIAER: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
+    };
+    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie.bildungsstufe;
+    const ausbildungsKostenLimit =
+      ausbiludungsStufe && aubildungsKostenMap[ausbiludungsStufe];
 
     // return true if the person was 18 or older by the end of the year before the gesuchsjahr
     const gesuchsjahr: number | undefined =
@@ -260,8 +277,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       hasData: true,
       hatElternteilVerloren,
       hatKinder,
-      willSekundarstufeZwei,
-      willTertiaerstufe,
+      // willSekundarstufeZwei,
+      // willTertiaerstufe,
+      ausbildungsKostenLimit,
+      ausbiludungsStufe,
       warErwachsenSteuerJahr,
     } as const;
   });
@@ -409,13 +428,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     effect(
       () => {
         this.gotReenabledSig();
-        const {
-          hasData,
-          hatKinder,
-          willSekundarstufeZwei,
-          willTertiaerstufe,
-          warErwachsenSteuerJahr,
-        } = this.formStateSig();
+        const { hasData, hatKinder, warErwachsenSteuerJahr } =
+          this.formStateSig();
 
         const {
           wohnsitzNotEigenerHaushalt,
@@ -427,14 +441,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         }
 
         this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
-        this.setDisabledStateAndHide(
-          this.form.controls.ausbildungskostenSekundarstufeZwei,
-          !willSekundarstufeZwei,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.ausbildungskostenTertiaerstufe,
-          !willTertiaerstufe,
-        );
+
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,
           !wohnsitzNotEigenerHaushalt,
@@ -491,8 +498,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             beitraege: einnahmenKosten.beitraege?.toString(),
             ausbildungskostenSekundarstufeZwei:
               einnahmenKosten.ausbildungskostenSekundarstufeZwei?.toString(),
-            ausbildungskostenTertiaerstufe:
-              einnahmenKosten.ausbildungskostenTertiaerstufe?.toString(),
+            // ausbildungskostenTertiaerstufe:
+            //   einnahmenKosten.ausbildungskostenTertiaerstufe?.toString(),
             fahrkosten: einnahmenKosten.fahrkosten.toString(),
             wohnkosten: einnahmenKosten.wohnkosten?.toString(),
             betreuungskostenKinder:
@@ -556,7 +563,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'alimente',
       'renten',
       'ausbildungskostenSekundarstufeZwei',
-      'ausbildungskostenTertiaerstufe',
+      // 'ausbildungskostenTertiaerstufe',
       'fahrkosten',
       'wohnkosten',
       'wgWohnend',
@@ -587,9 +594,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ausbildungskostenSekundarstufeZwei: fromFormatedNumber(
             formValues.ausbildungskostenSekundarstufeZwei,
           ),
-          ausbildungskostenTertiaerstufe: fromFormatedNumber(
-            formValues.ausbildungskostenTertiaerstufe,
-          ),
+          // ausbildungskostenTertiaerstufe: fromFormatedNumber(
+          //   formValues.ausbildungskostenTertiaerstufe,
+          // ),
           fahrkosten: fromFormatedNumber(formValues.fahrkosten),
           wohnkosten: fromFormatedNumber(formValues.wohnkosten),
           betreuungskostenKinder: fromFormatedNumber(

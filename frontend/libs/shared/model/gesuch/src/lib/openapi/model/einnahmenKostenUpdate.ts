@@ -28,13 +28,9 @@ export interface EinnahmenKostenUpdate {
     ergaenzungsleistungen?: number;
     beitraege?: number;
     /**
-     * Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+     * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
      */
     ausbildungskostenSekundarstufeZwei?: number;
-    /**
-     * Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
-     */
-    ausbildungskostenTertiaerstufe?: number;
     fahrkosten: number;
     wohnkosten?: number;
     /**

@@ -19,8 +19,10 @@ export class EinnahmenKostenPO {
     eoLeistungen: Locator;
     ergaenzungsleistungen: Locator;
     beitraege: Locator;
-    ausbildungskostenSekundarstufeZwei: Locator;
-    ausbildungskostenTertiaerstufe: Locator;
+    ausbildungskosten: Locator;
+    // todo: search and replace! once backend is fixed
+    // ausbildungskostenSekundarstufeZwei: Locator;
+    // ausbildungskostenTertiaerstufe: Locator;
     fahrkosten: Locator;
     wohnkosten: Locator;
     auswaertigeMittagessenProWoche: Locator;
@@ -58,11 +60,8 @@ export class EinnahmenKostenPO {
         'form-einnahmen-kosten-ergaenzungsleistungen',
       ),
       beitraege: page.getByTestId('form-einnahmen-kosten-beitraege'),
-      ausbildungskostenSekundarstufeZwei: page.getByTestId(
-        'form-einnahmen-kosten-ausbildungskostenSekundarstufeZwei',
-      ),
-      ausbildungskostenTertiaerstufe: page.getByTestId(
-        'form-einnahmen-kosten-ausbildungskostenTertiaerstufe',
+      ausbildungskosten: page.getByTestId(
+        'form-einnahmen-kosten-ausbildungskosten',
       ),
       fahrkosten: page.getByTestId('form-einnahmen-kosten-fahrkosten'),
       wohnkosten: page.getByTestId('form-einnahmen-kosten-wohnkosten'),
@@ -110,8 +109,9 @@ export class EinnahmenKostenPO {
       await this.elems.beitraege.fill(`${einnahmenKosten.beitraege}`);
     }
 
-    await this.elems.ausbildungskostenTertiaerstufe.fill(
-      `${einnahmenKosten.ausbildungskostenTertiaerstufe}`,
+    await this.elems.ausbildungskosten.fill(
+      // todo: rename once backend is fixed
+      `${einnahmenKosten.ausbildungskostenSekundarstufeZwei}`,
     );
 
     if (isDefined(einnahmenKosten.betreuungskostenKinder)) {
