@@ -9,7 +9,7 @@
     (gotReenabledSig)="gotReenabled$.next({})"
     data-testid="form-family-form"
     novalidate
-    class="mt-4"
+    class="mt-4 family-form"
     (ngSubmit)="handleSave()"
   >
     <div class="col-12">
@@ -74,6 +74,7 @@
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
               class="col-12 col-xl-6"
+              dvSharedUiFormField
             >
               <div class="d-flex align-items-center">
                 <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
