@@ -58,7 +58,6 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
         final SozialdienstBenutzer sozialdienstBenutzer,
         final JPAQuery<Delegierung> query
     ) {
-
         query.where(qDelegierung.delegierterMitarbeiter.id.eq(sozialdienstBenutzer.getId()));
         return query;
     }
