@@ -385,20 +385,30 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
 
     effect(() => {
-      this.formUtils.invalidateControlIfValidationFails(
-        this.form,
-        ['ausbildungNichtGefunden', 'ausbildungsstaette'],
-        {
-          specialValidationErrors:
-            this.einreichenStore.validationViewSig().invalidFormularProps
-              .specialValidationErrors,
-          beforeReset: () => {
-            untracked(() => {
-              this.handleManuellChangedByUser();
-            });
+      const { readonly } = this.cachedGesuchViewSig();
+      const { invalidFormularProps } = this.einreichenStore.validationViewSig();
+      const nichtGefunden = this.ausbildungNichtGefundenChangedSig();
+
+      if (!readonly && nichtGefunden) {
+        this.form.controls.ausbildungNichtGefunden.setErrors({
+          requiredOff: null,
+        });
+        this.formUtils.invalidateControlIfValidationFails(
+          this.form,
+          ['ausbildungNichtGefunden', 'ausbildungsstaette'],
+          {
+            specialValidationErrors:
+              invalidFormularProps.specialValidationErrors,
+            beforeInvalidate: () => {
+              untracked(() => {
+                this.form.controls.ausbildungNichtGefunden.setErrors({
+                  requiredOff: true,
+                });
+              });
+            },
           },
-        },
-      );
+        );
+      }
     });
 
     const isAusbildungAuslandSig = toSignal(

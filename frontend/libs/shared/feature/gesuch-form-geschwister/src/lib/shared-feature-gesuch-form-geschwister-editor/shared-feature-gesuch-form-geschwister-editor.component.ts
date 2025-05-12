@@ -198,6 +198,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
           this.form,
           ['wohnsitz'],
           {
+            shouldReset: true,
             specialValidationErrors: untracked(
               this.einreichenStore.validationViewSig,
             ).invalidFormularProps.specialValidationErrors,

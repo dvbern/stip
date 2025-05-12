@@ -396,6 +396,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.form,
             ['wohnsitz'],
             {
+              shouldReset: true,
               specialValidationErrors: untracked(
                 this.einreichenStore.validationViewSig,
               ).invalidFormularProps.specialValidationErrors,

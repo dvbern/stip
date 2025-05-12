@@ -303,6 +303,7 @@ export class SharedUtilFormService {
     form: T,
     affectedFields: KeysOfForm<T>[],
     opts?: {
+      shouldReset?: boolean;
       specialValidationErrors?: SpecialValidationError[];
       /**
        * A function that revises the value of the control and returns true if the value is valid
@@ -310,10 +311,15 @@ export class SharedUtilFormService {
        * in case there are multiple controls with the same field name, for example in an array as geschwister.
        */
       validatorFn?: (value: unknown) => boolean;
-      beforeReset?: () => void;
+      beforeInvalidate?: () => void;
     },
   ) {
-    const { specialValidationErrors, validatorFn, beforeReset } = opts ?? {};
+    const {
+      shouldReset,
+      specialValidationErrors,
+      validatorFn,
+      beforeInvalidate,
+    } = opts ?? {};
     if (!specialValidationErrors || specialValidationErrors.length === 0) {
       return;
     }
@@ -326,16 +332,13 @@ export class SharedUtilFormService {
       ) {
         affectedFields.forEach((affectedField) => {
           const control = form.get(affectedField as string);
+          const isInvalid = validatorFn ? !validatorFn(control?.value) : true;
 
-          if (validatorFn) {
-            if (!validatorFn(control?.value)) {
-              beforeReset?.();
+          if (isInvalid) {
+            beforeInvalidate?.();
+            if (shouldReset) {
               control?.reset();
-              control?.markAllAsTouched();
             }
-          } else {
-            beforeReset?.();
-            control?.reset();
             control?.markAllAsTouched();
           }
         });

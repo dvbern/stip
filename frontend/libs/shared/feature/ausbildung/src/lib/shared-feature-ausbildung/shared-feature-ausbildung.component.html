@@ -216,14 +216,24 @@
       'shared.form.ausbildung.isAusbildungAusland.label' | translate
     }}</mat-checkbox>
 
-    <!-- MANUELL -->
-    <mat-checkbox
-      formControlName="ausbildungNichtGefunden"
-      data-testid="form-education-ausbildungNichtGefunden"
-      (change)="handleManuellChangedByUser()"
-      class="tw-col-start-1"
-      >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
-    >
+    <div class="tw-col-start-1 tw-flex tw-w-full tw-flex-col tw-gap-2">
+      <!-- MANUELL -->
+      <mat-checkbox
+        formControlName="ausbildungNichtGefunden"
+        data-testid="form-education-ausbildungNichtGefunden"
+        (change)="handleManuellChangedByUser()"
+        >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
+      >
+      <div class="group-errors">
+        @if (
+          form.controls.ausbildungNichtGefunden.touched && form.controls.ausbildungNichtGefunden.errors?.['requiredOff']
+        ) {
+          <mat-error>
+            {{ 'shared.form.ausbildung.validation.notFound' | translate }}
+          </mat-error>
+        }
+      </div>
+    </div>
 
     <h3 class="tw-mt-6 md:tw-col-span-2 lg:tw-col-span-3">
       {{ 'shared.form.ausbildung.duration.title' | translate }}
