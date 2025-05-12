@@ -2452,7 +2452,7 @@ public class GesuchApiSpec {
      * Returns gesuche for dashboard filtered by gs
      * 
      *
-     * return List&lt;FallDashboardItemDtoSpec&gt;
+     * return FallDashboardItemDtoSpec
      */
     public static class GetGsDashboardOper implements Oper {
 
@@ -2482,10 +2482,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/gs-dashboard
          * @param handler handler
-         * @return List&lt;FallDashboardItemDtoSpec&gt;
+         * @return FallDashboardItemDtoSpec
          */
-        public List<FallDashboardItemDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<FallDashboardItemDtoSpec>> type = new TypeRef<List<FallDashboardItemDtoSpec>>(){};
+        public FallDashboardItemDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallDashboardItemDtoSpec> type = new TypeRef<FallDashboardItemDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -2660,7 +2660,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #fallIdPath  (required)
-     * return List&lt;FallDashboardItemDtoSpec&gt;
+     * return FallDashboardItemDtoSpec
      */
     public static class GetSozialdienstMitarbeiterDashboardOper implements Oper {
 
@@ -2690,10 +2690,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}
          * @param handler handler
-         * @return List&lt;FallDashboardItemDtoSpec&gt;
+         * @return FallDashboardItemDtoSpec
          */
-        public List<FallDashboardItemDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<FallDashboardItemDtoSpec>> type = new TypeRef<List<FallDashboardItemDtoSpec>>(){};
+        public FallDashboardItemDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallDashboardItemDtoSpec> type = new TypeRef<FallDashboardItemDtoSpec>(){};
             return execute(handler).as(type);
         }
 

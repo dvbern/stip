@@ -128,9 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FallDashboardItem'
+                $ref: '#/components/schemas/FallDashboardItem'
           description: Returns gesuche for dashboard filtered by gs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -155,9 +153,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FallDashboardItem'
+                $ref: '#/components/schemas/FallDashboardItem'
           description: Returns gesuche for dashboard filtered by sozialdienst mitarbeiter
         '401':
           $ref: '#/components/responses/Unauthorized'

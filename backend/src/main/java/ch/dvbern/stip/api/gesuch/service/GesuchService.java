@@ -420,20 +420,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<FallDashboardItemDto> getFallDashboardItemDtos() {
-        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
+    public FallDashboardItemDto getFallDashboardItemDtos() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
-        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
-        return fallDashboardItemDtos;
+        return fallDashboardItemMapper.toDto(fall);
     }
 
     @Transactional
-    public List<FallDashboardItemDto> getSozialdienstMitarbeiterFallDashboardItemDtos(UUID fallId) {
-        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
+    public FallDashboardItemDto getSozialdienstMitarbeiterFallDashboardItemDtos(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
-        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
-        return fallDashboardItemDtos;
+        return fallDashboardItemMapper.toDto(fall);
     }
 
     @Transactional

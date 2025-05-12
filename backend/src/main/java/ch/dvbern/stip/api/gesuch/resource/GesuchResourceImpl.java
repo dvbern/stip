@@ -267,7 +267,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public List<FallDashboardItemDto> getGsDashboard() {
+    public FallDashboardItemDto getGsDashboard() {
         gesuchAuthorizer.canGetGsDashboard();
         return gesuchService.getFallDashboardItemDtos();
     }
@@ -446,7 +446,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GS_GESUCH_READ)
     @Override
-    public List<FallDashboardItemDto> getSozialdienstMitarbeiterDashboard(UUID fallId) {
+    public FallDashboardItemDto getSozialdienstMitarbeiterDashboard(UUID fallId) {
         delegierenAuthorizer.canReadFallDashboard();
         return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
     }
