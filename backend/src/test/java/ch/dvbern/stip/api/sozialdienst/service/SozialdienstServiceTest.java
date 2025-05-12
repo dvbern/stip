@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.sozialdienst.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
@@ -42,9 +45,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
