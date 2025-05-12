@@ -14,7 +14,7 @@
   >
     <!-- willDarlehen -->
     <mat-radio-group
-      class="tw-flex tw-flex-col tw-pt-12"
+      class="will-darlehen-radio-group tw-flex tw-flex-col tw-pt-12"
       formControlName="willDarlehen"
       data-testid="form-darlehen-willDarlehen"
       dvSharedUiFormField
@@ -25,10 +25,11 @@
       <dv-shared-ui-form-zuvor-hint
         [changes]="view.formChanges?.willDarlehen | translateChange: 'shared.form.zuvor.radio.$VALUE'"
       ></dv-shared-ui-form-zuvor-hint>
-
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
+      <div class="group-errors">
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </div>
     </mat-radio-group>
 
     @if (willDarlehenChangedSig() && !view.loading) {
