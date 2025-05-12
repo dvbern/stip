@@ -123,7 +123,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (isJurist(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG) {
+        if (isJurist(currentBenutzer) && Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus())) {
             return;
         }
 

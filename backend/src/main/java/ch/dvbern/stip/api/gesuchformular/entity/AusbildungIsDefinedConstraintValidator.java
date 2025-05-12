@@ -37,10 +37,10 @@ public class AusbildungIsDefinedConstraintValidator
         ConstraintValidatorContext context
     ) {
         final var gesuch = gesuchFormular.getTranche().getGesuch();
-        final var ausbildungIsDefined = gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
+        final var isAusbildungDefined = gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
         || !gesuch.getAusbildung().isAusbildungNichtGefunden();
 
-        if (ausbildungIsDefined) {
+        if (isAusbildungDefined) {
             return true;
         }
         return GesuchValidatorUtil.addProperty(
