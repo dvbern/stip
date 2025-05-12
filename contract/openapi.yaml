@@ -6326,7 +6326,6 @@ components:
         - GEBURTSDATUM
         - WOHNORT
         - DELEGIERUNG_ANGENOMMEN
-        - LETZTE_AKTIVITAET
     SortOrder:
       enum:
         - ASCENDING

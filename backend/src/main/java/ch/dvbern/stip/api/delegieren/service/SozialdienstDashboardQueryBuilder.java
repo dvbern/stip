@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.delegieren.service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -71,17 +70,6 @@ public class SozialdienstDashboardQueryBuilder {
         query.where(qDelegierung.persoenlicheAngaben.geburtsdatum.eq(geburtsdatum));
     }
 
-    public void letzteAktivitaet(
-        final JPAQuery<Delegierung> query,
-        final LocalDate from,
-        final LocalDate to
-    ) {
-        query.where(
-            qDelegierung.delegierterFall.ausbildungs.any().gesuchs.any().timestampMutiert
-                .between(from.atStartOfDay(), to.atTime(LocalTime.MAX))
-        );
-    }
-
     public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
         query.where(qDelegierung.delegierungAngenommen.eq(delegierungAngenommen));
     }
@@ -98,7 +86,6 @@ public class SozialdienstDashboardQueryBuilder {
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;
             case DELEGIERUNG_ANGENOMMEN -> qDelegierung.persoenlicheAngaben.adresse.ort;
             case GEBURTSDATUM -> qDelegierung.persoenlicheAngaben.geburtsdatum;
-            case LETZTE_AKTIVITAET -> qDelegierung.delegierterFall.ausbildungs.any().gesuchs.any().timestampMutiert;
         };
 
         final var orderSpecifier = switch (sortOrder) {
