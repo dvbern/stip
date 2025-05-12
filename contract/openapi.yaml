@@ -1843,8 +1843,6 @@ paths:
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
         - $ref: '#/components/parameters/delegierungAngenommen'
-        - $ref: '#/components/parameters/letzteAktivitaetFrom'
-        - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -3826,7 +3824,6 @@ components:
         - fallNummer
         - mandant
         - delegierung
-        - letzteAktivitaet
       type: object
       properties:
         id:
@@ -3837,8 +3834,6 @@ components:
           type: string
         delegierung:
           $ref: '#/components/schemas/Delegierung'
-        letzteAktivitaet:
-          $ref: '#/components/schemas/LocalDate'
     Gesuchsjahr:
       type: object
       required:

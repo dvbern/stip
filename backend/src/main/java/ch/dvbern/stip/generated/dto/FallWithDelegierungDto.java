@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.DelegierungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -26,7 +25,6 @@ public class FallWithDelegierungDto  implements Serializable {
   private @Valid String fallNummer;
   private @Valid String mandant;
   private @Valid DelegierungDto delegierung;
-  private @Valid LocalDate letzteAktivitaet;
 
   /**
    **/
@@ -104,25 +102,6 @@ public class FallWithDelegierungDto  implements Serializable {
     this.delegierung = delegierung;
   }
 
-  /**
-   **/
-  public FallWithDelegierungDto letzteAktivitaet(LocalDate letzteAktivitaet) {
-    this.letzteAktivitaet = letzteAktivitaet;
-    return this;
-  }
-
-  
-  @JsonProperty("letzteAktivitaet")
-  @NotNull
-  public LocalDate getLetzteAktivitaet() {
-    return letzteAktivitaet;
-  }
-
-  @JsonProperty("letzteAktivitaet")
-  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
-    this.letzteAktivitaet = letzteAktivitaet;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -136,13 +115,12 @@ public class FallWithDelegierungDto  implements Serializable {
     return Objects.equals(this.id, fallWithDelegierung.id) &&
         Objects.equals(this.fallNummer, fallWithDelegierung.fallNummer) &&
         Objects.equals(this.mandant, fallWithDelegierung.mandant) &&
-        Objects.equals(this.delegierung, fallWithDelegierung.delegierung) &&
-        Objects.equals(this.letzteAktivitaet, fallWithDelegierung.letzteAktivitaet);
+        Objects.equals(this.delegierung, fallWithDelegierung.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, mandant, delegierung, letzteAktivitaet);
+    return Objects.hash(id, fallNummer, mandant, delegierung);
   }
 
   @Override
@@ -154,7 +132,6 @@ public class FallWithDelegierungDto  implements Serializable {
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
-    sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

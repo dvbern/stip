@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -33,8 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallWithDelegierungDtoSpec.JSON_PROPERTY_ID,
   FallWithDelegierungDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   FallWithDelegierungDtoSpec.JSON_PROPERTY_MANDANT,
-  FallWithDelegierungDtoSpec.JSON_PROPERTY_DELEGIERUNG,
-  FallWithDelegierungDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
+  FallWithDelegierungDtoSpec.JSON_PROPERTY_DELEGIERUNG
 })
 @JsonTypeName("FallWithDelegierung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -50,9 +48,6 @@ public class FallWithDelegierungDtoSpec {
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
   private DelegierungDtoSpec delegierung;
-
-  public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
-  private LocalDate letzteAktivitaet;
 
   public FallWithDelegierungDtoSpec() {
   }
@@ -160,32 +155,6 @@ public class FallWithDelegierungDtoSpec {
     this.delegierung = delegierung;
   }
 
-
-  public FallWithDelegierungDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
-    
-    this.letzteAktivitaet = letzteAktivitaet;
-    return this;
-  }
-
-   /**
-   * Get letzteAktivitaet
-   * @return letzteAktivitaet
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getLetzteAktivitaet() {
-    return letzteAktivitaet;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
-    this.letzteAktivitaet = letzteAktivitaet;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -198,13 +167,12 @@ public class FallWithDelegierungDtoSpec {
     return Objects.equals(this.id, fallWithDelegierung.id) &&
         Objects.equals(this.fallNummer, fallWithDelegierung.fallNummer) &&
         Objects.equals(this.mandant, fallWithDelegierung.mandant) &&
-        Objects.equals(this.delegierung, fallWithDelegierung.delegierung) &&
-        Objects.equals(this.letzteAktivitaet, fallWithDelegierung.letzteAktivitaet);
+        Objects.equals(this.delegierung, fallWithDelegierung.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, mandant, delegierung, letzteAktivitaet);
+    return Objects.hash(id, fallNummer, mandant, delegierung);
   }
 
   @Override
@@ -215,7 +183,6 @@ public class FallWithDelegierungDtoSpec {
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
-    sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

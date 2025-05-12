@@ -74,8 +74,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
         LocalDate geburtsdatum,
         String wohnort,
         Boolean delegierungAngenommen,
-        LocalDate letzteAktivitaetFrom,
-        LocalDate letzteAktivitaetTo,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -91,8 +89,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
             geburtsdatum,
             wohnort,
             delegierungAngenommen,
-            letzteAktivitaetFrom,
-            letzteAktivitaetTo,
             sortColumn,
             sortOrder
         );

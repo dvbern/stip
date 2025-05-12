@@ -262,8 +262,6 @@ public class DelegierenApiSpec {
      * @see #geburtsdatumQuery  (optional)
      * @see #wohnortQuery  (optional)
      * @see #delegierungAngenommenQuery  (optional)
-     * @see #letzteAktivitaetFromQuery  (optional)
-     * @see #letzteAktivitaetToQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
@@ -377,28 +375,6 @@ public class DelegierenApiSpec {
          */
         public GetDelegierungsOfSozialdienstOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
             reqSpec.addQueryParam(DELEGIERUNG_ANGENOMMEN_QUERY, delegierungAngenommen);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
-
-        /**
-         * @param letzteAktivitaetFrom (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDelegierungsOfSozialdienstOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
-
-        /**
-         * @param letzteAktivitaetTo (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDelegierungsOfSozialdienstOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
             return this;
         }
 

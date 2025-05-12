@@ -87,8 +87,6 @@ public class DelegierenService {
         LocalDate geburtsdatum,
         String wohnort,
         Boolean delegierungAngenommen,
-        LocalDate letzteAktivitaetFrom,
-        LocalDate letzteAktivitaetTo,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -123,10 +121,6 @@ public class DelegierenService {
 
         if (delegierungAngenommen != null) {
             sozDashboardQueryBuilder.delegierungAngenommen(baseQuery, delegierungAngenommen);
-        }
-
-        if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
-            sozDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
         }
 
         // Creating the count query must happen before ordering,

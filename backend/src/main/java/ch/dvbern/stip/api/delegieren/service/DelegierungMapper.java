@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class)
 
@@ -32,6 +31,5 @@ public interface DelegierungMapper {
 
     DelegierungDto toDto(final Delegierung delegierung);
 
-    @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
     FallWithDelegierungDto toFallWithDto(Fall fall);
 }
