@@ -61,16 +61,10 @@ public class RequiredDokumentService {
             return false;
         }
 
-        if (AuthorizerUtil.isDelegiert(gesuch)) {
-            if (
-                !AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-            ) {
-                return false;
-            }
-            return !isAnyDocumentStillRequired(gesuch);
-        }
-
-        if (!AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(benutzer, gesuch)) {
+        if (
+            !AuthorizerUtil
+                .isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
+        ) {
             return false;
         }
 
