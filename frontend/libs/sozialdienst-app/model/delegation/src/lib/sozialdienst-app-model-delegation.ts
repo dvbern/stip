@@ -8,7 +8,6 @@ import {
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
-import { AppendFromTo } from '@dv/shared/model/type-util';
 
 export type PersoehnelicheAngabenKeys = keyof Omit<
   PersoenlicheAngaben,
@@ -29,15 +28,8 @@ export type FallWithDelegierungKeys = keyof Pick<
 >;
 
 export type OrtKey = keyof Pick<Adresse, 'ort'>;
-// prepend wohn
+
 export type WohnortKey = `wohn${OrtKey}`;
-
-export type LetzteAktivitaetKey = keyof Pick<
-  FallWithDelegierung,
-  'letzteAktivitaet'
->;
-
-export type LetzteAktivitaetFromToKeys = AppendFromTo<LetzteAktivitaetKey>;
 
 export type SozCockpitFilterFormKeys =
   | FallWithDelegierungKeys
@@ -48,8 +40,7 @@ export type SozCockpitFilterFormKeys =
 export type SozCockpitFilterKeys =
   | FallWithDelegierungKeys
   | PersoehnelicheAngabenKeys
-  | WohnortKey
-  | LetzteAktivitaetFromToKeys;
+  | WohnortKey;
 
 export type SozCockpitFilterInputs = Record<
   SozCockpitFilterKeys,

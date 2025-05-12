@@ -31,14 +31,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, isDefined } from '@ngx-translate/core';
-import {
-  differenceInCalendarMonths,
-  differenceInCalendarYears,
-  differenceInDays,
-  format,
-} from 'date-fns';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
+import { debounceTime } from 'rxjs';
 
 import { selectVersion } from '@dv/shared/data-access/config';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -75,11 +69,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-import {
-  getDiffFormat,
-  parseDate,
-  toBackendLocalDate,
-} from '@dv/shared/util/validator-date';
+import { parseDate, toBackendLocalDate } from '@dv/shared/util/validator-date';
 import {
   inverseSortMap,
   makeEmptyStringPropertiesNull,
@@ -88,7 +78,6 @@ import {
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
 import {
-  LetzteAktivitaetFromToKeys,
   SozCockitComponentInputs,
   SozCockpitFilterFormKeys,
 } from '@dv/sozialdienst-app/model/delegation';
@@ -154,8 +143,6 @@ export class SozialdienstAppFeatureCockpitComponent
   vorname = input<string | undefined>(undefined);
   geburtsdatum = input<string | undefined>(undefined);
   wohnort = input<string | undefined>(undefined);
-  letzteAktivitaetFrom = input<string | undefined>(undefined);
-  letzteAktivitaetTo = input<string | undefined>(undefined);
   page = input<number | undefined, string | undefined>(undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
   });
@@ -184,11 +171,6 @@ export class SozialdienstAppFeatureCockpitComponent
     wohnort: [<string | undefined>undefined],
     delegierungAngenommen: [<boolean | undefined>undefined],
   } satisfies Record<SozCockpitFilterFormKeys, unknown>);
-
-  filterFromToForm = this.formBuilder.group({
-    letzteAktivitaetFrom: [<Date | undefined>undefined],
-    letzteAktivitaetTo: [<Date | undefined>undefined],
-  } satisfies Record<LetzteAktivitaetFromToKeys, unknown>);
 
   quickFilterForm = this.formBuilder.group({
     query: [<GetDelegierungSozQueryType | undefined>undefined],
@@ -224,31 +206,6 @@ export class SozialdienstAppFeatureCockpitComponent
     },
   ];
 
-  private letzteAktivitaetFromChangedSig = toSignal(
-    this.filterFromToForm.controls.letzteAktivitaetFrom.valueChanges,
-  );
-  private letzteAktivitaetToChangedSig = toSignal(
-    this.filterFromToForm.controls.letzteAktivitaetTo.valueChanges,
-  );
-  letzteAktivitaetRangeSig = computed(() => {
-    const start = this.letzteAktivitaetFromChangedSig();
-    const end = this.letzteAktivitaetToChangedSig();
-
-    if (!start || !end) {
-      return '';
-    }
-    const difference = {
-      days: differenceInDays(end, start),
-      months: differenceInCalendarMonths(end, start),
-      years: differenceInCalendarYears(end, start),
-    };
-    return difference.days
-      ? [
-          `${getDiffFormat(start, difference)}`,
-          `${format(end, 'dd.MM.yy')}`,
-        ].join(' - ')
-      : format(start, 'dd.MM.yyyy');
-  });
   availableQuickFiltersSig = computed(() => {
     const roles = this.permissionStore.rolesMapSig();
 
@@ -271,18 +228,6 @@ export class SozialdienstAppFeatureCockpitComponent
 
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
-  );
-  filterFromToFormChangedSig = toSignal(
-    this.filterFromToForm.valueChanges.pipe(
-      distinctUntilChanged(
-        (a, b) =>
-          // Only emit if both fields are defined or both are undefined
-          // otherwise the list will update on first range picker interaction
-          isDefined(b.letzteAktivitaetFrom) ===
-            isDefined(b.letzteAktivitaetTo) && a === b,
-      ),
-      debounceTime(INPUT_DELAY),
-    ),
   );
 
   faelleDataSourceSig = computed(() => {
@@ -347,33 +292,6 @@ export class SozialdienstAppFeatureCockpitComponent
       { allowSignalWrites: true },
     );
 
-    // Handle from-to filter form control changes seperately
-    effect(
-      () => {
-        this.filterFromToFormChangedSig();
-        const formValue = this.filterFromToForm.getRawValue();
-        const query = createQuery({
-          letzteAktivitaetFrom:
-            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
-              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
-              : undefined,
-          letzteAktivitaetTo:
-            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
-              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
-              : undefined,
-        });
-
-        this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
-
     // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
@@ -398,20 +316,12 @@ export class SozialdienstAppFeatureCockpitComponent
     // when the route param inputs change, load the data
     effect(
       () => {
-        const {
-          query,
-          filter,
-          fromToFilter,
-          sortColumn,
-          sortOrder,
-          page,
-          pageSize,
-        } = this.getInputs();
+        const { query, filter, sortColumn, sortOrder, page, pageSize } =
+          this.getInputs();
 
         this.delegationStore.loadPaginatedSozDashboard$({
           getDelegierungSozQueryType: query,
           ...filter,
-          ...fromToFilter,
           sortColumn,
           sortOrder,
           page: page ?? 0,
@@ -428,20 +338,12 @@ export class SozialdienstAppFeatureCockpitComponent
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
-          const {
-            query,
-            filter,
-            fromToFilter,
-            sortColumn,
-            sortOrder,
-            page,
-            pageSize,
-          } = this.getInputs();
+          const { query, filter, sortColumn, sortOrder, page, pageSize } =
+            this.getInputs();
 
           this.delegationStore.loadPaginatedSozDashboard$({
             getDelegierungSozQueryType: query,
             ...filter,
-            ...fromToFilter,
             sortColumn,
             sortOrder,
             page: page ?? 0,
@@ -461,10 +363,7 @@ export class SozialdienstAppFeatureCockpitComponent
       wohort: this.wohnort(),
       delegierungAngenommen: this.delegierungAngenommen(),
     };
-    const fromToFilter = {
-      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
-      letzteAktivitaetTo: this.letzteAktivitaetFrom(),
-    };
+
     const page = this.page();
     const pageSize = this.pageSize();
     const sortColumn = this.sortColumn();
@@ -473,7 +372,6 @@ export class SozialdienstAppFeatureCockpitComponent
     return {
       query,
       filter,
-      fromToFilter,
       page,
       pageSize,
       sortColumn,
@@ -506,19 +404,13 @@ export class SozialdienstAppFeatureCockpitComponent
   ngOnInit() {
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
 
-    const { query, filter, fromToFilter, sortColumn, sortOrder } =
-      this.getInputs();
+    const { query, filter, sortColumn, sortOrder } = this.getInputs();
 
     this.quickFilterForm.reset({ query });
     this.filterForm.reset({
       ...filter,
       delegierungAngenommen: filter.delegierungAngenommen,
       geburtsdatum: parseDate(filter.geburtsdatum ?? ''),
-    });
-    this.filterFromToForm.reset({
-      ...fromToFilter,
-      letzteAktivitaetFrom: parseDate(fromToFilter.letzteAktivitaetFrom),
-      letzteAktivitaetTo: parseDate(fromToFilter.letzteAktivitaetTo),
     });
 
     if (sortColumn && sortOrder) {

@@ -2422,9 +2422,9 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGsDashboard$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<FallDashboardItem>>;
-     public getGsDashboard$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FallDashboardItem>>>;
-     public getGsDashboard$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FallDashboardItem>>>;
+     public getGsDashboard$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FallDashboardItem>;
+     public getGsDashboard$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FallDashboardItem>>;
+     public getGsDashboard$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FallDashboardItem>>;
      public getGsDashboard$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -2473,7 +2473,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/benutzer/me/gs-dashboard`;
-        return this.httpClient.request<Array<FallDashboardItem>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FallDashboardItem>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -2636,9 +2636,9 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<FallDashboardItem>>;
-     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FallDashboardItem>>>;
-     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FallDashboardItem>>>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FallDashboardItem>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FallDashboardItem>>;
+     public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FallDashboardItem>>;
      public getSozialdienstMitarbeiterDashboard$(requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
@@ -2691,7 +2691,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<FallDashboardItem>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FallDashboardItem>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

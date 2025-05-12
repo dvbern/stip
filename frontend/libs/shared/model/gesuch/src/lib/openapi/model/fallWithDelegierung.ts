@@ -16,6 +16,5 @@ export interface FallWithDelegierung {
     fallNummer: string;
     mandant: string;
     delegierung: Delegierung;
-    letzteAktivitaet: string;
 }
 

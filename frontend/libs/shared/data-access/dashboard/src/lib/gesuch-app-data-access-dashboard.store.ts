@@ -32,7 +32,7 @@ import {
 import { dateFromMonthYearString } from '@dv/shared/util/validator-date';
 
 type DashboardState = {
-  dashboard: CachedRemoteData<FallDashboardItem[]>;
+  dashboard: CachedRemoteData<FallDashboardItem>;
 };
 
 const initialState: DashboardState = {
@@ -49,67 +49,66 @@ export class DashboardStore extends signalStore(
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private permissionStore = inject(PermissionStore);
 
-  dashboardViewSig = computed<SharedModelGsDashboardView[] | undefined>(() => {
-    const fallDashboardItems = this.dashboard.data();
+  dashboardViewSig = computed<SharedModelGsDashboardView | undefined>(() => {
+    const fallDashboardItem = this.dashboard.data();
+    if (!fallDashboardItem) {
+      return undefined;
+    }
     const activeAusbildungen: SharedModelGsAusbildungView[] = [];
     const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
     const rolesMap = this.permissionStore.rolesMapSig();
 
-    fallDashboardItems?.forEach((fallItem) =>
-      fallItem.ausbildungDashboardItems?.forEach(
-        ({ gesuchs, ...ausbildung }) => {
-          const hasMoreThanOneGesuche = (gesuchs?.length ?? 0) > 1;
-          const filteredGesuchs = !gesuchs
-            ? []
-            : (gesuchs.map(
-                toGesuchDashboardItemView({
-                  appType: this.appType,
-                  gesuchs,
-                  rolesMap,
-                  fallItem,
-                  isAusbildungActive: ausbildung.status === 'AKTIV',
-                  hasMoreThanOneGesuche,
-                }),
-              ) ?? []);
+    fallDashboardItem.ausbildungDashboardItems?.forEach(
+      ({ gesuchs, ...ausbildung }) => {
+        const hasMoreThanOneGesuche = (gesuchs?.length ?? 0) > 1;
+        const filteredGesuchs = !gesuchs
+          ? []
+          : (gesuchs.map(
+              toGesuchDashboardItemView({
+                appType: this.appType,
+                gesuchs,
+                rolesMap,
+                fallItem: fallDashboardItem,
+                isAusbildungActive: ausbildung.status === 'AKTIV',
+                hasMoreThanOneGesuche,
+              }),
+            ) ?? []);
 
-          const canEditAusbildung =
-            !hasMoreThanOneGesuche &&
-            filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS';
-          const canCurrentlyEditAusbildung = canCurrentlyEdit(
-            this.appType,
-            rolesMap,
-            fallItem.delegierung,
-          );
+        const canEditAusbildung =
+          !hasMoreThanOneGesuche &&
+          filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS';
+        const canCurrentlyEditAusbildung = canCurrentlyEdit(
+          this.appType,
+          rolesMap,
+          fallDashboardItem.delegierung,
+        );
 
-          (ausbildung.status !== 'AKTIV'
-            ? inactiveAusbildungen
-            : activeAusbildungen
-          ).push({
-            ...ausbildung,
-            canDelete: canEditAusbildung && canCurrentlyEditAusbildung,
-            ausbildungBegin: dateFromMonthYearString(
-              ausbildung.ausbildungBegin,
-            ),
-            ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
-            gesuchs: filteredGesuchs,
-          });
-        },
-      ),
+        (ausbildung.status !== 'AKTIV'
+          ? inactiveAusbildungen
+          : activeAusbildungen
+        ).push({
+          ...ausbildung,
+          canDelete: canEditAusbildung && canCurrentlyEditAusbildung,
+          ausbildungBegin: dateFromMonthYearString(ausbildung.ausbildungBegin),
+          ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
+          gesuchs: filteredGesuchs,
+        });
+      },
     );
 
-    return fallDashboardItems?.map((item) => ({
-      fall: item.fall,
-      delegierung: item.delegierung,
+    return {
+      fall: fallDashboardItem.fall,
+      delegierung: fallDashboardItem.delegierung,
       canCreateAusbildung: canCurrentlyEdit(
         this.appType,
         rolesMap,
-        item.delegierung,
+        fallDashboardItem.delegierung,
       ),
-      notifications: item.notifications,
-      hasActiveAusbildungen: true,
+      notifications: fallDashboardItem.notifications,
+      hasActiveAusbildungen: activeAusbildungen.length > 0,
       activeAusbildungen,
       inactiveAusbildungen,
-    }));
+    };
   });
 
   loadDashboard$ = rxMethod<void>(

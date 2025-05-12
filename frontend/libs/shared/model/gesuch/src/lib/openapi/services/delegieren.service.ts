@@ -50,8 +50,6 @@ export interface DelegierenServiceGetDelegierungsOfSozialdienstRequestParams {
     geburtsdatum?: string;
     wohnort?: string;
     delegierungAngenommen?: boolean;
-    letzteAktivitaetFrom?: string;
-    letzteAktivitaetTo?: string;
     page: number;
     pageSize: number;
     sortColumn?: SozDashboardColumn;
@@ -316,8 +314,6 @@ export class DelegierenService {
         const geburtsdatum = requestParameters.geburtsdatum;
         const wohnort = requestParameters.wohnort;
         const delegierungAngenommen = requestParameters.delegierungAngenommen;
-        const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
-        const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
             throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienst$.');
@@ -353,14 +349,6 @@ export class DelegierenService {
         if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>delegierungAngenommen, 'delegierungAngenommen');
-        }
-        if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>letzteAktivitaetFrom, 'letzteAktivitaetFrom');
-        }
-        if (letzteAktivitaetTo !== undefined && letzteAktivitaetTo !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>letzteAktivitaetTo, 'letzteAktivitaetTo');
         }
         if (page !== undefined && page !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

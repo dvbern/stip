@@ -31,7 +31,8 @@
           {{ 'sozialdienst-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
         </h1>
 
-        @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
+        @let dashboard = dashboardStore.dashboardViewSig();
+        @if (dashboard) {
           @let fall = dashboard.fall;
           <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
             <!-- main column -->
