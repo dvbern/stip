@@ -141,7 +141,6 @@ class SozialdienstServiceTest {
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdminOfSozialdienstB);
     }
 
-    // todo: test sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst()
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstA_ForSozialdienstMitarbeiterOfSozialdienstA() {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstA));
