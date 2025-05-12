@@ -110,11 +110,6 @@ public class SozialdienstBenutzerService {
     }
 
     @Transactional
-    public boolean isSozialdienstBenutzer(Benutzer benutzer) {
-        return Objects.nonNull(sozialdienstBenutzerRepository.findById(benutzer.getId()));
-    }
-
-    @Transactional
     public SozialdienstBenutzer getSozialdienstBenutzerById(UUID id) {
         return sozialdienstBenutzerRepository.requireById(id);
     }

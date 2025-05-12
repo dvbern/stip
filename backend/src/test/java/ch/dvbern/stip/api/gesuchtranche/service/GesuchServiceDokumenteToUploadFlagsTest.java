@@ -107,7 +107,6 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
         gsBenutzer.setRollen(Set.of(gsRole));
         when(benutzerService.getCurrentBenutzer()).thenReturn(gsBenutzer);
-        when(sozialdienstBenutzerService.isSozialdienstBenutzer(any())).thenReturn(false);
 
         // prepare a gesuch with 2 tranchen
         gesuch = new Gesuch().setGesuchTranchen(
