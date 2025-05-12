@@ -153,7 +153,7 @@ class BerechnungTest {
                 .setNettoerwerbseinkommen(0)
                 .setErgaenzungsleistungen(0)
                 .setWohnkosten(10000)
-                .setAusbildungskostenTertiaerstufe(2000)
+                .setAusbildungskostenSekundarstufeZwei(2000)
                 .setFahrkosten(0)
         );
 
@@ -511,7 +511,7 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(925)
                 .setRenten(0)
-                .setAusbildungskostenTertiaerstufe(0)
+                .setAusbildungskostenSekundarstufeZwei(0)
                 .setAusbildungskostenSekundarstufeZwei(950)
                 .setAuswaertigeMittagessenProWoche(5)
         );
@@ -658,7 +658,7 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(2_760)
                 .setRenten(0)
-                .setAusbildungskostenTertiaerstufe(1_500)
+                .setAusbildungskostenSekundarstufeZwei(1_500)
                 .setAusbildungskostenSekundarstufeZwei(0)
                 .setAuswaertigeMittagessenProWoche(0)
         );
@@ -749,7 +749,7 @@ class BerechnungTest {
                 .setFahrkosten(0)
                 .setRenten(0)
                 .setZulagen(5520)
-                .setAusbildungskostenTertiaerstufe(0)
+                .setAusbildungskostenSekundarstufeZwei(0)
                 .setAusbildungskostenSekundarstufeZwei(500)
                 .setBetreuungskostenKinder(3333)
                 .setFahrkosten(790)
@@ -885,7 +885,7 @@ class BerechnungTest {
                 .setFahrkosten(800)
                 .setRenten(0)
                 .setZulagen(0)
-                .setAusbildungskostenTertiaerstufe(2000)
+                .setAusbildungskostenSekundarstufeZwei(2000)
                 .setAusbildungskostenSekundarstufeZwei(0)
                 .setBetreuungskostenKinder(0)
                 .setFahrkosten(800)

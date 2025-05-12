@@ -55,7 +55,7 @@ public class AusbildungskostenStufeRequiredConstraintValidator
             }
         }
         if (gesuchFormular.getAusbildung().getAusbildungsgang().getBildungskategorie().getBildungsstufe() == TERTIAER) {
-            if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenTertiaerstufe() == null) {
+            if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() == null) {
                 return GesuchValidatorUtil.addProperty(
                     constraintValidatorContext,
                     VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE,

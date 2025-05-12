@@ -545,7 +545,7 @@ public class TestUtil {
                 .setNettoerwerbseinkommen(12916)
                 .setErgaenzungsleistungen(1200)
                 .setWohnkosten(6000)
-                .setAusbildungskostenTertiaerstufe(450)
+                .setAusbildungskostenSekundarstufeZwei(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
                 .setVerdienstRealisiert(true)

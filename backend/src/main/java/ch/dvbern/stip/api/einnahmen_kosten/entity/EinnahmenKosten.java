@@ -88,10 +88,6 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private Integer ausbildungskostenSekundarstufeZwei;
 
     @Nullable
-    @Column(name = "ausbildungskosten_tertiaerstufe")
-    private Integer ausbildungskostenTertiaerstufe;
-
-    @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
 

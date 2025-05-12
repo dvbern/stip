@@ -109,7 +109,7 @@ class EinnahmenKostenValidatorTest {
             )
         )
             .isFalse();
-        gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(1);
+        gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(1);
         assertThat(
             ausbildungskostenStufeRequiredConstraintValidator.isValid(
                 gesuchFormular,
