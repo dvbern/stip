@@ -1,4 +1,4 @@
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, Signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
@@ -17,6 +17,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
+import { getRelativeTrancheRoute } from '@dv/shared/model/router';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
@@ -95,6 +96,26 @@ export class GesuchAenderungStore extends signalStore(
       list: list.data?.tranchen?.filter((t) => t.typ === 'TRANCHE') ?? [],
     };
   });
+
+  getRelativeTranchenViewSig = (gesuchIdSig: Signal<string | undefined>) => {
+    const relativeRouteSig = getRelativeTrancheRoute(this.router, 'TRANCHE');
+
+    return computed(() => {
+      const gesuchId = gesuchIdSig();
+      const relativeRoute = relativeRouteSig();
+      const listRd = this.tranchenViewSig();
+
+      return {
+        ...listRd,
+        list: listRd.list.map((tranche) => ({
+          ...tranche,
+          url: relativeRoute
+            ? this.router.createUrlTree([...relativeRoute, tranche.id])
+            : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
+        })),
+      };
+    });
+  };
 
   initialTranchenViewSig = computed(() => {
     const list = this.cachedTranchenList();
