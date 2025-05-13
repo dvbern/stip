@@ -78,13 +78,6 @@ public class GesuchsperiodenService {
         return gesuchsperiode.map(gesuchsperiodeMapper::toDatenDto);
     }
 
-    public List<GesuchsperiodeDto> getAllActive() {
-        return gesuchsperiodeRepository
-            .findAllActiveForDate(LocalDate.now())
-            .map(gesuchsperiodeMapper::toDto)
-            .toList();
-    }
-
     public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
         final var ausbildungBegin = ausbildung.getAusbildungBegin();
 

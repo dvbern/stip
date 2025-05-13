@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchsperioden.repo;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -36,20 +35,6 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
     private final EntityManager entityManager;
 
     static final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
-
-    public Stream<Gesuchsperiode> findAllActiveForDate(LocalDate date) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var query = queryFactory
-            .selectFrom(gesuchsperiode)
-            .where(
-                gesuchsperiode.aufschaltterminStart.before(date)
-                    .and(
-                        gesuchsperiode.aufschaltterminStopp.after(date)
-                            .or(gesuchsperiode.aufschaltterminStopp.eq(date))
-                    )
-            );
-        return query.stream();
-    }
 
     public Gesuchsperiode findAllStartBeforeOrAt(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);

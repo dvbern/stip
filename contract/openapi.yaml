@@ -1345,29 +1345,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getLatest
       summary: Returniert die neuste GesuchsperiodeWithDaten
-  /gesuchsperiode/aktive:
-    get:
-      tags:
-        - Gesuchsperiode
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuchsperiode'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAktiveGesuchsperioden
-      summary: Get all active Gesuchsperioden
   '/gesuchsperiode/{gesuchsperiodeId}':
     parameters:
       - name: gesuchsperiodeId
@@ -5071,7 +5048,6 @@ components:
         - gesuchsperiodeStart
         - gesuchsperiodeStopp
         - aufschaltterminStart
-        - aufschaltterminStopp
         - einreichefristNormal
         - einreichefristReduziert
         - gueltigkeitStatus
@@ -5094,8 +5070,6 @@ components:
         gesuchsperiodeStopp:
           $ref: '#/components/schemas/LocalDate'
         aufschaltterminStart:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltterminStopp:
           $ref: '#/components/schemas/LocalDate'
         einreichefristNormal:
           $ref: '#/components/schemas/LocalDate'
@@ -5127,7 +5101,6 @@ components:
         - gesuchsperiodeStart
         - gesuchsperiodeStopp
         - aufschaltterminStart
-        - aufschaltterminStopp
         - einreichefristNormal
         - einreichefristReduziert
         - ausbKosten_SekII
@@ -5191,10 +5164,6 @@ components:
           description: dd.MM.yyyy
           type: string
         aufschaltterminStart:
-          format: date
-          description: dd.MM.yyyy
-          type: string
-        aufschaltterminStopp:
           format: date
           description: dd.MM.yyyy
           type: string

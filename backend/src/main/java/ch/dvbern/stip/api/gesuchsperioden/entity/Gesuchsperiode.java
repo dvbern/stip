@@ -82,9 +82,6 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "aufschalttermin_start")
     private LocalDate aufschaltterminStart;
 
-    @Column(nullable = false, name = "aufschalttermin_stopp")
-    private LocalDate aufschaltterminStopp;
-
     @Column(nullable = false, name = "einreichefrist_normal")
     private LocalDate einreichefristNormal;
 
