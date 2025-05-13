@@ -36,7 +36,10 @@ import {
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
-import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import {
+  getRelativeTrancheRoute,
+  urlAfterNavigationEnd,
+} from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -76,6 +79,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
   private router = inject(Router);
+  private relativeRouteSig = getRelativeTrancheRoute(this.router, 'TRANCHE');
 
   gesuchAenderungStore = inject(GesuchAenderungStore);
   headerService = inject(SharedUtilHeaderService);
@@ -86,6 +90,22 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+
+  tranchenSig = computed(() => {
+    const gesuchId = this.gesuchIdSig();
+    const relativeRoute = this.relativeRouteSig();
+    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
+
+    return {
+      ...tranchen,
+      list: tranchen.list.map((tranche) => ({
+        ...tranche,
+        url: relativeRoute
+          ? this.router.createUrlTree([...relativeRoute, tranche.id])
+          : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
+      })),
+    };
+  });
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();

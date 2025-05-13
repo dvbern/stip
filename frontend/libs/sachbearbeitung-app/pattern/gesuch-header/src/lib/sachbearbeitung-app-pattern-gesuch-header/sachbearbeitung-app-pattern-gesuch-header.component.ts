@@ -94,7 +94,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       filter(isDefined),
     ),
   );
-  private relativeRouteSig = getRelativeTrancheRoute(this.router);
+  private relativeRouteSig = getRelativeTrancheRoute(this.router, 'TRANCHE');
 
   tranchenSig = computed(() => {
     const gesuchId = this.gesuchIdSig();
