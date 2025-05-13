@@ -217,6 +217,7 @@
   "shared.dashboard.gesuch.status.title": "Statut",
   "shared.dashboard.gesuch.status.missingDocument": "1 document manquant",
   "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} documents manquants",
+  "shared.dashboard.gesuch.delegieren.success": "La demande a été déléguée avec succès au service social",
 
   "shared.dashboard.aenderung.title": "Changement",
   "shared.dashboard.aenderung.status.title": "Statut de la demande",

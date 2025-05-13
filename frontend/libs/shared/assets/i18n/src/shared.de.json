@@ -217,6 +217,7 @@
   "shared.dashboard.gesuch.status.title": "Status",
   "shared.dashboard.gesuch.status.missingDocument": "1 Dokument fehlt",
   "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} Dokumente fehlen",
+  "shared.dashboard.gesuch.delegieren.success": "Das Gesuch wurde erfolgreich delegiert",
 
   "shared.dashboard.aenderung.title": "Änderung",
   "shared.dashboard.aenderung.status.title": "Status des Antrags",

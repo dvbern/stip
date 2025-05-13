@@ -24,6 +24,7 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
@@ -77,6 +78,7 @@ export class GesuchAppFeatureCockpitComponent {
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  globalNotificationStore = inject(GlobalNotificationStore);
   sozialdienstStore = inject(SozialdienstStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   benutzerNameSig = computed(() => {
@@ -159,8 +161,8 @@ export class GesuchAppFeatureCockpitComponent {
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.ausbildung.delete.dialog.title',
-      message: 'gesuch-app.dashboard.ausbildung.delete.dialog.message',
+      title: 'shared.dashboard.ausbildung.delete.dialog.title',
+      message: 'shared.dashboard.ausbildung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -228,6 +230,9 @@ export class GesuchAppFeatureCockpitComponent {
           this.sozialdienstStore.fallDelegieren$({
             req,
             onSuccess: () => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: 'shared.dashboard.gesuch.delegieren.success',
+              });
               this.dashboardStore.loadDashboard$();
             },
           });
