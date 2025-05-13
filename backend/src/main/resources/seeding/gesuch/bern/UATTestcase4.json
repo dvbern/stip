@@ -313,7 +313,7 @@
         "eoLeistungen": null,
         "ergaenzungsleistungen": null,
         "beitraege": null,
-        "ausbildungskostenTertiaerstufe": 3500,
+        "ausbildungskosten": 3500,
         "wohnkosten": null,
         "wgWohnend": null,
         "willDarlehen": true,

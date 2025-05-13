@@ -219,7 +219,7 @@
         "eoLeistungen": null,
         "ergaenzungsleistungen": null,
         "beitraege": null,
-        "ausbildungskostenSekundarstufeZwei": 500,
+        "ausbildungskosten": 500,
         "wohnkosten": 18000,
         "wgWohnend": false,
         "willDarlehen": true,
