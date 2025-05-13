@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -617,10 +618,7 @@ public class GesuchService {
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        var violations = validator.validate(gesuch);
-        if (!violations.isEmpty()) {
-            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
-        }
+        ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
@@ -779,7 +777,7 @@ public class GesuchService {
     @Transactional
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+        ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);

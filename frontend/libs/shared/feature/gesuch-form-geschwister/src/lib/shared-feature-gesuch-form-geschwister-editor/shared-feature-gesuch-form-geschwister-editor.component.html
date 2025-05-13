@@ -123,9 +123,11 @@
           ></dv-shared-pattern-document-upload>
         }
       </div>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
+      <div class="group-errors">
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </div>
     </mat-radio-group>
   </div>
 

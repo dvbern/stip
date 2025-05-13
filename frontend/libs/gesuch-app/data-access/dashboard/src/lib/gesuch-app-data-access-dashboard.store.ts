@@ -18,7 +18,11 @@ import {
   GesuchDashboardItem,
   GesuchService,
 } from '@dv/shared/model/gesuch';
-import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
+import {
+  canCurrentlyEdit,
+  getGesuchPermissions,
+  getTranchePermissions,
+} from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -167,8 +171,16 @@ const toGesuchDashboardItemView =
       rolesMap,
       fallItem.delegierung,
     );
+    const gesuchPermission = getGesuchPermissions(gesuch, appType, rolesMap);
+    const aenderungPermission = gesuch.offeneAenderung
+      ? getTranchePermissions(
+          { gesuchTrancheToWorkWith: gesuch.offeneAenderung },
+          appType,
+          rolesMap,
+        )
+      : null;
     const canEdit =
-      gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS' && canCurrentlyEditGesuch;
+      !!gesuchPermission.permissions.canWrite && canCurrentlyEditGesuch;
 
     return {
       ...gesuch,
@@ -181,6 +193,8 @@ const toGesuchDashboardItemView =
           gesuch.gesuchStatus == 'KEIN_STIPENDIENANSPRUCH') &&
         !gesuch.offeneAenderung &&
         canCurrentlyEditGesuch,
+      canDeleteAenderung:
+        !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
       einreichefristAbgelaufen,
       reduzierterBeitrag,
       einreichefristDays,
