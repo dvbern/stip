@@ -196,10 +196,16 @@ public class AntragsstellerV1 {
         final Gesuchsperiode gesuchsperiode,
         final Bildungsstufe bildungsstufe
     ) {
-        return Integer.min(
-            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
-            gesuchsperiode.getAusbKostenSekII()
-        );
+        return switch (bildungsstufe) {
+            case SEKUNDAR_2 -> Integer.min(
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+                gesuchsperiode.getAusbKostenSekII()
+            );
+            case TERTIAER -> Integer.min(
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+                gesuchsperiode.getAusbKostenTertiaer()
+            );
+        };
     }
 
     private static boolean getHalbierungElternbeitrag(
