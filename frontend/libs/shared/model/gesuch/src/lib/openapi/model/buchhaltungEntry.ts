@@ -23,6 +23,7 @@ export interface BuchhaltungEntry {
     saldo: number;
     sapId?: number;
     sapStatus?: SapStatus;
+    businessPartnerId?: number;
     comment: string;
     verfuegungId?: string;
     gesuchId?: string;

@@ -31,13 +31,20 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "betrag", target = "saldoAenderung")
     @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
-    @Mapping(source = "sapDeliveryId", target = "sapId")
+    @Mapping(
+        source = "sapDelivery.sapDeliveryId",
+        target = "sapId"
+        // expression = "java(buchhaltung.getSapDelivery() != null ?
+        // buchhaltung.getSapDelivery().getSapDeliveryId().longValue() : null)"
+    )
+    @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
+    @Mapping(source = "sapDelivery.sapBusinessPartnerId", target = "businessPartnerId")
     @Mapping(source = "gesuch.id", target = "gesuchId")
     public abstract BuchhaltungEntryDto toDto(Buchhaltung buchhaltung);
 
     @Named("getAuszahlung")
     Integer getAuszahlung(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.AUSZAHLUNG && buchhaltung.getBetrag() > 0) {
+        if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() > 0) {
             return buchhaltung.getBetrag();
         }
         return null;
@@ -45,7 +52,7 @@ public abstract class BuchhaltungMapper {
 
     @Named("getRueckforderung")
     Integer getRueckforderung(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.AUSZAHLUNG && buchhaltung.getBetrag() < 0) {
+        if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() < 0) {
             return buchhaltung.getBetrag();
         }
         return null;

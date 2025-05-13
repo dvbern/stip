@@ -17,8 +17,23 @@
 
 package ch.dvbern.stip.api.buchhaltung.type;
 
+import java.math.BigInteger;
+
 public enum SapStatus {
-    SUCCESS,
-    FAILURE,
     IN_PROGRESS,
+    SUCCESS,
+    PARTIAL_SUCCESS,
+    FAILURE,
+    SUSPENDED;
+
+    public static SapStatus parse(final BigInteger code) {
+        return switch (code.intValue()) {
+            case 0 -> IN_PROGRESS;
+            case 1 -> SUCCESS;
+            case 2 -> PARTIAL_SUCCESS;
+            case 3 -> FAILURE;
+            case 4 -> SUSPENDED;
+            default -> throw new IllegalStateException("Unexpected value: " + code);
+        };
+    }
 }

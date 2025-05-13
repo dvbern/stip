@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,6 +38,7 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
     private final GesuchService gesuchService;
+    private final SapService sapService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -62,5 +64,10 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
                 berechnungsresultat
             );
         }
+        sapService.createInitialAuszahlungOrGetStatus(
+            gesuch.getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getAuszahlung()
+        );
     }
 }

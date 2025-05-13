@@ -17,8 +17,10 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -35,10 +37,12 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -55,6 +59,15 @@ public class BuchhaltungService {
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
             .map(Buchhaltung::getSaldo)
             .orElse(0);
+    }
+
+    @Transactional
+    public Buchhaltung getLatestBuchhaltungEntry(final UUID fallId) {
+        return buchhaltungRepository.findAllForFallId(fallId)
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .orElseThrow(
+                NotFoundException::new
+            );
     }
 
     @Transactional
@@ -108,7 +121,7 @@ public class BuchhaltungService {
         final BuchhaltungType buchhaltungType,
         final Integer betrag,
         final String comment,
-        final Integer sapDeliveryId,
+        final BigDecimal sapDeliveryId,
         final SapStatus sapStatus
     ) {
         final var lastEntrySaldo = getLastEntrySaldo(fall.getBuchhaltungs());
@@ -117,15 +130,61 @@ public class BuchhaltungService {
             .setBuchhaltungType(buchhaltungType)
             .setBetrag(betrag)
             .setSaldo(lastEntrySaldo + betrag)
-            .setSapDeliveryId(sapDeliveryId)
-            .setSapStatus(sapStatus)
             .setComment(comment)
             .setGesuch(gesuch)
             .setFall(fall);
 
+        final var sapDelivery = new SapDelivery();
+        sapDelivery
+            .setSapDeliveryId(sapDeliveryId)
+            .setSapStatus(sapStatus);
+        buchhaltungEntry.setSapDelivery(sapDelivery);
+
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungMapper.toDto(buchhaltungEntry);
+    }
+
+    private static TL getTranslator(final Locale locale) {
+        final var language = AppLanguages.fromLocale(locale);
+        return TLProducer.defaultBundle().forAppLanguage(language);
+    }
+
+    @Transactional
+    public Buchhaltung createAuszahlungBuchhaltungForGesuch(
+        final Gesuch gesuch,
+        final Integer betrag,
+        final BuchhaltungType buchhaltungType
+    ) {
+        if (!BuchhaltungType.AUSZAHLUNGS.contains(buchhaltungType)) {
+            throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
+        }
+        final TL translator = getTranslator(
+            gesuch.getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale()
+        );
+        final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
+        String tlKey = switch (buchhaltungType) {
+            case AUSZAHLUNG_INITIAL -> "stip.auszahlung.buchhaltung.initial";
+            case AUSZAHLUNG_REMAINDER -> "stip.auszahlung.buchhaltung.remainder";
+            default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
+        };
+
+        final var buchhaltungEntry = new Buchhaltung()
+            .setBuchhaltungType(buchhaltungType)
+            .setBetrag(betrag)
+            .setSaldo(lastEntrySaldo - betrag)
+            .setStipendium(0)
+            .setComment(translator.translate(tlKey))
+            .setGesuch(gesuch)
+            .setFall(gesuch.getAusbildung().getFall());
+
+        buchhaltungRepository.persistAndFlush(buchhaltungEntry);
+        gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
+        return buchhaltungEntry;
     }
 
     public Optional<Buchhaltung> getLastEntryStipendiumOpt(final UUID gesuchId) {
@@ -133,19 +192,25 @@ public class BuchhaltungService {
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
     }
 
+    public Optional<Buchhaltung> findLatestPendingBuchhaltungAuszahlungOpt(
+        final UUID gesuchId,
+        final BuchhaltungType buchhaltungType
+    ) {
+        return buchhaltungRepository.findPendingBuchhaltungEntryOfGesuch(gesuchId, buchhaltungType);
+    }
+
     @Transactional
     public BuchhaltungEntryDto createStipendiumBuchhaltungEntry(
         final Gesuch gesuch,
         final Integer stipendiumBetrag
     ) {
-        final var language = AppLanguages.fromLocale(
+        final TL translator = getTranslator(
             gesuch.getLatestGesuchTranche()
                 .getGesuchFormular()
                 .getPersonInAusbildung()
                 .getKorrespondenzSprache()
                 .getLocale()
         );
-        final TL translator = TLProducer.defaultBundle().forAppLanguage(language);
 
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 

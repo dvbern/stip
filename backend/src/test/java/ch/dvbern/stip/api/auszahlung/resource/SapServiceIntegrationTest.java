@@ -17,23 +17,26 @@
 
 package ch.dvbern.stip.api.auszahlung.resource;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
-import ch.dvbern.stip.api.sap.service.SapAuszahlungService;
+import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
-import ch.dvbern.stip.api.sap.util.SAPUtils;
+import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import org.apache.http.HttpStatus;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator.initAuszahlung;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SapServiceIntegrationTest {
     /**
      * Important:
@@ -43,64 +46,95 @@ class SapServiceIntegrationTest {
      */
 
     @Inject
-    SapEndpointService auszahlungSapService;
+    SapEndpointService sapEndpointService;
 
-    @Inject
-    SapAuszahlungService sapAuszahlungService;
+    BigDecimal deliveryid;
 
-    @Inject
-    AuszahlungMapper auszahlungMapper;
+    static final Integer TEST_BUSINESS_PARTNER_ID = 1000134830;
 
-    // @Test
-    void getImportStatus() {
-        final var response = auszahlungSapService.getImportStatus(SAPUtils.generateDeliveryId());
-        assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
+    private static @NotNull Auszahlung createAuszahlung() {
+        final var auszahlung = new Auszahlung();
 
-    /*
-     * todo KSTIP-1229: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
-     */
-    /*
-     * @Test
-     * void createBusinessPartnerTest() {
-     * fail();
-     * assertDoesNotThrow(() -> sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
-     * }
-     *
-     *
-     */
-    // @Test
-    void createBusinessPartnerTest_invalidRequest() {
-        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
-    }
-
-    /*
-     * todo KSTIP-1229: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
-     */
-    /*
-     * @Test
-     * void createVendorPostingTest_New_BusinessPartner_Success() {
-     * fail();
-     * Auszahlung auszahlung= initAuszahlung();
-     * assertNotNull(sapAuszahlungService.createVendorPosting(auszahlung));
-     * }
-     *
-     */
-    // @Test
-    void createVendorPostingTest_Existing_BusinessPartner_Success() {
-        Integer bpId = 1000569588;
-        Auszahlung auszahlung = initAuszahlung();
-        auszahlung.setSapBusinessPartnerId(bpId);
-        assertNotNull(sapAuszahlungService.createVendorPosting(auszahlung));
+        auszahlung.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlung.setId(UUID.randomUUID());
+        auszahlung.setVorname("Vorname");
+        auszahlung.setNachname("Nachname");
+        final var adresse = new Adresse();
+        adresse.setStrasse("Teststrasse");
+        adresse.setHausnummer("1");
+        adresse.setPlz("3000");
+        adresse.setOrt("Bern");
+        auszahlung.setAdresse(adresse);
+        auszahlung.setIban("CH4689144846113617661");
+        return auszahlung;
     }
 
     // @Test
-    void createVendorPostingTest_alreadyExistingDeliveryId() {
-        Auszahlung auszahlung = initAuszahlung();
-        auszahlung.setSapBusinessPartnerId(0);
-        assertThrows(WebApplicationException.class, () -> {
-            sapAuszahlungService.createVendorPosting(auszahlung);
-        });
+    @Order(1)
+    void createBusinessPartnerTest() {
+        final var auszahlung = createAuszahlung();
+        deliveryid = SapEndpointService.generateDeliveryId();
+
+        final var businessPartnerCreateResponse =
+            sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
+
+        assertThat(
+            SapReturnCodeType.isSuccess(businessPartnerCreateResponse.getRETURNCODE().get(0).getTYPE()),
+            is(true)
+        );
     }
 
+    // @Test
+    @Order(2)
+    void changeBusinessPartnerTest() {
+        final var auszahlung = createAuszahlung();
+        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        deliveryid = SapEndpointService.generateDeliveryId();
+
+        final var businessPartnerChangeResponse = sapEndpointService.changeBusinessPartner(auszahlung, deliveryid);
+        assertThat(
+            SapReturnCodeType.isSuccess(businessPartnerChangeResponse.getRETURNCODE().get(0).getTYPE()),
+            is(true)
+        );
+
+    }
+
+    // @Test
+    @Order(3)
+    void readBusinessPartnerTest() {
+        final var auszahlung = createAuszahlung();
+        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+
+        final var businessPartnerReadResponse = sapEndpointService.readBusinessPartner(auszahlung);
+        assertThat(
+            SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
+            is(false)
+        );
+    }
+
+    // @Test
+    @Order(4)
+    void readImportStatusTest() {
+        final var importStatusReadResponse = sapEndpointService.readImportStatus(deliveryid);
+
+        assertThat(
+            SapReturnCodeType.isSuccess(importStatusReadResponse.getRETURNCODE().get(0).getTYPE()),
+            is(true)
+        );
+    }
+
+    // @Test
+    @Order(5)
+    void createVendorPostingTest() {
+        final var auszahlung = createAuszahlung();
+        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        deliveryid = SapEndpointService.generateDeliveryId();
+
+        final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(auszahlung, 5, deliveryid, "");
+
+        assertThat(
+            SapReturnCodeType.isSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE()),
+            is(true)
+        );
+    }
 }

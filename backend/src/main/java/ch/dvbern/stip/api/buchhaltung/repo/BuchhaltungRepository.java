@@ -17,13 +17,16 @@
 
 package ch.dvbern.stip.api.buchhaltung.repo;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.entity.QBuchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.sap.entity.QSapDelivery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -33,10 +36,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     private final EntityManager entityManager;
+    final QBuchhaltung buchhaltung = QBuchhaltung.buchhaltung;
 
     public Stream<Buchhaltung> findAllForFallId(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var buchhaltung = QBuchhaltung.buchhaltung;
 
         final var query = queryFactory
             .selectFrom(buchhaltung)
@@ -46,14 +49,42 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     }
 
     public Stream<Buchhaltung> findStipendiumsEntrysForGesuch(final UUID gesuchId) {
+        return findEntrysOfTypeForGesuch(gesuchId, BuchhaltungType.STIPENDIUM);
+    }
+
+    public Optional<Buchhaltung> findPendingBuchhaltungEntryOfGesuch(
+        final UUID gesuchId,
+        final BuchhaltungType buchhaltungType
+    ) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var buchhaltung = QBuchhaltung.buchhaltung;
+        final var sapDelivery = QSapDelivery.sapDelivery;
+
+        final var query = queryFactory
+            .selectFrom(buchhaltung)
+            .where(buchhaltung.fall.id.eq(gesuchId))
+            .where(buchhaltung.buchhaltungType.eq(buchhaltungType))
+            .join(sapDelivery)
+            .on(buchhaltung.sapDelivery.id.eq(sapDelivery.id))
+            .where(sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .orderBy(buchhaltung.timestampErstellt.desc());
+        return query.stream().findFirst();
+    }
+
+    public Stream<Buchhaltung> findEntrysOfTypeForGesuch(final UUID gesuchId, final BuchhaltungType buchhaltungType) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
 
         final var query = queryFactory
             .selectFrom(buchhaltung)
             .where(buchhaltung.gesuch.id.eq(gesuchId))
-            .where(buchhaltung.buchhaltungType.eq(BuchhaltungType.STIPENDIUM))
+            .where(buchhaltung.buchhaltungType.eq(buchhaltungType))
             .orderBy(buchhaltung.timestampErstellt.asc());
         return query.stream();
+    }
+
+    public Stream<Buchhaltung> findBuchhaltungWithPendingSapDelivery() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(buchhaltung)
+            .where(buchhaltung.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .stream();
     }
 }

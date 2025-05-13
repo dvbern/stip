@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -77,6 +76,7 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -190,7 +190,7 @@ class GesuchServiceTest {
     NotificationRepository notificationRepository;
 
     @InjectMock
-    CustomDokumentTypRepository customDokumentTypRepository;
+    SapService sapService;
 
     @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
@@ -1131,12 +1131,15 @@ class GesuchServiceTest {
     @Test
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
     void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest() {
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        Gesuch gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
+        doReturn(gesuch.getGesuchTranchen().get(0)).when(gesuch).getLatestGesuchTranche();
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(

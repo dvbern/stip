@@ -17,8 +17,13 @@
 
 package ch.dvbern.stip.api.buchhaltung.type;
 
+import java.util.Set;
+
 public enum BuchhaltungType {
     SALDOAENDERUNG,
-    AUSZAHLUNG,
-    STIPENDIUM,
+    AUSZAHLUNG_INITIAL,
+    AUSZAHLUNG_REMAINDER,
+    STIPENDIUM;
+
+    public static Set<BuchhaltungType> AUSZAHLUNGS = Set.of(AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER);
 }

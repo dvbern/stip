@@ -18,11 +18,12 @@
 package ch.dvbern.stip.api.buchhaltung.entity;
 
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,6 +33,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -71,13 +73,12 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @Column(name = "sap_delivery_id")
-    private Integer sapDeliveryId;
-
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sap_status")
-    private SapStatus sapStatus;
+    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(
+        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_sapdelivery_id"),
+        nullable = true
+    )
+    private SapDelivery sapDelivery;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
