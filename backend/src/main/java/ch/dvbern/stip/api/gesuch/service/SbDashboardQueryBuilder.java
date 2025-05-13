@@ -62,23 +62,27 @@ public class SbDashboardQueryBuilder {
             case ALLE -> gesuchRepository.getFindAlleQuery();
         };
 
-        query.join(gesuch.gesuchTranchen, tranche);
+        final var trancheSub = new QGesuchTranche("sub2");
+        final var joinSubselect = JPAExpressions.select(trancheSub.id)
+            .from(trancheSub)
+            .where(
+                trancheSub.gesuch.id.eq(gesuch.id)
+                    .and(
+                        trancheSub.gueltigkeit.gueltigBis.eq(
+                            JPAExpressions.select(trancheSub.gueltigkeit.gueltigBis.max())
+                                .from(trancheSub)
+                                .where(trancheSub.gesuch.id.eq(gesuch.id))
+                        )
+                    )
+            );
 
         if (trancheType == GesuchTrancheTyp.AENDERUNG) {
             query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
         } else if (trancheType == GesuchTrancheTyp.TRANCHE) {
-            final var subTranche = new QGesuchTranche("subTranche");
-            query.where(
-                tranche.id.in(
-                    JPAExpressions
-                        .select(subTranche.id)
-                        .from(subTranche)
-                        .where(subTranche.gesuch.id.eq(gesuch.id))
-                        .orderBy(subTranche.gueltigkeit.gueltigBis.desc())
-                        .limit(1)
-                )
-            );
+            joinSubselect.where(trancheSub.typ.eq(GesuchTrancheTyp.TRANCHE));
         }
+
+        query.join(gesuch.gesuchTranchen, tranche).where(tranche.id.in(joinSubselect));
 
         joinFormular(query);
         return query.where(

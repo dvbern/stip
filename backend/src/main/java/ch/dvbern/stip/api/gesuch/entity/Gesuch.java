@@ -134,6 +134,7 @@ public class Gesuch extends AbstractMandantEntity {
         // There must always be at least 1 GesuchTranche
         // noinspection OptionalGetWithoutIsPresent
         return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
             .max(Comparator.comparing((GesuchTranche gesuchTranche) -> gesuchTranche.getGueltigkeit().getGueltigBis()))
             .get();
     }
