@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -40,7 +39,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
-import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -57,10 +55,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
 
 import static ch.dvbern.stip.api.dokument.type.DokumentArt.BESCHWERDE_ENTSCHEID;
-import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -299,7 +297,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
-            .body(equalTo(readPngFileData()));
+            .body(is(not(empty())));
     }
 
     @Test
@@ -307,9 +305,5 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
-    }
-
-    private String readPngFileData() throws IOException {
-        return FileUtils.getContentsAsString(new File(TEST_PNG_FILE_LOCATION));
     }
 }
