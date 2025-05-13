@@ -553,6 +553,28 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createBeschwerdeVerlaufEntry
+  '/gesuch/{gesuchId}/beschwerde-entscheid':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeEntscheidCreate'
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBeschwerdeEntscheid
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   /stip-decision/all:
     get:
       tags:
@@ -3513,6 +3535,7 @@ components:
         - GESUCH_DOKUMENT
         - UNTERSCHRIFTENBLATT
         - CUSTOM_DOKUMENT
+        - BESCHWERDE_ENTSCHEID
       type: string
     UnterschriftenblattDokumentTyp:
       type: string
@@ -3947,6 +3970,34 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
+    BeschwerdeEntscheidCreate:
+      required:
+        - kommentar
+        - beschwerdeErfolgreich
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        beschwerdeErfolgreich:
+          type: boolean
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    BeschwerdeEntscheid:
+      required:
+        - kommentar
+        - beschwerdeErfolgreich
+        - dokumente
+      type: object
+      properties:
+        kommentar:
+          type: string
+        beschwerdeErfolgreich:
+          type: boolean
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Gesuch:
       required:
         - fallId
@@ -6284,6 +6335,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
       properties:
+        beschwerdeEntscheid:
+          $ref: '#/components/schemas/BeschwerdeEntscheid'
         timestampErstellt:
           type: string
           format: date-time
