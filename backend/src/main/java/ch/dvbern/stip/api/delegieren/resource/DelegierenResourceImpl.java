@@ -34,8 +34,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_UPDATE;
 
 @Validated
 @RequestScoped
@@ -45,14 +46,14 @@ public class DelegierenResourceImpl implements DelegierenResource {
     private final DelegierenService delegierenService;
 
     @Override
-    @RolesAllowed(SOZIALDIENSTBENUTZER_UPDATE)
+    @RolesAllowed(DELEGIERUNG_CREATE)
     public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
         delegierenService.delegateFall(fallId, sozialdienstId, delegierungCreateDto);
     }
 
     @Override
-    @RolesAllowed(SOZIALDIENSTBENUTZER_UPDATE)
+    @RolesAllowed(DELEGIERUNG_UPDATE)
     public void delegierterMitarbeiterAendern(
         UUID delegierungId,
         DelegierterMitarbeiterAendernDto delegierterMitarbeiterAendernDto
@@ -61,7 +62,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         delegierenService.delegierterMitarbeiterAendern(delegierungId, delegierterMitarbeiterAendernDto);
     }
 
-    @RolesAllowed(GS_GESUCH_READ)
+    @RolesAllowed(DELEGIERUNG_READ)
     @Override
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienst(
         GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
