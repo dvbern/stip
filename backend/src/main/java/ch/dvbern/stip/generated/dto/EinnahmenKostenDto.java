@@ -28,7 +28,7 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Integer eoLeistungen;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer beitraege;
-  private @Valid Integer ausbildungskostenSekundarstufeZwei;
+  private @Valid Integer ausbildungskosten;
   private @Valid Integer wohnkosten;
   private @Valid Boolean wgWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
@@ -209,20 +209,20 @@ public class EinnahmenKostenDto  implements Serializable {
   /**
    * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
    **/
-  public EinnahmenKostenDto ausbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+  public EinnahmenKostenDto ausbildungskosten(Integer ausbildungskosten) {
+    this.ausbildungskosten = ausbildungskosten;
     return this;
   }
 
   
-  @JsonProperty("ausbildungskostenSekundarstufeZwei")
-  public Integer getAusbildungskostenSekundarstufeZwei() {
-    return ausbildungskostenSekundarstufeZwei;
+  @JsonProperty("ausbildungskosten")
+  public Integer getAusbildungskosten() {
+    return ausbildungskosten;
   }
 
-  @JsonProperty("ausbildungskostenSekundarstufeZwei")
-  public void setAusbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+  @JsonProperty("ausbildungskosten")
+  public void setAusbildungskosten(Integer ausbildungskosten) {
+    this.ausbildungskosten = ausbildungskosten;
   }
 
   /**
@@ -403,7 +403,7 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.eoLeistungen, einnahmenKosten.eoLeistungen) &&
         Objects.equals(this.ergaenzungsleistungen, einnahmenKosten.ergaenzungsleistungen) &&
         Objects.equals(this.beitraege, einnahmenKosten.beitraege) &&
-        Objects.equals(this.ausbildungskostenSekundarstufeZwei, einnahmenKosten.ausbildungskostenSekundarstufeZwei) &&
+        Objects.equals(this.ausbildungskosten, einnahmenKosten.ausbildungskosten) &&
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
@@ -416,7 +416,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -433,7 +433,7 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    eoLeistungen: ").append(toIndentedString(eoLeistungen)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    beitraege: ").append(toIndentedString(beitraege)).append("\n");
-    sb.append("    ausbildungskostenSekundarstufeZwei: ").append(toIndentedString(ausbildungskostenSekundarstufeZwei)).append("\n");
+    sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");

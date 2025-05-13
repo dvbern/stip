@@ -43,7 +43,7 @@ public class AusbildungskostenStufeRequiredConstraintValidator
         ) {
             return true;
         }
-        if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() == null) {
+        if (gesuchFormular.getEinnahmenKosten().getAusbildungskosten() == null) {
             return GesuchValidatorUtil.addProperty(
                 constraintValidatorContext,
                 VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE,

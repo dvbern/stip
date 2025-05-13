@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_EO_LEISTUNGEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BEITRAEGE,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WG_WOHNEND,
@@ -70,8 +70,8 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_BEITRAEGE = "beitraege";
   private Integer beitraege;
 
-  public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI = "ausbildungskostenSekundarstufeZwei";
-  private Integer ausbildungskostenSekundarstufeZwei;
+  public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN = "ausbildungskosten";
+  private Integer ausbildungskosten;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
@@ -288,29 +288,29 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec ausbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
+  public EinnahmenKostenDtoSpec ausbildungskosten(Integer ausbildungskosten) {
     
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+    this.ausbildungskosten = ausbildungskosten;
     return this;
   }
 
    /**
    * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-   * @return ausbildungskostenSekundarstufeZwei
+   * @return ausbildungskosten
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getAusbildungskostenSekundarstufeZwei() {
-    return ausbildungskostenSekundarstufeZwei;
+  public Integer getAusbildungskosten() {
+    return ausbildungskosten;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+  public void setAusbildungskosten(Integer ausbildungskosten) {
+    this.ausbildungskosten = ausbildungskosten;
   }
 
 
@@ -597,7 +597,7 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.eoLeistungen, einnahmenKosten.eoLeistungen) &&
         Objects.equals(this.ergaenzungsleistungen, einnahmenKosten.ergaenzungsleistungen) &&
         Objects.equals(this.beitraege, einnahmenKosten.beitraege) &&
-        Objects.equals(this.ausbildungskostenSekundarstufeZwei, einnahmenKosten.ausbildungskostenSekundarstufeZwei) &&
+        Objects.equals(this.ausbildungskosten, einnahmenKosten.ausbildungskosten) &&
         Objects.equals(this.fahrkosten, einnahmenKosten.fahrkosten) &&
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
@@ -612,7 +612,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -626,7 +626,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    eoLeistungen: ").append(toIndentedString(eoLeistungen)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    beitraege: ").append(toIndentedString(beitraege)).append("\n");
-    sb.append("    ausbildungskostenSekundarstufeZwei: ").append(toIndentedString(ausbildungskostenSekundarstufeZwei)).append("\n");
+    sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");

@@ -40,7 +40,7 @@ public class EinnahmenKostenCopyUtil {
         target.setEoLeistungen(source.getEoLeistungen());
         target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
         target.setBeitraege(source.getBeitraege());
-        target.setAusbildungskostenSekundarstufeZwei(source.getAusbildungskostenSekundarstufeZwei());
+        target.setAusbildungskosten(source.getAusbildungskosten());
         target.setAuswaertigeMittagessenProWoche(source.getAuswaertigeMittagessenProWoche());
         target.setBetreuungskostenKinder(source.getBetreuungskostenKinder());
         target.setVeranlagungsCode(source.getVeranlagungsCode());

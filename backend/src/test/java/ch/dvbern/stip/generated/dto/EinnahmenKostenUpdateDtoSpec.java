@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_EO_LEISTUNGEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_BEITRAEGE,
-  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI,
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WG_WOHNEND,
@@ -70,8 +70,8 @@ public class EinnahmenKostenUpdateDtoSpec {
   public static final String JSON_PROPERTY_BEITRAEGE = "beitraege";
   private Integer beitraege;
 
-  public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI = "ausbildungskostenSekundarstufeZwei";
-  private Integer ausbildungskostenSekundarstufeZwei;
+  public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN = "ausbildungskosten";
+  private Integer ausbildungskosten;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
@@ -288,29 +288,29 @@ public class EinnahmenKostenUpdateDtoSpec {
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec ausbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
+  public EinnahmenKostenUpdateDtoSpec ausbildungskosten(Integer ausbildungskosten) {
     
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+    this.ausbildungskosten = ausbildungskosten;
     return this;
   }
 
    /**
    * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-   * @return ausbildungskostenSekundarstufeZwei
+   * @return ausbildungskosten
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getAusbildungskostenSekundarstufeZwei() {
-    return ausbildungskostenSekundarstufeZwei;
+  public Integer getAusbildungskosten() {
+    return ausbildungskosten;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
-    this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
+  public void setAusbildungskosten(Integer ausbildungskosten) {
+    this.ausbildungskosten = ausbildungskosten;
   }
 
 
@@ -597,7 +597,7 @@ public class EinnahmenKostenUpdateDtoSpec {
         Objects.equals(this.eoLeistungen, einnahmenKostenUpdate.eoLeistungen) &&
         Objects.equals(this.ergaenzungsleistungen, einnahmenKostenUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.beitraege, einnahmenKostenUpdate.beitraege) &&
-        Objects.equals(this.ausbildungskostenSekundarstufeZwei, einnahmenKostenUpdate.ausbildungskostenSekundarstufeZwei) &&
+        Objects.equals(this.ausbildungskosten, einnahmenKostenUpdate.ausbildungskosten) &&
         Objects.equals(this.fahrkosten, einnahmenKostenUpdate.fahrkosten) &&
         Objects.equals(this.wohnkosten, einnahmenKostenUpdate.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKostenUpdate.wgWohnend) &&
@@ -612,7 +612,7 @@ public class EinnahmenKostenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -626,7 +626,7 @@ public class EinnahmenKostenUpdateDtoSpec {
     sb.append("    eoLeistungen: ").append(toIndentedString(eoLeistungen)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    beitraege: ").append(toIndentedString(beitraege)).append("\n");
-    sb.append("    ausbildungskostenSekundarstufeZwei: ").append(toIndentedString(ausbildungskostenSekundarstufeZwei)).append("\n");
+    sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");

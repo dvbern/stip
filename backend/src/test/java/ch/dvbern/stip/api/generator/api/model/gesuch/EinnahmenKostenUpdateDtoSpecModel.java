@@ -30,7 +30,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setEoLeistungen(500);
             model.setErgaenzungsleistungen(500);
             model.setBeitraege(Math.min(2500, 1));
-            model.setAusbildungskostenSekundarstufeZwei(2500);
+            model.setAusbildungskosten(2500);
             model.setFahrkosten(2500);
             model.setWohnkosten(2500);
             model.setWgWohnend(false);

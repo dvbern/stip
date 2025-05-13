@@ -153,7 +153,7 @@ class BerechnungTest {
                 .setNettoerwerbseinkommen(0)
                 .setErgaenzungsleistungen(0)
                 .setWohnkosten(10000)
-                .setAusbildungskostenSekundarstufeZwei(2000)
+                .setAusbildungskosten(2000)
                 .setFahrkosten(0)
         );
 
@@ -230,7 +230,7 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setRenten(0)
                 .setErgaenzungsleistungen(1800)
-                .setAusbildungskostenSekundarstufeZwei(2000)
+                .setAusbildungskosten(2000)
                 .setWohnkosten(9000 - 2754) // TODO: reduced as WG reduction of grundbedarf is not yet implemented
                 .setFahrkosten(600)
                 .setAuswaertigeMittagessenProWoche(0)
@@ -328,7 +328,7 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(0)
                 .setRenten(0)
-                .setAusbildungskostenSekundarstufeZwei(750)
+                .setAusbildungskosten(750)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -511,8 +511,8 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(925)
                 .setRenten(0)
-                .setAusbildungskostenSekundarstufeZwei(0)
-                .setAusbildungskostenSekundarstufeZwei(950)
+                .setAusbildungskosten(0)
+                .setAusbildungskosten(950)
                 .setAuswaertigeMittagessenProWoche(5)
         );
 
@@ -658,7 +658,7 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(2_760)
                 .setRenten(0)
-                .setAusbildungskostenSekundarstufeZwei(1_500)
+                .setAusbildungskosten(1_500)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -748,8 +748,8 @@ class BerechnungTest {
                 .setFahrkosten(0)
                 .setRenten(0)
                 .setZulagen(5520)
-                .setAusbildungskostenSekundarstufeZwei(0)
-                .setAusbildungskostenSekundarstufeZwei(500)
+                .setAusbildungskosten(0)
+                .setAusbildungskosten(500)
                 .setBetreuungskostenKinder(3333)
                 .setFahrkosten(790)
                 .setWohnkosten(18000)
@@ -884,7 +884,7 @@ class BerechnungTest {
                 .setFahrkosten(800)
                 .setRenten(0)
                 .setZulagen(0)
-                .setAusbildungskostenSekundarstufeZwei(2000)
+                .setAusbildungskosten(2000)
                 .setBetreuungskostenKinder(0)
                 .setFahrkosten(800)
                 .setWohnkosten(11460)
