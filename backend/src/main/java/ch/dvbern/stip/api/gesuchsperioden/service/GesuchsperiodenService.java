@@ -191,4 +191,8 @@ public class GesuchsperiodenService {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");
         }
     }
+
+    public List<Gesuchsperiode> findOutdatedGesuchsperioden() {
+        return gesuchsperiodeRepository.findAllStoppBefore(LocalDate.now());
+    }
 }

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.repo;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -47,6 +48,18 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
             )
             .orderBy(gesuchsperiode.aufschaltterminStart.desc());
         return query.fetchFirst();
+    }
+
+    public List<Gesuchsperiode> findAllStoppBefore(LocalDate date) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var query = queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
+            .where(
+                gesuchsperiode.gesuchsperiodeStopp.before(date)
+            )
+            .orderBy(gesuchsperiode.aufschaltterminStart.desc());
+        return query.stream().toList();
     }
 
     public Optional<Gesuchsperiode> getLatest() {
