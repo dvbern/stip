@@ -136,11 +136,10 @@ public class GesuchTrancheService {
         return gesuchTranche.getGesuch().getId();
     }
 
-    @Transactional
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
-        var gesuchToWorkWith = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
-
-        final var allTranchenList = gesuchToWorkWith.getGesuchTranchen();
+    private GesuchTrancheListDto getAllTranchenAndInitialTrancheForGesuchTranche(
+        List<GesuchTranche> allTranchenList,
+        UUID gesuchId
+    ) {
         final var allTranchenFromGesuchInStatusVerfuegt =
             gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
 
@@ -164,26 +163,17 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
-        final var allTranchenList = gesuchTrancheRepository.findForGesuch(gesuchId);
-        final var allTranchenFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
-        final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
-        allTranchenOut.addAll(
-            allTranchenList.stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
-                .toList()
-        );
-        allTranchenOut.addAll(
-            allTranchenList.stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
-                .toList()
-        );
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
+        var gesuchToWorkWith = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
 
-        return gesuchTrancheMapper.toListDto(
-            allTranchenOut,
-            allTranchenFromGesuchInStatusVerfuegt
+        return getAllTranchenAndInitialTrancheForGesuchTranche(gesuchToWorkWith.getGesuchTranchen(), gesuchId);
+    }
+
+    @Transactional
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
+        return getAllTranchenAndInitialTrancheForGesuchTranche(
+            gesuchTrancheRepository.findForGesuch(gesuchId),
+            gesuchId
         );
     }
 

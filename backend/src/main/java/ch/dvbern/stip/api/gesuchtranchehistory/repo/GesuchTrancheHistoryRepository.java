@@ -177,7 +177,7 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
-        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
+        return gesuchHistoryService.getFirstWhereStatusChangedTo(gesuchId, gesuchStatus)
             .map(Gesuch::getGesuchTranchen)
             .orElse(new ArrayList<>());
     }
