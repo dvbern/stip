@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import io.quarkus.scheduler.Scheduled;
@@ -39,12 +38,7 @@ public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
     public void run() {
         try {
             LOG.info("Start checking for any Gesuchperioden to be archived");
-            final var outdatedGesuchsperioden = gesuchsperiodenService.findOutdatedGesuchsperioden();
-            LOG.info("Found {} Gesuchsperioden to be archived", outdatedGesuchsperioden.size());
-            outdatedGesuchsperioden.forEach(gesuchsperiode -> {
-                gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
-                LOG.info("Updated Gesuchsperiode with id %s to Gueltigkeisstatus ARCHIVIERT");
-            });
+            gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
             LOG.info("Stopped checking for any Gesuchperioden to be archived");
         } catch (Throwable e) {
             LOG.error(e.getMessage(), e);

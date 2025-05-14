@@ -38,11 +38,13 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Slf4j
 public class GesuchsperiodenService {
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
@@ -192,7 +194,13 @@ public class GesuchsperiodenService {
         }
     }
 
-    public List<Gesuchsperiode> findOutdatedGesuchsperioden() {
-        return gesuchsperiodeRepository.findAllStoppBefore(LocalDate.now());
+    @Transactional
+    public void setOutdatedGesuchsperiodenToArchiviert() {
+        final var outdatedGesuchsperioden = gesuchsperiodeRepository.findAllStoppBefore(LocalDate.now());
+        LOG.info("Found {} Gesuchsperioden to be archived", outdatedGesuchsperioden.size());
+        outdatedGesuchsperioden.forEach(gesuchsperiode -> {
+            gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
+            LOG.info("Updated Gesuchsperiode with id %s to Gueltigkeisstatus ARCHIVIERT");
+        });
     }
 }
