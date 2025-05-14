@@ -597,6 +597,12 @@ public class GesuchTrancheService {
     }
 
     @Transactional
+    public void dropGesuchTranche(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        dropGesuchTranche(gesuchTranche);
+    }
+
+    @Transactional
     public GesuchDto aenderungFehlendeDokumenteEinreichen(final UUID aenderungId) {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService

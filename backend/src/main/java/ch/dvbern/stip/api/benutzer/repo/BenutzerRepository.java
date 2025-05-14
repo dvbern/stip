@@ -49,8 +49,8 @@ public class BenutzerRepository implements BaseRepository<Benutzer> {
         final var rolle = QRolle.rolle;
 
         return new JPAQueryFactory(entityManager)
-            .select(benutzer)
-            .from(benutzer, rolle)
+            .selectFrom(benutzer)
+            .join(benutzer.rollen, rolle)
             .where(rolle.keycloakIdentifier.eq(stringRolle))
             .stream();
     }
