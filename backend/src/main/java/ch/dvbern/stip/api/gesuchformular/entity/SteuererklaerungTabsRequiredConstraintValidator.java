@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
 
 public class SteuererklaerungTabsRequiredConstraintValidator
     implements ConstraintValidator<SteuererklaerungTabsRequiredConstraint, GesuchFormular> {
@@ -54,7 +55,11 @@ public class SteuererklaerungTabsRequiredConstraintValidator
             .collect(Collectors.toSet());
 
         if (requiredTabs.size() != actualTabs.size() || !requiredTabs.containsAll(actualTabs)) {
-            return GesuchValidatorUtil.addProperty(context, property);
+            requiredTabs.stream().filter(tab -> !actualTabs.contains(tab)).forEach(tab -> {
+                GesuchValidatorUtil
+                    .addProperty(context, property.concat(StringUtils.capitalize(tab.name().toLowerCase())));
+            });
+            return false;
         }
 
         return true;
