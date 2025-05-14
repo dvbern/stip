@@ -74,6 +74,7 @@ import {
   inverseSortMap,
   makeEmptyStringPropertiesNull,
   restrictNumberParam,
+  sortMap,
 } from '@dv/shared/util-fn/filter-util';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
@@ -383,7 +384,7 @@ export class SozialdienstAppFeatureCockpitComponent
     this.router.navigate(['.'], {
       queryParams: createQuery({
         sortColumn: event.active as SozDashboardColumn,
-        sortOrder: event.direction as SortOrder,
+        sortOrder: sortMap[event.direction],
       }),
       queryParamsHandling: 'merge',
       replaceUrl: true,
