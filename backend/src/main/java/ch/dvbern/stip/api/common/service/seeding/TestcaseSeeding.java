@@ -210,26 +210,32 @@ public class TestcaseSeeding extends Seeder {
 
         final var foundAdmin = benutzerRepository.findByRolle(OidcConstants.ROLE_ADMIN).findFirst();
         if (foundAdmin.isEmpty()) {
-            final var adminRollen = rolleRepository.findByKeycloakIdentifier(Set.of(OidcConstants.ROLE_ADMIN));
-            Rolle adminRolle;
-            if (!adminRollen.isEmpty()) {
-                adminRolle = adminRollen.stream().findFirst().get();
-            } else {
-                adminRolle = new Rolle()
-                    .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN);
-                rolleRepository.persistAndFlush(adminRolle);
-            }
+            final var adminRolle = getOrCreateRolle(OidcConstants.ROLE_ADMIN);
+            final var sachbearbeiterRolle = getOrCreateRolle(OidcConstants.ROLE_SACHBEARBEITER);
 
             final var benutzer = new Benutzer()
                 .setNachname("Seeding")
                 .setVorname("Admin")
                 .setBenutzerStatus(BenutzerStatus.AKTIV)
-                .setRollen(Set.of(adminRolle))
+                .setRollen(Set.of(adminRolle, sachbearbeiterRolle))
                 .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));
             benutzerRepository.persistAndFlush(benutzer);
         }
 
         zuordnungService.updateZuordnungOnAllFaelle();
+    }
+
+    private Rolle getOrCreateRolle(final String rolle) {
+        final var foundRoles = rolleRepository.findByKeycloakIdentifier(Set.of(rolle));
+        Rolle foundOrCreatedRole;
+        if (!foundRoles.isEmpty()) {
+            foundOrCreatedRole = foundRoles.stream().findFirst().get();
+        } else {
+            foundOrCreatedRole = new Rolle().setKeycloakIdentifier(rolle);
+            rolleRepository.persistAndFlush(foundOrCreatedRole);
+        }
+
+        return foundOrCreatedRole;
     }
 
     @Override
