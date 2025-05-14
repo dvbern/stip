@@ -55,10 +55,12 @@ public class SteuererklaerungTabsRequiredConstraintValidator
             .collect(Collectors.toSet());
 
         if (requiredTabs.size() != actualTabs.size() || !requiredTabs.containsAll(actualTabs)) {
-            requiredTabs.stream().filter(tab -> !actualTabs.contains(tab)).forEach(tab -> {
-                GesuchValidatorUtil
-                    .addProperty(context, property.concat(StringUtils.capitalize(tab.name().toLowerCase())));
-            });
+            requiredTabs.stream()
+                .filter(tab -> !actualTabs.contains(tab))
+                .forEach(
+                    tab -> GesuchValidatorUtil
+                        .addProperty(context, property.concat(StringUtils.capitalize(tab.name().toLowerCase())))
+                );
             return false;
         }
 
