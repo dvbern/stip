@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -38,6 +32,12 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
@@ -97,7 +97,6 @@ public class GesuchsperiodenService {
                 Objects.isNull(eligibleGesuchsperiode)
                 || eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT
             ) {
-                // throw new BadRequestException(ValidationsConstant.VALIDATION_NO_ACTIVE_GESUCHSPERIODE);
                 throw new CustomValidationsException(
                     "Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden",
                     new CustomConstraintViolation(
@@ -122,7 +121,6 @@ public class GesuchsperiodenService {
                 );
 
             }
-            // todo, public, aber erst in zukunft
             if (
                 eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT
                 && eligibleGesuchsperiode.getAufschaltterminStart().isAfter(LocalDate.now())
