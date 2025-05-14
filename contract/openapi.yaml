@@ -6273,11 +6273,11 @@ components:
         saldo:
           type: integer
         sapId:
-          type: number
+          type: string
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
         businessPartnerId:
-          type: number
+          type: integer
         comment:
           type: string
         verfuegungId:

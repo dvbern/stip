@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -30,9 +29,9 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid Integer stipendienBetrag;
   private @Valid Integer auszahlung;
   private @Valid Integer rueckforderung;
-  private @Valid BigDecimal sapId;
+  private @Valid String sapId;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
-  private @Valid BigDecimal businessPartnerId;
+  private @Valid Integer businessPartnerId;
   private @Valid UUID verfuegungId;
   private @Valid UUID gesuchId;
 
@@ -206,19 +205,19 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
-  public BuchhaltungEntryDto sapId(BigDecimal sapId) {
+  public BuchhaltungEntryDto sapId(String sapId) {
     this.sapId = sapId;
     return this;
   }
 
   
   @JsonProperty("sapId")
-  public BigDecimal getSapId() {
+  public String getSapId() {
     return sapId;
   }
 
   @JsonProperty("sapId")
-  public void setSapId(BigDecimal sapId) {
+  public void setSapId(String sapId) {
     this.sapId = sapId;
   }
 
@@ -242,19 +241,19 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
-  public BuchhaltungEntryDto businessPartnerId(BigDecimal businessPartnerId) {
+  public BuchhaltungEntryDto businessPartnerId(Integer businessPartnerId) {
     this.businessPartnerId = businessPartnerId;
     return this;
   }
 
   
   @JsonProperty("businessPartnerId")
-  public BigDecimal getBusinessPartnerId() {
+  public Integer getBusinessPartnerId() {
     return businessPartnerId;
   }
 
   @JsonProperty("businessPartnerId")
-  public void setBusinessPartnerId(BigDecimal businessPartnerId) {
+  public void setBusinessPartnerId(Integer businessPartnerId) {
     this.businessPartnerId = businessPartnerId;
   }
 

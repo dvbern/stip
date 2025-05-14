@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -74,13 +73,13 @@ public class BuchhaltungEntryDtoSpec {
   private Integer saldo;
 
   public static final String JSON_PROPERTY_SAP_ID = "sapId";
-  private BigDecimal sapId;
+  private String sapId;
 
   public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
   private SapStatusDtoSpec sapStatus;
 
   public static final String JSON_PROPERTY_BUSINESS_PARTNER_ID = "businessPartnerId";
-  private BigDecimal businessPartnerId;
+  private Integer businessPartnerId;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
   private String comment;
@@ -302,7 +301,7 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  public BuchhaltungEntryDtoSpec sapId(BigDecimal sapId) {
+  public BuchhaltungEntryDtoSpec sapId(String sapId) {
     
     this.sapId = sapId;
     return this;
@@ -316,14 +315,14 @@ public class BuchhaltungEntryDtoSpec {
   @JsonProperty(JSON_PROPERTY_SAP_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getSapId() {
+  public String getSapId() {
     return sapId;
   }
 
 
   @JsonProperty(JSON_PROPERTY_SAP_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapId(BigDecimal sapId) {
+  public void setSapId(String sapId) {
     this.sapId = sapId;
   }
 
@@ -354,7 +353,7 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  public BuchhaltungEntryDtoSpec businessPartnerId(BigDecimal businessPartnerId) {
+  public BuchhaltungEntryDtoSpec businessPartnerId(Integer businessPartnerId) {
     
     this.businessPartnerId = businessPartnerId;
     return this;
@@ -368,14 +367,14 @@ public class BuchhaltungEntryDtoSpec {
   @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getBusinessPartnerId() {
+  public Integer getBusinessPartnerId() {
     return businessPartnerId;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBusinessPartnerId(BigDecimal businessPartnerId) {
+  public void setBusinessPartnerId(Integer businessPartnerId) {
     this.businessPartnerId = businessPartnerId;
   }
 
