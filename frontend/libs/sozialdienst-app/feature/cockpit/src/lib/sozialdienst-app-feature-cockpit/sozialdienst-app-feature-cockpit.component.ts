@@ -361,7 +361,7 @@ export class SozialdienstAppFeatureCockpitComponent
       nachname: this.nachname(),
       vorname: this.vorname(),
       geburtsdatum: this.geburtsdatum(),
-      wohort: this.wohnort(),
+      wohnort: this.wohnort(),
       delegierungAngenommen: this.delegierungAngenommen(),
     };
 
