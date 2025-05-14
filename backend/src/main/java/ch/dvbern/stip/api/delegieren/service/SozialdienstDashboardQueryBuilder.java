@@ -51,19 +51,19 @@ public class SozialdienstDashboardQueryBuilder {
     }
 
     public void fallNummer(final JPAQuery<Delegierung> query, final String fallNummer) {
-        query.where(qDelegierung.delegierterFall.fallNummer.eq(fallNummer));
+        query.where(qDelegierung.delegierterFall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
     public void vorname(final JPAQuery<Delegierung> query, final String vorname) {
-        query.where(qDelegierung.persoenlicheAngaben.vorname.eq(vorname));
+        query.where(qDelegierung.persoenlicheAngaben.vorname.containsIgnoreCase(vorname));
     }
 
     public void nachname(final JPAQuery<Delegierung> query, final String nachname) {
-        query.where(qDelegierung.persoenlicheAngaben.nachname.eq(nachname));
+        query.where(qDelegierung.persoenlicheAngaben.nachname.containsIgnoreCase(nachname));
     }
 
-    public void wohnort(final JPAQuery<Delegierung> query, final String wohnsort) {
-        query.where(qDelegierung.persoenlicheAngaben.adresse.ort.eq(wohnsort));
+    public void wohnort(final JPAQuery<Delegierung> query, final String wohnort) {
+        query.where(qDelegierung.persoenlicheAngaben.adresse.ort.containsIgnoreCase(wohnort));
     }
 
     public void geburtsdtaum(final JPAQuery<Delegierung> query, final LocalDate geburtsdatum) {
