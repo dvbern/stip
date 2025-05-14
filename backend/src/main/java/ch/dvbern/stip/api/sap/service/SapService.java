@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestScoped
+@UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapService {
     private final SapEndpointService sapEndpointService;
