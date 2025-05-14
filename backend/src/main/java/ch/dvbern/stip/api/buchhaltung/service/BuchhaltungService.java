@@ -37,7 +37,6 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -133,12 +132,6 @@ public class BuchhaltungService {
             .setComment(comment)
             .setGesuch(gesuch)
             .setFall(fall);
-
-        final var sapDelivery = new SapDelivery();
-        sapDelivery
-            .setSapDeliveryId(sapDeliveryId)
-            .setSapStatus(sapStatus);
-        buchhaltungEntry.setSapDelivery(sapDelivery);
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
