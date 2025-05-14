@@ -46,7 +46,7 @@ type AenderungCompletionState = 'open' | 'completed';
 const aenderungStatusMap = {
   IN_BEARBEITUNG_GS: null,
   UEBERPRUEFEN: 'open',
-  FEHLENDE_DOKUMENTE: null,
+  FEHLENDE_DOKUMENTE: 'open',
   ABGELEHNT: null,
   AKZEPTIERT: 'completed',
   MANUELLE_AENDERUNG: 'completed',
