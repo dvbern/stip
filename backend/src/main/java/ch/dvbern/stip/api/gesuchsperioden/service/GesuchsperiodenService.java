@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchsperioden.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.common.validation.ValidationsConstant;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -92,7 +94,54 @@ public class GesuchsperiodenService {
                 gesuchsperiodeRepository.findAllStartBeforeOrAt(ausbildungsBeginAssumed);
 
             if (
-                (eligibleGesuchsperiode != null) &&
+                Objects.isNull(eligibleGesuchsperiode)
+                || eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT
+            ) {
+                // throw new BadRequestException(ValidationsConstant.VALIDATION_NO_ACTIVE_GESUCHSPERIODE);
+                throw new CustomValidationsException(
+                    "Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden",
+                    new CustomConstraintViolation(
+                        ValidationsConstant.VALIDATION_NO_ACTIVE_GESUCHSPERIODE,
+                        "gesuchsperiode"
+                    )
+                );
+            }
+
+            if (eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
+                final var errorMessage = String
+                    .format(
+                        "Die Gesuchsperiode für diesen Ausbildungsbeginn wird voraussichtlich am %s geöffnet",
+                        eligibleGesuchsperiode.getAufschaltterminStart().toString()
+                    );
+                throw new CustomValidationsException(
+                    errorMessage,
+                    new CustomConstraintViolation(
+                        ValidationsConstant.VALIDATION_GESUCHSPERIODE_IN_STATUS_DRAFT,
+                        "gesuchsperiode"
+                    )
+                );
+
+            }
+            // todo, public, aber erst in zukunft
+            if (
+                eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT
+                && eligibleGesuchsperiode.getAufschaltterminStart().isAfter(LocalDate.now())
+            ) {
+                final var errorMessage = String
+                    .format(
+                        "Die Gesuchsperiode für diesen Ausbildungsbeginn wird am %s geöffnet",
+                        eligibleGesuchsperiode.getAufschaltterminStart().toString()
+                    );
+                throw new CustomValidationsException(
+                    errorMessage,
+                    new CustomConstraintViolation(
+                        ValidationsConstant.VALIDATION_GESUCHSPERIODE_INACTIVE,
+                        "gesuchsperiode"
+                    )
+                );
+            }
+
+            if (
                 eligibleGesuchsperiode
                     .getGesuchsperiodeStart()
                     .plusMonths(6)
