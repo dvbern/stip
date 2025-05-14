@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -23,6 +24,7 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   private @Valid Boolean beschwerdeSetTo;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid String userErstellt;
+  private @Valid BeschwerdeEntscheidDto beschwerdeEntscheid;
 
   /**
    **/
@@ -100,6 +102,24 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
     this.userErstellt = userErstellt;
   }
 
+  /**
+   **/
+  public BeschwerdeVerlaufEntryDto beschwerdeEntscheid(BeschwerdeEntscheidDto beschwerdeEntscheid) {
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+    return this;
+  }
+
+  
+  @JsonProperty("beschwerdeEntscheid")
+  public BeschwerdeEntscheidDto getBeschwerdeEntscheid() {
+    return beschwerdeEntscheid;
+  }
+
+  @JsonProperty("beschwerdeEntscheid")
+  public void setBeschwerdeEntscheid(BeschwerdeEntscheidDto beschwerdeEntscheid) {
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -113,12 +133,13 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
     return Objects.equals(this.kommentar, beschwerdeVerlaufEntry.kommentar) &&
         Objects.equals(this.beschwerdeSetTo, beschwerdeVerlaufEntry.beschwerdeSetTo) &&
         Objects.equals(this.timestampErstellt, beschwerdeVerlaufEntry.timestampErstellt) &&
-        Objects.equals(this.userErstellt, beschwerdeVerlaufEntry.userErstellt);
+        Objects.equals(this.userErstellt, beschwerdeVerlaufEntry.userErstellt) &&
+        Objects.equals(this.beschwerdeEntscheid, beschwerdeVerlaufEntry.beschwerdeEntscheid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, beschwerdeSetTo, timestampErstellt, userErstellt);
+    return Objects.hash(kommentar, beschwerdeSetTo, timestampErstellt, userErstellt, beschwerdeEntscheid);
   }
 
   @Override
@@ -130,6 +151,7 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
     sb.append("    beschwerdeSetTo: ").append(toIndentedString(beschwerdeSetTo)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    beschwerdeEntscheid: ").append(toIndentedString(beschwerdeEntscheid)).append("\n");
     sb.append("}");
     return sb.toString();
   }

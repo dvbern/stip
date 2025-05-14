@@ -14,7 +14,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
@@ -30,7 +35,10 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import {
+  getRelativeTrancheRoute,
+  urlAfterNavigationEnd,
+} from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
@@ -73,6 +81,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
+  route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -85,7 +94,23 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       filter(isDefined),
     ),
   );
+  private relativeRouteSig = getRelativeTrancheRoute(this.router);
 
+  tranchenSig = computed(() => {
+    const gesuchId = this.gesuchIdSig();
+    const relativeRoute = this.relativeRouteSig();
+    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
+
+    return {
+      ...tranchen,
+      list: tranchen.list.map((tranche) => ({
+        ...tranche,
+        url: relativeRoute
+          ? this.router.createUrlTree([...relativeRoute, tranche.id])
+          : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
+      })),
+    };
+  });
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes('/tranche/')),

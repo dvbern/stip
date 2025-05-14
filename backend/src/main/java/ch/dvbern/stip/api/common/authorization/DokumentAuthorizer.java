@@ -69,7 +69,13 @@ public class DokumentAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-        if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuchTranche.getGesuch())) {
+        if (
+            !AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(
+                gesuchTranche.getGesuch(),
+                currentBenutzer,
+                sozialdienstService
+            )
+        ) {
             throw new ForbiddenException();
         }
 

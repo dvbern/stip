@@ -405,6 +405,23 @@ public class TestUtil {
             .then();
     }
 
+    public static ValidatableResponse uploadBeschwerdeEntscheid(
+        final GesuchApiSpec gesuchApiSpec,
+        final UUID gesuchId,
+        final Boolean isBeschwerdeErfolgreich,
+        final String kommentar,
+        final File fileUpload
+    ) {
+        return gesuchApiSpec.createBeschwerdeEntscheid()
+            .gesuchIdPath(gesuchId)
+            .beschwerdeErfolgreichForm(isBeschwerdeErfolgreich)
+            .kommentarForm(kommentar)
+            // .fileUploadMultiPart(fileUpload)
+            .reqSpec(req -> req.addMultiPart("fileUpload", fileUpload, "image/png"))
+            .execute(PEEK_IF_ENV_SET)
+            .then();
+    }
+
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()

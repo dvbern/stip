@@ -28,6 +28,7 @@ export * from './benutzereinstellungen';
 export * from './benutzereinstellungenUpdate';
 export * from './berechnungsStammdaten';
 export * from './berechnungsresultat';
+export * from './beschwerdeEntscheid';
 export * from './beschwerdeVerlaufEntry';
 export * from './beschwerdeVerlaufEntryAllOf';
 export * from './beschwerdeVerlaufEntryCreate';

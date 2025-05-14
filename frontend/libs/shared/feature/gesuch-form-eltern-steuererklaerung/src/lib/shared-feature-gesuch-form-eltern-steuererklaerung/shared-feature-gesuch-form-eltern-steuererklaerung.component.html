@@ -13,9 +13,9 @@
     [dvSharedUiFormReadonly]="view.readonly"
   >
     <!-- steuererklaerungInBern -->
-    <div class="row">
+    <div class="row g-4">
       <mat-radio-group
-        class="d-block col-12 col-md-6"
+        class="col-12 col-md-6 steuererklaerung-bern-radio-group"
         formControlName="steuererklaerungInBern"
         data-testid="form-eltern-steuererklaerung-steuererklaerungInBern"
         dvSharedUiFormField
@@ -34,15 +34,17 @@
             }}</mat-radio-button>
           </div>
         </div>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
         <dv-shared-ui-form-zuvor-hint
           [changes]="
             changes?.steuererklaerungInBern
               | translateChange: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.$VALUE'
           "
         ></dv-shared-ui-form-zuvor-hint>
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </div>
       </mat-radio-group>
     </div>
     @if (steuererklaerungInBernDocumentSig(); as options) {

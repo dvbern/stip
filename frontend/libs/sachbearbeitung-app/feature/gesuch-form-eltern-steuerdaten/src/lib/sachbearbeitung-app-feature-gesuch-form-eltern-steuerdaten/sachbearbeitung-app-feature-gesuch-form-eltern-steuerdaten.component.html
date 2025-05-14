@@ -82,9 +82,11 @@
             }}</mat-radio-button>
           </div>
         </div>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </div>
       </mat-radio-group>
     </div>
 

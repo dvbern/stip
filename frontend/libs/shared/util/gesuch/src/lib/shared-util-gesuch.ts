@@ -69,10 +69,20 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
     {
       ...route,
       path: ':id',
+      data: {
+        ...(route.data ?? {}),
+        // reinitialize when navigated to the same route
+        shouldReuseRoute: false,
+      },
     },
     {
       ...route,
       path: ':id/:trancheTyp/:trancheId',
+      data: {
+        ...(route.data ?? {}),
+        // reinitialize when navigated to the same route
+        shouldReuseRoute: false,
+      },
     },
   ];
 }
