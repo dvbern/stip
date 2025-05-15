@@ -33,7 +33,7 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "betrag", target = "saldoAenderung")
     @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
-    @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapId")
+    @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapDeliveryId")
     @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
     @Mapping(source = "sapDelivery.sapBusinessPartnerId", target = "businessPartnerId")
     @Mapping(source = "gesuch.id", target = "gesuchId")
@@ -55,8 +55,8 @@ public abstract class BuchhaltungMapper {
         return null;
     }
 
-    @Named("getSapId")
-    String getSapId(Buchhaltung buchhaltung) {
+    @Named("getSapDeliveryId")
+    String getSapDeliveryId(Buchhaltung buchhaltung) {
         if (Objects.nonNull(buchhaltung.getSapDelivery())) {
             return String.valueOf(buchhaltung.getSapDelivery().getSapDeliveryId().longValue());
         }
