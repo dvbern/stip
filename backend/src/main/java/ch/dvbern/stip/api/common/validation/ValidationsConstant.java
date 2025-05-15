@@ -190,13 +190,13 @@ public final class ValidationsConstant {
     public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE = "{" +
     "jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
     public static final String VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE =
-        "{jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message}";
+        "jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message";
     public static final String VALIDATION_NO_ACTIVE_GESUCHSPERIODE =
-        "{jakarta.validation.constraints.ausbildung.create.gesuchsperiode.no.active.found.message}";
+        "jakarta.validation.constraints.ausbildung.create.gesuchsperiode.no.active.found.message";
     public static final String VALIDATION_GESUCHSPERIODE_IN_STATUS_DRAFT =
-        "{jakarta.validation.constraints.ausbildung.create.gesuchsperiode.status.draft.message}";
+        "jakarta.validation.constraints.ausbildung.create.gesuchsperiode.status.draft.message";
     public static final String VALIDATION_GESUCHSPERIODE_INACTIVE =
-        "{jakarta.validation.constraints.ausbildung.create.gesuchsperiode.status.inactive.message}";
+        "jakarta.validation.constraints.ausbildung.create.gesuchsperiode.status.inactive.message";
     public static final String VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR =
         "{jakarta.validation.constraints.ausbildung.gesuch.onlyone.message}";
     public static final String VALIDATION_ADRESSE_LAND_NOT_STATELESS =
