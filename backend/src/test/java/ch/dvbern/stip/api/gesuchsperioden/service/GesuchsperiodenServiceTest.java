@@ -17,19 +17,17 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
-import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
-import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,17 +38,13 @@ import static org.mockito.Mockito.when;
 
 class GesuchsperiodenServiceTest {
     private GesuchsperiodenService gesuchsperiodenService;
-    private GesuchsperiodeMapper gesuchsperiodeMapper;
     private GesuchsperiodeRepository gesuchsperiodeRepository;
-    private GesuchsjahrRepository gesuchsjahrRepository;
 
     @BeforeEach
     void setUp() {
-        gesuchsperiodeMapper = new GesuchsperiodeMapperImpl(new EntityReferenceMapperImpl());
         gesuchsperiodeRepository = Mockito.mock(GesuchsperiodeRepository.class);
-        gesuchsjahrRepository = Mockito.mock(GesuchsjahrRepository.class);
         gesuchsperiodenService =
-            new GesuchsperiodenService(gesuchsperiodeMapper, gesuchsperiodeRepository, gesuchsjahrRepository);
+            new GesuchsperiodenService(null, gesuchsperiodeRepository, null);
     }
 
     @Test
@@ -66,10 +60,7 @@ class GesuchsperiodenServiceTest {
         );
 
         // arrange
-        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
-        gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
-        gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
-        gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
+        Gesuchsperiode gesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.PUBLIZIERT);
         when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // act & assert
         assertDoesNotThrow(() -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung));
@@ -79,12 +70,8 @@ class GesuchsperiodenServiceTest {
     void gesuchsperiodeInStatusDraftTest() {
         // arrange
         var ausbildung = new Ausbildung();
-        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
-        gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ENTWURF);
-        gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
-        gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
+        Gesuchsperiode gesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.ENTWURF);
 
-        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
         when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // act & assert
@@ -103,14 +90,9 @@ class GesuchsperiodenServiceTest {
     void gesuchsperiodeInStatusArchivedTest() {
         // arrange
         var ausbildung = new Ausbildung();
-        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
-        gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
-        gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
-        gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
+        Gesuchsperiode gesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.ARCHIVIERT);
 
-        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
-
         when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // arrange & assert
         assertThrows(
@@ -132,8 +114,7 @@ class GesuchsperiodenServiceTest {
         assertDoesNotThrow(() -> gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert());
 
         // arrange
-        Gesuchsperiode outdatedGesuchsperiode = new Gesuchsperiode();
-        outdatedGesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
+        Gesuchsperiode outdatedGesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.PUBLIZIERT);
         outdatedGesuchsperiode.setGesuchsperiodeStopp(LocalDate.now().minusDays(1));
 
         when(gesuchsperiodeRepository.findAllPubliziertStoppBefore(any())).thenReturn(List.of(outdatedGesuchsperiode));
@@ -143,13 +124,19 @@ class GesuchsperiodenServiceTest {
         assertThat(outdatedGesuchsperiode.getGueltigkeitStatus(), is(GueltigkeitStatus.ARCHIVIERT));
 
         // arrange
-        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
-        gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
+        Gesuchsperiode gesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.PUBLIZIERT);
         gesuchsperiode.setGesuchsperiodeStopp(LocalDate.now());
         // act
         gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
         // assert
         assertThat(gesuchsperiode.getGueltigkeitStatus(), is(GueltigkeitStatus.PUBLIZIERT));
+    }
 
+    private Gesuchsperiode getValidGesuchsperiode(final GueltigkeitStatus gueltigkeitStatus) {
+        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
+        gesuchsperiode.setGueltigkeitStatus(gueltigkeitStatus);
+        gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
+        gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
+        return gesuchsperiode;
     }
 }
