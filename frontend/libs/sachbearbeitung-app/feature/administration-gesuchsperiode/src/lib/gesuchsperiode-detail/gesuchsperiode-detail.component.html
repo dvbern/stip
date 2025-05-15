@@ -163,23 +163,6 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
-
-        <!-- Aufschalttermin Stopp -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStopp.label' | translate }}</mat-label>
-          <input
-            formControlName="aufschaltterminStopp"
-            data-testid="form-gesuchsperiode-aufschalttermin-stopp"
-            matInput
-            [dvMaxLength]="'small'"
-            [matDatepicker]="aufschaltterminStoppDatepicker"
-          />
-          <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #aufschaltterminStoppDatepicker></mat-datepicker>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
       </div>
 
       <div class="row g-4 mt-1">

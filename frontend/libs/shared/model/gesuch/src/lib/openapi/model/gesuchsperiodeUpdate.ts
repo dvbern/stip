@@ -31,10 +31,6 @@ export interface GesuchsperiodeUpdate {
     /**
      * dd.MM.yyyy
      */
-    aufschaltterminStopp: string;
-    /**
-     * dd.MM.yyyy
-     */
     einreichefristNormal: string;
     /**
      * dd.MM.yyyy

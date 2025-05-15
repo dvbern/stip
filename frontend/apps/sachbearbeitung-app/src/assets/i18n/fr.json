@@ -149,7 +149,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStart.label": "Période de demande Début",
   "sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStopp.label": "Période de demande Arrêt",
   "sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStart.label": "Date de mise en service Début",
-  "sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStopp.label": "Date de mise en service Arrêt",
   "sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.label": "Date limite de dépôt Normal",
   "sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.label": "Date limite de dépôt Réduit",
   "sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.label": "Deuxième date de paiement",
