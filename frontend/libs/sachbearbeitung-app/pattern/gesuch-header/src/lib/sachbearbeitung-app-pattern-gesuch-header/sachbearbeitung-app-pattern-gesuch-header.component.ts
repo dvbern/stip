@@ -227,7 +227,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         }),
       )
       .filter((uebergang) =>
-        uebergang.allowedFor.every((role) => rolesMap[role]),
+        uebergang.allowedFor.some((role) => rolesMap[role]),
       );
 
     return {

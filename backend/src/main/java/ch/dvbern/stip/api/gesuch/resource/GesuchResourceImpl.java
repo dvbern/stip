@@ -129,7 +129,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public GesuchDto changeGesuchStatusToNegativeVerfuegung(
         UUID gesuchTrancheId,
         AusgewaehlterGrundDto ausgewaehlterGrundDto
