@@ -94,7 +94,7 @@ public class GesuchsperiodenService {
             }
 
             var eligibleGesuchsperiode =
-                gesuchsperiodeRepository.findStartBeforeOrAt(ausbildungsBeginAssumed);
+                gesuchsperiodeRepository.findPubliziertStartBeforeOrAt(ausbildungsBeginAssumed);
 
             checkGesuchperiodeGueltigkeit(eligibleGesuchsperiode);
 
