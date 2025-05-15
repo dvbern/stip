@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.repo;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -30,6 +26,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> {
@@ -37,7 +37,7 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
 
     static final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
-    public Gesuchsperiode findAllStartBeforeOrAt(LocalDate date) {
+    public Gesuchsperiode findStartBeforeOrAt(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var query = queryFactory
             .selectFrom(gesuchsperiode)

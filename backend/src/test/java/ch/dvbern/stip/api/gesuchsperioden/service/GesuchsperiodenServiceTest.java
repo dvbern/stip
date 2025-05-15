@@ -58,7 +58,7 @@ class GesuchsperiodenServiceTest {
         // arrange
         var ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(null);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(null);
         // act & assert
         assertThrows(
             CustomValidationsException.class,
@@ -70,7 +70,7 @@ class GesuchsperiodenServiceTest {
         gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
         gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
         gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // act & assert
         assertDoesNotThrow(() -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung));
     }
@@ -84,9 +84,9 @@ class GesuchsperiodenServiceTest {
         gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
         gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
 
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // act & assert
         assertThrows(
             CustomValidationsException.class,
@@ -108,10 +108,10 @@ class GesuchsperiodenServiceTest {
         gesuchsperiode.setGesuchsperiodeStart(LocalDate.now().plusMonths(3));
         gesuchsperiode.setAufschaltterminStart(LocalDate.now().minusMonths(3));
 
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
 
-        when(gesuchsperiodeRepository.findAllStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
+        when(gesuchsperiodeRepository.findStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // arrange & assert
         assertThrows(
             CustomValidationsException.class,
