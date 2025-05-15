@@ -414,9 +414,11 @@
             <dv-shared-ui-form-zuvor-hint
               [changes]="view.formChanges?.wgWohnend | translateChange: 'shared.form.zuvor.radio.$VALUE'"
             ></dv-shared-ui-form-zuvor-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
+            <div class="group-errors">
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </div>
           </mat-radio-group>
         </div>
       }
@@ -562,9 +564,11 @@
                 ></dv-shared-pattern-document-upload>
               }
             </div>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
+            <div class="group-errors">
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </div>
           </mat-radio-group>
           <div
             dvSharedUiInfoDialog

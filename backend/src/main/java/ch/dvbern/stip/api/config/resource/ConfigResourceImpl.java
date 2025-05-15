@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.api.ConfigurationResource;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
+import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public class ConfigResourceImpl implements ConfigurationResource {
     private final ConfigService configService;
 
     @Override
+    @PermitAll
     public DeploymentConfigDto getDeploymentConfig() {
         return configService.getDeploymentConfiguration();
     }
