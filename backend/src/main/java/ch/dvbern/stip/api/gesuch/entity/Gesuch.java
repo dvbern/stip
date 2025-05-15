@@ -130,20 +130,14 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinFormula(value = """
-        (
-            SELECT gesuch_tranche.id
-            FROM gesuch_tranche gesuch_tranche
-            WHERE gesuch_tranche.gesuch_id = id
-                AND gesuch_tranche.typ = 'TRANCHE'
-            ORDER BY gesuch_tranche.gueltig_bis DESC
-            LIMIT 1
-        )
-    """)
-    @Setter(AccessLevel.NONE)
-    @NotAudited
-    private GesuchTranche latestGesuchTranche;
+    public GesuchTranche getLatestGesuchTranche() {
+        // There must always be at least 1 GesuchTranche
+        // noinspection OptionalGetWithoutIsPresent
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .max(Comparator.comparing((GesuchTranche gesuchTranche) -> gesuchTranche.getGueltigkeit().getGueltigBis()))
+            .get();
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """
