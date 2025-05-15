@@ -37,19 +37,6 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
 
     static final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
-    public Gesuchsperiode findStartBeforeOrAt(LocalDate date) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var query = queryFactory
-            .selectFrom(gesuchsperiode)
-            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
-            .where(
-                gesuchsperiode.gesuchsperiodeStart.before(date)
-                    .or(gesuchsperiode.gesuchsperiodeStart.eq(date))
-            )
-            .orderBy(gesuchsperiode.aufschaltterminStart.desc());
-        return query.fetchFirst();
-    }
-
     public List<Gesuchsperiode> findAllPubliziertStoppBefore(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var query = queryFactory
@@ -60,6 +47,19 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
             )
             .orderBy(gesuchsperiode.aufschaltterminStart.desc());
         return query.stream().toList();
+    }
+
+    public Gesuchsperiode findPubliziertStartBeforeOrAt(LocalDate date) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var query = queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
+            .where(
+                gesuchsperiode.gesuchsperiodeStart.before(date)
+                    .or(gesuchsperiode.gesuchsperiodeStart.eq(date))
+            )
+            .orderBy(gesuchsperiode.aufschaltterminStart.desc());
+        return query.fetchFirst();
     }
 
     public Optional<Gesuchsperiode> getLatest() {
