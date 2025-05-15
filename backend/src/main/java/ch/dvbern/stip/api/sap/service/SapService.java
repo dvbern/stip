@@ -196,7 +196,10 @@ public class SapService {
         final var gesuch = gesuchRepository.findGesuchByAuszahlungId(auszahlung.getId());
         final var pendingAuszahlungOpt =
             buchhaltungService
-                .findLatestPendingBuchhaltungAuszahlungOpt(gesuch.getId(), BuchhaltungType.AUSZAHLUNG_INITIAL);
+                .findLatestPendingBuchhaltungAuszahlungOpt(
+                    gesuch.getAusbildung().getFall().getId(),
+                    BuchhaltungType.AUSZAHLUNG_INITIAL
+                );
         Buchhaltung relevantBuchhaltung = null;
 
         if (pendingAuszahlungOpt.isEmpty()) {
@@ -237,7 +240,10 @@ public class SapService {
         final var gesuch = gesuchRepository.findGesuchByAuszahlungId(auszahlung.getId());
         final var pendingAuszahlungOpt =
             buchhaltungService
-                .findLatestPendingBuchhaltungAuszahlungOpt(gesuch.getId(), BuchhaltungType.AUSZAHLUNG_REMAINDER);
+                .findLatestPendingBuchhaltungAuszahlungOpt(
+                    gesuch.getAusbildung().getFall().getId(),
+                    BuchhaltungType.AUSZAHLUNG_REMAINDER
+                );
         Buchhaltung relevantBuchhaltung = null;
 
         if (pendingAuszahlungOpt.isEmpty()) {
@@ -282,7 +288,7 @@ public class SapService {
 
     public void processPendingCreateVendorPostingActions() {
         final var pendingBuchhaltungs = buchhaltungRepository.findBuchhaltungWithPendingSapDelivery();
-        pendingBuchhaltungs.forEach(buchhaltung -> getVendorPostingCreateStatus(buchhaltung));
+        pendingBuchhaltungs.forEach(this::getVendorPostingCreateStatus);
     }
 
     public void processRemainderAuszahlungActions() {

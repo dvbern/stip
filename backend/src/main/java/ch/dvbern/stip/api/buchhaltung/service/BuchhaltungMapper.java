@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -31,11 +33,7 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "betrag", target = "saldoAenderung")
     @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
-    @Mapping(
-        // source = "sapDelivery.sapDeliveryId",
-        target = "sapId",
-        expression = "java(buchhaltung.getSapDelivery() != null ? String.valueOf(buchhaltung.getSapDelivery().getSapDeliveryId().longValue()) : null)"
-    )
+    @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapId")
     @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
     @Mapping(source = "sapDelivery.sapBusinessPartnerId", target = "businessPartnerId")
     @Mapping(source = "gesuch.id", target = "gesuchId")
@@ -53,6 +51,14 @@ public abstract class BuchhaltungMapper {
     Integer getRueckforderung(Buchhaltung buchhaltung) {
         if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() < 0) {
             return buchhaltung.getBetrag();
+        }
+        return null;
+    }
+
+    @Named("getSapId")
+    String getSapId(Buchhaltung buchhaltung) {
+        if (Objects.nonNull(buchhaltung.getSapDelivery())) {
+            return String.valueOf(buchhaltung.getSapDelivery().getSapDeliveryId().longValue());
         }
         return null;
     }

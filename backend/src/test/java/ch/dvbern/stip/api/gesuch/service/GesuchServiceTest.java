@@ -1116,10 +1116,12 @@ class GesuchServiceTest {
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToStipendienanspruch() {
-        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
+        doReturn(gesuch.getGesuchTranchen().get(0)).when(gesuch).getLatestGesuchTranche();
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
             Gesuchstatus.STIPENDIENANSPRUCH,

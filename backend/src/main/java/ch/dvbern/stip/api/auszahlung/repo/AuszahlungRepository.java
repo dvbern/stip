@@ -32,12 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuszahlungRepository implements BaseRepository<Auszahlung> {
     private final EntityManager entityManager;
-    final QAuszahlung auszahlung = QAuszahlung.auszahlung;
+    static final QAuszahlung AUSZAHLUNG = QAuszahlung.auszahlung;
 
     public Stream<Auszahlung> findAuszahlungWithPendingSapDelivery() {
         return new JPAQueryFactory(entityManager)
-            .selectFrom(auszahlung)
-            .where(auszahlung.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .selectFrom(AUSZAHLUNG)
+            .where(AUSZAHLUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
             .stream();
     }
 }

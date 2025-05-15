@@ -25,5 +25,5 @@ public enum BuchhaltungType {
     AUSZAHLUNG_REMAINDER,
     STIPENDIUM;
 
-    public static Set<BuchhaltungType> AUSZAHLUNGS = Set.of(AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER);
+    public static final Set<BuchhaltungType> AUSZAHLUNGS = Set.of(AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER);
 }

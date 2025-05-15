@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateServ
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.handler.MessageContext;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +77,7 @@ public class SapEndpointService {
 
     public static BigDecimal generateDeliveryId() {
         SecureRandom secureRandom = new SecureRandom();
-        return BigDecimal.valueOf(Math.abs(secureRandom.nextLong())).setScale(0);
+        return BigDecimal.valueOf(Math.abs(secureRandom.nextLong() & Long.MAX_VALUE)).setScale(0);
     }
 
     public BusinessPartnerCreateResponse createBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
@@ -112,17 +113,6 @@ public class SapEndpointService {
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
     }
 
-    // public BusinessPartnerSearchResponse searchBusinessPartner(Auszahlung auszahlung) {
-    // final OsBusinessPartnerSearchService businessPartnerSearchService = new OsBusinessPartnerSearchService();
-    // final var port = businessPartnerSearchService.getHTTPSPort();
-    // this.setAuthHeader((BindingProvider) port);
-    //
-    // final BusinessPartnerSearchRequest businessPartnerSearchRequest = new BusinessPartnerSearchRequest();
-    // businessPartnerSearchRequest.setSENDER(businessPartnerReadMapper.getSenderParms(systemid, null));
-    //
-    // return port.osBusinessPartnerSearch(businessPartnerSearchRequest);
-    // }
-
     public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
         final OsImportStatusReadService importStatusReadService = new OsImportStatusReadService();
         final var port = importStatusReadService.getHTTPSPort();
@@ -156,7 +146,7 @@ public class SapEndpointService {
             docDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDate.now().toString());
             pstngDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDate.now().toString());
         } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException(e);
         }
 
         vendorPostingCreateRequest.getVENDORPOSTING()

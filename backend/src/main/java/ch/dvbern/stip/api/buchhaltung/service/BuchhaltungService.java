@@ -186,10 +186,10 @@ public class BuchhaltungService {
     }
 
     public Optional<Buchhaltung> findLatestPendingBuchhaltungAuszahlungOpt(
-        final UUID gesuchId,
+        final UUID fallId,
         final BuchhaltungType buchhaltungType
     ) {
-        return buchhaltungRepository.findPendingBuchhaltungEntryOfGesuch(gesuchId, buchhaltungType);
+        return buchhaltungRepository.findPendingBuchhaltungEntryOfGesuch(fallId, buchhaltungType);
     }
 
     @Transactional
