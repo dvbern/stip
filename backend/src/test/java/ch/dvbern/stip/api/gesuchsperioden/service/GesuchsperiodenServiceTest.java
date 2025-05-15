@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -25,9 +28,6 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
