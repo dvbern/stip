@@ -17,6 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -33,12 +39,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
@@ -133,9 +133,9 @@ public class GesuchsperiodenService {
 
         if (eligibleGesuchsperiode.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
             final var errorMessage = String.format(
-                    "Die Gesuchsperiode fuer diesen Ausbildungsbeginn wird voraussichtlich am %s geoeffnet",
-                    eligibleGesuchsperiode.getAufschaltterminStart().toString()
-                );
+                "Die Gesuchsperiode fuer diesen Ausbildungsbeginn wird voraussichtlich am %s geoeffnet",
+                eligibleGesuchsperiode.getAufschaltterminStart().toString()
+            );
             throw new CustomValidationsException(
                 errorMessage,
                 new CustomConstraintViolation(
@@ -150,9 +150,9 @@ public class GesuchsperiodenService {
             && eligibleGesuchsperiode.getAufschaltterminStart().isAfter(LocalDate.now())
         ) {
             final var errorMessage = String.format(
-                    "Die Gesuchsperiode fuer diesen Ausbildungsbeginn wird am %s geoeffnet",
-                    eligibleGesuchsperiode.getAufschaltterminStart().toString()
-                );
+                "Die Gesuchsperiode fuer diesen Ausbildungsbeginn wird am %s geoeffnet",
+                eligibleGesuchsperiode.getAufschaltterminStart().toString()
+            );
             throw new CustomValidationsException(
                 errorMessage,
                 new CustomConstraintViolation(
@@ -195,7 +195,7 @@ public class GesuchsperiodenService {
 
     @Transactional
     public void setOutdatedGesuchsperiodenToArchiviert() {
-        final var outdatedGesuchsperioden = gesuchsperiodeRepository.findAllStoppBefore(LocalDate.now());
+        final var outdatedGesuchsperioden = gesuchsperiodeRepository.findAllPubliziertStoppBefore(LocalDate.now());
         LOG.info("Found {} Gesuchsperioden to be archived", outdatedGesuchsperioden.size());
         outdatedGesuchsperioden.forEach(gesuchsperiode -> {
             gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
