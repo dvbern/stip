@@ -127,7 +127,7 @@ class GesuchsperiodenServiceTest {
     @Test
     void testSetOutdatedGesuchsperiodenToArchiviert(){
         // arrange
-        when(gesuchsperiodeRepository.findAllStoppBefore(any())).thenReturn(List.of());
+        when(gesuchsperiodeRepository.findAllPubliziertStoppBefore(any())).thenReturn(List.of());
         // act & assert
         assertDoesNotThrow(() -> gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert());
 
@@ -136,7 +136,7 @@ class GesuchsperiodenServiceTest {
         outdatedGesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
         outdatedGesuchsperiode.setGesuchsperiodeStopp(LocalDate.now().minusDays(1));
 
-        when(gesuchsperiodeRepository.findAllStoppBefore(any())).thenReturn(List.of(outdatedGesuchsperiode));
+        when(gesuchsperiodeRepository.findAllPubliziertStoppBefore(any())).thenReturn(List.of(outdatedGesuchsperiode));
         // act
         gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
         // assert

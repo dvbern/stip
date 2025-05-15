@@ -50,7 +50,7 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.fetchFirst();
     }
 
-    public List<Gesuchsperiode> findAllStoppBefore(LocalDate date) {
+    public List<Gesuchsperiode> findAllPubliziertStoppBefore(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var query = queryFactory
             .selectFrom(gesuchsperiode)
