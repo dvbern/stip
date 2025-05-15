@@ -11,7 +11,7 @@ import { addYears, format } from 'date-fns';
 import seedRandom from 'seedrandom';
 
 import { SmallImageFile } from './files';
-import { BEARER_COOKIE } from './playwright.config.base';
+import { BEARER_COOKIE, decompress } from './playwright.config.base';
 
 /**
  * works for all steptitles exept for "info" route (tranche component)
@@ -135,12 +135,15 @@ export const createTestContexts = async (options: {
   });
 
   const cookies = await browserContext.cookies();
-  const bearer = cookies.find((c) => c.name === BEARER_COOKIE);
+  const bearerCookie = cookies.find((c) => c.name === BEARER_COOKIE);
+  const bearer = bearerCookie?.value
+    ? await decompress(bearerCookie.value)
+    : undefined;
 
   const apiContext = await playwright.request.newContext({
     baseURL,
     extraHTTPHeaders: {
-      Authorization: `Bearer ${bearer?.value}`,
+      Authorization: `Bearer ${bearer}`,
     },
   });
 

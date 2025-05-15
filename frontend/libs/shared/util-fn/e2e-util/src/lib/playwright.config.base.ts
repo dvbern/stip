@@ -1,4 +1,5 @@
 import { defineConfig } from '@playwright/test';
+import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
 export const REFRESH_COOKIE = 'refresh_cookie';
@@ -66,3 +67,13 @@ export const baseConfig = defineConfig({
   retries: 1,
   // workers: 2,
 });
+
+export const compress = async (value: string) => {
+  const compressed = await zstdCompress(new TextEncoder().encode(value));
+  return Buffer.from(compressed).toString('base64');
+};
+
+export const decompress = async (value: string) => {
+  const decompressed = await zstdDecompress(Buffer.from(value, 'base64'));
+  return new TextDecoder().decode(decompressed);
+};
