@@ -20,9 +20,6 @@ export class EinnahmenKostenPO {
     ergaenzungsleistungen: Locator;
     beitraege: Locator;
     ausbildungskosten: Locator;
-    // todo: search and replace! once backend is fixed
-    // ausbildungskostenSekundarstufeZwei: Locator;
-    // ausbildungskostenTertiaerstufe: Locator;
     fahrkosten: Locator;
     wohnkosten: Locator;
     auswaertigeMittagessenProWoche: Locator;
@@ -110,8 +107,7 @@ export class EinnahmenKostenPO {
     }
 
     await this.elems.ausbildungskosten.fill(
-      // todo: rename once backend is fixed
-      `${einnahmenKosten.ausbildungskostenSekundarstufeZwei}`,
+      `${einnahmenKosten.ausbildungskosten}`,
     );
 
     if (isDefined(einnahmenKosten.betreuungskostenKinder)) {

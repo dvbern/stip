@@ -30,7 +30,7 @@ export interface EinnahmenKosten {
     /**
      * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
      */
-    ausbildungskostenSekundarstufeZwei?: number;
+    ausbildungskosten?: number;
     fahrkosten: number;
     wohnkosten?: number;
     /**

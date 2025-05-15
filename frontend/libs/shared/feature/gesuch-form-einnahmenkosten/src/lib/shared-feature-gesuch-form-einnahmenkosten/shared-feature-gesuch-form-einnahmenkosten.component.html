@@ -220,19 +220,18 @@
       @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
 
       <div class="row g-4">
-        <!-- Todo: rename -  AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI OR AUSUSBILDUNGSKOSTEN_TERTIARY -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
           <mat-label>{{
             'shared.form.einnahmenkosten.ausbildungskosten.label.' + ausbildungsStufe | translate
           }}</mat-label>
           <input
-            formControlName="ausbildungskostenSekundarstufeZwei"
+            formControlName="ausbildungskosten"
             data-testid="form-einnahmen-kosten-ausbildungskosten"
             matInput
             type="text"
             [maskito]="maskitoNumber"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskostenSekundarstufeZwei"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskosten"></mat-hint>
           @if (istAusbildungskostenMoreThanLimitSig()) {
             <mat-hint class="mat-caution">
               {{
@@ -253,40 +252,6 @@
           </mat-error>
         </mat-form-field>
       </div>
-
-      <!-- @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
-        <div class="row g-4">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
-            <input
-              formControlName="ausbildungskostenTertiaerstufe"
-              data-testid="form-einnahmen-kosten-ausbildungskostenTertiaerstufe"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskostenTertiaerstufe"></mat-hint>
-            @if (istTeritaerstufeGroesserAlsLimitSig()) {
-              <mat-hint class="mat-caution">
-                {{
-                  'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.warning'
-                    | translate: { max: tertiaerstufeLimitSig() }
-                }}
-              </mat-hint>
-            } @else {
-              <mat-hint>
-                {{
-                  'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.info'
-                    | translate: { max: tertiaerstufeLimitSig() }
-                }}</mat-hint
-              >
-            }
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      } -->
 
       @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
         <div class="row g-4">
