@@ -35,7 +35,18 @@ public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
     @Transactional
     @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
     @RunForTenant(MandantIdentifier.BERN)
-    public void run() {
+    public void runForBern() {
+        run();
+    }
+
+    @Transactional
+    @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
+    @RunForTenant(MandantIdentifier.DV)
+    public void runForDV() {
+        run();
+    }
+
+    private void run() {
         try {
             LOG.info("Start checking for any Gesuchperioden to be archived");
             gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
