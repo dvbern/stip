@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class SbDashboardQueryBuilder {
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
     private static final QGesuch gesuch = QGesuch.gesuch;
     private static final QAusbildung ausbildung = QAusbildung.ausbildung;
-    private QGesuchTranche tranche;
+    private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
 
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
@@ -61,10 +62,27 @@ public class SbDashboardQueryBuilder {
             case ALLE -> gesuchRepository.getFindAlleQuery();
         };
 
-        tranche = switch (trancheType) {
-            case TRANCHE -> gesuch.latestGesuchTranche;
-            case AENDERUNG -> gesuch.aenderungZuUeberpruefen;
-        };
+        final var trancheSub = new QGesuchTranche("sub2");
+        final var joinSubselect = JPAExpressions.select(trancheSub.id)
+            .from(trancheSub)
+            .where(
+                trancheSub.gesuch.id.eq(gesuch.id)
+                    .and(
+                        trancheSub.gueltigkeit.gueltigBis.eq(
+                            JPAExpressions.select(trancheSub.gueltigkeit.gueltigBis.max())
+                                .from(trancheSub)
+                                .where(trancheSub.gesuch.id.eq(gesuch.id))
+                        )
+                    )
+            );
+
+        if (trancheType == GesuchTrancheTyp.AENDERUNG) {
+            query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
+        } else if (trancheType == GesuchTrancheTyp.TRANCHE) {
+            joinSubselect.where(trancheSub.typ.eq(GesuchTrancheTyp.TRANCHE));
+        }
+
+        query.join(gesuch.gesuchTranchen, tranche).where(tranche.id.in(joinSubselect));
 
         joinFormular(query);
         return query.where(
