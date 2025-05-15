@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -1036,6 +1037,15 @@ public class GesuchService {
 
     @Transactional
     public void resetGesuchZurueckweisenToVerfuegt(Gesuch gesuch) {
+        final var tranchenIdsToDrop = doResetGesuchZurueckweisenToEingereicht(gesuch.getId());
+        for (final var trancheIdToDrop : tranchenIdsToDrop) {
+            gesuchTrancheService.dropGesuchTranche(trancheIdToDrop);
+        }
+    }
+
+    @Transactional
+    public List<UUID> doResetGesuchZurueckweisenToEingereicht(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         final var relevantAenderungId = gesuch.getGesuchTranchen()
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
@@ -1071,11 +1081,7 @@ public class GesuchService {
             );
         }
 
-        final var tranchenToDrop = new ArrayList<>(gesuch.getGesuchTranchen());
-
-        for (final var trancheToDrop : tranchenToDrop) {
-            gesuchTrancheService.dropGesuchTranche(trancheToDrop);
-        }
+        final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
             final var newTranche = GesuchTrancheCopyUtil.copyTrancheExceptGesuchDokuments(
@@ -1083,6 +1089,7 @@ public class GesuchService {
                 gesuchTrancheToRevertTo.getGueltigkeit(),
                 gesuchTrancheToRevertTo.getComment()
             );
+
             newTranche.setGesuch(gesuch);
             newTranche.setStatus(gesuchTrancheToRevertTo.getStatus());
             newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
@@ -1120,6 +1127,8 @@ public class GesuchService {
         gesuch.setEinreichedatum(gesuchToRevertTo.getEinreichedatum());
 
         gesuchRepository.persistAndFlush(gesuch);
+
+        return tranchenIdsToDrop;
     }
 
     @Transactional
