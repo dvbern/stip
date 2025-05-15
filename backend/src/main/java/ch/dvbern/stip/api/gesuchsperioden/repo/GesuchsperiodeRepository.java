@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.repo;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -25,10 +29,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 @RequiredArgsConstructor
