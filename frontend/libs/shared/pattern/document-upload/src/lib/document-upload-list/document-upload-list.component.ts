@@ -13,11 +13,10 @@ import { UploadStore } from '../upload.store';
 import { SharedPatternDocumentUploadEntryComponent } from './document-upload-entry.component';
 
 @Component({
-  selector: 'dv-shared-pattern-document-upload-list',
-  standalone: true,
-  imports: [MatFormFieldModule, SharedPatternDocumentUploadEntryComponent],
-  templateUrl: './document-upload-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-pattern-document-upload-list',
+    imports: [MatFormFieldModule, SharedPatternDocumentUploadEntryComponent],
+    templateUrl: './document-upload-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedPatternDocumentUploadListComponent {
   uploadViewSig = input.required<UploadView>();

@@ -40,28 +40,27 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 const INPUT_DELAY = 600;
 
 @Component({
-  standalone: true,
-  imports: [
-    RouterLink,
-    TranslatePipe,
-    ReactiveFormsModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiMaxLengthDirective,
-    SharedUiClearButtonComponent,
-    SharedUiTruncateTooltipDirective,
-    TypeSafeMatCellDefDirective,
-  ],
-  templateUrl: './sozialdienst-mitarbeiter-overview.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [paginatorTranslationProvider()],
+    imports: [
+        RouterLink,
+        TranslatePipe,
+        ReactiveFormsModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiMaxLengthDirective,
+        SharedUiClearButtonComponent,
+        SharedUiTruncateTooltipDirective,
+        TypeSafeMatCellDefDirective,
+    ],
+    templateUrl: './sozialdienst-mitarbeiter-overview.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [paginatorTranslationProvider()]
 })
 export class SozialdienstMitarbeiterOverviewComponent {
   private dialog = inject(MatDialog);

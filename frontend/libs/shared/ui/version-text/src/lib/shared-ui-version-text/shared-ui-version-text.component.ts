@@ -7,11 +7,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'dv-shared-ui-version-text',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './shared-ui-version-text.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-version-text',
+    imports: [CommonModule],
+    templateUrl: './shared-ui-version-text.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiVersionTextComponent {
   @Input({ required: true }) version!: {

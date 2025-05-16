@@ -15,12 +15,11 @@ type NotificationDialogData = {
 };
 
 @Component({
-  selector: 'dv-shared-ui-notification-dialog',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, SharedUiTooltipDateComponent],
-  templateUrl: './shared-ui-notification-dialog.component.html',
-  styleUrl: './shared-ui-notification-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-notification-dialog',
+    imports: [CommonModule, TranslatePipe, SharedUiTooltipDateComponent],
+    templateUrl: './shared-ui-notification-dialog.component.html',
+    styleUrl: './shared-ui-notification-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiNotificationDialogComponent {
   private dialogRef = inject(MatDialogRef);

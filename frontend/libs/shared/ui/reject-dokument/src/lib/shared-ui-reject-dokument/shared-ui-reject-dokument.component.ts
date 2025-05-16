@@ -21,21 +21,20 @@ export interface RejectDokument {
 }
 
 @Component({
-  selector: 'dv-shared-ui-reject-dokument',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './shared-ui-reject-dokument.component.html',
-  styleUrl: './shared-ui-reject-dokument.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-reject-dokument',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './shared-ui-reject-dokument.component.html',
+    styleUrl: './shared-ui-reject-dokument.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiRejectDokumentComponent {
   private dialogRef =

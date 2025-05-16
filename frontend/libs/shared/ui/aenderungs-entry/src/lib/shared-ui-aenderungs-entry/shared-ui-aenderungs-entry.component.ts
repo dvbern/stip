@@ -14,11 +14,10 @@ import { GesuchTrancheSlim } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
-  selector: 'dv-shared-ui-aenderungs-entry',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, RouterLink, SharedUiIconChipComponent],
-  templateUrl: './shared-ui-aenderungs-entry.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-aenderungs-entry',
+    imports: [CommonModule, TranslatePipe, RouterLink, SharedUiIconChipComponent],
+    templateUrl: './shared-ui-aenderungs-entry.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiAenderungsEntryComponent {
   @Input({ required: true }) gesuch!: SharedModelGsGesuchView;

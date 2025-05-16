@@ -48,26 +48,25 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
-  selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    TranslateDirective,
-    TranslatePipe,
-    MatSidenavModule,
-    MatMenuModule,
-    SharedPatternAppHeaderComponent,
-    SharedPatternGesuchStepNavComponent,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderPartsDirective,
-    SharedUiProgressBarComponent,
-    SharedUiIconChipComponent,
-    SharedUiHasRolesDirective,
-  ],
-  templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SharedUtilHeaderService],
+    selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
+    imports: [
+        CommonModule,
+        RouterLink,
+        TranslateDirective,
+        TranslatePipe,
+        MatSidenavModule,
+        MatMenuModule,
+        SharedPatternAppHeaderComponent,
+        SharedPatternGesuchStepNavComponent,
+        SharedPatternMobileSidenavComponent,
+        SharedPatternAppHeaderPartsDirective,
+        SharedUiProgressBarComponent,
+        SharedUiIconChipComponent,
+        SharedUiHasRolesDirective,
+    ],
+    templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [SharedUtilHeaderService]
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {

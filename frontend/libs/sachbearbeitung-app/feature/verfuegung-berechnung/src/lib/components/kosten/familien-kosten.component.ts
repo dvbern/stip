@@ -10,15 +10,14 @@ import {
 import { FamilienBerechnung } from '../../../models';
 
 @Component({
-  selector: 'dv-familien-kosten',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    SharedUiFormatChfPipe,
-    SharedUiFormatChfPositivePipe,
-  ],
-  template: `
+    selector: 'dv-familien-kosten',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        SharedUiFormatChfPipe,
+        SharedUiFormatChfPositivePipe,
+    ],
+    template: `
     <!-- Anzahl anrechenbare Personen -->
     <div class="d-flex gap-2">
       {{
@@ -158,7 +157,7 @@ import { FamilienBerechnung } from '../../../models';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FamilienKostenComponent {
   kostenSig = input.required<FamilienBerechnung['kosten']>();

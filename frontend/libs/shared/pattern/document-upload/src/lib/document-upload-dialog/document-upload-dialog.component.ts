@@ -25,19 +25,18 @@ import { SharedPatternDocumentUploadListComponent } from '../document-upload-lis
 import { UploadStore } from '../upload.store';
 
 @Component({
-  selector: 'dv-shared-pattern-document-upload-dialog',
-  standalone: true,
-  imports: [
-    TranslatePipe,
-    MatDialogModule,
-    MatFormFieldModule,
-    SharedUiDropFileComponent,
-    SharedPatternDocumentUploadListComponent,
-    DocumentUploadApprovalComponent,
-  ],
-  templateUrl: './document-upload-dialog.component.html',
-  styleUrls: ['./document-upload-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-pattern-document-upload-dialog',
+    imports: [
+        TranslatePipe,
+        MatDialogModule,
+        MatFormFieldModule,
+        SharedUiDropFileComponent,
+        SharedPatternDocumentUploadListComponent,
+        DocumentUploadApprovalComponent,
+    ],
+    templateUrl: './document-upload-dialog.component.html',
+    styleUrls: ['./document-upload-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedPatternDocumentUploadDialogComponent {
   data = inject<{

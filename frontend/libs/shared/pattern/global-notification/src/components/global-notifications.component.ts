@@ -32,12 +32,11 @@ const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
 const NOTIFICATION_TIME = 5000;
 
 @Component({
-  selector: 'dv-global-notifications',
-  standalone: true,
-  imports: [MatSnackBarModule, TranslatePipe],
-  templateUrl: './global-notifications.component.html',
-  styleUrls: ['./global-notifications.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-global-notifications',
+    imports: [MatSnackBarModule, TranslatePipe],
+    templateUrl: './global-notifications.component.html',
+    styleUrls: ['./global-notifications.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlobalNotificationsComponent {
   store = inject(GlobalNotificationStore);

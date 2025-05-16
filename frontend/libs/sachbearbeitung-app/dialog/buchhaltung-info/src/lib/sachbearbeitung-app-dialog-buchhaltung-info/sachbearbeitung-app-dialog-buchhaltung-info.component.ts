@@ -13,11 +13,10 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 type BuchhaltungInfoData = BuchhaltungEntry;
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-dialog-buchhaltung-info',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, SharedUiFormatChfPipe],
-  templateUrl: './sachbearbeitung-app-dialog-buchhaltung-info.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-dialog-buchhaltung-info',
+    imports: [CommonModule, TranslatePipe, SharedUiFormatChfPipe],
+    templateUrl: './sachbearbeitung-app-dialog-buchhaltung-info.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppDialogBuchhaltungInfoComponent {
   private dialogRef = inject(MatDialogRef);

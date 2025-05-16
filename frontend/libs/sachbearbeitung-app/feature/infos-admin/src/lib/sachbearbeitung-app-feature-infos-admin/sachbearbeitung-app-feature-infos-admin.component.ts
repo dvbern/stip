@@ -22,17 +22,16 @@ export interface GesuchTableColumns {
 }
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-admin',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatTableModule,
-    TypeSafeMatCellDefDirective,
-    RouterLink,
-  ],
-  templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-infos-admin',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatTableModule,
+        TypeSafeMatCellDefDirective,
+        RouterLink,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureInfosAdminComponent {
   private destroyRef = inject(DestroyRef);

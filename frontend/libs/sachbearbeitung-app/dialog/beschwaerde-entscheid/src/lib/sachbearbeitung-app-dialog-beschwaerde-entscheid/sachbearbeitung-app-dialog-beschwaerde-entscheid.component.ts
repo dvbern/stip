@@ -43,25 +43,23 @@ export interface BeschwerdeentscheidUploadDialogResult {
 }
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-dialog-beschwaerde-entscheid',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatRadioModule,
-    A11yModule,
-    ReactiveFormsModule,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    SharedUiFormFieldDirective,
-    SharedUiDropFileComponent,
-  ],
-  templateUrl:
-    './sachbearbeitung-app-dialog-beschwaerde-entscheid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-dialog-beschwaerde-entscheid',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatRadioModule,
+        A11yModule,
+        ReactiveFormsModule,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        SharedUiFormFieldDirective,
+        SharedUiDropFileComponent,
+    ],
+    templateUrl: './sachbearbeitung-app-dialog-beschwaerde-entscheid.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
   private dialogRef =

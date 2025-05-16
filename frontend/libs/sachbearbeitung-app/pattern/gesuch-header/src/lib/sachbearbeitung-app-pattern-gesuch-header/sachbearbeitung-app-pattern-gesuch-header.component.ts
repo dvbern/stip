@@ -55,22 +55,21 @@ import {
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    RouterLink,
-    RouterLinkActive,
-    MatChipsModule,
-    MatMenuModule,
-    MatTooltipModule,
-    SharedPatternAppHeaderComponent,
-    SharedPatternAppHeaderPartsDirective,
-    SharedUiLoadingComponent,
-  ],
-  templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        RouterLink,
+        RouterLinkActive,
+        MatChipsModule,
+        MatMenuModule,
+        MatTooltipModule,
+        SharedPatternAppHeaderComponent,
+        SharedPatternAppHeaderPartsDirective,
+        SharedUiLoadingComponent,
+    ],
+    templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private store = inject(Store);

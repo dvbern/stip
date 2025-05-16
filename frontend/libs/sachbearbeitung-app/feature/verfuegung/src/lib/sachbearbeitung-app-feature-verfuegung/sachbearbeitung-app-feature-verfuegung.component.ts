@@ -6,15 +6,14 @@ import { SachbearbeitungAppPatternVerfuegungLayoutComponent } from '@dv/sachbear
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-verfuegung',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SachbearbeitungAppPatternVerfuegungLayoutComponent,
-    SharedUiRouterOutletWrapperComponent,
-  ],
-  templateUrl: './sachbearbeitung-app-feature-verfuegung.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-verfuegung',
+    imports: [
+        CommonModule,
+        SachbearbeitungAppPatternVerfuegungLayoutComponent,
+        SharedUiRouterOutletWrapperComponent,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-verfuegung.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureVerfuegungComponent {
   option?: VerfuegungOption;

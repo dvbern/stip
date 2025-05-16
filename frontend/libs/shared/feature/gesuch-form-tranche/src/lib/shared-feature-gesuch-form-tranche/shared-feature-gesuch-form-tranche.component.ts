@@ -49,23 +49,22 @@ import {
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-tranche',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    SharedUiFormFieldDirective,
-    SharedUiHeaderSuffixDirective,
-    SharedUiIfSachbearbeiterDirective,
-    SharedUiFormReadonlyDirective,
-    TranslatePipe,
-  ],
-  templateUrl: './shared-feature-gesuch-form-tranche.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-gesuch-form-tranche',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterLink,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        SharedUiFormFieldDirective,
+        SharedUiHeaderSuffixDirective,
+        SharedUiIfSachbearbeiterDirective,
+        SharedUiFormReadonlyDirective,
+        TranslatePipe,
+    ],
+    templateUrl: './shared-feature-gesuch-form-tranche.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);

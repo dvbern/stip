@@ -13,16 +13,15 @@ import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
 import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
 
 @Component({
-  selector: 'dv-shared-ui-dashboard-gesuch',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    TranslatePipe,
-    SharedUiAenderungsEntryComponent,
-  ],
-  templateUrl: './shared-ui-dashboard-gesuch.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-dashboard-gesuch',
+    imports: [
+        CommonModule,
+        RouterLink,
+        TranslatePipe,
+        SharedUiAenderungsEntryComponent,
+    ],
+    templateUrl: './shared-ui-dashboard-gesuch.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiDashboardGesuchComponent {
   gesuchSig = input.required<SharedModelGsGesuchView>();

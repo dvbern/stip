@@ -5,14 +5,13 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { GesuchAppPatternGesuchStepLayoutComponent } from '@dv/sozialdienst-app/pattern/gesuch-step-layout';
 
 @Component({
-  selector: 'dv-sozialdienst-app-feature-gesuch-form',
-  standalone: true,
-  imports: [
-    SharedUiRouterOutletWrapperComponent,
-    GesuchAppPatternGesuchStepLayoutComponent,
-  ],
-  templateUrl: './sozialdienst-app-feature-gesuch-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sozialdienst-app-feature-gesuch-form',
+    imports: [
+        SharedUiRouterOutletWrapperComponent,
+        GesuchAppPatternGesuchStepLayoutComponent,
+    ],
+    templateUrl: './sozialdienst-app-feature-gesuch-form.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SozialdienstAppFeatureGesuchFormComponent {
   step?: GesuchFormStep;

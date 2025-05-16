@@ -43,22 +43,20 @@ export type NotizDialogResult = {
 };
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-    MatInputModule,
-    MatFormFieldModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    SharedUiFormReadonlyDirective,
-  ],
-  templateUrl:
-    './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslatePipe,
+        MatInputModule,
+        MatFormFieldModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        SharedUiFormReadonlyDirective,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   private dialogRef =

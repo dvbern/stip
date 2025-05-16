@@ -27,19 +27,18 @@ type DialogType = SharedPatternDocumentUploadDialogComponent;
 type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
 
 @Component({
-  selector: 'dv-shared-pattern-document-upload',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatDialogModule,
-    MatFormFieldModule,
-    SharedUiIconChipComponent,
-  ],
-  templateUrl: './document-upload.component.html',
-  styleUrls: ['./document-upload.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UploadStore],
+    selector: 'dv-shared-pattern-document-upload',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatDialogModule,
+        MatFormFieldModule,
+        SharedUiIconChipComponent,
+    ],
+    templateUrl: './document-upload.component.html',
+    styleUrls: ['./document-upload.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [UploadStore]
 })
 export class SharedPatternDocumentUploadComponent implements OnInit {
   private dialog = inject(MatDialog);

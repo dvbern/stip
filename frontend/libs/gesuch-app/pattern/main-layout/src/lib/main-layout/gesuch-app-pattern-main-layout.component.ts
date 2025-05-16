@@ -11,16 +11,15 @@ import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
 @Component({
-  selector: 'dv-gesuch-app-pattern-main-layout',
-  standalone: true,
-  imports: [
-    MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-  ],
-  templateUrl: './gesuch-app-pattern-main-layout.component.html',
-  styleUrls: ['./gesuch-app-pattern-main-layout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-gesuch-app-pattern-main-layout',
+    imports: [
+        MatSidenavModule,
+        SharedPatternMobileSidenavComponent,
+        SharedPatternAppHeaderComponent,
+    ],
+    templateUrl: './gesuch-app-pattern-main-layout.component.html',
+    styleUrls: ['./gesuch-app-pattern-main-layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GesuchAppPatternMainLayoutComponent {
   private sidenavSig = viewChild.required(MatSidenav);

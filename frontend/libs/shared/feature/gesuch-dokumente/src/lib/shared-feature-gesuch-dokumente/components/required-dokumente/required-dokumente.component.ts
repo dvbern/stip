@@ -52,25 +52,24 @@ import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
 @Component({
-  selector: 'dv-required-dokumente',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    TranslatePipe,
-    MatTableModule,
-    MatTooltipModule,
-    TypeSafeMatCellDefDirective,
-    SharedPatternDocumentUploadComponent,
-    DokumentStatusActionsComponent,
-    SharedUiLoadingComponent,
-    SharedUiIfSachbearbeiterDirective,
-  ],
-  templateUrl: './required-dokumente.component.html',
-  styleUrl: './required-dokumente.component.scss',
-  animations: [detailExpand],
-  providers: [provideDvDateAdapter()],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-required-dokumente',
+    imports: [
+        CommonModule,
+        RouterLink,
+        TranslatePipe,
+        MatTableModule,
+        MatTooltipModule,
+        TypeSafeMatCellDefDirective,
+        SharedPatternDocumentUploadComponent,
+        DokumentStatusActionsComponent,
+        SharedUiLoadingComponent,
+        SharedUiIfSachbearbeiterDirective,
+    ],
+    templateUrl: './required-dokumente.component.html',
+    styleUrl: './required-dokumente.component.scss',
+    animations: [detailExpand],
+    providers: [provideDvDateAdapter()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequiredDokumenteComponent {
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);

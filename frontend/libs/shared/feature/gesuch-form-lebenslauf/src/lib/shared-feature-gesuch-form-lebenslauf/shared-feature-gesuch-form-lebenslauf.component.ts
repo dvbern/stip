@@ -36,22 +36,21 @@ const AUSBILDUNGS_MONTH = 8;
 const MIN_EDUCATION_AGE = 16;
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-lebenslauf',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SharedFeatureGesuchFormLebenslaufEditorComponent,
-    TranslatePipe,
-    TwoColumnTimelineComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiInfoContainerComponent,
-    SharedUiStepFormButtonsComponent,
-    SharedUiLoadingComponent,
-    SharedUiInfoDialogDirective,
-  ],
-  templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
-  styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-gesuch-form-lebenslauf',
+    imports: [
+        CommonModule,
+        SharedFeatureGesuchFormLebenslaufEditorComponent,
+        TranslatePipe,
+        TwoColumnTimelineComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiInfoContainerComponent,
+        SharedUiStepFormButtonsComponent,
+        SharedUiLoadingComponent,
+        SharedUiInfoDialogDirective,
+    ],
+    templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
+    styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);

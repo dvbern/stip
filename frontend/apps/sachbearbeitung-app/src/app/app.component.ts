@@ -7,10 +7,9 @@ import { AblehnungGrundStore } from '@dv/shared/global/ablehnung-grund';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 
 @Component({
-  standalone: true,
-  imports: [RouterOutlet, GlobalNotificationsComponent],
-  selector: 'dv-root',
-  templateUrl: './app.component.html',
+    imports: [RouterOutlet, GlobalNotificationsComponent],
+    selector: 'dv-root',
+    templateUrl: './app.component.html'
 })
 export class AppComponent {
   @HostBinding('class') klass = 'app-container shadow';

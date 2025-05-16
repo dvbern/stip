@@ -60,27 +60,26 @@ import {
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MaskitoDirective,
-    SharedUiStepFormButtonsComponent,
-    MatCheckboxModule,
-    SharedUiFormReadonlyDirective,
-    SharedUiMaxLengthDirective,
-    SharedUiInfoDialogDirective,
-  ],
-  templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
-  styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MaskitoDirective,
+        SharedUiStepFormButtonsComponent,
+        MatCheckboxModule,
+        SharedUiFormReadonlyDirective,
+        SharedUiMaxLengthDirective,
+        SharedUiInfoDialogDirective,
+    ],
+    templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
+    styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   private elementRef = inject(ElementRef);

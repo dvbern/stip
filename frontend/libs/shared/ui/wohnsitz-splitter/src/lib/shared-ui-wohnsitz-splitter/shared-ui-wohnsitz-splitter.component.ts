@@ -9,17 +9,16 @@ import {
 } from '@dv/shared/ui/percentage-splitter';
 
 @Component({
-  selector: 'dv-shared-ui-wohnsitz-splitter',
-  standalone: true,
-  imports: [
-    SharedUiPercentageSplitterComponent,
-    SharedUiPercentageSplitterDirective,
-    SharedUiZuvorHintDirective,
-    TranslatePipe,
-  ],
-  templateUrl: './shared-ui-wohnsitz-splitter.component.html',
-  styleUrls: ['./shared-ui-wohnsitz-splitter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-wohnsitz-splitter',
+    imports: [
+        SharedUiPercentageSplitterComponent,
+        SharedUiPercentageSplitterDirective,
+        SharedUiZuvorHintDirective,
+        TranslatePipe,
+    ],
+    templateUrl: './shared-ui-wohnsitz-splitter.component.html',
+    styleUrls: ['./shared-ui-wohnsitz-splitter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiWohnsitzSplitterComponent {
   @Input({ required: true }) updateValidity: unknown;

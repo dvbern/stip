@@ -6,16 +6,15 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 @Component({
-  selector: 'dv-shared-ui-search',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    TranslatePipe,
-    SharedUiMaxLengthDirective,
-  ],
-  templateUrl: './shared-ui-search.component.html',
-  styleUrls: ['./shared-ui-search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-search',
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        TranslatePipe,
+        SharedUiMaxLengthDirective,
+    ],
+    templateUrl: './shared-ui-search.component.html',
+    styleUrls: ['./shared-ui-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiSearchComponent {}

@@ -10,15 +10,14 @@ import {
 import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
-  selector: 'dv-persoenliche-kosten',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    SharedUiFormatChfPipe,
-    SharedUiFormatChfPositivePipe,
-  ],
-  template: `
+    selector: 'dv-persoenliche-kosten',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        SharedUiFormatChfPipe,
+        SharedUiFormatChfPositivePipe,
+    ],
+    template: `
     <!-- Mehrkosten für auswärtige Verpflegung -->
     <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
@@ -230,7 +229,7 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersoenlicheKostenComponent {
   kostenSig = input.required<PersoenlicheBerechnung['kosten']>();

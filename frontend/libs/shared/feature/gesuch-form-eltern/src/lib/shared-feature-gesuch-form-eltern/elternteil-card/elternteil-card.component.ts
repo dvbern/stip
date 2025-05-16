@@ -11,12 +11,11 @@ import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-eltern-card',
-  standalone: true,
-  imports: [TranslatePipe, SharedUiIconChipComponent],
-  templateUrl: './elternteil-card.component.html',
-  styleUrls: ['./elternteil-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-gesuch-form-eltern-card',
+    imports: [TranslatePipe, SharedUiIconChipComponent],
+    templateUrl: './elternteil-card.component.html',
+    styleUrls: ['./elternteil-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ElternteilCardComponent {
   @Input({ required: true })

@@ -41,25 +41,24 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatTableModule,
-    MatPaginatorModule,
-    MatMenuModule,
-    MatTooltipModule,
-    TypeSafeMatCellDefDirective,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiTruncateTooltipDirective,
-    SharedUiFocusableListDirective,
-    SharedUiFocusableListItemDirective,
-  ],
-  providers: [paginatorTranslationProvider()],
-  templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatTableModule,
+        MatPaginatorModule,
+        MatMenuModule,
+        MatTooltipModule,
+        TypeSafeMatCellDefDirective,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiTruncateTooltipDirective,
+        SharedUiFocusableListDirective,
+        SharedUiFocusableListItemDirective,
+    ],
+    providers: [paginatorTranslationProvider()],
+    templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private dialog = inject(MatDialog);

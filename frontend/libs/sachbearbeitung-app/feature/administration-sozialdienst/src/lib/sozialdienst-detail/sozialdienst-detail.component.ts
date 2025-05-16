@@ -49,26 +49,25 @@ import { ibanValidator } from '@dv/shared/util/validator-iban';
 import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst-admin-dialog/replace-sozialdienst-admin-dialog.component';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    TranslatePipe,
-    MaskitoDirective,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiFormSaveComponent,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiFormAddressComponent,
-    SharedUiMaxLengthDirective,
-  ],
-  templateUrl: './sozialdienst-detail.component.html',
-  styleUrl: './sozialdienst-detail.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        TranslatePipe,
+        MaskitoDirective,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiFormSaveComponent,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiFormAddressComponent,
+        SharedUiMaxLengthDirective,
+    ],
+    templateUrl: './sozialdienst-detail.component.html',
+    styleUrl: './sozialdienst-detail.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SozialdienstDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);

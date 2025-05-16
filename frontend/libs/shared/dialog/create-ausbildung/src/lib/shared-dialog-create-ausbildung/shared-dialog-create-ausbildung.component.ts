@@ -14,11 +14,10 @@ export type CreateAusbildungData = {
 };
 
 @Component({
-  selector: 'dv-shared-dialog-create-ausbildung',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, SharedFeatureAusbildungComponent],
-  templateUrl: './shared-dialog-create-ausbildung.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-dialog-create-ausbildung',
+    imports: [CommonModule, TranslatePipe, SharedFeatureAusbildungComponent],
+    templateUrl: './shared-dialog-create-ausbildung.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedDialogCreateAusbildungComponent {
   private dialogRef = inject(MatDialogRef);

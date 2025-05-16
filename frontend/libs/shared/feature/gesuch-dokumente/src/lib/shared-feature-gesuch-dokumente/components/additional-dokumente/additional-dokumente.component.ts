@@ -21,17 +21,16 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
-  selector: 'dv-additional-dokumente',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatTableModule,
-    TypeSafeMatCellDefDirective,
-    SharedPatternDocumentUploadComponent,
-  ],
-  templateUrl: './additional-dokumente.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-additional-dokumente',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatTableModule,
+        TypeSafeMatCellDefDirective,
+        SharedPatternDocumentUploadComponent,
+    ],
+    templateUrl: './additional-dokumente.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdditionalDokumenteComponent {
   dokumenteViewSig = input.required<{

@@ -54,29 +54,28 @@ import {
 import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darlehen.selector';
 
 @Component({
-  selector: 'dv-shared-feature-darlehen',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MaskitoDirective,
-    SharedUiLoadingComponent,
-    SharedUiFormFieldDirective,
-    SharedUiZuvorHintDirective,
-    SharedPatternDocumentUploadComponent,
-    SharedUiFormMessageErrorDirective,
-    SharedUiTranslateChangePipe,
-    SharedUiFormZuvorHintComponent,
-    SharedUiFormReadonlyDirective,
-    SharedUiStepFormButtonsComponent,
-  ],
-  templateUrl: './shared-feature-darlehen.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-darlehen',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MaskitoDirective,
+        SharedUiLoadingComponent,
+        SharedUiFormFieldDirective,
+        SharedUiZuvorHintDirective,
+        SharedPatternDocumentUploadComponent,
+        SharedUiFormMessageErrorDirective,
+        SharedUiTranslateChangePipe,
+        SharedUiFormZuvorHintComponent,
+        SharedUiFormReadonlyDirective,
+        SharedUiStepFormButtonsComponent,
+    ],
+    templateUrl: './shared-feature-darlehen.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureDarlehenComponent implements OnInit {
   private store = inject(Store);

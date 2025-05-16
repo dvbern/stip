@@ -36,24 +36,23 @@ import {
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatListModule,
-    TranslatePipe,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiFormSaveComponent,
-    SharedUiMaxLengthDirective,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-  ],
-  templateUrl: './benutzer-detail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatListModule,
+        TranslatePipe,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiFormSaveComponent,
+        SharedUiMaxLengthDirective,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+    ],
+    templateUrl: './benutzer-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BenutzeDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);

@@ -7,12 +7,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'dv-shared-ui-table-header-filter',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './shared-ui-table-header-filter.component.html',
-  styleUrl: './shared-ui-table-header-filter.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-table-header-filter',
+    imports: [CommonModule],
+    templateUrl: './shared-ui-table-header-filter.component.html',
+    styleUrl: './shared-ui-table-header-filter.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiTableHeaderFilterComponent {
   @Input({ required: true }) text!: string;

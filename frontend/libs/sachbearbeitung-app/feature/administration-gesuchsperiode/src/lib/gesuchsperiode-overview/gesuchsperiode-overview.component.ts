@@ -30,26 +30,25 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatSortModule,
-    MatChipsModule,
-    MatTooltipModule,
-    MatPaginatorModule,
-    RouterLink,
-    TranslatePipe,
-    TranslatedPropertyPipe,
-    TypeSafeMatCellDefDirective,
-    SharedUiFocusableListDirective,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-  ],
-  providers: [paginatorTranslationProvider()],
-  templateUrl: './gesuchsperiode-overview.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatSortModule,
+        MatChipsModule,
+        MatTooltipModule,
+        MatPaginatorModule,
+        RouterLink,
+        TranslatePipe,
+        TranslatedPropertyPipe,
+        TypeSafeMatCellDefDirective,
+        SharedUiFocusableListDirective,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+    ],
+    providers: [paginatorTranslationProvider()],
+    templateUrl: './gesuchsperiode-overview.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GesuchsperiodeOverviewComponent implements OnInit {
   private dialog = inject(MatDialog);

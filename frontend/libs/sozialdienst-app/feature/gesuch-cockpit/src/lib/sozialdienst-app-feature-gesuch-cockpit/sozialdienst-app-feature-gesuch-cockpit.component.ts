@@ -40,24 +40,23 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 
 @Component({
-  selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    TranslatePipe,
-    MatSelectModule,
-    SharedUiIconChipComponent,
-    SharedUiNotificationsComponent,
-    SharedUiDashboardAusbildungComponent,
-    SharedUiDashboardCompactAusbildungComponent,
-  ],
-  templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DashboardStore],
+    selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
+    imports: [
+        CommonModule,
+        RouterLink,
+        MatSidenavModule,
+        SharedPatternMobileSidenavComponent,
+        SharedPatternAppHeaderComponent,
+        TranslatePipe,
+        MatSelectModule,
+        SharedUiIconChipComponent,
+        SharedUiNotificationsComponent,
+        SharedUiDashboardAusbildungComponent,
+        SharedUiDashboardCompactAusbildungComponent,
+    ],
+    templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DashboardStore]
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);

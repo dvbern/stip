@@ -27,21 +27,20 @@ export interface EinreichedatumAendernDialogData {
 export type EinreichedatumAendernDialogResult = EinreichedatumAendernRequest;
 
 @Component({
-  selector: 'dv-shared-dialog-einreichedatum-aendern',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    SharedUiMaxLengthDirective,
-    SharedUiFormMessageErrorDirective,
-  ],
-  templateUrl: './shared-dialog-einreichedatum-aendern.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideDvDateAdapter()],
+    selector: 'dv-shared-dialog-einreichedatum-aendern',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        SharedUiMaxLengthDirective,
+        SharedUiFormMessageErrorDirective,
+    ],
+    templateUrl: './shared-dialog-einreichedatum-aendern.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [provideDvDateAdapter()]
 })
 export class SharedDialogEinreichedatumAendernComponent {
   private formBuilder = inject(NonNullableFormBuilder);

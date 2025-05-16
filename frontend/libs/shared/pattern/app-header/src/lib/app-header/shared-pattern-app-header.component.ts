@@ -34,22 +34,21 @@ import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-d
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
-  selector: 'dv-shared-pattern-app-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    RouterOutlet,
-    RouterLink,
-    MatMenuModule,
-    MatButtonModule,
-    SharedUiLanguageSelectorComponent,
-    SharedUiIconChipComponent,
-    SharedUiMandantStylesDvComponent,
-  ],
-  templateUrl: './shared-pattern-app-header.component.html',
-  styleUrls: ['./shared-pattern-app-header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-pattern-app-header',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        RouterOutlet,
+        RouterLink,
+        MatMenuModule,
+        MatButtonModule,
+        SharedUiLanguageSelectorComponent,
+        SharedUiIconChipComponent,
+        SharedUiMandantStylesDvComponent,
+    ],
+    templateUrl: './shared-pattern-app-header.component.html',
+    styleUrls: ['./shared-pattern-app-header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedPatternAppHeaderComponent {
   @Input() backLink?: { path: string; text: string };

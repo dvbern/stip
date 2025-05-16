@@ -6,15 +6,14 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/sozialdienst-app/pattern/administration-layout';
 
 @Component({
-  selector: 'dv-sozialdienst-app-feature-administration',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SharedUiRouterOutletWrapperComponent,
-    SozialdienstAppPatternAdministrationLayoutComponent,
-  ],
-  templateUrl: './sozialdienst-app-feature-administration.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sozialdienst-app-feature-administration',
+    imports: [
+        CommonModule,
+        SharedUiRouterOutletWrapperComponent,
+        SozialdienstAppPatternAdministrationLayoutComponent,
+    ],
+    templateUrl: './sozialdienst-app-feature-administration.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureAdministrationComponent {
   option?: AdminOption;

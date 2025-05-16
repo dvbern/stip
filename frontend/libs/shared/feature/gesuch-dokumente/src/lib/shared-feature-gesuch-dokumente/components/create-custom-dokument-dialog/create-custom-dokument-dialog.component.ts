@@ -22,21 +22,20 @@ export type CustomDokumentDialogResult = {
 };
 
 @Component({
-  selector: 'dv-create-custom-dokument-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './create-custom-dokument-dialog.component.html',
-  styleUrl: './create-custom-dokument-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-create-custom-dokument-dialog',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './create-custom-dokument-dialog.component.html',
+    styleUrl: './create-custom-dokument-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateCustomDokumentDialogComponent {
   private dialogRef =

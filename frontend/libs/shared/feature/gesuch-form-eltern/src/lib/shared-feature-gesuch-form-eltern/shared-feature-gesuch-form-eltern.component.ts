@@ -31,18 +31,17 @@ import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch
 import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-eltern',
-  standalone: true,
-  imports: [
-    TranslatePipe,
-    SharedFeatureGesuchFormElternEditorComponent,
-    ElternteilCardComponent,
-    SharedUiStepFormButtonsComponent,
-    SharedUiChangeIndicatorComponent,
-    SharedUiLoadingComponent,
-  ],
-  templateUrl: './shared-feature-gesuch-form-eltern.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-feature-gesuch-form-eltern',
+    imports: [
+        TranslatePipe,
+        SharedFeatureGesuchFormElternEditorComponent,
+        ElternteilCardComponent,
+        SharedUiStepFormButtonsComponent,
+        SharedUiChangeIndicatorComponent,
+        SharedUiLoadingComponent,
+    ],
+    templateUrl: './shared-feature-gesuch-form-eltern.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);

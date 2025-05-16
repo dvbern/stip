@@ -36,22 +36,21 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 
 @Component({
-  standalone: true,
-  imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    TranslatePipe,
-    MatInputModule,
-    MatFormFieldModule,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiLoadingComponent,
-    SharedUiFormMessageErrorDirective,
-    SharedUiFormSaveComponent,
-    SharedUiHeaderSuffixDirective,
-  ],
-  templateUrl: './sozialdienst-mitarbeiter-detail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        ReactiveFormsModule,
+        TranslatePipe,
+        MatInputModule,
+        MatFormFieldModule,
+        SharedUiRdIsPendingPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiLoadingComponent,
+        SharedUiFormMessageErrorDirective,
+        SharedUiFormSaveComponent,
+        SharedUiHeaderSuffixDirective,
+    ],
+    templateUrl: './sozialdienst-mitarbeiter-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SozialdienstMitarbeiterDetailComponent
   implements OnInit, OnDestroy

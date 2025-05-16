@@ -33,25 +33,24 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    TranslatePipe,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatTooltipModule,
-    SharedUiKommentarDialogComponent,
-    SharedUiTruncateTooltipDirective,
-    SharedUiLoadingComponent,
-    TypeSafeMatCellDefDirective,
-    SharedUiDownloadButtonDirective,
-  ],
-  templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [BeschwerdeStore, paginatorTranslationProvider()],
+    selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
+    imports: [
+        CommonModule,
+        RouterLink,
+        TranslatePipe,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatTooltipModule,
+        SharedUiKommentarDialogComponent,
+        SharedUiTruncateTooltipDirective,
+        SharedUiLoadingComponent,
+        TypeSafeMatCellDefDirective,
+        SharedUiDownloadButtonDirective,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [BeschwerdeStore, paginatorTranslationProvider()]
 })
 export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   private store = inject(Store);

@@ -15,12 +15,11 @@ import {
 } from '@dv/shared/model/language';
 
 @Component({
-  selector: 'dv-shared-ui-language-selector',
-  standalone: true,
-  imports: [UpperCasePipe, TranslatePipe],
-  templateUrl: './shared-ui-language-selector.component.html',
-  styleUrls: ['./shared-ui-language-selector.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-shared-ui-language-selector',
+    imports: [UpperCasePipe, TranslatePipe],
+    templateUrl: './shared-ui-language-selector.component.html',
+    styleUrls: ['./shared-ui-language-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedUiLanguageSelectorComponent {
   @Input() language: Language = DEFAULT_LANGUAGE;

@@ -25,27 +25,25 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 const sharedCountryKeyPrefix = 'shared.country.';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    MatListModule,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiMaxLengthDirective,
-  ],
-  providers: [
-    provideMaterialDefaultOptions({
-      subscriptSizing: 'dynamic',
-    }),
-  ],
-  templateUrl:
-    './sachbearbeitung-app-feature-administration-eu-efta-laender.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        MatListModule,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiMaxLengthDirective,
+    ],
+    providers: [
+        provideMaterialDefaultOptions({
+            subscriptSizing: 'dynamic',
+        }),
+    ],
+    templateUrl: './sachbearbeitung-app-feature-administration-eu-efta-laender.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private translate = inject(TranslateService);

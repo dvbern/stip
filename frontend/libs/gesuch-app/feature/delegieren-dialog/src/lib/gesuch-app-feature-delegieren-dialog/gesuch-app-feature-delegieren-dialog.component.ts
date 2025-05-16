@@ -50,22 +50,21 @@ export interface DelegierenDialogResult {
 }
 
 @Component({
-  selector: 'dv-gesuch-app-feature-delegieren-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    ReactiveFormsModule,
-    SharedUiFormAddressComponent,
-  ],
-  templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-gesuch-app-feature-delegieren-dialog',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        ReactiveFormsModule,
+        SharedUiFormAddressComponent,
+    ],
+    templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
   private dialogRef =

@@ -23,25 +23,24 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
-  selector: 'lib-shared-feature-verfuegung-zusammenfassung',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    TranslateDirective,
-    TranslatePipe,
-    RouterLink,
-    SharedUiIconChipComponent,
-    SharedUiFormatChfPipe,
-    SharedUiFormatChfNegativePipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiDownloadButtonDirective,
-    SharedUiLoadingComponent,
-    DecimalPipe,
-  ],
-  templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
-  styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-shared-feature-verfuegung-zusammenfassung',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        TranslateDirective,
+        TranslatePipe,
+        RouterLink,
+        SharedUiIconChipComponent,
+        SharedUiFormatChfPipe,
+        SharedUiFormatChfNegativePipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiDownloadButtonDirective,
+        SharedUiLoadingComponent,
+        DecimalPipe,
+    ],
+    templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
+    styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFeatureVerfuegungZusammenfassungComponent {
   berechnungStore = inject(BerechnungStore);

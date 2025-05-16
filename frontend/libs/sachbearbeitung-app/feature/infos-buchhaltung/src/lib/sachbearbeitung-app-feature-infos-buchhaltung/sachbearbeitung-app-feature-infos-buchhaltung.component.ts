@@ -38,27 +38,26 @@ import {
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    RouterLink,
-    MatTableModule,
-    MatTooltipModule,
-    MatPaginatorModule,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiFormatChfPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiTruncateTooltipDirective,
-    SharedUiDownloadButtonDirective,
-    TypeSafeMatCellDefDirective,
-    TypeSafeMatRowDefDirective,
-  ],
-  templateUrl: './sachbearbeitung-app-feature-infos-buchhaltung.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [BuchhaltungStore],
+    selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        RouterLink,
+        MatTableModule,
+        MatTooltipModule,
+        MatPaginatorModule,
+        SharedUiLoadingComponent,
+        SharedUiRdIsPendingPipe,
+        SharedUiFormatChfPipe,
+        SharedUiRdIsPendingWithoutCachePipe,
+        SharedUiTruncateTooltipDirective,
+        SharedUiDownloadButtonDirective,
+        TypeSafeMatCellDefDirective,
+        TypeSafeMatRowDefDirective,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-infos-buchhaltung.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [BuchhaltungStore]
 })
 export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   private store = inject(Store);

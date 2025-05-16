@@ -27,24 +27,22 @@ import {
 import { BerechnungsCardComponent } from '../components/berechnungs-card/berechnungs-card.component';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    TranslatePipe,
-    MatExpansionModule,
-    SharedUiFormatChfPipe,
-    BerechnungsCardComponent,
-    PersoenlicheEinnahmenComponent,
-    PersoenlicheKostenComponent,
-    FamilienEinnahmenComponent,
-    FamilienKostenComponent,
-    SharedUiLoadingComponent,
-  ],
-  templateUrl:
-    './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        TranslatePipe,
+        MatExpansionModule,
+        SharedUiFormatChfPipe,
+        BerechnungsCardComponent,
+        PersoenlicheEinnahmenComponent,
+        PersoenlicheKostenComponent,
+        FamilienEinnahmenComponent,
+        FamilienKostenComponent,
+        SharedUiLoadingComponent,
+    ],
+    templateUrl: './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);

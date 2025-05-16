@@ -24,20 +24,19 @@ export interface ReplaceSozialdienstAdminDialogResult {
 }
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatFormFieldModule,
-    MatInputModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
-    SharedUiMaxLengthDirective,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './replace-sozialdienst-admin-dialog.component.html',
-  styleUrls: ['./replace-sozialdienst-admin-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatFormFieldModule,
+        MatInputModule,
+        SharedUiFormFieldDirective,
+        SharedUiFormMessageErrorDirective,
+        SharedUiMaxLengthDirective,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './replace-sozialdienst-admin-dialog.component.html',
+    styleUrls: ['./replace-sozialdienst-admin-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReplaceSozialdienstAdminDialogComponent {
   private dialogRef =

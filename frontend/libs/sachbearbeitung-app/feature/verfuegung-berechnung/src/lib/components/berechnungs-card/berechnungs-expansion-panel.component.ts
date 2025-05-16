@@ -14,15 +14,14 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { Berechnung, BerechnungsValue } from '../../../models';
 
 @Component({
-  selector: 'dv-berechnungs-expansion-panel',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatExpansionModule,
-    SharedUiFormatChfPipe,
-  ],
-  template: `
+    selector: 'dv-berechnungs-expansion-panel',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatExpansionModule,
+        SharedUiFormatChfPipe,
+    ],
+    template: `
     @if (viewSig(); as view) {
       <mat-expansion-panel
         #panel
@@ -55,7 +54,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
       </mat-expansion-panel>
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BerechnungsExpansionPanelComponent {
   berechnungSig = input.required<Berechnung>();

@@ -31,23 +31,22 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-pattern-verfuegung-layout',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    RouterLink,
-    RouterLinkActive,
-    MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    SharedUiIconChipComponent,
-    SachbearbeitungAppPatternGesuchHeaderComponent,
-  ],
-  styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
-  templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [BerechnungStore],
+    selector: 'dv-sachbearbeitung-app-pattern-verfuegung-layout',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        RouterLink,
+        RouterLinkActive,
+        MatSidenavModule,
+        SharedPatternMobileSidenavComponent,
+        SharedPatternAppHeaderComponent,
+        SharedUiIconChipComponent,
+        SachbearbeitungAppPatternGesuchHeaderComponent,
+    ],
+    styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
+    templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [BerechnungStore]
 })
 export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   @Input() option?: VerfuegungOption;

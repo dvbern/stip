@@ -21,21 +21,20 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    TypeSafeMatCellDefDirective,
-    ReactiveFormsModule,
-    SharedUiTruncateTooltipDirective,
-  ],
-  providers: [paginatorTranslationProvider()],
-  templateUrl: './sachbearbeitung-app-feature-infos-protokoll.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        TypeSafeMatCellDefDirective,
+        ReactiveFormsModule,
+        SharedUiTruncateTooltipDirective,
+    ],
+    providers: [paginatorTranslationProvider()],
+    templateUrl: './sachbearbeitung-app-feature-infos-protokoll.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SachbearbeitungAppFeatureInfosProtokollComponent {
   displayedColumns = ['datum', 'status', 'user', 'kommentar'];

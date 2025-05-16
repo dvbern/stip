@@ -33,25 +33,23 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslatePipe,
-    MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternGesuchStepNavComponent,
-    SharedUiIconChipComponent,
-    SharedUiProgressBarComponent,
-    SachbearbeitungAppPatternGesuchHeaderComponent,
-  ],
-  templateUrl:
-    './sachbearbeitung-app-pattern-gesuch-step-layout.component.html',
-  styleUrls: [
-    './sachbearbeitung-app-pattern-gesuch-step-layout.component.scss',
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SharedUtilHeaderService],
+    selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
+    imports: [
+        CommonModule,
+        TranslatePipe,
+        MatSidenavModule,
+        SharedPatternMobileSidenavComponent,
+        SharedPatternGesuchStepNavComponent,
+        SharedUiIconChipComponent,
+        SharedUiProgressBarComponent,
+        SachbearbeitungAppPatternGesuchHeaderComponent,
+    ],
+    templateUrl: './sachbearbeitung-app-pattern-gesuch-step-layout.component.html',
+    styleUrls: [
+        './sachbearbeitung-app-pattern-gesuch-step-layout.component.scss',
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [SharedUtilHeaderService]
 })
 export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {
