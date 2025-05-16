@@ -608,7 +608,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ausbildung'
+                $ref: '#/components/schemas/AusbildungCreateResponse'
           description: Returns the created Ausbildung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4965,6 +4965,27 @@ components:
           type: boolean
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
+    AusbildungCreateResponse:
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/Ausbildung'
+        error:
+          $ref: '#/components/schemas/AusbildungCreateError'
+    AusbildungCreateError:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          $ref: '#/components/schemas/AusbildungCreateErrorType'
+        context:
+          type: string
+          format: date
+    AusbildungCreateErrorType:
+      enum:
+        - KEINE_AKTIVE_PERIODE_GEFUNDEN
+        - PERIODE_IN_ENTWURF_GEFUNDEN
+        - INAKTIVE_PERIODE_GEFUNDEN
     AusbildungUpdate:
       type: object
       properties:

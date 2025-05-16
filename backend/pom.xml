@@ -720,7 +720,8 @@
                     SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
                     BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
                     ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
-                    ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB
+                    ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
+                    AusbildungCreateErrorType=ch.dvbern.stip.api.ausbildung.type.AusbildungCreateErrorType
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

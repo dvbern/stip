@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -53,7 +54,7 @@ public class AusbildungService {
     private final Validator validator;
 
     @Transactional
-    public AusbildungDto createAusbildung(final AusbildungUpdateDto ausbildungUpdateDto) {
+    public AusbildungCreateResponseDto createAusbildung(final AusbildungUpdateDto ausbildungUpdateDto) {
         if (fallService.hasAktiveAusbildung(ausbildungUpdateDto.getFallId())) {
             throw new BadRequestException("Cannot create Ausbildung for Fall with Aktive Ausbildung");
         }
@@ -75,7 +76,7 @@ public class AusbildungService {
                 .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         }
 
-        return ausbildungMapper.toDto(ausbildung);
+        return new AusbildungCreateResponseDto().ausbildung(ausbildungMapper.toDto(ausbildung));
     }
 
     @Transactional
