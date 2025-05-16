@@ -282,17 +282,17 @@ class GesuchUpdateNachristDokumenteTest {
     @Test
     @Order(24)
     void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
-        final var items = gesuchApiSpec.getGsDashboard()
+        final var item = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
         assertThat(
-            items[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
+            item.getAusbildungDashboardItems().get(0).getGesuchs().get(0).getNachfristDokumente(),
             is(nachreichefrist)
         );
     }

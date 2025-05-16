@@ -1,6 +1,12 @@
-<button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="loading || disabled">
-  {{ labelKey | translate }}
+<button
+  type="submit"
+  class="btn btn-primary tw-rev tw-w- tw-flex tw-items-center tw-gap-2"
+  [class.tw-flex-row-reverse]="prefixIcon"
+  data-testid="button-save"
+  [disabled]="loading || disabled"
+>
+  <span>{{ labelKey | translate }}</span>
+  @if (loading) {
+    <dv-shared-ui-loading loadingTextKey="shared.ui.saving.text" type="icon"></dv-shared-ui-loading>
+  }
 </button>
-@if (loading) {
-  <dv-shared-ui-loading loadingTextKey="shared.ui.saving.text" type="compact"></dv-shared-ui-loading>
-}
