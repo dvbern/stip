@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungCreateErrorType;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -69,6 +70,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -123,6 +125,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -292,12 +295,18 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public Pair<GesuchDto, Pair<Gesuchsperiode, AusbildungCreateErrorType>> createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
-        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+        final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
             gesuch.getAusbildung()
         );
+
+        if (potential.getRight() != null) {
+            return Pair.of(null, potential);
+        }
+
+        final var gesuchsperiode = potential.getLeft();
 
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
@@ -309,9 +318,12 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithTranche(
-            gesuch,
-            gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+        return Pair.of(
+            gesuchMapperUtil.mapWithTranche(
+                gesuch,
+                gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+            ),
+        null
         );
     }
 

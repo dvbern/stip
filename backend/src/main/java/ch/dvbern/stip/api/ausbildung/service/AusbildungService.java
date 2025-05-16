@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.generated.dto.AusbildungCreateErrorDto;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
@@ -58,9 +60,19 @@ public class AusbildungService {
         if (fallService.hasAktiveAusbildung(ausbildungUpdateDto.getFallId())) {
             throw new BadRequestException("Cannot create Ausbildung for Fall with Aktive Ausbildung");
         }
-
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
+
+        final var result = gesuchsperiodeService.getGesuchsperiodeForAusbildung(ausbildung);
+        if (result.getRight() != null) {
+            LocalDate contextDate = null;
+            if (result.getLeft() != null) {
+                contextDate = result.getLeft().getAufschaltterminStart();
+            }
+
+            return new AusbildungCreateResponseDto()
+                .error(new AusbildungCreateErrorDto(result.getRight(), contextDate));
+        }
 
         final var violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
@@ -69,14 +81,13 @@ public class AusbildungService {
         ausbildungRepository.persist(ausbildung);
         final var gesuchCreateDto = new GesuchCreateDto();
         gesuchCreateDto.setAusbildungId(ausbildung.getId());
-        gesuchService.createGesuch(gesuchCreateDto);
 
         if (ausbildung.getAusbildungsgang() != null) {
             ausbildung
                 .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         }
 
-        return new AusbildungCreateResponseDto().ausbildung(ausbildungMapper.toDto(ausbildung));
+        return new AusbildungCreateResponseDto(ausbildungMapper.toDto(ausbildung), null);
     }
 
     @Transactional
@@ -99,9 +110,15 @@ public class AusbildungService {
         }
 
         final var gesuch = ausbildung.getGesuchs().get(0);
-        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+        final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
             ausbildung
         );
+
+        if (potential.getRight() != null) {
+            potential.getRight().throwCustomValidation();
+        }
+
+        final var gesuchsperiode = potential.getLeft();
         gesuch.setGesuchsperiode(gesuchsperiode);
         var ausbildungsstart =
             ausbildung.getAusbildungBegin().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());

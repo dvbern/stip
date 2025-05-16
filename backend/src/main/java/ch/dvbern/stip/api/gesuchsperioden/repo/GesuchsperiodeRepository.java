@@ -62,6 +62,18 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.fetchFirst();
     }
 
+    public Gesuchsperiode findStartBeforeOrAt(LocalDate date) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var query = queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(
+                gesuchsperiode.gesuchsperiodeStart.before(date)
+                    .or(gesuchsperiode.gesuchsperiodeStart.eq(date))
+            )
+            .orderBy(gesuchsperiode.aufschaltterminStart.desc());
+        return query.fetchFirst();
+    }
+
     public Optional<Gesuchsperiode> getLatest() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchsperiode)

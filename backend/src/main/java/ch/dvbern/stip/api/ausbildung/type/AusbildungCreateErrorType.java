@@ -17,8 +17,24 @@
 
 package ch.dvbern.stip.api.ausbildung.type;
 
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.common.validation.ValidationsConstant;
+
 public enum AusbildungCreateErrorType {
+    // TODO KSTIP-1994: Rename this to something better?
+
     KEINE_AKTIVE_PERIODE_GEFUNDEN,
     PERIODE_IN_ENTWURF_GEFUNDEN,
-    INAKTIVE_PERIODE_GEFUNDEN
+    INAKTIVE_PERIODE_GEFUNDEN;
+
+    public void throwCustomValidation() {
+        throw new CustomValidationsException(
+            "Error occured when selecting a Gesuchsperiode: " + this,
+            new CustomConstraintViolation(
+                ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
+                "gesuchsperiode"
+            )
+        );
+    }
 }
