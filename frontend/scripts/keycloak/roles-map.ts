@@ -98,6 +98,5 @@ export const PERMISSION_ROLE_LIST = [
     'STAMMDATEN_UPDATE',
     'STAMMDATEN_DELETE',
     'SEND_EMAIL',
-    'GESUCH_DELETE_ADMIN', // Probably shouldn't be set
   ],
 ] as const satisfies [Role[], ...string[]][];
