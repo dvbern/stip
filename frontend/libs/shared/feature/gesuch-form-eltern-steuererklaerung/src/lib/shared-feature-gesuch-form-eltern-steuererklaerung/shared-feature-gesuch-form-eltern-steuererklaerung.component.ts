@@ -51,25 +51,26 @@ import {
 import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feature-gesuch-form-eltern-steuererklaerung.selector';
 
 @Component({
-    selector: 'lib-shared-feature-gesuch-form-eltern-steuererklaerung',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        SharedUiLoadingComponent,
-        SharedUiFormReadonlyDirective,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiStepFormButtonsComponent,
-        SharedUiFormZuvorHintComponent,
-        SharedUiTranslateChangePipe,
-        SharedPatternDocumentUploadComponent,
-    ],
-    templateUrl: './shared-feature-gesuch-form-eltern-steuererklaerung.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-shared-feature-gesuch-form-eltern-steuererklaerung',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    SharedUiLoadingComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiStepFormButtonsComponent,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
+    SharedPatternDocumentUploadComponent,
+  ],
+  templateUrl:
+    './shared-feature-gesuch-form-eltern-steuererklaerung.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   private store = inject(Store);

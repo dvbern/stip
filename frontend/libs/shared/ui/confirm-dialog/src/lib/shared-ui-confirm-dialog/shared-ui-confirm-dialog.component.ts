@@ -16,11 +16,11 @@ export interface ConfirmDialogData {
 }
 
 @Component({
-    selector: 'dv-shared-ui-confirm-dialog',
-    imports: [CommonModule, TranslatePipe],
-    templateUrl: './shared-ui-confirm-dialog.component.html',
-    styleUrl: './shared-ui-confirm-dialog.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-confirm-dialog',
+  imports: [CommonModule, TranslatePipe],
+  templateUrl: './shared-ui-confirm-dialog.component.html',
+  styleUrl: './shared-ui-confirm-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiConfirmDialogComponent {
   dialogRef = inject(MatDialogRef);

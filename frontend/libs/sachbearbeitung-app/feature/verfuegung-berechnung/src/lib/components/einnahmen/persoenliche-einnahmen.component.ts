@@ -10,14 +10,14 @@ import {
 import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
-    selector: 'dv-persoenliche-einnahmen',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        SharedUiFormatChfPipe,
-        SharedUiFormatChfPositivePipe,
-    ],
-    template: `
+  selector: 'dv-persoenliche-einnahmen',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfPositivePipe,
+  ],
+  template: `
     <!-- Nettoerwerbseinkommen -->
     <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
@@ -165,7 +165,7 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
     </div>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
   einnahmenSig = input.required<PersoenlicheBerechnung['einnahmen']>();

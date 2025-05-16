@@ -10,11 +10,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { delay, map } from 'rxjs';
 
 @Component({
-    selector: 'dv-shared-ui-router-outlet-wrapper',
-    imports: [RouterModule],
-    templateUrl: './shared-ui-router-outlet-wrapper.component.html',
-    styleUrls: ['./shared-ui-router-outlet-wrapper.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-router-outlet-wrapper',
+  imports: [RouterModule],
+  templateUrl: './shared-ui-router-outlet-wrapper.component.html',
+  styleUrls: ['./shared-ui-router-outlet-wrapper.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiRouterOutletWrapperComponent {
   @Input({ required: true }) attribute!: string;

@@ -38,29 +38,31 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
-    imports: [
-        CommonModule,
-        SharedUiLoadingComponent,
-        MatFormFieldModule,
-        SharedUiMaxLengthDirective,
-        TranslatePipe,
-        MatInputModule,
-        MatTableModule,
-        MatButtonModule,
-        MatSortModule,
-        ReactiveFormsModule,
-        MatPaginatorModule,
-        MatSelectModule,
-        MatTooltipModule,
-        TranslatedPropertyPipe,
-        TypeSafeMatCellDefDirective,
-    ],
-    templateUrl: './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.html',
-    styleUrl: './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.scss',
-    animations: [detailExpand],
-    providers: [AdminAusbildungsstaetteStore, paginatorTranslationProvider()],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
+  imports: [
+    CommonModule,
+    SharedUiLoadingComponent,
+    MatFormFieldModule,
+    SharedUiMaxLengthDirective,
+    TranslatePipe,
+    MatInputModule,
+    MatTableModule,
+    MatButtonModule,
+    MatSortModule,
+    ReactiveFormsModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatTooltipModule,
+    TranslatedPropertyPipe,
+    TypeSafeMatCellDefDirective,
+  ],
+  templateUrl:
+    './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.html',
+  styleUrl:
+    './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.scss',
+  animations: [detailExpand],
+  providers: [AdminAusbildungsstaetteStore, paginatorTranslationProvider()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   implements AfterViewInit

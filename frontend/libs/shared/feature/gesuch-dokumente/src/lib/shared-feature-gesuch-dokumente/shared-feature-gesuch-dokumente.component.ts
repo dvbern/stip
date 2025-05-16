@@ -52,22 +52,22 @@ import { CustomDokumenteComponent } from './components/custom-dokumente/custom-d
 import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-dokumente',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        MatTableModule,
-        RequiredDokumenteComponent,
-        AdditionalDokumenteComponent,
-        CustomDokumenteComponent,
-        SharedUiStepFormButtonsComponent,
-        SharedUiLoadingComponent,
-        SharedUiIfGesuchstellerDirective,
-        SharedUiIfSachbearbeiterDirective,
-        SharedUiRdIsPendingPipe,
-    ],
-    templateUrl: './shared-feature-gesuch-dokumente.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-dokumente',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    MatTableModule,
+    RequiredDokumenteComponent,
+    AdditionalDokumenteComponent,
+    CustomDokumenteComponent,
+    SharedUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
+    SharedUiIfGesuchstellerDirective,
+    SharedUiIfSachbearbeiterDirective,
+    SharedUiRdIsPendingPipe,
+  ],
+  templateUrl: './shared-feature-gesuch-dokumente.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);

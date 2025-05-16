@@ -70,29 +70,29 @@ const MIN_AGE_CHILD = 0;
 const MEDIUM_AGE = 20;
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-geschwister-editor',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        SharedUiFormFieldDirective,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatRadioModule,
-        SharedUiFormMessageErrorDirective,
-        SharedUiZuvorHintDirective,
-        SharedUiFormZuvorHintComponent,
-        SharedUiTranslateChangePipe,
-        SharedUiWohnsitzSplitterComponent,
-        SharedUiStepFormButtonsComponent,
-        SharedPatternDocumentUploadComponent,
-        SharedUiFormReadonlyDirective,
-        SharedUiMaxLengthDirective,
-    ],
-    templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
-    styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-form-geschwister-editor',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SharedUiFormFieldDirective,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    SharedUiFormMessageErrorDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
+    SharedUiWohnsitzSplitterComponent,
+    SharedUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiMaxLengthDirective,
+  ],
+  templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
+  styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private elementRef = inject(ElementRef);

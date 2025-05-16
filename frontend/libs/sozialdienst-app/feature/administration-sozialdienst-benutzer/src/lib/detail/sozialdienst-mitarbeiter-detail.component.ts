@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
@@ -36,21 +36,20 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 
 @Component({
-    imports: [
-        RouterLink,
-        ReactiveFormsModule,
-        TranslatePipe,
-        MatInputModule,
-        MatFormFieldModule,
-        SharedUiRdIsPendingPipe,
-        SharedUiRdIsPendingWithoutCachePipe,
-        SharedUiLoadingComponent,
-        SharedUiFormMessageErrorDirective,
-        SharedUiFormSaveComponent,
-        SharedUiHeaderSuffixDirective,
-    ],
-    templateUrl: './sozialdienst-mitarbeiter-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatInputModule,
+    MatFormFieldModule,
+    SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiLoadingComponent,
+    SharedUiFormMessageErrorDirective,
+    SharedUiFormSaveComponent,
+    SharedUiHeaderSuffixDirective,
+  ],
+  templateUrl: './sozialdienst-mitarbeiter-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SozialdienstMitarbeiterDetailComponent
   implements OnInit, OnDestroy

@@ -11,15 +11,15 @@ import {
 import { FamilienBerechnung } from '../../../models';
 
 @Component({
-    selector: 'dv-familien-einnahmen',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        SharedUiFormatChfPipe,
-        SharedUiFormatChfNegativePipe,
-        SharedUiFormatChfPositivePipe,
-    ],
-    template: `
+  selector: 'dv-familien-einnahmen',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
+    SharedUiFormatChfPositivePipe,
+  ],
+  template: `
     <!-- Total Einkünfte -->
     <div class="d-flex gap-2">
       {{
@@ -153,7 +153,7 @@ import { FamilienBerechnung } from '../../../models';
       </div>
     </div>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienEinnahmenComponent {
   einnahmenSig = input.required<FamilienBerechnung['einnahmen']>();

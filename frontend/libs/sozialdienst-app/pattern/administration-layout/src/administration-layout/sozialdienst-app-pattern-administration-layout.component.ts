@@ -23,24 +23,25 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
 
 @Component({
-    selector: 'dv-sozialdienst-app-pattern-administration-layout',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        RouterModule,
-        MatSidenavModule,
-        SharedPatternMobileSidenavComponent,
-        SharedPatternAppHeaderComponent,
-        SharedPatternAppHeaderPartsDirective,
-        SharedUiIconChipComponent,
-        SharedUiHasRolesDirective,
-    ],
-    templateUrl: './sozialdienst-app-pattern-administration-layout.component.html',
-    styleUrls: [
-        './sozialdienst-app-pattern-administration-layout.component.scss',
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SharedUtilHeaderService]
+  selector: 'dv-sozialdienst-app-pattern-administration-layout',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    RouterModule,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
+    SharedUiIconChipComponent,
+    SharedUiHasRolesDirective,
+  ],
+  templateUrl:
+    './sozialdienst-app-pattern-administration-layout.component.html',
+  styleUrls: [
+    './sozialdienst-app-pattern-administration-layout.component.scss',
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class SozialdienstAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;

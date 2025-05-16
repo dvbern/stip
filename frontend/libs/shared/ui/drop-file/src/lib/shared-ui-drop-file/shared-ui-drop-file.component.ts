@@ -9,14 +9,13 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-    selector: 'dv-shared-ui-drop-file',
-    imports: [TranslatePipe],
-    templateUrl: './shared-ui-drop-file.component.html',
-    styleUrls: ['./shared-ui-drop-file.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-drop-file',
+  imports: [],
+  templateUrl: './shared-ui-drop-file.component.html',
+  styleUrls: ['./shared-ui-drop-file.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDropFileComponent {
   @Input() disabled = false;

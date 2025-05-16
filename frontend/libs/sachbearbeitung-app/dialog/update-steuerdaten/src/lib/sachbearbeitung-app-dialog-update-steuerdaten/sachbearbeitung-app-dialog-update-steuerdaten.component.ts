@@ -24,19 +24,19 @@ type UpdateSteuerdatenDialogResult = {
 };
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-dialog-update-steuerdaten',
-    imports: [
-        CommonModule,
-        MaskitoDirective,
-        MatInputModule,
-        MatFormFieldModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-    ],
-    templateUrl: './sachbearbeitung-app-dialog-update-steuerdaten.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-dialog-update-steuerdaten',
+  imports: [
+    CommonModule,
+    MaskitoDirective,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+  ],
+  templateUrl: './sachbearbeitung-app-dialog-update-steuerdaten.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
   private formBuilder = inject(NonNullableFormBuilder);

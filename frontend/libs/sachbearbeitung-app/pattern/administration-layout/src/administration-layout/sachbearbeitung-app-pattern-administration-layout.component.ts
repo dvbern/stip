@@ -24,25 +24,26 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-pattern-administration-layout',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        RouterModule,
-        MatSidenavModule,
-        SharedPatternMobileSidenavComponent,
-        SharedUiSearchComponent,
-        SharedPatternAppHeaderComponent,
-        SharedPatternAppHeaderPartsDirective,
-        SharedUiIconChipComponent,
-        SharedUiHasRolesDirective,
-    ],
-    templateUrl: './sachbearbeitung-app-pattern-administration-layout.component.html',
-    styleUrls: [
-        './sachbearbeitung-app-pattern-administration-layout.component.scss',
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SharedUtilHeaderService]
+  selector: 'dv-sachbearbeitung-app-pattern-administration-layout',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    RouterModule,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SharedUiSearchComponent,
+    SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
+    SharedUiIconChipComponent,
+    SharedUiHasRolesDirective,
+  ],
+  templateUrl:
+    './sachbearbeitung-app-pattern-administration-layout.component.html',
+  styleUrls: [
+    './sachbearbeitung-app-pattern-administration-layout.component.scss',
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;

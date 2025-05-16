@@ -28,18 +28,18 @@ import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
-    selector: 'dv-shared-pattern-document-upload-approval',
-    imports: [
-        CommonModule,
-        SharedUiIconBadgeComponent,
-        SharedUiReplaceAppTypePipe,
-        SharedUiRdIsPendingWithoutCachePipe,
-        SharedUiLoadingComponent,
-        TranslatePipe,
-    ],
-    templateUrl: './document-upload-approval.component.html',
-    styleUrl: './document-upload-approval.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-pattern-document-upload-approval',
+  imports: [
+    CommonModule,
+    SharedUiIconBadgeComponent,
+    SharedUiReplaceAppTypePipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiLoadingComponent,
+    TranslatePipe,
+  ],
+  templateUrl: './document-upload-approval.component.html',
+  styleUrl: './document-upload-approval.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   uploadViewSig = input.required<UploadView>();

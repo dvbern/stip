@@ -16,7 +16,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { capitalize } from '@angular-architects/ngrx-toolkit';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -28,27 +28,24 @@ import {
   selectLanguage,
 } from '@dv/shared/data-access/language';
 import { Language } from '@dv/shared/model/language';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
-    selector: 'dv-shared-pattern-app-header',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        RouterOutlet,
-        RouterLink,
-        MatMenuModule,
-        MatButtonModule,
-        SharedUiLanguageSelectorComponent,
-        SharedUiIconChipComponent,
-        SharedUiMandantStylesDvComponent,
-    ],
-    templateUrl: './shared-pattern-app-header.component.html',
-    styleUrls: ['./shared-pattern-app-header.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-pattern-app-header',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    RouterLink,
+    MatMenuModule,
+    MatButtonModule,
+    SharedUiLanguageSelectorComponent,
+    SharedUiMandantStylesDvComponent,
+  ],
+  templateUrl: './shared-pattern-app-header.component.html',
+  styleUrls: ['./shared-pattern-app-header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternAppHeaderComponent {
   @Input() backLink?: { path: string; text: string };

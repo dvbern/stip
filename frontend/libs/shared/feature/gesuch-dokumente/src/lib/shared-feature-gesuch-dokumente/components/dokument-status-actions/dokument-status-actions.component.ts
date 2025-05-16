@@ -13,15 +13,15 @@ import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 
 @Component({
-    selector: 'dv-dokument-status-actions',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        SharedUiIconBadgeComponent,
-        SharedUiReplaceAppTypePipe,
-    ],
-    templateUrl: './dokument-status-actions.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-dokument-status-actions',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SharedUiIconBadgeComponent,
+    SharedUiReplaceAppTypePipe,
+  ],
+  templateUrl: './dokument-status-actions.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DokumentStatusActionsComponent {
   dokumentSig = input.required<SharedModelTableDokument>();

@@ -100,8 +100,15 @@ function initializeOidc(
 export const provideSharedPatternAppInitialization = () => {
   return [
     provideAppInitializer(() => {
-        const initializerFn = (initializeOidc)(inject(Router), inject(SharedUtilTenantConfigService), inject(TenantService), inject(OAuthService), inject(SharedModelCompileTimeConfig), inject(NgZone));
-        return initializerFn();
-      }),
+      const initializerFn = initializeOidc(
+        inject(Router),
+        inject(SharedUtilTenantConfigService),
+        inject(TenantService),
+        inject(OAuthService),
+        inject(SharedModelCompileTimeConfig),
+        inject(NgZone),
+      );
+      return initializerFn();
+    }),
   ];
 };

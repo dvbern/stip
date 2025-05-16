@@ -22,16 +22,16 @@ import { Language } from '@dv/shared/model/language';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 
 @Component({
-    selector: 'dv-shared-pattern-mobile-sidenav',
-    imports: [
-        CommonModule,
-        MatSidenavModule,
-        TranslatePipe,
-        SharedUiLanguageSelectorComponent,
-    ],
-    templateUrl: './shared-pattern-mobile-sidenav.component.html',
-    styleUrl: './shared-pattern-mobile-sidenav.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-pattern-mobile-sidenav',
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    TranslatePipe,
+    SharedUiLanguageSelectorComponent,
+  ],
+  templateUrl: './shared-pattern-mobile-sidenav.component.html',
+  styleUrl: './shared-pattern-mobile-sidenav.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternMobileSidenavComponent {
   private store = inject(Store);

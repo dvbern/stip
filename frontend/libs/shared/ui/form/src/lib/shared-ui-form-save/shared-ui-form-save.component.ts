@@ -10,10 +10,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
-    selector: 'dv-shared-ui-form-save',
-    imports: [CommonModule, SharedUiLoadingComponent, TranslatePipe],
-    templateUrl: './shared-ui-form-save.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-form-save',
+  imports: [CommonModule, SharedUiLoadingComponent, TranslatePipe],
+  templateUrl: './shared-ui-form-save.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormSaveComponent {
   @Input() labelKey = 'shared.form.save';

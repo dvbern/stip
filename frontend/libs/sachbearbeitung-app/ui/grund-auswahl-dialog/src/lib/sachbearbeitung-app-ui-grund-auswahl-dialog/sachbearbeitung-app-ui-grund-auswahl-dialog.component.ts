@@ -30,17 +30,17 @@ export interface GrundAuswahlDialogResult {
 }
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-ui-grund-auswahl-dialog',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatSelectModule,
-        SharedUiFormMessageErrorDirective,
-    ],
-    templateUrl: './sachbearbeitung-app-ui-grund-auswahl-dialog.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-ui-grund-auswahl-dialog',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    SharedUiFormMessageErrorDirective,
+  ],
+  templateUrl: './sachbearbeitung-app-ui-grund-auswahl-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   private dialogRef =

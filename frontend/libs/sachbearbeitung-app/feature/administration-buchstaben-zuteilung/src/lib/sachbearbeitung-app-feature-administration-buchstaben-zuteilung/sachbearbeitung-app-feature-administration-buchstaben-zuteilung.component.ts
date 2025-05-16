@@ -45,34 +45,36 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 const CHAR = '[a-z]{1,3} ?';
 const RANGE = `${CHAR}- ?(${CHAR})?`;
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MaskitoDirective,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTableModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatTooltipModule,
-        MatCheckboxModule,
-        TranslatePipe,
-        SharedUiFormSaveComponent,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiRdIsPendingPipe,
-        SharedUiMaxLengthDirective,
-        SharedUiClearButtonComponent,
-    ],
-    providers: [
-        provideMaterialDefaultOptions({
-            subscriptSizing: 'dynamic',
-        }),
-        paginatorTranslationProvider(),
-    ],
-    templateUrl: './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector:
+    'dv-sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaskitoDirective,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    TranslatePipe,
+    SharedUiFormSaveComponent,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiRdIsPendingPipe,
+    SharedUiMaxLengthDirective,
+    SharedUiClearButtonComponent,
+  ],
+  providers: [
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
+    paginatorTranslationProvider(),
+  ],
+  templateUrl:
+    './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   implements AfterViewInit

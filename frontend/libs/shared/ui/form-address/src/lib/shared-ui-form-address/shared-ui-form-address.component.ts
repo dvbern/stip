@@ -49,25 +49,25 @@ type AddresseFormGroup = FormGroup<{
 }>;
 
 @Component({
-    selector: 'dv-shared-ui-form-address',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        FormsModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiPlzOrtAutocompleteDirective,
-        SharedUiZuvorHintDirective,
-        SharedUiTranslateChangePipe,
-        SharedUiMaxLengthDirective,
-    ],
-    templateUrl: './shared-ui-form-address.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-form-address',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiPlzOrtAutocompleteDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiTranslateChangePipe,
+    SharedUiMaxLengthDirective,
+  ],
+  templateUrl: './shared-ui-form-address.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   @Input({ required: true }) group!: AddresseFormGroup;

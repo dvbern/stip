@@ -25,19 +25,19 @@ import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
-    selector: 'dv-shared-pattern-document-upload-entry',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        TranslateDirective,
-        SharedUiIconChipComponent,
-        SharedUiDownloadButtonDirective,
-        MatProgressBarModule,
-        FilesizePipe,
-    ],
-    templateUrl: './document-upload-entry.component.html',
-    styleUrls: ['./document-upload-entry.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-pattern-document-upload-entry',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    TranslateDirective,
+    SharedUiIconChipComponent,
+    SharedUiDownloadButtonDirective,
+    MatProgressBarModule,
+    FilesizePipe,
+  ],
+  templateUrl: './document-upload-entry.component.html',
+  styleUrls: ['./document-upload-entry.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternDocumentUploadEntryComponent {
   uploadViewSig = input.required<UploadView>();

@@ -48,23 +48,24 @@ import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MaskitoDirective,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        SharedUiLoadingComponent,
-        SharedUiFormReadonlyDirective,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiStepFormButtonsComponent,
-    ],
-    templateUrl: './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaskitoDirective,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    SharedUiLoadingComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiStepFormButtonsComponent,
+  ],
+  templateUrl:
+    './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   private dialog = inject(MatDialog);

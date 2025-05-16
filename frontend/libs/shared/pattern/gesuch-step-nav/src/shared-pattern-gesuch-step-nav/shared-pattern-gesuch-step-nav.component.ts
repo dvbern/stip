@@ -18,11 +18,11 @@ import { stepHasChanges } from '@dv/shared/util-fn/gesuch-util';
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
 
 @Component({
-    selector: 'dv-shared-pattern-gesuch-step-nav',
-    imports: [RouterLink, TranslatePipe, SharedUiChangeIndicatorComponent],
-    templateUrl: './shared-pattern-gesuch-step-nav.component.html',
-    styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-pattern-gesuch-step-nav',
+  imports: [RouterLink, TranslatePipe, SharedUiChangeIndicatorComponent],
+  templateUrl: './shared-pattern-gesuch-step-nav.component.html',
+  styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternGesuchStepNavComponent {
   @Output() navClicked = new EventEmitter();

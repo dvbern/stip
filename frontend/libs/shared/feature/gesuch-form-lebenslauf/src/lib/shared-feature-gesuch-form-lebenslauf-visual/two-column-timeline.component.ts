@@ -38,11 +38,11 @@ import {
 } from './two-column-timeline';
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
-    imports: [CommonModule, TranslatePipe, SharedUiIconChipComponent],
-    templateUrl: './two-column-timeline.component.html',
-    styleUrls: ['./two-column-timeline.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
+  imports: [CommonModule, TranslatePipe, SharedUiIconChipComponent],
+  templateUrl: './two-column-timeline.component.html',
+  styleUrls: ['./two-column-timeline.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwoColumnTimelineComponent implements OnChanges {
   cd = inject(ChangeDetectorRef);

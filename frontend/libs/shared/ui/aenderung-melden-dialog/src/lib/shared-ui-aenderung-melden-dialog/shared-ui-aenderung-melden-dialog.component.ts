@@ -39,27 +39,27 @@ type GesuchAenderungData = {
 };
 
 @Component({
-    selector: 'dv-shared-ui-aenderung-melden-dialog',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatDatepickerModule,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiMaxLengthDirective,
-    ],
-    templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
-    styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',
-    providers: [
-        provideMonthYearSachbearbeiterDateAdapter(),
-        provideMaterialDefaultOptions({
-            subscriptSizing: 'dynamic',
-        }),
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-aenderung-melden-dialog',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
+  ],
+  templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
+  styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',
+  providers: [
+    provideMonthYearSachbearbeiterDateAdapter(),
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiAenderungMeldenDialogComponent {
   private formBuilder = inject(NonNullableFormBuilder);

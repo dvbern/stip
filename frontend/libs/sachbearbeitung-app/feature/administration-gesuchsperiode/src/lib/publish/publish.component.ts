@@ -18,16 +18,17 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { RemoteData } from '@dv/shared/util/remote-data';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish',
-    imports: [
-        TranslatePipe,
-        SharedUiInfoContainerComponent,
-        SharedUiIconChipComponent,
-        SharedUiRdIsPendingPipe,
-        SharedUiLoadingComponent,
-    ],
-    templateUrl: './publish.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector:
+    'dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish',
+  imports: [
+    TranslatePipe,
+    SharedUiInfoContainerComponent,
+    SharedUiIconChipComponent,
+    SharedUiRdIsPendingPipe,
+    SharedUiLoadingComponent,
+  ],
+  templateUrl: './publish.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublishComponent {
   typeSig = input.required<'gesuchsperiode' | 'gesuchsjahr'>();

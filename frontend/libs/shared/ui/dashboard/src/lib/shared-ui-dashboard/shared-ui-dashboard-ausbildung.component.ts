@@ -16,16 +16,16 @@ import { SharedUiTranslatedDatePipe } from '@dv/shared/ui/translated-date-pipe';
 import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.component';
 
 @Component({
-    selector: 'dv-shared-ui-dashboard-ausbildung',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        SharedUiDashboardGesuchComponent,
-        SharedUiIconChipComponent,
-        SharedUiTranslatedDatePipe,
-    ],
-    templateUrl: './shared-ui-dashboard-ausbildung.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-dashboard-ausbildung',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SharedUiDashboardGesuchComponent,
+    SharedUiIconChipComponent,
+    SharedUiTranslatedDatePipe,
+  ],
+  templateUrl: './shared-ui-dashboard-ausbildung.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDashboardAusbildungComponent {
   ausbildungSig = input.required<SharedModelGsAusbildungView>();

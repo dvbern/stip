@@ -28,14 +28,14 @@ import { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.directiv
  * ></dv-shared-ui-form-zuvor-hint>
  */
 @Component({
-    selector: 'dv-shared-ui-form-zuvor-hint',
-    imports: [SharedUiZuvorHintDirective],
-    template: `
+  selector: 'dv-shared-ui-form-zuvor-hint',
+  imports: [SharedUiZuvorHintDirective],
+  template: `
     <div class="form-hints">
       <span *dvZuvorHint="changes"></span>
     </div>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormZuvorHintComponent {
   @Input({ required: true }) changes: FormularChangeTypes | undefined =

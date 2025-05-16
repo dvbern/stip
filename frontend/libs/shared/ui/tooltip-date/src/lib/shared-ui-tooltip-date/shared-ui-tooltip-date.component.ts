@@ -10,10 +10,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { fromBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
-    selector: 'dv-shared-ui-tooltip-date',
-    imports: [CommonModule, MatTooltipModule],
-    templateUrl: './shared-ui-tooltip-date.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-tooltip-date',
+  imports: [CommonModule, MatTooltipModule],
+  templateUrl: './shared-ui-tooltip-date.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiTooltipDateComponent {
   dateSig = input.required<Date | string | null | undefined>();

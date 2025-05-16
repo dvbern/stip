@@ -13,11 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  isDefined,
-} from '@ngx-translate/core';
+import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -48,25 +44,24 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
-    selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
-    imports: [
-        CommonModule,
-        RouterLink,
-        TranslateDirective,
-        TranslatePipe,
-        MatSidenavModule,
-        MatMenuModule,
-        SharedPatternAppHeaderComponent,
-        SharedPatternGesuchStepNavComponent,
-        SharedPatternMobileSidenavComponent,
-        SharedPatternAppHeaderPartsDirective,
-        SharedUiProgressBarComponent,
-        SharedUiIconChipComponent,
-        SharedUiHasRolesDirective,
-    ],
-    templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SharedUtilHeaderService]
+  selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslatePipe,
+    MatSidenavModule,
+    MatMenuModule,
+    SharedPatternAppHeaderComponent,
+    SharedPatternGesuchStepNavComponent,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderPartsDirective,
+    SharedUiProgressBarComponent,
+    SharedUiIconChipComponent,
+    SharedUiHasRolesDirective,
+  ],
+  templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {

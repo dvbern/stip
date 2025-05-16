@@ -23,20 +23,20 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-pattern-infos-layout',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        RouterLink,
-        RouterLinkActive,
-        MatSidenavModule,
-        SharedPatternMobileSidenavComponent,
-        SharedPatternAppHeaderComponent,
-        SharedUiIconChipComponent,
-        SachbearbeitungAppPatternGesuchHeaderComponent,
-    ],
-    templateUrl: './sachbearbeitung-app-pattern-infos-layout.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-pattern-infos-layout',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    RouterLink,
+    RouterLinkActive,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderComponent,
+    SharedUiIconChipComponent,
+    SachbearbeitungAppPatternGesuchHeaderComponent,
+  ],
+  templateUrl: './sachbearbeitung-app-pattern-infos-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatterninfosLayoutComponent {
   private store = inject(Store);

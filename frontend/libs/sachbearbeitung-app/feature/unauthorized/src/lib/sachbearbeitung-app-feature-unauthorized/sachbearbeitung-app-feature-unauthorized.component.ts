@@ -5,13 +5,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SachbearbeitungAppPatternBasicLayoutComponent } from '@dv/sachbearbeitung-app/pattern/basic-layout';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-unauthorized',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        SachbearbeitungAppPatternBasicLayoutComponent,
-    ],
-    templateUrl: './sachbearbeitung-app-feature-unauthorized.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-feature-unauthorized',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SachbearbeitungAppPatternBasicLayoutComponent,
+  ],
+  templateUrl: './sachbearbeitung-app-feature-unauthorized.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureUnauthorizedComponent {}

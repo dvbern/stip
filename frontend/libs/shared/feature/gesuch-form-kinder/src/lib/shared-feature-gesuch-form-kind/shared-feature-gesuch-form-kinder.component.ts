@@ -21,17 +21,17 @@ import { selectSharedFeatureGesuchFormKinderView } from './shared-feature-gesuch
 import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-gesuch-form-kind-editor/shared-feature-gesuch-form-kind-editor.component';
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-kinder',
-    imports: [
-        TranslatePipe,
-        SharedFeatureGesuchFormKinderEditorComponent,
-        SharedUiStepFormButtonsComponent,
-        SharedUiChangeIndicatorComponent,
-        SharedUiFormZuvorHintListPipe,
-        SharedUiLoadingComponent,
-    ],
-    templateUrl: './shared-feature-gesuch-form-kinder.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-form-kinder',
+  imports: [
+    TranslatePipe,
+    SharedFeatureGesuchFormKinderEditorComponent,
+    SharedUiStepFormButtonsComponent,
+    SharedUiChangeIndicatorComponent,
+    SharedUiFormZuvorHintListPipe,
+    SharedUiLoadingComponent,
+  ],
+  templateUrl: './shared-feature-gesuch-form-kinder.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);

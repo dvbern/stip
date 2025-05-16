@@ -11,19 +11,19 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
-    imports: [
-        RouterLink,
-        MatSidenavModule,
-        SharedPatternMobileSidenavComponent,
-        SharedPatternAppHeaderComponent,
-        SharedPatternAppHeaderPartsDirective,
-        SharedUiHasRolesDirective,
-        TranslatePipe,
-    ],
-    templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
-    styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
+  imports: [
+    RouterLink,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
+    SharedUiHasRolesDirective,
+    TranslatePipe,
+  ],
+  templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
+  styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatternOverviewLayoutComponent {
   @Input() closeMenu: { value: boolean } | null = null;

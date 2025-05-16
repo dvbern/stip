@@ -33,21 +33,21 @@ type EditNachfristResult = {
 };
 
 @Component({
-    selector: 'dv-shared-dialog-edit-dokumenten-nachfrist',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        SharedUiMaxLengthDirective,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-    ],
-    providers: [provideDvDateAdapter()],
-    templateUrl: './shared-dialog-edit-dokumenten-nachfrist.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-dialog-edit-dokumenten-nachfrist',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    SharedUiMaxLengthDirective,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+  ],
+  providers: [provideDvDateAdapter()],
+  templateUrl: './shared-dialog-edit-dokumenten-nachfrist.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedDialogEditDokumentenNachfristComponent {
   private dialogRef = inject(MatDialogRef);

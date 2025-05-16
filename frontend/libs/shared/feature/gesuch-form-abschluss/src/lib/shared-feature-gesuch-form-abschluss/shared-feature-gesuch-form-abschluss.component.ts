@@ -29,17 +29,17 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-abschluss',
-    imports: [
-        CommonModule,
-        RouterLink,
-        TranslatePipe,
-        SharedUiInfoContainerComponent,
-        SharedUiLoadingComponent,
-        SharedUiRdIsPendingPipe,
-    ],
-    templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-form-abschluss',
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslatePipe,
+    SharedUiInfoContainerComponent,
+    SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
+  ],
+  templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);

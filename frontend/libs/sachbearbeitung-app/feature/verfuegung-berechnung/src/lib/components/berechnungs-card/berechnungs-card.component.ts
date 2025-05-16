@@ -13,18 +13,18 @@ import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-pane
 import { Berechnung } from '../../../models';
 
 @Component({
-    selector: 'dv-berechnungs-card',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatExpansionModule,
-        TranslatePipe,
-        SharedUiFormatChfPipe,
-        SharedUiFormatChfNegativePipe,
-        BerechnungsExpansionPanelComponent,
-    ],
-    template: `
+  selector: 'dv-berechnungs-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatExpansionModule,
+    TranslatePipe,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
+    BerechnungsExpansionPanelComponent,
+  ],
+  template: `
     @if (berechnungSig(); as berechnung) {
       <mat-card class="rounded-4">
         <mat-card-header>
@@ -146,7 +146,7 @@ import { Berechnung } from '../../../models';
         </mat-card-footer>
       </mat-card>
     }
-  `
+  `,
 })
 export class BerechnungsCardComponent {
   berechnungSig = input.required<Berechnung>();

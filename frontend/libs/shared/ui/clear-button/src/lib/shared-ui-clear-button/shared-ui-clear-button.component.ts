@@ -22,10 +22,10 @@ type AllowedValues =
   | null;
 
 @Component({
-    selector: 'dv-shared-ui-clear-button',
-    imports: [CommonModule, SharedUiIconChipComponent, TranslatePipe],
-    templateUrl: './shared-ui-clear-button.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-clear-button',
+  imports: [CommonModule, SharedUiIconChipComponent, TranslatePipe],
+  templateUrl: './shared-ui-clear-button.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiClearButtonComponent implements OnInit {
   valueSig = input.required<AllowedValues>();

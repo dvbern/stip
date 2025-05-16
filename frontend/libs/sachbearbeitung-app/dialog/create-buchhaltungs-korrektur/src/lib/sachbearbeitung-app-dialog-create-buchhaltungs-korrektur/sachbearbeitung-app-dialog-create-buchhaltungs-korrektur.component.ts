@@ -23,19 +23,20 @@ import {
 } from '@dv/shared/util/maskito-util';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        ReactiveFormsModule,
-        MaskitoDirective,
-        MatFormFieldModule,
-        MatInputModule,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-    ],
-    templateUrl: './sachbearbeitung-app-dialog-create-buchhaltungs-korrektur.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    ReactiveFormsModule,
+    MaskitoDirective,
+    MatFormFieldModule,
+    MatInputModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+  ],
+  templateUrl:
+    './sachbearbeitung-app-dialog-create-buchhaltungs-korrektur.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent {
   private formBuilder = inject(NonNullableFormBuilder);

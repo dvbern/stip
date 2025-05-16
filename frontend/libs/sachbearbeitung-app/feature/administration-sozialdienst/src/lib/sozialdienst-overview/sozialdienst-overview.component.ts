@@ -38,29 +38,29 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 const INPUT_DELAY = 600;
 
 @Component({
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        ReactiveFormsModule,
-        MatTableModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatTooltipModule,
-        RouterLink,
-        TypeSafeMatCellDefDirective,
-        SharedUiRdIsPendingPipe,
-        SharedUiRdIsPendingWithoutCachePipe,
-        SharedUiLoadingComponent,
-        SharedUiClearButtonComponent,
-        SharedUiMaxLengthDirective,
-        SharedUiTruncateTooltipDirective,
-        MatFormFieldModule,
-        MatInputModule,
-    ],
-    providers: [paginatorTranslationProvider()],
-    templateUrl: './sozialdienst-overview.component.html',
-    styleUrl: './sozialdienst-overview.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    RouterLink,
+    TypeSafeMatCellDefDirective,
+    SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiLoadingComponent,
+    SharedUiClearButtonComponent,
+    SharedUiMaxLengthDirective,
+    SharedUiTruncateTooltipDirective,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  providers: [paginatorTranslationProvider()],
+  templateUrl: './sozialdienst-overview.component.html',
+  styleUrl: './sozialdienst-overview.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);

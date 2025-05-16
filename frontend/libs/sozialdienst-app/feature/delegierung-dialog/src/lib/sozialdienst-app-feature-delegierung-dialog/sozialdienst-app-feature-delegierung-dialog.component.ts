@@ -55,25 +55,25 @@ export interface DelegierungDialogData {
 }
 
 @Component({
-    selector: 'dv-sozialdienst-app-feature-delegierung-dialog',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        MatInputModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        SharedUiFormReadonlyDirective,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiMaxLengthDirective,
-        SharedUiFormAddressComponent,
-        SharedUiFormSaveComponent,
-    ],
-    templateUrl: './sozialdienst-app-feature-delegierung-dialog.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sozialdienst-app-feature-delegierung-dialog',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    SharedUiFormReadonlyDirective,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
+    SharedUiFormAddressComponent,
+    SharedUiFormSaveComponent,
+  ],
+  templateUrl: './sozialdienst-app-feature-delegierung-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DelegierungDialogComponent implements OnInit, OnDestroy {
   private dialogRef =

@@ -23,19 +23,19 @@ import { percentStringToNumber } from '@dv/shared/util/form';
 import { maskitoPercent } from '@dv/shared/util/maskito-util';
 
 @Component({
-    selector: 'dv-shared-ui-percentage-splitter',
-    imports: [
-        MaskitoDirective,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        TranslatePipe,
-    ],
-    templateUrl: './shared-ui-percentage-splitter.component.html',
-    styleUrls: ['./shared-ui-percentage-splitter.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-percentage-splitter',
+  imports: [
+    MaskitoDirective,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    TranslatePipe,
+  ],
+  templateUrl: './shared-ui-percentage-splitter.component.html',
+  styleUrls: ['./shared-ui-percentage-splitter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiPercentageSplitterComponent implements OnInit {
   @Input({ required: true }) updateValidity: unknown;

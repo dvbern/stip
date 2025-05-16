@@ -28,7 +28,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -55,11 +54,6 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  SharedUiPercentageSplitterComponent,
-  SharedUiPercentageSplitterDirective,
-} from '@dv/shared/ui/percentage-splitter';
-import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-navigation';
 import {
@@ -81,46 +75,45 @@ type FamSitAnimationState = 'in' | 'right' | 'left' | 'hidden';
 const animationTime = 500;
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-familiensituation',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslatePipe,
-        MaskitoDirective,
-        MatFormFieldModule,
-        MatRadioModule,
-        MatSelectModule,
-        SharedUiProgressBarComponent,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiPercentageSplitterComponent,
-        SharedUiPercentageSplitterDirective,
-        SharedUiStepFormButtonsComponent,
-        SharedUiStepperNavigationComponent,
-        SharedUiLoadingComponent,
-        SharedPatternDocumentUploadComponent,
-        SharedUiFormReadonlyDirective,
-        SharedUiInfoDialogDirective,
-    ],
-    templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
-    styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('inOutPaneAnimation', [
-            state('in', style({ position: 'relative', left: 0, right: 0 })),
-            state('right', style({ left: '100%', display: 'none' })),
-            state('left', style({ left: '-100%', display: 'none' })),
-            state('hidden', style({ position: 'absolute', left: '100%', display: 'none' })),
-            transition('void => *', []),
-            transition('* => *', [animate(`${animationTime}ms ease-in`)]),
-        ]),
-        trigger('hideDuringAnimation', [
-            state('hide', style({ opacity: 0 })),
-            state('show', style({ opacity: 1 })),
-            transition('* => *', [animate(`150ms ease-in`)]),
-            transition('void => *', []),
-        ]),
-    ]
+  selector: 'dv-shared-feature-gesuch-form-familiensituation',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatRadioModule,
+    MatSelectModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiStepFormButtonsComponent,
+    SharedUiStepperNavigationComponent,
+    SharedUiLoadingComponent,
+    SharedPatternDocumentUploadComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogDirective,
+  ],
+  templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
+  styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('inOutPaneAnimation', [
+      state('in', style({ position: 'relative', left: 0, right: 0 })),
+      state('right', style({ left: '100%', display: 'none' })),
+      state('left', style({ left: '-100%', display: 'none' })),
+      state(
+        'hidden',
+        style({ position: 'absolute', left: '100%', display: 'none' }),
+      ),
+      transition('void => *', []),
+      transition('* => *', [animate(`${animationTime}ms ease-in`)]),
+    ]),
+    trigger('hideDuringAnimation', [
+      state('hide', style({ opacity: 0 })),
+      state('show', style({ opacity: 1 })),
+      transition('* => *', [animate(`150ms ease-in`)]),
+      transition('void => *', []),
+    ]),
+  ],
 })
 export class SharedFeatureGesuchFormFamiliensituationComponent
   implements OnInit

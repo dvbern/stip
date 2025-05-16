@@ -16,11 +16,11 @@ import { GesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 
 @Component({
-    selector: 'dv-shared-ui-progress-bar',
-    imports: [CommonModule],
-    templateUrl: './shared-ui-progress-bar.component.html',
-    styleUrls: ['./shared-ui-progress-bar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-progress-bar',
+  imports: [CommonModule],
+  templateUrl: './shared-ui-progress-bar.component.html',
+  styleUrls: ['./shared-ui-progress-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiProgressBarComponent implements OnInit {
   private injector = inject(Injector);

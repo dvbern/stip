@@ -22,18 +22,18 @@ import { selectSharedFeatureGesuchFormGeschwisterView } from './shared-feature-g
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
 
 @Component({
-    selector: 'dv-shared-feature-gesuch-form-geschwister',
-    imports: [
-        TranslatePipe,
-        SharedFeatureGesuchFormGeschwisterEditorComponent,
-        SharedUiInfoContainerComponent,
-        SharedUiStepFormButtonsComponent,
-        SharedUiChangeIndicatorComponent,
-        SharedUiFormZuvorHintListPipe,
-        SharedUiLoadingComponent,
-    ],
-    templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-feature-gesuch-form-geschwister',
+  imports: [
+    TranslatePipe,
+    SharedFeatureGesuchFormGeschwisterEditorComponent,
+    SharedUiInfoContainerComponent,
+    SharedUiStepFormButtonsComponent,
+    SharedUiChangeIndicatorComponent,
+    SharedUiFormZuvorHintListPipe,
+    SharedUiLoadingComponent,
+  ],
+  templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private store = inject(Store);

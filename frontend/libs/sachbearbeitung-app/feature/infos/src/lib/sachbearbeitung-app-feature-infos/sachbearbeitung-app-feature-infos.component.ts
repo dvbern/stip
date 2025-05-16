@@ -6,14 +6,14 @@ import { SachbearbeitungAppPatterninfosLayoutComponent } from '@dv/sachbearbeitu
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({
-    selector: 'dv-sachbearbeitung-app-feature-infos',
-    imports: [
-        CommonModule,
-        SharedUiRouterOutletWrapperComponent,
-        SachbearbeitungAppPatterninfosLayoutComponent,
-    ],
-    templateUrl: './sachbearbeitung-app-feature-infos.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-sachbearbeitung-app-feature-infos',
+  imports: [
+    CommonModule,
+    SharedUiRouterOutletWrapperComponent,
+    SachbearbeitungAppPatterninfosLayoutComponent,
+  ],
+  templateUrl: './sachbearbeitung-app-feature-infos.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosComponent {
   option?: InfosOptions;

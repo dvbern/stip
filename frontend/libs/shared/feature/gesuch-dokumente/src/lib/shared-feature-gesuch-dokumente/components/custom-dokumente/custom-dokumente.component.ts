@@ -38,22 +38,22 @@ import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
 @Component({
-    selector: 'dv-custom-dokumente',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        MatTableModule,
-        TypeSafeMatCellDefDirective,
-        SharedPatternDocumentUploadComponent,
-        SharedUiLoadingComponent,
-        MatTooltipModule,
-        DokumentStatusActionsComponent,
-        SharedUiIfSachbearbeiterDirective,
-    ],
-    templateUrl: './custom-dokumente.component.html',
-    styleUrl: './custom-dokumente.component.scss',
-    animations: [detailExpand],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-custom-dokumente',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    MatTableModule,
+    TypeSafeMatCellDefDirective,
+    SharedPatternDocumentUploadComponent,
+    SharedUiLoadingComponent,
+    MatTooltipModule,
+    DokumentStatusActionsComponent,
+    SharedUiIfSachbearbeiterDirective,
+  ],
+  templateUrl: './custom-dokumente.component.html',
+  styleUrl: './custom-dokumente.component.scss',
+  animations: [detailExpand],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomDokumenteComponent {
   dokumentStore = inject(DokumentsStore);

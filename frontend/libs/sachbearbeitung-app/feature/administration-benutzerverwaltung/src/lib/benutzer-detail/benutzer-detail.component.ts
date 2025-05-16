@@ -29,30 +29,26 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatListModule,
-        TranslatePipe,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiFormSaveComponent,
-        SharedUiMaxLengthDirective,
-        SharedUiLoadingComponent,
-        SharedUiRdIsPendingPipe,
-        SharedUiRdIsPendingWithoutCachePipe,
-    ],
-    templateUrl: './benutzer-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    TranslatePipe,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiFormSaveComponent,
+    SharedUiMaxLengthDirective,
+    SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
+  ],
+  templateUrl: './benutzer-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BenutzeDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);

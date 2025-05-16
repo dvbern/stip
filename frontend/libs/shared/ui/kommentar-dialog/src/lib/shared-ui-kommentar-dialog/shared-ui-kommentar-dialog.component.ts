@@ -39,20 +39,20 @@ export interface OptionalKommentarDialogResult {
 }
 
 @Component({
-    selector: 'dv-shared-ui-kommentar-dialog',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        MatFormFieldModule,
-        MatInputModule,
-        SharedUiFormFieldDirective,
-        SharedUiFormMessageErrorDirective,
-        SharedUiMaxLengthDirective,
-        ReactiveFormsModule,
-    ],
-    templateUrl: './shared-ui-kommentar-dialog.component.html',
-    styleUrls: ['./shared-ui-kommentar-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-shared-ui-kommentar-dialog',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './shared-ui-kommentar-dialog.component.html',
+  styleUrls: ['./shared-ui-kommentar-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiKommentarDialogComponent {
   private dialogRef =

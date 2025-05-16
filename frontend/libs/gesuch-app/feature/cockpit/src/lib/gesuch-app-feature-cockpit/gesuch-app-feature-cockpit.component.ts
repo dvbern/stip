@@ -48,26 +48,26 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
 @Component({
-    selector: 'dv-gesuch-app-feature-cockpit',
-    imports: [
-        CommonModule,
-        TranslatePipe,
-        MatSelectModule,
-        GesuchAppPatternMainLayoutComponent,
-        SharedUiIconChipComponent,
-        SharedUiVersionTextComponent,
-        SharedUiClearButtonComponent,
-        SharedUiNotificationsComponent,
-        SharedUiDashboardAusbildungComponent,
-        SharedUiDashboardCompactAusbildungComponent,
-    ],
-    providers: [
-        FallStore,
-        SozialdienstStore,
-        provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
-    ],
-    templateUrl: './gesuch-app-feature-cockpit.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'dv-gesuch-app-feature-cockpit',
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    MatSelectModule,
+    GesuchAppPatternMainLayoutComponent,
+    SharedUiIconChipComponent,
+    SharedUiVersionTextComponent,
+    SharedUiClearButtonComponent,
+    SharedUiNotificationsComponent,
+    SharedUiDashboardAusbildungComponent,
+    SharedUiDashboardCompactAusbildungComponent,
+  ],
+  providers: [
+    FallStore,
+    SozialdienstStore,
+    provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
+  ],
+  templateUrl: './gesuch-app-feature-cockpit.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureCockpitComponent {
   private store = inject(Store);
