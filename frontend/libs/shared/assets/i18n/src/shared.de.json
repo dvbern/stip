@@ -717,6 +717,8 @@
   "shared.form.einnahmenkosten.renten.label": "Renten",
   "shared.form.einnahmenkosten.renten.info": "Kinder-/Waisenrente, IV-Rente, PK-Rente, etc.",
 
+  "shared.form.einnahmenkosten.ausbildungskosten.label.undefined": "Ausbildungskosten",
+  "shared.form.einnahmenkosten.ausbildungskosten.info.undefined": "effektive Kosten, CHF/Jahr",
   "shared.form.einnahmenkosten.ausbildungskosten.label.TERTIAER": "Ausbildungskosten: Tertiärstufe",
   "shared.form.einnahmenkosten.ausbildungskosten.info.TERTIAER": "effektive Kosten, max. CHF {{ max }}.-/Jahr",
   "shared.form.einnahmenkosten.ausbildungskosten.warning.TERTIAER": "Die Eingabe wird bei der Berechnug auf den Maximalbetrag von CHF {{ max }}.-- gekürzt",

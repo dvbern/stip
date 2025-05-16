@@ -716,6 +716,8 @@
   "shared.form.einnahmenkosten.renten.label": "Pensions",
   "shared.form.einnahmenkosten.renten.info": "Rente d'enfant/d'orphelin, rente AI, rente CP, etc.",
 
+  "shared.form.einnahmenkosten.ausbildungskosten.label.undefined": "Coûts de formation",
+  "shared.form.einnahmenkosten.ausbildungskosten.info.undefined": "frais effectifs, CHF/an",
   "shared.form.einnahmenkosten.ausbildungskosten.label.TERTIAER": "Coûts de formation : niveau tertiaire",
   "shared.form.einnahmenkosten.ausbildungskosten.info.TERTIAER": "frais effectifs, max. {{ max }} CHF/an",
   "shared.form.einnahmenkosten.ausbildungskosten.warning.TERTIAER": "La saisie est réduite au montant maximal de {{ max }} CHF lors du calcul.",
