@@ -235,14 +235,14 @@
           @if (istAusbildungskostenMoreThanLimitSig()) {
             <mat-hint class="mat-caution">
               {{
-                'shared.form.einnahmenkosten.ausbildungskosten.warning' + ausbildungsStufe
+                'shared.form.einnahmenkosten.ausbildungskosten.warning.' + ausbildungsStufe
                   | translate: { max: formStateSig().ausbildungsKostenLimit }
               }}
             </mat-hint>
           } @else {
             <mat-hint>
               {{
-                'shared.form.einnahmenkosten.ausbildungskosten.info' + ausbildungsStufe
+                'shared.form.einnahmenkosten.ausbildungskosten.info.' + ausbildungsStufe
                   | translate: { max: formStateSig().ausbildungsKostenLimit }
               }}</mat-hint
             >
