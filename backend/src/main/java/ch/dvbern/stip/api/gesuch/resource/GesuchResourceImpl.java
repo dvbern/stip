@@ -116,7 +116,6 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final DelegierenAuthorizer delegierenAuthorizer;
 
-    @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto changeGesuchStatusToInBearbeitung(UUID gesuchTrancheId) {
@@ -127,7 +126,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
-    @Transactional
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public GesuchDto changeGesuchStatusToNegativeVerfuegung(
@@ -251,7 +249,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
-    @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
@@ -450,8 +447,8 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
-    @Override
     @RolesAllowed(GS_GESUCH_READ)
+    @Override
     public FallDashboardItemDto getSozialdienstMitarbeiterDashboard(UUID fallId) {
         delegierenAuthorizer.canReadFallDashboard();
         return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
@@ -469,7 +466,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
-    @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(
@@ -493,7 +489,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
     }
 
-    @Transactional
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
