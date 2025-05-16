@@ -4999,7 +4999,7 @@ components:
         beitraege:
           type: integer
         ausbildungskosten:
-          description: To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+          description: The cost for the education calculated over the whole year
           type: integer
         fahrkosten:
           type: integer

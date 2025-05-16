@@ -295,7 +295,7 @@ public class EinnahmenKostenDtoSpec {
   }
 
    /**
-   * To be renamed in 1811, Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+   * The cost for the education calculated over the whole year
    * @return ausbildungskosten
   **/
   @jakarta.annotation.Nullable
