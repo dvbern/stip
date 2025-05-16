@@ -7,8 +7,21 @@
   <span class="material-symbols-rounded">close</span>
 </button>
 <form [formGroup]="form" data-testid="form-aenderung-melden-dialog-form" class="p-4" (ngSubmit)="confirm()">
-  <h3 class="mb-3">{{ 'shared.dialog.gesuch-aenderung.title' | translate }}</h3>
-  <div class="mb-5" [innerHTML]="'shared.dialog.gesuch-aenderung.text' | translate"></div>
+  <h3 class="mb-4">
+    {{
+      config.appType === 'sachbearbeitung-app'
+        ? ('shared.dialog.gesuch.tranche.create.title' | translate)
+        : ('shared.dialog.gesuch-aenderung.title' | translate)
+    }}
+  </h3>
+  <div
+    class="mb-4"
+    [innerHTML]="
+      config.appType === 'sachbearbeitung-app'
+        ? ('shared.dialog.gesuch.tranche.create.text' | translate)
+        : ('shared.dialog.gesuch-aenderung.text' | translate)
+    "
+  ></div>
   <div class="row">
     <div class="col-6">
       <mat-form-field dvSharedUiFormField>
@@ -23,12 +36,8 @@
           data-testid="form-aenderung-melden-dialog-gueltig-ab"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
-        <mat-datepicker-toggle matSuffix [for]="vonPicker"></mat-datepicker-toggle>
-        <mat-datepicker
-          (monthSelected)="monthSelectedGueltigAb($event, vonPicker)"
-          #vonPicker
-          [startView]="config.isSachbearbeitungApp ? 'multi-year' : 'month'"
-        ></mat-datepicker>
+        <mat-datepicker-toggle matIconSuffix [for]="vonPicker"></mat-datepicker-toggle>
+        <mat-datepicker #vonPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -53,12 +62,8 @@
           data-testid="form-aenderung-melden-dialog-gueltig-bis"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
-        <mat-datepicker-toggle matSuffix [for]="bisPicker"></mat-datepicker-toggle>
-        <mat-datepicker
-          #bisPicker
-          (monthSelected)="monthSelectedGueltigBis($event, bisPicker)"
-          [startView]="config.isSachbearbeitungApp ? 'multi-year' : 'month'"
-        ></mat-datepicker>
+        <mat-datepicker-toggle matIconSuffix [for]="bisPicker"></mat-datepicker-toggle>
+        <mat-datepicker #bisPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
           {{ 'shared.form.error.minDate' | translate: { date: form.controls.gueltigAb.value | date: 'dd.MM.yyyy' } }}
         </mat-error>
@@ -83,7 +88,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="d-flex mt-4 justify-content-between">
+  <div class="d-flex mt-5 justify-content-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | translate }}
     </button>

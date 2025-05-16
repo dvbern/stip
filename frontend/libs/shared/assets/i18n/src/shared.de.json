@@ -124,6 +124,8 @@
   "shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label": "Bemerkung",
   "shared.dialog.gesuch-aenderung.ABGELEHNT.success": "Die Änderung wurde erfolgreich abgelehnt",
   "shared.dialog.gesuch-aenderung.MANUELLE_AENDERUNG.success": "Die Anpassungen der Änderung müssen nun manuell vorgenommen werden",
+  "shared.dialog.gesuch.tranche.create.title": "Tranche erstellen",
+  "shared.dialog.gesuch.tranche.create.text": "Zeitraum der Tranche",
   "shared.dialog.gesuch.tranche.create.success": "Die Tranche wurde erfolgreich erstellt",
   "shared.dialog.einreichedatum-aendern.title": "Einreichedatum ändern",
   "shared.dialog.einreichedatum-aendern.einreichedatum.label": "Neues Einreichedatum",
