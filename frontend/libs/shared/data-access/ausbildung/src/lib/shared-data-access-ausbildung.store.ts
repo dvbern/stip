@@ -7,6 +7,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   Ausbildung,
+  AusbildungCreateResponse,
   AusbildungService,
   AusbildungUpdate,
 } from '@dv/shared/model/gesuch';
@@ -16,6 +17,7 @@ import {
 } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   cachedResult,
   fromCachedDataSig,
@@ -26,10 +28,12 @@ import {
 
 type AusbildungState = {
   ausbildung: CachedRemoteData<Ausbildung>;
+  ausbildungResponse: RemoteData<AusbildungCreateResponse>;
 };
 
 const initialState: AusbildungState = {
   ausbildung: initial(),
+  ausbildungResponse: initial(),
 };
 
 @Injectable()
@@ -95,12 +99,9 @@ export class AusbildungStore extends signalStore(
           })
           .pipe(
             handleApiResponse(
-              (ausbildung) => {
+              (ausbildungResponse) => {
                 patchState(this, () => ({
-                  ausbildung: cachedResult(
-                    success(ausbildungUpdate as Ausbildung),
-                    ausbildung,
-                  ),
+                  ausbildungResponse,
                 }));
               },
               {

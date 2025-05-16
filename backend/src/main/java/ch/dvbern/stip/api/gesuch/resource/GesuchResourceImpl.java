@@ -204,7 +204,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public UUID createGesuch(GesuchCreateDto gesuchCreateDto) {
         gesuchAuthorizer.canCreate();
         final var created = gesuchService.createGesuch(gesuchCreateDto);
-        return created.getId();
+        // todo: 1994 be fixed
+        return created.getLeft().getId();
     }
 
     @Override

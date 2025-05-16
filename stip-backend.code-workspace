@@ -29,6 +29,6 @@
     },
     "peacock.color": "#f85c05",
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
   }
 }
