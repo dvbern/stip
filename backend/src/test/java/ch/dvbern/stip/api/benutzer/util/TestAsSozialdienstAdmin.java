@@ -41,6 +41,8 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
         OidcPermissions.SOZIALDIENSTBENUTZER_CREATE,
         OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE,
         OidcPermissions.SOZIALDIENSTBENUTZER_DELETE,
+        OidcPermissions.DELEGIERUNG_READ,
+        OidcPermissions.DELEGIERUNG_UPDATE,
         "default-roles-bern"
     }
 )

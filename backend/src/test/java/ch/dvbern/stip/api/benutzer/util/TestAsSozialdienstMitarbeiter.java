@@ -53,6 +53,8 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_MITARBEITER_ID;
         OidcPermissions.STAMMDATEN_READ,
         OidcPermissions.DOKUMENT_DELETE,
         OidcPermissions.FALL_CREATE,
+        OidcPermissions.DELEGIERUNG_READ,
+        OidcPermissions.DELEGIERUNG_UPDATE,
         "default-roles-bern"
     }
 )

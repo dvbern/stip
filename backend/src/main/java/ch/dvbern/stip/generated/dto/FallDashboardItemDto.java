@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
-import ch.dvbern.stip.generated.dto.DelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -29,7 +29,7 @@ public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
   private @Valid List<NotificationDto> notifications = new ArrayList<>();
-  private @Valid DelegierungDto delegierung;
+  private @Valid DelegierungSlimDto delegierung;
 
   /**
    **/
@@ -122,19 +122,19 @@ public class FallDashboardItemDto  implements Serializable {
   }
   /**
    **/
-  public FallDashboardItemDto delegierung(DelegierungDto delegierung) {
+  public FallDashboardItemDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
   }
 
   
   @JsonProperty("delegierung")
-  public DelegierungDto getDelegierung() {
+  public DelegierungSlimDto getDelegierung() {
     return delegierung;
   }
 
   @JsonProperty("delegierung")
-  public void setDelegierung(DelegierungDto delegierung) {
+  public void setDelegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
   }
 
