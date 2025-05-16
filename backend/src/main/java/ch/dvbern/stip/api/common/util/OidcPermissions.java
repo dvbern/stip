@@ -94,6 +94,10 @@ public final class OidcPermissions {
     public static final String UNTERSCHRIFTENBLATT_UPLOAD = "V0_UNTERSCHRIFTENBLATT_CREATE";
     public static final String UNTERSCHRIFTENBLATT_DELETE = "V0_UNTERSCHRIFTENBLATT_DELETE";
 
+    public static final String DELEGIERUNG_CREATE = "V0_DELEGIERUNG_CREATE";
+    public static final String DELEGIERUNG_READ = "V0_DELEGIERUNG_READ";
+    public static final String DELEGIERUNG_UPDATE = "V0_DELEGIERUNG_UPDATE";
+
     private OidcPermissions() {
 
     }

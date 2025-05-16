@@ -1,7 +1,7 @@
 import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
-  Delegierung,
+  DelegierungSlim,
   GesuchTrancheStatus,
   GesuchUrlType,
   Gesuchstatus,
@@ -155,7 +155,7 @@ export const preparePermissions = (
 export const getGesuchPermissions = (
   gesuch: {
     gesuchStatus: Gesuchstatus;
-    delegierung?: Delegierung;
+    delegierung?: DelegierungSlim;
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
@@ -182,7 +182,7 @@ export const getGesuchPermissions = (
 export const getTranchePermissions = (
   gesuch: {
     gesuchTrancheToWorkWith: { status: GesuchTrancheStatus };
-    delegierung?: Delegierung;
+    delegierung?: DelegierungSlim;
   } | null,
   appType: AppType | undefined,
   rolesMap: RolesMap,
@@ -214,7 +214,7 @@ export const getTranchePermissions = (
 export const canCurrentlyEdit = (
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung: Delegierung | undefined,
+  delegierung: DelegierungSlim | undefined,
 ) => {
   // Only apply special rules for the gesuch-app
   if (appType !== 'gesuch-app') {
@@ -233,7 +233,7 @@ export const canCurrentlyEdit = (
  */
 const applyDelegatedPermission = (
   permissions: PermissionMap,
-  gesuch: { delegierung?: Delegierung },
+  gesuch: { delegierung?: DelegierungSlim },
   appType: AppType,
   rolesMap: RolesMap,
 ): PermissionMap => {

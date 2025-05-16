@@ -63,8 +63,7 @@ public class MailService {
         mailAlreadySentCheckerService.sentStandardNotification();
 
         Templates.getStandardNotification(nachname, vorname, language)
-            .to(recipients.get(0))
-            .cc(recipients.stream().skip(1).toArray(String[]::new))
+            .to(recipients.toArray(String[]::new))
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send()
             .onFailure()

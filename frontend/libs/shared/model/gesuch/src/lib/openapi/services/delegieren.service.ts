@@ -18,17 +18,42 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { DelegierterMitarbeiterAendern } from '../model/delegierterMitarbeiterAendern';
 import { DelegierungCreate } from '../model/delegierungCreate';
+import { GetDelegierungSozQueryType } from '../model/getDelegierungSozQueryType';
+import { PaginatedSozDashboard } from '../model/paginatedSozDashboard';
+import { SortOrder } from '../model/sortOrder';
+import { SozDashboardColumn } from '../model/sozDashboardColumn';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
+
+export interface DelegierenServiceDelegierterMitarbeiterAendernRequestParams {
+    /** Die ID der Delegierung */
+    delegierungId: string;
+    delegierterMitarbeiterAendern: DelegierterMitarbeiterAendern;
+}
 
 export interface DelegierenServiceFallDelegierenRequestParams {
     /** Die ID vom Fall */
     fallId: string;
     sozialdienstId: string;
     delegierungCreate: DelegierungCreate;
+}
+
+export interface DelegierenServiceGetDelegierungsOfSozialdienstRequestParams {
+    getDelegierungSozQueryType: GetDelegierungSozQueryType;
+    fallNummer?: string;
+    nachname?: string;
+    vorname?: string;
+    geburtsdatum?: string;
+    wohnort?: string;
+    delegierungAngenommen?: boolean;
+    page: number;
+    pageSize: number;
+    sortColumn?: SozDashboardColumn;
+    sortOrder?: SortOrder;
 }
 
 
@@ -93,6 +118,91 @@ export class DelegierenService {
             throw Error("key may not be null if value is not object or array");
         }
         return httpParams;
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public delegierterMitarbeiterAendern$(requestParameters: DelegierenServiceDelegierterMitarbeiterAendernRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public delegierterMitarbeiterAendern$(requestParameters: DelegierenServiceDelegierterMitarbeiterAendernRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public delegierterMitarbeiterAendern$(requestParameters: DelegierenServiceDelegierterMitarbeiterAendernRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public delegierterMitarbeiterAendern$(requestParameters: DelegierenServiceDelegierterMitarbeiterAendernRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const delegierungId = requestParameters.delegierungId;
+        if (delegierungId === null || delegierungId === undefined) {
+            throw new Error('Required parameter delegierungId was null or undefined when calling delegierterMitarbeiterAendern$.');
+        }
+        const delegierterMitarbeiterAendern = requestParameters.delegierterMitarbeiterAendern;
+        if (delegierterMitarbeiterAendern === null || delegierterMitarbeiterAendern === undefined) {
+            throw new Error('Required parameter delegierterMitarbeiterAendern was null or undefined when calling delegierterMitarbeiterAendern$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "delegierungId", value: delegierungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/mitarbeiterDelegieren`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: delegierterMitarbeiterAendern,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -175,6 +285,138 @@ export class DelegierenService {
             {
                 context: localVarHttpContext,
                 body: delegierungCreate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a list of Faelle with Delegierung
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
+        if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienst$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const nachname = requestParameters.nachname;
+        const vorname = requestParameters.vorname;
+        const geburtsdatum = requestParameters.geburtsdatum;
+        const wohnort = requestParameters.wohnort;
+        const delegierungAngenommen = requestParameters.delegierungAngenommen;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienst$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienst$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (fallNummer !== undefined && fallNummer !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>fallNummer, 'fallNummer');
+        }
+        if (nachname !== undefined && nachname !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>nachname, 'nachname');
+        }
+        if (vorname !== undefined && vorname !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>vorname, 'vorname');
+        }
+        if (geburtsdatum !== undefined && geburtsdatum !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>geburtsdatum, 'geburtsdatum');
+        }
+        if (wohnort !== undefined && wohnort !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>wohnort, 'wohnort');
+        }
+        if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>delegierungAngenommen, 'delegierungAngenommen');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryType", dataFormat: undefined})}`;
+        return this.httpClient.request<PaginatedSozDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

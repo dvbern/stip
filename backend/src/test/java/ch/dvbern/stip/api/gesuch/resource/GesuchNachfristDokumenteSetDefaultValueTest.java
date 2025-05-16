@@ -228,40 +228,35 @@ class GesuchNachfristDokumenteSetDefaultValueTest {
     @Test
     @Order(21)
     void gesuchEinreichefristDokumenteShouldBeSetToDefaultAsGS() {
-        final var fallDashboardItemDtos = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItemDto = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
         var ausbildungDashBoardItemDtos =
-            fallDashboardItemDtos[fallDashboardItemDtos.length - 1].getAusbildungDashboardItems();
+            fallDashboardItemDto.getAusbildungDashboardItems();
         var gesuchDashBoardItemDtos =
             ausbildungDashBoardItemDtos.get(ausbildungDashBoardItemDtos.size() - 1).getGesuchs();
-        Arrays.stream(fallDashboardItemDtos)
+        fallDashboardItemDto.getAusbildungDashboardItems()
             .forEach(
-                fallDashboardItemDto -> {
-                    fallDashboardItemDto.getAusbildungDashboardItems()
-                        .forEach(
-                            ausbildungDashboardItemDto -> ausbildungDashboardItemDto.getGesuchs()
-                                .forEach(
-                                    gesuchDashboardItemDto -> {
-                                        if (
-                                            Objects
-                                                .equals(gesuchDashboardItemDto.getCurrentTrancheId(), gesuchTrancheId)
-                                        ) {
-                                            assertThat(
-                                                gesuchDashboardItemDto.getNachfristDokumente(),
-                                                is(notNullValue())
-                                            );
-                                        }
-                                    }
-                                )
-                        );
-                }
+                ausbildungDashboardItemDto -> ausbildungDashboardItemDto.getGesuchs()
+                    .forEach(
+                        gesuchDashboardItemDto -> {
+                            if (
+                                Objects
+                                    .equals(gesuchDashboardItemDto.getCurrentTrancheId(), gesuchTrancheId)
+                            ) {
+                                assertThat(
+                                    gesuchDashboardItemDto.getNachfristDokumente(),
+                                    is(notNullValue())
+                                );
+                            }
+                        }
+                    )
             );
 
         assertThat(
