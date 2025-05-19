@@ -1,5 +1,5 @@
 ﻿stipDecision;titleDe;textDe;textFr
-EINGABEFRIST_ABGELAUFEN;Nichteintreten;"Ihr Gesuch um einen Ausbildungsbeitrag für das Ausbildungsjahr %s ist mit einer Verspätung von mehr als drei Monaten am %s eingereicht worden. Deshalb können wir leider auf Ihr Gesuch nicht eintreten.
+EINGABEFRIST_ABGELAUFEN;Nichteintreten;"Ihr Gesuch um einen Ausbildungsbeitrag für das Ausbildungsjahr {AUSBILDUNGSJAHR} ist mit einer Verspätung von mehr als drei Monaten am {EINREICHEFRIST} eingereicht worden. Deshalb können wir leider auf Ihr Gesuch nicht eintreten.
 
 Gemäss Artikel 36 Absatz 1 der Verordnung über die Ausbildungsbeiträge (ABV) ist der Eingabetermin für Gesuche a) der 30. Juni für Ausbildungsjahre, die in der ersten Jahreshälfte beginnen und b) der
 31. Dezember für Ausbildungsjahre, die in der zweiten Jahreshälfte beginnen. Bei Gesuchen, die mit einer Verspätung von bis zu drei Monaten eingehen, werden die Ausbildungsbeiträge entsprechend
