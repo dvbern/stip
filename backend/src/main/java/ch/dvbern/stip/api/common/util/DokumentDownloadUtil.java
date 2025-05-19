@@ -17,14 +17,19 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
+import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -67,6 +72,24 @@ public class DokumentDownloadUtil {
                 List.of("application/octet-stream")
             )
         );
+    }
+
+    public FileDownloadTokenDto getFileDownloadToken(
+        UUID dokumentId,
+        BenutzerService benutzerService,
+        ConfigService configService
+    ) {
+        return new FileDownloadTokenDto()
+            .token(
+                Jwt
+                    .claims()
+                    .upn(benutzerService.getCurrentBenutzername())
+                    .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
+                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
+                    .issuer(configService.getIssuer())
+                    .jws()
+                    .signWithSecret(configService.getSecret())
+            );
     }
 
     public UUID getDokumentId(final JWTParser jwtParser, final String jwtString, final String secret) {
