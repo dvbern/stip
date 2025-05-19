@@ -11,18 +11,16 @@ import {
   AusbildungService,
   AusbildungUpdate,
 } from '@dv/shared/model/gesuch';
-import {
-  noGlobalErrorsIf,
-  shouldIgnoreBadRequestErrorsIf,
-} from '@dv/shared/util/http';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
-  cachedResult,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
@@ -55,9 +53,13 @@ export class AusbildungStore extends signalStore(
     };
   });
 
+  ausbildungCreateErrorResponseViewSig = computed(() => {
+    return fromCachedDataSig(this.ausbildungResponse)?.error;
+  });
+
   resetAusbildungErrors = () => {
-    patchState(this, (state) => ({
-      ausbildung: { ...state.ausbildung, error: undefined },
+    patchState(this, () => ({
+      ausbildungResponse: initial(),
     }));
   };
 
@@ -80,36 +82,50 @@ export class AusbildungStore extends signalStore(
 
   createAusbildung$ = rxMethod<{
     ausbildung: AusbildungUpdate;
-    onSuccess: () => void;
-    onFailure: (error: unknown) => void;
+    onSuccess: (response: AusbildungCreateResponse) => void;
   }>(
     pipe(
       tap(({ ausbildung }) => {
         patchState(this, () => ({
           ausbildung: cachedPending(success(ausbildung as Ausbildung)),
+          ausbildungResponse: pending(),
         }));
       }),
-      switchMap(({ ausbildung: ausbildungUpdate, onSuccess, onFailure }) =>
-        this.ausbildungService
-          .createAusbildung$({ ausbildungUpdate }, undefined, undefined, {
-            context: shouldIgnoreBadRequestErrorsIf(
-              true,
-              noGlobalErrorsIf(true),
-            ),
-          })
-          .pipe(
-            handleApiResponse(
-              (ausbildungResponse) => {
-                patchState(this, () => ({
-                  ausbildungResponse,
-                }));
-              },
-              {
-                onSuccess,
-                onFailure,
-              },
-            ),
+      switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
+        this.ausbildungService.createAusbildung$({ ausbildungUpdate }).pipe(
+          handleApiResponse(
+            (res) => {
+              patchState(this, () => {
+                if (isSuccess(res)) {
+                  if (isDefined(res.data.error)) {
+                    return {
+                      ausbildung: initial(),
+                      ausbildungResponse: res,
+                    };
+                  }
+                  if (isDefined(res.data.ausbildung)) {
+                    return {
+                      ausbildung: success(res.data.ausbildung),
+                      ausbildungResponse: res,
+                    };
+                  }
+                  return {
+                    ausbildung: initial(),
+                    ausbildungResponse: res,
+                  };
+                } else {
+                  return {
+                    ausbildung: res,
+                    ausbildungResponse: res,
+                  };
+                }
+              });
+            },
+            {
+              onSuccess,
+            },
           ),
+        ),
       ),
     ),
   );
@@ -118,7 +134,6 @@ export class AusbildungStore extends signalStore(
     ausbildungId: string;
     ausbildungUpdate: AusbildungUpdate;
     onSuccess: () => void;
-    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(() => {
@@ -126,7 +141,7 @@ export class AusbildungStore extends signalStore(
           ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess, onFailure }) =>
+      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess }) =>
         this.ausbildungService
           .updateAusbildung$({
             ausbildungId,
@@ -139,7 +154,6 @@ export class AusbildungStore extends signalStore(
               },
               {
                 onSuccess,
-                onFailure,
               },
             ),
           ),

@@ -252,6 +252,18 @@
       <mat-error *dvSharedUiFormMessageError="'periodeNotFound'" class="tw-whitespace-nowrap">
         {{ 'shared.form.ausbildung.form.error.periodeNotFound' | translate }}
       </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'inactivePeriod'" class="tw-whitespace-nowrap">
+        {{
+          'shared.form.ausbildung.form.error.inactivePeriod'
+            | translate: { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date) }
+        }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="tw-whitespace-nowrap">
+        {{
+          'shared.form.ausbildung.form.error.periodeIsDraft'
+            | translate: { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date) }
+        }}
+      </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
         {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
       </mat-error>
@@ -293,6 +305,10 @@
         {{ 'shared.form.error.maxDateFuture' | translate }}
       </mat-error>
     </mat-form-field>
+
+    <pre class="tw-col-span-full tw-col-start-1">{{
+      ausbildungStore.ausbildungCreateErrorResponseViewSig() | json
+    }}</pre>
 
     <!-- PENSUM -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">

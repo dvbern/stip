@@ -10,10 +10,9 @@
  * Do not edit the class manually.
  */
 import { GesuchsperiodeSelectError } from './gesuchsperiodeSelectError';
-import { Ausbildung } from './ausbildung';
 
-export interface AusbildungCreateResponse { 
-    ausbildung?: Ausbildung;
+export interface GesuchCreateResponse { 
+    gesuch?: string;
     error?: GesuchsperiodeSelectError;
 }
 

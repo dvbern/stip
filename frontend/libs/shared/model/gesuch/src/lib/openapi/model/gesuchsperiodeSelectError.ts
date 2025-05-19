@@ -9,11 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchsperiodeSelectError } from './gesuchsperiodeSelectError';
-import { Ausbildung } from './ausbildung';
+import { GesuchsperiodeSelectErrorType } from './gesuchsperiodeSelectErrorType';
 
-export interface AusbildungCreateResponse { 
-    ausbildung?: Ausbildung;
-    error?: GesuchsperiodeSelectError;
+export interface GesuchsperiodeSelectError { 
+    type: GesuchsperiodeSelectErrorType;
+    context?: string;
 }
+
+
 
