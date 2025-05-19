@@ -1,51 +1,55 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
-@JsonTypeName("AusbildungCreateError")
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
+
+@JsonTypeName("GesuchsperiodeSelectError")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AusbildungCreateErrorDto  implements Serializable {
-  private @Valid GesuchsperiodeSelectErrorType type;
+public class GesuchsperiodeSelectErrorDto  implements Serializable {
+  private @Valid ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type;
   private @Valid LocalDate context;
 
   /**
    **/
-  public AusbildungCreateErrorDto type(GesuchsperiodeSelectErrorType type) {
+  public GesuchsperiodeSelectErrorDto type(ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type) {
     this.type = type;
     return this;
   }
 
-
+  
   @JsonProperty("type")
   @NotNull
-  public GesuchsperiodeSelectErrorType getType() {
+  public ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType getType() {
     return type;
   }
 
   @JsonProperty("type")
-  public void setType(GesuchsperiodeSelectErrorType type) {
+  public void setType(ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type) {
     this.type = type;
   }
 
   /**
    **/
-  public AusbildungCreateErrorDto context(LocalDate context) {
+  public GesuchsperiodeSelectErrorDto context(LocalDate context) {
     this.context = context;
     return this;
   }
 
-
+  
   @JsonProperty("context")
   public LocalDate getContext() {
     return context;
@@ -65,9 +69,9 @@ public class AusbildungCreateErrorDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungCreateErrorDto ausbildungCreateError = (AusbildungCreateErrorDto) o;
-    return Objects.equals(this.type, ausbildungCreateError.type) &&
-        Objects.equals(this.context, ausbildungCreateError.context);
+    GesuchsperiodeSelectErrorDto gesuchsperiodeSelectError = (GesuchsperiodeSelectErrorDto) o;
+    return Objects.equals(this.type, gesuchsperiodeSelectError.type) &&
+        Objects.equals(this.context, gesuchsperiodeSelectError.context);
   }
 
   @Override
@@ -78,8 +82,8 @@ public class AusbildungCreateErrorDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungCreateErrorDto {\n");
-
+    sb.append("class GesuchsperiodeSelectErrorDto {\n");
+    
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    context: ").append(toIndentedString(context)).append("\n");
     sb.append("}");

@@ -56,6 +56,7 @@ import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -201,11 +202,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_CREATE)
-    public UUID createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public GesuchCreateResponseDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         gesuchAuthorizer.canCreate();
-        final var created = gesuchService.createGesuch(gesuchCreateDto);
-        // todo: 1994 be fixed
-        return created.getLeft().getId();
+        return gesuchService.createGesuch(gesuchCreateDto);
     }
 
     @Override

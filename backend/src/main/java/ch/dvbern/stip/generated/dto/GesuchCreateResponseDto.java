@@ -1,8 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -15,36 +15,36 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("AusbildungCreateResponse")
+@JsonTypeName("GesuchCreateResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AusbildungCreateResponseDto  implements Serializable {
-  private @Valid AusbildungDto ausbildung;
+public class GesuchCreateResponseDto  implements Serializable {
+  private @Valid UUID gesuch;
   private @Valid GesuchsperiodeSelectErrorDto error;
 
   /**
    **/
-  public AusbildungCreateResponseDto ausbildung(AusbildungDto ausbildung) {
-    this.ausbildung = ausbildung;
+  public GesuchCreateResponseDto gesuch(UUID gesuch) {
+    this.gesuch = gesuch;
     return this;
   }
 
   
-  @JsonProperty("ausbildung")
-  public AusbildungDto getAusbildung() {
-    return ausbildung;
+  @JsonProperty("gesuch")
+  public UUID getGesuch() {
+    return gesuch;
   }
 
-  @JsonProperty("ausbildung")
-  public void setAusbildung(AusbildungDto ausbildung) {
-    this.ausbildung = ausbildung;
+  @JsonProperty("gesuch")
+  public void setGesuch(UUID gesuch) {
+    this.gesuch = gesuch;
   }
 
   /**
    **/
-  public AusbildungCreateResponseDto error(GesuchsperiodeSelectErrorDto error) {
+  public GesuchCreateResponseDto error(GesuchsperiodeSelectErrorDto error) {
     this.error = error;
     return this;
   }
@@ -69,22 +69,22 @@ public class AusbildungCreateResponseDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungCreateResponseDto ausbildungCreateResponse = (AusbildungCreateResponseDto) o;
-    return Objects.equals(this.ausbildung, ausbildungCreateResponse.ausbildung) &&
-        Objects.equals(this.error, ausbildungCreateResponse.error);
+    GesuchCreateResponseDto gesuchCreateResponse = (GesuchCreateResponseDto) o;
+    return Objects.equals(this.gesuch, gesuchCreateResponse.gesuch) &&
+        Objects.equals(this.error, gesuchCreateResponse.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, error);
+    return Objects.hash(gesuch, error);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungCreateResponseDto {\n");
+    sb.append("class GesuchCreateResponseDto {\n");
     
-    sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
+    sb.append("    gesuch: ").append(toIndentedString(gesuch)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();

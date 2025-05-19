@@ -721,7 +721,7 @@
                     BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
                     ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
                     ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
-                    AusbildungCreateErrorType=ch.dvbern.stip.api.ausbildung.type.AusbildungCreateErrorType
+                    GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

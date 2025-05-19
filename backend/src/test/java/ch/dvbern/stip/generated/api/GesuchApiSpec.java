@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
@@ -1053,7 +1054,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #body  (required)
-     * return UUID
+     * return GesuchCreateResponseDtoSpec
      */
     public static class CreateGesuchOper implements Oper {
 
@@ -1084,10 +1085,10 @@ public class GesuchApiSpec {
         /**
          * POST /gesuch
          * @param handler handler
-         * @return UUID
+         * @return GesuchCreateResponseDtoSpec
          */
-        public UUID executeAs(Function<Response, Response> handler) {
-            TypeRef<UUID> type = new TypeRef<UUID>(){};
+        public GesuchCreateResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchCreateResponseDtoSpec> type = new TypeRef<GesuchCreateResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 

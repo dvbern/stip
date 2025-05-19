@@ -30,11 +30,11 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.generated.dto.AusbildungCreateErrorDto;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -71,7 +71,7 @@ public class AusbildungService {
             }
 
             return new AusbildungCreateResponseDto()
-                .error(new AusbildungCreateErrorDto(result.getRight(), contextDate));
+                .error(new GesuchsperiodeSelectErrorDto(result.getRight(), contextDate));
         }
 
         final var violations = validator.validate(ausbildung);
@@ -81,6 +81,7 @@ public class AusbildungService {
         ausbildungRepository.persist(ausbildung);
         final var gesuchCreateDto = new GesuchCreateDto();
         gesuchCreateDto.setAusbildungId(ausbildung.getId());
+        gesuchService.createGesuchForAusbildung(gesuchCreateDto);
 
         if (ausbildung.getAusbildungsgang() != null) {
             ausbildung

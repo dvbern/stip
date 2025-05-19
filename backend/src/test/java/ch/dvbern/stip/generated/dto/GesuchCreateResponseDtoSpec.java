@@ -15,62 +15,62 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * AusbildungCreateResponseDtoSpec
+ * GesuchCreateResponseDtoSpec
  */
 @JsonPropertyOrder({
-  AusbildungCreateResponseDtoSpec.JSON_PROPERTY_AUSBILDUNG,
-  AusbildungCreateResponseDtoSpec.JSON_PROPERTY_ERROR
+  GesuchCreateResponseDtoSpec.JSON_PROPERTY_GESUCH,
+  GesuchCreateResponseDtoSpec.JSON_PROPERTY_ERROR
 })
-@JsonTypeName("AusbildungCreateResponse")
+@JsonTypeName("GesuchCreateResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class AusbildungCreateResponseDtoSpec {
-  public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
-  private AusbildungDtoSpec ausbildung;
+public class GesuchCreateResponseDtoSpec {
+  public static final String JSON_PROPERTY_GESUCH = "gesuch";
+  private UUID gesuch;
 
   public static final String JSON_PROPERTY_ERROR = "error";
   private GesuchsperiodeSelectErrorDtoSpec error;
 
-  public AusbildungCreateResponseDtoSpec() {
+  public GesuchCreateResponseDtoSpec() {
   }
 
-  public AusbildungCreateResponseDtoSpec ausbildung(AusbildungDtoSpec ausbildung) {
+  public GesuchCreateResponseDtoSpec gesuch(UUID gesuch) {
     
-    this.ausbildung = ausbildung;
+    this.gesuch = gesuch;
     return this;
   }
 
    /**
-   * Get ausbildung
-   * @return ausbildung
+   * Get gesuch
+   * @return gesuch
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(JSON_PROPERTY_GESUCH)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public AusbildungDtoSpec getAusbildung() {
-    return ausbildung;
+  public UUID getGesuch() {
+    return gesuch;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(JSON_PROPERTY_GESUCH)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildung(AusbildungDtoSpec ausbildung) {
-    this.ausbildung = ausbildung;
+  public void setGesuch(UUID gesuch) {
+    this.gesuch = gesuch;
   }
 
 
-  public AusbildungCreateResponseDtoSpec error(GesuchsperiodeSelectErrorDtoSpec error) {
+  public GesuchCreateResponseDtoSpec error(GesuchsperiodeSelectErrorDtoSpec error) {
     
     this.error = error;
     return this;
@@ -103,21 +103,21 @@ public class AusbildungCreateResponseDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungCreateResponseDtoSpec ausbildungCreateResponse = (AusbildungCreateResponseDtoSpec) o;
-    return Objects.equals(this.ausbildung, ausbildungCreateResponse.ausbildung) &&
-        Objects.equals(this.error, ausbildungCreateResponse.error);
+    GesuchCreateResponseDtoSpec gesuchCreateResponse = (GesuchCreateResponseDtoSpec) o;
+    return Objects.equals(this.gesuch, gesuchCreateResponse.gesuch) &&
+        Objects.equals(this.error, gesuchCreateResponse.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, error);
+    return Objects.hash(gesuch, error);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungCreateResponseDtoSpec {\n");
-    sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
+    sb.append("class GesuchCreateResponseDtoSpec {\n");
+    sb.append("    gesuch: ").append(toIndentedString(gesuch)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();

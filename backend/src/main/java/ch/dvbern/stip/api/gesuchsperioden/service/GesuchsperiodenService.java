@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.type.AusbildungCreateErrorType;
+import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -79,7 +79,9 @@ public class GesuchsperiodenService {
         return gesuchsperiode.map(gesuchsperiodeMapper::toDatenDto);
     }
 
-    public Pair<Gesuchsperiode, AusbildungCreateErrorType> getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
+    public Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeForAusbildung(
+        final Ausbildung ausbildung
+    ) {
         final var ausbildungBegin = ausbildung.getAusbildungBegin();
 
         for (int yearOffset = 1; yearOffset >= -1; yearOffset--) {
@@ -96,7 +98,8 @@ public class GesuchsperiodenService {
                 eligibleGesuchsperiode
                     .getGesuchsperiodeStart()
                     .plusMonths(6)
-                    .isAfter(ausbildungsBeginAssumed) &&
+                    .isAfter(ausbildungsBeginAssumed)
+                &&
                 eligibleGesuchsperiode.getAufschaltterminStart().isBefore(LocalDate.now())
             ) {
                 return Pair.of(eligibleGesuchsperiode, null);
@@ -116,13 +119,13 @@ public class GesuchsperiodenService {
 
         if (toCheck.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
             // Die Gesuchsperiode für diesen Ausbildungsbeginn wird voraussichtlich am xx.xx geöffnet
-            return Pair.of(toCheck, AusbildungCreateErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
+            return Pair.of(toCheck, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
         } else if (toCheck.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
             // Die Gesuchsperiode für diesen Ausbildungsbeginn wird am xx.xx geöffnet
-            return Pair.of(toCheck, AusbildungCreateErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+            return Pair.of(toCheck, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
         } else {
             // Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden
-            return Pair.of(null, AusbildungCreateErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
         }
     }
 

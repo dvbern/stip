@@ -46,7 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UUID'
+                $ref: '#/components/schemas/GesuchCreateResponse'
           description: New Gesuch is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4965,23 +4965,29 @@ components:
           type: boolean
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
+    GesuchCreateResponse:
+      properties:
+        gesuch:
+          $ref: '#/components/schemas/UUID'
+        error:
+          $ref: '#/components/schemas/GesuchsperiodeSelectError'
     AusbildungCreateResponse:
       properties:
         ausbildung:
           $ref: '#/components/schemas/Ausbildung'
         error:
-          $ref: '#/components/schemas/AusbildungCreateError'
-    AusbildungCreateError:
+          $ref: '#/components/schemas/GesuchsperiodeSelectError'
+    GesuchsperiodeSelectError:
       type: object
       required:
         - type
       properties:
         type:
-          $ref: '#/components/schemas/AusbildungCreateErrorType'
+          $ref: '#/components/schemas/GesuchsperiodeSelectErrorType'
         context:
           type: string
           format: date
-    AusbildungCreateErrorType:
+    GesuchsperiodeSelectErrorType:
       enum:
         - KEINE_AKTIVE_PERIODE_GEFUNDEN
         - PERIODE_IN_ENTWURF_GEFUNDEN

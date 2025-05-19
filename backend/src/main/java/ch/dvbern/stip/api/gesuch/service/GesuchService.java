@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
-import ch.dvbern.stip.api.ausbildung.type.AusbildungCreateErrorType;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
@@ -101,6 +101,7 @@ import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -110,6 +111,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -295,7 +297,30 @@ public class GesuchService {
     }
 
     @Transactional
-    public Pair<GesuchDto, Pair<Gesuchsperiode, AusbildungCreateErrorType>> createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public GesuchCreateResponseDto createGesuch(final GesuchCreateDto gesuchCreateDto) {
+        final var result = createGesuchForAusbildung(gesuchCreateDto);
+        if (result.getLeft() != null) {
+            return new GesuchCreateResponseDto(result.getLeft().getId(), null);
+        }
+
+        LocalDate contextDate = null;
+        if (result.getRight().getLeft() != null) {
+            contextDate = result.getRight().getLeft().getAufschaltterminStart();
+        }
+
+        return new GesuchCreateResponseDto(
+            null,
+            new GesuchsperiodeSelectErrorDto(
+                result.getRight().getRight(),
+                contextDate
+            )
+        );
+    }
+
+    @Transactional
+    public Pair<GesuchDto, Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType>> createGesuchForAusbildung(
+        GesuchCreateDto gesuchCreateDto
+    ) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
         final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
@@ -323,7 +348,7 @@ public class GesuchService {
                 gesuch,
                 gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
             ),
-        null
+            null
         );
     }
 
