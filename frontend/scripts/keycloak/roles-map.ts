@@ -12,6 +12,7 @@ import { Role } from './types';
  *   - Following elements represent the permissions.
  */
 export const PERMISSION_ROLE_LIST = [
+  [['Gesuchsteller'], 'DELEGIERUNG_CREATE'],
   [
     ['Gesuchsteller', 'Sozialdienst-Mitarbeiter'],
     'FALL_CREATE',
@@ -58,10 +59,15 @@ export const PERMISSION_ROLE_LIST = [
     'AUSBILDUNGSSTAETTE_DELETE',
     'STAMMDATEN_READ',
     'GESUCH_READ_JURIST',
-    'GESUCH_WRITE_JURIST',
+    'GESUCH_UPDATE_JURIST',
   ],
   [['Super-User'], 'GESUCH_DELETE_ADMIN'],
-  [['Sozialdienst-Mitarbeiter'], 'SOZIALDIENSTBENUTZER_READ'],
+  [
+    ['Sozialdienst-Admin', 'Sozialdienst-Mitarbeiter'],
+    'SOZIALDIENSTBENUTZER_READ',
+    'DELEGIERUNG_READ',
+    'DELEGIERUNG_UPDATE',
+  ],
   [
     ['Jurist', 'Sachbearbeiter'],
     'NOTIZ_CREATE',

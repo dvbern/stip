@@ -58,7 +58,53 @@ export const syncMissingPermissions = async (
         allRolesOrPermissionsMap[newRole.name] = newRole;
       });
 
-    console.info(`Created permissions ${missingPermissions.join(', ')}`);
+    console.info('Created permissions:', missingPermissions);
+  }
+  console.info('======================================\n');
+};
+
+export const deleteSuperfluousPermissions = async (
+  kcAdminClient: KeycloakAdminClient,
+  realm: string,
+  superfluousPermissions: string[],
+) => {
+  console.info('Removing superfluous permissions', superfluousPermissions);
+  console.info('======================================');
+  if (
+    !(await confirm({
+      message: 'Are you sure you want to remove the permissions?',
+    }))
+  ) {
+    console.warn('Aborting role and permission sync...');
+    process.exit(0);
+  }
+  const deleteMissingPermissions = superfluousPermissions.map(
+    async (permission) => {
+      await kcAdminClient.roles.delByName({
+        name: permission,
+        realm,
+      });
+
+      const deletedPermission = await kcAdminClient.roles.findOneByName({
+        name: permission,
+        realm,
+      });
+
+      if (deletedPermission) {
+        console.error(`Permission ${permission} still found after creation`);
+        return { name: permission, deleted: false };
+      }
+
+      return { name: permission, deleted: true };
+    },
+  );
+
+  if (deleteMissingPermissions.length) {
+    (await Promise.all(deleteMissingPermissions))
+      .filter(isDefined)
+      .forEach((deletedRole) => deletedRole.name);
+
+    console.info('Deleted permissions:', superfluousPermissions);
   }
   console.info('======================================\n');
 };

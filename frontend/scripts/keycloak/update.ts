@@ -12,10 +12,14 @@ import { config } from 'dotenv';
 
 import { allowInsecure } from './ignore-reject-unauthorized';
 import { syncMissingCompositeRoles } from './sync/composite-roles';
-import { syncMissingPermissions } from './sync/permissions';
+import {
+  deleteSuperfluousPermissions,
+  syncMissingPermissions,
+} from './sync/permissions';
 import { repairCompositeRoles } from './sync/repair-composite-roles';
 import { syncMissingRoles } from './sync/roles';
 import {
+  CURRENT_VERSION,
   CurrentRoleOrPermission,
   PERMISSIONS,
   ROLES,
@@ -113,9 +117,9 @@ async function initKc(target: (typeof known.envs)[number]) {
  * Find missing roles and permissions in Keycloak.
  */
 async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
-  const allRolesOrPermissions = (
-    await kcAdminClient.roles.find({ realm })
-  ).filter(isRoleOrPermission);
+  const rawRolesOrPermissions = await kcAdminClient.roles.find({ realm });
+  const allRolesOrPermissions =
+    rawRolesOrPermissions.filter(isRoleOrPermission);
   const roles = await Promise.all(
     ROLES.map(async (role) => {
       const roleRepresentation = allRolesOrPermissions.find(
@@ -155,6 +159,10 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
   const missingPermissions = PERMISSIONS.filter(
     (role) => !allRolesOrPermissions.some((r) => r.name === role),
   );
+  const superfluousPermissions = rawRolesOrPermissions.filter(
+    (role) =>
+      !isRoleOrPermission(role) && role.name?.startsWith(CURRENT_VERSION),
+  );
 
   return {
     allRolesOrPermissionsMap: allRolesOrPermissions.reduce(
@@ -165,6 +173,9 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
       {} as Partial<Record<CurrentRoleOrPermission, RoleRepresentation>>,
     ),
     missingCompositeRoles: roles.filter((r) => r.type === 'NOT_COMPOSITE'),
+    superfluousPermissions: superfluousPermissions
+      .map((r) => r.name)
+      .filter(isDefined),
     compositeRoles: roles.filter((r) => r.type === 'COMPOSITE'),
     missingRoles: roles
       .filter((r) => r.type === 'NOT_FOUND')
@@ -186,6 +197,7 @@ async function syncRoles(realm: string) {
     compositeRoles,
     missingCompositeRoles,
     missingPermissions,
+    superfluousPermissions,
     missingRoles,
   } = {
     ...(await findMissingRoles(kcAdminClient, realm)),
@@ -194,7 +206,7 @@ async function syncRoles(realm: string) {
   console.info('Current state of roles and permissions');
   console.info('======================================');
   console.info({
-    missingPermissions,
+    missingPermissions: superfluousPermissions,
     missingRoles,
     missingCompositeRoles: missingCompositeRoles.map((r) => r.name),
   });
@@ -207,6 +219,14 @@ async function syncRoles(realm: string) {
       realm,
       missingPermissions,
       allRolesOrPermissionsMap,
+    );
+  }
+
+  if (superfluousPermissions.length > 0) {
+    await deleteSuperfluousPermissions(
+      kcAdminClient,
+      realm,
+      superfluousPermissions,
     );
   }
 
