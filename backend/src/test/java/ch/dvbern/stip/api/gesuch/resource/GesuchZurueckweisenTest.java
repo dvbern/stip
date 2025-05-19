@@ -86,7 +86,7 @@ class GesuchZurueckweisenTest {
     @Order(3)
     void gesuchEinreichen() {
         TestUtil.executeAndAssert(
-            gesuchApiSpec.gesuchEinreichen()
+            gesuchApiSpec.gesuchEinreichenGs()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 

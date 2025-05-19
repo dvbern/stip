@@ -434,7 +434,7 @@ class GesuchFillFormularTest {
     @TestAsSachbearbeiter
     @Order(21)
     void gesuchEinreichenAsSBShouldFail() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -446,7 +446,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(22)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

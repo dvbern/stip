@@ -115,7 +115,7 @@ class GesuchTrancheCreateTest {
     @TestAsGesuchsteller
     @Order(4)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

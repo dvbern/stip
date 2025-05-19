@@ -119,19 +119,27 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGesuchEinreichen(final UUID gesuchId) {
+    public void canGsGesuchEinreichen(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        if (isJurist(currentBenutzer) && Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus())) {
-            return;
-        }
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
         && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canJurGesuchEinreichen(final UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (isJurist(currentBenutzer) && Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus())) {
             return;
         }
 

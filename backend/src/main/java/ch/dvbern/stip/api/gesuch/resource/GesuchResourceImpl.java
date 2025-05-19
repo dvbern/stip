@@ -238,11 +238,23 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
-    public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
+    @RolesAllowed({ GS_GESUCH_UPDATE })
+    public GesuchDto gesuchEinreichenGs(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canGesuchEinreichen(gesuchId);
+        gesuchAuthorizer.canGsGesuchEinreichen(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchService.gesuchEinreichen(gesuchId);
+        gesuchService.stipendienAnspruchPruefen(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
+    @RolesAllowed({ JURIST_GESUCH_UPDATE })
+    public GesuchDto gesuchEinreichenJur(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.canJurGesuchEinreichen(gesuchId);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
