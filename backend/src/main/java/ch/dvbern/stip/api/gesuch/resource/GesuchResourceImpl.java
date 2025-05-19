@@ -42,29 +42,10 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
-import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
-import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
-import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
-import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
-import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchInfoDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
-import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -110,12 +91,11 @@ public class GesuchResourceImpl implements GesuchResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
-    private final GesuchValidatorService gesuchValidatorService;
-    private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
+    private final VerfuegungService verfuegungService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -136,6 +116,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        verfuegungService.createVerfuegung(gesuchId, ausgewaehlterGrundDto.getDecisionId());
         gesuchService.changeGesuchStatusToNegativeVerfuegung(
             gesuchId,
             ausgewaehlterGrundDto.getDecisionId()
@@ -236,6 +217,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         beschwerdeVerlaufAuthorizer.canRead();
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        return verfuegungService.getVerfuegungenByGesuch(gesuchId);
     }
 
     @Override
