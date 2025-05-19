@@ -48,7 +48,7 @@ export class FallStore extends signalStore(
     ),
   );
 
-  loadOrCreateFall$() {
+  private loadOrCreateFall$() {
     const [hasFall$, hasNoFall$] = partition(
       this.fallService
         .getFallForGs$()

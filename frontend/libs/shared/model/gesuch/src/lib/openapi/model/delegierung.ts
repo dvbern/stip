@@ -10,8 +10,14 @@
  * Do not edit the class manually.
  */
 import { SozialdienstSlim } from './sozialdienstSlim';
+import { PersoenlicheAngaben } from './persoenlicheAngaben';
+import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
 export interface Delegierung { 
+    id: string;
     sozialdienst?: SozialdienstSlim;
+    delegierterMitarbeiter?: SozialdienstBenutzer;
+    delegierungAngenommen?: boolean;
+    persoenlicheAngaben?: PersoenlicheAngaben;
 }
 

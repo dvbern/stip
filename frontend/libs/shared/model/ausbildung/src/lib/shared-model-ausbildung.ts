@@ -36,6 +36,7 @@ export type SharedModelGsDashboardView = Omit<
   'ausbildungDashboardItems'
 > & {
   hasActiveAusbildungen: boolean;
+  canCreateAusbildung: boolean;
   activeAusbildungen: SharedModelGsAusbildungView[];
   inactiveAusbildungen: SharedModelGsAusbildungView[];
 };

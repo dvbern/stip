@@ -51,8 +51,6 @@ class MailServiceTest {
 
     private static final String HTML_CONTENT = "<h1>hello email world<h1>";
 
-    private static final String TEST_EMAIL_DE_STRING = "Gesuch wurde übermittelt";
-
     private static final String TEST_EMAIL = "jean@bat.ch";
 
     private static final String TEST_STANDARD_EMAIL_DE_STRING = "neue Nachricht";
@@ -246,20 +244,20 @@ class MailServiceTest {
     @Test
     void sendStandardNotificationEmailsMultipleRecipients() {
         final var recipient = "test-mitarbeiter@bat.ch";
-        final var cc = "test-gs@bat.ch";
+        final var gesuchsteller = "test-gs@bat.ch";
         mailService.sendStandardNotificationEmails(
             "Test",
             "GS",
             AppLanguages.DE,
-            List.of(recipient, cc)
+            List.of(recipient, gesuchsteller)
         );
 
         final var received = mailbox.getMailMessagesSentTo(recipient);
         assertThat(received).hasSize(1);
 
         final var message = received.get(0);
-        assertThat(message.getCc()).hasSize(1);
-        assertThat(message.getCc().get(0)).isEqualTo(cc);
+        assertThat(message.getCc()).isEmpty();
+        assertThat(message.getTo()).containsAll(List.of(recipient, gesuchsteller));
     }
 
     @Test

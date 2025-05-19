@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.sozialdienst.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -43,15 +44,10 @@ public class SozialdienstService {
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
-    public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        return getSozialdienstOfSozialdienstAdmin(currentBenutzer);
-    }
-
-    public Sozialdienst getSozialdienstOfSozialdienstAdmin(Benutzer benutzer) {
-        return sozialdienstRepository.getSozialdienstBySozialdienstAdmin(
-            sozialdienstBenutzerService.getSozialdienstBenutzerById(benutzer.getId())
-        );
+    public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
+        final var sozialdienstBenutzer =
+            sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
+        return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
     }
 
     @Transactional
@@ -109,9 +105,16 @@ public class SozialdienstService {
     @Transactional
     public boolean isCurrentBenutzerMitarbeiterOfSozialdienst(final UUID sozialdienstId) {
         final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
-        return currentBenutzer.map(benutzer -> {
-            final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
-            return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
-        }).orElse(false);
+        return currentBenutzer.map(benutzer -> isBenutzerMitarbeiterOfSozialdienst(sozialdienstId, benutzer))
+            .orElse(false);
+    }
+
+    @Transactional
+    public boolean isBenutzerMitarbeiterOfSozialdienst(
+        final UUID sozialdienstId,
+        final SozialdienstBenutzer benutzer
+    ) {
+        final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
+        return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
     }
 }

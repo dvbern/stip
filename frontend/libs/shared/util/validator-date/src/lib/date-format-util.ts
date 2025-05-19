@@ -1,4 +1,4 @@
-import { addHours } from 'date-fns';
+import { addHours, format, isValid, toDate } from 'date-fns';
 
 import { Language } from '@dv/shared/model/language';
 
@@ -64,4 +64,25 @@ export function getFormatDef(
 export const normalizeDateForUTC = (date: Date | string) => {
   const offset = (new Date().getTimezoneOffset() / 60) * -1 + 1;
   return addHours(date, offset).toISOString();
+};
+
+export const getDiffFormat = (
+  date: Date,
+  difference: { months: number; years: number },
+) => {
+  let value = format(date, 'dd.');
+  if (difference.months > 0) {
+    value += format(date, 'MM.');
+  }
+  if (difference.years > 0) {
+    value += format(date, 'yy');
+  }
+  return value;
+};
+
+export const parseDate = (date: string | undefined): Date | undefined => {
+  if (!date || isValid(date)) {
+    return undefined;
+  }
+  return toDate(date);
 };

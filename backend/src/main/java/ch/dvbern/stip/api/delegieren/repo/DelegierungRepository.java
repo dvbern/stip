@@ -17,12 +17,48 @@
 
 package ch.dvbern.stip.api.delegieren.repo;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DelegierungRepository implements BaseRepository<Delegierung> {
+    private final EntityManager entityManager;
+    private static final QDelegierung qDelegierung = QDelegierung.delegierung;
+
+    public JPAQuery<Delegierung> getFindAlleMeineQuery(
+        final SozialdienstBenutzer sozialdienstBenutzer,
+        final UUID sozialdienstId
+    ) {
+        return addMeineFilter(sozialdienstBenutzer, getFindAlleOfSozialdienstQuery(sozialdienstId));
+    }
+
+    public JPAQuery<Delegierung> getFindAlleOfSozialdienstQuery(UUID sozialdienstId) {
+        return addOfSozialdienstFilter(sozialdienstId, new JPAQueryFactory(entityManager).selectFrom(qDelegierung));
+    }
+
+    private JPAQuery<Delegierung> addOfSozialdienstFilter(
+        final UUID sozialdienstId,
+        final JPAQuery<Delegierung> query
+    ) {
+        query.where(qDelegierung.sozialdienst.id.eq(sozialdienstId));
+        return query;
+    }
+
+    private JPAQuery<Delegierung> addMeineFilter(
+        final SozialdienstBenutzer sozialdienstBenutzer,
+        final JPAQuery<Delegierung> query
+    ) {
+        query.where(qDelegierung.delegierterMitarbeiter.id.eq(sozialdienstBenutzer.getId()));
+        return query;
+    }
 }

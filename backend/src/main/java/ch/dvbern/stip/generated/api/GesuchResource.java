@@ -190,7 +190,7 @@ public interface GesuchResource {
     @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
-    List<FallDashboardItemDto> getGsDashboard();
+    FallDashboardItemDto getGsDashboard();
 
     @GET
     @Path("/changes/{gesuchId}")
@@ -201,6 +201,11 @@ public interface GesuchResource {
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
+    @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    FallDashboardItemDto getSozialdienstMitarbeiterDashboard(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

@@ -18,11 +18,12 @@
 package ch.dvbern.stip.api.fall.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.FallDto;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { DelegierungMapper.class })
 public interface FallMapper {
 
     Fall toEntity(FallDto fallDto);
