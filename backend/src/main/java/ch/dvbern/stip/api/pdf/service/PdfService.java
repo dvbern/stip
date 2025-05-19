@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.pdf;
+package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
@@ -37,13 +38,11 @@ import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
-import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -79,26 +78,44 @@ import lombok.extern.slf4j.Slf4j;
 public class PdfService {
     private static final String FONT_PATH = "src/main/resources/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "src/main/resources/fonts/arial_bold.ttf";
+
     private static final float FONT_SIZE_BIG = 10.5f;
     private static final float FONT_SIZE_MEDIUM = 8.5f;
     private static final float FONT_SIZE_SMALL = 6.5f;
     private static final PageSize PAGE_SIZE = PageSize.A4;
+
     private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
-    private final GesuchRepository gesuchRepository;
-    private final StipDecisionService stipDecisionService;
+
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream createPdf(
+    public ByteArrayOutputStream createNegativeVerfuegungPdf(
+        final Gesuch gesuch,
+        final StipDecision stipDecision
+    ) {
+        final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
+        return this.createPdf(gesuch, negativeVerfuegungSection, stipDecision);
+    }
+
+    private ByteArrayOutputStream createPdf(
         final Gesuch gesuch,
         final PdfSection section,
         final StipDecision stipDecision
-    ) throws IOException {
-        final FontProgram font = FontProgramFactory.createFont(FONT_PATH);
-        final FontProgram fontBold = FontProgramFactory.createFont(FONT_BOLD_PATH);
+    ) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final FontProgram font;
+        final FontProgram fontBold;
+
+        try {
+            font = FontProgramFactory.createFont(FONT_PATH);
+            fontBold = FontProgramFactory.createFont(FONT_BOLD_PATH);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         pdfFont = PdfFontFactory.createFont(font);
         pdfFontBold = PdfFontFactory.createFont(fontBold);
@@ -118,8 +135,6 @@ public class PdfService {
                 AppLanguages.fromLocale(locale)
             );
 
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         try (
             final PdfWriter writer = new PdfWriter(out);
             final PdfDocument pdfDocument = new PdfDocument(writer);
@@ -135,6 +150,8 @@ public class PdfService {
             header(gesuch, document, leftMargin, translator);
             section.render(gesuch, document, leftMargin, translator, stipDecision);
             rechtsmittelbelehrung(translator, document, leftMargin);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return out;
@@ -435,13 +452,15 @@ public class PdfService {
             .get()
             .getGueltigBis();
 
+        final String ausbildungsjahr =
+            String.format(" %d/%d", ausbildungsjahrVon.getYear(), ausbildungsjahrBis.getYear());
         document.add(
             createParagraph(
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate("stip.pdf.negativeVerfuegung.ausbildungsjahr"),
-                String.format(" %d/%d", ausbildungsjahrVon.getYear(), ausbildungsjahrBis.getYear()),
+                ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
                     DateUtil.formatDate(ausbildungsjahrVon),
@@ -466,6 +485,7 @@ public class PdfService {
             )
         );
 
+        final String einreichedatum = DateUtil.formatDate(Objects.requireNonNull(gesuch.getEinreichedatum()));
         document.add(
             createParagraph(
                 pdfFont,
@@ -474,14 +494,17 @@ public class PdfService {
                 translator.translate(
                     "stip.pdf.negativeVerfuegung.bedankung",
                     "DATUM",
-                    DateUtil.formatDate(gesuch.getEinreichedatum())
+                    einreichedatum
                 )
             )
         );
 
-        final String decision = locale.getLanguage().equals("de")
+        String decision = locale.getLanguage().equals("de")
             ? stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextDe()
             : stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextFr();
+
+        decision = decision.replace("{AUSBILDUNGSJAHR}", ausbildungsjahr);
+        decision = decision.replace("{EINREICHEEDATUM}", einreichedatum);
 
         document.add(
             createParagraph(
@@ -623,7 +646,7 @@ public class PdfService {
     }
 
     @FunctionalInterface
-    public static interface PdfSection {
+    private static interface PdfSection {
         void render(Gesuch gesuch, Document document, float leftMargin, TL translator, StipDecision stipDecision)
         throws IOException;
     }
