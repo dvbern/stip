@@ -206,7 +206,8 @@ async function syncRoles(realm: string) {
   console.info('Current state of roles and permissions');
   console.info('======================================');
   console.info({
-    missingPermissions: superfluousPermissions,
+    missingPermissions,
+    superfluousPermissions,
     missingRoles,
     missingCompositeRoles: missingCompositeRoles.map((r) => r.name),
   });
@@ -261,6 +262,7 @@ async function syncRoles(realm: string) {
   return {
     addedMissingCompositeRoles: missingCompositeRoles,
     addedMissingRoles: missingRoles,
+    removedSuperfluousPermissions: superfluousPermissions,
     addedMissingPermissions: missingPermissions,
     repairedCompositeRoles,
   };
