@@ -65,6 +65,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'step',
   });
 

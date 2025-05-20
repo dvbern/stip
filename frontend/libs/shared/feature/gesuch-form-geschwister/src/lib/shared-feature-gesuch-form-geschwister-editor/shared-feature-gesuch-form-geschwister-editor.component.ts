@@ -101,6 +101,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private einreichenStore = inject(EinreichenStore);
 
   geschwisterSig = input.required<Partial<GeschwisterUpdate>>({
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'geschwister',
   });
   @Input({ required: true }) changes:

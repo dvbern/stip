@@ -54,6 +54,7 @@ import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 export class SozialdienstMitarbeiterDetailComponent
   implements OnInit, OnDestroy
 {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input<string | undefined>(undefined, { alias: 'id' });
 
   private router = inject(Router);

@@ -34,6 +34,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 export class SharedUiNotificationsComponent {
   private dialog = inject(MatDialog);
   readonly pageSize = 5;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   notificationsSig = input.required<Notification[]>({ alias: 'notifications' });
   newPageSig = signal<PageEvent | null>(null);
 

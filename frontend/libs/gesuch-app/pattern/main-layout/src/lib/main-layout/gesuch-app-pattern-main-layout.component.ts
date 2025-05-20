@@ -23,6 +23,7 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 })
 export class GesuchAppPatternMainLayoutComponent {
   private sidenavSig = viewChild.required(MatSidenav);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
 
   constructor() {

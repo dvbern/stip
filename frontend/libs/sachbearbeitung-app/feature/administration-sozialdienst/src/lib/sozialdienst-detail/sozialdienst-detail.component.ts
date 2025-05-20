@@ -73,6 +73,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
   private destroyRef = inject(DestroyRef);
   private globalStore = inject(Store);
 
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   store = inject(SozialdienstStore);
   laenderSig = signal<Land[]>(['CH']);

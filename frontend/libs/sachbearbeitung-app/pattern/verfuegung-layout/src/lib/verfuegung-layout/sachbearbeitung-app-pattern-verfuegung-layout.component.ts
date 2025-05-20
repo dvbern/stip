@@ -25,7 +25,6 @@ import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { isPending } from '@dv/shared/util/remote-data';
@@ -39,7 +38,6 @@ import { isPending } from '@dv/shared/util/remote-data';
     RouterLinkActive,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
   ],

@@ -75,6 +75,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   private einreichenStore = inject(EinreichenStore);
   config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);

@@ -40,7 +40,7 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
   displayedColumns = ['datum', 'status', 'user', 'kommentar'];
   statusprotokollStore = inject(StatusprotokollStore);
   store = inject(Store);
-
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
 
   sortSig = viewChild(MatSort);

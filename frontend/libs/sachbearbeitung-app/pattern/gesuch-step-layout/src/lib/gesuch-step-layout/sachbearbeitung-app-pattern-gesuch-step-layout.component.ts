@@ -54,6 +54,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 })
 export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'step',
   });
   navClicked$ = new EventEmitter();

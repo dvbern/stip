@@ -43,7 +43,6 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
-import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -54,7 +53,6 @@ import {
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
-import { SharedUiWohnsitzSplitterComponent } from '@dv/shared/ui/wohnsitz-splitter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -93,14 +91,12 @@ const MEDIUM_AGE = 20;
     MatSelectModule,
     MatRadioModule,
     MaskitoDirective,
-    SharedUiWohnsitzSplitterComponent,
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
-    SharedUiChangeIndicatorComponent,
     SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',

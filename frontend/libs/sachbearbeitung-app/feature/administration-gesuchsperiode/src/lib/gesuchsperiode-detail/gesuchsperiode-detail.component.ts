@@ -18,7 +18,6 @@ import {
 import { MatChipsModule } from '@angular/material/chips';
 import {
   MatDatepicker,
-  MatDatepickerApply,
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
@@ -90,7 +89,6 @@ import { PublishComponent } from '../publish/publish.component';
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
-    MatDatepickerApply,
     MatChipsModule,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
@@ -107,6 +105,7 @@ export class GesuchsperiodeDetailComponent {
   translate = inject(TranslateService);
   maskitoYear = maskitoYear;
   maskitoNumber = maskitoNumber;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   unsavedChangesSig: Signal<boolean>;
 

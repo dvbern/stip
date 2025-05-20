@@ -15,7 +15,6 @@ import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 import {
@@ -33,7 +32,6 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
     MatCardModule,
     TranslatePipe,
     MatExpansionModule,
-    SharedUiFormatChfPipe,
     BerechnungsCardComponent,
     PersoenlicheEinnahmenComponent,
     PersoenlicheKostenComponent,
@@ -47,6 +45,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   indexSig = input.required<string>({ alias: 'index' });
   expansionState = {
     persoenlich: {

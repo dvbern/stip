@@ -15,7 +15,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -36,13 +35,11 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
-    SharedUiKommentarDialogComponent,
     SharedUiTruncateTooltipDirective,
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,

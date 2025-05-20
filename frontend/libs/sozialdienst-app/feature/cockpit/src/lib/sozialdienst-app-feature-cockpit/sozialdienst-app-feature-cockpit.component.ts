@@ -133,6 +133,7 @@ export class SozialdienstAppFeatureCockpitComponent
   delegationStore = inject(DelegationStore);
   versionSig = this.store.selectSignal(selectVersion);
 
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GetDelegierungSozQueryType | undefined>(undefined);

@@ -12,7 +12,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -42,7 +41,6 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
   imports: [
     CommonModule,
     TranslatePipe,
-    RouterLink,
     MatTableModule,
     MatTooltipModule,
     MatPaginatorModule,
