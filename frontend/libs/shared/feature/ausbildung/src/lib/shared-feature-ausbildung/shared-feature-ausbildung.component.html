@@ -255,13 +255,15 @@
       <mat-error *dvSharedUiFormMessageError="'inactivePeriod'" class="tw-whitespace-nowrap">
         {{
           'shared.form.ausbildung.form.error.inactivePeriod'
-            | translate: { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date) }
+            | translate
+              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
         }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="tw-whitespace-nowrap">
         {{
           'shared.form.ausbildung.form.error.periodeIsDraft'
-            | translate: { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date) }
+            | translate
+              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
         }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
