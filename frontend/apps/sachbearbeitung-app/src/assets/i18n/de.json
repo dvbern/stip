@@ -373,6 +373,7 @@
   "sachbearbeitung-app.infos.admin.table.kommentar": "Kommentar",
   "sachbearbeitung-app.infos.admin.verfuegungen": "Verschickte Verfügungen",
   "sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung": "Verfügung als PDF",
+  "sachbearbeitung-app.infos.admin.verfuegung.table.dokument": "Dokument",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen": "Ausbildung abbrechen",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message": "Wollen Sie die Ausbildung wirklich abbrechen?",
   "sachbearbeitung-app.infos.admin.ausbildung-unterbrechen": "Ausbildung unterbrechen",

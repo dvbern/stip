@@ -373,6 +373,7 @@
   "sachbearbeitung-app.infos.admin.table.kommentar": "Commentaire",
   "sachbearbeitung-app.infos.admin.verfuegungen": "Décisions envoyées",
   "sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung": "Décision en PDF",
+  "sachbearbeitung-app.infos.admin.verfuegung.table.dokument": "Document",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen": "Annuler la formation",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message": "Voulez-vous vraiment annuler la formation?",
   "sachbearbeitung-app.infos.admin.ausbildung-unterbrechen": "Interrompre la formation",
