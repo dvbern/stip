@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -82,50 +84,81 @@ public class GesuchsperiodenService {
     public Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeForAusbildung(
         final Ausbildung ausbildung
     ) {
-        final var ausbildungBegin = ausbildung.getAusbildungBegin();
-
-        for (int yearOffset = 1; yearOffset >= -1; yearOffset--) {
-            var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
-
-            if (ausbildungsBeginAssumed.isBefore(ausbildungBegin)) {
-                break;
-            }
-
-            var eligibleGesuchsperiode =
-                gesuchsperiodeRepository.findPubliziertStartBeforeOrAt(ausbildungsBeginAssumed);
-
-            if (
-                eligibleGesuchsperiode
-                    .getGesuchsperiodeStart()
-                    .plusMonths(6)
-                    .isAfter(ausbildungsBeginAssumed)
-                &&
-                eligibleGesuchsperiode.getAufschaltterminStart().isBefore(LocalDate.now())
-            ) {
-                return Pair.of(eligibleGesuchsperiode, null);
-            }
-        }
-
-        // None were found, throw error
-        final var ausbildungThisYear = ausbildungBegin.withYear(LocalDate.now().getYear());
-        LocalDate dateToCheck;
-        if (ausbildungThisYear.isBefore(LocalDate.now())) {
-            dateToCheck = ausbildungThisYear.plusYears(1);
+        if (ausbildung.getAusbildungBegin().isBefore(LocalDate.now())) {
+            return getGesuchsperiodeDateInPast(ausbildung.getAusbildungBegin());
         } else {
-            dateToCheck = ausbildungThisYear;
+            return getGesuchsperiodeDateInFuture(ausbildung.getAusbildungBegin());
         }
+    }
 
-        final var toCheck = gesuchsperiodeRepository.findStartBeforeOrAt(dateToCheck);
-
-        if (toCheck.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
-            // Die Gesuchsperiode für diesen Ausbildungsbeginn wird voraussichtlich am xx.xx geöffnet
-            return Pair.of(toCheck, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
-        } else if (toCheck.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
-            // Die Gesuchsperiode für diesen Ausbildungsbeginn wird am xx.xx geöffnet
-            return Pair.of(toCheck, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
-        } else {
-            // Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden
+    Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeDateInFuture(final LocalDate ausbildungBegin) {
+        final var overlappingPerioden = gesuchsperiodeRepository.findAllStartAndStopIntersect(ausbildungBegin);
+        if (overlappingPerioden.isEmpty()) {
             return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        }
+
+        // get is fine here, as the list is guaranteed not empty
+        final var toAssign =
+            overlappingPerioden.stream().max(Comparator.comparing(Gesuchsperiode::getAufschaltterminStart)).get();
+        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT) {
+            LOG.error("A Gesuchsperiode in the future is archiviert");
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        }
+
+        if (toAssign.isActiveFor(LocalDate.now())) {
+            return Pair.of(toAssign, null);
+        }
+
+        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
+            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
+        } else {
+            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+        }
+    }
+
+    private Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeDateInPast(
+        final LocalDate ausbildungBegin
+    ) {
+        final var currentlyPublic = gesuchsperiodeRepository.findAllPublicStartAndStopIntersect(LocalDate.now());
+        if (currentlyPublic.size() != 2) {
+            LOG.error("There are != 2 currently active Gesuchsperioden, currently active: {}", currentlyPublic.size());
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        }
+
+        final var isFruehling = DateUtil.isFruehling(ausbildungBegin);
+
+        Gesuchsperiode toAssign;
+        if (isFruehling) {
+            final var toAssignOpt = currentlyPublic.stream()
+                .filter(gesuchsperiode -> DateUtil.isFruehling(gesuchsperiode.getGesuchsperiodeStart()))
+                .findFirst();
+
+            if (toAssignOpt.isEmpty()) {
+                LOG.error("No active Fruehling periode found");
+                return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+            }
+
+            toAssign = toAssignOpt.get();
+        } else {
+            final var toAssignOpt = currentlyPublic.stream()
+                .filter(gesuchsperiode -> DateUtil.isHerbst(gesuchsperiode.getGesuchsperiodeStart()))
+                .findFirst();
+
+            if (toAssignOpt.isEmpty()) {
+                LOG.error("No active Herbst periode found");
+                return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+            }
+
+            toAssign = toAssignOpt.get();
+        }
+
+        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
+            LOG.error("Gesuchsperiode for a past date was found in Status Entwurf: {}", toAssign.getId());
+            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+        } else if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT) {
+            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+        } else {
+            return Pair.of(toAssign, null);
         }
     }
 

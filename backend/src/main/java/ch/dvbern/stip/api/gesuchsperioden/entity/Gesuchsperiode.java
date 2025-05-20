@@ -21,6 +21,7 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -222,4 +223,13 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Min(0)
     @Column(name = "frist_nachreichen_dokumente", nullable = false)
     private Integer fristNachreichenDokumente;
+
+    public boolean isActiveFor(final LocalDate date) {
+        return DateUtil.between(
+            getAufschaltterminStart(),
+            getGesuchsperiodeStopp(),
+            date,
+            true
+        );
+    }
 }

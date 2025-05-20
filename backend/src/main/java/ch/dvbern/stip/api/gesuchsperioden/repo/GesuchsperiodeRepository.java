@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -80,5 +81,25 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
             .orderBy(gesuchsperiode.timestampErstellt.desc())
             .stream()
             .findFirst();
+    }
+
+    public List<Gesuchsperiode> findAllStartAndStopIntersect(final LocalDate ausbildungBegin) {
+        return findAllStartAndStopIntersectQuery(ausbildungBegin).stream().toList();
+    }
+
+    public List<Gesuchsperiode> findAllPublicStartAndStopIntersect(final LocalDate ausbildungBegin) {
+        return findAllStartAndStopIntersectQuery(ausbildungBegin)
+            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
+            .stream()
+            .toList();
+    }
+
+    JPAQuery<Gesuchsperiode> findAllStartAndStopIntersectQuery(final LocalDate ausbildungBegin) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchsperiode)
+            .where(
+                gesuchsperiode.gesuchsperiodeStart.loe(ausbildungBegin)
+                    .and(gesuchsperiode.gesuchsperiodeStopp.goe(ausbildungBegin))
+            );
     }
 }

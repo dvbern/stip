@@ -125,6 +125,24 @@ public class DateUtil {
         }
     }
 
+    public boolean isFruehling(final LocalDate date) {
+        return between(
+            LocalDate.of(LocalDate.now().getYear(), 1, 1),
+            LocalDate.of(LocalDate.now().getYear(), 6, 1).with(lastDayOfMonth()),
+            date,
+            true
+        );
+    }
+
+    public boolean isHerbst(final LocalDate date) {
+        return between(
+            LocalDate.of(date.getYear(), 7, 1),
+            LocalDate.of(date.getYear(), 12, 1).with(lastDayOfMonth()),
+            date,
+            true
+        );
+    }
+
     public String formatDate(final LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return localDate.format(formatter);
