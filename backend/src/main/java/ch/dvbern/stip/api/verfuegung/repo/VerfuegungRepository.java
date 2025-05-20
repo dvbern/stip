@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.verfuegung.repository;
+package ch.dvbern.stip.api.verfuegung.repo;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;

@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.verfuegung.repository.VerfuegungRepository;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.vertx.mutiny.core.buffer.Buffer;
