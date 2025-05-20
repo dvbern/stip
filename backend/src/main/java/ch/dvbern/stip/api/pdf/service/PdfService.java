@@ -504,7 +504,7 @@ public class PdfService {
             : stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextFr();
 
         decision = decision.replace("{AUSBILDUNGSJAHR}", ausbildungsjahr);
-        decision = decision.replace("{EINREICHEEDATUM}", einreichedatum);
+        decision = decision.replace("{EINREICHEFRIST}", einreichedatum);
 
         document.add(
             createParagraph(
