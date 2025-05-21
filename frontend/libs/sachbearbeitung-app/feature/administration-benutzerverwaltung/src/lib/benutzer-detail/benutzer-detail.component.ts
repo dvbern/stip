@@ -52,6 +52,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 })
 export class BenutzeDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
   private route = inject(ActivatedRoute);

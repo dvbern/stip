@@ -71,6 +71,7 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
     ].includes(gesuchStatus);
   });
   gesuchStore = inject(GesuchStore);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
   displayColumns = [
     'timestampErstellt',
