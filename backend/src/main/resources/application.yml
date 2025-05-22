@@ -71,19 +71,19 @@ kstip:
     cron: '0 0 10 1/1 * ? *' # Fires daily at 10:00
   sapbusinesspartner:
     bern:
-      cron: '0 0/15 * * * ? *' # Fires every 15 minutes, starting at XX:00
+      cron: '0 0/5 * * * ? *' # Fires every 15 minutes, starting at XX:00
     dv:
-      cron: '0 1/15 * * * ? *' # Fires every 15 minutes, starting at XX:01
+      cron: '0 1/5 * * * ? *' # Fires every 15 minutes, starting at XX:01
   sappendingauszahlung:
     bern:
-      cron: '0 5/15 * * * ? *' # Fires every 15 minutes, starting at XX:05
+      cron: '0 5/5 * * * ? *' # Fires every 15 minutes, starting at XX:05
     dv:
-      cron: '0 6/15 * * * ? *' # Fires every 15 minutes, starting at XX:06
+      cron: '0 6/5 * * * ? *' # Fires every 15 minutes, starting at XX:06
   sapremainderauszahlung:
     bern:
-      cron: '0 10/15 * * * ? *' # Fires every 15 minutes, starting at XX:10
+      cron: '0 10/5 * * * ? *' # Fires every 15 minutes, starting at XX:10
     dv:
-      cron: '0 11/15 * * * ? *' # Fires every 15 minutes, starting at XX:11
+      cron: '0 11/5 * * * ? *' # Fires every 15 minutes, starting at XX:11
   bern:
     welcome-mail:
       kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
