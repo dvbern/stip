@@ -25,7 +25,6 @@ const initialState: SachbearbeiterState = {
 @Injectable()
 export class SachbearbeiterStore extends signalStore(
   { protectedState: false },
-
   withState(initialState),
 ) {
   private benutzerService = inject(BenutzerService);
