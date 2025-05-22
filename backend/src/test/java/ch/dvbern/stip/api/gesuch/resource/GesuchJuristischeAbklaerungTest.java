@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -130,7 +131,7 @@ class GesuchJuristischeAbklaerungTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(21)
+    @Order(5)
     void gesuchEinreichenAsSBShouldFail() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
@@ -142,7 +143,7 @@ class GesuchJuristischeAbklaerungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(21)
+    @Order(6)
     void gesuchEinreichenAsGSShouldFail() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
@@ -156,7 +157,7 @@ class GesuchJuristischeAbklaerungTest {
 
     @Test
     @TestAsJurist
-    @Order(22)
+    @Order(7)
     void gesuchEinreichenAsJurShouldWork() {
         gesuchApiSpec.gesuchEinreichenJur()
             .gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
@@ -164,5 +165,12 @@ class GesuchJuristischeAbklaerungTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    void test_delete_gesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchDtoSpec.getId());
     }
 }
