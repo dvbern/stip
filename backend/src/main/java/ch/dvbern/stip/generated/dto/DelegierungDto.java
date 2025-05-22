@@ -1,7 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -20,7 +23,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DelegierungDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid SozialdienstSlimDto sozialdienst;
+  private @Valid SozialdienstBenutzerDto delegierterMitarbeiter;
+  private @Valid Boolean delegierungAngenommen;
+  private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
+
+  /**
+   **/
+  public DelegierungDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -40,6 +66,60 @@ public class DelegierungDto  implements Serializable {
     this.sozialdienst = sozialdienst;
   }
 
+  /**
+   **/
+  public DelegierungDto delegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
+    this.delegierterMitarbeiter = delegierterMitarbeiter;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierterMitarbeiter")
+  public SozialdienstBenutzerDto getDelegierterMitarbeiter() {
+    return delegierterMitarbeiter;
+  }
+
+  @JsonProperty("delegierterMitarbeiter")
+  public void setDelegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
+    this.delegierterMitarbeiter = delegierterMitarbeiter;
+  }
+
+  /**
+   **/
+  public DelegierungDto delegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierungAngenommen")
+  public Boolean getDelegierungAngenommen() {
+    return delegierungAngenommen;
+  }
+
+  @JsonProperty("delegierungAngenommen")
+  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+  }
+
+  /**
+   **/
+  public DelegierungDto persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+    return this;
+  }
+
+  
+  @JsonProperty("persoenlicheAngaben")
+  public PersoenlicheAngabenDto getPersoenlicheAngaben() {
+    return persoenlicheAngaben;
+  }
+
+  @JsonProperty("persoenlicheAngaben")
+  public void setPersoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -50,12 +130,16 @@ public class DelegierungDto  implements Serializable {
       return false;
     }
     DelegierungDto delegierung = (DelegierungDto) o;
-    return Objects.equals(this.sozialdienst, delegierung.sozialdienst);
+    return Objects.equals(this.id, delegierung.id) &&
+        Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
+        Objects.equals(this.delegierterMitarbeiter, delegierung.delegierterMitarbeiter) &&
+        Objects.equals(this.delegierungAngenommen, delegierung.delegierungAngenommen) &&
+        Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialdienst);
+    return Objects.hash(id, sozialdienst, delegierterMitarbeiter, delegierungAngenommen, persoenlicheAngaben);
   }
 
   @Override
@@ -63,7 +147,11 @@ public class DelegierungDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
+    sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
+    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
+    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("}");
     return sb.toString();
   }

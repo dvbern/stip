@@ -63,6 +63,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -93,18 +94,17 @@ class GesuchGetGesucheTest {
     void getGsDashboardNoAusbildungTest() {
 
         final var fall = TestUtil.getOrCreateFall(fallApiSpec);
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
-        assertThat(fallDashboardItems.length, is(1));
+        assertThat(fallDashboardItem, is(notNullValue()));
 
-        final var fallDashboardItem = fallDashboardItems[0];
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
 
         assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
@@ -115,16 +115,16 @@ class GesuchGetGesucheTest {
          * an empty gesuch with a empty gesuchtranche should be returned
          */
         TestUtil.createAusbildung(ausbildungApiSpec, fall.getId());
-        final var fallDashboardItems2 = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem2 = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
         assertNotNull(
-            fallDashboardItems2[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getCurrentTrancheId()
+            fallDashboardItem2.getAusbildungDashboardItems().get(0).getGesuchs().get(0).getCurrentTrancheId()
         );
     }
 
@@ -190,18 +190,17 @@ class GesuchGetGesucheTest {
     @TestAsGesuchsteller
     @Order(10)
     void getGsDashboardTest() {
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
-        assertThat(fallDashboardItems.length, is(1));
+        assertThat(fallDashboardItem, is(notNullValue()));
 
-        final var fallDashboardItem = fallDashboardItems[0];
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
 
         assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
@@ -227,25 +226,6 @@ class GesuchGetGesucheTest {
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
-    }
-
-    @Order(12)
-    void getGsDashboardTestNoAusbildung() {
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(FallDashboardItemDto[].class);
-
-        assertThat(fallDashboardItems.length, is(1));
-
-        final var fallDashboardItem = fallDashboardItems[0];
-        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
-
-        assertThat(ausbildungDashboardItems.size(), is(0));
     }
 
     @Test

@@ -288,6 +288,10 @@ quarkus:
     log:
       sentry:
         enabled: false
+    antivirus:
+      clamav:
+        devservice:
+          enabled: false
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:

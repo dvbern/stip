@@ -177,16 +177,15 @@ class CustomDokumenteGetGSDashboardTest {
     @TestAsGesuchsteller
     @Order(8)
     void getGsDashboardMissingDocumentsTest() {
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
-        final var fallDashboardItem = fallDashboardItems[0];
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
         final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
         final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
