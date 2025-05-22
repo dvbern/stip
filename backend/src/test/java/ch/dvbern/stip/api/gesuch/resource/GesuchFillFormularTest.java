@@ -104,7 +104,6 @@ class GesuchFillFormularTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final NotificationApiSpec notificationApiSpec =
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
-    private UUID fallId;
     private UUID gesuchId;
     private UUID gesuchTrancheId;
     private UUID ausbildungId;

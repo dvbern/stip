@@ -273,7 +273,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.getGesuchInfo(gesuchId);
