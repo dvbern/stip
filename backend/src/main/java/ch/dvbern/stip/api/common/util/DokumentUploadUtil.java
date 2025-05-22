@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -85,14 +84,7 @@ public class DokumentUploadUtil {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         final var key = dokumentPathPrefix + objectId;
         return Uni.createFrom()
-            .completionStage(
-                () -> getUploadDokumentFuture(
-                    s3,
-                    fileUpload,
-                    configService.getBucketName(),
-                    key
-                )
-            )
+            .completionStage(() -> getUploadDokumentFuture(s3, fileUpload, configService.getBucketName(), key))
             .onItem()
             .invoke(() -> serviceCallback.accept(objectId))
             .onItem()
@@ -109,23 +101,17 @@ public class DokumentUploadUtil {
     }
 
     public String executeUploadDocument(
-        final File file,
+        final byte[] byteArray,
+        final String fileName,
         final S3AsyncClient s3,
         final ConfigService configService,
         final String documentPathPrefix
     ) {
-        final var objectId = FileUtil.generateUUIDWithFileExtension(file.getName());
+        final var objectId = FileUtil.generateUUIDWithFileExtension(fileName);
         final var key = documentPathPrefix + objectId;
 
         Uni.createFrom()
-            .completionStage(
-                getUploadDokumentFuture(
-                    s3,
-                    file,
-                    configService.getBucketName(),
-                    key
-                )
-            )
+            .completionStage(getUploadDokumentFuture(s3, byteArray, configService.getBucketName(), key))
             .await()
             .indefinitely();
 
@@ -172,17 +158,13 @@ public class DokumentUploadUtil {
 
     private CompletableFuture<PutObjectResponse> getUploadDokumentFuture(
         final S3AsyncClient s3,
-        final File file,
+        final byte[] byteArray,
         final String bucketName,
         final String objectId
     ) {
         return s3.putObject(
-            buildPutRequest(
-                DOCUMENT_CONTENT_TYPE,
-                bucketName,
-                objectId
-            ),
-            AsyncRequestBody.fromFile(file)
+            buildPutRequest(DOCUMENT_CONTENT_TYPE, bucketName, objectId),
+            AsyncRequestBody.fromBytes(byteArray)
         );
     }
 
@@ -193,24 +175,12 @@ public class DokumentUploadUtil {
         final String objectId
     ) {
         return s3.putObject(
-            buildPutRequest(
-                fileUpload.contentType(),
-                bucketName,
-                objectId
-            ),
+            buildPutRequest(fileUpload.contentType(), bucketName, objectId),
             AsyncRequestBody.fromFile(fileUpload.uploadedFile())
         );
     }
 
-    private PutObjectRequest buildPutRequest(
-        final String contentType,
-        final String bucketName,
-        final String objectId
-    ) {
-        return PutObjectRequest.builder()
-            .bucket(bucketName)
-            .key(objectId)
-            .contentType(contentType)
-            .build();
+    private PutObjectRequest buildPutRequest(final String contentType, final String bucketName, final String objectId) {
+        return PutObjectRequest.builder().bucket(bucketName).key(objectId).contentType(contentType).build();
     }
 }

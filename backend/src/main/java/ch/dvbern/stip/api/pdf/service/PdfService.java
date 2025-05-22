@@ -76,9 +76,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class PdfService {
+
     private static final String FONT_PATH = "src/main/resources/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "src/main/resources/fonts/arial_bold.ttf";
 
+    private static final int SPACING_BIG = 30;
+    private static final int SPACING_MEDIUM = 20;
+    private static final int SPACING_SMALL = 10;
     private static final float FONT_SIZE_BIG = 10.5f;
     private static final float FONT_SIZE_MEDIUM = 8.5f;
     private static final float FONT_SIZE_SMALL = 6.5f;
@@ -93,10 +97,7 @@ public class PdfService {
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream createNegativeVerfuegungPdf(
-        final Gesuch gesuch,
-        final StipDecision stipDecision
-    ) {
+    public ByteArrayOutputStream createNegativeVerfuegungPdf(final Gesuch gesuch, final StipDecision stipDecision) {
         final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
         return this.createPdf(gesuch, negativeVerfuegungSection, stipDecision);
     }
@@ -120,20 +121,15 @@ public class PdfService {
         pdfFont = PdfFontFactory.createFont(font);
         pdfFontBold = PdfFontFactory.createFont(fontBold);
 
-        ausbildungsbeitraegeUri = new Link(
-            AUSBILDUNGSBEITRAEGE_LINK,
-            PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK)
-        );
+        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
-        final Locale locale = gesuch.getLatestGesuchTranche()
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
-        final TL translator = TLProducer.defaultBundle()
-            .forAppLanguage(
-                AppLanguages.fromLocale(locale)
-            );
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
         try (
             final PdfWriter writer = new PdfWriter(out);
@@ -163,9 +159,11 @@ public class PdfService {
 
         final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
 
-        assert gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung() != null;
-        final Benutzer sachbearbeiterBenutzer =
-            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
+        final Benutzer sachbearbeiterBenutzer = gesuch
+            .getAusbildung()
+            .getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter();
 
         final Cell sender = createCell(
             pdfFont,
@@ -186,14 +184,13 @@ public class PdfService {
             translator.translate("stip.pdf.header.plz")
         );
 
-        final Link ausbildungsbeitraegeUri =
-            new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-        final Paragraph uriParagraph = new Paragraph()
-            .add(ausbildungsbeitraegeUri);
+        final Link ausbildungsbeitraegeUri = new Link(
+            AUSBILDUNGSBEITRAEGE_LINK,
+            PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK)
+        );
+        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
 
-        final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1)
-            .setPaddingBottom(0)
-            .add(uriParagraph);
+        final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
 
         final Paragraph recieverHeaderParagraph = new Paragraph()
             .add(translator.translate("stip.pdf.header.bkd") + ", ")
@@ -213,13 +210,14 @@ public class PdfService {
             1,
             gesuchFormular.getPersonInAusbildung().getFullName(),
             gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
-            gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() + " "
-            + gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
-        ).setPaddingTop(20);
+            gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() +
+            " " +
+            gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
+        ).setPaddingTop(SPACING_MEDIUM);
 
+        // TODO: implement sb email
         final Link email = new Link("TBD: peter.muster@be.ch", PdfAction.createURI("mailto:peter.muster@be.ch"));
-        final Paragraph emailParagraph = new Paragraph()
-            .add(email);
+        final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
             pdfFont,
@@ -227,9 +225,11 @@ public class PdfService {
             1,
             1,
             String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
+            // TODO: implement sb phone number
             "TBD: 031 300 30 30"
-        ).setPaddingBottom(30)
-            .setPaddingTop(20)
+        )
+            .setPaddingBottom(SPACING_BIG)
+            .setPaddingTop(SPACING_MEDIUM)
             .add(emailParagraph);
 
         final Paragraph dossierNr = new Paragraph()
@@ -244,15 +244,10 @@ public class PdfService {
         fallInformations.add(dossierNr);
         fallInformations.add(svNr);
 
-        final Cell date = createCell(
-            pdfFont,
-            FONT_SIZE_MEDIUM,
-            1,
-            1,
-            DateUtil.formatDate(LocalDate.now())
-        );
+        final Cell date = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, DateUtil.formatDate(LocalDate.now()));
 
-        final Locale locale = gesuch.getLatestGesuchTranche()
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
@@ -265,14 +260,7 @@ public class PdfService {
             ? gesuch.getAusbildung().getAusbildungsgang().getBezeichnungDe()
             : gesuch.getAusbildung().getAusbildungsgang().getBezeichnungFr();
 
-        final Cell ausbildungsgang = createCell(
-            pdfFont,
-            FONT_SIZE_MEDIUM,
-            1,
-            1,
-            ausbildungsStaette,
-            ausbildungsGang
-        );
+        final Cell ausbildungsgang = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, ausbildungsStaette, ausbildungsGang);
 
         headerTable.addCell(sender);
         headerTable.addCell(recieverHeader);
@@ -283,7 +271,7 @@ public class PdfService {
         headerTable.addCell(fallInformations);
         headerTable.addCell(date);
         headerTable.addCell(ausbildungsgang);
-        headerTable.setMarginBottom(20);
+        headerTable.setMarginBottom(SPACING_MEDIUM);
 
         document.add(headerTable);
     }
@@ -299,11 +287,11 @@ public class PdfService {
                 translator.translate("stip.pdf.rechtsmittelbelehrung.title").toUpperCase()
             )
                 .setUnderline()
-                .setPaddingTop(20)
+                .setPaddingTop(SPACING_MEDIUM)
         );
 
         final Table mainTable = createTable(new float[] { 10, 90 }, leftMargin);
-        mainTable.setMarginTop(20);
+        mainTable.setMarginTop(SPACING_MEDIUM);
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "1."));
         mainTable.addCell(
@@ -330,13 +318,7 @@ public class PdfService {
             createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.title"))
         );
         mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.text")
-            )
+            createCell(pdfFont, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.text"))
         );
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2.1."));
@@ -429,31 +411,39 @@ public class PdfService {
         final TL translator,
         StipDecision stipDecision
     ) throws IOException {
-        final Locale locale = gesuch.getLatestGesuchTranche()
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
 
-        assert gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung() != null;
-        final Benutzer sachbearbeiterBenutzer =
-            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
+        final Benutzer sachbearbeiterBenutzer = gesuch
+            .getAusbildung()
+            .getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter();
 
-        final LocalDate ausbildungsjahrVon = gesuch.getGesuchTranchen()
+        final LocalDate ausbildungsjahrVon = gesuch
+            .getGesuchTranchen()
             .stream()
             .map(GesuchTranche::getGueltigkeit)
             .min(Comparator.comparing(DateRange::getGueltigAb))
             .get()
             .getGueltigAb();
-        final LocalDate ausbildungsjahrBis = gesuch.getGesuchTranchen()
+        final LocalDate ausbildungsjahrBis = gesuch
+            .getGesuchTranchen()
             .stream()
             .map(GesuchTranche::getGueltigkeit)
             .max(Comparator.comparing(DateRange::getGueltigBis))
             .get()
             .getGueltigBis();
 
-        final String ausbildungsjahr =
-            String.format(" %d/%d", ausbildungsjahrVon.getYear(), ausbildungsjahrBis.getYear());
+        final String ausbildungsjahr = String.format(
+            " %d/%d",
+            ausbildungsjahrVon.getYear(),
+            ausbildungsjahrBis.getYear()
+        );
         document.add(
             createParagraph(
                 pdfFontBold,
@@ -469,8 +459,10 @@ public class PdfService {
             )
         );
 
-        final PersonInAusbildung personInAusbildung =
-            gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final PersonInAusbildung personInAusbildung = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
             ? "stip.pdf.negativeVerfuegung.begruessung.mann"
             : "stip.pdf.negativeVerfuegung.begruessung.frau";
@@ -491,11 +483,7 @@ public class PdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate(
-                    "stip.pdf.negativeVerfuegung.bedankung",
-                    "DATUM",
-                    einreichedatum
-                )
+                translator.translate("stip.pdf.negativeVerfuegung.bedankung", "DATUM", einreichedatum)
             )
         );
 
@@ -504,16 +492,9 @@ public class PdfService {
             : stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextFr();
 
         decision = decision.replace("{AUSBILDUNGSJAHR}", ausbildungsjahr);
-        decision = decision.replace("{EINREICHEFRIST}", einreichedatum);
+        decision = decision.replace("{EINREICHEDATUM}", einreichedatum);
 
-        document.add(
-            createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                decision
-            )
-        );
+        document.add(createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
 
         document.add(
             createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
@@ -528,12 +509,12 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate("stip.pdf.negativeVerfuegung.glueckWunsch")
-            ).setPaddingTop(10)
+            ).setPaddingTop(SPACING_SMALL)
         );
 
         final float[] columnWidths = { 50, 50 };
         final Table signatureTable = createTable(columnWidths, leftMargin);
-        signatureTable.setMarginTop(20);
+        signatureTable.setMarginTop(SPACING_MEDIUM);
         signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
         signatureTable.addCell(
             createCell(
@@ -553,10 +534,11 @@ public class PdfService {
                 1,
                 1,
                 String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
+                // TODO: implement sb job title
                 "TBD: Sachbearbeiter"
             )
         );
-        signatureTable.setMarginBottom(20);
+        signatureTable.setMarginBottom(SPACING_MEDIUM);
         document.add(signatureTable);
 
         document.add(
@@ -638,7 +620,7 @@ public class PdfService {
             .setBorder(Border.NO_BORDER)
             .setFont(font)
             .setFontSize(fontSize)
-            .setPaddingBottom(10);
+            .setPaddingBottom(SPACING_SMALL);
         for (final String text : paragraphs) {
             cell.add(createParagraph(font, fontSize, 0, text));
         }

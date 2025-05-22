@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -44,6 +45,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @Slf4j
 @Validated
 public class VerfuegungResourceImpl implements VerfuegungResource {
+
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
     private final BenutzerService benutzerService;
@@ -54,7 +56,12 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     @Override
     @PermitAll
     public RestMulti<Buffer> getVerfuegung(String token) {
-        final var verfuegungId = DokumentDownloadUtil.getDokumentId(jwtPar, token, configService.getSecret());
+        final var verfuegungId = DokumentDownloadUtil.getClaimId(
+            jwtPar,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.VERFUEGUNGS_ID_CLAIM
+        );
         return verfuegungService.getVerfuegung(verfuegungId);
     }
 
@@ -63,6 +70,11 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     public FileDownloadTokenDto getVerfuegungsDownloadToken(UUID verfuegungsId) {
         verfuegungAuthorizer.canGetVerfuegungDownloadToken();
 
-        return DokumentDownloadUtil.getFileDownloadToken(verfuegungsId, benutzerService, configService);
+        return DokumentDownloadUtil.getFileDownloadToken(
+            verfuegungsId,
+            DokumentDownloadConstants.VERFUEGUNGS_ID_CLAIM,
+            benutzerService,
+            configService
+        );
     }
 }

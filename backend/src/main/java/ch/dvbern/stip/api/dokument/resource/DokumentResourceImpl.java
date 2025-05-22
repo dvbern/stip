@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
@@ -74,6 +75,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT
 @Slf4j
 @Validated
 public class DokumentResourceImpl implements DokumentResource {
+
     private final GesuchDokumentService gesuchDokumentService;
     private final UnterschriftenblattService unterschriftenblattService;
     private final ConfigService configService;
@@ -99,10 +101,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD)
-    public Uni<Response> uploadCustomGesuchDokument(
-        UUID customDokumentTypId,
-        FileUpload fileUpload
-    ) {
+    public Uni<Response> uploadCustomGesuchDokument(UUID customDokumentTypId, FileUpload fileUpload) {
         customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
@@ -194,7 +193,12 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @PermitAll
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
-        final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
+        final var dokumentId = DokumentDownloadUtil.getClaimId(
+            jwtParser,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM
+        );
         return switch (dokumentArt) {
             case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
@@ -208,7 +212,12 @@ public class DokumentResourceImpl implements DokumentResource {
         dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(dokumentId, benutzerService, configService);
+        return DokumentDownloadUtil.getFileDownloadToken(
+            dokumentId,
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
+            benutzerService,
+            configService
+        );
     }
 
     @Override

@@ -1,10 +1,10 @@
 ﻿stipDecision;titleDe;textDe;textFr
-EINGABEFRIST_ABGELAUFEN;Nichteintreten;"Ihr Gesuch um einen Ausbildungsbeitrag für das Ausbildungsjahr {AUSBILDUNGSJAHR} ist mit einer Verspätung von mehr als drei Monaten am {EINREICHEFRIST} eingereicht worden. Deshalb können wir leider auf Ihr Gesuch nicht eintreten.
+EINGABEFRIST_ABGELAUFEN;Nichteintreten;"Ihr Gesuch um einen Ausbildungsbeitrag für das Ausbildungsjahr {AUSBILDUNGSJAHR} ist mit einer Verspätung von mehr als drei Monaten am {EINREICHEDATUM} eingereicht worden. Deshalb können wir leider auf Ihr Gesuch nicht eintreten.
 
 Gemäss Artikel 36 Absatz 1 der Verordnung über die Ausbildungsbeiträge (ABV) ist der Eingabetermin für Gesuche a) der 30. Juni für Ausbildungsjahre, die in der ersten Jahreshälfte beginnen und b) der
 31. Dezember für Ausbildungsjahre, die in der zweiten Jahreshälfte beginnen. Bei Gesuchen, die mit einer Verspätung von bis zu drei Monaten eingehen, werden die Ausbildungsbeiträge entsprechend
 gekürzt und nur für ganze Monate ausgerichtet (Art. 36 Abs. 2 ABV). Auf Gesuche, die mit einer Verspätung von mehr als drei Monaten eingehen, wird nicht eingetreten (Art. 36 Abs. 3 ABV).
-";"Votre demande de subside de formation pour l’année de formation %s a été soumise le %s, soit avec un retard supérieur à trois mois, raison pour laquelle elle est malheureusement irrecevable.
+";"Votre demande de subside de formation pour l’année de formation {AUSBILDUNGSJAHR} a été soumise le {EINREICHEDATUM}, soit avec un retard supérieur à trois mois, raison pour laquelle elle est malheureusement irrecevable.
 
 En vertu du l’article 36, alinéa 1 de l’ordonnance sur l’octroi de subsides de formation (OSF), les de-mandes doivent être remises a) au plus tard le 30 juin lorsque l’année de formation commence au
 premier semestre et b) au plus tard le 31 décembre lorsque l’année de formation commence au second

@@ -46,6 +46,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @UtilityClass
 public class DokumentDownloadUtil {
+
     public RestMulti<Buffer> getDokument(
         final S3AsyncClient s3,
         final String bucketName,
@@ -55,9 +56,7 @@ public class DokumentDownloadUtil {
     ) {
         return RestMulti.fromUniResponse(
             Uni.createFrom()
-                .completionStage(
-                    () -> getDownloadDokumentFuture(s3, bucketName, dokumentPathPrefix + objectId)
-                ),
+                .completionStage(() -> getDownloadDokumentFuture(s3, bucketName, dokumentPathPrefix + objectId)),
             response -> Multi.createFrom()
                 .safePublisher(AdaptersToFlow.publisher(response))
                 .map(byteBuffer -> {
@@ -75,16 +74,16 @@ public class DokumentDownloadUtil {
     }
 
     public FileDownloadTokenDto getFileDownloadToken(
-        UUID dokumentId,
-        BenutzerService benutzerService,
-        ConfigService configService
+        final UUID id,
+        final String idClaim,
+        final BenutzerService benutzerService,
+        final ConfigService configService
     ) {
         return new FileDownloadTokenDto()
             .token(
-                Jwt
-                    .claims()
+                Jwt.claims()
                     .upn(benutzerService.getCurrentBenutzername())
-                    .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
+                    .claim(idClaim, id.toString())
                     .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
                     .issuer(configService.getIssuer())
                     .jws()
@@ -92,7 +91,12 @@ public class DokumentDownloadUtil {
             );
     }
 
-    public UUID getDokumentId(final JWTParser jwtParser, final String jwtString, final String secret) {
+    public UUID getClaimId(
+        final JWTParser jwtParser,
+        final String jwtString,
+        final String secret,
+        final String idClaim
+    ) {
         JsonWebToken jwt;
         try {
             jwt = jwtParser.verify(jwtString, secret);
@@ -100,8 +104,7 @@ public class DokumentDownloadUtil {
             throw new UnauthorizedException();
         }
 
-        final var idString = (String) jwt.claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM)
-            .orElseThrow(BadRequestException::new);
+        final var idString = (String) jwt.claim(idClaim).orElseThrow(BadRequestException::new);
 
         return UUID.fromString(idString);
     }
@@ -112,19 +115,10 @@ public class DokumentDownloadUtil {
         final String objectId
     ) {
         // TODO objectKey needs to prefixed with "PATH/..."
-        return s3.getObject(
-            buildGetRequest(
-                bucketName,
-                objectId
-            ),
-            AsyncResponseTransformer.toPublisher()
-        );
+        return s3.getObject(buildGetRequest(bucketName, objectId), AsyncResponseTransformer.toPublisher());
     }
 
     private GetObjectRequest buildGetRequest(final String bucketName, final String objectId) {
-        return GetObjectRequest.builder()
-            .bucket(bucketName)
-            .key(objectId)
-            .build();
+        return GetObjectRequest.builder().bucket(bucketName).key(objectId).build();
     }
 }

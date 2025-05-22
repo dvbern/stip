@@ -18,9 +18,6 @@
 package ch.dvbern.stip.api.verfuegung.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,9 +43,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @RequiredArgsConstructor
 @Slf4j
 public class VerfuegungService {
+
     private static final String VERFUEGUNG_DOKUMENT_PATH = "verfuegung/";
-    private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_PREFIX = "Negative_Verfuegung";
-    private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_SUFFIX = ".pdf";
+    private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_NAME = "Negative_Verfuegung.pdf";
 
     private final PdfService pdfService;
     private final ConfigService configService;
@@ -60,7 +57,6 @@ public class VerfuegungService {
 
     @Transactional
     public void createVerfuegung(final UUID gesuchId, final UUID stipDecisionId) {
-
         final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
 
         final Verfuegung verfuegung = new Verfuegung();
@@ -73,29 +69,16 @@ public class VerfuegungService {
     public void createNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(gesuch, verfuegung.getStipDecision());
 
-        File tempFile = null;
-        try {
-            tempFile = File.createTempFile(NEGATIVE_VERFUEGUNG_DOKUMENT_PREFIX, NEGATIVE_VERFUEGUNG_DOKUMENT_SUFFIX);
-            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                out.writeTo(fos);
-                fos.flush();
-            }
-
-            final String objectId =
-                DokumentUploadUtil.executeUploadDocument(tempFile, s3, configService, VERFUEGUNG_DOKUMENT_PATH);
-            verfuegung.setObjectId(objectId);
-            verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_PREFIX + NEGATIVE_VERFUEGUNG_DOKUMENT_SUFFIX);
-            verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
-        } catch (IOException e) {
-            LOG.error("Failed to create or upload Verfuegung PDF", e);
-        } finally {
-            if (tempFile != null && tempFile.exists()) {
-                if (!tempFile.delete()) {
-                    LOG.warn("Failed to delete temporary file {}", tempFile.getAbsolutePath());
-                }
-            }
-        }
-
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
+        );
+        verfuegung.setObjectId(objectId);
+        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
     public List<VerfuegungDto> getVerfuegungenByGesuch(final UUID gesuchId) {
