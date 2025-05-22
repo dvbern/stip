@@ -63,6 +63,8 @@ public class SapEndpointService {
     private final VendorPostingCreateMapper vendorPostingCreateMapper;
     private final GeneralMapper generalMapper;
 
+    private static final int MAX_LENGHT_REF_DOC_NO = 16;
+
     @ConfigProperty(name = "kstip.sap.system-id")
     BigInteger systemid;
 
@@ -130,7 +132,8 @@ public class SapEndpointService {
         Auszahlung auszahlung,
         Integer amount,
         BigDecimal sapDeliveryId,
-        String qrIbanAddlInfo
+        String qrIbanAddlInfo,
+        String refDocNo
     ) {
         final OsVendorPostingCreateService vendorPostingCreateService = new OsVendorPostingCreateService();
         final var port = vendorPostingCreateService.getHTTPSPort();
@@ -149,9 +152,13 @@ public class SapEndpointService {
             throw new BadRequestException(e);
         }
 
+        if (refDocNo.length() > MAX_LENGHT_REF_DOC_NO) {
+            refDocNo = refDocNo.substring(0, MAX_LENGHT_REF_DOC_NO);
+        }
+
         vendorPostingCreateRequest.getVENDORPOSTING()
             .get(0)
-            .setHEADER(vendorPostingCreateMapper.toHeader(docDate, pstngDate));
+            .setHEADER(vendorPostingCreateMapper.toHeader(refDocNo, docDate, pstngDate));
 
         return port.osVendorPostingCreate(vendorPostingCreateRequest);
     }

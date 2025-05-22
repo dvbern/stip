@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
@@ -141,6 +142,33 @@ public class BuchhaltungService {
     private static TL getTranslator(final Locale locale) {
         final var language = AppLanguages.fromLocale(locale);
         return TLProducer.defaultBundle().forAppLanguage(language);
+    }
+
+    @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
+        final Auszahlung auszahlung
+    ) {
+        final Gesuch gesuch = gesuchRepository.findGesuchByAuszahlungId(auszahlung.getId());
+        final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
+
+        final TL translator = getTranslator(
+            gesuch.getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale()
+        );
+
+        final var buchhaltungEntry = new Buchhaltung()
+            .setBuchhaltungType(BuchhaltungType.BUSINESSPARTNER_CREATE)
+            .setBetrag(0)
+            .setSaldo(lastEntrySaldo)
+            .setComment(translator.translate("stip.businesspartner.buchhaltung.erstellen"))
+            .setFall(gesuch.getAusbildung().getFall());
+
+        buchhaltungRepository.persistAndFlush(buchhaltungEntry);
+        gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
+        return buchhaltungEntry;
     }
 
     @Transactional

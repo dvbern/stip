@@ -36,13 +36,14 @@ public abstract class VendorPostingCreateMapper {
     @Mapping(target = "DOCTYPE", constant = "YK")
     @Mapping(target = "COMPCODE", constant = "4800")
     @Mapping(target = "HEADERTXT", constant = "4890")
-    @Mapping(target = "REFDOCNO", constant = "0001544323")
+    @Mapping(source = "refDocNo", target = "REFDOCNO")
     // @Mapping(source = "", target = "PAYMENTREASON")
     @Mapping(source = "docdate", target = "DOCDATE")
     @Mapping(source = "pstngdate", target = "PSTNGDATE")
     @Mapping(target = "CURRENCY", constant = "CHF")
     @Mapping(target = "IKSRELEVANT", constant = "false")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.HEADER toHeader(
+        String refDocNo,
         XMLGregorianCalendar docdate,
         XMLGregorianCalendar pstngdate
     );

@@ -103,6 +103,9 @@ public class SapService {
         auszahlung.setSapDelivery(sapStatus);
         auszahlung.getSapDelivery()
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+        final var businessPartnerCreateBuchhaltung =
+            buchhaltungService.createBuchhaltungForBusinessPartnerCreate(auszahlung);
+        businessPartnerCreateBuchhaltung.setSapDelivery(sapStatus);
     }
 
     public SapStatus getOrCreateBusinessPartner(final Auszahlung auszahlung) {
@@ -163,7 +166,8 @@ public class SapService {
                     auszahlung,
                     buchhaltung.getBetrag(),
                     deliveryid,
-                    getQrIbanAddlInfoString(gesuch)
+                    getQrIbanAddlInfoString(gesuch),
+                    String.valueOf(buchhaltung.getId().getMostSignificantBits())
                 );
             SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
             final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid)

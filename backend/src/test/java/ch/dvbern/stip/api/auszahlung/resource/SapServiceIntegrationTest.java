@@ -130,7 +130,13 @@ class SapServiceIntegrationTest {
         auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         deliveryid = SapEndpointService.generateDeliveryId();
 
-        final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(auszahlung, 5, deliveryid, "");
+        final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(
+            auszahlung,
+            5,
+            deliveryid,
+            "",
+            String.valueOf(UUID.randomUUID().getMostSignificantBits())
+        );
 
         assertThat(
             SapReturnCodeType.isSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE()),
