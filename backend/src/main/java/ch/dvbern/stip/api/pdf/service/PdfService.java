@@ -215,7 +215,7 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        // TODO: implement sb email
+        // TODO: implement sb email KSTIP-2021
         final Link email = new Link("TBD: peter.muster@be.ch", PdfAction.createURI("mailto:peter.muster@be.ch"));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
@@ -225,7 +225,7 @@ public class PdfService {
             1,
             1,
             String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-            // TODO: implement sb phone number
+            // TODO: implement sb phone number KSTIP-2021
             "TBD: 031 300 30 30"
         )
             .setPaddingBottom(SPACING_BIG)
@@ -534,7 +534,7 @@ public class PdfService {
                 1,
                 1,
                 String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                // TODO: implement sb job title
+                // TODO: implement sb job title KSTIP-2021
                 "TBD: Sachbearbeiter"
             )
         );
