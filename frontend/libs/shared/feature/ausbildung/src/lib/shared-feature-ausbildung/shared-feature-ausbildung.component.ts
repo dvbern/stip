@@ -336,7 +336,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     effect(
       () => {
-        // todo: does this run on every keystroke?
         this.beginChangedSig();
 
         this.ausbildungStore.resetAusbildungErrors();
@@ -350,7 +349,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     effect(
       () => {
-        // todo: does this run on every keystroke? ==> test
         const error =
           this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
 
@@ -359,9 +357,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
           );
         }
-        //  else {
-        //   this.withAusbildungRange((ctrl) => ctrl.setErrors(null));
-        // }
       },
       { allowSignalWrites: true },
     );
