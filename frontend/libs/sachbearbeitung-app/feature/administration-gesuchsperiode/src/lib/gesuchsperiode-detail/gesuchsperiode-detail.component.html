@@ -1,8 +1,12 @@
 <ng-template dvHeaderSuffix>
   @if (store.currentGesuchsperiodeViewSig(); as view) {
-    <mat-chip class="ms-2" [color]="view?.statusColor" highlighted>{{
-      'shared.gesuch.periode.status.' + view.gueltigkeitStatus | translate
-    }}</mat-chip>
+    <mat-chip
+      class="ms-2 fw-normal fs-4"
+      [class.opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
+      [color]="view?.statusColor"
+      highlighted
+      >{{ 'shared.gesuch.periode.status.' + view.gueltigkeitStatus | translate }}</mat-chip
+    >
   }
 </ng-template>
 

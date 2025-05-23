@@ -212,6 +212,7 @@
 
   "shared.gesuch.periode.status.ENTWURF": "Entwurf",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publik - Aktiv",
+  "shared.gesuch.periode.status.PUBLIZIERT_INAKTIV": "Publik - Inaktiv",
   "shared.gesuch.periode.status.ARCHIVIERT": "Archiviert",
 
   "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",

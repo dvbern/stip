@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
-import { Gesuchsjahr, Gesuchsperiode } from '@dv/shared/model/gesuch';
+import { Gesuchsjahr } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -81,6 +81,12 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
     const datasource = new MatTableDataSource(gesuchsperioden);
     const sort = this.gesuchsperiodenSortSig();
     const paginator = this.gesuchsperiodenPaginatorSig();
+    datasource.sortingDataAccessor = (item, property) => {
+      if (property === 'gesuchsperiode') {
+        return item['gesuchsperiodeStart'];
+      }
+      return property;
+    };
     if (sort) {
       datasource.sort = sort;
     }
@@ -131,7 +137,9 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
       });
   }
 
-  deleteGesuchsperiode(gesuchsperiode: Gesuchsperiode) {
+  deleteGesuchsperiode<
+    T extends { id: string; bezeichnungDe: string; bezeichnungFr: string },
+  >(gesuchsperiode: T) {
     this.deleteEntry(gesuchsperiode, () =>
       this.store.deleteGesuchsperiode$(gesuchsperiode.id),
     );

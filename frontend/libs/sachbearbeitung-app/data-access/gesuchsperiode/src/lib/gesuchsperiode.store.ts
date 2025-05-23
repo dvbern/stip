@@ -2,6 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { startOfDay } from 'date-fns';
 import { merge, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -14,6 +15,7 @@ import {
   GesuchsperiodeService,
   GesuchsperiodeWithDaten,
   GueltigkeitStatus,
+  GueltigkeitStatusFrontend,
   NullableGesuchsperiodeWithDaten,
   StatusColor,
 } from '@dv/shared/model/gesuch';
@@ -42,6 +44,38 @@ const initialState: GesuchsperiodeState = {
   currentGesuchsperiode: initial(),
 };
 
+type GesuchsPeriodeFrontend = Omit<Gesuchsperiode, 'gueltigkeitStatus'> & {
+  gueltigkeitStatus: GueltigkeitStatusFrontend;
+  gesuchsperiode: string;
+  statusColor: StatusColor;
+  isEditable: boolean;
+  isReadonly: boolean;
+};
+
+const extendStatus = <
+  T extends {
+    gueltigkeitStatus: GueltigkeitStatus;
+    aufschaltterminStart: string;
+  },
+>(
+  periode: T,
+): GueltigkeitStatusFrontend => {
+  if (periode.gueltigkeitStatus !== 'PUBLIZIERT') {
+    return periode.gueltigkeitStatus;
+  }
+
+  const today = startOfDay(new Date());
+  const aufschaltterminStart = startOfDay(
+    new Date(periode.aufschaltterminStart),
+  );
+
+  if (today < aufschaltterminStart) {
+    return 'PUBLIZIERT_INAKTIV';
+  }
+
+  return 'PUBLIZIERT';
+};
+
 @Injectable()
 export class GesuchsperiodeStore extends signalStore(
   { protectedState: false },
@@ -52,17 +86,20 @@ export class GesuchsperiodeStore extends signalStore(
   private gesuchsjahrService = inject(GesuchsjahrService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  gesuchsperiodenListViewSig = computed(() => {
-    return fromCachedDataSig(this.gesuchsperioden)?.map((g) =>
-      prepareView({
-        ...g,
-        gesuchsperiode:
-          formatBackendLocalDate(g.gesuchsperiodeStart, 'de') +
-          ' - ' +
-          formatBackendLocalDate(g.gesuchsperiodeStopp, 'de'),
-      }),
-    );
-  });
+  gesuchsperiodenListViewSig = computed(
+    (): GesuchsPeriodeFrontend[] | undefined => {
+      return fromCachedDataSig(this.gesuchsperioden)?.map((g) =>
+        prepareView({
+          ...g,
+          gueltigkeitStatus: extendStatus(g),
+          gesuchsperiode:
+            formatBackendLocalDate(g.gesuchsperiodeStart, 'de') +
+            ' - ' +
+            formatBackendLocalDate(g.gesuchsperiodeStopp, 'de'),
+        }),
+      );
+    },
+  );
 
   gesuchsjahreListViewSig = computed(() => {
     return fromCachedDataSig(this.gesuchsjahre)?.map((g) =>
@@ -75,9 +112,26 @@ export class GesuchsperiodeStore extends signalStore(
     );
   });
 
-  currentGesuchsperiodeViewSig = computed(() => {
-    return prepareNullableView(this.currentGesuchsperiode.data());
-  });
+  currentGesuchsperiodeViewSig = computed(
+    ():
+      | (Omit<GesuchsperiodeWithDaten, 'gueltigkeitStatus'> & {
+          gueltigkeitStatus: GueltigkeitStatusFrontend;
+          statusColor: StatusColor;
+          isEditable: boolean;
+          isReadonly: boolean;
+        })
+      | undefined => {
+      const periode = this.currentGesuchsperiode.data();
+      if (!periode) {
+        return undefined;
+      }
+
+      return prepareNullableView({
+        ...periode,
+        gueltigkeitStatus: extendStatus(periode),
+      });
+    },
+  );
 
   currentGesuchsjahrViewSig = computed(() => {
     return prepareNullableView(this.currentGesuchsjahr.data());
@@ -370,17 +424,20 @@ export class GesuchsperiodeStore extends signalStore(
   );
 }
 
-const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
+const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatusFrontend }>(
   value: T,
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
-const statusColorMap: Record<GueltigkeitStatus, StatusColor> = {
+const statusColorMap: Record<GueltigkeitStatusFrontend, StatusColor> = {
   ENTWURF: 'caution',
   ARCHIVIERT: 'primary',
   PUBLIZIERT: 'success',
+  PUBLIZIERT_INAKTIV: 'success',
 } as const;
 
-const prepareView = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
+const prepareView = <
+  T extends { gueltigkeitStatus: GueltigkeitStatusFrontend },
+>(
   value: T,
 ) => {
   const editable = isEditable(value);
@@ -393,7 +450,7 @@ const prepareView = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
 };
 
 const prepareNullableView = <
-  T extends { gueltigkeitStatus: GueltigkeitStatus },
+  T extends { gueltigkeitStatus: GueltigkeitStatusFrontend },
 >(
   value: T | undefined | null,
 ) => (value ? prepareView(value) : undefined);

@@ -211,6 +211,7 @@
 
   "shared.gesuch.periode.status.ENTWURF": "Brouillon",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publié - Actif",
+  "shared.gesuch.periode.status.PUBLIZIERT_INAKTIV": "Publié - Inactif",
   "shared.gesuch.periode.status.ARCHIVIERT": "Archivé",
 
   "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "Changement intégré manuellement",
