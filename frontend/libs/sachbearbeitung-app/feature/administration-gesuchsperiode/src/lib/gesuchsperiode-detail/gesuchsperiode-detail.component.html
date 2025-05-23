@@ -27,7 +27,7 @@
     (ngSubmit)="handleSave()"
     class="col-12 col-xl-7"
   >
-    @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache) {
+    @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
       <h1 class="h2 mb-4">

@@ -22,7 +22,7 @@
       {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | translate }}
     </h3>
 
-    @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache) {
+    @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
       <div class="row g-4">
