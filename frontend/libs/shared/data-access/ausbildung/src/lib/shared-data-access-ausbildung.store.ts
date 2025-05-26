@@ -96,29 +96,28 @@ export class AusbildungStore extends signalStore(
           handleApiResponse(
             (res) => {
               patchState(this, () => {
-                if (isSuccess(res)) {
-                  if (isDefined(res.data.error)) {
-                    return {
-                      ausbildung: initial(),
-                      ausbildungResponse: res,
-                    };
-                  }
-                  if (isDefined(res.data.ausbildung)) {
-                    return {
-                      ausbildung: success(res.data.ausbildung),
-                      ausbildungResponse: res,
-                    };
-                  }
-                  return {
-                    ausbildung: initial(),
-                    ausbildungResponse: res,
-                  };
-                } else {
+                if (!isSuccess(res)) {
                   return {
                     ausbildung: res,
                     ausbildungResponse: res,
                   };
                 }
+                if (isDefined(res.data.error)) {
+                  return {
+                    ausbildung: initial(),
+                    ausbildungResponse: res,
+                  };
+                }
+                if (isDefined(res.data.ausbildung)) {
+                  return {
+                    ausbildung: success(res.data.ausbildung),
+                    ausbildungResponse: res,
+                  };
+                }
+                return {
+                  ausbildung: initial(),
+                  ausbildungResponse: res,
+                };
               });
             },
             {
