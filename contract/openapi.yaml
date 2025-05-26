@@ -4998,11 +4998,8 @@ components:
           type: integer
         beitraege:
           type: integer
-        ausbildungskostenSekundarstufeZwei:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-          type: integer
-        ausbildungskostenTertiaerstufe:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
+        ausbildungskosten:
+          description: The cost for the education calculated over the whole year
           type: integer
         fahrkosten:
           type: integer
