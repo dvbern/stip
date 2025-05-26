@@ -95,12 +95,13 @@ public class SapService {
         final var createResponse = sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
         SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
 
-        final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
-
         final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid);
         sapDeliveryRepository.persist(sapStatus);
         auszahlung.setSapDelivery(sapStatus);
+
+        final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
+
         auszahlung.getSapDelivery()
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
         final var businessPartnerCreateBuchhaltung =
@@ -161,19 +162,20 @@ public class SapService {
         if (Objects.isNull(buchhaltung.getSapDelivery())) {
             deliveryid = SapEndpointService.generateDeliveryId();
 
+            final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid)
+                .setSapBusinessPartnerId(auszahlung.getSapBusinessPartnerId());
+            sapDeliveryRepository.persist(sapStatus);
+            buchhaltung.setSapDelivery(sapStatus);
+
             final var vendorPostingCreateResponse =
                 sapEndpointService.createVendorPosting(
                     auszahlung,
                     buchhaltung.getBetrag(),
                     deliveryid,
                     getQrIbanAddlInfoString(gesuch),
-                    String.valueOf(buchhaltung.getId().getMostSignificantBits())
+                    String.valueOf(Math.abs(buchhaltung.getId().getMostSignificantBits()))
                 );
             SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
-            final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid)
-                .setSapBusinessPartnerId(auszahlung.getSapBusinessPartnerId());
-            sapDeliveryRepository.persist(sapStatus);
-            buchhaltung.setSapDelivery(sapStatus);
         }
         return getVendorPostingCreateStatus(buchhaltung);
     }
@@ -269,9 +271,9 @@ public class SapService {
     }
 
     public void processPendingCreateBusinessPartnerActions() {
-        final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery();
-        pendingAuszahlungs.forEach(
-            auszahlung -> {
+        final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList();
+        for (var auszahlung : pendingAuszahlungs) {
+            try {
                 getBusinessPartnerCreateStatus(auszahlung);
                 if (
                     auszahlung.getSapDelivery().getSapStatus() == SapStatus.SUCCESS
@@ -286,34 +288,62 @@ public class SapService {
                     }
                     auszahlung.getSapDelivery().setPendingSapAction(null);
                 }
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingCreateBusinessPartnerActions: Error during processing of Auszahlung %s",
+                        auszahlung.getId()
+                    ),
+                    e
+                );
             }
-        );
+        }
     }
 
     public void processPendingCreateVendorPostingActions() {
-        final var pendingBuchhaltungs = buchhaltungRepository.findBuchhaltungWithPendingSapDelivery();
-        pendingBuchhaltungs.forEach(this::getVendorPostingCreateStatus);
+        final var pendingBuchhaltungs = buchhaltungRepository.findBuchhaltungWithPendingSapDelivery().toList();
+        for (var buchhaltung : pendingBuchhaltungs) {
+            try {
+                getVendorPostingCreateStatus(buchhaltung);
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingCreateVendorPostingActions: Error during processing of Buchaltung %s",
+                        buchhaltung.getId()
+                    ),
+                    e
+                );
+            }
+        }
     }
 
     public void processRemainderAuszahlungActions() {
         gesuchsperiodeRepository.listAll()
-            .forEach(
-                gesuchsperiode -> {
-                    if (gesuchsperiode.getZweiterAuszahlungsterminTag() == LocalDate.now().getDayOfMonth()) {
-                        gesuchRepository.findGesuchsByGesuchsperiodeId(gesuchsperiode.getId())
-                            .forEach(
-                                gesuch -> {
-                                    if (isPastSecondPaymentDate(gesuch)) {
-                                        createRemainderAuszahlungOrGetStatus(
-                                            gesuch.getLatestGesuchTranche()
-                                                .getGesuchFormular()
-                                                .getAuszahlung()
-                                        );
-                                    }
-                                }
-                            );
-                    }
+            .stream()
+            .filter(
+                gesuchsperiode -> gesuchsperiode.getZweiterAuszahlungsterminTag() == LocalDate.now().getDayOfMonth()
+            )
+            .flatMap(
+                gesuchsperiode -> gesuchRepository.findGesuchsByGesuchsperiodeId(gesuchsperiode.getId()).stream()
+            )
+            .filter(this::isPastSecondPaymentDate)
+            .forEach(gesuch -> {
+                try {
+                    createRemainderAuszahlungOrGetStatus(
+                        gesuch.getLatestGesuchTranche()
+                            .getGesuchFormular()
+                            .getAuszahlung()
+                    );
+                } catch (Exception e) {
+                    LOG.error(
+                        String.format(
+                            "processRemainderAuszahlungActions: Error during processing of gesuch %s",
+                            gesuch.getId()
+                        ),
+                        e
+                    );
                 }
+            }
             );
     }
 }

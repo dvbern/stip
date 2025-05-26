@@ -30,9 +30,14 @@ import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public abstract class BusinessPartnerReadMapper {
-    @Mapping(target = "EXTID", expression = "java( String.valueOf(auszahlung.getId().getMostSignificantBits()))")
+    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     // @Mapping(source = "sapBusinessPartnerId", target = "BPARTNER")
     public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(Auszahlung auszahlung);
+
+    @Named("getExtId")
+    public String getExtId(Auszahlung auszahlung) {
+        return String.valueOf(auszahlung.getId().getMostSignificantBits());
+    }
 
     @Named("getSenderParms")
     public SenderParms getSenderParms(

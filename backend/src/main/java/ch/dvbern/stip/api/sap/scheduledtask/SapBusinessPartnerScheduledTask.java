@@ -35,9 +35,7 @@ public class SapBusinessPartnerScheduledTask {
 
     private void run() {
         try {
-            LOG.info("SapBusinessPartnerScheduledTask: Processing pending BusinesspartnerCreations");
             sapService.processPendingCreateBusinessPartnerActions();
-            LOG.info("SapBusinessPartnerScheduledTask: Processing pending BusinesspartnerCreations");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }

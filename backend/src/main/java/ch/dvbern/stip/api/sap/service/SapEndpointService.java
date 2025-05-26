@@ -63,7 +63,7 @@ public class SapEndpointService {
     private final VendorPostingCreateMapper vendorPostingCreateMapper;
     private final GeneralMapper generalMapper;
 
-    private static final int MAX_LENGHT_REF_DOC_NO = 16;
+    private static final int MAX_LENGTH_REF_DOC_NO = 16;
 
     @ConfigProperty(name = "kstip.sap.system-id")
     BigInteger systemid;
@@ -152,8 +152,8 @@ public class SapEndpointService {
             throw new BadRequestException(e);
         }
 
-        if (refDocNo.length() > MAX_LENGHT_REF_DOC_NO) {
-            refDocNo = refDocNo.substring(0, MAX_LENGHT_REF_DOC_NO);
+        if (refDocNo.length() > MAX_LENGTH_REF_DOC_NO) {
+            refDocNo = refDocNo.substring(0, MAX_LENGTH_REF_DOC_NO);
         }
 
         vendorPostingCreateRequest.getVENDORPOSTING()

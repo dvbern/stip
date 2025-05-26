@@ -35,9 +35,7 @@ public class SapPendingAuszahlungScheduledTask {
 
     private void run() {
         try {
-            LOG.info("SapPendingAuszahlungScheduledTask: Processing pending Auszahlungs");
             sapService.processPendingCreateVendorPostingActions();
-            LOG.info("SapPendingAuszahlungScheduledTask: Processing pending Auszahlungs");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }

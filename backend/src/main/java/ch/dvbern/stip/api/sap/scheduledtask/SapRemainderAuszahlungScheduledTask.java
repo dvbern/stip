@@ -35,9 +35,7 @@ public class SapRemainderAuszahlungScheduledTask {
 
     private void run() {
         try {
-            LOG.info("SapRemainderAuszahlungScheduledTask: Processing pending Remainder payments");
             sapService.processRemainderAuszahlungActions();
-            LOG.info("SapRemainderAuszahlungScheduledTask: Processing pending Remainder payments");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }

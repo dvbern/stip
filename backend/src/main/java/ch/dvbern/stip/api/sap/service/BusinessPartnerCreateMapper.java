@@ -39,8 +39,13 @@ public abstract class BusinessPartnerCreateMapper {
         return header;
     }
 
-    @Mapping(target = "EXTID", expression = "java( String.valueOf(auszahlung.getId().getMostSignificantBits()))")
+    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(Auszahlung auszahlung);
+
+    @Named("getExtId")
+    public String getExtId(Auszahlung auszahlung) {
+        return String.valueOf(auszahlung.getId().getMostSignificantBits());
+    }
 
     @Mapping(source = "vorname", target = "FIRSTNAME")
     @Mapping(source = "nachname", target = "LASTNAME")

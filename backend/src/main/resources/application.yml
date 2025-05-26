@@ -224,20 +224,6 @@ quarkus:
   rest-client:
     GeoCollection-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
-    AuszahlungSapImportStatusEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_ImportStatusRead&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS'
-    AuszahlungSapBusinessPartnerCreateEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerCreate&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapBusinessPartnerChangeEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerChange&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapBusinessPartnerReadEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerRead&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapBusinessPartnerSearchEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerSearch&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapVendorPostingCreateEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
-    NeskoGetSteuerdatenEndpoint:
-      url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService'
 #   store-type: jdbc-tx
 '%dev':
   quarkus:

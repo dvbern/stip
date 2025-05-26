@@ -1127,7 +1127,6 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
-        doReturn(gesuch.getGesuchTranchen().get(0)).when(gesuch).getLatestGesuchTranche();
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
             Gesuchstatus.STIPENDIENANSPRUCH,
@@ -1146,8 +1145,6 @@ class GesuchServiceTest {
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
-
-        doReturn(gesuch.getGesuchTranchen().get(0)).when(gesuch).getLatestGesuchTranche();
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(

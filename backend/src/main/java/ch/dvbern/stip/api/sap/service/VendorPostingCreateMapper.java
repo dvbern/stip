@@ -37,7 +37,6 @@ public abstract class VendorPostingCreateMapper {
     @Mapping(target = "COMPCODE", constant = "4800")
     @Mapping(target = "HEADERTXT", constant = "4890")
     @Mapping(source = "refDocNo", target = "REFDOCNO")
-    // @Mapping(source = "", target = "PAYMENTREASON")
     @Mapping(source = "docdate", target = "DOCDATE")
     @Mapping(source = "pstngdate", target = "PSTNGDATE")
     @Mapping(target = "CURRENCY", constant = "CHF")
@@ -49,20 +48,28 @@ public abstract class VendorPostingCreateMapper {
     );
 
     @Mapping(source = "auszahlung.sapBusinessPartnerId", target = "VENDORNO")
-    @Mapping(target = "AMTDOCCUR", expression = "java( new BigDecimal(amount) )")
+    @Mapping(source = ".", target = "AMTDOCCUR", qualifiedByName = "getAmtdoccur")
     @Mapping(target = "ZTERM", constant = "ZB04")
-    @Mapping(target = "ITEMTEXT", expression = "java( qrIbanAddlInfo )")
+    @Mapping(source = ".", target = "ITEMTEXT", qualifiedByName = "getQrIbanAddlInfo")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.VENDOR toVendor(
         @Context Integer amount,
         @Context String qrIbanAddlInfo,
         Auszahlung auszahlung
     );
 
+    @Named("getAmtdoccur")
+    public BigDecimal getAmtdoccur(
+        @Context Integer amount,
+        Auszahlung auszahlung
+    ) {
+        return new BigDecimal(amount);
+    }
+
     @Mapping(source = "iban", target = "IBAN")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN toIban(Auszahlung auszahlung);
 
     @Mapping(target = "QRIBAN", constant = "")
-    @Mapping(target = "QRIBANADDLINFO", expression = "java( qrIbanAddlInfo )")
+    @Mapping(source = ".", target = "QRIBANADDLINFO", qualifiedByName = "getQrIbanAddlInfo")
     @Mapping(target = "POREFNO", constant = "")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN toQrIban(
         @Context String qrIbanAddlInfo,
@@ -81,13 +88,21 @@ public abstract class VendorPostingCreateMapper {
     @Mapping(target = "ORDERID", constant = "485100210001")
     @Mapping(target = "TAXCODE", constant = "V0")
     @Mapping(target = "COSTCENTER", constant = "")
-    @Mapping(target = "ITEMTEXT", expression = "java( qrIbanAddlInfo )")
+    @Mapping(source = ".", target = "ITEMTEXT", qualifiedByName = "getQrIbanAddlInfo")
     @Mapping(target = "KBLPOS", constant = "0")
     @Mapping(target = "REFSETERLK", constant = "false")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT toGlAccount(
         @Context String qrIbanAddlInfo,
         Auszahlung auszahlung
     );
+
+    @Named("getQrIbanAddlInfo")
+    public String getQrIbanAddlInfo(
+        @Context String qrIbanAddlInfo,
+        Auszahlung auszahlung
+    ) {
+        return qrIbanAddlInfo;
+    }
 
     @Named("setGlAccount")
     public List<VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT> setGlAccount(
@@ -97,19 +112,22 @@ public abstract class VendorPostingCreateMapper {
         return List.of(toGlAccount(qrIbanAddlInfo, auszahlung));
     }
 
+    @Named("setPosition")
+    public List<VendorPostingCreateRequest.VENDORPOSTING.POSITION> setPosition(
+        @Context Integer amount,
+        Auszahlung auszahlung
+    ) {
+        return List.of(toPosition(amount));
+    }
+
     @Mapping(target = "ITEMNOACC", constant = "1")
     @Mapping(source = "amount", target = "AMTDOCCUR")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.POSITION toPosition(Integer amount);
 
-    @Named("setPosition")
-    public List<VendorPostingCreateRequest.VENDORPOSTING.POSITION> setPosition(Integer amount) {
-        return List.of(toPosition(amount));
-    }
-
     @Mapping(source = ".", target = "VENDOR")
     @Mapping(source = ".", target = "PAYMENTDETAIL")
     @Mapping(source = ".", target = "GLACCOUNT", qualifiedByName = "setGlAccount")
-    @Mapping(target = "POSITION", expression = "java( setPosition(amount) )")
+    @Mapping(source = ".", target = "POSITION", qualifiedByName = "setPosition")
     public abstract VendorPostingCreateRequest.VENDORPOSTING toVendorPosting(
         @Context Integer amount,
         @Context String qrIbanAddlInfo,

@@ -177,9 +177,12 @@ public class BuchhaltungService {
         final Integer betrag,
         final BuchhaltungType buchhaltungType
     ) {
-        if (!BuchhaltungType.AUSZAHLUNGS.contains(buchhaltungType)) {
-            throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
-        }
+        final String tlKey = switch (buchhaltungType) {
+            case AUSZAHLUNG_INITIAL -> "stip.auszahlung.buchhaltung.initial";
+            case AUSZAHLUNG_REMAINDER -> "stip.auszahlung.buchhaltung.remainder";
+            default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
+        };
+
         final TL translator = getTranslator(
             gesuch.getLatestGesuchTranche()
                 .getGesuchFormular()
@@ -188,11 +191,6 @@ public class BuchhaltungService {
                 .getLocale()
         );
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
-        String tlKey = switch (buchhaltungType) {
-            case AUSZAHLUNG_INITIAL -> "stip.auszahlung.buchhaltung.initial";
-            case AUSZAHLUNG_REMAINDER -> "stip.auszahlung.buchhaltung.remainder";
-            default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
-        };
 
         final var buchhaltungEntry = new Buchhaltung()
             .setBuchhaltungType(buchhaltungType)
