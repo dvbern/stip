@@ -31,6 +31,7 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -48,6 +49,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -91,12 +94,16 @@ class AusbildungResourceTest {
         ausbildungUpdateDtoSpec.setAusbildungBegin(DateMapperImpl.dateToMonthYear(LocalDate.now().plusYears(2)));
         ausbildungUpdateDtoSpec.setAusbildungEnd(DateMapperImpl.dateToMonthYear(LocalDate.now().plusYears(4)));
 
-        ausbildungApiSpec.createAusbildung()
-            .body(ausbildungUpdateDtoSpec)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
+        final var returned = TestUtil.executeAndExtract(
+            AusbildungCreateResponseDtoSpec.class,
+            ausbildungApiSpec.createAusbildung().body(ausbildungUpdateDtoSpec)
+        );
+
+        assertThat(
+            "Create Ausbildung in Zukunft unexpectedly succeeded",
+            returned.getError(),
+            is(not(nullValue()))
+        );
     }
 
     @Test

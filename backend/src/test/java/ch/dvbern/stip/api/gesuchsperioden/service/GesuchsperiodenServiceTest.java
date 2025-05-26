@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -31,7 +30,8 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThrows;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -54,10 +54,8 @@ class GesuchsperiodenServiceTest {
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
         when(gesuchsperiodeRepository.findPubliziertStartBeforeOrAt(any())).thenReturn(null);
         // act & assert
-        assertThrows(
-            CustomValidationsException.class,
-            () -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung)
-        );
+        final var result = gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung);
+        assertThat(result.getRight(), is(not(nullValue())));
 
         // arrange
         Gesuchsperiode gesuchsperiode = getValidGesuchsperiode(GueltigkeitStatus.PUBLIZIERT);
@@ -75,10 +73,8 @@ class GesuchsperiodenServiceTest {
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
         when(gesuchsperiodeRepository.findPubliziertStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // act & assert
-        assertThrows(
-            CustomValidationsException.class,
-            () -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung)
-        );
+        final var result = gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung);
+        assertThat(result.getRight(), is(not(nullValue())));
 
         // arrange
         gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
@@ -95,10 +91,8 @@ class GesuchsperiodenServiceTest {
         ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(3));
         when(gesuchsperiodeRepository.findPubliziertStartBeforeOrAt(any())).thenReturn(gesuchsperiode);
         // arrange & assert
-        assertThrows(
-            CustomValidationsException.class,
-            () -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung)
-        );
+        final var result = gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung);
+        assertThat(result.getRight(), is(not(nullValue())));
 
         // arrange
         gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);

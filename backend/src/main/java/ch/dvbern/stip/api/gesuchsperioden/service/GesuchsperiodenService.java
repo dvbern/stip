@@ -120,11 +120,6 @@ public class GesuchsperiodenService {
         final LocalDate ausbildungBegin
     ) {
         final var currentlyPublic = gesuchsperiodeRepository.findAllPublicStartAndStopIntersect(LocalDate.now());
-        if (currentlyPublic.size() != 2) {
-            LOG.error("There are != 2 currently active Gesuchsperioden, currently active: {}", currentlyPublic.size());
-            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
-        }
-
         final var isFruehling = DateUtil.isFruehling(ausbildungBegin);
 
         Gesuchsperiode toAssign;
