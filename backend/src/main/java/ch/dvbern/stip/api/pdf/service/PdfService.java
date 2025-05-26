@@ -71,6 +71,7 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.spi.InternalServerErrorException;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -117,7 +118,7 @@ public class PdfService {
             font = FontProgramFactory.createFont(fontBytes);
             fontBold = FontProgramFactory.createFont(fontBoldBytes);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new InternalServerErrorException(e);
         }
 
         pdfFont = PdfFontFactory.createFont(font);
@@ -149,7 +150,7 @@ public class PdfService {
             section.render(gesuch, document, leftMargin, translator, stipDecision);
             rechtsmittelbelehrung(translator, document, leftMargin);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new InternalServerErrorException(e);
         }
 
         return out;
@@ -186,10 +187,6 @@ public class PdfService {
             translator.translate("stip.pdf.header.plz")
         );
 
-        final Link ausbildungsbeitraegeUri = new Link(
-            AUSBILDUNGSBEITRAEGE_LINK,
-            PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK)
-        );
         final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
 
         final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
@@ -217,7 +214,7 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        // TODO: implement sb email KSTIP-2021
+        // TODO KSTIP-2021: implement sb email
         final Link email = new Link("TBD: peter.muster@be.ch", PdfAction.createURI("mailto:peter.muster@be.ch"));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
@@ -227,7 +224,7 @@ public class PdfService {
             1,
             1,
             String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-            // TODO: implement sb phone number KSTIP-2021
+            // TODO KSTIP-2021: implement sb phone number
             "TBD: 031 300 30 30"
         )
             .setPaddingBottom(SPACING_BIG)
@@ -536,7 +533,7 @@ public class PdfService {
                 1,
                 1,
                 String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                // TODO: implement sb job title KSTIP-2021
+                // TODO KSTIP-2021: implement sb job title
                 "TBD: Sachbearbeiter"
             )
         );
