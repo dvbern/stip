@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   computed,
   effect,
   inject,
@@ -12,15 +11,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
-import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
-import {
-  GesuchAppUiDashboardAusbildungComponent,
-  GesuchAppUiDashboardCompactAusbildungComponent,
-} from '@dv/gesuch-app/ui/dashboard';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
   SharedDataAccessGesuchEvents,
@@ -29,10 +23,11 @@ import {
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
+import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
-  GesuchTrancheSlim,
   Gesuchsperiode,
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
@@ -41,6 +36,10 @@ import { compareById } from '@dv/shared/model/type-util';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import {
+  SharedUiDashboardAusbildungComponent,
+  SharedUiDashboardCompactAusbildungComponent,
+} from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
@@ -60,8 +59,8 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
-    GesuchAppUiDashboardAusbildungComponent,
-    GesuchAppUiDashboardCompactAusbildungComponent,
+    SharedUiDashboardAusbildungComponent,
+    SharedUiDashboardCompactAusbildungComponent,
   ],
   providers: [
     FallStore,
@@ -69,7 +68,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
-  styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureCockpitComponent {
@@ -77,10 +75,10 @@ export class GesuchAppFeatureCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  @Input({ required: true }) tranche?: GesuchTrancheSlim;
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  globalNotificationStore = inject(GlobalNotificationStore);
   sozialdienstStore = inject(SozialdienstStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   benutzerNameSig = computed(() => {
@@ -122,12 +120,11 @@ export class GesuchAppFeatureCockpitComponent {
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    GesuchAppDialogCreateAusbildungComponent.open(
-      this.dialog,
-      fallId,
-    ).subscribe(() => {
-      this.dashboardStore.loadDashboard$();
-    });
+    SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+      .afterClosed()
+      .subscribe(() => {
+        this.dashboardStore.loadDashboard$();
+      });
   }
 
   trackByPerioden(
@@ -135,10 +132,6 @@ export class GesuchAppFeatureCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   handleLanguageChangeHeader(language: Language) {
@@ -168,8 +161,8 @@ export class GesuchAppFeatureCockpitComponent {
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.ausbildung.delete.dialog.title',
-      message: 'gesuch-app.dashboard.ausbildung.delete.dialog.message',
+      title: 'shared.dashboard.ausbildung.delete.dialog.title',
+      message: 'shared.dashboard.ausbildung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -188,8 +181,8 @@ export class GesuchAppFeatureCockpitComponent {
 
   deleteGesuch(gesuchId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.gesuch.delete.dialog.title',
-      message: 'gesuch-app.dashboard.gesuch.delete.dialog.message',
+      title: 'shared.dashboard.gesuch.delete.dialog.title',
+      message: 'shared.dashboard.gesuch.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -205,8 +198,8 @@ export class GesuchAppFeatureCockpitComponent {
 
   deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.dashboard.aenderung.delete.dialog.title',
-      message: 'gesuch-app.dashboard.aenderung.delete.dialog.message',
+      title: 'shared.dashboard.aenderung.delete.dialog.title',
+      message: 'shared.dashboard.aenderung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -237,6 +230,9 @@ export class GesuchAppFeatureCockpitComponent {
           this.sozialdienstStore.fallDelegieren$({
             req,
             onSuccess: () => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: 'shared.dashboard.gesuch.delegieren.success',
+              });
               this.dashboardStore.loadDashboard$();
             },
           });

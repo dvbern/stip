@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -67,6 +68,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -123,6 +125,8 @@ public class GesuchTrancheService {
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final Validator validator;
+    private final BenutzerService benutzerService;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -181,12 +185,14 @@ public class GesuchTrancheService {
         final Gesuch gesuch,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
+        final var benutzer = benutzerService.getCurrentBenutzer();
         final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
         || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
         dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
 
         dokumenteToUploadDto.setGsCanDokumenteUebermitteln(
-            requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuch)
+            requiredDokumentService
+                .getGSCanFehlendeDokumenteEinreichen(gesuch, benutzer)
         );
 
         dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(

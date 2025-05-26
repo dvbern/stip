@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 import { AusbildungDashboardItem } from './ausbildungDashboardItem';
-import { Delegierung } from './delegierung';
 import { Fall } from './fall';
+import { DelegierungSlim } from './delegierungSlim';
 import { Notification } from './notification';
 
 export interface FallDashboardItem { 
     fall: Fall;
     ausbildungDashboardItems: Array<AusbildungDashboardItem>;
     notifications: Array<Notification>;
-    delegierung?: Delegierung;
+    delegierung?: DelegierungSlim;
 }
 

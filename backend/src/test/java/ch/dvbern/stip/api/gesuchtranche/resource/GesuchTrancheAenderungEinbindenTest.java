@@ -366,15 +366,15 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsGesuchsteller
     @Order(14)
     void aenderungEinreichenAgain() {
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
-        aenderungId = fallDashboardItems[0].getAusbildungDashboardItems()
+            .as(FallDashboardItemDto.class);
+        aenderungId = fallDashboardItem.getAusbildungDashboardItems()
             .get(0)
             .getGesuchs()
             .get(0)

@@ -17,6 +17,17 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'fall/:id',
+        loadComponent: () =>
+          import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
+            (m) => m.SozialdienstAppFeatureGesuchCockpitComponent,
+          ),
+        loadChildren: () =>
+          import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
+            (m) => m.sozialdienstAppFeatureGesuchCockpitRoutes,
+          ),
+      },
+      {
         path: 'gesuch',
         loadComponent: () =>
           import('@dv/sozialdienst-app/feature/gesuch-form').then(

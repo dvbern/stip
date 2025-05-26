@@ -17,15 +17,25 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
+import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
+import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +45,12 @@ public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
+    private final SozialdienstService sozialdienstService;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
+    private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
+    private final ConfigService configService;
+    private final DelegierungMapper delegierungMapper;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -51,5 +66,83 @@ public class DelegierenService {
             .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
 
         delegierungRepository.persist(newDelegierung);
+    }
+
+    @Transactional
+    public void delegierterMitarbeiterAendern(final UUID delegierungId, final DelegierterMitarbeiterAendernDto dto) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+        final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
+
+        delegierung.setDelegierterMitarbeiter(mitarbeiter);
+    }
+
+    @Transactional
+    public PaginatedSozDashboardDto getDelegierungSoz(
+        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        @NotNull Integer page,
+        @NotNull Integer pageSize,
+        String fallNummer,
+        String nachname,
+        String vorname,
+        LocalDate geburtsdatum,
+        String wohnort,
+        Boolean delegierungAngenommen,
+        SozDashboardColumnDto sortColumn,
+        SortOrder sortOrder
+    ) {
+        if (pageSize > configService.getMaxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+
+        final var sozialdienst = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer();
+
+        final var baseQuery = sozDashboardQueryBuilder
+            .baseQuery(getDelegierungSozQueryType, sozialdienst.getId());
+
+        if (fallNummer != null) {
+            sozDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
+        }
+
+        if (vorname != null) {
+            sozDashboardQueryBuilder.vorname(baseQuery, vorname);
+        }
+
+        if (nachname != null) {
+            sozDashboardQueryBuilder.nachname(baseQuery, nachname);
+        }
+
+        if (geburtsdatum != null) {
+            sozDashboardQueryBuilder.geburtsdtaum(baseQuery, geburtsdatum);
+        }
+
+        if (wohnort != null) {
+            sozDashboardQueryBuilder.wohnort(baseQuery, wohnort);
+        }
+
+        if (delegierungAngenommen != null) {
+            sozDashboardQueryBuilder.delegierungAngenommen(baseQuery, delegierungAngenommen);
+        }
+
+        // Creating the count query must happen before ordering,
+        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
+        final var countQuery = sozDashboardQueryBuilder.getCountQuery(baseQuery);
+
+        if (sortColumn != null && sortOrder != null) {
+            sozDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        } else {
+            sozDashboardQueryBuilder.defaultOrder(baseQuery);
+        }
+
+        sozDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
+        final var results = baseQuery.stream()
+            .map(delegierung -> delegierungMapper.toFallWithDto(delegierung.getDelegierterFall()))
+            .toList();
+
+        return new PaginatedSozDashboardDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
+        );
     }
 }

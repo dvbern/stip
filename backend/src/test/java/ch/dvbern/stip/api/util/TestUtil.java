@@ -124,30 +124,28 @@ public class TestUtil {
     }
 
     public static void deleteAusbildung(final GesuchApiSpec gesuchApiSpec, final UUID ausbildungId) {
-        final var dashboard = gesuchApiSpec.getGsDashboard()
+        final var fallDashboard = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
-        for (final var fallDashboard : dashboard) {
-            for (
-                final var ausbildungDashboards : fallDashboard.getAusbildungDashboardItems()
-                    .stream()
-                    .filter(ausbildungDashboard -> ausbildungDashboard.getId().equals(ausbildungId))
-                    .toList()
-            ) {
-                for (final var gesuch : ausbildungDashboards.getGesuchs()) {
-                    gesuchApiSpec.deleteGesuch()
-                        .gesuchIdPath(gesuch.getId())
-                        .execute(TestUtil.PEEK_IF_ENV_SET)
-                        .then()
-                        .assertThat()
-                        .statusCode(Status.NO_CONTENT.getStatusCode());
-                }
+        for (
+            final var ausbildungDashboards : fallDashboard.getAusbildungDashboardItems()
+                .stream()
+                .filter(ausbildungDashboard -> ausbildungDashboard.getId().equals(ausbildungId))
+                .toList()
+        ) {
+            for (final var gesuch : ausbildungDashboards.getGesuchs()) {
+                gesuchApiSpec.deleteGesuch()
+                    .gesuchIdPath(gesuch.getId())
+                    .execute(TestUtil.PEEK_IF_ENV_SET)
+                    .then()
+                    .assertThat()
+                    .statusCode(Status.NO_CONTENT.getStatusCode());
             }
         }
     }
@@ -261,9 +259,9 @@ public class TestUtil {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
+            .as(FallDashboardItemDto.class);
 
-        if (fallDashboardItemDtos[0].getAusbildungDashboardItems().isEmpty()) {
+        if (fallDashboardItemDtos.getAusbildungDashboardItems().isEmpty()) {
             createAusbildung(ausbildungApiSpec, fall.getId());
         }
 
@@ -545,7 +543,7 @@ public class TestUtil {
                 .setNettoerwerbseinkommen(12916)
                 .setErgaenzungsleistungen(1200)
                 .setWohnkosten(6000)
-                .setAusbildungskostenTertiaerstufe(450)
+                .setAusbildungskosten(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
                 .setVerdienstRealisiert(true)

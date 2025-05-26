@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -34,6 +36,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +46,12 @@ import lombok.RequiredArgsConstructor;
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
+    private final SozialdienstService sozialdienstService;
 
-    public boolean getGSCanFehlendeDokumenteEinreichen(final Gesuch gesuch) {
+    public boolean getGSCanFehlendeDokumenteEinreichen(
+        final Gesuch gesuch,
+        final Benutzer benutzer
+    ) {
         if (
             (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE)
             && gesuch.getGesuchTranchen()
@@ -53,6 +60,14 @@ public class RequiredDokumentService {
         ) {
             return false;
         }
+
+        if (
+            !AuthorizerUtil
+                .isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
+        ) {
+            return false;
+        }
+
         var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
         return !isAnyDocumentStillRequired;
     }

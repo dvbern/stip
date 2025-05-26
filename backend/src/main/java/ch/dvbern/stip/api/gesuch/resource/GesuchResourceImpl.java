@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthori
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
+import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
@@ -42,9 +43,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
@@ -110,12 +109,11 @@ public class GesuchResourceImpl implements GesuchResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
-    private final GesuchValidatorService gesuchValidatorService;
-    private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
+    private final DelegierenAuthorizer delegierenAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -270,7 +268,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public List<FallDashboardItemDto> getGsDashboard() {
+    public FallDashboardItemDto getGsDashboard() {
         gesuchAuthorizer.canGetGsDashboard();
         return gesuchService.getFallDashboardItemDtos();
     }
@@ -446,6 +444,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
         gesuchAuthorizer.sbCanReadTranche(aenderungId);
         return gesuchService.getSbTrancheChanges(aenderungId);
+    }
+
+    @RolesAllowed(GS_GESUCH_READ)
+    @Override
+    public FallDashboardItemDto getSozialdienstMitarbeiterDashboard(UUID fallId) {
+        delegierenAuthorizer.canReadFallDashboard();
+        return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
     }
 
     @Override
