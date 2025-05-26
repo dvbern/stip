@@ -91,9 +91,9 @@ export class SharedUiAenderungMeldenDialogComponent {
 
   confirm() {
     this.form.markAllAsTouched();
-    // if (this.form.invalid) {
-    //   return;
-    // }
+    if (this.form.invalid) {
+      return;
+    }
     const aenderungsAntrag = convertTempFormToRealValues(this.form, [
       'gueltigAb',
       'kommentar',
@@ -119,12 +119,22 @@ export function dateRangeValidator(startDateKey: string, endDateKey: string) {
     const endDate = formGroup.get(endDateKey)?.value;
     const endControl = formGroup.get(endDateKey);
 
+    // compare the two dates and set "add" an error if both dates are on the same day. do not change existing errors
     if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
-      endControl?.setErrors({ dateRangeEqual: true });
-      return { dateRangeEqual: true };
+      endControl?.setErrors({
+        ...endControl.errors,
+        sameDay: true,
+      });
+      return { sameDay: true };
+    } else if (endControl?.errors) {
+      endControl?.setErrors({
+        ...endControl.errors,
+        sameDay: null,
+      });
+    } else {
+      endControl?.setErrors(null);
     }
 
-    // endControl?.setErrors(null);
     return null;
   };
 }

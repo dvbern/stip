@@ -90,7 +90,7 @@
   "shared.form.error.minDatePast": "Das Datum liegt zu weit in der Vergangenheit",
   "shared.form.error.maxDatePast": "Das Datum muss weiter in der Vergangenheit liegen",
   "shared.form.error.maxDateFuture": "Das Datum liegt zu weit in der Zukunft",
-  "shared.form.error.dateRangeEqual": "Das Enddatum muss nach dem Startdatum liegen",
+  "shared.form.error.sameDay": "Das Enddatum muss nach dem Startdatum liegen",
   "shared.form.error.maxDate": "Das Datum darf nicht später als {{ date }} sein",
   "shared.form.error.minDate": "Das Datum darf nicht früher als {{ date }} sein",
   "shared.form.error.max": "Der Wert darf nicht grösser als {{max}} sein",

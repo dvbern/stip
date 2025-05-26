@@ -70,8 +70,8 @@
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
           {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'dateRangeEqual'">
-          {{ 'shared.form.error.dateRangeEqual' | translate }}
+        <mat-error *dvSharedUiFormMessageError="'sameDay'">
+          {{ 'shared.form.error.sameDay' | translate }}
         </mat-error>
       </mat-form-field>
     </div>
@@ -95,7 +95,7 @@
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | translate }}
     </button>
-    <button type="submit" data-testid="dialog-confirm" class="btn btn-primary ms-2">
+    <button type="submit" [disabled]="form.invalid" data-testid="dialog-confirm" class="btn btn-primary ms-2">
       {{ 'shared.form.save' | translate }}
     </button>
   </div>
