@@ -83,16 +83,13 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        this.notizStore.loadNotizen$({
-          gesuchId,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.notizStore.loadNotizen$({
+        gesuchId,
+      });
+    });
   }
 
   createNotiz(notizTyp: GesuchNotizTyp) {

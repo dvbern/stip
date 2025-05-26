@@ -55,14 +55,11 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        this.statusprotokollStore.loadCachedStatusprotokoll$({
-          gesuchId,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      this.statusprotokollStore.loadCachedStatusprotokoll$({
+        gesuchId,
+      });
+    });
   }
 }

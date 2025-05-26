@@ -143,13 +143,10 @@ export class BenutzerOverviewComponent {
 
   constructor() {
     this.store.loadAllSbAppBenutzers$();
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
+    });
   }
 
   expandRolesForBenutzer(benutzerId: string) {

@@ -271,199 +271,168 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       mutterUnbekanntVerstorben.valueChanges,
     );
 
-    effect(
-      () => {
-        const { gesuchFormular } = this.viewSig();
-        if (gesuchFormular !== undefined) {
-          const initialFormFamSit = gesuchFormular?.familiensituation ?? {};
-          this.form.patchValue({
-            ...initialFormFamSit,
-          });
-        } else {
-          this.form.reset();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const { gesuchFormular } = this.viewSig();
+      if (gesuchFormular !== undefined) {
+        const initialFormFamSit = gesuchFormular?.familiensituation ?? {};
+        this.form.patchValue({
+          ...initialFormFamSit,
+        });
+      } else {
+        this.form.reset();
+      }
+    });
 
     // effect for gerichtlicheAlimentenregelung
-    effect(
-      () => {
-        this.gotReenabledSig();
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: gerichtlicheAlimentenregelung,
-          visible: elternVerheiratetZusammenSig() === false,
-          disabled:
-            this.viewSig().readonly || elternVerheiratetZusammenSig() !== false,
-          resetOnInvisible: true,
-        });
-        this.goNextStep();
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: gerichtlicheAlimentenregelung,
+        visible: elternVerheiratetZusammenSig() === false,
+        disabled:
+          this.viewSig().readonly || elternVerheiratetZusammenSig() !== false,
+        resetOnInvisible: true,
+      });
+      this.goNextStep();
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const gerichtlicheAlimentenregelung =
-          this.gerichtlicheAlimentenregelungSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const gerichtlicheAlimentenregelung =
+        this.gerichtlicheAlimentenregelungSig();
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: werZahltAlimente,
-          visible: gerichtlicheAlimentenregelung === true,
-          disabled:
-            this.viewSig().readonly || gerichtlicheAlimentenregelung !== true,
-          resetOnInvisible: true,
-        });
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: werZahltAlimente,
+        visible: gerichtlicheAlimentenregelung === true,
+        disabled:
+          this.viewSig().readonly || gerichtlicheAlimentenregelung !== true,
+        resetOnInvisible: true,
+      });
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: elternteilUnbekanntVerstorben,
-          visible: gerichtlicheAlimentenregelung === false,
-          disabled:
-            this.viewSig().readonly || gerichtlicheAlimentenregelung !== false,
-          resetOnInvisible: true,
-        });
-        this.goNextStep();
-      },
-      { allowSignalWrites: true },
-    );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: elternteilUnbekanntVerstorben,
+        visible: gerichtlicheAlimentenregelung === false,
+        disabled:
+          this.viewSig().readonly || gerichtlicheAlimentenregelung !== false,
+        resetOnInvisible: true,
+      });
+      this.goNextStep();
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const elternteilUnbekanntVerstorben =
-          elternteilUnbekanntVerstorbenSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorbenSig();
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: mutterUnbekanntVerstorben,
-          visible: elternteilUnbekanntVerstorben === true,
-          disabled:
-            this.viewSig().readonly || elternteilUnbekanntVerstorben !== true,
-          resetOnInvisible: true,
-        });
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: mutterUnbekanntVerstorben,
+        visible: elternteilUnbekanntVerstorben === true,
+        disabled:
+          this.viewSig().readonly || elternteilUnbekanntVerstorben !== true,
+        resetOnInvisible: true,
+      });
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: vaterUnbekanntVerstorben,
-          visible: elternteilUnbekanntVerstorben === true,
-          disabled:
-            this.viewSig().readonly || elternteilUnbekanntVerstorben !== true,
-          resetOnInvisible: true,
-        });
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: vaterUnbekanntVerstorben,
+        visible: elternteilUnbekanntVerstorben === true,
+        disabled:
+          this.viewSig().readonly || elternteilUnbekanntVerstorben !== true,
+        resetOnInvisible: true,
+      });
 
-        this.goNextStep();
-      },
-      { allowSignalWrites: true },
-    );
+      this.goNextStep();
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const vaterUnbekanntVerstorben = vaterVerstorbenUnbekanntSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const vaterUnbekanntVerstorben = vaterVerstorbenUnbekanntSig();
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: vaterUnbekanntGrund,
-          visible:
-            vaterUnbekanntVerstorben === ElternAbwesenheitsGrund.UNBEKANNT,
-          disabled:
-            this.viewSig().readonly ||
-            vaterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: vaterUnbekanntGrund,
+        visible: vaterUnbekanntVerstorben === ElternAbwesenheitsGrund.UNBEKANNT,
+        disabled:
+          this.viewSig().readonly ||
+          vaterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
+        resetOnInvisible: true,
+      });
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const mutterUnbekanntVerstorben = mutterVerstorbenUnbekanntSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const mutterUnbekanntVerstorben = mutterVerstorbenUnbekanntSig();
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: mutterUnbekanntGrund,
-          visible:
-            mutterUnbekanntVerstorben === ElternAbwesenheitsGrund.UNBEKANNT,
-          disabled:
-            this.viewSig().readonly ||
-            mutterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: mutterUnbekanntGrund,
+        visible:
+          mutterUnbekanntVerstorben === ElternAbwesenheitsGrund.UNBEKANNT,
+        disabled:
+          this.viewSig().readonly ||
+          mutterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
+        resetOnInvisible: true,
+      });
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const zahltMutterAlimente =
-          werZahltAlimenteSig() === Elternschaftsteilung.MUTTER;
-        const vaterWederVerstorbenNochUnbekannt =
-          vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
-        const mutterVerstorbenOderUnbekannt =
-          mutterVerstorbenUnbekanntSig() ===
-            ElternAbwesenheitsGrund.VERSTORBEN ||
-          mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
-        const keinElternTeilUnbekanntVerstorben =
-          elternteilUnbekanntVerstorbenSig() === false;
+    effect(() => {
+      this.gotReenabledSig();
+      const zahltMutterAlimente =
+        werZahltAlimenteSig() === Elternschaftsteilung.MUTTER;
+      const vaterWederVerstorbenNochUnbekannt =
+        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
+      const mutterVerstorbenOderUnbekannt =
+        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.VERSTORBEN ||
+        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
+      const keinElternTeilUnbekanntVerstorben =
+        elternteilUnbekanntVerstorbenSig() === false;
 
-        const showVaterVerheiratedFrage =
-          keinElternTeilUnbekanntVerstorben ||
-          zahltMutterAlimente ||
-          (mutterVerstorbenOderUnbekannt && vaterWederVerstorbenNochUnbekannt);
+      const showVaterVerheiratedFrage =
+        keinElternTeilUnbekanntVerstorben ||
+        zahltMutterAlimente ||
+        (mutterVerstorbenOderUnbekannt && vaterWederVerstorbenNochUnbekannt);
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: vaterWiederverheiratet,
-          visible: showVaterVerheiratedFrage,
-          disabled: this.viewSig().readonly || !showVaterVerheiratedFrage,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: vaterWiederverheiratet,
+        visible: showVaterVerheiratedFrage,
+        disabled: this.viewSig().readonly || !showVaterVerheiratedFrage,
+        resetOnInvisible: true,
+      });
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const zahltVaterAlimente =
-          werZahltAlimenteSig() === Elternschaftsteilung.VATER;
-        const mutterWederVerstorbenNochUnbekannt =
-          mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
-        const vaterVerstorbenOderUnbekannt =
-          vaterVerstorbenUnbekanntSig() ===
-            ElternAbwesenheitsGrund.VERSTORBEN ||
-          vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
-        const keinElternTeilUnbekanntVerstorben =
-          elternteilUnbekanntVerstorbenSig() === false;
+    effect(() => {
+      this.gotReenabledSig();
+      const zahltVaterAlimente =
+        werZahltAlimenteSig() === Elternschaftsteilung.VATER;
+      const mutterWederVerstorbenNochUnbekannt =
+        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
+      const vaterVerstorbenOderUnbekannt =
+        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.VERSTORBEN ||
+        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
+      const keinElternTeilUnbekanntVerstorben =
+        elternteilUnbekanntVerstorbenSig() === false;
 
-        const showMutterVerheiratedFrage =
-          keinElternTeilUnbekanntVerstorben ||
-          zahltVaterAlimente ||
-          (vaterVerstorbenOderUnbekannt && mutterWederVerstorbenNochUnbekannt);
+      const showMutterVerheiratedFrage =
+        keinElternTeilUnbekanntVerstorben ||
+        zahltVaterAlimente ||
+        (vaterVerstorbenOderUnbekannt && mutterWederVerstorbenNochUnbekannt);
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: mutterWiederverheiratet,
-          visible: showMutterVerheiratedFrage,
-          disabled: this.viewSig().readonly || !showMutterVerheiratedFrage,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: mutterWiederverheiratet,
+        visible: showMutterVerheiratedFrage,
+        disabled: this.viewSig().readonly || !showMutterVerheiratedFrage,
+        resetOnInvisible: true,
+      });
+    });
   }
 
   hasPreviousStep(): boolean {

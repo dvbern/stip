@@ -247,90 +247,73 @@ export class SozialdienstAppFeatureCockpitComponent
     });
 
     // Handle the case where the page is higher than the total number of pages
-    effect(
-      () => {
-        const { page, pageSize } = this.getInputs();
-        const totalEntries =
-          this.delegationStore.cockpitViewSig().paginatedSozDashboard
-            ?.totalEntries;
+    effect(() => {
+      const { page, pageSize } = this.getInputs();
+      const totalEntries =
+        this.delegationStore.cockpitViewSig().paginatedSozDashboard
+          ?.totalEntries;
 
-        if (
-          page &&
-          pageSize &&
-          totalEntries &&
-          page * pageSize > totalEntries
-        ) {
-          this.router.navigate(['.'], {
-            queryParams: {
-              page: Math.ceil(totalEntries / pageSize) - 1,
-            },
-            queryParamsHandling: 'merge',
-            replaceUrl: true,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
-
-    // Handle string filter form control changes
-    effect(
-      () => {
-        this.filterFormChangedSig();
-        const formValue = this.filterForm.getRawValue();
-        const query = createQuery({
-          ...formValue,
-          geburtsdatum: formValue.geburtsdatum
-            ? toBackendLocalDate(formValue.geburtsdatum)
-            : undefined,
-        });
-
+      if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
         this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParams: {
+            page: Math.ceil(totalEntries / pageSize) - 1,
+          },
           queryParamsHandling: 'merge',
           replaceUrl: true,
         });
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
+
+    // Handle string filter form control changes
+    effect(() => {
+      this.filterFormChangedSig();
+      const formValue = this.filterForm.getRawValue();
+      const query = createQuery({
+        ...formValue,
+        geburtsdatum: formValue.geburtsdatum
+          ? toBackendLocalDate(formValue.geburtsdatum)
+          : undefined,
+      });
+
+      this.router.navigate(['.'], {
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
     );
-    effect(
-      () => {
-        const query = quickFilterChanged();
-        if (!query) {
-          return;
-        }
-        this.router.navigate(['.'], {
-          queryParams: {
-            show: query === DEFAULT_FILTER ? undefined : query,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const query = quickFilterChanged();
+      if (!query) {
+        return;
+      }
+      this.router.navigate(['.'], {
+        queryParams: {
+          show: query === DEFAULT_FILTER ? undefined : query,
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // when the route param inputs change, load the data
-    effect(
-      () => {
-        const { query, filter, sortColumn, sortOrder, page, pageSize } =
-          this.getInputs();
+    effect(() => {
+      const { query, filter, sortColumn, sortOrder, page, pageSize } =
+        this.getInputs();
 
-        this.delegationStore.loadPaginatedSozDashboard$({
-          getDelegierungSozQueryType: query,
-          ...filter,
-          sortColumn,
-          sortOrder,
-          page: page ?? 0,
-          pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.delegationStore.loadPaginatedSozDashboard$({
+        getDelegierungSozQueryType: query,
+        ...filter,
+        sortColumn,
+        sortOrder,
+        page: page ?? 0,
+        pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
+      });
+    });
   }
 
   openDialog(fall: FallWithDelegierung) {

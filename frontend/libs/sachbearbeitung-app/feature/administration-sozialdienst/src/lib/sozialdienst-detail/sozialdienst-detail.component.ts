@@ -101,48 +101,42 @@ export class SozialdienstDetailComponent implements OnDestroy {
   });
 
   constructor() {
-    effect(
-      () => {
-        const id = this.idSig();
+    effect(() => {
+      const id = this.idSig();
 
-        if (id) {
-          this.store.loadSozialdienst$({ sozialdienstId: id });
-          // disable email field
-          this.form.controls.sozialdienstAdmin.controls.email.disable({
-            emitEvent: false,
-          });
-        } else {
-          // set country to CH, since all sozialdienst are in CH
-          this.form.controls.adresse.controls.land.setValue('CH', {
-            emitEvent: false,
-          });
-        }
-        this.form.controls.adresse.controls.land.disable({ emitEvent: false });
-      },
-      { allowSignalWrites: true },
-    );
+      if (id) {
+        this.store.loadSozialdienst$({ sozialdienstId: id });
+        // disable email field
+        this.form.controls.sozialdienstAdmin.controls.email.disable({
+          emitEvent: false,
+        });
+      } else {
+        // set country to CH, since all sozialdienst are in CH
+        this.form.controls.adresse.controls.land.setValue('CH', {
+          emitEvent: false,
+        });
+      }
+      this.form.controls.adresse.controls.land.disable({ emitEvent: false });
+    });
 
-    effect(
-      () => {
-        const sozialdienst = this.store.sozialdienst().data;
-        if (sozialdienst) {
-          this.form.patchValue({
-            name: sozialdienst.name,
-            iban: sozialdienst.iban?.substring(2),
-            sozialdienstAdmin: {
-              vorname: sozialdienst.sozialdienstAdmin.vorname,
-              nachname: sozialdienst.sozialdienstAdmin.nachname,
-              email: sozialdienst.sozialdienstAdmin.email,
-            },
-          });
-          SharedUiFormAddressComponent.patchForm(
-            this.form.controls.adresse,
-            sozialdienst.adresse,
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const sozialdienst = this.store.sozialdienst().data;
+      if (sozialdienst) {
+        this.form.patchValue({
+          name: sozialdienst.name,
+          iban: sozialdienst.iban?.substring(2),
+          sozialdienstAdmin: {
+            vorname: sozialdienst.sozialdienstAdmin.vorname,
+            nachname: sozialdienst.sozialdienstAdmin.nachname,
+            email: sozialdienst.sozialdienstAdmin.email,
+          },
+        });
+        SharedUiFormAddressComponent.patchForm(
+          this.form.controls.adresse,
+          sozialdienst.adresse,
+        );
+      }
+    });
   }
 
   handleSubmit() {

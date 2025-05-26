@@ -253,18 +253,15 @@ export class GesuchsperiodeDetailComponent {
       initialValue: false,
     });
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(
-      () => {
-        const id = this.idSig();
-        this.store.loadAllGesuchsjahre$();
-        if (id) {
-          this.store.loadGesuchsperiode$(id);
-        } else {
-          this.store.loadLatestGesuchsperiode$();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const id = this.idSig();
+      this.store.loadAllGesuchsjahre$();
+      if (id) {
+        this.store.loadGesuchsperiode$(id);
+      } else {
+        this.store.loadLatestGesuchsperiode$();
+      }
+    });
     effect(() => {
       const gesuchsJahre = this.store.gesuchsjahre.data();
       if (!gesuchsJahre) {

@@ -262,22 +262,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const controls = this.form.controls;
 
     // abhaengige Validierung zuruecksetzen on valueChanges
-    effect(
-      () => {
-        const value = this.ausbildungNichtGefundenChangedSig();
-        const {
-          alternativeAusbildungsgang,
-          alternativeAusbildungsstaette,
-          ausbildungsgang,
-          ausbildungsstaette,
-        } = this.form.controls;
-        this.formUtils.setRequired(ausbildungsgang, !value);
-        this.formUtils.setRequired(ausbildungsstaette, !value);
-        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
-        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const value = this.ausbildungNichtGefundenChangedSig();
+      const {
+        alternativeAusbildungsgang,
+        alternativeAusbildungsstaette,
+        ausbildungsgang,
+        ausbildungsstaette,
+      } = this.form.controls;
+      this.formUtils.setRequired(ausbildungsgang, !value);
+      this.formUtils.setRequired(ausbildungsstaette, !value);
+      this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
+      this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
+    });
 
     [
       { control: controls.ausbildungBegin, getAdditionalValidators: () => [] },
@@ -316,94 +313,82 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
 
     (['begin', 'end'] as const).forEach((type) =>
-      effect(
-        () => {
-          this[`${type}ChangedSig`]();
-          controls[`ausbildung${capitalized(type)}`].updateValueAndValidity();
-        },
-        { allowSignalWrites: true },
-      ),
+      effect(() => {
+        this[`${type}ChangedSig`]();
+        controls[`ausbildung${capitalized(type)}`].updateValueAndValidity();
+      }),
     );
 
-    effect(
-      () => {
-        this.beginChangedSig();
+    effect(() => {
+      this.beginChangedSig();
 
-        this.ausbildungStore.resetAusbildungErrors();
+      this.ausbildungStore.resetAusbildungErrors();
 
-        setTimeout(() => {
-          this.withAusbildungRange((ctrl) => ctrl.updateValueAndValidity());
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      setTimeout(() => {
+        this.withAusbildungRange((ctrl) => ctrl.updateValueAndValidity());
+      });
+    });
 
     // fill form
-    effect(
-      () => {
-        const ausbildung = {
-          ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-            .gesuchFormular?.ausbildung,
-        };
-        const ausbildungstaetten =
-          this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    effect(() => {
+      const ausbildung = {
+        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          .gesuchFormular?.ausbildung,
+      };
+      const ausbildungstaetten =
+        this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
-        if (ausbildung && ausbildungstaetten) {
+      if (ausbildung && ausbildungstaetten) {
+        this.form.patchValue({
+          ...ausbildung,
+          ausbildungsgang: undefined,
+        });
+        const currentAusbildungsgang = ausbildung.ausbildungsgang;
+        if (currentAusbildungsgang) {
+          const ausbildungsstaette = ausbildungstaetten.find(
+            (ausbildungsstaette) =>
+              ausbildungsstaette.ausbildungsgaenge?.find(
+                (ausbildungsgang) =>
+                  ausbildungsgang.id === currentAusbildungsgang.id,
+              ),
+          );
+          const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+            (ausbildungsgang) =>
+              ausbildungsgang.id === currentAusbildungsgang.id,
+          );
           this.form.patchValue({
-            ...ausbildung,
-            ausbildungsgang: undefined,
+            ausbildungsstaette:
+              getTranslatableProp(
+                ausbildungsstaette,
+                'name',
+                this.languageSig(),
+              ) ?? undefined,
+            ausbildungsgang: ausbildungsgang?.id,
           });
-          const currentAusbildungsgang = ausbildung.ausbildungsgang;
-          if (currentAusbildungsgang) {
-            const ausbildungsstaette = ausbildungstaetten.find(
-              (ausbildungsstaette) =>
-                ausbildungsstaette.ausbildungsgaenge?.find(
-                  (ausbildungsgang) =>
-                    ausbildungsgang.id === currentAusbildungsgang.id,
-                ),
-            );
-            const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-              (ausbildungsgang) =>
-                ausbildungsgang.id === currentAusbildungsgang.id,
-            );
-            this.form.patchValue({
-              ausbildungsstaette:
-                getTranslatableProp(
-                  ausbildungsstaette,
-                  'name',
-                  this.languageSig(),
-                ) ?? undefined,
-              ausbildungsgang: ausbildungsgang?.id,
-            });
-          }
-        } else {
-          this.form.reset();
         }
-      },
-      { allowSignalWrites: true },
-    );
+      } else {
+        this.form.reset();
+      }
+    });
 
     const isAusbildungAuslandSig = toSignal(
       this.form.controls.isAusbildungAusland.valueChanges.pipe(
         startWith(this.form.value.isAusbildungAusland),
       ),
     );
-    effect(
-      () => {
-        const isAusbildungAusland = !!isAusbildungAuslandSig();
+    effect(() => {
+      const isAusbildungAusland = !!isAusbildungAuslandSig();
 
-        if (isAusbildungAusland) {
-          this.form.controls.ausbildungsort.reset();
-        }
+      if (isAusbildungAusland) {
+        this.form.controls.ausbildungsort.reset();
+      }
 
-        this.formUtils.setDisabledState(
-          this.form.controls.ausbildungsort,
-          !this.isEditableSig() || isAusbildungAusland,
-          false,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsort,
+        !this.isEditableSig() || isAusbildungAusland,
+        false,
+      );
+    });
 
     // When Staette null, disable gang
     const staetteSig = toSignal(
@@ -411,27 +396,24 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.ausbildungsstaette),
       ),
     );
-    effect(
-      () => {
-        const isWritable = this.isEditableSig();
-        const staette = staetteSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.ausbildungsgang,
-          !isWritable || !staette,
-          isWritable,
-        );
+    effect(() => {
+      const isWritable = this.isEditableSig();
+      const staette = staetteSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsgang,
+        !isWritable || !staette,
+        isWritable,
+      );
 
-        if (!staette) {
-          this.form.controls.ausbildungsgang.reset();
-          this.form.controls.besuchtBMS.reset();
-          if (!this.form.controls.ausbildungNichtGefunden) {
-            this.form.controls.fachrichtung.reset();
-            this.form.controls.ausbildungsort.reset();
-          }
+      if (!staette) {
+        this.form.controls.ausbildungsgang.reset();
+        this.form.controls.besuchtBMS.reset();
+        if (!this.form.controls.ausbildungNichtGefunden) {
+          this.form.controls.fachrichtung.reset();
+          this.form.controls.ausbildungsort.reset();
         }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
 
     // When Ausbildungsgang is null, disable fachrichtung. But only if ausbildungNichtGefunden is false
     const ausbildungsgangSig = toSignal(
@@ -444,18 +426,14 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.ausbildungNichtGefunden),
       ),
     );
-    effect(
-      () => {
-        const isWritable = this.isEditableSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.fachrichtung,
-          !isWritable ||
-            (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
-          isWritable,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const isWritable = this.isEditableSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.fachrichtung,
+        !isWritable || (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
+        isWritable,
+      );
+    });
   }
 
   ngOnInit() {

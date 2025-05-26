@@ -94,18 +94,15 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
+      if (!gesuchId) {
+        return;
+      }
 
-        this.buchhaltungStore.loadBuchhaltung$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      this.buchhaltungStore.loadBuchhaltung$({ gesuchId });
+    });
   }
 
   isStartOfNewGesuch(_: number, buchhaltungEntry: BuchhaltungEntryView) {

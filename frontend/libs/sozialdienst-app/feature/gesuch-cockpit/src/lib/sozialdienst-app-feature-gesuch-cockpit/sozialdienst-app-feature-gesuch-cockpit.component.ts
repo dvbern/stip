@@ -86,27 +86,21 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (this.gesuchUpdatedSig() && fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (this.gesuchUpdatedSig() && fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
   }
 
   compareById = compareById;

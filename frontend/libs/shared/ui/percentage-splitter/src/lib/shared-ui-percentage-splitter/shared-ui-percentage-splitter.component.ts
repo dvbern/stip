@@ -59,27 +59,21 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
       this.controlA.addValidators(Validators.minLength(2));
       this.controlB.addValidators(Validators.minLength(2));
 
-      effect(
-        () => {
-          const anteilA = percentStringToNumber(controlAChangedSig());
-          if (anteilA !== undefined && anteilA !== null) {
-            this.controlB.setValue((100 - anteilA)?.toString());
-            this.controlB.setErrors(null);
-          }
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const anteilA = percentStringToNumber(controlAChangedSig());
+        if (anteilA !== undefined && anteilA !== null) {
+          this.controlB.setValue((100 - anteilA)?.toString());
+          this.controlB.setErrors(null);
+        }
+      });
 
-      effect(
-        () => {
-          const anteilB = percentStringToNumber(controlBChangedSig());
-          if (anteilB !== undefined && anteilB !== null) {
-            this.controlA.setValue((100 - anteilB)?.toString());
-            this.controlA.setErrors(null);
-          }
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const anteilB = percentStringToNumber(controlBChangedSig());
+        if (anteilB !== undefined && anteilB !== null) {
+          this.controlA.setValue((100 - anteilB)?.toString());
+          this.controlA.setErrors(null);
+        }
+      });
     });
   }
 

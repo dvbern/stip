@@ -71,34 +71,28 @@ export class BenutzeDetailComponent implements OnDestroy {
   constructor() {
     this.store.loadAvailableRoles$();
 
-    effect(
-      () => {
-        const id = this.idSig();
+    effect(() => {
+      const id = this.idSig();
 
-        if (id) {
-          this.store.loadBenutzerWithRoles$(id);
+      if (id) {
+        this.store.loadBenutzerWithRoles$(id);
 
-          // disable email field
-          this.form.controls.email.disable({ emitEvent: false });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+        // disable email field
+        this.form.controls.email.disable({ emitEvent: false });
+      }
+    });
 
-    effect(
-      () => {
-        const benutzer = this.store.benutzer().data;
-        if (benutzer) {
-          this.form.patchValue({
-            name: benutzer.lastName,
-            vorname: benutzer.firstName,
-            email: benutzer.email,
-            roles: benutzer.roles,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const benutzer = this.store.benutzer().data;
+      if (benutzer) {
+        this.form.patchValue({
+          name: benutzer.lastName,
+          vorname: benutzer.firstName,
+          email: benutzer.email,
+          roles: benutzer.roles,
+        });
+      }
+    });
   }
 
   compareById = compareById;

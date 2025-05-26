@@ -192,17 +192,14 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.form,
     );
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.erhalteneAlimentebeitraege,
-          this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
-          !this.viewSig().readonly,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.erhalteneAlimentebeitraege,
+        this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
+        !this.viewSig().readonly,
+      );
+    });
   }
 
   ngOnChanges() {

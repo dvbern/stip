@@ -222,18 +222,14 @@ export class SharedFeatureGesuchDokumenteComponent {
         });
       });
 
-    effect(
-      () => {
-        if (
-          this.config.isSachbearbeitungApp &&
-          this.dokumentsStore.dokumenteCanFlagsSig()
-            .sbCanBearbeitungAbschliessen
-        ) {
-          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      if (
+        this.config.isSachbearbeitungApp &&
+        this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen
+      ) {
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+      }
+    });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }

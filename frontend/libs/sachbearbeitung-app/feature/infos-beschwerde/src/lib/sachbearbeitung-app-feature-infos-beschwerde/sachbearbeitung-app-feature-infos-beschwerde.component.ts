@@ -102,19 +102,16 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
+      if (!gesuchId) {
+        return;
+      }
 
-        this.gesuchStore.loadGesuchInfo$({ gesuchId });
-        this.beschwerdeStore.loadBeschwerden$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      this.gesuchStore.loadGesuchInfo$({ gesuchId });
+      this.beschwerdeStore.loadBeschwerden$({ gesuchId });
+    });
   }
 
   entscheidHochladen() {

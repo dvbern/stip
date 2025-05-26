@@ -116,14 +116,11 @@ export class SozialdienstOverviewComponent {
 
   constructor() {
     this.store.loadAllSozialdienste$();
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.sozialDiensteListDataSourceSig().filter =
-          JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.sozialDiensteListDataSourceSig().filter =
+        JSON.stringify(filterValues);
+    });
   }
 
   deleteSozialdienst(sozialdienst: Sozialdienst) {

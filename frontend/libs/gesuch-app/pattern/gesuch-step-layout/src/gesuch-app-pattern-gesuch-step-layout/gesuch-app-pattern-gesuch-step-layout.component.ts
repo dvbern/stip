@@ -121,15 +121,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      }
+    });
   }
 
   handleLanguageChangeHeader(language: Language) {

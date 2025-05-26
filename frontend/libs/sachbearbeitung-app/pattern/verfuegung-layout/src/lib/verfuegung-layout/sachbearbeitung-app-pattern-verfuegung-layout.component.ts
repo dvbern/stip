@@ -95,14 +95,11 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchStore.loadGesuchInfo$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchStore.loadGesuchInfo$({ gesuchId });
+      }
+    });
   }
 }

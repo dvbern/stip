@@ -230,16 +230,13 @@ export class RequiredDokumenteComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const el = this.dokumentStore.expandedComponentList();
+    effect(() => {
+      const el = this.dokumentStore.expandedComponentList();
 
-        if (el !== 'required') {
-          this.expandedRowSig.set(null);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (el !== 'required') {
+        this.expandedRowSig.set(null);
+      }
+    });
   }
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {

@@ -163,14 +163,11 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
 
     if (isSachbearbeitungApp) {
-      effect(
-        () => {
-          const { trancheId: gesuchTrancheId } = this.viewSig();
-          if (!gesuchTrancheId) return;
-          this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const { trancheId: gesuchTrancheId } = this.viewSig();
+        if (!gesuchTrancheId) return;
+        this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
+      });
       effect(() => {
         const steuerdaten = this.originalSteuerdatenSig();
 
@@ -182,21 +179,18 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
           });
         }
       });
-      effect(
-        () => {
-          this.gotReenabledSig();
-          const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
-          this.hiddenFieldSet.setFieldVisibility(
-            this.form.controls.saeule3a,
-            arbeitsverhaeltnis ?? false,
-          );
-          this.hiddenFieldSet.setFieldVisibility(
-            this.form.controls.saeule2,
-            arbeitsverhaeltnis ?? false,
-          );
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        this.gotReenabledSig();
+        const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.saeule3a,
+          arbeitsverhaeltnis ?? false,
+        );
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.saeule2,
+          arbeitsverhaeltnis ?? false,
+        );
+      });
     }
   }
 

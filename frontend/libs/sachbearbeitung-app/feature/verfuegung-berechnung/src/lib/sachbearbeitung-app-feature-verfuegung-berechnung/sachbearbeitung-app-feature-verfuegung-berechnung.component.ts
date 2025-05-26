@@ -187,17 +187,14 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
-        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      if (!gesuchId) {
+        return;
+      }
+      this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+    });
   }
 }
 

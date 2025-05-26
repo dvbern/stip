@@ -98,15 +98,12 @@ export class GesuchsjahrDetailComponent {
         technischesJahr: gesuchsjahr?.technischesJahr.toString(),
       });
     });
-    effect(
-      () => {
-        const id = this.idSig();
-        if (id) {
-          this.store.loadGesuchsjahr$(id);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const id = this.idSig();
+      if (id) {
+        this.store.loadGesuchsjahr$(id);
+      }
+    });
   }
 
   handleSave(config?: { shouldPublishAfterSave: boolean }) {

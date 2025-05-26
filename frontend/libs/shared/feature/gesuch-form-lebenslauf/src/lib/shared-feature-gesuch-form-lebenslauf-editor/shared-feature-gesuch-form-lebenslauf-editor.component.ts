@@ -159,53 +159,38 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       this.form,
     );
     // abhaengige Validierung zuruecksetzen on valueChanges
-    effect(
-      () => {
-        this.startChangedSig();
-        this.form.controls.bis.updateValueAndValidity();
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.endChangedSig();
-        this.form.controls.von.updateValueAndValidity();
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.berufsbezeichnung,
-          this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
-          true,
-        );
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.fachrichtung,
-          this.viewSig().readonly || !this.showFachrichtungSig(),
-          true,
-        );
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.titelDesAbschlusses,
-          this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
-          true,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.startChangedSig();
+      this.form.controls.bis.updateValueAndValidity();
+    });
+    effect(() => {
+      this.endChangedSig();
+      this.form.controls.von.updateValueAndValidity();
+    });
+    effect(() => {
+      this.gotReenabledSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.berufsbezeichnung,
+        this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
+        true,
+      );
+    });
+    effect(() => {
+      this.gotReenabledSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.fachrichtung,
+        this.viewSig().readonly || !this.showFachrichtungSig(),
+        true,
+      );
+    });
+    effect(() => {
+      this.gotReenabledSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.titelDesAbschlusses,
+        this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
+        true,
+      );
+    });
     const previousAusbildungenSig = computed(() =>
       this.ausbildungenSig()
         .filter((l) => {
@@ -274,52 +259,49 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         ]);
       }
     });
-    effect(
-      () => {
-        const item = this.itemSig();
-        if (item) {
-          this.form.controls.bildungsart.clearValidators();
-          this.form.controls.bildungsart.setValidators([
-            item.type === 'AUSBILDUNG'
-              ? Validators.required
-              : Validators.nullValidator,
-          ]);
-          this.form.controls.taetigkeitsart.clearValidators();
-          this.form.controls.taetigkeitsart.setValidators([
-            item.type === 'TAETIGKEIT'
-              ? Validators.required
-              : Validators.nullValidator,
-          ]);
-        }
+    effect(() => {
+      const item = this.itemSig();
+      if (item) {
+        this.form.controls.bildungsart.clearValidators();
+        this.form.controls.bildungsart.setValidators([
+          item.type === 'AUSBILDUNG'
+            ? Validators.required
+            : Validators.nullValidator,
+        ]);
+        this.form.controls.taetigkeitsart.clearValidators();
+        this.form.controls.taetigkeitsart.setValidators([
+          item.type === 'TAETIGKEIT'
+            ? Validators.required
+            : Validators.nullValidator,
+        ]);
+      }
 
-        this.form.patchValue(item);
+      this.form.patchValue(item);
 
-        if (item.von && item.bis) {
-          this.form.controls.bis.markAsTouched();
-        }
+      if (item.von && item.bis) {
+        this.form.controls.bis.markAsTouched();
+      }
 
-        if (item.type === 'AUSBILDUNG') {
-          this.formUtils.setRequired(this.form.controls.taetigkeitsart, false);
-          this.formUtils.setRequired(
-            this.form.controls.taetigkeitsBeschreibung,
-            false,
-          );
-          this.formUtils.setRequired(this.form.controls.bildungsart, true);
-        }
+      if (item.type === 'AUSBILDUNG') {
+        this.formUtils.setRequired(this.form.controls.taetigkeitsart, false);
+        this.formUtils.setRequired(
+          this.form.controls.taetigkeitsBeschreibung,
+          false,
+        );
+        this.formUtils.setRequired(this.form.controls.bildungsart, true);
+      }
 
-        if (item.type === 'TAETIGKEIT') {
-          this.form.controls.bildungsart.clearValidators();
-          this.form.controls.bildungsart.updateValueAndValidity();
-          this.form.controls.taetigkeitsart.setValidators(Validators.required);
-          this.form.controls.taetigkeitsart.updateValueAndValidity();
-          this.form.controls.taetigkeitsBeschreibung.setValidators(
-            Validators.required,
-          );
-          this.form.controls.taetigkeitsBeschreibung.updateValueAndValidity();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (item.type === 'TAETIGKEIT') {
+        this.form.controls.bildungsart.clearValidators();
+        this.form.controls.bildungsart.updateValueAndValidity();
+        this.form.controls.taetigkeitsart.setValidators(Validators.required);
+        this.form.controls.taetigkeitsart.updateValueAndValidity();
+        this.form.controls.taetigkeitsBeschreibung.setValidators(
+          Validators.required,
+        );
+        this.form.controls.taetigkeitsBeschreibung.updateValueAndValidity();
+      }
+    });
   }
 
   private prepareKantonValues() {
