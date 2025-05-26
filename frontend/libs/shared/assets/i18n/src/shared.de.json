@@ -56,6 +56,7 @@
   "shared.header.aenderungen.initial": "Erstgesuch",
   "shared.header.aenderungen.akzeptierte": "Akzeptierte Änderungen",
   "shared.header.initialTranche.item": "Erstgesuch vom {{ date }}",
+  "shared.header.initialTranche.multiple": "Erstgesuch Tranche {{ index }} vom {{ date }}",
   "shared.file.upload": "Dateien Durchsuchen",
   "shared.file.uploadError": "Fehler beim Hochladen der Datei",
   "shared.file.uploading": "Datei wird hochgeladen...",
