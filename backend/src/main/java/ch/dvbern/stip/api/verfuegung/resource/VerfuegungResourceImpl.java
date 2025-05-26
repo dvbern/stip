@@ -31,13 +31,13 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 
 @RequestScoped
@@ -54,7 +54,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
 
     @Blocking
     @Override
-    @PermitAll
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public RestMulti<Buffer> getVerfuegung(String token) {
         final var verfuegungId = DokumentDownloadUtil.getClaimId(
             jwtPar,
