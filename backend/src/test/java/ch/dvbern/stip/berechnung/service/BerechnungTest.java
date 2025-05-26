@@ -511,7 +511,6 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setFahrkosten(925)
                 .setRenten(0)
-                .setAusbildungskosten(0)
                 .setAusbildungskosten(950)
                 .setAuswaertigeMittagessenProWoche(5)
         );
@@ -748,7 +747,6 @@ class BerechnungTest {
                 .setFahrkosten(0)
                 .setRenten(0)
                 .setZulagen(5520)
-                .setAusbildungskosten(0)
                 .setAusbildungskosten(500)
                 .setBetreuungskostenKinder(3333)
                 .setFahrkosten(790)
