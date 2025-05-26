@@ -71,6 +71,7 @@ import com.itextpdf.svg.converter.SvgConverter;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -112,10 +113,10 @@ public class PdfService {
         final FontProgram fontBold;
 
         try {
-            final var fontFile = getClass().getResource(FONT_PATH).getFile();
-            final var fontBoldFile = getClass().getResource(FONT_BOLD_PATH).getFile();
-            font = FontProgramFactory.createFont(fontFile);
-            fontBold = FontProgramFactory.createFont(fontBoldFile);
+            final byte[] fontBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_PATH));
+            final byte[] fontBoldBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_BOLD_PATH));
+            font = FontProgramFactory.createFont(fontBytes);
+            fontBold = FontProgramFactory.createFont(fontBoldBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
