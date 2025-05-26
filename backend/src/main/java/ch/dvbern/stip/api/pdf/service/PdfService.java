@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -141,7 +140,7 @@ public class PdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            final Image logo = getLogo(pdfDocument, "src/main/resources/images/bern_logo.svg");
+            final Image logo = getLogo(pdfDocument, "/images/bern_logo.svg");
             logo.setMarginLeft(-25);
             logo.setMarginTop(-35);
             document.add(logo);
@@ -586,7 +585,7 @@ public class PdfService {
 
     private Image getLogo(PdfDocument pdfDocument, String pathToSvg) throws IOException {
         final ByteArrayOutputStream svgOut = new ByteArrayOutputStream();
-        try (final InputStream svgStream = new FileInputStream(pathToSvg)) {
+        try (final InputStream svgStream = getClass().getResourceAsStream(pathToSvg)) {
             SvgConverter.createPdf(svgStream, svgOut);
         }
         try (
