@@ -8,6 +8,7 @@ import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
   GSFormStepProps,
+  GesuchFormular,
   GesuchTranche,
   GesuchTrancheTyp,
   GesuchUrlType,
@@ -289,6 +290,23 @@ export function prepareTranchenChanges(
   if (!gesuch) {
     return null;
   }
+  const adresseIdFields = formularPropsContaining<{ adresse: { id?: string } }>(
+    {
+      personInAusbildung: null,
+      elterns: null,
+      partner: null,
+      auszahlung: null,
+    },
+  ).map((step) => `${step}.adresse.id`);
+
+  const idFields = formularPropsContaining<{ id?: string }>({
+    steuererklaerung: null,
+    lebenslaufItems: null,
+    elterns: null,
+    geschwisters: null,
+    kinds: null,
+  }).map((step) => `${step}.id`);
+
   /**
    * Changes have Zero, one or max two tranches
    * - Zero: No changes
@@ -300,7 +318,9 @@ export function prepareTranchenChanges(
       tranche.gesuchFormular,
       gesuch.gesuchTrancheToWorkWith.gesuchFormular,
       {
-        keysToSkip: ['id'],
+        // The json-diff-ts library updated their handling of nested keys
+        // https://github.com/ltwlf/json-diff-ts/pull/243/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5
+        keysToSkip: [...adresseIdFields, ...idFields],
         embeddedObjKeys: {
           /** Used to have a more accurate diff for steuerdaten in {@link hasSteuererklaerungChanges} */
           ['steuererklaerung']: 'steuerdatenTyp',
@@ -371,3 +391,28 @@ export const hasSteuererklaerungChanges = (
 
   return Array.from(affectedSteps);
 };
+
+type RelevantFields = Exclude<keyof GesuchFormular, 'ausbildung'>;
+
+type FieldsThatContain<
+  T extends Record<string, unknown>,
+  U = RelevantFields,
+> = U extends RelevantFields
+  ? Exclude<GesuchFormular[U], undefined> extends T | T[]
+    ? U
+    : never
+  : never;
+
+/**
+ * Returns Formular properties which types are containing the given sub-type
+ *
+ * @example
+ * ```ts
+ * formularPropsContaining<{ heimatort?: string }>({
+ *     personInAusbildung: null,
+ * });
+ * ```
+ */
+const formularPropsContaining = <T extends Record<string, unknown>>(
+  obj: Record<FieldsThatContain<T>, null>,
+) => Object.keys(obj) as FieldsThatContain<T>[];
