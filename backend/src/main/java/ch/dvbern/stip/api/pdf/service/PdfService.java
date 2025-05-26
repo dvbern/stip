@@ -77,8 +77,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PdfService {
 
-    private static final String FONT_PATH = "src/main/resources/fonts/arial.ttf";
-    private static final String FONT_BOLD_PATH = "src/main/resources/fonts/arial_bold.ttf";
+    private static final String FONT_PATH = "/fonts/arial.ttf";
+    private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
 
     private static final int SPACING_BIG = 30;
     private static final int SPACING_MEDIUM = 20;
@@ -112,8 +112,10 @@ public class PdfService {
         final FontProgram fontBold;
 
         try {
-            font = FontProgramFactory.createFont(FONT_PATH);
-            fontBold = FontProgramFactory.createFont(FONT_BOLD_PATH);
+            final var fontFile = getClass().getResource(FONT_PATH).getFile();
+            final var fontBoldFile = getClass().getResource(FONT_BOLD_PATH).getFile();
+            font = FontProgramFactory.createFont(fontFile);
+            fontBold = FontProgramFactory.createFont(fontBoldFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
