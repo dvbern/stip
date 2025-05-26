@@ -138,7 +138,6 @@ public class GesuchTrancheService {
         return gesuchTranche.getGesuch().getId();
     }
 
-    @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
         var gesuchToWorkWith = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
 
@@ -150,6 +149,7 @@ public class GesuchTrancheService {
         allTranchenOut.addAll(
             allTranchenList.stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .sorted(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigAb()))
                 .toList()
         );
         allTranchenOut.addAll(
@@ -173,6 +173,7 @@ public class GesuchTrancheService {
         allTranchenOut.addAll(
             allTranchenList.stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .sorted(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigAb()))
                 .toList()
         );
         allTranchenOut.addAll(

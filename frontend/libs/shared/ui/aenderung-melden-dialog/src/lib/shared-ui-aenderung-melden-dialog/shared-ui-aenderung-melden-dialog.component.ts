@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -68,11 +70,16 @@ export class SharedUiAenderungMeldenDialogComponent {
 
   config = inject(SharedModelCompileTimeConfig);
 
-  form = this.formBuilder.group({
-    gueltigAb: [<Date | null>null, Validators.required],
-    gueltigBis: [<Date | null>null],
-    kommentar: [<string | null>null, Validators.required],
-  });
+  form = this.formBuilder.group(
+    {
+      gueltigAb: [<Date | null>null, Validators.required],
+      gueltigBis: [<Date | null>null],
+      kommentar: [<string | null>null, Validators.required],
+    },
+    {
+      validators: dateRangeValidator('gueltigAb', 'gueltigBis'),
+    },
+  );
 
   static open(dialog: MatDialog, data: GesuchAenderungData) {
     return dialog.open<
@@ -84,9 +91,9 @@ export class SharedUiAenderungMeldenDialogComponent {
 
   confirm() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) {
-      return;
-    }
+    // if (this.form.invalid) {
+    //   return;
+    // }
     const aenderungsAntrag = convertTempFormToRealValues(this.form, [
       'gueltigAb',
       'kommentar',
@@ -104,4 +111,20 @@ export class SharedUiAenderungMeldenDialogComponent {
   cancel() {
     return this.dialogRef.close(null);
   }
+}
+
+export function dateRangeValidator(startDateKey: string, endDateKey: string) {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const startDate = formGroup.get(startDateKey)?.value;
+    const endDate = formGroup.get(endDateKey)?.value;
+    const endControl = formGroup.get(endDateKey);
+
+    if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
+      endControl?.setErrors({ dateRangeEqual: true });
+      return { dateRangeEqual: true };
+    }
+
+    // endControl?.setErrors(null);
+    return null;
+  };
 }
