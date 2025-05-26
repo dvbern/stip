@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -36,7 +36,7 @@ public class GesuchDto  implements Serializable {
   private @Valid Boolean verfuegt;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
-  private @Valid DelegierungDto delegierung;
+  private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
 
   /**
@@ -268,19 +268,19 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
-  public GesuchDto delegierung(DelegierungDto delegierung) {
+  public GesuchDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
   }
 
   
   @JsonProperty("delegierung")
-  public DelegierungDto getDelegierung() {
+  public DelegierungSlimDto getDelegierung() {
     return delegierung;
   }
 
   @JsonProperty("delegierung")
-  public void setDelegierung(DelegierungDto delegierung) {
+  public void setDelegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
   }
 

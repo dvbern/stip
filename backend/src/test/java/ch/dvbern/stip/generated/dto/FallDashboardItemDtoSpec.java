@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDtoSpec;
-import ch.dvbern.stip.generated.dto.DelegierungDtoSpec;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,7 +52,7 @@ public class FallDashboardItemDtoSpec {
   private List<NotificationDtoSpec> notifications;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
-  private DelegierungDtoSpec delegierung;
+  private DelegierungSlimDtoSpec delegierung;
 
   public FallDashboardItemDtoSpec() {
   }
@@ -151,7 +151,7 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  public FallDashboardItemDtoSpec delegierung(DelegierungDtoSpec delegierung) {
+  public FallDashboardItemDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
     
     this.delegierung = delegierung;
     return this;
@@ -165,14 +165,14 @@ public class FallDashboardItemDtoSpec {
   @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DelegierungDtoSpec getDelegierung() {
+  public DelegierungSlimDtoSpec getDelegierung() {
     return delegierung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierung(DelegierungDtoSpec delegierung) {
+  public void setDelegierung(DelegierungSlimDtoSpec delegierung) {
     this.delegierung = delegierung;
   }
 

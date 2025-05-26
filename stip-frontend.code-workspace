@@ -124,7 +124,15 @@
           "url": "http://localhost:4201",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
-        }
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "Soz Edge",
+          "url": "http://localhost:4202",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
       ]
     },
     "editor.formatOnSave": true,
@@ -147,6 +155,7 @@
     },
     "yaml.maxItemsComputed": 10000,
     "testing.automaticallyOpenTestResults": "neverOpen",
-    "angular.forceStrictTemplates": true
+    "angular.forceStrictTemplates": true,
+    "git.blame.statusBarItem.enabled": false
   }
 }

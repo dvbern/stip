@@ -1,7 +1,11 @@
 {
   "app-name": "Stipendien Online",
+  "sozialdienst-app.dashboard.title": "Dashboard",
+  "sozialdienst-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
+  "sozialdienst-app.dashboard.ausbildung.create": "Stipendium beantragen",
 
   "sozialdienst-app.header.antraege": "Anträge",
+  "sozialdienst-app.header.fall": "Fall",
   "sozialdienst-app.header.administration": "Administration",
 
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Benutzerverwaltung",
@@ -15,5 +19,29 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
   "sozialdienst-app.admin.sozialdienstBenutzer.table.erstellen": "Erstellen",
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.title": "Sozialdienst Arbeiter löschen",
-  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?"
+  "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
+
+  "sozialdienst-app.cockpit.quick-filter.ALLE": "Alle",
+  "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche",
+
+  "sozialdienst-app.cockpit.table.description": "Beschreibung der Tabelle",
+  "sozialdienst-app.cockpit.table.fall": "Fallnummer",
+  "sozialdienst-app.cockpit.table.nachname": "Nachname",
+  "sozialdienst-app.cockpit.table.vorname": "Vorname",
+  "sozialdienst-app.cockpit.table.geburtsdatum": "Geburtsdatum",
+  "sozialdienst-app.cockpit.table.wohnort": "Wohnort",
+  "sozialdienst-app.cockpit.table.delegierungAngenommen": "Art",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE": "Anfrage",
+  "sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG": "Delegierung",
+  "sozialdienst-app.cockpit.no-status-filter": "Alle",
+  "sozialdienst-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
+  "sozialdienst-app.cockpit.delegierungen": "Delegierungen",
+
+  "sozialdienst-app.cockpit.table.delegierung.title.delegierung": "Delegierung",
+  "sozialdienst-app.cockpit.table.delegierung.title.anfrage": "Delegierungsanfrage",
+  "sozialdienst-app.delegierung-dialog.zuweisung.title": "Zuweisung",
+  "sozialdienst-app.delegierung-dialog.fallNummer.label": "Fallnummer",
+  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Sozialdienstmitarbeiter",
+  "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern",
+  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Bitte speichern Sie die Änderungen, bevor Sie den Dialog schließen."
 }
