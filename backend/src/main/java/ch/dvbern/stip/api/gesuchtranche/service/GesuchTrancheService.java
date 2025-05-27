@@ -357,7 +357,7 @@ public class GesuchTrancheService {
             throw new ForbiddenException();
         }
 
-        final var trancheToCopy = gesuch.getTrancheValidOnDate(aenderungsantragCreateDto.getStart())
+        final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(aenderungsantragCreateDto.getStart())
             .orElseThrow(NotFoundException::new);
 
         final var newTranche = GesuchTrancheCopyUtil
@@ -378,7 +378,7 @@ public class GesuchTrancheService {
         final CreateGesuchTrancheRequestDto createDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = gesuch.getTrancheValidOnDate(createDto.getStart())
+        final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(createDto.getStart())
             .orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(
             trancheToCopy,
