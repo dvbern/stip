@@ -28,13 +28,9 @@ export interface EinnahmenKosten {
     ergaenzungsleistungen?: number;
     beitraege?: number;
     /**
-     * Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+     * The cost for the education calculated over the whole year
      */
-    ausbildungskostenSekundarstufeZwei?: number;
-    /**
-     * Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
-     */
-    ausbildungskostenTertiaerstufe?: number;
+    ausbildungskosten?: number;
     fahrkosten: number;
     wohnkosten?: number;
     /**

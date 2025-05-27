@@ -89,6 +89,7 @@ public class GesuchApiSpec {
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersandbereit(),
                 changeGesuchStatusToVersendet(),
+                createBeschwerdeEntscheid(),
                 createBeschwerdeVerlaufEntry(),
                 createGesuch(),
                 deleteGesuch(),
@@ -108,8 +109,9 @@ public class GesuchApiSpec {
                 getGesucheSb(),
                 getGsAenderungChangesInBearbeitung(),
                 getGsDashboard(),
-                getInitialTrancheChangesByGesuchId(),
+                getInitialTrancheChanges(),
                 getSbAenderungChanges(),
+                getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
                 updateGesuch(),
                 updateNachfristDokumente()
@@ -146,6 +148,10 @@ public class GesuchApiSpec {
 
     public ChangeGesuchStatusToVersendetOper changeGesuchStatusToVersendet() {
         return new ChangeGesuchStatusToVersendetOper(createReqSpec());
+    }
+
+    public CreateBeschwerdeEntscheidOper createBeschwerdeEntscheid() {
+        return new CreateBeschwerdeEntscheidOper(createReqSpec());
     }
 
     public CreateBeschwerdeVerlaufEntryOper createBeschwerdeVerlaufEntry() {
@@ -224,12 +230,16 @@ public class GesuchApiSpec {
         return new GetGsDashboardOper(createReqSpec());
     }
 
-    public GetInitialTrancheChangesByGesuchIdOper getInitialTrancheChangesByGesuchId() {
-        return new GetInitialTrancheChangesByGesuchIdOper(createReqSpec());
+    public GetInitialTrancheChangesOper getInitialTrancheChanges() {
+        return new GetInitialTrancheChangesOper(createReqSpec());
     }
 
     public GetSbAenderungChangesOper getSbAenderungChanges() {
         return new GetSbAenderungChangesOper(createReqSpec());
+    }
+
+    public GetSozialdienstMitarbeiterDashboardOper getSozialdienstMitarbeiterDashboard() {
+        return new GetSozialdienstMitarbeiterDashboardOper(createReqSpec());
     }
 
     public GetStatusProtokollOper getStatusProtokoll() {
@@ -856,6 +866,105 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToVersendetOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #kommentarForm  (required)
+     * @see #beschwerdeErfolgreichForm  (required)
+     * @see #fileUploadMultiPart  (required)
+     */
+    public static class CreateBeschwerdeEntscheidOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/beschwerde-entscheid";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateBeschwerdeEntscheidOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/{gesuchId}/beschwerde-entscheid
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateBeschwerdeEntscheidOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+         public static final String KOMMENTAR_FORM = "kommentar";
+
+         /**
+         * @param kommentar (String)  (required)
+         * @return operation
+         */
+         public CreateBeschwerdeEntscheidOper kommentarForm(Object... kommentar) {
+            reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
+            return this;
+         }
+
+         public static final String BESCHWERDE_ERFOLGREICH_FORM = "beschwerdeErfolgreich";
+
+         /**
+         * @param beschwerdeErfolgreich (Boolean)  (required)
+         * @return operation
+         */
+         public CreateBeschwerdeEntscheidOper beschwerdeErfolgreichForm(Object... beschwerdeErfolgreich) {
+            reqSpec.addFormParam(BESCHWERDE_ERFOLGREICH_FORM, beschwerdeErfolgreich);
+            return this;
+         }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public CreateBeschwerdeEntscheidOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateBeschwerdeEntscheidOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateBeschwerdeEntscheidOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -2343,7 +2452,7 @@ public class GesuchApiSpec {
      * Returns gesuche for dashboard filtered by gs
      * 
      *
-     * return List&lt;FallDashboardItemDtoSpec&gt;
+     * return FallDashboardItemDtoSpec
      */
     public static class GetGsDashboardOper implements Oper {
 
@@ -2373,10 +2482,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/gs-dashboard
          * @param handler handler
-         * @return List&lt;FallDashboardItemDtoSpec&gt;
+         * @return FallDashboardItemDtoSpec
          */
-        public List<FallDashboardItemDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<FallDashboardItemDtoSpec>> type = new TypeRef<List<FallDashboardItemDtoSpec>>(){};
+        public FallDashboardItemDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallDashboardItemDtoSpec> type = new TypeRef<FallDashboardItemDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -2401,28 +2510,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns the inital tranche changes by GesuchId
+     * Returns the inital tranche changes by gesuchTrancheId
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
-    public static class GetInitialTrancheChangesByGesuchIdOper implements Oper {
+    public static class GetInitialTrancheChangesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/changes/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/changes/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetInitialTrancheChangesByGesuchIdOper(RequestSpecBuilder reqSpec) {
+        public GetInitialTrancheChangesOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2433,7 +2542,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchWithChangesDtoSpec
          */
@@ -2442,14 +2551,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetInitialTrancheChangesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -2458,7 +2567,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetInitialTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2468,7 +2577,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetInitialTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -2542,6 +2651,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetSbAenderungChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns gesuche for dashboard filtered by gs
+     * 
+     *
+     * @see #fallIdPath  (required)
+     * return FallDashboardItemDtoSpec
+     */
+    public static class GetSozialdienstMitarbeiterDashboardOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSozialdienstMitarbeiterDashboardOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}
+         * @param handler handler
+         * @return FallDashboardItemDtoSpec
+         */
+        public FallDashboardItemDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallDashboardItemDtoSpec> type = new TypeRef<FallDashboardItemDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID)  (required)
+         * @return operation
+         */
+        public GetSozialdienstMitarbeiterDashboardOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstMitarbeiterDashboardOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstMitarbeiterDashboardOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

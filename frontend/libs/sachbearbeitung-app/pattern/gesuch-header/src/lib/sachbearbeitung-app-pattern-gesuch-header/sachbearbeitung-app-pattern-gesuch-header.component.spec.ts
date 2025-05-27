@@ -86,7 +86,6 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     ['BEREIT_FUER_BEARBEITUNG'],
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
-    ['VERSENDET'],
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {
@@ -97,7 +96,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     },
   );
 
-  it.each([['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
+  it.each([['VERSENDET'], ['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang with onSuccess',
     (nextStatus) => {
       component.setStatusUebergang(nextStatus, 'gesuchId', 'gesuchTrancheId');

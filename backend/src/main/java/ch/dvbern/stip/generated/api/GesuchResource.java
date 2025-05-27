@@ -83,6 +83,12 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
+    @Path("/{gesuchId}/beschwerde-entscheid")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "beschwerdeErfolgreich")  Boolean beschwerdeErfolgreich,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
+    @POST
     @Path("/{gesuchId}/beschwerde")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
@@ -178,17 +184,22 @@ public interface GesuchResource {
     @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
-    List<FallDashboardItemDto> getGsDashboard();
+    FallDashboardItemDto getGsDashboard();
 
     @GET
-    @Path("/changes/{gesuchId}")
+    @Path("/changes/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getInitialTrancheChangesByGesuchId(@PathParam("gesuchId") UUID gesuchId);
+    GesuchWithChangesDto getInitialTrancheChanges(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
+    @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    FallDashboardItemDto getSozialdienstMitarbeiterDashboard(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

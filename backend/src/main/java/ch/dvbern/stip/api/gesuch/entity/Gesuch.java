@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
@@ -129,20 +130,14 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinFormula(value = """
-        (
-            SELECT gesuch_tranche.id
-            FROM gesuch_tranche gesuch_tranche
-            WHERE gesuch_tranche.gesuch_id = id
-                AND gesuch_tranche.typ = 'TRANCHE'
-            ORDER BY gesuch_tranche.gueltig_bis DESC
-            LIMIT 1
-        )
-    """)
-    @Setter(AccessLevel.NONE)
-    @NotAudited
-    private GesuchTranche latestGesuchTranche;
+    public GesuchTranche getLatestGesuchTranche() {
+        // There must always be at least 1 GesuchTranche
+        // noinspection OptionalGetWithoutIsPresent
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .max(Comparator.comparing((GesuchTranche gesuchTranche) -> gesuchTranche.getGueltigkeit().getGueltigBis()))
+            .get();
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """
@@ -172,6 +167,9 @@ public class Gesuch extends AbstractMandantEntity {
 
     @Column(name = "beschwerde_haengig", nullable = false)
     private boolean beschwerdeHaengig;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private List<BeschwerdeEntscheid> beschwerdeEntscheids = new ArrayList<>();
 
     /**
      * Gesuch was verfuegt at least once in the past

@@ -42,7 +42,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
-import io.quarkus.keycloak.admin.client.common.KeycloakAdminClientConfig;
+import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

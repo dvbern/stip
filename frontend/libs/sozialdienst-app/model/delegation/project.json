@@ -1,0 +1,15 @@
+{
+  "name": "sozialdienst-app-model-delegation",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sozialdienst-app/model/delegation/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:sozialdienst-app"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sozialdienst-app/model/delegation/tsconfig.lib.json"
+      }
+    }
+  }
+}

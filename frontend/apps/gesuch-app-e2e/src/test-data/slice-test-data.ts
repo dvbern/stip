@@ -150,7 +150,7 @@ export const einnahmenKosten: EinnahmenKosten = {
   eoLeistungen: 0,
   ergaenzungsleistungen: 0,
   beitraege: 3000,
-  ausbildungskostenTertiaerstufe: 1980,
+  ausbildungskosten: 1980,
   fahrkosten: 798,
   auswaertigeMittagessenProWoche: 5,
   vermoegen: 6,

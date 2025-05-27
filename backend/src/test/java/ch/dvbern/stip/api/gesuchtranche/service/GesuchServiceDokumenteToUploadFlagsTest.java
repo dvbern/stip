@@ -18,15 +18,22 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -35,12 +42,16 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,6 +61,7 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class GesuchServiceDokumenteToUploadFlagsTest {
+
     @InjectMock
     GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
@@ -66,7 +78,20 @@ class GesuchServiceDokumenteToUploadFlagsTest {
     @InjectMock
     UnterschriftenblattService unterschriftenblattService;
 
+    @InjectMock
+    BenutzerService benutzerService;
+
+    @InjectMock
+    SozialdienstBenutzerService sozialdienstBenutzerService;
+
+    @InjectMock
+    SozialdienstService sozialdienstService;
+
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
+
     @Inject
+    @InjectMocks
     GesuchTrancheService gesuchTrancheService;
 
     GesuchTranche tranche1;
@@ -80,6 +105,13 @@ class GesuchServiceDokumenteToUploadFlagsTest {
     void setUp() {
         // ignore unterschriftenblatt for this tesst
         when(unterschriftenblattService.getUnterschriftenblaetterToUpload(any())).thenReturn(List.of());
+
+        var gsBenutzer = new Benutzer();
+        var gsRole = new Rolle();
+        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
+        gsBenutzer.setRollen(Set.of(gsRole));
+        when(benutzerService.getCurrentBenutzer()).thenReturn(gsBenutzer);
+
         // prepare a gesuch with 2 tranchen
         gesuch = new Gesuch().setGesuchTranchen(
             List.of(
@@ -87,6 +119,12 @@ class GesuchServiceDokumenteToUploadFlagsTest {
                 new GesuchTranche()
             )
         );
+        var fall = new Fall();
+        fall.setGesuchsteller(gsBenutzer);
+        var ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        gesuch.setAusbildung(ausbildung);
+
         // prepare tranchen for tests
         tranche1 = gesuch.getGesuchTranchen().get(0);
         tranche1.setId(UUID.randomUUID());
@@ -116,6 +154,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // overall arrange
         when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
         when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
+        when(gesuchTrancheHistoryService.getLatestTranche(tranche1.getId())).thenReturn(tranche1);
+        when(gesuchTrancheHistoryService.getLatestTranche(tranche2.getId())).thenReturn(tranche2);
     }
 
     @Test
@@ -137,7 +177,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenCallRealMethod();
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenCallRealMethod();
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         // act
@@ -160,7 +200,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          * Gesuchstatus must be IN_BEARBEITUNG_SB
          */
         // arrange
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
         when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
@@ -255,7 +295,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          * all GesuchDokuments must be accepted
          */
         // arrange
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any())).thenReturn(false);
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
         when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
         Mockito.doNothing().when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());

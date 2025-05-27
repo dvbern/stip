@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -39,9 +39,10 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid Boolean verfuegt;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
-  private @Valid DelegierungDto delegierung;
+  private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
+  private @Valid Boolean isInitial;
 
   /**
    **/
@@ -272,19 +273,19 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
-  public GesuchWithChangesDto delegierung(DelegierungDto delegierung) {
+  public GesuchWithChangesDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
   }
 
   
   @JsonProperty("delegierung")
-  public DelegierungDto getDelegierung() {
+  public DelegierungSlimDto getDelegierung() {
     return delegierung;
   }
 
   @JsonProperty("delegierung")
-  public void setDelegierung(DelegierungDto delegierung) {
+  public void setDelegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
   }
 
@@ -340,6 +341,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public GesuchWithChangesDto isInitial(Boolean isInitial) {
+    this.isInitial = isInitial;
+    return this;
+  }
+
+  
+  @JsonProperty("isInitial")
+  public Boolean getIsInitial() {
+    return isInitial;
+  }
+
+  @JsonProperty("isInitial")
+  public void setIsInitial(Boolean isInitial) {
+    this.isInitial = isInitial;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -364,12 +383,13 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
-        Objects.equals(this.changes, gesuchWithChanges.changes);
+        Objects.equals(this.changes, gesuchWithChanges.changes) &&
+        Objects.equals(this.isInitial, gesuchWithChanges.isInitial);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes, isInitial);
   }
 
   @Override
@@ -392,6 +412,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
+    sb.append("    isInitial: ").append(toIndentedString(isInitial)).append("\n");
     sb.append("}");
     return sb.toString();
   }

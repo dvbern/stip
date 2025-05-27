@@ -15,12 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,16 +31,58 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DelegierungDtoSpec
  */
 @JsonPropertyOrder({
-  DelegierungDtoSpec.JSON_PROPERTY_SOZIALDIENST
+  DelegierungDtoSpec.JSON_PROPERTY_ID,
+  DelegierungDtoSpec.JSON_PROPERTY_SOZIALDIENST,
+  DelegierungDtoSpec.JSON_PROPERTY_DELEGIERTER_MITARBEITER,
+  DelegierungDtoSpec.JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN,
+  DelegierungDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN
 })
 @JsonTypeName("Delegierung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DelegierungDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
   private SozialdienstSlimDtoSpec sozialdienst;
 
+  public static final String JSON_PROPERTY_DELEGIERTER_MITARBEITER = "delegierterMitarbeiter";
+  private SozialdienstBenutzerDtoSpec delegierterMitarbeiter;
+
+  public static final String JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN = "delegierungAngenommen";
+  private Boolean delegierungAngenommen;
+
+  public static final String JSON_PROPERTY_PERSOENLICHE_ANGABEN = "persoenlicheAngaben";
+  private PersoenlicheAngabenDtoSpec persoenlicheAngaben;
+
   public DelegierungDtoSpec() {
   }
+
+  public DelegierungDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public DelegierungDtoSpec sozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
     
@@ -64,6 +109,84 @@ public class DelegierungDtoSpec {
     this.sozialdienst = sozialdienst;
   }
 
+
+  public DelegierungDtoSpec delegierterMitarbeiter(SozialdienstBenutzerDtoSpec delegierterMitarbeiter) {
+    
+    this.delegierterMitarbeiter = delegierterMitarbeiter;
+    return this;
+  }
+
+   /**
+   * Get delegierterMitarbeiter
+   * @return delegierterMitarbeiter
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELEGIERTER_MITARBEITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SozialdienstBenutzerDtoSpec getDelegierterMitarbeiter() {
+    return delegierterMitarbeiter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELEGIERTER_MITARBEITER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierterMitarbeiter(SozialdienstBenutzerDtoSpec delegierterMitarbeiter) {
+    this.delegierterMitarbeiter = delegierterMitarbeiter;
+  }
+
+
+  public DelegierungDtoSpec delegierungAngenommen(Boolean delegierungAngenommen) {
+    
+    this.delegierungAngenommen = delegierungAngenommen;
+    return this;
+  }
+
+   /**
+   * Get delegierungAngenommen
+   * @return delegierungAngenommen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getDelegierungAngenommen() {
+    return delegierungAngenommen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+  }
+
+
+  public DelegierungDtoSpec persoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+    
+    this.persoenlicheAngaben = persoenlicheAngaben;
+    return this;
+  }
+
+   /**
+   * Get persoenlicheAngaben
+   * @return persoenlicheAngaben
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public PersoenlicheAngabenDtoSpec getPersoenlicheAngaben() {
+    return persoenlicheAngaben;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPersoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -73,19 +196,27 @@ public class DelegierungDtoSpec {
       return false;
     }
     DelegierungDtoSpec delegierung = (DelegierungDtoSpec) o;
-    return Objects.equals(this.sozialdienst, delegierung.sozialdienst);
+    return Objects.equals(this.id, delegierung.id) &&
+        Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
+        Objects.equals(this.delegierterMitarbeiter, delegierung.delegierterMitarbeiter) &&
+        Objects.equals(this.delegierungAngenommen, delegierung.delegierungAngenommen) &&
+        Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialdienst);
+    return Objects.hash(id, sozialdienst, delegierterMitarbeiter, delegierungAngenommen, persoenlicheAngaben);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
+    sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
+    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
+    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("}");
     return sb.toString();
   }

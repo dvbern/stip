@@ -175,8 +175,8 @@ class GesuchTrancheAenderungEinbindenTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
@@ -299,7 +299,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void aenderungAkzeptieren() {
         var nullableGesuchDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(customDokumentId)
@@ -339,7 +339,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(13)
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
@@ -360,31 +360,21 @@ class GesuchTrancheAenderungEinbindenTest {
                 GesuchTrancheListDtoSpec.class
             );
         assertThat(gesuchtranchen.getTranchen()).hasSize(2);
-
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getGesuchStatus())
-            .isIn(List.of(GesuchstatusDtoSpec.STIPENDIENANSPRUCH, GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH));
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(13)
+    @Order(14)
     void aenderungEinreichenAgain() {
-        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(FallDashboardItemDto[].class);
-        aenderungId = fallDashboardItems[0].getAusbildungDashboardItems()
+            .as(FallDashboardItemDto.class);
+        aenderungId = fallDashboardItem.getAusbildungDashboardItems()
             .get(0)
             .getGesuchs()
             .get(0)
@@ -405,7 +395,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(15)
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -429,7 +419,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(16)
     @Test
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
@@ -441,7 +431,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @Test
-    @Order(16)
+    @Order(17)
     @TestAsSachbearbeiter
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
