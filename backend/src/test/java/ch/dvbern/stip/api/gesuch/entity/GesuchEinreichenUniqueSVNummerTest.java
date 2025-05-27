@@ -72,7 +72,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokType, file);
         }
 
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -86,7 +86,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     void gesuchEinreichenWithNonUniqueSvNummerError() {
         final var gesuch = createFullGesuch();
 
-        var response = gesuchApiSpec.gesuchEinreichen()
+        var response = gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

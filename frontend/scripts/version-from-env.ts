@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { writeFileSync } from 'node:fs';
-
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 const version = process.env.VERSION;
 if (!version) {

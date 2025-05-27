@@ -78,6 +78,23 @@ public class GesuchMapperUtil {
     public GesuchWithChangesDto toWithChangesDto(
         final Gesuch gesuch,
         final GesuchTranche tranche,
+        final GesuchTranche changes,
+        final boolean isInitial
+    ) {
+        var dto = gesuchMapper.toWithChangesDto(gesuch);
+        dto.setIsInitial(isInitial);
+        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
+        if (Objects.isNull(changes)) {
+            dto.setChanges(List.of());
+        } else {
+            dto.setChanges(List.of(gesuchTrancheMapper.toDto(changes)));
+        }
+        return dto;
+    }
+
+    public GesuchWithChangesDto toWithChangesDto(
+        final Gesuch gesuch,
+        final GesuchTranche tranche,
         final GesuchTranche changes
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);

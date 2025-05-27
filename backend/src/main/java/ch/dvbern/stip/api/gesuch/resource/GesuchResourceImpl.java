@@ -91,6 +91,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
@@ -126,7 +127,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public GesuchDto changeGesuchStatusToNegativeVerfuegung(
         UUID gesuchTrancheId,
         AusgewaehlterGrundDto ausgewaehlterGrundDto
@@ -237,11 +238,23 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(GS_GESUCH_UPDATE)
-    public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
+    @RolesAllowed({ GS_GESUCH_UPDATE })
+    public GesuchDto gesuchEinreichenGs(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canGesuchEinreichen(gesuchId);
+        gesuchAuthorizer.canGsGesuchEinreichen(gesuchId);
+        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchService.gesuchEinreichen(gesuchId);
+        gesuchService.stipendienAnspruchPruefen(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
+    @RolesAllowed({ JURIST_GESUCH_UPDATE })
+    public GesuchDto gesuchEinreichenJur(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.canJurGesuchEinreichen(gesuchId);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
@@ -260,7 +273,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.getGesuchInfo(gesuchId);
@@ -271,6 +284,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public FallDashboardItemDto getGsDashboard() {
         gesuchAuthorizer.canGetGsDashboard();
         return gesuchService.getFallDashboardItemDtos();
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
+        gesuchAuthorizer.canReadInitialTranche(gesuchTrancheId);
+        return gesuchService.getChangesByInitialTrancheId(gesuchTrancheId);
     }
 
     @Override
@@ -430,13 +450,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
-    }
-
-    @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
-    public GesuchWithChangesDto getInitialTrancheChangesByGesuchId(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.getChangesByGesuchId(gesuchId);
     }
 
     @Override

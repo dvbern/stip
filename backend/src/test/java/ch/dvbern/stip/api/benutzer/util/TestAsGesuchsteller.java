@@ -52,6 +52,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
         OidcPermissions.GS_GESUCH_CREATE,
         OidcPermissions.AENDERUNG_EINREICHEN,
         OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.AUSBILDUNGSSTAETTE_READ,
         OidcPermissions.DOKUMENT_DELETE,
         OidcPermissions.FALL_CREATE,
         OidcPermissions.CUSTOM_DOKUMENT_READ,

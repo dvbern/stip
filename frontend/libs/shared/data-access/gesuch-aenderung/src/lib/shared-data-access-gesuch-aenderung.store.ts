@@ -1,4 +1,4 @@
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, Signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
@@ -17,6 +17,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
+import { getRelativeTrancheRoute } from '@dv/shared/model/router';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
@@ -45,7 +46,7 @@ type AenderungCompletionState = 'open' | 'completed';
 const aenderungStatusMap = {
   IN_BEARBEITUNG_GS: null,
   UEBERPRUEFEN: 'open',
-  FEHLENDE_DOKUMENTE: null,
+  FEHLENDE_DOKUMENTE: 'open',
   ABGELEHNT: null,
   AKZEPTIERT: 'completed',
   MANUELLE_AENDERUNG: 'completed',
@@ -96,9 +97,34 @@ export class GesuchAenderungStore extends signalStore(
     };
   });
 
-  initialTrancheViewSig = computed(() => {
+  getRelativeTranchenViewSig = (gesuchIdSig: Signal<string | undefined>) => {
+    const relativeRouteSig = getRelativeTrancheRoute(this.router, 'TRANCHE');
+
+    return computed(() => {
+      const gesuchId = gesuchIdSig();
+      const relativeRoute = relativeRouteSig();
+      const listRd = this.tranchenViewSig();
+
+      return {
+        ...listRd,
+        list: listRd.list.map((tranche) => ({
+          ...tranche,
+          url: relativeRoute
+            ? this.router.createUrlTree([...relativeRoute, tranche.id])
+            : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
+        })),
+      };
+    });
+  };
+
+  initialTranchenViewSig = computed(() => {
     const list = this.cachedTranchenList();
-    return list.data?.initialTranche ?? null;
+    const length = list.data?.tranchen?.length ?? 0;
+    return {
+      list: list.data?.initialTranchen ?? null,
+      hasTranchen: !!length,
+      hasMultiple: length > 1,
+    };
   });
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(

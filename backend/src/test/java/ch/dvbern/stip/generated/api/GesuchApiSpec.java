@@ -94,7 +94,8 @@ public class GesuchApiSpec {
                 createGesuch(),
                 deleteGesuch(),
                 einreichedatumManuellAendern(),
-                gesuchEinreichen(),
+                gesuchEinreichenGs(),
+                gesuchEinreichenJur(),
                 gesuchFehlendeDokumenteUebermitteln(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
@@ -109,7 +110,7 @@ public class GesuchApiSpec {
                 getGesucheSb(),
                 getGsAenderungChangesInBearbeitung(),
                 getGsDashboard(),
-                getInitialTrancheChangesByGesuchId(),
+                getInitialTrancheChanges(),
                 getSbAenderungChanges(),
                 getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
@@ -170,8 +171,12 @@ public class GesuchApiSpec {
         return new EinreichedatumManuellAendernOper(createReqSpec());
     }
 
-    public GesuchEinreichenOper gesuchEinreichen() {
-        return new GesuchEinreichenOper(createReqSpec());
+    public GesuchEinreichenGsOper gesuchEinreichenGs() {
+        return new GesuchEinreichenGsOper(createReqSpec());
+    }
+
+    public GesuchEinreichenJurOper gesuchEinreichenJur() {
+        return new GesuchEinreichenJurOper(createReqSpec());
     }
 
     public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
@@ -230,8 +235,8 @@ public class GesuchApiSpec {
         return new GetGsDashboardOper(createReqSpec());
     }
 
-    public GetInitialTrancheChangesByGesuchIdOper getInitialTrancheChangesByGesuchId() {
-        return new GetInitialTrancheChangesByGesuchIdOper(createReqSpec());
+    public GetInitialTrancheChangesOper getInitialTrancheChanges() {
+        return new GetInitialTrancheChangesOper(createReqSpec());
     }
 
     public GetSbAenderungChangesOper getSbAenderungChanges() {
@@ -1272,28 +1277,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Das Gesuch einreichen
+     * Das Gesuch einreichen als Gesuchsteller
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
-    public static class GesuchEinreichenOper implements Oper {
+    public static class GesuchEinreichenGsOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/einreichen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/einreichen/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GesuchEinreichenOper(RequestSpecBuilder reqSpec) {
+        public GesuchEinreichenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/einreichen
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1304,7 +1309,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/einreichen
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen/gs
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -1319,7 +1324,7 @@ public class GesuchApiSpec {
          * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GesuchEinreichenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public GesuchEinreichenGsOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -1329,7 +1334,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GesuchEinreichenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GesuchEinreichenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1339,7 +1344,80 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GesuchEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GesuchEinreichenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Das Gesuch einreichen als Jurist
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class GesuchEinreichenJurOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/einreichen/jur";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchEinreichenJurOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen/jur
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen/jur
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchEinreichenJurOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchEinreichenJurOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchEinreichenJurOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -2510,28 +2588,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns the inital tranche changes by GesuchId
+     * Returns the inital tranche changes by gesuchTrancheId
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
-    public static class GetInitialTrancheChangesByGesuchIdOper implements Oper {
+    public static class GetInitialTrancheChangesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/changes/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/changes/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetInitialTrancheChangesByGesuchIdOper(RequestSpecBuilder reqSpec) {
+        public GetInitialTrancheChangesOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2542,7 +2620,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchWithChangesDtoSpec
          */
@@ -2551,14 +2629,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetInitialTrancheChangesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -2567,7 +2645,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetInitialTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2577,7 +2655,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetInitialTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

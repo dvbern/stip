@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.util;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
@@ -76,11 +77,11 @@ public class GesuchTrancheCopyUtil {
             .getGueltigkeit()
             .getGueltigBis();
 
-        if (endDate.isAfter(maxEndDate)) {
+        if (Objects.nonNull(endDate) && endDate.isAfter(maxEndDate)) {
             throw new BadRequestException("End date must be inside gesuch date range");
         }
 
-        if (DateUtil.getMonthsBetween(startDate, endDate) < 1) {
+        if (Objects.nonNull(endDate) && DateUtil.getMonthsBetween(startDate, endDate) < 1) {
             throw new BadRequestException("Start date must be a month before end date");
         }
     }
@@ -142,6 +143,7 @@ public class GesuchTrancheCopyUtil {
         final String comment
     ) {
         validateStartEndDate(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuchTranche.getGesuch());
+
         final var gesuchTranchen = gesuchTranche.getGesuch()
             .getGesuchTranchen();
         final var clampDateStart = gesuchTranchen

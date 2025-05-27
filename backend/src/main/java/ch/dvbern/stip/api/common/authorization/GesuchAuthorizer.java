@@ -24,15 +24,18 @@ import java.util.function.BooleanSupplier;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
@@ -44,11 +47,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final GesuchStatusService gesuchStatusService;
-    private final GesuchTrancheStatusService gesuchTrancheStatusService;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
@@ -67,6 +70,31 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
+    }
+
+    @Transactional
+    protected Gesuch fetchGesuchOfTranche(final UUID trancheId) {
+        GesuchTranche tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
+        // fetch the gesuchId of this tranche
+        // then fetch current gesuch data
+        // (because gesuch of audited tranche could still be in other state than VERFUEGT)
+        final var gesuchId = tranche.getGesuch().getId();
+        return gesuchRepository.requireById(gesuchId);
+    }
+
+    private void canReadGesuchOfTranche(final UUID trancheId) {
+        final var gesuch = fetchGesuchOfTranche(trancheId);
+        canRead(gesuch.getId());
+    }
+
+    @Transactional
+    public void canReadInitialTranche(final UUID trancheId) {
+        canReadGesuchOfTranche(trancheId);
+        final var gesuch = fetchGesuchOfTranche(trancheId);
+        if (gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).isEmpty()) {
+            throw new BadRequestException();
+        }
+
     }
 
     @Transactional
@@ -119,7 +147,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGesuchEinreichen(final UUID gesuchId) {
+    public void canGsGesuchEinreichen(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -128,6 +156,18 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
         && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canJurGesuchEinreichen(final UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (isJurist(currentBenutzer) && Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus())) {
             return;
         }
 

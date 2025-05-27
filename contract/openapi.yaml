@@ -2092,9 +2092,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
-  '/gesuch/changes/{gesuchId}':
+  '/gesuch/changes/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -2117,8 +2117,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getInitialTrancheChangesByGesuchId
-      summary: Returns the inital tranche changes by GesuchId
+      operationId: getInitialTrancheChanges
+      summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
         parameters:
           - name: gesuchTrancheId
@@ -2370,7 +2370,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-  '/gesuch/{gesuchTrancheId}/einreichen':
+  '/gesuch/{gesuchTrancheId}/einreichen/gs':
     patch:
       tags:
         - Gesuch
@@ -2395,8 +2395,35 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichen
-      summary: Das Gesuch einreichen
+      operationId: gesuchEinreichenGs
+      summary: Das Gesuch einreichen als Gesuchsteller
+  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchEinreichenJur
+      summary: Das Gesuch einreichen als Jurist
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -4315,6 +4342,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTranche'
+        isInitial:
+          type: boolean
     GesuchCreate:
       required:
         - ausbildungId
@@ -4998,11 +5027,8 @@ components:
           type: integer
         beitraege:
           type: integer
-        ausbildungskostenSekundarstufeZwei:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-          type: integer
-        ausbildungskostenTertiaerstufe:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
+        ausbildungskosten:
+          description: The cost for the education calculated over the whole year
           type: integer
         fahrkosten:
           type: integer
@@ -5547,8 +5573,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
-        initialTranche:
-          $ref: '#/components/schemas/GesuchTrancheSlim'
+        initialTranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:
