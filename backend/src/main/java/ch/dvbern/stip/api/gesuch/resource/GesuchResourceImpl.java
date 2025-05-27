@@ -287,6 +287,13 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
+        gesuchAuthorizer.canReadInitialTranche(gesuchTrancheId);
+        return gesuchService.getChangesByInitialTrancheId(gesuchTrancheId);
+    }
+
+    @Override
     @RolesAllowed(GS_GESUCH_READ)
     public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canRead(aenderungId);
@@ -443,13 +450,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
-    }
-
-    @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
-    public GesuchWithChangesDto getInitialTrancheChangesByGesuchId(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.getChangesByGesuchId(gesuchId);
     }
 
     @Override

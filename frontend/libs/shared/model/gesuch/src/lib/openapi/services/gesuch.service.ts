@@ -184,8 +184,8 @@ export interface GesuchServiceGetGsAenderungChangesInBearbeitungRequestParams {
     aenderungId: string;
 }
 
-export interface GesuchServiceGetInitialTrancheChangesByGesuchIdRequestParams {
-    gesuchId: string;
+export interface GesuchServiceGetInitialTrancheChangesRequestParams {
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceGetSbAenderungChangesRequestParams {
@@ -2563,18 +2563,18 @@ export class GesuchService {
     }
 
     /**
-     * Returns the inital tranche changes by GesuchId
+     * Returns the inital tranche changes by gesuchTrancheId
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getInitialTrancheChangesByGesuchId$(requestParameters: GesuchServiceGetInitialTrancheChangesByGesuchIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
-     public getInitialTrancheChangesByGesuchId$(requestParameters: GesuchServiceGetInitialTrancheChangesByGesuchIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
-     public getInitialTrancheChangesByGesuchId$(requestParameters: GesuchServiceGetInitialTrancheChangesByGesuchIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
-     public getInitialTrancheChangesByGesuchId$(requestParameters: GesuchServiceGetInitialTrancheChangesByGesuchIdRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getInitialTrancheChangesByGesuchId$.');
+     public getInitialTrancheChanges$(requestParameters: GesuchServiceGetInitialTrancheChangesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
+     public getInitialTrancheChanges$(requestParameters: GesuchServiceGetInitialTrancheChangesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
+     public getInitialTrancheChanges$(requestParameters: GesuchServiceGetInitialTrancheChangesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
+     public getInitialTrancheChanges$(requestParameters: GesuchServiceGetInitialTrancheChangesRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getInitialTrancheChanges$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2622,7 +2622,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/changes/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/changes/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GesuchWithChanges>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

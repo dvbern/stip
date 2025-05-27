@@ -110,7 +110,7 @@ public class GesuchApiSpec {
                 getGesucheSb(),
                 getGsAenderungChangesInBearbeitung(),
                 getGsDashboard(),
-                getInitialTrancheChangesByGesuchId(),
+                getInitialTrancheChanges(),
                 getSbAenderungChanges(),
                 getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
@@ -235,8 +235,8 @@ public class GesuchApiSpec {
         return new GetGsDashboardOper(createReqSpec());
     }
 
-    public GetInitialTrancheChangesByGesuchIdOper getInitialTrancheChangesByGesuchId() {
-        return new GetInitialTrancheChangesByGesuchIdOper(createReqSpec());
+    public GetInitialTrancheChangesOper getInitialTrancheChanges() {
+        return new GetInitialTrancheChangesOper(createReqSpec());
     }
 
     public GetSbAenderungChangesOper getSbAenderungChanges() {
@@ -2588,28 +2588,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns the inital tranche changes by GesuchId
+     * Returns the inital tranche changes by gesuchTrancheId
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
-    public static class GetInitialTrancheChangesByGesuchIdOper implements Oper {
+    public static class GetInitialTrancheChangesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/changes/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/changes/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetInitialTrancheChangesByGesuchIdOper(RequestSpecBuilder reqSpec) {
+        public GetInitialTrancheChangesOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2620,7 +2620,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/changes/{gesuchId}
+         * GET /gesuch/changes/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchWithChangesDtoSpec
          */
@@ -2629,14 +2629,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetInitialTrancheChangesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -2645,7 +2645,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetInitialTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2655,7 +2655,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetInitialTrancheChangesByGesuchIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetInitialTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

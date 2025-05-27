@@ -42,6 +42,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
+  private @Valid Boolean isInitial;
 
   /**
    **/
@@ -340,6 +341,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public GesuchWithChangesDto isInitial(Boolean isInitial) {
+    this.isInitial = isInitial;
+    return this;
+  }
+
+  
+  @JsonProperty("isInitial")
+  public Boolean getIsInitial() {
+    return isInitial;
+  }
+
+  @JsonProperty("isInitial")
+  public void setIsInitial(Boolean isInitial) {
+    this.isInitial = isInitial;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -364,12 +383,13 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
-        Objects.equals(this.changes, gesuchWithChanges.changes);
+        Objects.equals(this.changes, gesuchWithChanges.changes) &&
+        Objects.equals(this.isInitial, gesuchWithChanges.isInitial);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes, isInitial);
   }
 
   @Override
@@ -392,6 +412,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
+    sb.append("    isInitial: ").append(toIndentedString(isInitial)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -60,7 +60,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final var gesuch = gesuchTrancheHistoryService.getLatestTrancheForGs(gesuchTrancheId).getGesuch();
+        final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
         if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
             return;
         }

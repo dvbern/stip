@@ -97,6 +97,26 @@ public class GesuchHistoryRepository {
 
     // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
     @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getFirstWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
     public Optional<Gesuch> getLatestWhereStatusChangedToOneOf(
         final UUID gesuchId,
         final Collection<Gesuchstatus> gesuchStatus

@@ -1,5 +1,12 @@
 import { toSignal } from '@angular/core/rxjs-interop';
-import { EventType, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivationEnd,
+  EventType,
+  NavigationEnd,
+  Router,
+} from '@angular/router';
+import { GesuchUrlType } from '@dv/shared/model/gesuch';
+import { lowercased } from '@dv/shared/model/type-util';
 import { filter, map } from 'rxjs/operators';
 
 /**
@@ -15,11 +22,14 @@ export const urlAfterNavigationEnd = (router: Router) =>
  * Check if the current route contains a trancheId parameter and return the
  * route path without the trancheId part.
  */
-export const getRelativeTrancheRoute = (router: Router) =>
+export const getRelativeTrancheRoute = (
+  router: Router,
+  trancheTyp: GesuchUrlType,
+) =>
   toSignal(
     router.events.pipe(
       filter((event) => event.type === EventType.ActivationEnd),
-      filter((e) => 'trancheId' in e.snapshot.params),
+      filter(isTrancheRoute),
       map((e) => {
         const paths: string[] = [];
         const stack = [e.snapshot.root];
@@ -35,14 +45,27 @@ export const getRelativeTrancheRoute = (router: Router) =>
           stack.push(...route.children);
         }
 
-        return (
-          paths
-            // Remove the TrancheId part from the path
-            .slice(0, -1)
-        );
+        return [
+          ...paths
+            // Remove the TrancheId and TrancheTyp part from the path
+            .slice(0, -2),
+          // Add the target TrancheTyp to the path
+          lowercased(trancheTyp),
+        ];
       }),
     ),
     {
       initialValue: null,
     },
   );
+
+const isTrancheRoute = (
+  routeEvent: ActivationEnd,
+): routeEvent is ActivationEnd & {
+  snapshot: ActivationEnd['snapshot'] & {
+    params: { trancheId: string; trancheTyp: string };
+  };
+} =>
+  routeEvent.type === EventType.ActivationEnd &&
+  'trancheId' in routeEvent.snapshot.params &&
+  'trancheTyp' in routeEvent.snapshot.params;

@@ -175,8 +175,8 @@ class GesuchTrancheAenderungEinbindenTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
@@ -360,16 +360,6 @@ class GesuchTrancheAenderungEinbindenTest {
                 GesuchTrancheListDtoSpec.class
             );
         assertThat(gesuchtranchen.getTranchen()).hasSize(2);
-
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getGesuchStatus())
-            .isIn(List.of(GesuchstatusDtoSpec.STIPENDIENANSPRUCH, GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH));
     }
 
     @Test

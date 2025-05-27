@@ -36,10 +36,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { PermissionStore } from '@dv/shared/global/permission';
-import {
-  getRelativeTrancheRoute,
-  urlAfterNavigationEnd,
-} from '@dv/shared/model/router';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
@@ -96,23 +93,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       filter(isDefined),
     ),
   );
-  private relativeRouteSig = getRelativeTrancheRoute(this.router);
 
-  tranchenSig = computed(() => {
-    const gesuchId = this.gesuchIdSig();
-    const relativeRoute = this.relativeRouteSig();
-    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
-
-    return {
-      ...tranchen,
-      list: tranchen.list.map((tranche) => ({
-        ...tranche,
-        url: relativeRoute
-          ? this.router.createUrlTree([...relativeRoute, tranche.id])
-          : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
-      })),
-    };
-  });
+  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes('/tranche/')),
@@ -250,8 +234,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
-      case 'VERSENDET':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
+        break;
+      case 'VERSENDET':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+          },
+        });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
