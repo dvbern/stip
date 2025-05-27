@@ -114,13 +114,13 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -726,24 +726,35 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchWithChangesDto getChangesByInitialTrancheId(UUID trancheId) {
+        final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
+        final var gesuch = tranche.getGesuch();
 
-        final var currentTrancheFromGesuchInStatusEingereicht =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+        final var requestedTrancheFromGesuchInStatusEingereicht =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                .orElseThrow(ForbiddenException::new)
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst();
 
-        final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
-        if (currentTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
-            throw new ForbiddenException();
-        }
+        var requestedTrancheFromGesuchInStatusVerfuegt =
+            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT)
+                .orElseThrow(NotFoundException::new)
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst()
+                .orElseThrow(BadRequestException::new);
 
         return gesuchMapperUtil.toWithChangesDto(
-            gesuch,
-            // tranche to work with
-            currentTrancheFromGesuchInStatusVerfuegt.orElse(null),
+            requestedTrancheFromGesuchInStatusVerfuegt.getGesuch(),
+            // tranche to work with -> findByTrancheId
+            requestedTrancheFromGesuchInStatusVerfuegt,
             // changes
-            currentTrancheFromGesuchInStatusEingereicht.orElse(null)
+            requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
+            // make sure this flag is true whenever especially this endpoint is called
+            true
         );
     }
 

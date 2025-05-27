@@ -916,7 +916,7 @@ class GesuchServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
@@ -957,7 +957,7 @@ class GesuchServiceTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
@@ -1427,7 +1427,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuch.getGesuchTranchen().get(0));
         // act
@@ -1458,13 +1458,13 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(gesuchToReturn.getNewestGesuchTranche());
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuchToReturn));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+        when(gesuchTrancheHistoryService.getLatestTranche(any()))
             .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
@@ -1495,7 +1495,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
@@ -1569,7 +1569,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+        when(gesuchTrancheHistoryService.getLatestTranche(any()))
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
