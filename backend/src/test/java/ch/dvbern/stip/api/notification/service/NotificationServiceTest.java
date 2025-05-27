@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
@@ -96,6 +97,7 @@ class NotificationServiceTest {
 
         GesuchTranche gesuchTranche = new GesuchTranche()
             .setGesuchFormular(gesuchFormular)
+            .setTyp(GesuchTrancheTyp.TRANCHE)
             .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now()));
 
         Gesuch gesuch = new Gesuch()
