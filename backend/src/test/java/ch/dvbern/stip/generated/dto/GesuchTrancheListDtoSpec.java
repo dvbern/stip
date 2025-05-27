@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchTrancheListDtoSpec.JSON_PROPERTY_TRANCHEN,
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_INITIAL_TRANCHE
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_INITIAL_TRANCHEN
 })
 @JsonTypeName("GesuchTrancheList")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -40,8 +40,8 @@ public class GesuchTrancheListDtoSpec {
   public static final String JSON_PROPERTY_TRANCHEN = "tranchen";
   private List<GesuchTrancheSlimDtoSpec> tranchen;
 
-  public static final String JSON_PROPERTY_INITIAL_TRANCHE = "initialTranche";
-  private GesuchTrancheSlimDtoSpec initialTranche;
+  public static final String JSON_PROPERTY_INITIAL_TRANCHEN = "initialTranchen";
+  private List<GesuchTrancheSlimDtoSpec> initialTranchen;
 
   public GesuchTrancheListDtoSpec() {
   }
@@ -80,29 +80,37 @@ public class GesuchTrancheListDtoSpec {
   }
 
 
-  public GesuchTrancheListDtoSpec initialTranche(GesuchTrancheSlimDtoSpec initialTranche) {
+  public GesuchTrancheListDtoSpec initialTranchen(List<GesuchTrancheSlimDtoSpec> initialTranchen) {
     
-    this.initialTranche = initialTranche;
+    this.initialTranchen = initialTranchen;
+    return this;
+  }
+
+  public GesuchTrancheListDtoSpec addInitialTranchenItem(GesuchTrancheSlimDtoSpec initialTranchenItem) {
+    if (this.initialTranchen == null) {
+      this.initialTranchen = new ArrayList<>();
+    }
+    this.initialTranchen.add(initialTranchenItem);
     return this;
   }
 
    /**
-   * Get initialTranche
-   * @return initialTranche
+   * Get initialTranchen
+   * @return initialTranchen
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHE)
+  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public GesuchTrancheSlimDtoSpec getInitialTranche() {
-    return initialTranche;
+  public List<GesuchTrancheSlimDtoSpec> getInitialTranchen() {
+    return initialTranchen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHE)
+  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInitialTranche(GesuchTrancheSlimDtoSpec initialTranche) {
-    this.initialTranche = initialTranche;
+  public void setInitialTranchen(List<GesuchTrancheSlimDtoSpec> initialTranchen) {
+    this.initialTranchen = initialTranchen;
   }
 
   @Override
@@ -115,12 +123,12 @@ public class GesuchTrancheListDtoSpec {
     }
     GesuchTrancheListDtoSpec gesuchTrancheList = (GesuchTrancheListDtoSpec) o;
     return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranche, gesuchTrancheList.initialTranche);
+        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranche);
+    return Objects.hash(tranchen, initialTranchen);
   }
 
   @Override
@@ -128,7 +136,7 @@ public class GesuchTrancheListDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheListDtoSpec {\n");
     sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
-    sb.append("    initialTranche: ").append(toIndentedString(initialTranche)).append("\n");
+    sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

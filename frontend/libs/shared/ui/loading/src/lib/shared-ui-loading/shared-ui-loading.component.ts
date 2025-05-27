@@ -8,6 +8,7 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
   selector: 'dv-shared-ui-loading',
   imports: [CommonModule, TranslatePipe],
   templateUrl: './shared-ui-loading.component.html',

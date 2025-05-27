@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { Observable, exhaustMap, pipe, switchMap, tap } from 'rxjs';
+import { Observable, exhaustMap, map, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
@@ -142,12 +142,14 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    VERSENDET: rxMethod<{ gesuchTrancheId: string }>(
+    VERSENDET: rxMethod<{ gesuchTrancheId: string; onSuccess: () => void }>(
       pipe(
-        this.handleStatusChange(({ gesuchTrancheId }) =>
-          this.gesuchService.changeGesuchStatusToVersendet$({
-            gesuchTrancheId,
-          }),
+        this.handleStatusChange(({ gesuchTrancheId, onSuccess }) =>
+          this.gesuchService
+            .changeGesuchStatusToVersendet$({
+              gesuchTrancheId,
+            })
+            .pipe(map((p) => ({ ...p, onSuccess }))),
         ),
       ),
     ),

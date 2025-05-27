@@ -56,13 +56,13 @@
 
     <!-- Änderungen -->
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
-    @let initialTranche = gesuchAenderungStore.initialTrancheViewSig();
+    @let initialTranchen = gesuchAenderungStore.initialTranchenViewSig();
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="sb-gesuch-header-aenderungen-nav-menu"
       [class.active]="isAenderungRouteSig()"
-      [disabled]="!aenderungen.hasAenderungen && !initialTranche"
+      [disabled]="!aenderungen.hasAenderungen && !initialTranchen.hasTranchen"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
@@ -82,10 +82,10 @@
             <span>
               {{
                 'shared.header.aenderung.item'
-                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
               }}
               -
-              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
             </span>
           </a>
         }
@@ -105,35 +105,45 @@
             <span>
               {{
                 'shared.header.aenderung.item'
-                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
               }}
               -
-              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
             </span>
           </a>
         }
 
-        @if (initialTranche) {
+        @if (initialTranchen.hasTranchen) {
           <div class="d-flex gap-2 align-items-center text-muted small">
             <hr class="flex-grow-1" />
             {{ 'shared.header.aenderungen.initial' | translate }}
             <hr class="flex-grow-1" />
           </div>
-          <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
-            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="aenderungen-nav-menu-item"
-            mat-menu-item
-            [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
-          >
-            <span>
-              {{
-                'shared.header.initialTranche.item' | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
-              }}
-              -
-              {{ initialTranche.gueltigBis | date: 'dd.MM.YYYY' }}
-            </span>
-          </a>
+          @for (initialTranche of initialTranchen.list; track $index) {
+            <a
+              [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
+              class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+              data-testid="aenderungen-nav-menu-item"
+              mat-menu-item
+              [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
+            >
+              <span>
+                @if (initialTranchen.hasMultiple) {
+                  {{
+                    'shared.header.initialTranche.multiple'
+                      | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy', index: $index + 1 }
+                  }}
+                } @else {
+                  {{
+                    'shared.header.initialTranche.item'
+                      | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy' }
+                  }}
+                }
+                -
+                {{ initialTranche.gueltigBis | date: 'dd.MM.yyyy' }}
+              </span>
+            </a>
+          }
         }
       </div>
     </mat-menu>

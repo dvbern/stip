@@ -116,12 +116,6 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
 
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
@@ -136,8 +130,8 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByGesuchId()
-            .gesuchIdPath(gesuch.getId())
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()

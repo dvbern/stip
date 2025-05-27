@@ -77,11 +77,6 @@ public class GesuchTrancheValidatorService {
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        // disable default validation behaviour in this special case...
-        if (toValidate.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE) {
-            ValidatorUtil.throwIfEntityNotValid(validator, toValidate);
-            return;
-        }
         final var validationGroups = Stream.concat(
             Stream.of(Default.class),
             statusToValidationGroups.getOrDefault(status, List.of()).stream()

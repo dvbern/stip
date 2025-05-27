@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchTrancheListDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> tranchen;
-  private @Valid GesuchTrancheSlimDto initialTranche;
+  private @Valid List<GesuchTrancheSlimDto> initialTranchen;
 
   /**
    **/
@@ -62,22 +62,38 @@ public class GesuchTrancheListDto  implements Serializable {
   }
   /**
    **/
-  public GesuchTrancheListDto initialTranche(GesuchTrancheSlimDto initialTranche) {
-    this.initialTranche = initialTranche;
+  public GesuchTrancheListDto initialTranchen(List<GesuchTrancheSlimDto> initialTranchen) {
+    this.initialTranchen = initialTranchen;
     return this;
   }
 
   
-  @JsonProperty("initialTranche")
-  public GesuchTrancheSlimDto getInitialTranche() {
-    return initialTranche;
+  @JsonProperty("initialTranchen")
+  public List<GesuchTrancheSlimDto> getInitialTranchen() {
+    return initialTranchen;
   }
 
-  @JsonProperty("initialTranche")
-  public void setInitialTranche(GesuchTrancheSlimDto initialTranche) {
-    this.initialTranche = initialTranche;
+  @JsonProperty("initialTranchen")
+  public void setInitialTranchen(List<GesuchTrancheSlimDto> initialTranchen) {
+    this.initialTranchen = initialTranchen;
   }
 
+  public GesuchTrancheListDto addInitialTranchenItem(GesuchTrancheSlimDto initialTranchenItem) {
+    if (this.initialTranchen == null) {
+      this.initialTranchen = new ArrayList<>();
+    }
+
+    this.initialTranchen.add(initialTranchenItem);
+    return this;
+  }
+
+  public GesuchTrancheListDto removeInitialTranchenItem(GesuchTrancheSlimDto initialTranchenItem) {
+    if (initialTranchenItem != null && this.initialTranchen != null) {
+      this.initialTranchen.remove(initialTranchenItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -89,12 +105,12 @@ public class GesuchTrancheListDto  implements Serializable {
     }
     GesuchTrancheListDto gesuchTrancheList = (GesuchTrancheListDto) o;
     return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranche, gesuchTrancheList.initialTranche);
+        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranche);
+    return Objects.hash(tranchen, initialTranchen);
   }
 
   @Override
@@ -103,7 +119,7 @@ public class GesuchTrancheListDto  implements Serializable {
     sb.append("class GesuchTrancheListDto {\n");
     
     sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
-    sb.append("    initialTranche: ").append(toIndentedString(initialTranche)).append("\n");
+    sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

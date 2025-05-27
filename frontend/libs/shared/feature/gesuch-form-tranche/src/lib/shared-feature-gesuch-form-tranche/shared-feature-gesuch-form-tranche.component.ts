@@ -29,6 +29,7 @@ import {
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { GesuchUrlType } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
@@ -98,7 +99,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   currentTrancheNumberSig = computed(() => {
-    const currentTranche = this.viewSig().tranche;
+    const { tranche: currentTranche, gesuchUrlTyp } = this.viewSig();
 
     if (!currentTranche) {
       return '…';
@@ -106,13 +107,17 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
     const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
+    const initialTranchen = this.gesuchAenderungStore.initialTranchenViewSig();
     const list = {
       TRANCHE: tranchen.list,
       AENDERUNG: aenderungen.list,
-    };
-    const index = list[currentTranche.typ].findIndex(
-      (aenderung) => aenderung.id === currentTranche.id,
-    );
+      INITIAL: initialTranchen.list ?? [],
+    } satisfies Record<GesuchUrlType, unknown>;
+    const index = gesuchUrlTyp
+      ? list[gesuchUrlTyp].findIndex(
+          (aenderung) => aenderung.id === currentTranche.id,
+        )
+      : -1;
 
     return index >= 0 ? index + 1 : '…';
   });

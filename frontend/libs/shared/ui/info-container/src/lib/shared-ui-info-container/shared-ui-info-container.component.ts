@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'dv-shared-ui-info-container',
   imports: [CommonModule],
   templateUrl: './shared-ui-info-container.component.html',
