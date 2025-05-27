@@ -31,6 +31,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
 
     @Blocking
     @Override
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @PermitAll
     public RestMulti<Buffer> getVerfuegung(String token) {
         final var verfuegungId = DokumentDownloadUtil.getClaimId(
             jwtPar,
@@ -66,7 +67,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getVerfuegungsDownloadToken(UUID verfuegungsId) {
         verfuegungAuthorizer.canGetVerfuegungDownloadToken();
 
