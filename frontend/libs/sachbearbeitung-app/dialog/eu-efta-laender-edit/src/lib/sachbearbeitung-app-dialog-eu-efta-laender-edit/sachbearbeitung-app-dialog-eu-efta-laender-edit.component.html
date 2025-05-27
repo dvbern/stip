@@ -7,8 +7,12 @@
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'sachbearbeitung-app.infos.euEftaLaender.editdialog.title' | translate }}
+  <h1 class="tw-mb-8 tw-text-2xl">
+    @if (dialogData.land) {
+      {{ 'sachbearbeitung-app.infos.euEftaLaender.editdialog.title.edit' | translate }}
+    } @else {
+      {{ 'sachbearbeitung-app.infos.euEftaLaender.editdialog.title.create' | translate }}
+    }
   </h1>
   <form
     [formGroup]="form"
@@ -23,12 +27,17 @@
         data-testid="form-euEftaLaender-laendercodeBfs"
         matInput
         type="text"
+        [maskito]="maskitoBfsCode"
         [formControlName]="'laendercodeBfs'"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'notUniqueBfs'">
+        {{ 'sachbearbeitung-app.infos.euEftaLaender.laendercodeBfs.error.notUniqueBfs' | translate }}
+      </mat-error>
     </mat-form-field>
+
     <!-- ISO3 - Code -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.iso3code.label' | translate }}</mat-label>
@@ -78,7 +87,7 @@
       </mat-error>
     </mat-checkbox>
     <!-- EU/Efta -->
-    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="euEfta">
+    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="isEuEfta">
       <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.euEfta.label' | translate }}</mat-label>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

@@ -42,7 +42,7 @@ export class EuEftaLaenderStore extends signalStore(
       }),
       switchMap(() =>
         this.stammdatenService.getLaenderEuEfta$().pipe(
-          tap((x) => console.log('Request', x)),
+          tap((x) => console.log('Request', x)), //todo: remove
           handleApiResponse((euEftaLaender) =>
             patchState(this, { euEftaLaender }),
           ),
