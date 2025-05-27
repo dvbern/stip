@@ -81,15 +81,6 @@ public class SapServiceMock extends SapService {
     }
 
     @Override
-    public SapStatus createVendorPostingOrGetStatus(
-        final Gesuch gesuch,
-        final Auszahlung auszahlung,
-        final Buchhaltung buchhaltung
-    ) {
-        return SapStatus.SUCCESS;
-    }
-
-    @Override
     public boolean isPastSecondPaymentDate(final Gesuch gesuch) {
         return true;
     }
