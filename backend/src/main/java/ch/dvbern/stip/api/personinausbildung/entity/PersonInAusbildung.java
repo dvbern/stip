@@ -116,7 +116,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "land_id",
+        name = "nationalitaet_id",
         foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_land_id")
     )
     private Land nationalitaet;
