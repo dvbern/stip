@@ -192,7 +192,7 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
-  # For the generation of the classes fot the NESKO SOAP interface
+# For the generation of the classes fot the NESKO SOAP interface
 #  cxf:
 #    codegen:
 #      wsdl2java:

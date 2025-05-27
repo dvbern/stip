@@ -95,9 +95,9 @@ public class SapService {
         final var createResponse = sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
         SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
 
-        final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid);
-        sapDeliveryRepository.persist(sapStatus);
-        auszahlung.setSapDelivery(sapStatus);
+        final var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid);
+        sapDeliveryRepository.persist(sapDelivery);
+        auszahlung.setSapDelivery(sapDelivery);
 
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
@@ -106,7 +106,7 @@ public class SapService {
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
         final var businessPartnerCreateBuchhaltung =
             buchhaltungService.createBuchhaltungForBusinessPartnerCreate(auszahlung);
-        businessPartnerCreateBuchhaltung.setSapDelivery(sapStatus);
+        businessPartnerCreateBuchhaltung.setSapDelivery(sapDelivery);
     }
 
     public SapStatus getOrCreateBusinessPartner(final Auszahlung auszahlung) {
@@ -150,7 +150,7 @@ public class SapService {
         return buchhaltung.getSapDelivery().getSapStatus();
     }
 
-    public SapStatus createVendorPostingOrGetStatus(
+    private SapStatus createVendorPostingOrGetStatus(
         final Gesuch gesuch,
         final Auszahlung auszahlung,
         final Buchhaltung buchhaltung
@@ -162,10 +162,10 @@ public class SapService {
         if (Objects.isNull(buchhaltung.getSapDelivery())) {
             deliveryid = SapEndpointService.generateDeliveryId();
 
-            final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid)
+            final var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
                 .setSapBusinessPartnerId(auszahlung.getSapBusinessPartnerId());
-            sapDeliveryRepository.persist(sapStatus);
-            buchhaltung.setSapDelivery(sapStatus);
+            sapDeliveryRepository.persist(sapDelivery);
+            buchhaltung.setSapDelivery(sapDelivery);
 
             final var vendorPostingCreateResponse =
                 sapEndpointService.createVendorPosting(
@@ -244,6 +244,8 @@ public class SapService {
             return createBusinessPartnerStatus;
         }
         final var gesuch = gesuchRepository.findGesuchByAuszahlungId(auszahlung.getId());
+        gesuch.setRemainderPaymentExecuted(true);
+
         final var pendingAuszahlungOpt =
             buchhaltungService
                 .findLatestPendingBuchhaltungAuszahlungOpt(
@@ -326,6 +328,7 @@ public class SapService {
             .flatMap(
                 gesuchsperiode -> gesuchRepository.findGesuchsByGesuchsperiodeId(gesuchsperiode.getId()).stream()
             )
+            .filter(gesuch -> !gesuch.isRemainderPaymentExecuted())
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {

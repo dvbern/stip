@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.sap.generated.import_status.OsImportStatusReadService;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateService;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.xml.ws.BindingProvider;
@@ -71,6 +72,12 @@ public class SapEndpointService {
     @ConfigProperty(name = "kstip.sap.auth-header-value")
     String authHeaderValue;
 
+    private void setLogHandler(BindingProvider port) {
+        var handlerChain = port.getBinding().getHandlerChain();
+        handlerChain.add(new SOAPLoggingHandler());
+        port.getBinding().setHandlerChain(handlerChain);
+    }
+
     private void setAuthHeader(BindingProvider port) {
         Map<String, List<String>> headers = new HashMap<>();
         headers.put("Authorization", Collections.singletonList("Basic " + authHeaderValue));
@@ -86,6 +93,7 @@ public class SapEndpointService {
         final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
         final var port = businessPartnerCreateService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
+        this.setLogHandler((BindingProvider) port);
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
             businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
@@ -97,6 +105,7 @@ public class SapEndpointService {
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
+        this.setLogHandler((BindingProvider) port);
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
@@ -109,6 +118,7 @@ public class SapEndpointService {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
+        this.setLogHandler((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, auszahlung);
@@ -119,6 +129,7 @@ public class SapEndpointService {
         final OsImportStatusReadService importStatusReadService = new OsImportStatusReadService();
         final var port = importStatusReadService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
+        this.setLogHandler((BindingProvider) port);
 
         final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
         importStatusReadRequest.setSENDER(generalMapper.getSenderParms(systemid));
@@ -138,6 +149,7 @@ public class SapEndpointService {
         final OsVendorPostingCreateService vendorPostingCreateService = new OsVendorPostingCreateService();
         final var port = vendorPostingCreateService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
+        this.setLogHandler((BindingProvider) port);
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper

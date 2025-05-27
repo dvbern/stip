@@ -171,6 +171,9 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<BeschwerdeEntscheid> beschwerdeEntscheids = new ArrayList<>();
 
+    @Column(name = "remainder_payment_executed", nullable = false)
+    private boolean remainderPaymentExecuted = false;
+
     /**
      * Gesuch was verfuegt at least once in the past
      */

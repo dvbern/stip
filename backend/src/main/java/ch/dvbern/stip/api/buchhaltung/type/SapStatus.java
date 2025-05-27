@@ -20,11 +20,12 @@ package ch.dvbern.stip.api.buchhaltung.type;
 import java.math.BigInteger;
 
 public enum SapStatus {
-    IN_PROGRESS,
-    SUCCESS,
-    PARTIAL_SUCCESS,
-    FAILURE,
-    SUSPENDED;
+    IN_PROGRESS, // Initial: Die Delivery wurde noch nicht vollständig verarbeitet.
+    SUCCESS, // Erfolgreich: Alle Belege/Datensätze der Delivery wurden erfolgreich verarbeitet.
+    PARTIAL_SUCCESS, // Teilerfolg: Mindestens ein Beleg/Datensätze der Delivery enthält einen Fehler und einen
+                     // Erfolgsfall.
+    FAILURE, // Fehler: Alle Belege/Datensätze der Delivery enthalten Fehler.
+    SUSPENDED; // Abgeschlossen: Alle oder ein Teil der Belege der Delivery wurden nicht bearbeitet.
 
     public static SapStatus parse(final BigInteger code) {
         return switch (code.intValue()) {

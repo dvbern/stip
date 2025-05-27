@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -151,19 +152,14 @@ public class BuchhaltungService {
         final Gesuch gesuch = gesuchRepository.findGesuchByAuszahlungId(auszahlung.getId());
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
-        final TL translator = getTranslator(
-            gesuch.getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale()
-        );
+        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
 
         final var buchhaltungEntry = new Buchhaltung()
             .setBuchhaltungType(BuchhaltungType.BUSINESSPARTNER_CREATE)
             .setBetrag(0)
             .setSaldo(lastEntrySaldo)
             .setComment(translator.translate("stip.businesspartner.buchhaltung.erstellen"))
+            .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
@@ -183,13 +179,7 @@ public class BuchhaltungService {
             default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
         };
 
-        final TL translator = getTranslator(
-            gesuch.getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale()
-        );
+        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
@@ -223,13 +213,7 @@ public class BuchhaltungService {
         final Gesuch gesuch,
         final Integer stipendiumBetrag
     ) {
-        final TL translator = getTranslator(
-            gesuch.getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale()
-        );
+        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
 
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 

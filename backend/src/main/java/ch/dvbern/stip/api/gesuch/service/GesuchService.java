@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
@@ -479,7 +480,7 @@ public class GesuchService {
             throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
         }
 
-        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
+        final var gesuchTranche = gesuch.getLatestGesuchTranche();
         final var decision = stipDecisionService.decide(gesuchTranche);
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
@@ -708,12 +709,7 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungsblattService.getBerechnungsblattFromGesuch(
             gesuch,
-            gesuch.getNewestGesuchTranche()
-                .orElseThrow(NotFoundException::new)
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale()
+            LocaleUtil.getLocaleFromGesuch(gesuch)
         );
     }
 

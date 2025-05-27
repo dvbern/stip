@@ -15,24 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.util;
+package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import java.util.Locale;
+
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class AuszahlungCopyUtil {
-    public Auszahlung createCopyIgnoreReferences(final Auszahlung other) {
-        final var copy = new Auszahlung();
-        copyValues(other, copy);
-        return copy;
-    }
-
-    public void copyValues(final Auszahlung source, final Auszahlung target) {
-        target.setKontoinhaber(source.getKontoinhaber());
-        target.setVorname(source.getVorname());
-        target.setNachname(source.getNachname());
-        target.setIban(source.getIban());
-        target.setSapBusinessPartnerId(source.getSapBusinessPartnerId());
+public class LocaleUtil {
+    public Locale getLocaleFromGesuch(Gesuch gesuch) {
+        return gesuch.getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
     }
 }

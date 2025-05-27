@@ -21,17 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class MailServiceUtils {
     public void sendStandardNotificationEmailForGesuch(final MailService mailService, final Gesuch gesuch) {
-        final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         mailService.sendStandardNotificationEmails(
             pia.getNachname(),
             pia.getVorname(),
-            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale()),
+            AppLanguages.fromLocale(LocaleUtil.getLocaleFromGesuch(gesuch)),
             gatherRecipients(gesuch)
         );
     }
