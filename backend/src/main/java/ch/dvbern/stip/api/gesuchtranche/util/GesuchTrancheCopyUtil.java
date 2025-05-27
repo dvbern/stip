@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -44,6 +45,7 @@ import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -51,6 +53,38 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
+    private static void validateStartEndDate(LocalDate startDate, LocalDate endDate, Gesuch gesuch) {
+        var minStartDate = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()))
+            .orElseThrow(NotFoundException::new)
+            .getGueltigkeit()
+            .getGueltigAb();
+
+        if (startDate.isBefore(minStartDate)) {
+            throw new BadRequestException("Start date must be inside gesuch date range");
+        }
+
+        var maxEndDate = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .max(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis()))
+            .orElseThrow(
+                NotFoundException::new
+            )
+            .getGueltigkeit()
+            .getGueltigBis();
+
+        if (endDate.isAfter(maxEndDate)) {
+            throw new BadRequestException("End date must be inside gesuch date range");
+        }
+
+        if (DateUtil.getMonthsBetween(startDate, endDate) < 1) {
+            throw new BadRequestException("Start date must be a month before end date");
+        }
+    }
+
     /**
      * Copies an existing {@link GesuchTranche} and sets all values, so it's a complete Aenderungstranche
      */
@@ -73,6 +107,8 @@ public class GesuchTrancheCopyUtil {
                 .getGueltigkeit()
                 .getGueltigBis();
         }
+
+        validateStartEndDate(createDto.getStart(), endDate, original.getGesuch());
 
         final var copy = copyTranche(
             original,
@@ -105,6 +141,7 @@ public class GesuchTrancheCopyUtil {
         final DateRange gueltigkeit,
         final String comment
     ) {
+        validateStartEndDate(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuchTranche.getGesuch());
         final var gesuchTranchen = gesuchTranche.getGesuch()
             .getGesuchTranchen();
         final var clampDateStart = gesuchTranchen
