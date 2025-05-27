@@ -17,13 +17,14 @@
 
 package ch.dvbern.stip.api.adresse.entity;
 
-import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class NotStatelessConstraintValidator implements ConstraintValidator<NotStatelessConstraint, Land> {
     @Override
     public boolean isValid(Land value, ConstraintValidatorContext context) {
-        return value != Land.STATELESS;
+        return !value.is(WellKnownLand.STATELESS);
     }
 }

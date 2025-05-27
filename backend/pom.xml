@@ -695,7 +695,6 @@
                     ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
                     Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                    Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
                     Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,

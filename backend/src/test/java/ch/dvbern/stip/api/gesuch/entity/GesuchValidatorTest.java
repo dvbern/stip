@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
@@ -52,7 +53,6 @@ import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -113,13 +113,13 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setAdresse(new Adresse());
         // Beim Land CH muss der Heimatort nicht leer sein
-        personInAusbildung.getAdresse().setLand(Land.CH);
+        personInAusbildung.getAdresse().setLand(LandGenerator.initSwitzerland());
         // Bei PLZ != 3xxx, muss das vermoegenVorjahr nicht leer sein
         personInAusbildung.getAdresse().setPlz("7000");
         // Beim nicht IZV muessen die IZV PLZ und Ort nicht leer sein
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(false);
         // Beim Nationalitaet CH muesst die Niederlassungsstatus nicht gegeben werden
-        personInAusbildung.setNationalitaet(Land.CH);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
         personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
         // Beim Wohnsitz MUTTER_VATER muessen die Anteile Feldern nicht null sein
         personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
@@ -163,7 +163,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(Land.FR);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
         personInAusbildung.setHeimatort("");
 
         Gesuch gesuch = prepareDummyGesuch();
@@ -196,7 +196,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(Land.FR);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
         personInAusbildung.setHeimatort("");
         // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
         personInAusbildung.setNiederlassungsstatus(niederlassungsstatus);

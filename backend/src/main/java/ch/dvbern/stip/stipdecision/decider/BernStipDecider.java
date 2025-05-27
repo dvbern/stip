@@ -23,11 +23,11 @@ import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.land.service.LandService;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
-import ch.dvbern.stip.api.stammdaten.service.LandService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -238,7 +238,8 @@ public class BernStipDecider extends BaseStipDecider {
         private static boolean piaHasSchweizerBuergerrecht(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getNationalitaet() == Land.CH;
+                .getNationalitaet()
+                .is(WellKnownLand.CH);
         }
 
         private static boolean piaIsFluechtling(final GesuchTranche gesuchTranche) {
@@ -248,7 +249,11 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static boolean piaWohntSchweiz(final GesuchTranche gesuchTranche) {
-            return gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse().getLand() == Land.CH;
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getAdresse()
+                .getLand()
+                .is(WellKnownLand.CH);
         }
 
         private static boolean piaHasNiederlassungsbewilligungC(final GesuchTranche gesuchTranche) {
@@ -296,14 +301,14 @@ public class BernStipDecider extends BaseStipDecider {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
                 .getNiederlassungsstatus() == Niederlassungsstatus.FLUECHTLING
-            || gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet() == Land.STATELESS;
+            || gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet().is(WellKnownLand.STATELESS);
         }
 
         private static boolean elternlosOderElternImAusland(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular().getElterns().isEmpty() || gesuchTranche.getGesuchFormular()
                 .getElterns()
                 .stream()
-                .noneMatch(eltern -> eltern.getAdresse().getLand() == Land.CH);
+                .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CH));
         }
 
         private static boolean piaBernZugewiesen(final GesuchTranche gesuchTranche) {

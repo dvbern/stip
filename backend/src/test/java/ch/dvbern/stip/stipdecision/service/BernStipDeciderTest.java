@@ -22,14 +22,14 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
-import ch.dvbern.stip.api.stammdaten.service.LandService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.stipdecision.decider.BernStipDecider;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -140,7 +140,7 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNationalitaet(Land.IR)
+        pia.setNationalitaet(LandGenerator.initIran())
             .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
             .setEinreisedatum(LocalDate.now().minusYears(1));
 
@@ -171,8 +171,8 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNationalitaet(Land.IR);
-        pia.setAdresse(new Adresse().setLand(Land.CH));
+        pia.setNationalitaet(LandGenerator.initIran());
+        pia.setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()));
         pia.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
 
@@ -188,7 +188,7 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(true);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNationalitaet(Land.CH);
+        pia.setNationalitaet(LandGenerator.initSwitzerland());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
@@ -207,11 +207,11 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(true);
         final Adresse adresseBern = new Adresse();
-        final Adresse adresseNotBern = new Adresse().setLand(Land.DE);
+        final Adresse adresseNotBern = new Adresse().setLand(LandGenerator.initGermany());
         Mockito.when(plzService.isInBern(adresseBern)).thenReturn(true);
         Mockito.when(plzService.isInBern(adresseNotBern)).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNationalitaet(Land.CH);
+        pia.setNationalitaet(LandGenerator.initSwitzerland());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
@@ -242,12 +242,12 @@ class BernStipDeciderTest {
     void testStipendienrechtlicherWohnsitzKantonNoElternBern() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(true);
-        final Adresse adresseNotBern1 = new Adresse().setLand(Land.CH);
-        final Adresse adresseNotBern2 = new Adresse().setLand(Land.DE);
+        final Adresse adresseNotBern1 = new Adresse().setLand(LandGenerator.initSwitzerland());
+        final Adresse adresseNotBern2 = new Adresse().setLand(LandGenerator.initGermany());
         Mockito.when(plzService.isInBern(adresseNotBern1)).thenReturn(false);
         Mockito.when(plzService.isInBern(adresseNotBern2)).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNationalitaet(Land.CH);
+        pia.setNationalitaet(LandGenerator.initSwitzerland());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()

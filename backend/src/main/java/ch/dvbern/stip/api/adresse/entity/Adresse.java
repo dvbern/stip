@@ -18,13 +18,14 @@
 package ch.dvbern.stip.api.adresse.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.land.entity.Land;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,10 +47,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Setter
 public class Adresse extends AbstractMandantEntity {
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "land", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(
+        name = "land_id",
+        foreignKey = @ForeignKey(name = "FK_adresse_land_id")
+    )
     @NotStatelessConstraint
-    private Land land = Land.CH;
+    // TODO KSTIP 1968: Allow update of ungueltig but not add
+    // TODO KSTIP-1968: Warning/ Error when Gesuch is in an edit state
+    private Land land;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

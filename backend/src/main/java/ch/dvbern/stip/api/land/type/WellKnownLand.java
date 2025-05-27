@@ -15,30 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.resource;
+package ch.dvbern.stip.api.land.type;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.Test;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+@Getter
+@RequiredArgsConstructor
+public enum WellKnownLand {
+    CH("8100"),
+    DE("8207"),
+    IR("8513"),
+    STATELESS("8998"),
+    STATE_UNKNOWN("8999");
 
-@QuarkusTest
-class StammdatenResourceImplTest {
-    @Inject
-    StammdatenResourceImpl stammdatenResource;
-
-    @TestAsGesuchsteller
-    @Test
-    void getLaenderasGS() {
-        assertNotNull(stammdatenResource.getLaender());
-    }
-
-    @TestAsSachbearbeiter
-    @Test
-    void getLaenderasSB() {
-        assertNotNull(stammdatenResource.getLaender());
-    }
+    private final String laendercodeBfs;
 }

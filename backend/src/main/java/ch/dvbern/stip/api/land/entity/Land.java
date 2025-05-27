@@ -15,15 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.entity;
+package ch.dvbern.stip.api.land.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -36,19 +34,14 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "land_eu_efta",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_eu_efta_land_mandant", columnNames = { "land", "mandant" }
+        name = "UC_land_laendercode_bfs", columnNames = { "laendercodeBfs", "mandant" }
     ),
     indexes = @Index(name = "IX_land_mandant", columnList = "mandant,land")
 )
 @Audited
 @Getter
 @Setter
-public class LandEuEfta extends AbstractMandantEntity {
-    @NotNull
-    @Column(name = "land", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Land land;
-
+public class Land extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_eu_efta", nullable = false)
     private Boolean isEuEfta;
@@ -80,4 +73,12 @@ public class LandEuEfta extends AbstractMandantEntity {
     @NotNull
     @Column(name = "gueltig", nullable = false)
     private boolean gueltig = true;
+
+    public boolean is(final WellKnownLand land) {
+        if (laendercodeBfs == null) {
+            return false;
+        }
+
+        return laendercodeBfs.equals(land.getLaendercodeBfs());
+    }
 }

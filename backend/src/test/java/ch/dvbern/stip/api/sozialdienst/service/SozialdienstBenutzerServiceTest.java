@@ -30,11 +30,11 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerReposito
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -175,7 +175,7 @@ class SozialdienstBenutzerServiceTest {
         sdAdresse.setPlz("12345");
         sdAdresse.setOrt("Musterort");
         sdAdresse.setHausnummer("1");
-        sdAdresse.setLand(Land.CH);
+        sdAdresse.setLandId(TestConstants.TEST_LAND_SCHWEIZ_ID);
         sozialdienstCreateDto.setAdresse(sdAdresse);
 
         var sozialdienstAdminDto = new SozialdienstAdminDto();

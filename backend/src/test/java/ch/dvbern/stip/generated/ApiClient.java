@@ -81,6 +81,9 @@ public class ApiClient {
     public GesuchsperiodeApiSpec gesuchsperiode() {
         return GesuchsperiodeApiSpec.gesuchsperiode(config.reqSpecSupplier);
     }
+    public LandApiSpec land() {
+        return LandApiSpec.land(config.reqSpecSupplier);
+    }
     public MailApiSpec mail() {
         return MailApiSpec.mail(config.reqSpecSupplier);
     }
@@ -92,9 +95,6 @@ public class ApiClient {
     }
     public SozialdienstApiSpec sozialdienst() {
         return SozialdienstApiSpec.sozialdienst(config.reqSpecSupplier);
-    }
-    public StammdatenApiSpec stammdaten() {
-        return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
     }
     public SteuerdatenApiSpec steuerdaten() {
         return SteuerdatenApiSpec.steuerdaten(config.reqSpecSupplier);

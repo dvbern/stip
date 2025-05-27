@@ -28,11 +28,12 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.land.service.LandService;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,7 @@ public class SozialdienstSeeding extends Seeder {
     private final SozialdienstRepository sozialdienstRepository;
     private final ConfigService configService;
     private final TenantService tenantService;
+    private final LandService landService;
 
     private static final Map<String, String> KEYCLOAK_IDS = Map.of(
         MandantIdentifier.BERN.getIdentifier(),
@@ -57,6 +59,7 @@ public class SozialdienstSeeding extends Seeder {
 
     @Override
     public int getPriority() {
+        // Ensure this number is smaller than dependent data (i.e. Land)
         return 300;
     }
 
@@ -83,12 +86,14 @@ public class SozialdienstSeeding extends Seeder {
                 new Benutzereinstellungen()
                     .setDigitaleKommunikation(true)
             );
+
+        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CH.getLaendercodeBfs()).orElseThrow();
         final var adresse = new Adresse()
             .setStrasse("Nussbaumstrasse")
             .setHausnummer("21")
             .setOrt("Bern")
             .setPlz("3000")
-            .setLand(Land.CH);
+            .setLand(switzerland);
         final var sozialdienst = new Sozialdienst()
             .setName("[E2E] Sozialdienst")
             .setAdresse(adresse)

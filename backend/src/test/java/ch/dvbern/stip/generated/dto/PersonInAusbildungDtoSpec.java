@@ -17,7 +17,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.AnredeDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.NiederlassungsstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SpracheDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -31,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -46,7 +46,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungDtoSpec.JSON_PROPERTY_EMAIL,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
-  PersonInAusbildungDtoSpec.JSON_PROPERTY_NATIONALITAET,
+  PersonInAusbildungDtoSpec.JSON_PROPERTY_NATIONALITAET_ID,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_HEIMATORT,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NIEDERLASSUNGSSTATUS,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_EINREISEDATUM,
@@ -90,8 +90,8 @@ public class PersonInAusbildungDtoSpec {
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
   private LocalDate geburtsdatum;
 
-  public static final String JSON_PROPERTY_NATIONALITAET = "nationalitaet";
-  private LandDtoSpec nationalitaet;
+  public static final String JSON_PROPERTY_NATIONALITAET_ID = "nationalitaetId";
+  private UUID nationalitaetId;
 
   public static final String JSON_PROPERTY_HEIMATORT = "heimatort";
   private String heimatort;
@@ -349,29 +349,29 @@ public class PersonInAusbildungDtoSpec {
   }
 
 
-  public PersonInAusbildungDtoSpec nationalitaet(LandDtoSpec nationalitaet) {
+  public PersonInAusbildungDtoSpec nationalitaetId(UUID nationalitaetId) {
     
-    this.nationalitaet = nationalitaet;
+    this.nationalitaetId = nationalitaetId;
     return this;
   }
 
    /**
-   * Get nationalitaet
-   * @return nationalitaet
+   * Get nationalitaetId
+   * @return nationalitaetId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NATIONALITAET)
+  @JsonProperty(JSON_PROPERTY_NATIONALITAET_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LandDtoSpec getNationalitaet() {
-    return nationalitaet;
+  public UUID getNationalitaetId() {
+    return nationalitaetId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NATIONALITAET)
+  @JsonProperty(JSON_PROPERTY_NATIONALITAET_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNationalitaet(LandDtoSpec nationalitaet) {
-    this.nationalitaet = nationalitaet;
+  public void setNationalitaetId(UUID nationalitaetId) {
+    this.nationalitaetId = nationalitaetId;
   }
 
 
@@ -781,7 +781,7 @@ public class PersonInAusbildungDtoSpec {
         Objects.equals(this.email, personInAusbildung.email) &&
         Objects.equals(this.telefonnummer, personInAusbildung.telefonnummer) &&
         Objects.equals(this.geburtsdatum, personInAusbildung.geburtsdatum) &&
-        Objects.equals(this.nationalitaet, personInAusbildung.nationalitaet) &&
+        Objects.equals(this.nationalitaetId, personInAusbildung.nationalitaetId) &&
         Objects.equals(this.heimatort, personInAusbildung.heimatort) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildung.niederlassungsstatus) &&
         Objects.equals(this.einreisedatum, personInAusbildung.einreisedatum) &&
@@ -801,7 +801,7 @@ public class PersonInAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigerKanton, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigerKanton, zustaendigeKESB);
   }
 
   @Override
@@ -816,7 +816,7 @@ public class PersonInAusbildungDtoSpec {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    nationalitaet: ").append(toIndentedString(nationalitaet)).append("\n");
+    sb.append("    nationalitaetId: ").append(toIndentedString(nationalitaetId)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
     sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");

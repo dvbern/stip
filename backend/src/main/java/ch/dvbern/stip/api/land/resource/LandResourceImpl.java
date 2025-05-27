@@ -15,16 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.resource;
+package ch.dvbern.stip.api.land.resource;
 
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.StammdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.stammdaten.service.LandService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.api.StammdatenResource;
-import ch.dvbern.stip.generated.dto.LandEuEftaDto;
+import ch.dvbern.stip.api.land.service.LandService;
+import ch.dvbern.stip.generated.api.LandResource;
+import ch.dvbern.stip.generated.dto.LandDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -34,27 +34,26 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
-public class StammdatenResourceImpl implements StammdatenResource {
+public class LandResourceImpl implements LandResource {
     private final StammdatenAuthorizer stammdatenAuthorizer;
     private final LandService landService;
 
     @Override
+    public LandDto createLand(LandDto landDto) {
+        // TODO KSTIP-1968: Authorizer
+        return landService.createLand(landDto);
+    }
+
+    @Override
     @RolesAllowed(STAMMDATEN_READ)
-    public List<Land> getLaender() {
+    public List<LandDto> getLaender() {
         stammdatenAuthorizer.canGetLaender();
         return landService.getAllLaender();
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_READ)
-    public List<LandEuEftaDto> getLaenderEuEfta() {
-        return List.of();
-    }
-
-    @Override
-    @RolesAllowed(STAMMDATEN_READ)
-    public List<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
-        stammdatenAuthorizer.canSetLaenderEuEfta();
-        return landService.setLaenderEuEfta(landEuEftaDto);
+    public LandDto updateLand(UUID landId, LandDto landDto) {
+        // TODO KSTIP-1968: Authorizer
+        return landService.updateLand(landId, landDto);
     }
 }
