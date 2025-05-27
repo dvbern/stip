@@ -108,12 +108,20 @@
         <!-- actions -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
-            <a
+            <!-- <a
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
               class="btn btn-outline-primary btn-sm"
             >
               <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
-            </a>
+            </a> -->
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              [attr.aria-label]="'sachbearbeitung-app.admin.euEftaLaender.create' | translate"
+              (click)="openDialog()"
+            >
+              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+            </button>
           </th>
           <td mat-cell *dvMatCellDef="let country; dataSource: countryDataSourceSig()">
             <div class="d-flex justify-content-end gap-2">
@@ -121,7 +129,7 @@
                 type="button"
                 class="btn btn-link"
                 [attr.aria-label]="'sachbearbeitung-app.admin.-----------------!!!!!' | translate"
-                (click)="shxowEdit(country)"
+                (click)="openDialog(country)"
               >
                 <i class="material-symbols-rounded fs-5">edit</i>
               </button>

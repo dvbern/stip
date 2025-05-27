@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   effect,
   inject,
@@ -82,6 +83,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private dialog = inject(MatDialog);
   private sortSig = viewChild(MatSort);
+  private destroyRef = inject(DestroyRef);
   paginatorSig = viewChild(MatPaginator);
 
   filterChangedSig = signal<string | null>(null);
@@ -270,46 +272,24 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       { allowSignalWrites: true },
     );
   }
-  showEdit(landEuEfta: LandEuEfta) {
-    SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(
-      this.dialog,
-      landEuEfta,
-    )
-      .afterClosed()
-      .subscribe((land) => {
-        if (land) {
-          this.laenderStore.saveLand$({
-            laendercodeBfs: land.laendercodeBfs,
-            iso3code: land.iso3code,
-            deKurzform: land.deKurzform,
-            frKurzform: land.frKurzform,
-            itKurzform: land.itKurzform,
-            engKurzform: land.engKurzform,
-            eintragGueltig: land.eintragGueltig,
-            euEfta: land.isEuEfta,
-          });
-        }
-      });
-  }
 
-  createLand(land: LandEuEfta) {
+  openDialog(landEuEfta?: LandEuEfta) {
     SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(this.dialog, {
-      land,
+      land: landEuEfta,
+      laender: this.laenderStore.euEftaLaenderListViewSig() ?? [],
     })
+      .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((land) => {
-        if (land) {
-          this.laenderStore.saveLand$({
-            laendercodeBfs: land.laendercodeBfs,
-            iso3code: land.iso3code,
-            deKurzform: land.deKurzform,
-            frKurzform: land.frKurzform,
-            itKurzform: land.itKurzform,
-            engKurzform: land.engKurzform,
-            eintragGueltig: land.eintragGueltig,
-            euEfta: land.isEuEfta,
-          });
+        if (!land) {
+          return;
         }
+
+        if (land.id) {
+          this.laenderStore.saveLand$({ landEuEfta: [land] });
+        }
+
+        this.laenderStore.createLand$({ landEuEfta: land });
       });
   }
 }

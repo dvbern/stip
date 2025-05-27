@@ -71,7 +71,7 @@
     </mat-form-field>
     <!-- Eintrag Gültig -->
     <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="eintragGueltig">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.engKurzform.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.eintragGueltig.label' | translate }}</mat-label>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -79,7 +79,7 @@
     </mat-checkbox>
     <!-- EU/Efta -->
     <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="euEfta">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.engKurzform.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.euEfta.label' | translate }}</mat-label>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -92,7 +92,7 @@
       <button
         type="submit"
         data-testid="dialog-submit"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || form.pristine"
         class="btn btn-primary ms-2"
         (click)="confirm()"
       >

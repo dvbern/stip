@@ -29,7 +29,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type EuEftaLandEditData = {
   laender: LandEuEfta[];
-  land: LandEuEfta;
+  land?: LandEuEfta;
 };
 
 @Component({
@@ -60,6 +60,8 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
   dialogData = inject<EuEftaLandEditData>(MAT_DIALOG_DATA);
   private formBuilder = inject(NonNullableFormBuilder);
 
+  isEdit = !!this.dialogData.land?.id;
+
   uniqueBfsNumberValidator = (): ValidatorFn => (control) => {
     const laender = this.dialogData.laender;
     const currentValue = control.value;
@@ -67,7 +69,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     if (!currentValue) {
       return null;
     }
-    const currentEditLand: LandEuEfta | null = this.dialogData.land;
+    const currentEditLand = this.dialogData.land;
 
     const duplicateExists = laender.some((entry) => {
       const isSameAsCurrent =
@@ -92,17 +94,25 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
 
   form = this.formBuilder.group({
     laendercodeBfs: [
-      this.dialogData.land.laendercodeBfs,
+      '',
       [Validators.required, this.uniqueBfsNumberValidator()],
     ],
-    iso3code: [this.dialogData.land.iso3code, [Validators.required]],
-    deKurzform: [this.dialogData.land.deKurzform, [Validators.required]],
-    frKurzform: [this.dialogData.land.frKurzform, [Validators.required]],
-    itKurzform: [this.dialogData.land.itKurzform, [Validators.required]],
-    engKurzform: [this.dialogData.land.engKurzform, [Validators.required]],
-    eintragGueltig: [this.dialogData.land.eintragGueltig],
-    euEfta: [this.dialogData.land.isEuEfta],
+    iso3code: ['', [Validators.required]],
+    deKurzform: ['', [Validators.required]],
+    frKurzform: ['', [Validators.required]],
+    itKurzform: ['', [Validators.required]],
+    engKurzform: ['', [Validators.required]],
+    eintragGueltig: [false],
+    isEuEfta: [false],
   });
+
+  constructor() {
+    if (this.isEdit) {
+      this.form.patchValue({
+        ...this.dialogData.land,
+      });
+    }
+  }
 
   confirm() {
     this.form.markAllAsTouched();
@@ -113,16 +123,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
 
     const euEftaLaenderDaten = convertTempFormToRealValues(this.form);
 
-    this.dialogRef.close({
-      laendercodeBfs: euEftaLaenderDaten.laendercodeBfs,
-      iso3code: euEftaLaenderDaten.iso3code,
-      deKurzform: euEftaLaenderDaten.deKurzform,
-      frKurzform: euEftaLaenderDaten.frKurzform,
-      itKurzform: euEftaLaenderDaten.itKurzform,
-      engKurzform: euEftaLaenderDaten.engKurzform,
-      eintragGueltig: euEftaLaenderDaten.eintragGueltig,
-      euEfta: euEftaLaenderDaten.euEfta,
-    });
+    this.dialogRef.close(euEftaLaenderDaten);
   }
   close() {
     this.dialogRef.close();

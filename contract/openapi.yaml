@@ -4145,6 +4145,8 @@ components:
         - itKurzform
         - engKurzform
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
         land:
           $ref: '#/components/schemas/Land'
         laendercodeBfs:
@@ -4154,7 +4156,7 @@ components:
         iso3code:
             type: string
         eintragGueltig:
-          type: string
+          type: boolean
         deKurzform:
           type: string
         frKurzform:

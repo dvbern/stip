@@ -51,20 +51,37 @@ export class EuEftaLaenderStore extends signalStore(
     ),
   );
 
-  // saveLand$ = rxMethod<LandEuEfta>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         euEftaLaender: cachedPending(state.euEftaLaender),
-  //       }));
-  //     }),
-  //     switchMap((payload) =>
-  //       this.stammdatenService.setLaenderEuEfta$({ landEuEfta: payload }).pipe(
-  //         handleApiResponse((euEftaLaender) => {
-  //           patchState(this, { euEftaLaender });
-  //         }),
-  //       ),
-  //     ),
-  //   ),
-  // );
+  saveLand$ = rxMethod<{ landEuEfta: LandEuEfta[] }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          euEftaLaender: cachedPending(state.euEftaLaender),
+        }));
+      }),
+      switchMap((req) =>
+        this.stammdatenService.setLaenderEuEfta$(req).pipe(
+          handleApiResponse((euEftaLaender) => {
+            patchState(this, { euEftaLaender });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  createLand$ = rxMethod<{ landEuEfta: LandEuEfta }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          euEftaLaender: cachedPending(state.euEftaLaender),
+        }));
+      }),
+      // switchMap((land) =>
+      //   this.stammdatenService.createLandEuEfta$(land).pipe(
+      //     handleApiResponse((euEftaLaender) => {
+      //       patchState(this, { euEftaLaender });
+      //     }),
+      //   ),
+      // ),
+    ),
+  );
 }
