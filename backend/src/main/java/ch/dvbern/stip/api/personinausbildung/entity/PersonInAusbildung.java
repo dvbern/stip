@@ -23,10 +23,10 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,6 +37,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -113,9 +114,12 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private String telefonnummer;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "nationalitaet", nullable = false)
-    private Land nationalitaet = Land.CH;
+    @ManyToOne(optional = false)
+    @JoinColumn(
+        name = "land_id",
+        foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_land_id")
+    )
+    private Land nationalitaet;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

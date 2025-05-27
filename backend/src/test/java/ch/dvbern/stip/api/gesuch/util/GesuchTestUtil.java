@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -38,7 +39,6 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -92,7 +92,7 @@ public class GesuchTestUtil {
         adresse.setHausnummer("1");
         adresse.setId(UUID.randomUUID());
         adresse.setPlz("3333");
-        adresse.setLand(Land.CH);
+        adresse.setLand(LandGenerator.initSwitzerland());
         adresse.setOrt("b");
         personInAusbildung.setHeimatort("B");
         personInAusbildung.setAdresse(adresse);

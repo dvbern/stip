@@ -79,7 +79,6 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -87,6 +86,7 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -238,7 +238,7 @@ class GesuchServiceTest {
         var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
-        pia.setNationalitaet(Land.NA);
+        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
         pia.setHeimatort(null);
         GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
             gesuchUpdateDto,

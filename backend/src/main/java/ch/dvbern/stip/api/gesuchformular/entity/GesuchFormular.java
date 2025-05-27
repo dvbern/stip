@@ -250,7 +250,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
-
         name = "familiensituation_id",
         foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id")
     )

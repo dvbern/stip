@@ -20,15 +20,11 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.stammdaten.service.LandService;
-import ch.dvbern.stip.generated.dto.LandEuEftaDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import ch.dvbern.stip.api.land.service.LandService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -50,16 +46,7 @@ public class LandEuEftaSeeding extends Seeder {
     @Override
     protected void seed() {
         LOG.info("Seeding EU/EFTA Laender");
-        final var json = getJson();
-
-        List<LandEuEftaDto> dtos = new ArrayList<>();
-        try {
-            dtos = objectMapper.readValue(json, new TypeReference<List<LandEuEftaDto>>() {});
-        } catch (JsonProcessingException e) {
-            LOG.error("Failed to deserialize eueftalaender json", e);
-            return;
-        }
-        landService.setLaenderEuEfta(dtos);
+        // TODO KSTIP-1968: Implement seeding
     }
 
     @Override

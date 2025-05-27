@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ public class LandCHRequiredConstraintValidator
         PersonInAusbildung personInAusbildung,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (personInAusbildung.getNationalitaet() == Land.CH) {
+        if (personInAusbildung.getNationalitaet().is(WellKnownLand.CH)) {
             return StringUtils.isNotEmpty(personInAusbildung.getHeimatort());
         }
         constraintValidatorContext.disableDefaultConstraintViolation();

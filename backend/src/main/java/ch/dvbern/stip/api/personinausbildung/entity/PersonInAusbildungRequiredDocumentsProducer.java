@@ -26,10 +26,10 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -112,7 +112,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
                 return false;
             }
 
-            return adresse.getLand() != Land.CH;
+            return !adresse.getLand().is(WellKnownLand.CH);
         });
     }
 }

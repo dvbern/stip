@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.LandEuEftaDto;
+import ch.dvbern.stip.generated.dto.LandDto;
+import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -15,22 +16,22 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/stammdaten/land")
+@Path("/land")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
-public interface StammdatenResource {
+public interface LandResource {
 
-    @GET
-    @Produces({ "application/json", "text/plain" })
-    List<ch.dvbern.stip.api.stammdaten.type.Land> getLaender();
-
-    @GET
-    @Path("/euefta")
-    @Produces({ "application/json", "text/plain" })
-    List<LandEuEftaDto> getLaenderEuEfta();
-
-    @PATCH
-    @Path("/euefta")
+    @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    List<LandEuEftaDto> setLaenderEuEfta(@Valid @NotNull List<LandEuEftaDto> landEuEftaDto);
+    LandDto createLand(@Valid @NotNull LandDto landDto);
+
+    @GET
+    @Produces({ "application/json", "text/plain" })
+    List<LandDto> getLaender();
+
+    @PATCH
+    @Path("/{landId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    LandDto updateLand(@PathParam("landId") UUID landId,@Valid @NotNull LandDto landDto);
 }

@@ -14,7 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.LandEuEftaDtoSpec;
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,17 +34,17 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static io.restassured.http.Method.*;
 
-public class StammdatenApiSpec {
+public class LandApiSpec {
 
     private Supplier<RequestSpecBuilder> reqSpecSupplier;
     private Consumer<RequestSpecBuilder> reqSpecCustomizer;
 
-    private StammdatenApiSpec(Supplier<RequestSpecBuilder> reqSpecSupplier) {
+    private LandApiSpec(Supplier<RequestSpecBuilder> reqSpecSupplier) {
         this.reqSpecSupplier = reqSpecSupplier;
     }
 
-    public static StammdatenApiSpec stammdaten(Supplier<RequestSpecBuilder> reqSpecSupplier) {
-        return new StammdatenApiSpec(reqSpecSupplier);
+    public static LandApiSpec land(Supplier<RequestSpecBuilder> reqSpecSupplier) {
+        return new LandApiSpec(reqSpecSupplier);
     }
 
     private RequestSpecBuilder createReqSpec() {
@@ -57,22 +57,22 @@ public class StammdatenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                createLand(),
                 getLaender(),
-                getLaenderEuEfta(),
-                setLaenderEuEfta()
+                updateLand()
         );
+    }
+
+    public CreateLandOper createLand() {
+        return new CreateLandOper(createReqSpec());
     }
 
     public GetLaenderOper getLaender() {
         return new GetLaenderOper(createReqSpec());
     }
 
-    public GetLaenderEuEftaOper getLaenderEuEfta() {
-        return new GetLaenderEuEftaOper(createReqSpec());
-    }
-
-    public SetLaenderEuEftaOper setLaenderEuEfta() {
-        return new SetLaenderEuEftaOper(createReqSpec());
+    public UpdateLandOper updateLand() {
+        return new UpdateLandOper(createReqSpec());
     }
 
     /**
@@ -80,13 +80,85 @@ public class StammdatenApiSpec {
      * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
      * @return api
      */
-    public StammdatenApiSpec reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+    public LandApiSpec reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
         this.reqSpecCustomizer = reqSpecCustomizer;
         return this;
     }
 
     /**
-     * Returns a List of LandCode
+     * 
+     * 
+     *
+     * @see #body  (required)
+     * return LandDtoSpec
+     */
+    public static class CreateLandOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/land";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateLandOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /land
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /land
+         * @param handler handler
+         * @return LandDtoSpec
+         */
+        public LandDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<LandDtoSpec> type = new TypeRef<LandDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param landDtoSpec (LandDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateLandOper body(LandDtoSpec landDtoSpec) {
+            reqSpec.setBody(landDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateLandOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateLandOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
      * 
      *
      * return List&lt;LandDtoSpec&gt;
@@ -94,7 +166,7 @@ public class StammdatenApiSpec {
     public static class GetLaenderOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/stammdaten/land";
+        public static final String REQ_URI = "/land";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -106,7 +178,7 @@ public class StammdatenApiSpec {
         }
 
         /**
-         * GET /stammdaten/land
+         * GET /land
          * @param handler handler
          * @param <T> type
          * @return type
@@ -117,7 +189,7 @@ public class StammdatenApiSpec {
         }
 
         /**
-         * GET /stammdaten/land
+         * GET /land
          * @param handler handler
          * @return List&lt;LandDtoSpec&gt;
          */
@@ -150,79 +222,19 @@ public class StammdatenApiSpec {
      * 
      * 
      *
-     * return List&lt;LandEuEftaDtoSpec&gt;
-     */
-    public static class GetLaenderEuEftaOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/stammdaten/land/euefta";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetLaenderEuEftaOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /stammdaten/land/euefta
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /stammdaten/land/euefta
-         * @param handler handler
-         * @return List&lt;LandEuEftaDtoSpec&gt;
-         */
-        public List<LandEuEftaDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<LandEuEftaDtoSpec>> type = new TypeRef<List<LandEuEftaDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetLaenderEuEftaOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetLaenderEuEftaOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
+     * @see #landIdPath  (required)
      * @see #body  (required)
-     * return List&lt;LandEuEftaDtoSpec&gt;
+     * return LandDtoSpec
      */
-    public static class SetLaenderEuEftaOper implements Oper {
+    public static class UpdateLandOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/stammdaten/land/euefta";
+        public static final String REQ_URI = "/land/{landId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public SetLaenderEuEftaOper(RequestSpecBuilder reqSpec) {
+        public UpdateLandOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -230,7 +242,7 @@ public class StammdatenApiSpec {
         }
 
         /**
-         * PATCH /stammdaten/land/euefta
+         * PATCH /land/{landId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -241,21 +253,32 @@ public class StammdatenApiSpec {
         }
 
         /**
-         * PATCH /stammdaten/land/euefta
+         * PATCH /land/{landId}
          * @param handler handler
-         * @return List&lt;LandEuEftaDtoSpec&gt;
+         * @return LandDtoSpec
          */
-        public List<LandEuEftaDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<LandEuEftaDtoSpec>> type = new TypeRef<List<LandEuEftaDtoSpec>>(){};
+        public LandDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<LandDtoSpec> type = new TypeRef<LandDtoSpec>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param landEuEftaDtoSpec (List&lt;LandEuEftaDtoSpec&gt;)  (required)
+         * @param landDtoSpec (LandDtoSpec)  (required)
          * @return operation
          */
-        public SetLaenderEuEftaOper body(List<LandEuEftaDtoSpec> landEuEftaDtoSpec) {
-            reqSpec.setBody(landEuEftaDtoSpec);
+        public UpdateLandOper body(LandDtoSpec landDtoSpec) {
+            reqSpec.setBody(landDtoSpec);
+            return this;
+        }
+
+        public static final String LAND_ID_PATH = "landId";
+
+        /**
+         * @param landId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateLandOper landIdPath(Object landId) {
+            reqSpec.addPathParam(LAND_ID_PATH, landId);
             return this;
         }
 
@@ -264,7 +287,7 @@ public class StammdatenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public SetLaenderEuEftaOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public UpdateLandOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -274,7 +297,7 @@ public class StammdatenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public SetLaenderEuEftaOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public UpdateLandOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

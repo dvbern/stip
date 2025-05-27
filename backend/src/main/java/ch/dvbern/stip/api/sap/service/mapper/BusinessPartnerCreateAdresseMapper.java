@@ -28,7 +28,7 @@ public class BusinessPartnerCreateAdresseMapper {
         Adresse adresse = auszahlung.getAdresse();
         if (adresse != null) {
             address.setCITY(adresse.getOrt());
-            address.setCOUNTRY(adresse.getLand().getLandDE());
+            address.setCOUNTRY(adresse.getLand().getDeKurzform());
             address.setCONAME(adresse.getCoAdresse());
             address.setSTREET(adresse.getStrasse());
             address.setHOUSENO(adresse.getHausnummer());
