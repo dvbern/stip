@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
@@ -85,6 +86,9 @@ class GesuchServiceDokumenteToUploadFlagsTest {
 
     @InjectMock
     SozialdienstService sozialdienstService;
+
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Inject
     @InjectMocks
@@ -150,6 +154,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // overall arrange
         when(gesuchTrancheRepository.requireById(tranche1.getId())).thenReturn(tranche1);
         when(gesuchTrancheRepository.requireById(tranche2.getId())).thenReturn(tranche2);
+        when(gesuchTrancheHistoryService.getLatestTranche(tranche1.getId())).thenReturn(tranche1);
+        when(gesuchTrancheHistoryService.getLatestTranche(tranche2.getId())).thenReturn(tranche2);
     }
 
     @Test

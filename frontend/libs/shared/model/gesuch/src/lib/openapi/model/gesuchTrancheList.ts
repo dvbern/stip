@@ -13,6 +13,6 @@ import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
 export interface GesuchTrancheList { 
     tranchen?: Array<GesuchTrancheSlim>;
-    initialTranche?: GesuchTrancheSlim;
+    initialTranchen?: Array<GesuchTrancheSlim>;
 }
 

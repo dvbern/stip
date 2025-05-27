@@ -71,7 +71,7 @@
 
     @let gesuchId = gesuchIdSig();
     @let trancheId = trancheIdSig();
-    @let tranchen = gesuchAenderungStore.tranchenViewSig().list;
+    @let tranchen = tranchenSig().list;
     @if (gesuchId && trancheId && tranchen.length > 1) {
       <!-- Gesuch -->
       <button
@@ -89,7 +89,7 @@
         <div class="d-flex flex-column gap-2">
           @for (tranche of tranchen; track $index) {
             <a
-              [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
+              [routerLink]="tranche.url"
               class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
               data-testid="gesuch-step-nav-overview"
               mat-menu-item

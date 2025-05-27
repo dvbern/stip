@@ -198,11 +198,11 @@ public class AntragsstellerV1 {
     ) {
         return switch (bildungsstufe) {
             case SEKUNDAR_2 -> Integer.min(
-                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskosten(), 0),
                 gesuchsperiode.getAusbKostenSekII()
             );
             case TERTIAER -> Integer.min(
-                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskosten(), 0),
                 gesuchsperiode.getAusbKostenTertiaer()
             );
         };
