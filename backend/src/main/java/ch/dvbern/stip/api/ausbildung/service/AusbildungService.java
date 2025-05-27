@@ -63,6 +63,9 @@ public class AusbildungService {
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
 
+        // Manual check here is necessary, because otherwise the Ausbildung would be persisted
+        // but creation of a Gesuch would fail. But because none of that throws an exception,
+        // instead returning an error the Transaction wouldn't be rolled backed and the Ausbildung would persist.
         final var result = gesuchsperiodeService.getGesuchsperiodeForAusbildung(ausbildung);
         if (result.getRight() != null) {
             LocalDate contextDate = null;

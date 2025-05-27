@@ -109,11 +109,11 @@ public class GesuchsperiodenService {
             return Pair.of(toAssign, null);
         }
 
-        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
-            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
-        } else {
-            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
-        }
+        return switch (toAssign.getGueltigkeitStatus()) {
+            case ENTWURF -> Pair.of(toAssign, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
+            case PUBLIZIERT -> Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+            case ARCHIVIERT -> Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        };
     }
 
     private Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeDateInPast(
@@ -147,14 +147,7 @@ public class GesuchsperiodenService {
             toAssign = toAssignOpt.get();
         }
 
-        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ENTWURF) {
-            LOG.error("Gesuchsperiode for a past date was found in Status Entwurf: {}", toAssign.getId());
-            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
-        } else if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT) {
-            return Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
-        } else {
-            return Pair.of(toAssign, null);
-        }
+        return Pair.of(toAssign, null);
     }
 
     @Transactional

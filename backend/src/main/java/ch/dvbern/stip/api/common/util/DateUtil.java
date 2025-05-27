@@ -127,8 +127,8 @@ public class DateUtil {
 
     public boolean isFruehling(final LocalDate date) {
         return between(
-            LocalDate.of(LocalDate.now().getYear(), 1, 1),
-            LocalDate.of(LocalDate.now().getYear(), 6, 1).with(lastDayOfMonth()),
+            LocalDate.of(date.getYear(), 1, 1),
+            LocalDate.of(date.getYear(), 6, 1).with(lastDayOfMonth()),
             date,
             true
         );
