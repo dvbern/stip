@@ -5,24 +5,44 @@ import {
   computed,
   effect,
   inject,
+  signal,
   untracked,
+  viewChild,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {
+  FormControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidatorFn,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { MaskitoDirective } from '@maskito/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
-import { Land } from '@dv/shared/model/gesuch';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
+import { LandEuEfta } from '@dv/shared/model/gesuch';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 const sharedCountryKeyPrefix = 'shared.country.';
+
+const INPUT_DELAY = 600;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
@@ -33,10 +53,20 @@ const sharedCountryKeyPrefix = 'shared.country.';
     TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule,
-    SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiMaxLengthDirective,
+    MatInputModule,
+    MatCheckboxModule,
+    SharedUiClearButtonComponent,
+    MatButtonModule,
+    MatSortModule,
+    MatTooltipModule,
+    MaskitoDirective,
+    MatTableModule,
+    MatIconModule,
+    TypeSafeMatCellDefDirective,
+    RouterLink,
+    MatPaginator,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -49,9 +79,40 @@ const sharedCountryKeyPrefix = 'shared.country.';
 })
 export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private translate = inject(TranslateService);
+  private formBuilder = inject(NonNullableFormBuilder);
+  private dialog = inject(MatDialog);
+  private sortSig = viewChild(MatSort);
+  paginatorSig = viewChild(MatPaginator);
+
+  filterChangedSig = signal<string | null>(null);
+
   laenderStore = inject(EuEftaLaenderStore);
   countryFilter = new FormControl<string | null>(null);
   countryList = new FormControl<string[]>([]);
+
+  displayedColumns: string[] = [
+    'iso3code',
+    'deKurzform',
+    'frKurzform',
+    'eintragGueltig',
+    'euEfta',
+    'actions',
+  ];
+
+  filterForm = this.formBuilder.group({
+    iso3code: [<string | null>null],
+    deKurzform: [<string | null>null],
+    frKurzform: [<string | null>null],
+    eintragGueltig: [<string | null>null],
+    euEfta: [<string | null>null],
+  });
+
+  private filterFormChangedSig = toSignal(
+    this.filterForm.valueChanges.pipe(
+      debounceTime(INPUT_DELAY),
+      map(() => this.filterForm.getRawValue()),
+    ),
+  );
 
   private countryFilterChangedSig = toSignal(
     this.countryFilter.valueChanges.pipe(
@@ -83,6 +144,57 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       value,
     }));
   });
+
+  countryDataSourceSig = computed(() => {
+    const allCountries = this.laenderStore.euEftaLaenderListViewSig() ?? [];
+    const selected = this.countryList.value ?? [];
+    const paginator = this.paginatorSig();
+    const sort = this.sortSig();
+    const filter = this.filterChangedSig();
+
+    const filteredCountries =
+      selected.length > 0
+        ? allCountries.filter((c) => selected.includes(c.land))
+        : allCountries;
+
+    const datasource = new MatTableDataSource(filteredCountries);
+
+    datasource.filterPredicate = (data, filter: string) => {
+      const { iso3, deKurzform, frKurzform } = JSON.parse(filter);
+      if (iso3 && !data.iso3code?.toLowerCase().includes(iso3.toLowerCase())) {
+        return false;
+      }
+      if (
+        deKurzform &&
+        !data.deKurzform.toLowerCase().includes(deKurzform.toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        frKurzform &&
+        !data.frKurzform.toLowerCase().includes(frKurzform.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    };
+
+    datasource.sort = this.sortSig() ?? null;
+
+    if (paginator) {
+      datasource.paginator = paginator;
+    }
+
+    if (sort) {
+      datasource.sort = sort;
+    }
+
+    if (filter) {
+      datasource.filter = filter.trim().toLowerCase();
+    }
+    return datasource;
+  });
+
   hiddenCountriesSig = computed(() => {
     const filter = this.countryFilterChangedSig();
     const countryListSig = this.countryListSig();
@@ -121,29 +233,83 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
 
     effect(
       () => {
+        const filterValues = this.filterFormChangedSig();
+        this.countryDataSourceSig().filter = JSON.stringify(filterValues);
         const selectedCountries = this.countryListChangedSig();
 
         if (!selectedCountries) {
           return;
         }
+        //
+        // const remainingCountries =
+        //   untracked(this.laenderStore.euEftaLaenderListViewSig)?.filter(
+        //     (l) => !selectedCountries.includes(l.land),
+        //   ) ?? [];
 
-        const remainingCountries =
-          untracked(this.laenderStore.euEftaLaenderListViewSig)?.filter(
-            (l) => !selectedCountries.includes(l.land),
-          ) ?? [];
-
-        this.laenderStore.saveLaender$([
-          ...selectedCountries.map((land) => ({
-            land: land as Land,
-            isEuEfta: true,
-          })),
-          ...remainingCountries.map(({ land }) => ({
-            land,
-            isEuEfta: false,
-          })),
-        ]);
+        // this.laenderStore.saveLaender$([
+        //   ...selectedCountries.map((land, iso3code) => ({
+        //     land: land as Land,
+        //     isEuEfta: true,
+        //     iso3Code: iso3code as Iso3,
+        //     deKurzform: deKurzform as DeKurzformObject,
+        //     frKurzform: frKurzform as FrKurzformObject,
+        //     eintragGueltig: true,
+        //   })),
+        //   ...remainingCountries.map(
+        //     ({ land, iso3code, deKurzform, frKurzform }) => ({
+        //       land,
+        //       isEuEfta: false,
+        //       iso3code,
+        //       deKurzform,
+        //       frKurzform,
+        //       eintragGueltig: false,
+        //     }),
+        //   ),
+        // ]);
       },
       { allowSignalWrites: true },
     );
+  }
+  showEdit(landEuEfta: LandEuEfta) {
+    SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(
+      this.dialog,
+      landEuEfta,
+    )
+      .afterClosed()
+      .subscribe((land) => {
+        if (land) {
+          this.laenderStore.saveLand$({
+            laendercodeBfs: land.laendercodeBfs,
+            iso3code: land.iso3code,
+            deKurzform: land.deKurzform,
+            frKurzform: land.frKurzform,
+            itKurzform: land.itKurzform,
+            engKurzform: land.engKurzform,
+            eintragGueltig: land.eintragGueltig,
+            euEfta: land.isEuEfta,
+          });
+        }
+      });
+  }
+
+  createLand(land: LandEuEfta) {
+    SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(this.dialog, {
+      land,
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((land) => {
+        if (land) {
+          this.laenderStore.saveLand$({
+            laendercodeBfs: land.laendercodeBfs,
+            iso3code: land.iso3code,
+            deKurzform: land.deKurzform,
+            frKurzform: land.frKurzform,
+            itKurzform: land.itKurzform,
+            engKurzform: land.engKurzform,
+            eintragGueltig: land.eintragGueltig,
+            euEfta: land.isEuEfta,
+          });
+        }
+      });
   }
 }

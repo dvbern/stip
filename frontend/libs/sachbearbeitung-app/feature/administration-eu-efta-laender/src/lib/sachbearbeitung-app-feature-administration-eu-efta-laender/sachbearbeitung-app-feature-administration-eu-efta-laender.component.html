@@ -1,31 +1,145 @@
 <div class="container mt-3">
   <p>{{ 'sachbearbeitung-app.admin.euEftaLaender.description' | translate }}</p>
 
-  <div class="row mt-5">
-    <h2 class="h3 col-12 col-md-4 col-xl-3 align-self-end">
-      {{ 'shared.form.shared.address.country.label' | translate }}
-    </h2>
-    <mat-form-field class="col-12 col-md-4 col-xl-3">
-      <mat-label>{{ 'shared.search' | translate }}</mat-label>
-      <input matInput dvMaxLength [formControl]="countryFilter" />
-      <i class="material-symbols-rounded me-2" matSuffix>search</i>
-    </mat-form-field>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-8 col-xl-6 position-relative">
-      @if (laenderStore.euEftaLaender() | rdIsPending) {
-        <dv-shared-ui-loading class="position-absolute mt-5 left-0 w-100"></dv-shared-ui-loading>
-      }
-      <mat-selection-list class="w-100" [formControl]="countryList" [disableRipple]="true">
-        @for (l of laenderStore.euEftaLaenderListViewSig(); track l.land) {
-          <mat-list-option
-            [value]="l.land"
-            [class.d-none]="hiddenCountriesSig()[l.land]"
-            [disabled]="laenderStore.euEftaLaender() | rdIsPending"
-            >{{ 'shared.country.' + l.land | translate }}</mat-list-option
-          >
-        }
-      </mat-selection-list>
-    </div>
+  <div class="tw-dv-table">
+    <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+      <table mat-table [dataSource]="countryDataSourceSig()" matSort>
+        <!-- ISO3 Code -->
+        <ng-container matColumnDef="iso3code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+            <label class="pe-none" for="fallNummer">
+              {{ 'sachbearbeitung-app.admin.euEftaLaender.iso3.label' | translate }}
+            </label>
+            <div class="tw-relative tw-flex">
+              <mat-form-field>
+                <input
+                  matInput
+                  [dvMaxLength]="'small'"
+                  class="tw-w-full"
+                  formControlName="iso3code"
+                  data-testid="eu-efta-laender-iso3"
+                  (click)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                (clear)="filterForm.controls.iso3code.reset()"
+                [valueSig]="filterForm.controls.iso3code.value"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.iso3code }}</td>
+        </ng-container>
+
+        <!-- De Kurzform -->
+        <ng-container matColumnDef="deKurzform">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+            <label class="pe-none" for="fallNummer">
+              {{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | translate }}
+            </label>
+            <div class="tw-relative tw-flex">
+              <mat-form-field>
+                <input
+                  matInput
+                  [dvMaxLength]="'small'"
+                  class="tw-w-full"
+                  formControlName="deKurzform"
+                  data-testid="eu-efta-laender-deKurzform"
+                  (click)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                (clear)="filterForm.controls.deKurzform.reset()"
+                [valueSig]="filterForm.controls.deKurzform.value"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.deKurzform }}</td>
+        </ng-container>
+
+        <!-- Fr Kurzform -->
+        <ng-container matColumnDef="frKurzform">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+            <label class="pe-none" for="fallNummer">
+              {{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | translate }}
+            </label>
+            <div class="tw-relative tw-flex">
+              <mat-form-field>
+                <input
+                  matInput
+                  [dvMaxLength]="'small'"
+                  class="tw-w-full"
+                  formControlName="frKurzform"
+                  data-testid="eu-efta-laender-frKurzform"
+                  (click)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                (clear)="filterForm.controls.frKurzform.reset()"
+                [valueSig]="filterForm.controls.frKurzform.value"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.frKurzform }}</td>
+        </ng-container>
+
+        <!-- Eintrag Gueltig -->
+        <ng-container matColumnDef="eintragGueltig">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let land">
+            <mat-checkbox [checked]="land.eintragGueltig"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- EU/Efta -->
+        <ng-container matColumnDef="euEfta">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let land">
+            <mat-checkbox [checked]="land.euEfta"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <a
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              class="btn btn-outline-primary btn-sm"
+            >
+              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+            </a>
+          </th>
+          <td mat-cell *dvMatCellDef="let country; dataSource: countryDataSourceSig()">
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-link"
+                [attr.aria-label]="'sachbearbeitung-app.admin.-----------------!!!!!' | translate"
+                (click)="shxowEdit(country)"
+              >
+                <i class="material-symbols-rounded fs-5">edit</i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Table Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[10, 20, 50]"
+        pageSize="10"
+        [length]="countryDataSourceSig().data.length"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </form>
   </div>
 </div>

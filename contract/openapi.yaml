@@ -4137,12 +4137,32 @@ components:
       type: object
       required:
         - land
+        - laendercodeBfs
         - isEuEfta
+        - eintragGueltig
+        - deKurzform
+        - frKurzform
+        - itKurzform
+        - engKurzform
       properties:
         land:
           $ref: '#/components/schemas/Land'
+        laendercodeBfs:
+          type: string
         isEuEfta:
           type: boolean
+        iso3code:
+            type: string
+        eintragGueltig:
+          type: string
+        deKurzform:
+          type: string
+        frKurzform:
+          type: string
+        itKurzform:
+          type: string
+        engKurzform:
+          type: string
     Land:
       enum:
         - 'CH'

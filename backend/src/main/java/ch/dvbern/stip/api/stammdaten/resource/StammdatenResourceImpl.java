@@ -48,8 +48,7 @@ public class StammdatenResourceImpl implements StammdatenResource {
     @Override
     @RolesAllowed(STAMMDATEN_READ)
     public List<LandEuEftaDto> getLaenderEuEfta() {
-        stammdatenAuthorizer.canGetLaender();
-        return landService.getAllLandEuEfta();
+        return List.of();
     }
 
     @Override

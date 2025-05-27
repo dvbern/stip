@@ -13,7 +13,14 @@ import { Land } from './land';
 
 export interface LandEuEfta { 
     land: Land;
+    laendercodeBfs: string;
     isEuEfta: boolean;
+    iso3code?: string;
+    eintragGueltig: string;
+    deKurzform: string;
+    frKurzform: string;
+    itKurzform: string;
+    engKurzform: string;
 }
 
 

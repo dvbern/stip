@@ -21,6 +21,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class LandEuEftaDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.stammdaten.type.Land land;
   private @Valid Boolean isEuEfta;
+  private @Valid String eintragGueltig;
+  private @Valid String deKurzform;
+  private @Valid String frKurzform;
+  private @Valid String iso3code;
 
   /**
    **/
@@ -60,6 +64,81 @@ public class LandEuEftaDto  implements Serializable {
     this.isEuEfta = isEuEfta;
   }
 
+  /**
+   **/
+  public LandEuEftaDto eintragGueltig(String eintragGueltig) {
+    this.eintragGueltig = eintragGueltig;
+    return this;
+  }
+
+  
+  @JsonProperty("eintragGueltig")
+  @NotNull
+  public String getEintragGueltig() {
+    return eintragGueltig;
+  }
+
+  @JsonProperty("eintragGueltig")
+  public void setEintragGueltig(String eintragGueltig) {
+    this.eintragGueltig = eintragGueltig;
+  }
+
+  /**
+   **/
+  public LandEuEftaDto deKurzform(String deKurzform) {
+    this.deKurzform = deKurzform;
+    return this;
+  }
+
+  
+  @JsonProperty("deKurzform")
+  @NotNull
+  public String getDeKurzform() {
+    return deKurzform;
+  }
+
+  @JsonProperty("deKurzform")
+  public void setDeKurzform(String deKurzform) {
+    this.deKurzform = deKurzform;
+  }
+
+  /**
+   **/
+  public LandEuEftaDto frKurzform(String frKurzform) {
+    this.frKurzform = frKurzform;
+    return this;
+  }
+
+  
+  @JsonProperty("frKurzform")
+  @NotNull
+  public String getFrKurzform() {
+    return frKurzform;
+  }
+
+  @JsonProperty("frKurzform")
+  public void setFrKurzform(String frKurzform) {
+    this.frKurzform = frKurzform;
+  }
+
+  /**
+   **/
+  public LandEuEftaDto iso3code(String iso3code) {
+    this.iso3code = iso3code;
+    return this;
+  }
+
+  
+  @JsonProperty("iso3code")
+  public String getIso3code() {
+    return iso3code;
+  }
+
+  @JsonProperty("iso3code")
+  public void setIso3code(String iso3code) {
+    this.iso3code = iso3code;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -71,12 +150,16 @@ public class LandEuEftaDto  implements Serializable {
     }
     LandEuEftaDto landEuEfta = (LandEuEftaDto) o;
     return Objects.equals(this.land, landEuEfta.land) &&
-        Objects.equals(this.isEuEfta, landEuEfta.isEuEfta);
+        Objects.equals(this.isEuEfta, landEuEfta.isEuEfta) &&
+        Objects.equals(this.eintragGueltig, landEuEfta.eintragGueltig) &&
+        Objects.equals(this.deKurzform, landEuEfta.deKurzform) &&
+        Objects.equals(this.frKurzform, landEuEfta.frKurzform) &&
+        Objects.equals(this.iso3code, landEuEfta.iso3code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(land, isEuEfta);
+    return Objects.hash(land, isEuEfta, eintragGueltig, deKurzform, frKurzform, iso3code);
   }
 
   @Override
@@ -86,6 +169,10 @@ public class LandEuEftaDto  implements Serializable {
     
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
     sb.append("    isEuEfta: ").append(toIndentedString(isEuEfta)).append("\n");
+    sb.append("    eintragGueltig: ").append(toIndentedString(eintragGueltig)).append("\n");
+    sb.append("    deKurzform: ").append(toIndentedString(deKurzform)).append("\n");
+    sb.append("    frKurzform: ").append(toIndentedString(frKurzform)).append("\n");
+    sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
     sb.append("}");
     return sb.toString();
   }
