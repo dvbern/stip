@@ -24,6 +24,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -32,11 +33,11 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(
-    name = "land_eu_efta",
+    name = "land",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_laendercode_bfs", columnNames = { "laendercodeBfs", "mandant" }
+        name = "UC_land_laendercode_bfs", columnNames = { "laendercode_bfs", "mandant" }
     ),
-    indexes = @Index(name = "IX_land_mandant", columnList = "mandant,land")
+    indexes = @Index(name = "IX_land_mandant", columnList = "mandant,laendercode_bfs")
 )
 @Audited
 @Getter
@@ -74,6 +75,7 @@ public class Land extends AbstractMandantEntity {
     @Column(name = "gueltig", nullable = false)
     private boolean gueltig = true;
 
+    @Transient
     public boolean is(final WellKnownLand land) {
         if (laendercodeBfs == null) {
             return false;
