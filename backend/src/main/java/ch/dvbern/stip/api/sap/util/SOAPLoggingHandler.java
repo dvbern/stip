@@ -30,11 +30,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import lombok.extern.slf4j.Slf4j;
+import org.jctools.queues.MessagePassingQueue.Consumer;
 
 /*
  * This simple SOAPHandler will output the contents of incoming
@@ -43,21 +45,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
     public Set<QName> getHeaders() {
-        return null;
+        return Set.of();
     }
 
     public boolean handleMessage(SOAPMessageContext smc) {
-        logToSystemOut(smc);
+        logToSystemOut(smc, LOG::info);
         return true;
     }
 
     public boolean handleFault(SOAPMessageContext smc) {
-        logToSystemOut(smc);
+        logToSystemOut(smc, LOG::error);
         return true;
     }
 
     // nothing to clean up
-    public void close(MessageContext messageContext) {}
+    public void close(MessageContext messageContext) {
+        // do Nothing
+    }
 
     private static String prettyPrint(OutputStream xml) {
         try {
@@ -65,7 +69,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
             StringWriter stringWriter = new StringWriter();
             StreamResult xmlOutput = new StreamResult(stringWriter);
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            TransformerFactory transformerFactory = TransformerFactory.newDefaultInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -73,7 +77,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
             return xmlOutput.getWriter().toString();
         } catch (Exception e) {
-            throw new RuntimeException("Error pretty printing XML", e);
+            throw new InternalServerErrorException("Error pretty printing XML", e);
         }
     }
 
@@ -84,21 +88,21 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
      * output the message. The writeTo() method can throw
      * SOAPException or IOException
      */
-    private void logToSystemOut(SOAPMessageContext smc) {
+    private void logToSystemOut(SOAPMessageContext smc, Consumer<String> loggingFunction) {
         Boolean outboundProperty = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         if (outboundProperty.booleanValue()) {
-            LOG.info("Outbound message:");
+            loggingFunction.accept("Outbound message:");
         } else {
-            LOG.info("Inbound message:");
+            loggingFunction.accept("Inbound message:");
         }
 
         SOAPMessage message = smc.getMessage();
         try {
             final var outstream = new ByteArrayOutputStream();
             message.writeTo(outstream);
-            LOG.info(prettyPrint(outstream));
-            LOG.info(""); // just to add a newline
+            loggingFunction.accept(prettyPrint(outstream));
+            loggingFunction.accept(""); // just to add a newline
         } catch (Exception e) {
             LOG.error("Exception in handler: " + e);
         }

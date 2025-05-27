@@ -36,7 +36,7 @@ public class SapRemainderAuszahlungScheduledTask {
     private void run() {
         try {
             sapService.processRemainderAuszahlungActions();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             LOG.error(e.toString(), e);
         }
     }
