@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -20,11 +21,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class LandEuEftaDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.stammdaten.type.Land land;
+  private @Valid String laendercodeBfs;
   private @Valid Boolean isEuEfta;
-  private @Valid String eintragGueltig;
+  private @Valid Boolean eintragGueltig;
   private @Valid String deKurzform;
   private @Valid String frKurzform;
+  private @Valid String itKurzform;
+  private @Valid UUID id;
   private @Valid String iso3code;
+  private @Valid String enKurzform;
 
   /**
    **/
@@ -43,6 +48,25 @@ public class LandEuEftaDto  implements Serializable {
   @JsonProperty("land")
   public void setLand(ch.dvbern.stip.api.stammdaten.type.Land land) {
     this.land = land;
+  }
+
+  /**
+   **/
+  public LandEuEftaDto laendercodeBfs(String laendercodeBfs) {
+    this.laendercodeBfs = laendercodeBfs;
+    return this;
+  }
+
+  
+  @JsonProperty("laendercodeBfs")
+  @NotNull
+  public String getLaendercodeBfs() {
+    return laendercodeBfs;
+  }
+
+  @JsonProperty("laendercodeBfs")
+  public void setLaendercodeBfs(String laendercodeBfs) {
+    this.laendercodeBfs = laendercodeBfs;
   }
 
   /**
@@ -66,7 +90,7 @@ public class LandEuEftaDto  implements Serializable {
 
   /**
    **/
-  public LandEuEftaDto eintragGueltig(String eintragGueltig) {
+  public LandEuEftaDto eintragGueltig(Boolean eintragGueltig) {
     this.eintragGueltig = eintragGueltig;
     return this;
   }
@@ -74,12 +98,12 @@ public class LandEuEftaDto  implements Serializable {
   
   @JsonProperty("eintragGueltig")
   @NotNull
-  public String getEintragGueltig() {
+  public Boolean getEintragGueltig() {
     return eintragGueltig;
   }
 
   @JsonProperty("eintragGueltig")
-  public void setEintragGueltig(String eintragGueltig) {
+  public void setEintragGueltig(Boolean eintragGueltig) {
     this.eintragGueltig = eintragGueltig;
   }
 
@@ -123,6 +147,43 @@ public class LandEuEftaDto  implements Serializable {
 
   /**
    **/
+  public LandEuEftaDto itKurzform(String itKurzform) {
+    this.itKurzform = itKurzform;
+    return this;
+  }
+
+  
+  @JsonProperty("itKurzform")
+  @NotNull
+  public String getItKurzform() {
+    return itKurzform;
+  }
+
+  @JsonProperty("itKurzform")
+  public void setItKurzform(String itKurzform) {
+    this.itKurzform = itKurzform;
+  }
+
+  /**
+   **/
+  public LandEuEftaDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   **/
   public LandEuEftaDto iso3code(String iso3code) {
     this.iso3code = iso3code;
     return this;
@@ -139,6 +200,24 @@ public class LandEuEftaDto  implements Serializable {
     this.iso3code = iso3code;
   }
 
+  /**
+   **/
+  public LandEuEftaDto enKurzform(String enKurzform) {
+    this.enKurzform = enKurzform;
+    return this;
+  }
+
+  
+  @JsonProperty("enKurzform")
+  public String getEnKurzform() {
+    return enKurzform;
+  }
+
+  @JsonProperty("enKurzform")
+  public void setEnKurzform(String enKurzform) {
+    this.enKurzform = enKurzform;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -150,16 +229,20 @@ public class LandEuEftaDto  implements Serializable {
     }
     LandEuEftaDto landEuEfta = (LandEuEftaDto) o;
     return Objects.equals(this.land, landEuEfta.land) &&
+        Objects.equals(this.laendercodeBfs, landEuEfta.laendercodeBfs) &&
         Objects.equals(this.isEuEfta, landEuEfta.isEuEfta) &&
         Objects.equals(this.eintragGueltig, landEuEfta.eintragGueltig) &&
         Objects.equals(this.deKurzform, landEuEfta.deKurzform) &&
         Objects.equals(this.frKurzform, landEuEfta.frKurzform) &&
-        Objects.equals(this.iso3code, landEuEfta.iso3code);
+        Objects.equals(this.itKurzform, landEuEfta.itKurzform) &&
+        Objects.equals(this.id, landEuEfta.id) &&
+        Objects.equals(this.iso3code, landEuEfta.iso3code) &&
+        Objects.equals(this.enKurzform, landEuEfta.enKurzform);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(land, isEuEfta, eintragGueltig, deKurzform, frKurzform, iso3code);
+    return Objects.hash(land, laendercodeBfs, isEuEfta, eintragGueltig, deKurzform, frKurzform, itKurzform, id, iso3code, enKurzform);
   }
 
   @Override
@@ -168,11 +251,15 @@ public class LandEuEftaDto  implements Serializable {
     sb.append("class LandEuEftaDto {\n");
     
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
+    sb.append("    laendercodeBfs: ").append(toIndentedString(laendercodeBfs)).append("\n");
     sb.append("    isEuEfta: ").append(toIndentedString(isEuEfta)).append("\n");
     sb.append("    eintragGueltig: ").append(toIndentedString(eintragGueltig)).append("\n");
     sb.append("    deKurzform: ").append(toIndentedString(deKurzform)).append("\n");
     sb.append("    frKurzform: ").append(toIndentedString(frKurzform)).append("\n");
+    sb.append("    itKurzform: ").append(toIndentedString(itKurzform)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
+    sb.append("    enKurzform: ").append(toIndentedString(enKurzform)).append("\n");
     sb.append("}");
     return sb.toString();
   }

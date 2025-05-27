@@ -45,6 +45,13 @@ public class GesuchHistoryService {
         return revisions.stream().map(statusprotokollMapper::toDto).toList();
     }
 
+    public Optional<Gesuch> getFirstWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        return gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuchId, gesuchStatus);
+    }
+
     public Optional<Gesuch> getLatestWhereStatusChangedTo(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus

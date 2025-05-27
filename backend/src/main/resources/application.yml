@@ -252,12 +252,16 @@ quarkus:
     log:
       sentry:
         enabled: false
+    antivirus:
+      clamav:
+        devservice:
+          enabled: false
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:
         generation: 'drop-and-create'
     oidc:
-      auth-server-url: '${keycloak.url}/realms/quarkus/'
+      auth-server-url: '${keycloak.url:replaced-by-test-resource}/realms/quarkus/'
       client-id: '${keycloak.client-id}'
       application-type: service
     s3:

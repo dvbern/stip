@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DelegierungDtoSpec;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -85,7 +85,7 @@ public class GesuchDtoSpec {
   private LocalDate einreichedatum;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
-  private DelegierungDtoSpec delegierung;
+  private DelegierungSlimDtoSpec delegierung;
 
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
   private LocalDate nachfristDokumente;
@@ -382,7 +382,7 @@ public class GesuchDtoSpec {
   }
 
 
-  public GesuchDtoSpec delegierung(DelegierungDtoSpec delegierung) {
+  public GesuchDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
     
     this.delegierung = delegierung;
     return this;
@@ -396,14 +396,14 @@ public class GesuchDtoSpec {
   @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DelegierungDtoSpec getDelegierung() {
+  public DelegierungSlimDtoSpec getDelegierung() {
     return delegierung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierung(DelegierungDtoSpec delegierung) {
+  public void setDelegierung(DelegierungSlimDtoSpec delegierung) {
     this.delegierung = delegierung;
   }
 

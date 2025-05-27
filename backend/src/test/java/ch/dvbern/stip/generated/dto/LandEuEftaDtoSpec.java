@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,18 +29,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * LandEuEftaDtoSpec
  */
 @JsonPropertyOrder({
+  LandEuEftaDtoSpec.JSON_PROPERTY_ID,
   LandEuEftaDtoSpec.JSON_PROPERTY_LAND,
+  LandEuEftaDtoSpec.JSON_PROPERTY_LAENDERCODE_BFS,
   LandEuEftaDtoSpec.JSON_PROPERTY_IS_EU_EFTA,
   LandEuEftaDtoSpec.JSON_PROPERTY_ISO3CODE,
   LandEuEftaDtoSpec.JSON_PROPERTY_EINTRAG_GUELTIG,
   LandEuEftaDtoSpec.JSON_PROPERTY_DE_KURZFORM,
-  LandEuEftaDtoSpec.JSON_PROPERTY_FR_KURZFORM
+  LandEuEftaDtoSpec.JSON_PROPERTY_FR_KURZFORM,
+  LandEuEftaDtoSpec.JSON_PROPERTY_IT_KURZFORM,
+  LandEuEftaDtoSpec.JSON_PROPERTY_EN_KURZFORM
 })
 @JsonTypeName("LandEuEfta")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class LandEuEftaDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_LAND = "land";
   private LandDtoSpec land;
+
+  public static final String JSON_PROPERTY_LAENDERCODE_BFS = "laendercodeBfs";
+  private String laendercodeBfs;
 
   public static final String JSON_PROPERTY_IS_EU_EFTA = "isEuEfta";
   private Boolean isEuEfta;
@@ -48,7 +59,7 @@ public class LandEuEftaDtoSpec {
   private String iso3code;
 
   public static final String JSON_PROPERTY_EINTRAG_GUELTIG = "eintragGueltig";
-  private String eintragGueltig;
+  private Boolean eintragGueltig;
 
   public static final String JSON_PROPERTY_DE_KURZFORM = "deKurzform";
   private String deKurzform;
@@ -56,8 +67,40 @@ public class LandEuEftaDtoSpec {
   public static final String JSON_PROPERTY_FR_KURZFORM = "frKurzform";
   private String frKurzform;
 
+  public static final String JSON_PROPERTY_IT_KURZFORM = "itKurzform";
+  private String itKurzform;
+
+  public static final String JSON_PROPERTY_EN_KURZFORM = "enKurzform";
+  private String enKurzform;
+
   public LandEuEftaDtoSpec() {
   }
+
+  public LandEuEftaDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public LandEuEftaDtoSpec land(LandDtoSpec land) {
     
@@ -82,6 +125,32 @@ public class LandEuEftaDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLand(LandDtoSpec land) {
     this.land = land;
+  }
+
+
+  public LandEuEftaDtoSpec laendercodeBfs(String laendercodeBfs) {
+    
+    this.laendercodeBfs = laendercodeBfs;
+    return this;
+  }
+
+   /**
+   * Get laendercodeBfs
+   * @return laendercodeBfs
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getLaendercodeBfs() {
+    return laendercodeBfs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setLaendercodeBfs(String laendercodeBfs) {
+    this.laendercodeBfs = laendercodeBfs;
   }
 
 
@@ -137,7 +206,7 @@ public class LandEuEftaDtoSpec {
   }
 
 
-  public LandEuEftaDtoSpec eintragGueltig(String eintragGueltig) {
+  public LandEuEftaDtoSpec eintragGueltig(Boolean eintragGueltig) {
     
     this.eintragGueltig = eintragGueltig;
     return this;
@@ -151,14 +220,14 @@ public class LandEuEftaDtoSpec {
   @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getEintragGueltig() {
+  public Boolean getEintragGueltig() {
     return eintragGueltig;
   }
 
 
   @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEintragGueltig(String eintragGueltig) {
+  public void setEintragGueltig(Boolean eintragGueltig) {
     this.eintragGueltig = eintragGueltig;
   }
 
@@ -214,6 +283,58 @@ public class LandEuEftaDtoSpec {
     this.frKurzform = frKurzform;
   }
 
+
+  public LandEuEftaDtoSpec itKurzform(String itKurzform) {
+    
+    this.itKurzform = itKurzform;
+    return this;
+  }
+
+   /**
+   * Get itKurzform
+   * @return itKurzform
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getItKurzform() {
+    return itKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setItKurzform(String itKurzform) {
+    this.itKurzform = itKurzform;
+  }
+
+
+  public LandEuEftaDtoSpec enKurzform(String enKurzform) {
+    
+    this.enKurzform = enKurzform;
+    return this;
+  }
+
+   /**
+   * Get enKurzform
+   * @return enKurzform
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getEnKurzform() {
+    return enKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEnKurzform(String enKurzform) {
+    this.enKurzform = enKurzform;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -223,29 +344,37 @@ public class LandEuEftaDtoSpec {
       return false;
     }
     LandEuEftaDtoSpec landEuEfta = (LandEuEftaDtoSpec) o;
-    return Objects.equals(this.land, landEuEfta.land) &&
+    return Objects.equals(this.id, landEuEfta.id) &&
+        Objects.equals(this.land, landEuEfta.land) &&
+        Objects.equals(this.laendercodeBfs, landEuEfta.laendercodeBfs) &&
         Objects.equals(this.isEuEfta, landEuEfta.isEuEfta) &&
         Objects.equals(this.iso3code, landEuEfta.iso3code) &&
         Objects.equals(this.eintragGueltig, landEuEfta.eintragGueltig) &&
         Objects.equals(this.deKurzform, landEuEfta.deKurzform) &&
-        Objects.equals(this.frKurzform, landEuEfta.frKurzform);
+        Objects.equals(this.frKurzform, landEuEfta.frKurzform) &&
+        Objects.equals(this.itKurzform, landEuEfta.itKurzform) &&
+        Objects.equals(this.enKurzform, landEuEfta.enKurzform);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(land, isEuEfta, iso3code, eintragGueltig, deKurzform, frKurzform);
+    return Objects.hash(id, land, laendercodeBfs, isEuEfta, iso3code, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LandEuEftaDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
+    sb.append("    laendercodeBfs: ").append(toIndentedString(laendercodeBfs)).append("\n");
     sb.append("    isEuEfta: ").append(toIndentedString(isEuEfta)).append("\n");
     sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
     sb.append("    eintragGueltig: ").append(toIndentedString(eintragGueltig)).append("\n");
     sb.append("    deKurzform: ").append(toIndentedString(deKurzform)).append("\n");
     sb.append("    frKurzform: ").append(toIndentedString(frKurzform)).append("\n");
+    sb.append("    itKurzform: ").append(toIndentedString(itKurzform)).append("\n");
+    sb.append("    enKurzform: ").append(toIndentedString(enKurzform)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -37,7 +37,7 @@ public class GesuchTrancheHistoryService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchHistoryService gesuchHistoryService;
 
-    public GesuchTranche getLatestTrancheForGs(final UUID gesuchTrancheId) {
+    public GesuchTranche getLatestTranche(final UUID gesuchTrancheId) {
         final var gesuchTrancheOpt = gesuchTrancheRepository.findByIdOptional(gesuchTrancheId);
         return gesuchTrancheOpt.orElse(
             gesuchTrancheHistoryRepository.getLatestExistingVersionOfTranche(gesuchTrancheId)
@@ -48,7 +48,7 @@ public class GesuchTrancheHistoryService {
     }
 
     public GesuchTranche getCurrentOrHistoricalTrancheForGS(final UUID gesuchTrancheId) {
-        var gesuchTranche = getLatestTrancheForGs(gesuchTrancheId);
+        var gesuchTranche = getLatestTranche(gesuchTrancheId);
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
@@ -69,7 +69,7 @@ public class GesuchTrancheHistoryService {
     }
 
     public Optional<Integer> getHistoricalTrancheRevisionForGS(final UUID gesuchTrancheId) {
-        var gesuchTranche = getLatestTrancheForGs(gesuchTrancheId);
+        var gesuchTranche = getLatestTranche(gesuchTrancheId);
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && (gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)

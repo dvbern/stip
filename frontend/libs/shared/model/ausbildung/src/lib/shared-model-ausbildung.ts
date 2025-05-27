@@ -13,6 +13,7 @@ export type SharedModelGsGesuchView = Modify<
     canEdit: boolean;
     canDelete: boolean;
     canCreateAenderung: boolean;
+    canDeleteAenderung: boolean;
     einreichefristAbgelaufen: boolean;
     reduzierterBeitrag: boolean;
     einreichefristDays: number | null;
@@ -35,6 +36,7 @@ export type SharedModelGsDashboardView = Omit<
   'ausbildungDashboardItems'
 > & {
   hasActiveAusbildungen: boolean;
+  canCreateAusbildung: boolean;
   activeAusbildungen: SharedModelGsAusbildungView[];
   inactiveAusbildungen: SharedModelGsAusbildungView[];
 };

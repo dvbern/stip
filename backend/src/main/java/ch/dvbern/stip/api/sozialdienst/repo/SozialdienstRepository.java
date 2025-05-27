@@ -48,7 +48,9 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(sozialdienst)
-            .where(sozialdienst.sozialdienstBenutzers.contains(benutzer))
+            .where(
+                sozialdienst.sozialdienstBenutzers.contains(benutzer).or(sozialdienst.sozialdienstAdmin.eq(benutzer))
+            )
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);

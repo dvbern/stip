@@ -9,10 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BeschwerdeEntscheid } from './beschwerdeEntscheid';
 
 export interface BeschwerdeVerlaufEntry { 
     kommentar: string;
     beschwerdeSetTo: boolean;
+    beschwerdeEntscheid?: BeschwerdeEntscheid;
     timestampErstellt: string;
     userErstellt: string;
 }

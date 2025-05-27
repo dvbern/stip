@@ -40,8 +40,8 @@ public class MailServiceUtils {
         final var result = new ArrayList<String>();
 
         final var delegierung = gesuch.getAusbildung().getFall().getDelegierung();
-        if (delegierung != null) {
-            result.add(delegierung.getSozialdienst().getSozialdienstAdmin().getEmail());
+        if (delegierung != null && delegierung.getDelegierterMitarbeiter() != null) {
+            result.add(delegierung.getDelegierterMitarbeiter().getEmail());
         }
 
         result.add(gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung().getEmail());

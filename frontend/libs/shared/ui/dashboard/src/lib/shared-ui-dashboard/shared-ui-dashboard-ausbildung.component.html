@@ -1,0 +1,45 @@
+@let ausbildung = ausbildungSig();
+<div class="tw-grid tw-grid-cols-[1fr,auto]">
+  <div>
+    <h2 class="tw-mb-3 tw-flex tw-items-center tw-gap-4 tw-text-2xl">
+      <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
+        <i class="material-symbols-rounded tw-text-2xl">school</i>
+      </dv-shared-ui-icon-chip>
+      {{
+        'shared.dashboard.ausbildung.title'
+          | translate
+            : (ausbildung.ausbildungNichtGefunden
+                ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
+                : ausbildung.ausbildungsgang)
+      }}
+    </h2>
+    <p class="tw-mb-10 tw-ml-4">
+      {{
+        'shared.dashboard.ausbildung.description'
+          | translate
+            : {
+                start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
+                end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
+              }
+      }}
+    </p>
+  </div>
+  @if (ausbildung.canDelete) {
+    <button type="button" class="btn btn-outline-primary tw-h-min" (click)="deleteAusbildung.emit(ausbildung)">
+      {{ 'shared.dashboard.ausbildung.delete' | translate }}
+    </button>
+  }
+</div>
+
+<div class="tw-flex tw-flex-col tw-gap-6">
+  @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
+    <dv-shared-ui-dashboard-gesuch
+      [gesuchSig]="gesuch"
+      [class.bg-tertiary]="!gesuch.isActive"
+      [class.bg-success-subtle]="gesuch.isActive"
+      (deleteGesuch)="deleteGesuch.emit($event)"
+      (aenderungMelden)="aenderungMelden.emit({ gesuch })"
+      (deleteAenderung)="deleteAenderung.emit($event)"
+    ></dv-shared-ui-dashboard-gesuch>
+  }
+</div>

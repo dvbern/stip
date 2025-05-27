@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * BeschwerdeVerlaufEntryDtoSpec
  */
 @JsonPropertyOrder({
+  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_BESCHWERDE_ENTSCHEID,
   BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_KOMMENTAR,
@@ -35,6 +37,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("BeschwerdeVerlaufEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class BeschwerdeVerlaufEntryDtoSpec {
+  public static final String JSON_PROPERTY_BESCHWERDE_ENTSCHEID = "beschwerdeEntscheid";
+  private BeschwerdeEntscheidDtoSpec beschwerdeEntscheid;
+
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private java.time.LocalDateTime timestampErstellt;
 
@@ -49,6 +54,32 @@ public class BeschwerdeVerlaufEntryDtoSpec {
 
   public BeschwerdeVerlaufEntryDtoSpec() {
   }
+
+  public BeschwerdeVerlaufEntryDtoSpec beschwerdeEntscheid(BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
+    
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+    return this;
+  }
+
+   /**
+   * Get beschwerdeEntscheid
+   * @return beschwerdeEntscheid
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ENTSCHEID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public BeschwerdeEntscheidDtoSpec getBeschwerdeEntscheid() {
+    return beschwerdeEntscheid;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ENTSCHEID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBeschwerdeEntscheid(BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+  }
+
 
   public BeschwerdeVerlaufEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
     
@@ -162,7 +193,8 @@ public class BeschwerdeVerlaufEntryDtoSpec {
       return false;
     }
     BeschwerdeVerlaufEntryDtoSpec beschwerdeVerlaufEntry = (BeschwerdeVerlaufEntryDtoSpec) o;
-    return Objects.equals(this.timestampErstellt, beschwerdeVerlaufEntry.timestampErstellt) &&
+    return Objects.equals(this.beschwerdeEntscheid, beschwerdeVerlaufEntry.beschwerdeEntscheid) &&
+        Objects.equals(this.timestampErstellt, beschwerdeVerlaufEntry.timestampErstellt) &&
         Objects.equals(this.userErstellt, beschwerdeVerlaufEntry.userErstellt) &&
         Objects.equals(this.kommentar, beschwerdeVerlaufEntry.kommentar) &&
         Objects.equals(this.beschwerdeSetTo, beschwerdeVerlaufEntry.beschwerdeSetTo);
@@ -170,13 +202,14 @@ public class BeschwerdeVerlaufEntryDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, userErstellt, kommentar, beschwerdeSetTo);
+    return Objects.hash(beschwerdeEntscheid, timestampErstellt, userErstellt, kommentar, beschwerdeSetTo);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BeschwerdeVerlaufEntryDtoSpec {\n");
+    sb.append("    beschwerdeEntscheid: ").append(toIndentedString(beschwerdeEntscheid)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");

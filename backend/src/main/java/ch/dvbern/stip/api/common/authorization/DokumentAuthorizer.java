@@ -69,17 +69,14 @@ public class DokumentAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
+        if (
+            !AuthorizerUtil.isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(
                 gesuchTranche.getGesuch(),
+                currentBenutzer,
                 sozialdienstService
-            );
-
-        final BooleanSupplier isGesuchsteller =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuchTranche.getGesuch());
-
-        if (!(isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean())) {
-            forbidden();
+            )
+        ) {
+            throw new ForbiddenException();
         }
 
         final var trancheTyp = gesuchTranche.getTyp();

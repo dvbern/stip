@@ -48,7 +48,7 @@ public class DateRange implements Serializable, Comparable<DateRange> {
         this(LocalDate.now(), LocalDate.now());
     }
 
-    public int getMonths() {
+    public int months() {
         return DateUtil.getMonthsBetween(getGueltigAb(), getGueltigBis());
     }
 

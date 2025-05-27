@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -50,6 +51,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -126,6 +128,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -197,6 +200,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheHistoryService gesuchTrancheHistoryService;
+
+    @InjectMock
+    FallRepository fallRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -910,7 +916,7 @@ class GesuchServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 
@@ -951,7 +957,7 @@ class GesuchServiceTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
@@ -1419,7 +1425,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuch.getGesuchTranchen().get(0));
         // act
@@ -1450,13 +1456,13 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(gesuchToReturn.getNewestGesuchTranche());
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuchToReturn));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+        when(gesuchTrancheHistoryService.getLatestTranche(any()))
             .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
@@ -1487,7 +1493,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
@@ -1561,7 +1567,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
-        when(gesuchTrancheHistoryService.getLatestTrancheForGs(any()))
+        when(gesuchTrancheHistoryService.getLatestTranche(any()))
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
@@ -1707,6 +1713,27 @@ class GesuchServiceTest {
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertNull(gesuch.getEinreichedatum());
+    }
+
+    @Test
+    @TestAsSozialdienstMitarbeiter
+    void getFallDashboardAsSozialdienstMitarbeiterTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setGesuchsteller(new Benutzer());
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(fallRepository.requireById(any())).thenReturn(fall);
+        final var result = gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(UUID.randomUUID());
+        assertNotNull(result);
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

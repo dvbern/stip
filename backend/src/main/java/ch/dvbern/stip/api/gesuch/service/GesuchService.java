@@ -36,11 +36,13 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -111,13 +113,13 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -419,12 +421,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<FallDashboardItemDto> getFallDashboardItemDtos() {
-        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
+    public FallDashboardItemDto getFallDashboardItemDtos() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
-        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
-        return fallDashboardItemDtos;
+        return fallDashboardItemMapper.toDto(fall);
+    }
+
+    @Transactional
+    public FallDashboardItemDto getSozialdienstMitarbeiterFallDashboardItemDtos(UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+        return fallDashboardItemMapper.toDto(fall);
     }
 
     @Transactional
@@ -616,10 +622,7 @@ public class GesuchService {
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        var violations = validator.validate(gesuch);
-        if (!violations.isEmpty()) {
-            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
-        }
+        ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
@@ -727,24 +730,35 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchWithChangesDto getChangesByInitialTrancheId(UUID trancheId) {
+        final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
+        final var gesuch = tranche.getGesuch();
 
-        final var currentTrancheFromGesuchInStatusEingereicht =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+        final var requestedTrancheFromGesuchInStatusEingereicht =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                .orElseThrow(ForbiddenException::new)
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst();
 
-        final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
-        if (currentTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
-            throw new ForbiddenException();
-        }
+        var requestedTrancheFromGesuchInStatusVerfuegt =
+            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT)
+                .orElseThrow(NotFoundException::new)
+                .getGesuchTranchen()
+                .stream()
+                .filter(trancheToFind -> trancheToFind.getId().equals(trancheId))
+                .findFirst()
+                .orElseThrow(BadRequestException::new);
 
         return gesuchMapperUtil.toWithChangesDto(
-            gesuch,
-            // tranche to work with
-            currentTrancheFromGesuchInStatusVerfuegt.orElse(null),
+            requestedTrancheFromGesuchInStatusVerfuegt.getGesuch(),
+            // tranche to work with -> findByTrancheId
+            requestedTrancheFromGesuchInStatusVerfuegt,
             // changes
-            currentTrancheFromGesuchInStatusEingereicht.orElse(null)
+            requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
+            // make sure this flag is true whenever especially this endpoint is called
+            true
         );
     }
 
@@ -778,7 +792,7 @@ public class GesuchService {
     @Transactional
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+        ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -1038,6 +1052,15 @@ public class GesuchService {
 
     @Transactional
     public void resetGesuchZurueckweisenToVerfuegt(Gesuch gesuch) {
+        final var tranchenIdsToDrop = doResetGesuchZurueckweisenToEingereicht(gesuch.getId());
+        for (final var trancheIdToDrop : tranchenIdsToDrop) {
+            gesuchTrancheService.dropGesuchTranche(trancheIdToDrop);
+        }
+    }
+
+    @Transactional
+    public List<UUID> doResetGesuchZurueckweisenToEingereicht(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         final var relevantAenderungId = gesuch.getGesuchTranchen()
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
@@ -1073,11 +1096,7 @@ public class GesuchService {
             );
         }
 
-        final var tranchenToDrop = new ArrayList<>(gesuch.getGesuchTranchen());
-
-        for (final var trancheToDrop : tranchenToDrop) {
-            gesuchTrancheService.dropGesuchTranche(trancheToDrop);
-        }
+        final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
             final var newTranche = GesuchTrancheCopyUtil.copyTrancheExceptGesuchDokuments(
@@ -1085,6 +1104,7 @@ public class GesuchService {
                 gesuchTrancheToRevertTo.getGueltigkeit(),
                 gesuchTrancheToRevertTo.getComment()
             );
+
             newTranche.setGesuch(gesuch);
             newTranche.setStatus(gesuchTrancheToRevertTo.getStatus());
             newTranche.setTyp(gesuchTrancheToRevertTo.getTyp());
@@ -1122,6 +1142,8 @@ public class GesuchService {
         gesuch.setEinreichedatum(gesuchToRevertTo.getEinreichedatum());
 
         gesuchRepository.persistAndFlush(gesuch);
+
+        return tranchenIdsToDrop;
     }
 
     @Transactional
