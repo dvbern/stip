@@ -2370,7 +2370,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-  '/gesuch/{gesuchTrancheId}/einreichen':
+  '/gesuch/{gesuchTrancheId}/einreichen/gs':
     patch:
       tags:
         - Gesuch
@@ -2395,8 +2395,35 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichen
-      summary: Das Gesuch einreichen
+      operationId: gesuchEinreichenGs
+      summary: Das Gesuch einreichen als Gesuchsteller
+  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchEinreichenJur
+      summary: Das Gesuch einreichen als Jurist
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId

@@ -254,8 +254,11 @@
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande. Veuillez vérifier vos saisies dans:",
   "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",
+  "shared.gesuch.validation.ausbildung.notFound.message": "La formation doit encore être indiquée. Veuillez vérifier vos saisies dans:",
   "shared.gesuch.validation.link.personInAusbildung": "Personne en formation",
   "shared.gesuch.validation.link.geschwisters": "Frères et sœurs",
+  "shared.gesuch.validation.link.einnahmenKosten": "Revenus et coûts",
+  "shared.gesuch.validation.link.ausbildung": "Formation",
 
   "shared.gesuch.periode.status.ENTWURF": "Brouillon",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publié - Actif",
@@ -467,6 +470,10 @@
   "shared.form.ausbildung.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
   "shared.form.ausbildung.form.error.periodeNotFound": "Aucune période de bourse disponible n'a été trouvée pour la période spécifiée",
+  "shared.form.ausbildung.validation.notFound": "La formation manquante doit encore être créée",
+  "shared.form.ausbildung.validation.notFound.part1": "La formation manquante doit encore être créée dans les",
+  "shared.form.ausbildung.validation.notFound.link": "centres de formation.",
+  "shared.form.ausbildung.validation.notFound.part2": "",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",

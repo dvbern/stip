@@ -254,9 +254,11 @@
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Die eingegebene AHV-Nummer wurde bereits in einem anderen Gesuch verwendet.<br>Bitte überprüfen Sie Ihre Eingaben bei:",
   "shared.gesuch.validation.wohnsitz.message": "Die Wohnsitz Angaben stimmen nicht mit den Angaben der Familiensituation überein. Bitte überprüfen Sie Ihre Eingaben bei:",
+  "shared.gesuch.validation.ausbildung.notFound.message": "Die Ausbildung muss noch angegeben werden. Bitte überprüfen Sie Ihre Eingaben bei:",
   "shared.gesuch.validation.link.personInAusbildung": "Person in Ausbildung",
   "shared.gesuch.validation.link.geschwisters": "Geschwister",
   "shared.gesuch.validation.link.einnahmenKosten": "Einnahmen & Kosten",
+  "shared.gesuch.validation.link.ausbildung": "Ausbildung",
 
   "shared.gesuch.periode.status.ENTWURF": "Entwurf",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publik - Aktiv",
@@ -468,6 +470,10 @@
   "shared.form.ausbildung.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
   "shared.form.ausbildung.form.error.periodeNotFound": "Für den angegebenen Zeitraum wurde keine verfügbare Stipendium-Periode gefunden",
+  "shared.form.ausbildung.validation.notFound": "Die fehlende Ausbildung muss erstellt werden",
+  "shared.form.ausbildung.validation.notFound.part1": "Die fehlende Ausbildung muss noch bei den",
+  "shared.form.ausbildung.validation.notFound.link": "Ausbildungstaetten",
+  "shared.form.ausbildung.validation.notFound.part2": "erstellt werden.",
 
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",

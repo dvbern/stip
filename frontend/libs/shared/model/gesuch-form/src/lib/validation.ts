@@ -45,6 +45,15 @@ export const SPECIAL_VALIDATION_ERRORS: Record<
     validationErrorKey: 'shared.gesuch.validation.wohnsitz.message',
     linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
   }),
+  '{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}': (
+    validationError,
+  ) => ({
+    step: GSFormSteps.AUSBILDUNG,
+    field: 'ausbildungNichtGefunden',
+    fieldErrorKey: `shared.form.ausbildung.validation.notFound`,
+    validationErrorKey: 'shared.gesuch.validation.ausbildung.notFound.message',
+    linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
+  }),
 };
 
 export const isSpecialValidationError = (error: {
