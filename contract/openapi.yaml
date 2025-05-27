@@ -4364,7 +4364,7 @@ components:
           type: string
         itKurzform:
           type: string
-        engKurzform:
+        enKurzform:
           type: string
     Land:
       enum:

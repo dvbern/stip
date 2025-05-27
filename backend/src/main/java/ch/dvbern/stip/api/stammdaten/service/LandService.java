@@ -18,15 +18,10 @@
 package ch.dvbern.stip.api.stammdaten.service;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.stammdaten.entity.LandEuEfta;
 import ch.dvbern.stip.api.stammdaten.repo.LandEuEftaRepository;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.api.stammdaten.type.LandEuEftaMapper;
 import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -43,6 +38,7 @@ public class LandService {
     }
 
     public boolean landInEuEfta(Land land) {
+        // TODO KSTIP-1968: Refactor this to be a simple query
         return getAllLandEuEfta()
             .stream()
             .filter(LandEuEftaDto::getIsEuEfta)
@@ -53,16 +49,11 @@ public class LandService {
 
     @Transactional
     public List<LandEuEftaDto> getAllLandEuEfta() {
-        var lands = Stream.of(Land.values()).map(landEuEftaMapper::toDto).collect(Collectors.toSet());
-        var landsEuEfta = landEuEftaRepository.findAll().stream().map(LandEuEfta::getLand).toList();
-
-        for (var land : lands) {
-            if (landsEuEfta.contains(land.getLand())) {
-                land.setIsEuEfta(true);
-            }
-        }
-
-        return lands.stream().sorted(Comparator.comparing(LandEuEftaDto::getLand)).toList();
+        return landEuEftaRepository
+            .findAll()
+            .stream()
+            .map(landEuEftaMapper::toDto)
+            .toList();
     }
 
     @Transactional

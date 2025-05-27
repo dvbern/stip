@@ -15,15 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.type;
+package ch.dvbern.stip.api.stammdaten.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.stammdaten.entity.LandEuEfta;
 import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class)
 public interface LandEuEftaMapper {
-    @Mapping(target = "isEuEfta", constant = "false")
-    LandEuEftaDto toDto(Land land);
+    LandEuEftaDto toDto(LandEuEfta landEuEfta);
 }
