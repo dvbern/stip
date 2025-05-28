@@ -58,7 +58,7 @@ public class SapService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Transactional
-    private void doOrReadChangeBusinessPartner(final Auszahlung auszahlung) {
+    public void doOrReadChangeBusinessPartner(final Auszahlung auszahlung) {
         BigDecimal deliveryid = null;
         if (Objects.isNull(auszahlung.getSapDelivery())) {
             deliveryid = SapEndpointService.generateDeliveryId();
@@ -77,7 +77,7 @@ public class SapService {
     }
 
     @Transactional
-    private void getBusinessPartnerCreateStatus(final Auszahlung auszahlung) {
+    public void getBusinessPartnerCreateStatus(final Auszahlung auszahlung) {
         final BigDecimal deliveryid = auszahlung.getSapDelivery().getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
@@ -94,7 +94,7 @@ public class SapService {
     }
 
     @Transactional
-    private void createBusinessPartner(final Auszahlung auszahlung) {
+    public void createBusinessPartner(final Auszahlung auszahlung) {
         final BigDecimal deliveryid = SapEndpointService.generateDeliveryId();
         final var createResponse = sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
         SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
@@ -155,7 +155,7 @@ public class SapService {
     }
 
     @Transactional
-    private SapStatus createVendorPostingOrGetStatus(
+    public SapStatus createVendorPostingOrGetStatus(
         final Gesuch gesuch,
         final Auszahlung auszahlung,
         final Buchhaltung buchhaltung
