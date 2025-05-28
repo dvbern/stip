@@ -30,6 +30,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.Length;
 
 @UniqueOrNullIso3codeConstraint
 @Entity
@@ -54,7 +55,7 @@ public class Land extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "iso3code", nullable = true)
-    // TODO KSTIP-1968: Limit to 3 chars? Auto uppercase?
+    @Length(min = 3, max = 3)
     private String iso3code;
 
     @NotNull

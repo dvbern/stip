@@ -69,7 +69,12 @@ public enum LandGueltigFor {
             return null;
         }
 
-        return formular.getAuszahlung().getAdresse().getLand();
+        final var auszahlung = formular.getAuszahlung();
+        if (auszahlung.getAdresse() == null) {
+            return null;
+        }
+
+        return auszahlung.getAdresse().getLand();
     }
     );
 
