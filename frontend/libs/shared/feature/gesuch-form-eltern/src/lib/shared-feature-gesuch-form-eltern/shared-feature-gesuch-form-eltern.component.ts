@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
 } from '@angular/core';
@@ -10,7 +9,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -26,9 +24,9 @@ import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 
+import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
 import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch-form-eltern.selector';
-import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',
@@ -50,9 +48,6 @@ export class SharedFeatureGesuchFormElternComponent {
   private appType = inject(SharedModelCompileTimeConfig).appType;
 
   hasUnsavedChanges = false;
-  laenderSig = computed(() => {
-    return this.viewSig().laender;
-  });
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
@@ -63,7 +58,6 @@ export class SharedFeatureGesuchFormElternComponent {
 
   constructor() {
     this.store.dispatch(SharedEventGesuchFormEltern.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
     effect(
       () => {
         const { loading, gesuch, gesuchFormular } = this.viewSig();

@@ -17,13 +17,14 @@
         </div>
         <div class="d-flex justify-content-between align-items-end w-100">
           @if (parent.adresse; as adresse) {
+            <!-- todo: show land value -->
             <small>
               @if (adresse.coAdresse) {
                 <span>{{ adresse.coAdresse }}<br /></span>
               }
               {{ adresse.strasse }} {{ adresse.hausnummer }}<br />
               {{ adresse.plz }} {{ adresse.ort }}<br />
-              {{ adresse.land }}
+              {{ adresse.landId }}
             </small>
           }
           @if (!readonly) {

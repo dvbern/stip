@@ -16,5 +16,6 @@ import { GesuchTranche } from './gesuchTranche';
  */
 export interface GesuchWithChangesAllOf { 
     changes?: Array<GesuchTranche>;
+    isInitial?: boolean;
 }
 

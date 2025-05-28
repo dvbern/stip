@@ -3719,7 +3719,7 @@ components:
       type: string
     Adresse:
       required:
-        - land
+        - landId
         - strasse
         - plz
         - ort

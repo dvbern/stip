@@ -115,7 +115,6 @@ export * from './kindUpdate';
 export * from './kommentar';
 export * from './kontoinhaber';
 export * from './land';
-export * from './landEuEfta';
 export * from './lebenslaufAusbildungsArt';
 export * from './lebenslaufItem';
 export * from './lebenslaufItemUpdate';

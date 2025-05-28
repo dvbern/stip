@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -19,10 +14,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  SharedDataAccessStammdatenApiEvents,
-  selectLaender,
-} from '@dv/shared/data-access/stammdaten';
 import { Adresse, Anrede } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
@@ -67,7 +58,7 @@ export interface DelegierenDialogResult {
   templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
+export class GesuchAppFeatureDelegierenDialogComponent {
   private dialogRef =
     inject<
       MatDialogRef<
@@ -81,7 +72,6 @@ export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
   readonly anredeValues = Object.values(Anrede);
 
   languageSig = this.store.selectSignal(selectLanguage);
-  laenderSig = this.store.selectSignal(selectLaender);
 
   static open(
     dialog: MatDialog,
@@ -130,10 +120,6 @@ export class GesuchAppFeatureDelegierenDialogComponent implements OnInit {
       subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
       this.languageSig(),
     );
-  }
-
-  ngOnInit() {
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   confirm() {

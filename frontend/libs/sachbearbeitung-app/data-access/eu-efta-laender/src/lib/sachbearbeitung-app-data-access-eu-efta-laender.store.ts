@@ -4,7 +4,12 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { LandEuEfta, StammdatenService } from '@dv/shared/model/gesuch';
+import {
+  Land,
+  LandEuEfta,
+  LandService,
+  StammdatenService,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -14,11 +19,11 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type EuEftaLaenderState = {
-  euEftaLaender: CachedRemoteData<LandEuEfta[]>;
+  laender: CachedRemoteData<LandEuEfta[]>;
 };
 
 const initialState: EuEftaLaenderState = {
-  euEftaLaender: initial(),
+  laender: initial(),
 };
 
 @Injectable()
@@ -27,61 +32,65 @@ export class EuEftaLaenderStore extends signalStore(
   withState(initialState),
   withDevtools('EuEftaLaenderStore'),
 ) {
-  private stammdatenService = inject(StammdatenService);
+  private landService = inject(LandService);
 
   euEftaLaenderListViewSig = computed(() => {
-    return fromCachedDataSig(this.euEftaLaender);
+    return fromCachedDataSig(this.laender);
   });
 
   loadLaender$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          euEftaLaender: cachedPending(state.euEftaLaender),
+          laender: cachedPending(state.laender),
         }));
       }),
       switchMap(() =>
-        this.stammdatenService.getLaenderEuEfta$().pipe(
+        this.landService.getLaender$().pipe(
           tap((x) => console.log('Request', x)), //todo: remove
-          handleApiResponse((euEftaLaender) =>
-            patchState(this, { euEftaLaender }),
-          ),
+          handleApiResponse((laender) => patchState(this, { laender })),
         ),
       ),
     ),
   );
 
-  saveLand$ = rxMethod<{ landEuEfta: LandEuEfta[] }>(
+  updateLand$ = rxMethod<{ landEuEfta: LandEuEfta[] }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          euEftaLaender: cachedPending(state.euEftaLaender),
+          laender: cachedPending(state.laender),
         }));
       }),
       switchMap((req) =>
-        this.stammdatenService.setLaenderEuEfta$(req).pipe(
-          handleApiResponse((euEftaLaender) => {
-            patchState(this, { euEftaLaender });
+        this.landService.updateLand$(req).pipe(
+          handleApiResponse((land) => {
+            // find the updated land via id in the current state an upodate it
+            patchState(this, (state) => {
+              const updatedLaender = state.laender.data.map((l) =>
+                l.id === land.id ? land : l,
+              );
+              return { laender: { ...state.laender, data: updatedLaender } };
+            });
           }),
         ),
       ),
     ),
   );
 
-  createLand$ = rxMethod<{ landEuEfta: LandEuEfta }>(
+  createLand$ = rxMethod<{ land: Land }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          euEftaLaender: cachedPending(state.euEftaLaender),
+          laender: cachedPending(state.laender),
         }));
       }),
-      // switchMap((land) =>
-      //   this.stammdatenService.createLandEuEfta$(land).pipe(
-      //     handleApiResponse((euEftaLaender) => {
-      //       patchState(this, { euEftaLaender });
-      //     }),
-      //   ),
-      // ),
+      switchMap((land) =>
+        this.landService.createLand$(land).pipe(
+          handleApiResponse((land) => {
+            patchState(this, { laender: euEftaLaender });
+          }),
+        ),
+      ),
     ),
   );
 }

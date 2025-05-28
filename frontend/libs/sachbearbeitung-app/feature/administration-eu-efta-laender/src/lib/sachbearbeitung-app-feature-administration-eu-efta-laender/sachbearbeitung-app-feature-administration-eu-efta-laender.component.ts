@@ -34,7 +34,7 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
 import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
-import { LandEuEfta } from '@dv/shared/model/gesuch';
+import { Land } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
@@ -273,9 +273,9 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     );
   }
 
-  openDialog(landEuEfta?: LandEuEfta) {
+  openDialog(land?: Land) {
     SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(this.dialog, {
-      land: landEuEfta,
+      land: land,
       laender: this.laenderStore.euEftaLaenderListViewSig() ?? [],
     })
       .afterClosed()
@@ -286,7 +286,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
         }
 
         if (land.id) {
-          this.laenderStore.saveLand$({ landEuEfta: [land] });
+          this.laenderStore.updateLand$({ landEuEfta: [land] });
         }
 
         this.laenderStore.createLand$({ landEuEfta: land });

@@ -82,6 +82,7 @@
   <div class="col-12 col-md-6">
     <mat-form-field dvSharedUiFormField class="w-100">
       <mat-label>{{ 'shared.form.shared.address.country.label' | translate }}</mat-label>
+      <!-- todo: change for land value -->
       <mat-select
         formControlName="land"
         data-testid="form-address-land"
@@ -93,7 +94,8 @@
           </mat-option>
         }
       </mat-select>
-      <mat-hint *dvZuvorHint="changes?.land | translateChange: 'shared.country.$VALUE'"></mat-hint>
+      <!-- todo: change for land value -->
+      <mat-hint *dvZuvorHint="changes?.landId | translateChange: 'shared.country.$VALUE'"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>

@@ -33,12 +33,10 @@ import { switchMap } from 'rxjs/operators';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Anrede,
   DokumentTyp,
-  Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Niederlassungsstatus,
   PATTERN_EMAIL,
@@ -159,14 +157,23 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   updateValidity$ = new Subject<unknown>();
-  laenderSig = computed(() => this.viewSig().laender);
+  // todo: 1968 new laenderSig
+  laenderSig = computed(() => []);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
 
-  nationalitaetCH = 'CH';
+  // todo: 1968
+  nationalitaetIso3CodeSig = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const id = this.form.controls.nationalitaetId.value;
+
+    return 'CHE';
+  });
+  nationalitaetCH = 'CHE';
+
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
     const niederlassungsstatusMap = {
@@ -221,15 +228,17 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       : null;
   });
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
+    // todo:
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
 
     const kanton = this.plzStore.getKantonByPlz(plz);
 
-    return kanton &&
-      kanton === WohnsitzKanton.BE &&
-      eltern?.some((e) => e.adresse.land !== 'CH')
-      ? DokumentTyp.PERSON_AUSWEIS
+    // todo: add check for Land CH ISO Code?
+    return kanton && kanton === WohnsitzKanton.BE
+      ? //&& eltern?.some((e) => e.adresse.land !== 'CH')
+        DokumentTyp.PERSON_AUSWEIS
       : null;
   });
 
@@ -275,7 +284,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ),
       ],
     ],
-    nationalitaet: this.formBuilder.control(<Land | undefined>undefined, {
+    nationalitaetId: this.formBuilder.control(<string | undefined>undefined, {
       validators: Validators.required,
     }),
     heimatort: [<string | undefined>undefined, [Validators.required]],
@@ -440,14 +449,16 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
     // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
     const nationalitaetChangedSig = toSignal(
-      this.form.controls.nationalitaet.valueChanges,
+      this.form.controls.nationalitaetId.valueChanges,
     );
     effect(
       () => {
         this.gotReenabledSig();
         const nationalitaetChanged = nationalitaetChangedSig();
         // If nationality is Switzerland
-        if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
+        // todo: check for ISO Code CH?
+        // if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
+        if (nationalitaetChanged) {
           updateVisbilityAndDisbledState({
             hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.heimatort,
@@ -616,7 +627,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormPerson.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   handleSave() {
@@ -670,7 +680,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
     const values = convertTempFormToRealValues(this.form, [
-      'nationalitaet',
+      'nationalitaetId',
       'sozialhilfebeitraege',
     ]);
     return {

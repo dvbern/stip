@@ -114,7 +114,6 @@
           class="col-12 col-xl-8"
           [group]="form.controls.adresse"
           [changes]="view.formChanges?.adresse"
-          [laender]="laenderSig()"
           [language]="languageSig()"
         />
       </div>
@@ -352,8 +351,9 @@
                 </mat-option>
               }
             </mat-select>
+            <!-- todo: show land name -->
             <mat-hint
-              *dvZuvorHint="view.formChanges?.nationalitaet | translateChange: 'shared.country.$VALUE'"
+              *dvZuvorHint="view.formChanges?.nationalitaetId | translateChange: 'shared.country.$VALUE'"
             ></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
@@ -539,7 +539,8 @@
         </div>
 
         <!-- VORMUNDSCHAFT -->
-        @if (form.controls.nationalitaet.value === nationalitaetCH) {
+
+        @if (nationalitaetIso3CodeSig() === nationalitaetCH) {
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
             <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
               'shared.form.person.guardianship.label' | translate

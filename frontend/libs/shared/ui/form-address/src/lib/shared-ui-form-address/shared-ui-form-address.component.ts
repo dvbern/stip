@@ -45,7 +45,7 @@ type AddresseFormGroup = FormGroup<{
     plz: FormControl<string | undefined>;
     ort: FormControl<string | undefined>;
   }>;
-  land: FormControl<Land | undefined>;
+  landId: FormControl<string | undefined>;
 }>;
 
 @Component({
@@ -72,13 +72,16 @@ type AddresseFormGroup = FormGroup<{
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   @Input({ required: true }) group!: AddresseFormGroup;
-  @Input({ required: true }) laender!: Land[];
+  // @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
   @Input() changes?: Partial<Adresse>;
+
+  // todo: laender direkt von neuer ressource holen
 
   private countriesService = inject(SharedUtilCountriesService);
   private laender$ = new BehaviorSubject<Land[]>([]);
 
+  // todo: still needed?
   translatedLaender$ = this.laender$.pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
     map((translatedLaender) =>
@@ -100,8 +103,8 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
         plz: [<string | undefined>undefined, [Validators.required]],
         ort: [<string | undefined>undefined, [Validators.required]],
       }),
-      land: [
-        <Land | undefined>undefined,
+      landId: [
+        <string | undefined>undefined,
         {
           validators: Validators.required,
         },
@@ -113,7 +116,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { plzOrt: _, ...values } = convertTempFormToRealValues(form, [
       'strasse',
-      'land',
+      'landId',
     ]);
     const plzOrt = convertTempFormToRealValues(form.controls.plzOrt, [
       'plz',
@@ -134,7 +137,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
       hausnummer?: string;
       plz?: string;
       ort?: string;
-      land?: Land;
+      landId?: string;
     },
   ) {
     form.patchValue({
@@ -145,7 +148,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
         plz: values.plz,
         ort: values.ort,
       },
-      land: values.land,
+      landId: values.landId,
     });
   }
 

@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  computed,
   effect,
   inject,
   untracked,
@@ -25,7 +24,6 @@ import { Subject, distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import {
   DokumentTyp,
@@ -121,9 +119,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     ],
   });
 
-  laenderSig = computed(() => {
-    return this.viewSig().laender;
-  });
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormAuszahlungenView,
@@ -220,7 +215,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormAuszahlung.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   handleSave(): void {

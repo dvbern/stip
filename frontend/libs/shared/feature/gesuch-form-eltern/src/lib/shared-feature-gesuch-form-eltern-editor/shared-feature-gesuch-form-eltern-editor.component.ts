@@ -119,7 +119,8 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     Omit<Partial<ElternUpdate>, 'elternTyp'> &
       Required<Pick<ElternUpdate, 'elternTyp'>>
   >();
-  @Input({ required: true }) laender!: Land[];
+  // todo: 1968
+  // @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
@@ -269,10 +270,12 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       { allowSignalWrites: true },
     );
     const landChangedSig = this.formUtils.signalFromChanges(
-      this.form.controls.adresse.controls.land,
+      // todo: check Land
+      this.form.controls.adresse.controls.landId,
       { useDefault: true },
     );
 
+    // todo: 1968 check new behavior
     // make SVN required if CH
     effect(
       () => {

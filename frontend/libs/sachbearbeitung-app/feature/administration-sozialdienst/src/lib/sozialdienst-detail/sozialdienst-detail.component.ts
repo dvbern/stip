@@ -7,7 +7,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import {
-  Land,
   MASK_IBAN,
   PATTERN_EMAIL,
   Sozialdienst,
@@ -80,7 +78,8 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
   idSig = input.required<string | undefined>({ alias: 'id' });
   store = inject(SozialdienstStore);
-  laenderSig = signal<Land[]>(['CH']);
+  // todo: 1968
+  // laenderSig = signal<Land[]>(['CH']);
   languageSig = this.globalStore.selectSignal(selectLanguage);
 
   MASK_IBAN = MASK_IBAN;
@@ -116,12 +115,15 @@ export class SozialdienstDetailComponent implements OnDestroy {
             emitEvent: false,
           });
         } else {
+          // todo: new behavior 1968
           // set country to CH, since all sozialdienst are in CH
-          this.form.controls.adresse.controls.land.setValue('CH', {
+          this.form.controls.adresse.controls.landId.setValue('CH', {
             emitEvent: false,
           });
         }
-        this.form.controls.adresse.controls.land.disable({ emitEvent: false });
+        this.form.controls.adresse.controls.landId.disable({
+          emitEvent: false,
+        });
       },
       { allowSignalWrites: true },
     );

@@ -19,17 +19,16 @@ import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { LandEuEfta } from '@dv/shared/model/gesuch';
+import { Land } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
 type EuEftaLandEditData = {
-  laender: LandEuEfta[];
-  land?: LandEuEfta;
+  laender: Land[];
+  land?: Land;
 };
 
 @Component({
@@ -87,7 +86,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     return dialog.open<
       SachbearbeitungAppDialogEuEftaLaenderEditComponent,
       EuEftaLandEditData,
-      LandEuEfta
+      Land
     >(SachbearbeitungAppDialogEuEftaLaenderEditComponent, {
       data,
     });

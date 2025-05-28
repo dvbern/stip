@@ -91,7 +91,6 @@
       "@dv/shared/data-access/notification": ["libs/shared/data-access/notification/src/index.ts"],
       "@dv/shared/data-access/plz-ort": ["libs/shared/data-access/plz-ort/src/index.ts"],
       "@dv/shared/data-access/sozialdienst": ["libs/shared/data-access/sozialdienst/src/index.ts"],
-      "@dv/shared/data-access/stammdaten": ["libs/shared/data-access/stammdaten/src/index.ts"],
       "@dv/shared/dialog/create-ausbildung": ["libs/shared/dialog/create-ausbildung/src/index.ts"],
       "@dv/shared/dialog/edit-dokumenten-nachfrist": ["libs/shared/dialog/edit-dokumenten-nachfrist/src/index.ts"],
       "@dv/shared/dialog/einreichedatum-aendern": ["libs/shared/dialog/einreichedatum-aendern/src/index.ts"],

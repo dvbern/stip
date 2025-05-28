@@ -4,6 +4,7 @@ import { map, shareReplay, startWith } from 'rxjs/operators';
 
 import { Land } from '@dv/shared/model/gesuch';
 
+// todo: wil this still be needed?
 @Injectable({
   providedIn: 'root',
 })
