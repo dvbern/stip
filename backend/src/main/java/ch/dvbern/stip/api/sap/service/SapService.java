@@ -279,26 +279,31 @@ public class SapService {
         return createVendorPostingOrGetStatus(gesuch, auszahlung, relevantBuchhaltung);
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void processPendingCreateBusinessPartnerAction(Auszahlung auszahlung) {
+        auszahlung = auszahlungRepository.requireById(auszahlung.getId());
+        getBusinessPartnerCreateStatus(auszahlung);
+        if (
+            auszahlung.getSapDelivery().getSapStatus() == SapStatus.SUCCESS
+            && auszahlung.getSapDelivery().getPendingSapAction() != null
+        ) {
+            switch (auszahlung.getSapDelivery().getPendingSapAction()) {
+                case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(auszahlung);
+                case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(auszahlung);
+                default -> throw new IllegalStateException(
+                    "Invalid pending action: " + auszahlung.getSapDelivery().getPendingSapAction().name()
+                );
+            }
+            auszahlung.getSapDelivery().setPendingSapAction(null);
+        }
+    }
+
     public void processPendingCreateBusinessPartnerActions() {
         final var pendingAuszahlungs =
             new ArrayList<>(auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList());
         for (var auszahlung : pendingAuszahlungs) {
             try {
-                getBusinessPartnerCreateStatus(auszahlung);
-                if (
-                    auszahlung.getSapDelivery().getSapStatus() == SapStatus.SUCCESS
-                    && auszahlung.getSapDelivery().getPendingSapAction() != null
-                ) {
-                    switch (auszahlung.getSapDelivery().getPendingSapAction()) {
-                        case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(auszahlung);
-                        case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(auszahlung);
-                        default -> throw new IllegalStateException(
-                            "Invalid pending action: " + auszahlung.getSapDelivery().getPendingSapAction().name()
-                        );
-                    }
-                    auszahlung.getSapDelivery().setPendingSapAction(null);
-                }
+                processPendingCreateBusinessPartnerAction(auszahlung);
             } catch (Exception e) {
                 LOG.error(
                     String.format(
