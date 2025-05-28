@@ -53,6 +53,7 @@ import io.quarkus.test.security.oidc.OidcSecurity;
         OidcPermissions.NOTIZ_UPDATE,
         OidcPermissions.UNTERSCHRIFTENBLATT_DELETE,
         OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.AUSBILDUNGSSTAETTE_READ,
         OidcPermissions.SB_GESUCH_UPDATE,
         OidcPermissions.CUSTOM_DOKUMENT_DELETE,
         OidcPermissions.BUCHSTABENZUWEISUNG_READ,
