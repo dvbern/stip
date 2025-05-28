@@ -6,7 +6,12 @@
 >
   <span class="material-symbols-rounded">close</span>
 </button>
-<form [formGroup]="form" data-testid="form-aenderung-melden-dialog-form" class="p-4" (ngSubmit)="confirm()">
+<form
+  [formGroup]="form"
+  data-testid="form-aenderung-melden-dialog-form"
+  class="p-4 tw-block tw-max-w-[580px]"
+  (ngSubmit)="confirm()"
+>
   <h3 class="mb-4">
     {{
       config.appType === 'sachbearbeitung-app'
@@ -24,7 +29,7 @@
   ></div>
   <div class="row">
     <div class="col-6">
-      <mat-form-field dvSharedUiFormField>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | translate }}</mat-label>
         <input
           matInput
@@ -50,13 +55,13 @@
       </mat-form-field>
     </div>
     <div class="col-6">
-      <mat-form-field dvSharedUiFormField>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | translate }}</mat-label>
         <input
           matInput
           [dvMaxLength]="'small'"
           [matDatepicker]="bisPicker"
-          [min]="form.controls.gueltigAb.value ?? dialogData.minDate"
+          [min]="oneDayAfterGueltigAbSig() ?? dialogData.minDate"
           [max]="dialogData.maxDate"
           formControlName="gueltigBis"
           data-testid="form-aenderung-melden-dialog-gueltig-bis"
@@ -70,11 +75,13 @@
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
           {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'sameDay'">
-          {{ 'shared.form.error.sameDay' | translate }}
-        </mat-error>
       </mat-form-field>
     </div>
+  </div>
+  <div class="group-errors tw-mt-1 tw-text-sm">
+    @if (form.errors?.['dateRangeTooShort']) {
+      <mat-error> {{ 'shared.form.error.dateRangeTooShort' | translate }}</mat-error>
+    }
   </div>
   <div class="row mt-4">
     <mat-form-field class="col-12" dvSharedUiFormField>
@@ -95,8 +102,11 @@
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | translate }}
     </button>
-    <button type="submit" [disabled]="form.invalid" data-testid="dialog-confirm" class="btn btn-primary ms-2">
-      {{ 'shared.form.save' | translate }}
-    </button>
+    <dv-shared-ui-form-save
+      data-testid="dialog-confirm"
+      class="ms-2"
+      [disabled]="form.invalid || form.pristine"
+      [loading]="gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending: { ignoreInitial: true }"
+    ></dv-shared-ui-form-save>
   </div>
 </form>

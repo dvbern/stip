@@ -4,15 +4,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 
-import { SharedUiAenderungMeldenDialogComponent } from './shared-ui-aenderung-melden-dialog.component';
+import { SharedDialogTrancheErstellenComponent } from './shared-dialog-tranche-erstellen.component';
 
-describe('SharedUiAenderungMeldenDialogComponent', () => {
-  let component: SharedUiAenderungMeldenDialogComponent;
-  let fixture: ComponentFixture<SharedUiAenderungMeldenDialogComponent>;
+describe('SharedDialogTrancheErstellenComponent', () => {
+  let component: SharedDialogTrancheErstellenComponent;
+  let fixture: ComponentFixture<SharedDialogTrancheErstellenComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiAenderungMeldenDialogComponent],
+      imports: [SharedDialogTrancheErstellenComponent],
       providers: [
         provideSharedPatternJestTestSetup(),
         {
@@ -29,7 +29,7 @@ describe('SharedUiAenderungMeldenDialogComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SharedUiAenderungMeldenDialogComponent);
+    fixture = TestBed.createComponent(SharedDialogTrancheErstellenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

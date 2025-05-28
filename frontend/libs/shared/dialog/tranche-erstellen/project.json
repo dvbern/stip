@@ -4,7 +4,7 @@
   "sourceRoot": "libs/shared/ui/aenderung-melden-dialog/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:ui", "scope:shared"],
+  "tags": ["type:dialog", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",

@@ -7,6 +7,7 @@ import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { isSharedModelError } from '@dv/shared/model/error';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
@@ -18,7 +19,10 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
 import { getRelativeTrancheRoute } from '@dv/shared/model/router';
-import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
+import {
+  shouldIgnoreBadRequestErrorsIf,
+  shouldIgnoreNotFoundErrorsIf,
+} from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
@@ -35,6 +39,11 @@ type GesuchAenderungState = {
 const initialState: GesuchAenderungState = {
   cachedGesuchAenderung: initial(),
   cachedTranchenList: initial(),
+};
+
+const EXPECTED_ERRORS: Record<string, string> = {
+  '{jakarta.validation.constraints.gesuchTranche.daterangeTooShort.message}':
+    'shared.form.error.tranche.daterangeTooShort',
 };
 
 export type AenderungChangeState = Extract<
@@ -238,6 +247,8 @@ export class GesuchAenderungStore extends signalStore(
   createGesuchTrancheCopy$ = rxMethod<{
     gesuchId: string;
     createGesuchTrancheRequest?: CreateGesuchTrancheRequest;
+    onSuccess: () => void;
+    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(() => {
@@ -245,29 +256,32 @@ export class GesuchAenderungStore extends signalStore(
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ gesuchId, createGesuchTrancheRequest }) =>
-        this.gesuchTrancheService
-          .createGesuchTrancheCopy$({
-            gesuchId,
-            createGesuchTrancheRequest,
-          })
-          .pipe(
-            handleApiResponse(
-              (gesuchAenderung) => {
-                patchState(this, () => ({
-                  cachedGesuchAenderung: gesuchAenderung,
-                }));
-              },
-              {
-                onSuccess: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch.tranche.create.success',
-                  });
-                  this.getAllTranchenForGesuch$({ gesuchId });
+      switchMap(
+        ({ gesuchId, createGesuchTrancheRequest, onSuccess, onFailure }) =>
+          this.gesuchTrancheService
+            .createGesuchTrancheCopy$({
+              gesuchId,
+              createGesuchTrancheRequest,
+            })
+            .pipe(
+              handleApiResponse(
+                (gesuchAenderung) => {
+                  patchState(this, () => ({
+                    cachedGesuchAenderung: gesuchAenderung,
+                  }));
                 },
-              },
+                {
+                  onSuccess: () => {
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey: 'shared.dialog.gesuch.tranche.create.success',
+                    });
+                    this.getAllTranchenForGesuch$({ gesuchId });
+                    onSuccess();
+                  },
+                  onFailure,
+                },
+              ),
             ),
-          ),
       ),
     ),
   );
@@ -293,21 +307,48 @@ export class GesuchAenderungStore extends signalStore(
           comment,
           onSuccess: additionalOnSuccess,
         }) => {
-          const services$ = {
-            AKZEPTIERT: () =>
-              this.gesuchTrancheService.aenderungAkzeptieren$({ aenderungId }),
-            ABGELEHNT: () =>
-              this.gesuchTrancheService.aenderungAblehnen$({
-                aenderungId,
-                kommentar: { text: comment },
-              }),
-            MANUELLE_AENDERUNG: () =>
-              this.gesuchTrancheService.aenderungManuellAnpassen$({
-                aenderungId,
-              }),
-          } satisfies Record<AenderungChangeState, unknown>;
+          const [serviceCall$, onFailure] = (
+            {
+              AKZEPTIERT: [
+                () =>
+                  this.gesuchTrancheService.aenderungAkzeptieren$(
+                    { aenderungId },
+                    undefined,
+                    undefined,
+                    {
+                      context: shouldIgnoreBadRequestErrorsIf(true),
+                    },
+                  ),
+                (error: unknown) => {
+                  if (
+                    isSharedModelError(error) &&
+                    error.type === 'validationError' &&
+                    EXPECTED_ERRORS[error.messageKey]
+                  ) {
+                    this.globalNotificationStore.createNotification({
+                      type: 'ERROR',
+                      messageKey: EXPECTED_ERRORS[error.messageKey],
+                    });
+                  }
+                },
+              ] as const,
+              ABGELEHNT: [
+                () =>
+                  this.gesuchTrancheService.aenderungAblehnen$({
+                    aenderungId,
+                    kommentar: { text: comment },
+                  }),
+              ] as const,
+              MANUELLE_AENDERUNG: [
+                () =>
+                  this.gesuchTrancheService.aenderungManuellAnpassen$({
+                    aenderungId,
+                  }),
+              ] as const,
+            } satisfies Record<AenderungChangeState, unknown>
+          )[target];
 
-          return services$[target]().pipe(
+          return serviceCall$().pipe(
             handleApiResponse(
               (gesuchAenderung) => {
                 patchState(this, () => ({
@@ -322,6 +363,7 @@ export class GesuchAenderungStore extends signalStore(
                   this.getAllTranchenForGesuch$({ gesuchId });
                   additionalOnSuccess(value.id);
                 },
+                onFailure,
               },
             ),
           );

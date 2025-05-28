@@ -19,14 +19,15 @@ package ch.dvbern.stip.api.gesuchtranche.util;
 
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
@@ -51,10 +52,12 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_TRANCHE_DATERANGE_TOO_SHORT;
+
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
-    private static void validateStartEndDate(LocalDate startDate, LocalDate endDate, Gesuch gesuch) {
+    private static DateRange validateStartEndDate(final LocalDate startDate, final LocalDate endDate, final Gesuch gesuch) {
         var minStartDate = gesuch
             .getGesuchTranchen()
             .stream()
@@ -77,13 +80,30 @@ public class GesuchTrancheCopyUtil {
             .getGueltigkeit()
             .getGueltigBis();
 
-        if (Objects.nonNull(endDate) && endDate.isAfter(maxEndDate)) {
+        if (endDate != null && endDate.isAfter(maxEndDate)) {
             throw new BadRequestException("End date must be inside gesuch date range");
         }
 
-        if (Objects.nonNull(endDate) && DateUtil.getMonthsBetween(startDate, endDate) < 1) {
-            throw new BadRequestException("Start date must be a month before end date");
+        return new DateRange(minStartDate, maxEndDate);
+    }
+
+    private static DateRange validateAndClampStartEndDate(final DateRange gueltigkeit, final Gesuch gesuch) {
+        final var maxRange = validateStartEndDate(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuch);
+
+        final var clampedGueltigkeit = clampStartStop(
+            maxRange.getGueltigAb(),
+            maxRange.getGueltigBis(),
+            gueltigkeit
+        );
+
+        if (DateUtil.getMonthsBetween(clampedGueltigkeit.getGueltigAb(), clampedGueltigkeit.getGueltigBis()) < 1) {
+            throw new CustomValidationsException(
+                "Die Zeitspanne ist zu kurz",
+                new CustomConstraintViolation(VALIDATION_TRANCHE_DATERANGE_TOO_SHORT, "gueltigkeit")
+            );
         }
+
+        return clampedGueltigkeit;
     }
 
     /**
@@ -94,22 +114,11 @@ public class GesuchTrancheCopyUtil {
         final CreateAenderungsantragRequestDto createDto
     ) {
         var endDate = createDto.getEnd();
-        if (endDate == null) {
-            endDate = original.getGesuch()
-                .getGesuchTranchen()
-                .stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
-                .max(
-                    Comparator.comparing(
-                        gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis()
-                    )
-                )
-                .orElseThrow(NotFoundException::new)
-                .getGueltigkeit()
-                .getGueltigBis();
-        }
+        final var maxDaterange = validateStartEndDate(createDto.getStart(), createDto.getEnd(), original.getGesuch());
 
-        validateStartEndDate(createDto.getStart(), endDate, original.getGesuch());
+        if (endDate == null) {
+            endDate = maxDaterange.getGueltigBis();
+        }
 
         final var copy = copyTranche(
             original,
@@ -142,40 +151,7 @@ public class GesuchTrancheCopyUtil {
         final DateRange gueltigkeit,
         final String comment
     ) {
-        validateStartEndDate(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuchTranche.getGesuch());
-
-        final var gesuchTranchen = gesuchTranche.getGesuch()
-            .getGesuchTranchen();
-        final var clampDateStart = gesuchTranchen
-            .stream()
-            .filter(gesuchTranche1 -> gesuchTranche1.getTyp() == GesuchTrancheTyp.TRANCHE)
-            .min(
-                (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
-                    .getGueltigAb()
-                    .isAfter(gesuchTranche2.getGueltigkeit().getGueltigAb()) ? 1 : -1
-            )
-            .orElseThrow(NotFoundException::new)
-            .getGueltigkeit()
-            .getGueltigAb();
-
-        final var clampDateStop = gesuchTranchen
-            .stream()
-            .filter(gesuchTranche1 -> gesuchTranche1.getTyp() == GesuchTrancheTyp.TRANCHE)
-            .min(
-                (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
-                    .getGueltigBis()
-                    .isBefore(gesuchTranche2.getGueltigkeit().getGueltigBis()) ? 1 : -1
-            )
-            .orElseThrow(NotFoundException::new)
-            .getGueltigkeit()
-            .getGueltigBis();
-
-        final var clamped = clampStartStop(
-            clampDateStart,
-            clampDateStop,
-            gueltigkeit
-        );
-
+        final var clamped = validateAndClampStartEndDate(gueltigkeit, gesuchTranche.getGesuch());
         final var newTranche = copyTranche(
             gesuchTranche,
             clamped,
@@ -264,10 +240,6 @@ public class GesuchTrancheCopyUtil {
             true,
             false
         );
-
-        if (startDate.isAfter(roundedEndDate)) {
-            throw new AppErrorException("Start date for new GesuchTranche must be after end date");
-        }
 
         return new DateRange(startDate, roundedEndDate);
     }
