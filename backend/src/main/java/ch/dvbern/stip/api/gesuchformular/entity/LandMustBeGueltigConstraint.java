@@ -15,29 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.adresse.entity;
+package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ADRESSE_LAND_UNGUELTIG;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ForbidAddIfLandIsUngueltigConstraintValidator.class)
+@Constraint(validatedBy = LandMustBeGueltigConstraintValidator.class)
 @Documented
-public @interface ForbidAddIfLandIsUngueltigConstraint {
-    String message() default VALIDATION_ADRESSE_LAND_UNGUELTIG;
+@Repeatable(LandMustBeGueltigConstraint.List.class)
+public @interface LandMustBeGueltigConstraint {
+    String message() default VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG;
 
     Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+    LandGueltigFor landGueltigFor();
 
-    String property() default "";
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+        LandMustBeGueltigConstraint[] value();
+    }
 }

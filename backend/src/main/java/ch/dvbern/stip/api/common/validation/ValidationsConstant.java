@@ -201,6 +201,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.land.iso3code.notunique}";
     public static final String VALIDATION_ADRESSE_LAND_UNGUELTIG =
         "{jakarta.validation.constraints.adresse.land.ungueltig}";
+    public static final String VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG =
+        "{jakarta.validation.constraints.formular.land.ungueltig}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

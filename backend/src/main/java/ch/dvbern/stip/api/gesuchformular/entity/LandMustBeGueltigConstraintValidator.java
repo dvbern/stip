@@ -15,20 +15,33 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.adresse.entity;
+package ch.dvbern.stip.api.gesuchformular.entity;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ForbidAddIfLandIsUngueltigConstraintValidator
-    implements ConstraintValidator<ForbidAddIfLandIsUngueltigConstraint, Adresse> {
+public class LandMustBeGueltigConstraintValidator
+    implements ConstraintValidator<LandMustBeGueltigConstraint, GesuchFormular> {
+    private LandGueltigFor landGueltigFor;
+
     @Override
-    public boolean isValid(Adresse value, ConstraintValidatorContext context) {
-        if (value.getId() != null) {
+    public void initialize(LandMustBeGueltigConstraint constraintAnnotation) {
+        landGueltigFor = constraintAnnotation.landGueltigFor();
+    }
+
+    @Override
+    public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
+        final var land = landGueltigFor.getProducer().apply(formular);
+        if (land == null) {
             return true;
         }
 
-        // TODO KSTIP-1968: Write a resource test for this
-        return value.getLand().isGueltig();
+        if (land.isGueltig()) {
+            return true;
+        }
+
+        return GesuchValidatorUtil.addProperty(context, landGueltigFor.getProperty());
     }
 }

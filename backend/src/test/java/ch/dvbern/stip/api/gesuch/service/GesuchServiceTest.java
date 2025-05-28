@@ -1139,7 +1139,7 @@ class GesuchServiceTest {
     void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
+        doNothing().when(gesuchValidatorService).validateGesuchForTransition(any(), any());
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));

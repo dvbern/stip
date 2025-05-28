@@ -37,7 +37,6 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
-@ForbidAddIfLandIsUngueltigConstraint
 @Entity
 @Table(
     name = "adresse",
@@ -54,7 +53,6 @@ public class Adresse extends AbstractMandantEntity {
         foreignKey = @ForeignKey(name = "FK_adresse_land_id")
     )
     @NotStatelessConstraint
-    // TODO KSTIP 1968: Allow update of ungueltig but not add
     // TODO KSTIP-1968: Warning/ Error when Gesuch is in an edit state
     private Land land;
 
