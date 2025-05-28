@@ -36,7 +36,7 @@ public abstract class BusinessPartnerReadMapper {
 
     @Named("getExtId")
     public String getExtId(Auszahlung auszahlung) {
-        return String.valueOf(auszahlung.getId().getMostSignificantBits());
+        return String.valueOf(Math.abs(auszahlung.getId().getMostSignificantBits()));
     }
 
     @Named("getSenderParms")

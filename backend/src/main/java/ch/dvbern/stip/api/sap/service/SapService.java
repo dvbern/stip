@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -76,7 +77,6 @@ public class SapService {
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
     }
 
-    @Transactional
     public void getBusinessPartnerCreateStatus(final Auszahlung auszahlung) {
         final BigDecimal deliveryid = auszahlung.getSapDelivery().getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
@@ -91,6 +91,7 @@ public class SapService {
                 Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
             );
         }
+        sapDeliveryRepository.persistAndFlush(auszahlung.getSapDelivery());
         auszahlungRepository.persistAndFlush(auszahlung);
     }
 
@@ -199,7 +200,6 @@ public class SapService {
             .isBefore(LocalDate.now());
     }
 
-    @Transactional
     public SapStatus createInitialAuszahlungOrGetStatus(final Auszahlung auszahlung) {
         if (auszahlung.getSapBusinessPartnerId() == null) {
             final var createBusinessPartnerStatus = getOrCreateBusinessPartner(auszahlung);
@@ -244,7 +244,6 @@ public class SapService {
         return createVendorPostingOrGetStatus(gesuch, auszahlung, relevantBuchhaltung);
     }
 
-    @Transactional
     public SapStatus createRemainderAuszahlungOrGetStatus(final Auszahlung auszahlung) {
         if (auszahlung.getSapBusinessPartnerId() == null) {
             final var createBusinessPartnerStatus = getOrCreateBusinessPartner(auszahlung);
@@ -282,7 +281,8 @@ public class SapService {
 
     @Transactional
     public void processPendingCreateBusinessPartnerActions() {
-        final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList();
+        final var pendingAuszahlungs =
+            new ArrayList<>(auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList());
         for (var auszahlung : pendingAuszahlungs) {
             try {
                 getBusinessPartnerCreateStatus(auszahlung);

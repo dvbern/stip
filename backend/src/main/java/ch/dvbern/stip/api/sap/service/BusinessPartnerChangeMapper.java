@@ -41,7 +41,7 @@ public abstract class BusinessPartnerChangeMapper {
 
     @Named("getExtId")
     public String getExtId(Auszahlung auszahlung) {
-        return String.valueOf(auszahlung.getId().getMostSignificantBits());
+        return String.valueOf(Math.abs(auszahlung.getId().getMostSignificantBits()));
     }
 
     @Mapping(source = "vorname", target = "FIRSTNAME")
