@@ -91,6 +91,7 @@ public class SapService {
                 Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
             );
         }
+        auszahlungRepository.persistAndFlush(auszahlung);
     }
 
     @Transactional
