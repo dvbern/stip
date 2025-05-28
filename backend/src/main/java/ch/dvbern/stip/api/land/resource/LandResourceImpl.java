@@ -29,7 +29,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class LandResourceImpl implements LandResource {
     private final LandService landService;
 
     @Override
+    @RolesAllowed(STAMMDATEN_CREATE)
     public LandDto createLand(LandDto landDto) {
         // TODO KSTIP-1968: Authorizer
         return landService.createLand(landDto);
@@ -52,6 +55,7 @@ public class LandResourceImpl implements LandResource {
     }
 
     @Override
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public LandDto updateLand(UUID landId, LandDto landDto) {
         // TODO KSTIP-1968: Authorizer
         return landService.updateLand(landId, landDto);

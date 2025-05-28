@@ -52,8 +52,10 @@ public class LandService {
 
     @Transactional
     public LandDto updateLand(final UUID landId, final LandDto landDto) {
-        // TODO KSTIP-1968: Implement
-        return null;
+        final var entity = landRepository.requireById(landId);
+        landMapper.partialUpdate(landDto, entity);
+
+        return landMapper.toDto(entity);
     }
 
     public boolean landInEuEfta(Land land) {

@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.generated.dto.LandDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface LandMapper {
@@ -30,4 +31,8 @@ public interface LandMapper {
 
     @Mapping(source = "eintragGueltig", target = "gueltig")
     Land toEntity(LandDto landDto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "eintragGueltig", target = "gueltig")
+    void partialUpdate(LandDto landDto, @MappingTarget Land land);
 }
