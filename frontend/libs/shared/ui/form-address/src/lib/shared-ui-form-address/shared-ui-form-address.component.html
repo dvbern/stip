@@ -83,8 +83,9 @@
     <mat-form-field dvSharedUiFormField class="w-100">
       <mat-label>{{ 'shared.form.shared.address.country.label' | translate }}</mat-label>
       <!-- todo: change for land value -->
+      <!-- todo: rename testid and adjust tests -->
       <mat-select
-        formControlName="land"
+        formControlName="landId"
         data-testid="form-address-land"
         [placeholder]="'shared.form.select.empty' | translate"
       >

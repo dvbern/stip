@@ -7,7 +7,6 @@ import {
   effect,
   inject,
   signal,
-  untracked,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -15,7 +14,6 @@ import {
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidatorFn,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -27,8 +25,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
-import { MaskitoDirective } from '@maskito/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 
@@ -37,7 +33,6 @@ import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbear
 import { Land } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
@@ -54,7 +49,6 @@ const INPUT_DELAY = 600;
     TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
-    SharedUiRdIsPendingPipe,
     SharedUiMaxLengthDirective,
     MatInputModule,
     MatCheckboxModule,
@@ -62,11 +56,9 @@ const INPUT_DELAY = 600;
     MatButtonModule,
     MatSortModule,
     MatTooltipModule,
-    MaskitoDirective,
     MatTableModule,
     MatIconModule,
     TypeSafeMatCellDefDirective,
-    RouterLink,
     MatPaginator,
   ],
   providers: [
@@ -97,7 +89,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     'deKurzform',
     'frKurzform',
     'eintragGueltig',
-    'euEfta',
+    'isEuEfta',
     'actions',
   ];
 
@@ -106,7 +98,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     deKurzform: [<string | null>null],
     frKurzform: [<string | null>null],
     eintragGueltig: [<string | null>null],
-    euEfta: [<string | null>null],
+    isEuEfta: [<string | null>null],
   });
 
   private filterFormChangedSig = toSignal(
@@ -154,9 +146,10 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     const sort = this.sortSig();
     const filter = this.filterChangedSig();
 
+    // todo:correct
     const filteredCountries =
       selected.length > 0
-        ? allCountries.filter((c) => selected.includes(c.land))
+        ? allCountries.filter((c) => selected.includes(c.iso3code ?? ''))
         : allCountries;
 
     const datasource = new MatTableDataSource(filteredCountries);
@@ -227,8 +220,9 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
         return;
       }
 
+      // todo:correct
       this.countryList.patchValue(
-        laender.filter((l) => l.isEuEfta).map((l) => l.land),
+        laender.filter((l) => l.isEuEfta).map((l) => l.iso3code ?? ''),
         { emitEvent: false },
       );
     });
@@ -286,10 +280,10 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
         }
 
         if (land.id) {
-          this.laenderStore.updateLand$({ landEuEfta: [land] });
+          this.laenderStore.updateLand$({ land, landId: land.id });
         }
 
-        this.laenderStore.createLand$({ landEuEfta: land });
+        this.laenderStore.createLand$({ land });
       });
   }
 }

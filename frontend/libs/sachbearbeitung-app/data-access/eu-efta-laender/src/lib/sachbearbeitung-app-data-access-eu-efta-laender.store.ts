@@ -4,22 +4,19 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import {
-  Land,
-  LandEuEfta,
-  LandService,
-  StammdatenService,
-} from '@dv/shared/model/gesuch';
+import { Land, LandService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
+  mapCachedData,
 } from '@dv/shared/util/remote-data';
 
 type EuEftaLaenderState = {
-  laender: CachedRemoteData<LandEuEfta[]>;
+  laender: CachedRemoteData<Land[]>;
 };
 
 const initialState: EuEftaLaenderState = {
@@ -54,7 +51,7 @@ export class EuEftaLaenderStore extends signalStore(
     ),
   );
 
-  updateLand$ = rxMethod<{ landEuEfta: LandEuEfta[] }>(
+  updateLand$ = rxMethod<{ land: Land; landId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -63,14 +60,18 @@ export class EuEftaLaenderStore extends signalStore(
       }),
       switchMap((req) =>
         this.landService.updateLand$(req).pipe(
-          handleApiResponse((land) => {
-            // find the updated land via id in the current state an upodate it
-            patchState(this, (state) => {
-              const updatedLaender = state.laender.data.map((l) =>
-                l.id === land.id ? land : l,
-              );
-              return { laender: { ...state.laender, data: updatedLaender } };
-            });
+          handleApiResponse((res) => {
+            patchState(this, (state) => ({
+              laender: mapCachedData(state.laender, (laender) => {
+                if (isSuccess(res)) {
+                  return laender.map((land) =>
+                    land.id === req.landId ? { ...land, ...res.data } : land,
+                  );
+                } else {
+                  return laender;
+                }
+              }),
+            }));
           }),
         ),
       ),
@@ -87,7 +88,15 @@ export class EuEftaLaenderStore extends signalStore(
       switchMap((land) =>
         this.landService.createLand$(land).pipe(
           handleApiResponse((land) => {
-            patchState(this, { laender: euEftaLaender });
+            patchState(this, (state) => ({
+              laender: mapCachedData(state.laender, (laender) => {
+                // todo: check sorting from backend, if there is any?
+                if (isSuccess(land)) {
+                  return [...laender, land.data];
+                }
+                return laender;
+              }),
+            }));
           }),
         ),
       ),

@@ -337,11 +337,13 @@
 
       <div class="row g-4 mt-1">
         <!-- NATIONALITAET -->
+
+        <!-- todo: rename testid and adjust tests -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
           <mat-form-field class="flex-grow-1" dvSharedUiFormField>
             <mat-label>{{ 'shared.form.person.nationality.label' | translate }}</mat-label>
             <mat-select
-              formControlName="nationalitaet"
+              formControlName="nationalitaetId"
               data-testid="form-person-nationalitaet"
               [placeholder]="'shared.form.select.empty' | translate"
             >
