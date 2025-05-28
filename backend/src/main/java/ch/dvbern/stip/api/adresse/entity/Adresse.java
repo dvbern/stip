@@ -37,6 +37,7 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
+@ForbidAddIfLandIsUngueltigConstraint
 @Entity
 @Table(
     name = "adresse",
