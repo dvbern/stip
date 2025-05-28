@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,7 @@ public class SapService {
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
+    @Transactional
     private void doOrReadChangeBusinessPartner(final Auszahlung auszahlung) {
         BigDecimal deliveryid = null;
         if (Objects.isNull(auszahlung.getSapDelivery())) {
@@ -74,6 +76,7 @@ public class SapService {
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
     }
 
+    @Transactional
     private void getBusinessPartnerCreateStatus(final Auszahlung auszahlung) {
         final BigDecimal deliveryid = auszahlung.getSapDelivery().getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
@@ -90,6 +93,7 @@ public class SapService {
         }
     }
 
+    @Transactional
     private void createBusinessPartner(final Auszahlung auszahlung) {
         final BigDecimal deliveryid = SapEndpointService.generateDeliveryId();
         final var createResponse = sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
@@ -150,6 +154,7 @@ public class SapService {
         return buchhaltung.getSapDelivery().getSapStatus();
     }
 
+    @Transactional
     private SapStatus createVendorPostingOrGetStatus(
         final Gesuch gesuch,
         final Auszahlung auszahlung,
@@ -193,6 +198,7 @@ public class SapService {
             .isBefore(LocalDate.now());
     }
 
+    @Transactional
     public SapStatus createInitialAuszahlungOrGetStatus(final Auszahlung auszahlung) {
         if (auszahlung.getSapBusinessPartnerId() == null) {
             final var createBusinessPartnerStatus = getOrCreateBusinessPartner(auszahlung);
@@ -237,6 +243,7 @@ public class SapService {
         return createVendorPostingOrGetStatus(gesuch, auszahlung, relevantBuchhaltung);
     }
 
+    @Transactional
     public SapStatus createRemainderAuszahlungOrGetStatus(final Auszahlung auszahlung) {
         if (auszahlung.getSapBusinessPartnerId() == null) {
             final var createBusinessPartnerStatus = getOrCreateBusinessPartner(auszahlung);
@@ -272,6 +279,7 @@ public class SapService {
         return createVendorPostingOrGetStatus(gesuch, auszahlung, relevantBuchhaltung);
     }
 
+    @Transactional
     public void processPendingCreateBusinessPartnerActions() {
         final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList();
         for (var auszahlung : pendingAuszahlungs) {
@@ -302,6 +310,7 @@ public class SapService {
         }
     }
 
+    @Transactional
     public void processPendingCreateVendorPostingActions() {
         final var pendingBuchhaltungs = buchhaltungRepository.findBuchhaltungWithPendingSapDelivery().toList();
         for (var buchhaltung : pendingBuchhaltungs) {
@@ -319,6 +328,7 @@ public class SapService {
         }
     }
 
+    @Transactional
     public void processRemainderAuszahlungActions() {
         gesuchsperiodeRepository.listAll()
             .stream()
