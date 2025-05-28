@@ -466,7 +466,7 @@
   "shared.form.ausbildung.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
-  "shared.form.ausbildung.form.error.periodeNotFound": "Aucune période de bourse disponible n'a été trouvée pour la période spécifiée",
+  "shared.form.ausbildung.form.error.periodeNotFound": "Aucune période de demande active n'est disponible pour ce début de formation",
   "shared.form.ausbildung.form.error.inactivePeriod": "La période de demande pour ce début de formation sera ouverte le {{ date }}",
   "shared.form.ausbildung.form.error.periodeIsDraft": "La période de demande pour ce début de formation sera probablement ouverte le {{ date }}",
 

@@ -76,7 +76,7 @@
       @if (store.currentGesuchsjahrViewSig()?.isEditable ?? true) {
         <dv-shared-ui-form-save
           class="mt-4"
-          [loading]="store.currentGesuchsjahr() | rdIsPending"
+          [loading]="store.currentGesuchsjahr() | rdIsPending: { ignoreInitial: true }"
         ></dv-shared-ui-form-save>
       }
     }

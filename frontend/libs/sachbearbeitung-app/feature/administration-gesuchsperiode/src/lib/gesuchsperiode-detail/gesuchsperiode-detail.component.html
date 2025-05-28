@@ -984,7 +984,7 @@
       @if (store.currentGesuchsperiodeViewSig()?.isEditable ?? true) {
         <dv-shared-ui-form-save
           class="mt-4"
-          [loading]="store.currentGesuchsperiode() | rdIsPending"
+          [loading]="store.currentGesuchsperiode() | rdIsPending: { ignoreInitial: true }"
         ></dv-shared-ui-form-save>
       }
     }

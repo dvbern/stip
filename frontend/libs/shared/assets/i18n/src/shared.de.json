@@ -467,7 +467,7 @@
   "shared.form.ausbildung.form.error.monthYearAfter": "Das Enddatum muss nach dem {{ date }} sein",
   "shared.form.ausbildung.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
-  "shared.form.ausbildung.form.error.periodeNotFound": "Für den angegebenen Zeitraum wurde keine verfügbare Stipendium-Periode gefunden",
+  "shared.form.ausbildung.form.error.periodeNotFound": "Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden",
   "shared.form.ausbildung.form.error.inactivePeriod": "Die Gesuchsperiode für diesen Ausbildungsbeginn wird am {{ date }} geöffnet",
   "shared.form.ausbildung.form.error.periodeIsDraft": "Die Gesuchsperiode für diesen Ausbildungsbeginn wird voraussichtlich am {{ date }} geöffnet",
 
