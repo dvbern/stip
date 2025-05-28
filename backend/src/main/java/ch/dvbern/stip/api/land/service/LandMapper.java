@@ -27,4 +27,7 @@ import org.mapstruct.Mapping;
 public interface LandMapper {
     @Mapping(source = "gueltig", target = "eintragGueltig")
     LandDto toDto(Land landEuEfta);
+
+    @Mapping(source = "eintragGueltig", target = "gueltig")
+    Land toEntity(LandDto landDto);
 }
