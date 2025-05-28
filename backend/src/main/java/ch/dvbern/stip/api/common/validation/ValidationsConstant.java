@@ -203,6 +203,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.adresse.land.ungueltig}";
     public static final String VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG =
         "{jakarta.validation.constraints.formular.land.ungueltig}";
+    public static final String VALIDATION_SIZE_OR_EMPTY =
+        "{jakarta.validation.constraints.size.equalorempty}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

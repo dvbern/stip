@@ -15,24 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.personinausbildung.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import java.util.UUID;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class LandAuthorizer extends BaseAuthorizer {
-    public void canCreate() {
-        permitAll();
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.land.entity.Land;
+
+public class MockPersonInAusbildungMapperImpl extends PersonInAusbildungMapperImpl {
+    public MockPersonInAusbildungMapperImpl(AdresseMapper adresseMapper) {
+        super(adresseMapper);
     }
 
-    public void canUpdate() {
-        permitAll();
-    }
-
-    public void canGetLaender() {
-        permitAll();
+    @Override
+    public Land mapNationalitaet(UUID landId) {
+        return null;
     }
 }

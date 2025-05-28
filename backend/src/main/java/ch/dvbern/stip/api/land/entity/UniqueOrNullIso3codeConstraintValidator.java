@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.land.entity;
 
-import ch.dvbern.stip.api.land.repo.LandRepository;
+import ch.dvbern.stip.api.land.service.LandService;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -26,19 +26,19 @@ public class UniqueOrNullIso3codeConstraintValidator
     implements ConstraintValidator<UniqueOrNullIso3codeConstraint, Land> {
 
     @Inject
-    LandRepository landRepository;
+    LandService landService;
 
     @Override
     public boolean isValid(Land land, ConstraintValidatorContext context) {
-        // TODO KSTIP-1968: Write a resource test for this (should be easy)
         if (land.getIso3code() == null) {
             return true;
         }
 
-        final var duplicate = landRepository.getByIso3code(land.getIso3code());
-        if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
-            return false;
-        }
+        // TODO KSTIP-1968: For some reason this throws a StackOverflow on startup?
+        // final var duplicate = landService.getByIso3code(land.getIso3code());
+        // if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
+        // return false;
+        // }
 
         return true;
     }

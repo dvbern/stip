@@ -81,7 +81,7 @@ extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
     }
 
     @Named("mapNationalitaet")
-    protected Land mapNationalitaet(UUID landId) {
+    public Land mapNationalitaet(UUID landId) {
         return landService.requireLandById(landId);
     }
 }

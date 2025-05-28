@@ -57,7 +57,6 @@ public final class TestConstants {
     public static UUID TEST_AUSBILDUNGSSTAETTE_ID;
     public static UUID TEST_GESUCHSPERIODE_ID;
     public static UUID TEST_GESUCHSJAHR_ID;
-    // TODO KSTIP-1968: Set these 2 ids in seeding
     public static UUID TEST_LAND_SCHWEIZ_ID;
     public static UUID TEST_LAND_NON_EU_EFTA_ID;
 

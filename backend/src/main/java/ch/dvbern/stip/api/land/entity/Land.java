@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.land.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.SizeOrEmpty;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -27,10 +28,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.Length;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @UniqueOrNullIso3codeConstraint
 @Entity
@@ -51,27 +54,32 @@ public class Land extends AbstractMandantEntity {
 
     @NotNull
     @Column(name = "laendercode_bfs", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String laendercodeBfs;
 
     @Nullable
     @Column(name = "iso3code", nullable = true)
-    @Length(min = 3, max = 3)
+    @SizeOrEmpty(min = 3, max = 3)
     private String iso3code;
 
     @NotNull
     @Column(name = "de_kurzform", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String deKurzform;
 
     @NotNull
     @Column(name = "fr_kurzform", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String frKurzform;
 
     @NotNull
     @Column(name = "it_kurzform", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String itKurzform;
 
     @NotNull
     @Column(name = "en_kurzform", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String enKurzform;
 
     @NotNull

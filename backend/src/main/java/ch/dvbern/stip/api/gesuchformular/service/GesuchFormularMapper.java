@@ -155,13 +155,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             case SOZIALDIENST_INSTITUTION, ANDERE -> {
                 /* Nur gesuchsteller und eltern haben verlinkte adressen */}
         }
-
-        if (newFormular.getAuszahlung().getAdresse() == null) {
-            return;
-        }
-
-        final var land = landService.requireLandById(newFormular.getAuszahlung().getAdresse().getLandId());
-
     }
 
     void setPiaAdresse(final GesuchFormularUpdateDto newFormular) {

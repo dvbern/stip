@@ -15,24 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.common.validation;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class LandAuthorizer extends BaseAuthorizer {
-    public void canCreate() {
-        permitAll();
+public class SizeOrEmptyValidator implements ConstraintValidator<SizeOrEmpty, String> {
+    int min;
+    int max;
+
+    @Override
+    public void initialize(SizeOrEmpty constraintAnnotation) {
+        min = constraintAnnotation.min();
+        max = constraintAnnotation.max();
     }
 
-    public void canUpdate() {
-        permitAll();
-    }
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null || value.isEmpty()) {
+            return true;
+        }
 
-    public void canGetLaender() {
-        permitAll();
+        final var result = value.length() <= min && value.length() <= max;
+        return result;
     }
 }

@@ -69,4 +69,8 @@ public class LandService {
     public Land requireLandById(final UUID id) {
         return landRepository.requireById(id);
     }
+
+    public Optional<Land> getByIso3code(final String iso3code) {
+        return landRepository.getByIso3code(iso3code);
+    }
 }

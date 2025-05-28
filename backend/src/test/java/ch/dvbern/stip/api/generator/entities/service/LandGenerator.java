@@ -26,15 +26,15 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LandGenerator {
     public Land initSwitzerland() {
-        return initForWellKnownLand(WellKnownLand.CH);
+        return initForWellKnownLand(WellKnownLand.CH).setIsEuEfta(true);
     }
 
     public Land initGermany() {
-        return initForWellKnownLand(WellKnownLand.DE);
+        return initForWellKnownLand(WellKnownLand.DE).setIsEuEfta(true);
     }
 
     public Land initIran() {
-        return initForWellKnownLand(WellKnownLand.IR);
+        return initForWellKnownLand(WellKnownLand.IR).setIsEuEfta(false);
     }
 
     private Land initForWellKnownLand(final WellKnownLand wellKnownLand) {

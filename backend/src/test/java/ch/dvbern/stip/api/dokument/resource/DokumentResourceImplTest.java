@@ -49,6 +49,8 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -175,6 +177,9 @@ class DokumentResourceImplTest {
         var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         var tranche = gesuch.getGesuchTranchen().get(0);
         tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+        tranche.getGesuchFormular()
+            .getPersonInAusbildung()
+            .setNationalitaet(new Land().setLaendercodeBfs(WellKnownLand.CH.getLaendercodeBfs()));
 
         CustomDokumentTyp customDokumentTyp1 = new CustomDokumentTyp();
         customDokumentTyp1.setId(UUID.randomUUID());

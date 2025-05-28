@@ -239,6 +239,10 @@ import org.hibernate.envers.Audited;
     groups = LandMustBeGueltigValidationGroup.class,
     landGueltigFor = LandGueltigFor.AUSZAHLUNG
 )
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.PARTNER
+)
 @UniqueSvNumberConstraint
 @Entity
 @Table(

@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import jakarta.validation.Payload;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -113,6 +114,11 @@ class LandMustBeGueltigConstraintValidatorTest {
 
         @Override
         public Class<?>[] groups() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends Payload>[] payload() {
             return new Class[0];
         }
 

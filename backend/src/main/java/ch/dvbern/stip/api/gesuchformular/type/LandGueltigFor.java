@@ -76,6 +76,16 @@ public enum LandGueltigFor {
 
         return auszahlung.getAdresse().getLand();
     }
+    ),
+    PARTNER(
+    "partner",
+    formular -> {
+        if (formular.getPartner() == null) {
+            return null;
+        }
+
+        return formular.getPartner().getAdresse().getLand();
+    }
     );
 
     private final String property;

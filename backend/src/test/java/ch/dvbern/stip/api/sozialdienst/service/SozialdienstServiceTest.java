@@ -23,7 +23,7 @@ import java.util.Optional;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
-import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -68,14 +68,19 @@ class SozialdienstServiceTest {
     private SozialdienstBenutzer sozialdienstAdminOfSozialdienstB;
 
     @Inject
-    private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
-    @Inject
-    private SozialdienstRepository sozialdienstRepository;
+    SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     @Inject
-    private SozialdienstService sozialdienstService;
+    SozialdienstRepository sozialdienstRepository;
+
+    @Inject
+    SozialdienstService sozialdienstService;
+
+    @Inject
+    LandService landService;
+
     @InjectMock
-    private SozialdienstBenutzerService sozialdienstBenutzerService;
+    SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
     @BeforeEach
@@ -105,16 +110,17 @@ class SozialdienstServiceTest {
         sozialdienstAdminOfSozialdienstB.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdminOfSozialdienstB.setBenutzerStatus(BenutzerStatus.AKTIV);
 
+        final var switzerland = landService.requireLandById(TestConstants.TEST_LAND_SCHWEIZ_ID);
         Adresse adresse1 = new Adresse();
         adresse1.setPlz("3000");
-        adresse1.setLand(LandGenerator.initSwitzerland());
+        adresse1.setLand(switzerland);
         adresse1.setHausnummer("1");
         adresse1.setStrasse("Musterstrasse");
         adresse1.setOrt("Ort");
 
         Adresse adresse2 = new Adresse();
         adresse2.setPlz("3000");
-        adresse2.setLand(LandGenerator.initSwitzerland());
+        adresse2.setLand(switzerland);
         adresse2.setHausnummer("1");
         adresse2.setStrasse("Musterstrasse");
         adresse2.setOrt("Ort");
