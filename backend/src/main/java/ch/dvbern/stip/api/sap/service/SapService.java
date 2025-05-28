@@ -316,12 +316,17 @@ public class SapService {
         }
     }
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void processPendingCreateVendorPostingAction(Buchhaltung buchhaltung) {
+        getVendorPostingCreateStatus(buchhaltungRepository.requireById(buchhaltung.getId()));
+    }
+
     @Transactional
     public void processPendingCreateVendorPostingActions() {
         final var pendingBuchhaltungs = buchhaltungRepository.findBuchhaltungWithPendingSapDelivery().toList();
         for (var buchhaltung : pendingBuchhaltungs) {
             try {
-                getVendorPostingCreateStatus(buchhaltung);
+                processPendingCreateVendorPostingAction(buchhaltung);
             } catch (Exception e) {
                 LOG.error(
                     String.format(
@@ -332,6 +337,11 @@ public class SapService {
                 );
             }
         }
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void processRemainderAuszahlungAction(Auszahlung auszahlung) {
+        createRemainderAuszahlungOrGetStatus(auszahlungRepository.requireById(auszahlung.getId()));
     }
 
     @Transactional
@@ -348,7 +358,7 @@ public class SapService {
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {
-                    createRemainderAuszahlungOrGetStatus(
+                    processRemainderAuszahlungAction(
                         gesuch.getLatestGesuchTranche()
                             .getGesuchFormular()
                             .getAuszahlung()
