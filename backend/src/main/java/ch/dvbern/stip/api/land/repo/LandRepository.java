@@ -40,4 +40,19 @@ public class LandRepository implements BaseRepository<Land> {
             .stream()
             .findFirst();
     }
+
+    public boolean isLandEuEfta(final String bfsCode) {
+        final var land = QLand.land;
+        final var entity = new JPAQueryFactory(entityManager)
+            .selectFrom(land)
+            .where(land.laendercodeBfs.eq(bfsCode))
+            .stream()
+            .findFirst();
+
+        if (entity.isEmpty()) {
+            return false;
+        }
+
+        return entity.get().getIsEuEfta();
+    }
 }

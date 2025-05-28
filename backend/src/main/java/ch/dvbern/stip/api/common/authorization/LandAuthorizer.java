@@ -23,12 +23,18 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
-public class StammdatenAuthorizer extends BaseAuthorizer {
-    public void canGetLaender() {
+public class LandAuthorizer extends BaseAuthorizer {
+    public void canCreate() {
+        // TODO KSTIP-1968: Check with Daniel
         permitAll();
     }
 
-    public void canSetLaenderEuEfta() {
+    public void canUpdate() {
+        // TODO KSTIP-1968: Check with Daniel
+        permitAll();
+    }
+
+    public void canGetLaender() {
         permitAll();
     }
 }

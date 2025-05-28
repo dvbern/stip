@@ -53,6 +53,8 @@ public class Land extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "iso3code", nullable = true)
+    // TODO KSTIP-1968: Limit to 3 chars? Auto uppercase?
+    // TODO KSTIP-1968: Unique if present
     private String iso3code;
 
     @NotNull

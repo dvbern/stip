@@ -59,8 +59,7 @@ public class LandService {
     }
 
     public boolean landInEuEfta(Land land) {
-        // TODO KSTIP-1968: Refactor this to be a simple query
-        return true;
+        return landRepository.isLandEuEfta(land.getLaendercodeBfs());
     }
 
     public Optional<Land> getLandByBfsCode(final String bfsCode) {
