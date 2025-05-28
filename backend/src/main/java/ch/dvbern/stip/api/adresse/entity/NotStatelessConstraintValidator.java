@@ -25,6 +25,10 @@ import jakarta.validation.ConstraintValidatorContext;
 public class NotStatelessConstraintValidator implements ConstraintValidator<NotStatelessConstraint, Land> {
     @Override
     public boolean isValid(Land value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
+
         return !value.is(WellKnownLand.STATELESS);
     }
 }

@@ -44,8 +44,10 @@ public class LandService {
 
     @Transactional
     public LandDto createLand(final LandDto landDto) {
-        // TODO KSTIP-1968: Implement
-        return null;
+        final var land = landMapper.toEntity(landDto);
+        landRepository.persist(land);
+
+        return landMapper.toDto(land);
     }
 
     @Transactional

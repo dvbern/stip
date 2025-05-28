@@ -83,6 +83,9 @@
             <column name="laendercode_bfs" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+    <changeSet id="1748361379767-1" author="Juri Furer">
+        <dropColumn tableName="adresse" columnName="land" />
+    </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-3">
         <addColumn tableName="adresse">
             <column name="land_id" type="UUID">

@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.land.repo.LandRepository;
 import ch.dvbern.stip.api.land.service.LandService;
+import ch.dvbern.stip.generated.dto.LandDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -35,18 +37,34 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LandEuEftaSeeding extends Seeder {
     private final LandService landService;
+    private final LandRepository landRepository;
     private final ObjectMapper objectMapper;
     private final ConfigService configService;
 
     @Override
     public int getPriority() {
-        return 0;
+        return 500;
     }
 
     @Override
     protected void seed() {
-        LOG.info("Seeding EU/EFTA Laender");
-        // TODO KSTIP-1968: Implement seeding
+        LOG.info("Seeding Laender");
+        if (landRepository.findAll().count() != 0) {
+            LOG.info("Skipping Land seeding because Laender already exist in DB");
+            return;
+        }
+
+        // TODO KSTIP-1968: Implement CSV seeding, for now just seed Switzerland so the backend can start
+        final var switzerland = new LandDto();
+        switzerland.setIsEuEfta(true);
+        switzerland.setLaendercodeBfs("8100");
+        switzerland.setIso3code("CHE");
+        switzerland.setDeKurzform("Schweiz");
+        switzerland.setFrKurzform("Suisse");
+        switzerland.setItKurzform("Svizzera");
+        switzerland.setEnKurzform("Switzerland");
+        switzerland.setEintragGueltig(true);
+        landService.createLand(switzerland);
     }
 
     @Override
