@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -283,26 +282,48 @@ public class SapService {
     public void processPendingCreateBusinessPartnerAction(Auszahlung auszahlung) {
         auszahlung = auszahlungRepository.requireById(auszahlung.getId());
         getBusinessPartnerCreateStatus(auszahlung);
-        if (
-            auszahlung.getSapDelivery().getSapStatus() == SapStatus.SUCCESS
-            && auszahlung.getSapDelivery().getPendingSapAction() != null
-        ) {
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void processPendingSapAction(Auszahlung auszahlung) {
+        if (auszahlung.getSapDelivery() != null) {
             switch (auszahlung.getSapDelivery().getPendingSapAction()) {
-                case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(auszahlung);
-                case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(auszahlung);
+                case AUSZAHLUNG_INITIAL -> {
+                    createInitialAuszahlungOrGetStatus(auszahlung);
+                    auszahlung.getSapDelivery().setPendingSapAction(null);
+                }
+                case AUSZAHLUNG_REMAINDER -> {
+                    createRemainderAuszahlungOrGetStatus(auszahlung);
+                    auszahlung.getSapDelivery().setPendingSapAction(null);
+                }
+                case null -> throw new IllegalStateException("Invalid pending action: null");
                 default -> throw new IllegalStateException(
                     "Invalid pending action: " + auszahlung.getSapDelivery().getPendingSapAction().name()
                 );
             }
-            auszahlung.getSapDelivery().setPendingSapAction(null);
         }
     }
 
     public void processPendingCreateBusinessPartnerActions() {
-        final var pendingAuszahlungs =
-            new ArrayList<>(auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList());
+        final var pendingAuszahlungWithSapActions = auszahlungRepository.findAuszahlungWithPendingSapAction().toList();
+        for (var auszahlung : pendingAuszahlungWithSapActions) {
+            try {
+                processPendingSapAction(auszahlung);
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingCreateBusinessPartnerActions: Error during processing of Pending SAP action Auszahlung %s",
+                        auszahlung.getId()
+                    ),
+                    e
+                );
+            }
+        }
+
+        final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList();
         for (var auszahlung : pendingAuszahlungs) {
             try {
+                LOG.info(String.format("Processing Auszahlung: %s, %s", auszahlung.getId(), auszahlung.getIban()));
                 processPendingCreateBusinessPartnerAction(auszahlung);
             } catch (Exception e) {
                 LOG.error(

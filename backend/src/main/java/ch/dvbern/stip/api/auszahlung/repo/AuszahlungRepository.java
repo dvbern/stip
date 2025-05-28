@@ -40,4 +40,14 @@ public class AuszahlungRepository implements BaseRepository<Auszahlung> {
             .where(AUSZAHLUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
             .stream();
     }
+
+    public Stream<Auszahlung> findAuszahlungWithPendingSapAction() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(AUSZAHLUNG)
+            .where(
+                AUSZAHLUNG.sapDelivery.pendingSapAction.isNotNull()
+                    .and(AUSZAHLUNG.sapDelivery.sapStatus.eq(SapStatus.SUCCESS))
+            )
+            .stream();
+    }
 }
