@@ -18,29 +18,43 @@
 package ch.dvbern.stip.api.personinausbildung.service;
 
 import java.util.Objects;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import jakarta.inject.Inject;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 public abstract class PersonInAusbildungMapper
 extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
+    @Inject
+    LandService landService;
+
+    @Mapping(source = "nationalitaetId", target = "nationalitaet", qualifiedByName = "mapNationalitaet")
     public abstract PersonInAusbildung toEntity(PersonInAusbildungDto personInAusbildungDto);
 
+    @Mapping(source = "nationalitaet.id", target = "nationalitaetId")
     public abstract PersonInAusbildungDto toDto(PersonInAusbildung personInAusbildung);
 
+    @Mapping(source = "nationalitaetId", target = "nationalitaet", qualifiedByName = "mapNationalitaet")
     public abstract PersonInAusbildung partialUpdate(
         PersonInAusbildungUpdateDto personInAusbildungUpdateDto,
         @MappingTarget PersonInAusbildung personInAusbildung
     );
 
+    @Mapping(source = "nationalitaet.id", target = "nationalitaetId")
     public abstract PersonInAusbildungUpdateDto toUpdateDto(PersonInAusbildung personInAusbildung);
 
     @Override
@@ -64,5 +78,10 @@ extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
             "Reset zustaendigerKanton because niederlassungsstatus has changed",
             () -> newFormular.setZustaendigerKanton(null)
         );
+    }
+
+    @Named("mapNationalitaet")
+    protected Land mapNationalitaet(UUID landId) {
+        return landService.requireLandById(landId);
     }
 }

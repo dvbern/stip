@@ -105,6 +105,9 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="1748435927755-1" author="Juri Furer">
+        <dropColumn tableName="person_in_ausbildung" columnName="nationalitaet" />
+    </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-6">
         <addColumn tableName="person_in_ausbildung_aud">
             <column name="nationalitaet_id" type="UUID"/>

@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG;
 
@@ -38,6 +39,8 @@ public @interface LandMustBeGueltigConstraint {
     String message() default VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG;
 
     Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 
     LandGueltigFor landGueltigFor();
 

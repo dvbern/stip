@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.generated.dto.ElternDto;
@@ -29,7 +30,7 @@ import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 public interface ElternMapper {
     Eltern toEntity(ElternDto elternDto);
 

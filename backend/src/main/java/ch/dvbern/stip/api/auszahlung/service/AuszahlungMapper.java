@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungDiffUtil;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
@@ -29,7 +30,7 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
     @Inject
     AdresseRepository adresseRepository;

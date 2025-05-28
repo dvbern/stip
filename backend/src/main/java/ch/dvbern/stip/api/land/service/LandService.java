@@ -65,4 +65,8 @@ public class LandService {
     public Optional<Land> getLandByBfsCode(final String bfsCode) {
         return landRepository.getByBfsCode(bfsCode);
     }
+
+    public Land requireLandById(final UUID id) {
+        return landRepository.requireById(id);
+    }
 }

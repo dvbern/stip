@@ -17,17 +17,39 @@
 
 package ch.dvbern.stip.api.adresse.service;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.generated.dto.AdresseDto;
+import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
-public interface AdresseMapper {
-    Adresse toEntity(AdresseDto adresseDto);
+public abstract class AdresseMapper {
+    @Inject
+    LandService landService;
 
-    AdresseDto toDto(Adresse adresse);
+    @Mapping(source = "landId", target = "land", qualifiedByName = "mapLand")
+    public abstract Adresse toEntity(AdresseDto adresseDto);
 
-    Adresse partialUpdate(AdresseDto adresseDto, @MappingTarget Adresse adresse);
+    @Mapping(source = "land.id", target = "landId")
+    public abstract AdresseDto toDto(Adresse adresse);
+
+    @Mapping(source = "landId", target = "land", qualifiedByName = "mapLand")
+    public abstract Adresse partialUpdate(AdresseDto adresseDto, @MappingTarget Adresse adresse);
+
+    @Named("mapLand")
+    protected Land mapLand(UUID landId) {
+        if (landId == null) {
+            return null;
+        }
+
+        return landService.requireLandById(landId);
+    }
 }
