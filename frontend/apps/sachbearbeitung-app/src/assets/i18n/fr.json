@@ -82,7 +82,7 @@
   "sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.error.notUniqueBfs": "Le code du pays BFS doit être unique.",
   "sachbearbeitung-app.admin.euEftaLaender.iso3code.label": "ISO 3 Code",
   "sachbearbeitung-app.admin.euEftaLaender.itKurzform.label": "It forme courte",
-  "sachbearbeitung-app.admin.euEftaLaender.engKurzform.label": "Eng forme courte",
+  "sachbearbeitung-app.admin.euEftaLaender.enKurzform.label": "Eng forme courte",
   "sachbearbeitung-app.admin.euEftaLaender.euEfta.label": "EU/Efta",
   "sachbearbeitung-app.admin.euEftaLaender-dialog.submit": "Enregistrer",
 

@@ -82,7 +82,7 @@
   "sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.error.notUniqueBfs": "Ländercode existiert bereits",
   "sachbearbeitung-app.admin.euEftaLaender.iso3code.label": "ISO 3 Code",
   "sachbearbeitung-app.admin.euEftaLaender.itKurzform.label": "It Kurzform",
-  "sachbearbeitung-app.admin.euEftaLaender.engKurzform.label": "Eng Kurzform",
+  "sachbearbeitung-app.admin.euEftaLaender.enKurzform.label": "Eng Kurzform",
   "sachbearbeitung-app.admin.euEftaLaender.euEfta.label": "EU/Efta",
   "sachbearbeitung-app.admin.euEftaLaender-dialog.submit": "Speichern",
 

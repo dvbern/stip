@@ -104,7 +104,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     deKurzform: [<string | undefined>undefined, [Validators.required]],
     frKurzform: [<string | undefined>undefined, [Validators.required]],
     itKurzform: [<string | undefined>undefined, [Validators.required]],
-    engKurzform: [<string | undefined>undefined, [Validators.required]],
+    enKurzform: [<string | undefined>undefined, [Validators.required]],
     eintragGueltig: [false],
     isEuEfta: [false],
   });
@@ -126,11 +126,10 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
 
     const values = convertTempFormToRealValues(this.form, [
       'laendercodeBfs',
-      'iso3code',
       'deKurzform',
       'frKurzform',
       'itKurzform',
-      'engKurzform',
+      'enKurzform',
     ]);
 
     this.dialogRef.close({ ...this.dialogData.land, ...values } as Land);
