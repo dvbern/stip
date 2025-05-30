@@ -35,7 +35,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime } from 'rxjs';
 
 import { selectVersion } from '@dv/shared/data-access/config';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
@@ -403,8 +402,6 @@ export class SozialdienstAppFeatureCockpitComponent
   }
 
   ngOnInit() {
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
-
     const { query, filter, sortColumn, sortOrder } = this.getInputs();
 
     this.quickFilterForm.reset({ query });

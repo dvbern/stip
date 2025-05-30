@@ -62,6 +62,8 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     mask: [/\d/, /\d/, /\d/, /\d/],
   };
 
+  // Todo: dialog nicht schliessen, wenn call failt. check wie du das bei Ausbildung gemacht hast
+
   uniqueBfsNumberValidator = (): ValidatorFn => (control) => {
     const laender = this.dialogData.laender;
     const currentValue = control.value;
@@ -92,12 +94,13 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     });
   }
 
+  // todo: add custom validator for iso3code
   form = this.formBuilder.group({
     laendercodeBfs: [
       <string | undefined>undefined,
       [Validators.required, this.uniqueBfsNumberValidator()],
     ],
-    iso3code: [<string | undefined>undefined, [Validators.required]],
+    iso3code: [<string | undefined>undefined],
     deKurzform: [<string | undefined>undefined, [Validators.required]],
     frKurzform: [<string | undefined>undefined, [Validators.required]],
     itKurzform: [<string | undefined>undefined, [Validators.required]],
@@ -121,16 +124,16 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
       return;
     }
 
-    this.dialogRef.close(
-      convertTempFormToRealValues(this.form, [
-        'laendercodeBfs',
-        'iso3code',
-        'deKurzform',
-        'frKurzform',
-        'itKurzform',
-        'engKurzform',
-      ]),
-    );
+    const values = convertTempFormToRealValues(this.form, [
+      'laendercodeBfs',
+      'iso3code',
+      'deKurzform',
+      'frKurzform',
+      'itKurzform',
+      'engKurzform',
+    ]);
+
+    this.dialogRef.close({ ...this.dialogData.land, ...values } as Land);
   }
   close() {
     this.dialogRef.close();

@@ -9,9 +9,9 @@
   </button>
   <h1 class="tw-mb-8 tw-text-2xl">
     @if (dialogData.land) {
-      {{ 'sachbearbeitung-app.infos.euEftaLaender.editdialog.title.edit' | translate }}
+      {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.edit' | translate }}
     } @else {
-      {{ 'sachbearbeitung-app.infos.euEftaLaender.editdialog.title.create' | translate }}
+      {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.create' | translate }}
     }
   </h1>
   <form
@@ -22,7 +22,7 @@
   >
     <!-- Ländercode BFS -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.laendercodeBfs.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label' | translate }}*</mat-label>
       <input
         data-testid="form-euEftaLaender-laendercodeBfs"
         matInput
@@ -34,64 +34,54 @@
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'notUniqueBfs'">
-        {{ 'sachbearbeitung-app.infos.euEftaLaender.laendercodeBfs.error.notUniqueBfs' | translate }}
+        {{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.error.notUniqueBfs' | translate }}
       </mat-error>
     </mat-form-field>
 
     <!-- ISO3 - Code -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.iso3code.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-iso3code" matInput type="text" [formControlName]="'iso3code'" />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.label' | translate }}</mat-label>
+      <input data-testid="form-euEftaLaender-iso3code" matInput type="text" formControlName="iso3code" />
     </mat-form-field>
     <!-- De Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.deKurzform.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-deKurzform" matInput type="text" [formControlName]="'deKurzform'" />
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-deKurzform" matInput type="text" formControlName="deKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <!-- Fr Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.frKurzform.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-frKurzform" matInput type="text" [formControlName]="'frKurzform'" />
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-frKurzform" matInput type="text" formControlName="frKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <!-- It Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.itKurzform.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-itKurzform" matInput type="text" [formControlName]="'itKurzform'" />
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.itKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-itKurzform" matInput type="text" formControlName="itKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <!-- Eng Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.engKurzform.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-engKurzform" matInput type="text" [formControlName]="'engKurzform'" />
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.engKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-engKurzform" matInput type="text" formControlName="engKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <!-- Eintrag Gültig -->
     <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="eintragGueltig">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.eintragGueltig.label' | translate }}</mat-label>
-
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | translate }}</mat-label>
     </mat-checkbox>
     <!-- EU/Efta -->
     <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="isEuEfta">
-      <mat-label>{{ 'sachbearbeitung-app.infos.euEftaLaender.euEfta.label' | translate }}</mat-label>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | translate }}</mat-label>
     </mat-checkbox>
 
     <div class="d-flex mt-4 justify-content-between tw-col-span-full">
@@ -105,7 +95,7 @@
         class="btn btn-primary ms-2"
         (click)="confirm()"
       >
-        {{ 'sachbearbeitung-app.infos.euEftaLaender-dialog.submit' | translate }}
+        {{ 'sachbearbeitung-app.admin.euEftaLaender-dialog.submit' | translate }}
       </button>
     </div>
   </form>

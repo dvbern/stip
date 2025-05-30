@@ -281,9 +281,9 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
 
         if (land.id) {
           this.laenderStore.updateLand$({ land, landId: land.id });
+        } else {
+          this.laenderStore.createLand$({ land });
         }
-
-        this.laenderStore.createLand$({ land });
       });
   }
 }

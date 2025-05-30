@@ -43,10 +43,9 @@ export class EuEftaLaenderStore extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.landService.getLaender$().pipe(
-          tap((x) => console.log('Request', x)), //todo: remove
-          handleApiResponse((laender) => patchState(this, { laender })),
-        ),
+        this.landService
+          .getLaender$()
+          .pipe(handleApiResponse((laender) => patchState(this, { laender }))),
       ),
     ),
   );
