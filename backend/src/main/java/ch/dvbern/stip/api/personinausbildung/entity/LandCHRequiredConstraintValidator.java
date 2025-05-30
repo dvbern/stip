@@ -32,6 +32,10 @@ public class LandCHRequiredConstraintValidator
         PersonInAusbildung personInAusbildung,
         ConstraintValidatorContext constraintValidatorContext
     ) {
+        if (personInAusbildung.getNationalitaet() == null) {
+            return true;
+        }
+
         if (personInAusbildung.getNationalitaet().is(WellKnownLand.CH)) {
             return StringUtils.isNotEmpty(personInAusbildung.getHeimatort());
         }

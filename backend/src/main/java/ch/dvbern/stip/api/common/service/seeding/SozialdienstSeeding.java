@@ -94,7 +94,6 @@ public class SozialdienstSeeding extends Seeder {
             .setOrt("Bern")
             .setPlz("3000")
             .setLand(switzerland);
-        // TODO KSTIP-1968: Fix seeding failure here, somehow Benutzereinstellungen have a duplicate ID?
         final var sozialdienst = new Sozialdienst()
             .setName("[E2E] Sozialdienst")
             .setAdresse(adresse)

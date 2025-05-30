@@ -15,24 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.land.service;
+package ch.dvbern.stip.api.gesuchformular.util;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
+import java.util.function.BiFunction;
+
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.land.entity.Land;
-import ch.dvbern.stip.generated.dto.LandDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import lombok.experimental.UtilityClass;
 
-@Mapper(config = MappingConfig.class)
-public interface LandMapper {
-    @Mapping(source = "gueltig", target = "eintragGueltig")
-    LandDto toDto(Land landEuEfta);
+@UtilityClass
+public class LandGueltigForUtil {
+    public static final BiFunction<GesuchFormular, ElternTyp, Land> getLandForElterntyp = (formular, elterntyp) -> {
+        if (formular.getElterns() == null) {
+            return null;
+        }
 
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    Land toEntity(LandDto landDto);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    void partialUpdate(LandDto landDto, @MappingTarget Land land);
+        final var elternteil = formular.getElternteilOfTyp(elterntyp);
+        return elternteil.map(eltern -> eltern.getAdresse().getLand()).orElse(null);
+    };
 }

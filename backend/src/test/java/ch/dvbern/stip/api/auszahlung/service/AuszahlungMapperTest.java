@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
@@ -51,7 +52,7 @@ class AuszahlungMapperTest {
         Mockito.when(repo.requireById(targetAdresseId)).thenReturn(target.getAdresse());
         Mockito.when(repo.requireById(updateAdresseId)).thenReturn((Adresse) new Adresse().setId(updateAdresseId));
 
-        final var mapper = new AuszahlungMapperImpl();
+        final var mapper = new AuszahlungMapperImpl(new MockAdresseMapperImpl());
         mapper.adresseRepository = repo;
 
         mapper.resetDependentDataBeforeUpdate(updateAuszahlung, target);

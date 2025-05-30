@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.land.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.StammdatenAuthorizer;
+import ch.dvbern.stip.api.common.authorization.LandAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.generated.api.LandResource;
@@ -29,31 +29,35 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class LandResourceImpl implements LandResource {
-    private final StammdatenAuthorizer stammdatenAuthorizer;
+    private final LandAuthorizer landAuthorizer;
     private final LandService landService;
 
     @Override
+    @RolesAllowed(STAMMDATEN_CREATE)
     public LandDto createLand(LandDto landDto) {
-        // TODO KSTIP-1968: Authorizer
+        landAuthorizer.canCreate();
         return landService.createLand(landDto);
     }
 
     @Override
     @RolesAllowed(STAMMDATEN_READ)
     public List<LandDto> getLaender() {
-        stammdatenAuthorizer.canGetLaender();
+        landAuthorizer.canGetLaender();
         return landService.getAllLaender();
     }
 
     @Override
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public LandDto updateLand(UUID landId, LandDto landDto) {
-        // TODO KSTIP-1968: Authorizer
+        landAuthorizer.canUpdate();
         return landService.updateLand(landId, landDto);
     }
 }

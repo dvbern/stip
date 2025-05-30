@@ -163,7 +163,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
+        personInAusbildung.setNationalitaet(LandGenerator.initGermany());
         personInAusbildung.setHeimatort("");
 
         Gesuch gesuch = prepareDummyGesuch();
@@ -196,7 +196,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
+        personInAusbildung.setNationalitaet(LandGenerator.initGermany());
         personInAusbildung.setHeimatort("");
         // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
         personInAusbildung.setNiederlassungsstatus(niederlassungsstatus);

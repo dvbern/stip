@@ -206,12 +206,13 @@ class BernStipDeciderTest {
     void testStipendienrechtlicherWohnsitzKantonOneElternBern() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(true);
-        final Adresse adresseBern = new Adresse();
+        final Adresse adresseBern = new Adresse().setLand(LandGenerator.initSwitzerland());
         final Adresse adresseNotBern = new Adresse().setLand(LandGenerator.initGermany());
         Mockito.when(plzService.isInBern(adresseBern)).thenReturn(true);
         Mockito.when(plzService.isInBern(adresseNotBern)).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(LandGenerator.initSwitzerland());
+        pia.setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()));
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()

@@ -53,8 +53,6 @@ public class Adresse extends AbstractMandantEntity {
         foreignKey = @ForeignKey(name = "FK_adresse_land_id")
     )
     @NotStatelessConstraint
-    // TODO KSTIP 1968: Allow update of ungueltig but not add
-    // TODO KSTIP-1968: Warning/ Error when Gesuch is in an edit state
     private Land land;
 
     @Nullable

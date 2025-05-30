@@ -15,24 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.land.service;
+package ch.dvbern.stip.api.common.authorization;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.land.entity.Land;
-import ch.dvbern.stip.generated.dto.LandDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-@Mapper(config = MappingConfig.class)
-public interface LandMapper {
-    @Mapping(source = "gueltig", target = "eintragGueltig")
-    LandDto toDto(Land landEuEfta);
+@ApplicationScoped
+@RequiredArgsConstructor
+@Authorizer
+public class LandAuthorizer extends BaseAuthorizer {
+    public void canCreate() {
+        permitAll();
+    }
 
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    Land toEntity(LandDto landDto);
+    public void canUpdate() {
+        permitAll();
+    }
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    void partialUpdate(LandDto landDto, @MappingTarget Land land);
+    public void canGetLaender() {
+        permitAll();
+    }
 }

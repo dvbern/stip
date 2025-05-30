@@ -52,16 +52,25 @@ public class LandService {
 
     @Transactional
     public LandDto updateLand(final UUID landId, final LandDto landDto) {
-        // TODO KSTIP-1968: Implement
-        return null;
+        final var entity = landRepository.requireById(landId);
+        landMapper.partialUpdate(landDto, entity);
+
+        return landMapper.toDto(entity);
     }
 
     public boolean landInEuEfta(Land land) {
-        // TODO KSTIP-1968: Refactor this to be a simple query
-        return true;
+        return landRepository.isLandEuEfta(land.getLaendercodeBfs());
     }
 
     public Optional<Land> getLandByBfsCode(final String bfsCode) {
         return landRepository.getByBfsCode(bfsCode);
+    }
+
+    public Land requireLandById(final UUID id) {
+        return landRepository.requireById(id);
+    }
+
+    public Optional<Land> getByIso3code(final String iso3code) {
+        return landRepository.getByIso3code(iso3code);
     }
 }

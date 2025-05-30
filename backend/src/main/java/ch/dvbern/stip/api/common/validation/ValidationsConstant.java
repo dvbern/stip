@@ -197,6 +197,14 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.adresse.land.no.stateless}";
     public static final String VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT =
         "{jakarta.validation.constraints.unterschriftenblaetter.not.present}";
+    public static final String VALIDATION_LAND_ISO3CODE_NOT_UNIQUE =
+        "{jakarta.validation.constraints.land.iso3code.notunique}";
+    public static final String VALIDATION_ADRESSE_LAND_UNGUELTIG =
+        "{jakarta.validation.constraints.adresse.land.ungueltig}";
+    public static final String VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG =
+        "{jakarta.validation.constraints.formular.land.ungueltig}";
+    public static final String VALIDATION_SIZE_OR_EMPTY =
+        "{jakarta.validation.constraints.size.equalorempty}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

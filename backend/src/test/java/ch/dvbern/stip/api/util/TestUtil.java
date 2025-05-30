@@ -523,6 +523,7 @@ public class TestUtil {
 
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
+            .setNationalitaet(LandGenerator.initSwitzerland())
             .setZivilstand(Zivilstand.VERHEIRATET)
             .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
             .setAdresse(

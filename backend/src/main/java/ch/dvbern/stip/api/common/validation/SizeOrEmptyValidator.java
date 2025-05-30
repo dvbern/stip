@@ -15,24 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.land.service;
+package ch.dvbern.stip.api.common.validation;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.land.entity.Land;
-import ch.dvbern.stip.generated.dto.LandDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-@Mapper(config = MappingConfig.class)
-public interface LandMapper {
-    @Mapping(source = "gueltig", target = "eintragGueltig")
-    LandDto toDto(Land landEuEfta);
+public class SizeOrEmptyValidator implements ConstraintValidator<SizeOrEmpty, String> {
+    int min;
+    int max;
 
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    Land toEntity(LandDto landDto);
+    @Override
+    public void initialize(SizeOrEmpty constraintAnnotation) {
+        min = constraintAnnotation.min();
+        max = constraintAnnotation.max();
+    }
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    void partialUpdate(LandDto landDto, @MappingTarget Land land);
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null || value.isEmpty()) {
+            return true;
+        }
+
+        final var result = value.length() <= min && value.length() <= max;
+        return result;
+    }
 }

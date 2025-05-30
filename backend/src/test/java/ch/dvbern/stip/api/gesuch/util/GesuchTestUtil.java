@@ -103,13 +103,17 @@ public class GesuchTestUtil {
         personInAusbildung.setAnrede(Anrede.FRAU);
         personInAusbildung.setEmail("test@test.com");
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
 
         return personInAusbildung;
     }
 
     public GesuchFormular setupGesuchFormularWithChildEntities() {
         return new GesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
+            .setPersonInAusbildung(
+                new PersonInAusbildung().setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()))
+                    .setNationalitaet(LandGenerator.initSwitzerland())
+            )
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setAuszahlung(new Auszahlung().setAdresse(new Adresse()).setIban(""))

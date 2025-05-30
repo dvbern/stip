@@ -15,24 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.land.service;
+package ch.dvbern.stip.api.adresse.service;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.land.entity.Land;
-import ch.dvbern.stip.generated.dto.LandDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
-public interface LandMapper {
-    @Mapping(source = "gueltig", target = "eintragGueltig")
-    LandDto toDto(Land landEuEfta);
-
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    Land toEntity(LandDto landDto);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "eintragGueltig", target = "gueltig")
-    void partialUpdate(LandDto landDto, @MappingTarget Land land);
+public class MockAdresseMapperImpl extends AdresseMapperImpl {
+    @Override
+    protected Land mapLand(UUID landId) {
+        return null;
+    }
 }

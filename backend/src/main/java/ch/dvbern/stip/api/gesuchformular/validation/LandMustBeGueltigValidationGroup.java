@@ -15,20 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.gesuchformular.validation;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-
-@ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class StammdatenAuthorizer extends BaseAuthorizer {
-    public void canGetLaender() {
-        permitAll();
-    }
-
-    public void canSetLaenderEuEfta() {
-        permitAll();
-    }
+public interface LandMustBeGueltigValidationGroup {
 }
