@@ -6,7 +6,7 @@
       <table mat-table [dataSource]="countryDataSourceSig()" matSort>
         <!-- ISO3 Code -->
         <ng-container matColumnDef="iso3code">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
             <label class="pe-none" for="fallNummer">
               {{ 'sachbearbeitung-app.admin.euEftaLaender.iso3.label' | translate }}
             </label>
@@ -87,8 +87,28 @@
 
         <!-- Eintrag Gueltig -->
         <ng-container matColumnDef="eintragGueltig">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | translate }}
+            <mat-form-field class="tw-w-full">
+              <mat-select
+                [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.label' | translate"
+                formControlName="eintragGueltig"
+                (click)="$event.stopPropagation()"
+                class="!tw-font-normal"
+                [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.OFF' | translate"
+                panelClass="table-select"
+              >
+                <mat-option [value]="undefined">
+                  {{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.OFF' | translate }}
+                </mat-option>
+
+                @for (status of boolFilterValues; track status.key) {
+                  <mat-option [value]="status.value">
+                    {{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.' + status.key | translate }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </th>
           <td mat-cell *matCellDef="let land">
             <mat-checkbox disabled [checked]="land.eintragGueltig"></mat-checkbox>
@@ -97,8 +117,28 @@
 
         <!-- EU/Efta -->
         <ng-container matColumnDef="isEuEfta">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw-w-44 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.label' | translate }}
+            <mat-form-field class="tw-w-full">
+              <mat-select
+                [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.label' | translate"
+                formControlName="isEuEfta"
+                (click)="$event.stopPropagation()"
+                class="!tw-font-normal"
+                [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.OFF' | translate"
+                panelClass="table-select"
+              >
+                <mat-option [value]="undefined">
+                  {{ 'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.OFF' | translate }}
+                </mat-option>
+
+                @for (status of boolFilterValues; track status.key) {
+                  <mat-option [value]="status.value">
+                    {{ 'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.' + status.key | translate }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </th>
           <td mat-cell *matCellDef="let land">
             <mat-checkbox disabled [checked]="land.isEuEfta"></mat-checkbox>
