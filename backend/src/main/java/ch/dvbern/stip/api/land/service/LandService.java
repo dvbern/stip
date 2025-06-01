@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.land.repo.LandRepository;
 import ch.dvbern.stip.generated.dto.LandDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -45,6 +46,12 @@ public class LandService {
     @Transactional
     public LandDto createLand(final LandDto landDto) {
         final var land = landMapper.toEntity(landDto);
+
+        var duplicate = landRepository.getByIso3code(land.getIso3code());
+        if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
+            throw new ValidationException("iso3code must be unique or null");
+        }
+
         landRepository.persist(land);
 
         return landMapper.toDto(land);

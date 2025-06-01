@@ -35,7 +35,6 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
-@UniqueOrNullIso3codeConstraint
 @Entity
 @Table(
     name = "land",
