@@ -15,12 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.verfuegung.repo;
 
-public final class DokumentDownloadConstants {
-    private DokumentDownloadConstants() {}
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-    public static final String GESUCH_ID_CLAIM = "gesuch_id";
-    public static final String DOKUMENT_ID_CLAIM = "dokument_id";
-    public static final String VERFUEGUNGS_ID_CLAIM = "verfuegungs_id";
+@ApplicationScoped
+@RequiredArgsConstructor
+public class VerfuegungRepository implements BaseRepository<Verfuegung> {
 }

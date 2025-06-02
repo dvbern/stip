@@ -17,49 +17,38 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import java.util.Comparator;
+
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
-    private final ConfigService configService;
-    private final BerechnungService berechnungService;
-    private final BuchhaltungService buchhaltungService;
-    private final GesuchService gesuchService;
+@Slf4j
+public class NegativeVerfuegungHandler implements GesuchStatusStateChangeHandler {
+    private final VerfuegungService verfuegungService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.VERFUEGT;
+        return transition.getDestination() == Gesuchstatus.NEGATIVE_VERFUEGUNG;
     }
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+        verfuegungService.createNegtativeVerfuegung(
             gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
+            gesuch.getVerfuegungs()
+                .stream()
+                .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+                .orElseThrow(NotFoundException::new)
         );
-
-        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
-            ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnung();
-
-        if (berechnungsresultat > 0) {
-            buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuch,
-                berechnungsresultat
-            );
-        }
     }
 }

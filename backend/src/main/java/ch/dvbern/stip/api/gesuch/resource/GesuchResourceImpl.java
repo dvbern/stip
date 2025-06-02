@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,7 @@ import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -42,9 +42,11 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -64,11 +66,9 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
-import io.quarkus.security.UnauthorizedException;
+import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import io.smallrye.jwt.auth.principal.ParseException;
-import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -76,12 +76,10 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
@@ -100,6 +98,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Slf4j
 @Validated
 public class GesuchResourceImpl implements GesuchResource {
+
     private final GesuchService gesuchService;
     private final GesuchTrancheService gesuchTrancheService;
     private final TenantService tenantService;
@@ -114,7 +113,9 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
+    private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
+    private final GesuchStatusService gesuchStatusService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -184,8 +185,12 @@ public class GesuchResourceImpl implements GesuchResource {
         FileUpload fileUpload
     ) {
         beschwerdeEntscheidAuthorizer.canCreate(gesuchId);
-        return beschwerdeEntscheidService
-            .createBeschwerdeEntscheid(gesuchId, kommentar, isBeschwerdeErfolgreich, fileUpload);
+        return beschwerdeEntscheidService.createBeschwerdeEntscheid(
+            gesuchId,
+            kommentar,
+            isBeschwerdeErfolgreich,
+            fileUpload
+        );
     }
 
     @Override
@@ -235,6 +240,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         beschwerdeVerlaufAuthorizer.canRead();
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        return verfuegungService.getVerfuegungenByGesuch(gesuchId);
     }
 
     @Override
@@ -354,8 +366,9 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_UPDATE, SB_GESUCH_UPDATE })
     public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        final var gesuchTranche =
-            gesuchTrancheService.getGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getId()
+        );
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
     }
@@ -379,16 +392,11 @@ public class GesuchResourceImpl implements GesuchResource {
     @Blocking
     @PermitAll
     public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
-        JsonWebToken jwt;
-        try {
-            jwt = jwtParser.verify(token, configService.getSecret());
-        } catch (ParseException e) {
-            throw new UnauthorizedException();
-        }
-
-        final var gesuchId = UUID.fromString(
-            (String) jwt.claim(DokumentDownloadConstants.GESUCH_ID_CLAIM)
-                .orElseThrow(BadRequestException::new)
+        final var gesuchId = DokumentDownloadUtil.getClaimId(
+            jwtParser,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.GESUCH_ID_CLAIM
         );
 
         ByteArrayOutputStream byteStream = null;
@@ -419,17 +427,12 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        return new FileDownloadTokenDto()
-            .token(
-                Jwt
-                    .claims()
-                    .upn(benutzerService.getCurrentBenutzername())
-                    .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
-                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
-                    .issuer(configService.getIssuer())
-                    .jws()
-                    .signWithSecret(configService.getSecret())
-            );
+        return DokumentDownloadUtil.getFileDownloadToken(
+            gesuchId,
+            DokumentDownloadConstants.GESUCH_ID_CLAIM,
+            benutzerService,
+            configService
+        );
     }
 
     @Override
