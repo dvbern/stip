@@ -187,9 +187,17 @@ public class GesuchService {
     @Transactional
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        final var targetGueltigAb = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId)
+            .getGueltigkeit()
+            .getGueltigAb();
         Optional<GesuchTranche> changes = Optional.empty();
         if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
-            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+            changes = gesuchTrancheHistoryRepository
+                .getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId, targetGueltigAb)
+                .or(
+                    () -> gesuchTrancheHistoryRepository
+                        .getLatestWhereGesuchStatusChangedToEingereicht(gesuchId, targetGueltigAb)
+                );
         }
         // bis eingereicht: changes: empty/null
         // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
