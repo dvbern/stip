@@ -122,6 +122,12 @@ export const SharedModelError = z.intersection(
 
 export type SharedModelError = z.infer<typeof SharedModelError>;
 
+export const isSharedModelError = (
+  error: unknown,
+): error is SharedModelError => {
+  return SharedModelError.safeParse(error).success;
+};
+
 const createError = <K extends SharedModelErrorTypes, T>(
   type: K,
   data: T & { messageKey: string; messageKeys?: string[]; message?: string },

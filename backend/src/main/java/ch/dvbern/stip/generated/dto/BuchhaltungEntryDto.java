@@ -29,8 +29,9 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid Integer stipendienBetrag;
   private @Valid Integer auszahlung;
   private @Valid Integer rueckforderung;
-  private @Valid Integer sapId;
+  private @Valid String sapId;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+  private @Valid Integer businessPartnerId;
   private @Valid UUID verfuegungId;
   private @Valid UUID gesuchId;
 
@@ -204,19 +205,19 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
-  public BuchhaltungEntryDto sapId(Integer sapId) {
+  public BuchhaltungEntryDto sapId(String sapId) {
     this.sapId = sapId;
     return this;
   }
 
   
   @JsonProperty("sapId")
-  public Integer getSapId() {
+  public String getSapId() {
     return sapId;
   }
 
   @JsonProperty("sapId")
-  public void setSapId(Integer sapId) {
+  public void setSapId(String sapId) {
     this.sapId = sapId;
   }
 
@@ -236,6 +237,24 @@ public class BuchhaltungEntryDto  implements Serializable {
   @JsonProperty("sapStatus")
   public void setSapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
     this.sapStatus = sapStatus;
+  }
+
+  /**
+   **/
+  public BuchhaltungEntryDto businessPartnerId(Integer businessPartnerId) {
+    this.businessPartnerId = businessPartnerId;
+    return this;
+  }
+
+  
+  @JsonProperty("businessPartnerId")
+  public Integer getBusinessPartnerId() {
+    return businessPartnerId;
+  }
+
+  @JsonProperty("businessPartnerId")
+  public void setBusinessPartnerId(Integer businessPartnerId) {
+    this.businessPartnerId = businessPartnerId;
   }
 
   /**
@@ -295,13 +314,14 @@ public class BuchhaltungEntryDto  implements Serializable {
         Objects.equals(this.rueckforderung, buchhaltungEntry.rueckforderung) &&
         Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
         Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
+        Objects.equals(this.businessPartnerId, buchhaltungEntry.businessPartnerId) &&
         Objects.equals(this.verfuegungId, buchhaltungEntry.verfuegungId) &&
         Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, businessPartnerId, verfuegungId, gesuchId);
   }
 
   @Override
@@ -320,6 +340,7 @@ public class BuchhaltungEntryDto  implements Serializable {
     sb.append("    rueckforderung: ").append(toIndentedString(rueckforderung)).append("\n");
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("    verfuegungId: ").append(toIndentedString(verfuegungId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("}");

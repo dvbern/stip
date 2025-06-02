@@ -114,7 +114,7 @@ class DokumentResourceImplTest {
         when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
         when(gesuchDokumentHistoryRepository.findInHistoryById(any())).thenReturn(gesuchDokument);
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any())).thenReturn(tranche);
-        when(gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(any(), any()))
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(Optional.empty());
     }
 

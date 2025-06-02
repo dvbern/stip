@@ -790,6 +790,7 @@ public class TestUtil {
 
     public static Gesuch setupGesuchWithCustomDokument() {
         GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchTranche.setGesuchDokuments(List.of(setupCustomGesuchDokument()));
         Gesuch gesuch = new Gesuch();
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);

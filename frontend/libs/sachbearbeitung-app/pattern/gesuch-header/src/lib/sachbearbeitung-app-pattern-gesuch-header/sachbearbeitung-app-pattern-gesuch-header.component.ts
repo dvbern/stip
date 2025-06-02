@@ -35,6 +35,7 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
@@ -42,7 +43,6 @@ import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
-import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -326,19 +326,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const periode = this.gesuchStore.gesuchInfo().data;
     if (!gesuchId || !periode) return;
 
-    SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
+    SharedDialogTrancheErstellenComponent.open(this.dialog, {
+      forAenderung: false,
+      gesuchId,
       minDate: new Date(periode.startDate),
       maxDate: new Date(periode.endDate),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
-          this.gesuchAenderungStore.createGesuchTrancheCopy$({
-            gesuchId,
-            createGesuchTrancheRequest: result,
-          });
-        }
-      });
+      .subscribe();
   }
 }

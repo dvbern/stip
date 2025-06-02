@@ -66,6 +66,13 @@
       </dd>
     }
 
+    @if (dialogData.businessPartnerId) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapBusinessPartnerId' | translate }}
+      </dt>
+      <dd class="tw-font-normal">{{ dialogData.businessPartnerId }}</dd>
+    }
+
     <dt class="tw-mt-4 tw-whitespace-nowrap tw-font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | translate }}
     </dt>

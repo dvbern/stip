@@ -1,9 +1,9 @@
-<wsdl:definitions xmlns:p1="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="os_VendorPostingCreate" targetNamespace="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING">
+<wsdl:definitions name="os_VendorPostingCreate" targetNamespace="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:p1="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:documentation/>
   <wsp:UsingPolicy wsdl:required="true"/>
   <wsp:Policy wsu:Id="OP_os_VendorPostingCreate"/>
   <wsdl:types>
-    <xsd:schema xmlns="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:p7="urn:be.ch:KTBE_ERP_FI:GENERAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING">
+    <xsd:schema targetNamespace="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:p7="urn:be.ch:KTBE_ERP_FI:GENERAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <xsd:import namespace="urn:be.ch:KTBE_ERP_FI:GENERAL"/>
       <xsd:element name="VendorPostingCreate_Response" type="VendorPostingCreate_Response"/>
       <xsd:element name="VendorPostingCreate_Request" type="VendorPostingCreate_Request"/>
@@ -385,9 +385,7 @@
                       <xsd:element name="AMT_DOCCUR">
                         <xsd:annotation>
                           <xsd:appinfo source="http://sap.com/xi/TextID">e196f08b246b11edc41e000000605fae</xsd:appinfo>
-                          <xsd:documentation>
-                            <![CDATA[ Betrag: muss in Summe den Kreditorenbetrag ausgleichen, kann aber auf verschiedene Kostenträger gebucht werden. Dezimalstelle als Punkt übertragen, bis zu 4 Nachkommastellen möglich ]]>
-                          </xsd:documentation>
+                          <xsd:documentation>Betrag: muss in Summe den Kreditorenbetrag ausgleichen, kann aber auf verschiedene Kostenträger gebucht werden. Dezimalstelle als Punkt übertragen, bis zu 4 Nachkommastellen möglich</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
                           <xsd:restriction base="xsd:decimal">
@@ -429,7 +427,7 @@
         </xsd:sequence>
       </xsd:complexType>
     </xsd:schema>
-    <xsd:schema xmlns="urn:be.ch:KTBE_ERP_FI:GENERAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:be.ch:KTBE_ERP_FI:GENERAL">
+    <xsd:schema targetNamespace="urn:be.ch:KTBE_ERP_FI:GENERAL" xmlns="urn:be.ch:KTBE_ERP_FI:GENERAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <xsd:complexType name="AdditionalData">
         <xsd:annotation>
           <xsd:documentation xml:lang="DE">Struktur für Zusatzdaten</xsd:documentation>
@@ -588,23 +586,23 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="os_VendorPostingCreateBinding" type="p1:os_VendorPostingCreate">
-    <soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     <wsdl:operation name="os_VendorPostingCreate">
-      <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" soapAction="http://sap.com/xi/WebService/soap1.1"/>
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       <wsdl:input>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="os_VendorPostingCreateService">
     <wsdl:port name="HTTP_Port" binding="p1:os_VendorPostingCreateBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_VendorPostingCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_ERP_FI%3AVENDOR_POSTING"/>
+      <soap:address location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_VendorPostingCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_ERP_FI%3AVENDOR_POSTING" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
     <wsdl:port name="HTTPS_Port" binding="p1:os_VendorPostingCreateBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_VendorPostingCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_ERP_FI%3AVENDOR_POSTING"/>
+      <soap:address location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_VendorPostingCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_ERP_FI%3AVENDOR_POSTING" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
