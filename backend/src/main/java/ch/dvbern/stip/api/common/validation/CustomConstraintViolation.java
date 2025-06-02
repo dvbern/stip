@@ -41,7 +41,7 @@ public class CustomConstraintViolation {
     public CustomConstraintViolation(String messageTamplate, String propertyPath) {
         this.messageTemplate = messageTamplate;
         this.message = VALIDATION_MESSAGE_BUNDLE.containsKey(messageTamplate)
-            ? VALIDATION_MESSAGE_BUNDLE.getString(messageTamplate.replaceAll("^\\{|}$", ""))
+            ? VALIDATION_MESSAGE_BUNDLE.getString(messageTamplate.replaceAll("(^\\{)|(}$)", ""))
             : "";
         this.propertyPath = propertyPath;
     }
