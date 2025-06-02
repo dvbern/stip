@@ -56,7 +56,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
-    private static DateRange validateStartEndDate(
+    private static DateRange validateAndCreateDateRange(
         final LocalDate startDate,
         final LocalDate endDate,
         final Gesuch gesuch
@@ -90,8 +90,9 @@ public class GesuchTrancheCopyUtil {
         return new DateRange(minStartDate, maxEndDate);
     }
 
-    private static DateRange validateAndClampStartEndDate(final DateRange gueltigkeit, final Gesuch gesuch) {
-        final var maxRange = validateStartEndDate(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuch);
+    private static DateRange validateAndCreateClampedDateRange(final DateRange gueltigkeit, final Gesuch gesuch) {
+        final var maxRange =
+            validateAndCreateDateRange(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuch);
 
         final var clampedGueltigkeit = clampStartStop(
             maxRange.getGueltigAb(),
@@ -117,7 +118,7 @@ public class GesuchTrancheCopyUtil {
         final CreateAenderungsantragRequestDto createDto
     ) {
         var endDate = createDto.getEnd();
-        final var maxDaterange = validateAndClampStartEndDate(
+        final var maxDaterange = validateAndCreateClampedDateRange(
             new DateRange(createDto.getStart(), createDto.getEnd()),
             original.getGesuch()
         );
@@ -157,7 +158,7 @@ public class GesuchTrancheCopyUtil {
         final DateRange gueltigkeit,
         final String comment
     ) {
-        final var clamped = validateAndClampStartEndDate(gueltigkeit, gesuchTranche.getGesuch());
+        final var clamped = validateAndCreateClampedDateRange(gueltigkeit, gesuchTranche.getGesuch());
         final var newTranche = copyTranche(
             gesuchTranche,
             clamped,
