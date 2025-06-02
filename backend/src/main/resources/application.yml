@@ -16,6 +16,8 @@ kstip:
   sap:
     system-id: '${STIP_SAP_SYSID}'
     auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
+    connectionTimeout: 6000
+    receiveTimeout: 1000
   seeding:
     seed-on:
       - 'dev'

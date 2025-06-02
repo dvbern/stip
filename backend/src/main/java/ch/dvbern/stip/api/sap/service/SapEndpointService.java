@@ -72,6 +72,12 @@ public class SapEndpointService {
     @ConfigProperty(name = "kstip.sap.auth-header-value")
     String authHeaderValue;
 
+    @ConfigProperty(name = "kstip.sap.connectionTimeout")
+    Integer connectionTimeout;
+
+    @ConfigProperty(name = "kstip.sap.receiveTimeout")
+    Integer receiveTimeout;
+
     private void setLogHandler(BindingProvider port) {
         var handlerChain = port.getBinding().getHandlerChain();
         handlerChain.add(new SOAPLoggingHandler());
@@ -80,9 +86,9 @@ public class SapEndpointService {
 
     private void setTimeouts(BindingProvider port) {
         // Set timeout until a connection is established
-        port.getRequestContext().put("javax.xml.ws.client.connectionTimeout", "6000");
+        port.getRequestContext().put("javax.xml.ws.client.connectionTimeout", String.valueOf(connectionTimeout));
         // Set timeout until the response is received
-        port.getRequestContext().put("javax.xml.ws.client.receiveTimeout", "1000");
+        port.getRequestContext().put("javax.xml.ws.client.receiveTimeout", String.valueOf(receiveTimeout));
     }
 
     private void setPortParams(BindingProvider port) {
