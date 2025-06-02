@@ -91,6 +91,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
@@ -171,6 +172,7 @@ public class GesuchService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
+    private final VerfuegungService verfuegungService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -204,16 +206,14 @@ public class GesuchService {
         final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
         final GesuchTranche trancheToUpdate
     ) {
-        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
+        final var benutzerRollenIdentifiers = benutzerService
+            .getCurrentBenutzer()
             .getRollen()
             .stream()
             .map(Rolle::getKeycloakIdentifier)
             .collect(Collectors.toSet());
 
-        final var gesuchsjahr = trancheToUpdate
-            .getGesuch()
-            .getGesuchsperiode()
-            .getGesuchsjahr();
+        final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
         Integer veranlagungsCodeToSet = 0;
 
@@ -222,37 +222,33 @@ public class GesuchService {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = ValidateUpdateLegalityUtil
-                .getAndValidateLegalityValue(
-                    benutzerRollenIdentifiers,
-                    steuerjahrDtoValue,
-                    steuerjahrExistingValue,
-                    steuerjahrDefaultValue
-                );
+            steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+                benutzerRollenIdentifiers,
+                steuerjahrDtoValue,
+                steuerjahrExistingValue,
+                steuerjahrDefaultValue
+            );
 
             final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
             final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
             final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil
-                .getAndValidateLegalityValue(
-                    benutzerRollenIdentifiers,
-                    veranlagungsCodeDtoValue,
-                    veranlagungsCodeExistingValue,
-                    veranlagungscodeDefaltValue
-                );
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+                benutzerRollenIdentifiers,
+                veranlagungsCodeDtoValue,
+                veranlagungsCodeExistingValue,
+                veranlagungscodeDefaltValue
+            );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
-    public void updateGesuch(
-        final UUID gesuchId,
-        final GesuchUpdateDto gesuchUpdateDto,
-        final String tenantId
-    ) throws ValidationsException {
+    public void updateGesuch(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto, final String tenantId)
+    throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
-        var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
+        var trancheToUpdate = gesuch
+            .getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
         if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
             preventUpdateVonGesuchIfReadOnly(gesuch);
@@ -262,10 +258,7 @@ public class GesuchService {
 
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
-                gesuchUpdateDto
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getEinnahmenKosten(),
+                gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten(),
                 trancheToUpdate
             );
         }
@@ -275,10 +268,7 @@ public class GesuchService {
         final var newFormular = trancheToUpdate.getGesuchFormular();
         gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
 
-        final var updatePia = gesuchUpdateDto
-            .getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung();
+        final var updatePia = gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung();
         if (updatePia != null) {
             zuordnungService.updateZuordnungOnGesuch(gesuch);
         }
@@ -296,9 +286,7 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
-        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
-            gesuch.getAusbildung()
-        );
+        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(gesuch.getAusbildung());
 
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
@@ -321,7 +309,8 @@ public class GesuchService {
             .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
             .orElseThrow(NotFoundException::new);
 
-        var ausbildungsstart = gesuch.getAusbildung()
+        var ausbildungsstart = gesuch
+            .getAusbildung()
             .getAusbildungBegin()
             .withYear(periode.getGesuchsperiodeStart().getYear());
         if (ausbildungsstart.isAfter(periode.getGesuchsperiodeStopp())) {
@@ -631,12 +620,14 @@ public class GesuchService {
     public void changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var decision = stipDecisionTextRepository.requireById(decisionId);
+        verfuegungService.createVerfuegung(gesuchId, decisionId);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             new KommentarDto(decision.getTitleDe()),
             false
         );
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
     }
 
     @Transactional
@@ -662,7 +653,8 @@ public class GesuchService {
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        return gesuch.getGesuchTranchen()
+        return gesuch
+            .getGesuchTranchen()
             .stream()
             .filter(
                 gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
@@ -715,8 +707,10 @@ public class GesuchService {
 
     public String getBerechnungsblattFileName(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        GesuchFormular gesuchFormularToUse =
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new).getGesuchFormular();
+        GesuchFormular gesuchFormularToUse = gesuch
+            .getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular();
         return String.format(
             "%s_%s_%s.pdf",
             gesuchFormularToUse.getPersonInAusbildung().getVorname(),
@@ -762,8 +756,10 @@ public class GesuchService {
     public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
-        final var statesWhereCurrentIsReturned =
-            List.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        final var statesWhereCurrentIsReturned = List.of(
+            GesuchTrancheStatus.IN_BEARBEITUNG_GS,
+            GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+        );
         if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
             aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         }
@@ -789,8 +785,10 @@ public class GesuchService {
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
-        gesuchStatusService
-            .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuchTranche.getGesuch(),
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG
+        );
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -809,8 +807,10 @@ public class GesuchService {
     @Transactional
     public void checkForFehlendeDokumenteOnAllGesuche() {
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
-        final var toUpdate =
-            gesuchsToCheck.stream().filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now())).toList();
+        final var toUpdate = gesuchsToCheck
+            .stream()
+            .filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now()))
+            .toList();
         final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
         final var toUpdateVerfuegt = toUpdate.stream().filter(Gesuch::isVerfuegt).toList();
 
@@ -852,10 +852,10 @@ public class GesuchService {
     public void checkForFehlendeDokumenteOnAllAenderungen() {
         final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
 
-        final var toUpdate =
-            gesuchTranchenToCheck.stream()
-                .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isAfter(LocalDate.now()))
-                .toList();
+        final var toUpdate = gesuchTranchenToCheck
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isAfter(LocalDate.now()))
+            .toList();
         if (!toUpdate.isEmpty()) {
             gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
@@ -915,10 +915,9 @@ public class GesuchService {
 
     public void setDefaultNachfristDokumente(Gesuch gesuch) {
         if (Objects.isNull(gesuch.getNachfristDokumente())) {
-            gesuch
-                .setNachfristDokumente(
-                    LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
-                );
+            gesuch.setNachfristDokumente(
+                LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+            );
         }
     }
 
@@ -930,89 +929,67 @@ public class GesuchService {
 
         toTranche.setGueltigkeit(fromTranche.getGueltigkeit());
 
-        GesuchTrancheOverrideUtil.overrideGesuchFormular(
-            toTranche.getGesuchFormular(),
-            formularOfFromTranche
-        );
+        GesuchTrancheOverrideUtil.overrideGesuchFormular(toTranche.getGesuchFormular(), formularOfFromTranche);
 
         // Dokumente
         // Remove doks that exist now but didn't exist then (i.e. past)
-        final var dokumentIdsNow = toTranche.getGesuchDokuments()
+        final var dokumentIdsNow = toTranche
+            .getGesuchDokuments()
             .stream()
-            .flatMap(
-                gesuchDokument -> gesuchDokument.getDokumente()
-                    .stream()
-                    .map(
-                        Dokument::getId
-                    )
-            )
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
             .toList();
 
-        final var dokumentIdsThen = fromTranche.getGesuchDokuments()
+        final var dokumentIdsThen = fromTranche
+            .getGesuchDokuments()
             .stream()
-            .flatMap(
-                gesuchDokument -> gesuchDokument.getDokumente()
-                    .stream()
-                    .map(
-                        Dokument::getId
-                    )
-            )
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
             .toList();
 
         final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
 
-        dokumentIdsNowButNotThen
-            .forEach(
-                uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId())
-            );
+        dokumentIdsNowButNotThen.forEach(uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId()));
 
         // Remove doks that existed then (i.e. past) but not now
-        toTranche.getGesuchDokuments()
-            .removeIf(
-                gesuchDokument -> !fromTranche.getGesuchDokuments().contains(gesuchDokument)
-            );
+        toTranche
+            .getGesuchDokuments()
+            .removeIf(gesuchDokument -> !fromTranche.getGesuchDokuments().contains(gesuchDokument));
 
         final var targetGesuchDokumente = toTranche.getGesuchDokuments();
 
         for (var sourceGesuchDokument : fromTranche.getGesuchDokuments()) {
             if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
-                final var replacement =
-                    targetGesuchDokumente.stream()
-                        .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
-                        .findFirst();
-                replacement.ifPresent(
-                    gesuchDokument -> {
-                        GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument, toTranche);
-                        if (Objects.nonNull(gesuchDokument.getCustomDokumentTyp())) {
-                            customDokumentTypRepository.persist(gesuchDokument.getCustomDokumentTyp());
-                        }
-                        gesuchDokumentRepository.persist(gesuchDokument);
-                        sourceGesuchDokument.getDokumente()
-                            .forEach(
-                                dokument -> {
-                                    if (!gesuchDokument.getDokumente().contains(dokument)) {
-                                        final var newDokument = new Dokument();
-                                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                                        gesuchDokument.addDokument(newDokument);
-                                        dokumentRepository.persist(newDokument);
-                                    }
-                                }
-                            );
+                final var replacement = targetGesuchDokumente
+                    .stream()
+                    .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
+                    .findFirst();
+                replacement.ifPresent(gesuchDokument -> {
+                    GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument, toTranche);
+                    if (Objects.nonNull(gesuchDokument.getCustomDokumentTyp())) {
+                        customDokumentTypRepository.persist(gesuchDokument.getCustomDokumentTyp());
                     }
-                );
-
+                    gesuchDokumentRepository.persist(gesuchDokument);
+                    sourceGesuchDokument
+                        .getDokumente()
+                        .forEach(dokument -> {
+                            if (!gesuchDokument.getDokumente().contains(dokument)) {
+                                final var newDokument = new Dokument();
+                                GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                                gesuchDokument.addDokument(newDokument);
+                                dokumentRepository.persist(newDokument);
+                            }
+                        });
+                });
             } else {
                 final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
                 gesuchDokumentRepository.persist(newGesuchDokument);
-                sourceGesuchDokument.getDokumente()
-                    .forEach(
-                        dokument -> {
-                            final var newDokument = new Dokument();
-                            GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                            newGesuchDokument.addDokument(newDokument);
-                            dokumentRepository.persist(newDokument);
-                        }
-                    );
+                sourceGesuchDokument
+                    .getDokumente()
+                    .forEach(dokument -> {
+                        final var newDokument = new Dokument();
+                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                        newGesuchDokument.addDokument(newDokument);
+                        dokumentRepository.persist(newDokument);
+                    });
             }
         }
     }
@@ -1028,7 +1005,8 @@ public class GesuchService {
 
         final var trancheOfStateEingereicht = gesuchOfStateEingereicht.getGesuchTranchen().get(0);
 
-        final var trancheToReset = gesuch.getGesuchTranchen()
+        final var trancheToReset = gesuch
+            .getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getId().equals(trancheOfStateEingereicht.getId()))
             .findFirst()
@@ -1036,7 +1014,8 @@ public class GesuchService {
 
         resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
 
-        final var allOtherTranchen = gesuch.getGesuchTranchen()
+        final var allOtherTranchen = gesuch
+            .getGesuchTranchen()
             .stream()
             .filter(tranche -> !tranche.getId().equals(trancheToReset.getId()))
             .toList();
@@ -1057,20 +1036,23 @@ public class GesuchService {
     @Transactional
     public List<UUID> doResetGesuchZurueckweisenToEingereicht(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var relevantAenderungId = gesuch.getGesuchTranchen()
+        final var relevantAenderungId = gesuch
+            .getGesuchTranchen()
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
             .max(Comparator.comparing(GesuchTranche::getTimestampErstellt))
             .orElseThrow(NotFoundException::new)
             .getId();
 
-        final Integer revisionToResetTo = gesuchTrancheHistoryRepository
-            .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
-            .orElseThrow()
-        - 1;
+        final Integer revisionToResetTo =
+            gesuchTrancheHistoryRepository
+                .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
+                .orElseThrow()
+            - 1;
 
         // Select the gesuch just before it changes from STIPENDIENANSPRUCH/KEIN_STIPENDIENANSPRUCH to IN_BEARBEITUNG_SB
-        final var gesuchToRevertTo = gesuchHistoryRepository.getGesuchAtRevision(gesuch.getId(), revisionToResetTo)
+        final var gesuchToRevertTo = gesuchHistoryRepository
+            .getGesuchAtRevision(gesuch.getId(), revisionToResetTo)
             .orElseThrow(NotFoundException::new);
 
         Map<UUID, List<GesuchDokumentKommentar>> trancheIdGesuchDokumentKommentarsMap = new HashMap<>();
@@ -1078,7 +1060,8 @@ public class GesuchService {
         // We need to fetch comments before making changes to the gesuch as otherwise hibernate would commit those
         // changes at the getGesuchDokumentKommentarOfGesuchDokumentAtRevision calls
         for (var gesuchTranche : gesuchToRevertTo.getGesuchTranchen()) {
-            List<GesuchDokumentKommentar> gesuchDokumentKommentars = gesuchTranche.getGesuchDokuments()
+            List<GesuchDokumentKommentar> gesuchDokumentKommentars = gesuchTranche
+                .getGesuchDokuments()
                 .stream()
                 .flatMap(
                     gesuchDokument -> gesuchDokumentKommentarHistoryRepository
@@ -1086,10 +1069,7 @@ public class GesuchService {
                         .stream()
                 )
                 .toList();
-            trancheIdGesuchDokumentKommentarsMap.put(
-                gesuchTranche.getId(),
-                gesuchDokumentKommentars
-            );
+            trancheIdGesuchDokumentKommentarsMap.put(gesuchTranche.getId(), gesuchDokumentKommentars);
         }
 
         final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
@@ -1116,22 +1096,20 @@ public class GesuchService {
                     newGesuchDokument.getCustomDokumentTyp().setGesuchDokument(newGesuchDokument);
                 }
                 gesuchDokumentRepository.persist(newGesuchDokument);
-                sourceGesuchDokument.getDokumente()
-                    .forEach(
-                        dokument -> {
-                            final var newDokument = new Dokument();
-                            GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                            newGesuchDokument.addDokument(newDokument);
-                            dokumentRepository.persist(newDokument);
-                        }
-                    );
+                sourceGesuchDokument
+                    .getDokumente()
+                    .forEach(dokument -> {
+                        final var newDokument = new Dokument();
+                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
+                        newGesuchDokument.addDokument(newDokument);
+                        dokumentRepository.persist(newDokument);
+                    });
             }
 
-            gesuchDokumentKommentarService
-                .copyKommentareToTranche(
-                    trancheIdGesuchDokumentKommentarsMap.get(gesuchTrancheToRevertTo.getId()),
-                    newTranche
-                );
+            gesuchDokumentKommentarService.copyKommentareToTranche(
+                trancheIdGesuchDokumentKommentarsMap.get(gesuchTrancheToRevertTo.getId()),
+                newTranche
+            );
         }
 
         gesuch.setNachfristDokumente(gesuchToRevertTo.getNachfristDokumente());

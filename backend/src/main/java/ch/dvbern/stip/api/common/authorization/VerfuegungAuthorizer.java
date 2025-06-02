@@ -15,12 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.common.authorization;
 
-public final class DokumentDownloadConstants {
-    private DokumentDownloadConstants() {}
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
-    public static final String GESUCH_ID_CLAIM = "gesuch_id";
-    public static final String DOKUMENT_ID_CLAIM = "dokument_id";
-    public static final String VERFUEGUNGS_ID_CLAIM = "verfuegungs_id";
+@ApplicationScoped
+@RequiredArgsConstructor
+@Authorizer
+public class VerfuegungAuthorizer extends BaseAuthorizer {
+
+    private final BenutzerService benutzerService;
+
+    @Transactional
+    public void canGetVerfuegungDownloadToken() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isSachbearbeiter(currentBenutzer)) {
+            return;
+        }
+        forbidden();
+    }
 }
