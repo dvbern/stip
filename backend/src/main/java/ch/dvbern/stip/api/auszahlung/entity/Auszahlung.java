@@ -85,7 +85,7 @@ public class Auszahlung extends AbstractMandantEntity {
     private Integer sapBusinessPartnerId;
 
     @Nullable
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(optional = true)
     @JoinColumn(
         name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_auszahlung_sapdelivery_id"),
         nullable = true

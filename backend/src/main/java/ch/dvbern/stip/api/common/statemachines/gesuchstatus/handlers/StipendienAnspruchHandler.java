@@ -43,6 +43,7 @@ public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler
             gesuch.getLatestGesuchTranche()
                 .getGesuchFormular()
                 .getAuszahlung()
+                .getId()
         );
     }
 }

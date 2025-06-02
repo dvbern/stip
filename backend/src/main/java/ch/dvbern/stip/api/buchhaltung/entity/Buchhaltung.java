@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -73,7 +72,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(optional = true)
     @JoinColumn(
         name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_sapdelivery_id"),
         nullable = true

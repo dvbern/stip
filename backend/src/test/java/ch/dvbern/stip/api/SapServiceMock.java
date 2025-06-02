@@ -86,16 +86,6 @@ public class SapServiceMock extends SapService {
     }
 
     @Override
-    public SapStatus createInitialAuszahlungOrGetStatus(final Auszahlung auszahlung) {
-        return SapStatus.SUCCESS;
-    }
-
-    @Override
-    public SapStatus createRemainderAuszahlungOrGetStatus(final Auszahlung auszahlung) {
-        return SapStatus.SUCCESS;
-    }
-
-    @Override
     public void processPendingCreateBusinessPartnerActions() {}
 
     @Override
