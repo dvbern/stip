@@ -220,7 +220,10 @@ public class SapService {
                 );
         Buchhaltung relevantBuchhaltung = null;
 
-        auszahlung.getSapDelivery().setPendingSapAction(null);
+        if (Objects.nonNull(auszahlung.getSapDelivery())) {
+            auszahlung.getSapDelivery().setPendingSapAction(null);
+        }
+
         if (pendingAuszahlungOpt.isEmpty()) {
             final var relevantStipendienBuchhaltung =
                 buchhaltungService.getLastEntryStipendiumOpt(gesuch.getId()).orElseThrow(NotFoundException::new);
@@ -269,7 +272,9 @@ public class SapService {
                 );
         Buchhaltung relevantBuchhaltung = null;
 
-        auszahlung.getSapDelivery().setPendingSapAction(null);
+        if (Objects.nonNull(auszahlung.getSapDelivery())) {
+            auszahlung.getSapDelivery().setPendingSapAction(null);
+        }
         if (pendingAuszahlungOpt.isEmpty()) {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
