@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.VerfuegungDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -112,9 +113,14 @@ public interface GesuchResource {
     GesuchDto einreichedatumManuellAendern(@PathParam("gesuchId") UUID gesuchId,@Valid EinreichedatumAendernRequestDto einreichedatumAendernRequestDto);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/einreichen")
+    @Path("/{gesuchTrancheId}/einreichen/gs")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchEinreichenGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/einreichen/jur")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto gesuchEinreichenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumente")
@@ -136,6 +142,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/verfuegungen")
+    @Produces({ "application/json", "text/plain" })
+    List<VerfuegungDto> getAllVerfuegungen(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")
@@ -188,9 +199,9 @@ public interface GesuchResource {
     FallDashboardItemDto getGsDashboard();
 
     @GET
-    @Path("/changes/{gesuchId}")
+    @Path("/changes/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getInitialTrancheChangesByGesuchId(@PathParam("gesuchId") UUID gesuchId);
+    GesuchWithChangesDto getInitialTrancheChanges(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")

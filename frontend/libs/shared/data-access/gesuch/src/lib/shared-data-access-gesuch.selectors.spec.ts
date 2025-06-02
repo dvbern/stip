@@ -143,6 +143,11 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const result = selectSharedDataAccessGesuchStepsView.projector(
       state,
       {
+        rolesMap: { V0_Sachbearbeiter: true },
+        currentBenutzerRd: initial(),
+        lastFetchTs: null,
+      },
+      {
         deploymentConfig: undefined,
         compileTimeConfig: {
           appType: 'gesuch-app',
@@ -152,11 +157,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
         error: undefined,
         isGesuchApp: true,
         isSachbearbeitungApp: false,
-      },
-      {
-        rolesMap: {},
-        currentBenutzerRd: initial(),
-        lastFetchTs: null,
       },
     );
     const elternIndex = result.steps.findIndex(

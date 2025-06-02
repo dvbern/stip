@@ -108,6 +108,9 @@ public class ApiClient {
     public ValidationApiSpec validation() {
         return ValidationApiSpec.validation(config.reqSpecSupplier);
     }
+    public VerfuegungApiSpec verfuegung() {
+        return VerfuegungApiSpec.verfuegung(config.reqSpecSupplier);
+    }
 
     public static class Config {
         private Supplier<RequestSpecBuilder> reqSpecSupplier = () -> new RequestSpecBuilder()

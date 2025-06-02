@@ -181,6 +181,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
     public static final String VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.ausbildungsort.if.swiss.message}";
+    public static final String VALIDATION_AUSBILDUNG_NOT_FOUND =
+        "{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
     public static final String VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS =

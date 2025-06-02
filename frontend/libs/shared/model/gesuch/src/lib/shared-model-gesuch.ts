@@ -69,5 +69,6 @@ export type AenderungMelden = {
 
 export type TrancheSetting = {
   type: GesuchTrancheTyp;
+  gesuchUrlTyp: GesuchUrlType;
   routesSuffix: string[];
 };

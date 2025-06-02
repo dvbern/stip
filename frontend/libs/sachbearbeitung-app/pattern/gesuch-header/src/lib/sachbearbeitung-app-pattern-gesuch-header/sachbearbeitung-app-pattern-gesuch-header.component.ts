@@ -35,10 +35,8 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import {
-  getRelativeTrancheRoute,
-  urlAfterNavigationEnd,
-} from '@dv/shared/model/router';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
@@ -78,6 +76,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private einreichenStore = inject(EinreichenStore);
+  private permissionStore = inject(PermissionStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
@@ -94,23 +93,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       filter(isDefined),
     ),
   );
-  private relativeRouteSig = getRelativeTrancheRoute(this.router);
 
-  tranchenSig = computed(() => {
-    const gesuchId = this.gesuchIdSig();
-    const relativeRoute = this.relativeRouteSig();
-    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
-
-    return {
-      ...tranchen,
-      list: tranchen.list.map((tranche) => ({
-        ...tranche,
-        url: relativeRoute
-          ? this.router.createUrlTree([...relativeRoute, tranche.id])
-          : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
-      })),
-    };
-  });
+  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes('/tranche/')),
@@ -187,9 +173,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   availableTrancheInteractionSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
 
-    if (gesuchStatus === 'IN_BEARBEITUNG_SB') {
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
     } else {
       return null;
@@ -197,26 +184,35 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   });
 
   statusUebergaengeOptionsSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     const sbCanBearbeitungAbschliessen =
       this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
-
     const validations =
       this.einreichnenStore.validationViewSig().invalidFormularProps
         .validations;
-    const hasValidationErrors = !!validations.errors?.length;
-    const hasValidationWarnings = !!validations.warnings?.length;
 
     if (!gesuchStatus) {
       return {};
     }
 
-    const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
-      StatusUebergaengeOptions[status]({
-        hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
-        isInvalid: hasValidationErrors || hasValidationWarnings,
-      }),
-    );
+    const hasValidationErrors = !!validations.errors?.length;
+    const hasValidationWarnings = !!validations.warnings?.length;
+    const pendingRechtsabklaerung =
+      gesuchStatus === 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' &&
+      !rolesMap.V0_Jurist;
+
+    const list = StatusUebergaengeMap[gesuchStatus]
+      ?.map((status) =>
+        StatusUebergaengeOptions[status]({
+          pendingRechtsabklaerung,
+          hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
+          isInvalid: hasValidationErrors || hasValidationWarnings,
+        }),
+      )
+      .filter((uebergang) =>
+        uebergang.allowedFor.some((role) => rolesMap[role]),
+      );
 
     return {
       list,
@@ -238,8 +234,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
-      case 'VERSENDET':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
+        break;
+      case 'VERSENDET':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+          },
+        });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {

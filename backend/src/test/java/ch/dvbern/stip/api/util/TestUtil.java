@@ -82,13 +82,13 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.restassured.response.ValidatableResponse;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
@@ -232,8 +232,11 @@ public class TestUtil {
         );
     }
 
-    public static AusbildungDtoSpec createAusbildung(final AusbildungApiSpec ausbildungApiSpec, final UUID fallId) {
-        var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+    public static AusbildungDtoSpec createAusbildung(
+        final AusbildungApiSpec ausbildungApiSpec,
+        final AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec,
+        final UUID fallId
+    ) {
         ausbildungUpdateDtoSpec.setFallId(fallId);
 
         final var response = ausbildungApiSpec.createAusbildung()
@@ -255,9 +258,10 @@ public class TestUtil {
         return response.getAusbildung();
     }
 
-    public static GesuchDtoSpec createGesuchAusbildungFall(
+    public static GesuchDtoSpec createGesuchAusbildungFallWithAusbildung(
         final FallApiSpec fallApiSpec,
         final AusbildungApiSpec ausbildungApiSpec,
+        final AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec,
         final GesuchApiSpec gesuchApiSpec
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
@@ -271,7 +275,7 @@ public class TestUtil {
             .as(FallDashboardItemDto.class);
 
         if (fallDashboardItemDtos.getAusbildungDashboardItems().isEmpty()) {
-            createAusbildung(ausbildungApiSpec, fall.getId());
+            createAusbildung(ausbildungApiSpec, ausbildungUpdateDtoSpec, fall.getId());
         }
 
         final var gesuche = gesuchApiSpec.getGesucheGs()
@@ -286,10 +290,17 @@ public class TestUtil {
         return gesuche[0];
     }
 
-    public static UUID extractIdFromResponse(ValidatableResponse response) {
-        var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
-        var idString = locationString[locationString.length - 1];
-        return UUID.fromString(idString);
+    public static GesuchDtoSpec createGesuchAusbildungFall(
+        final FallApiSpec fallApiSpec,
+        final AusbildungApiSpec ausbildungApiSpec,
+        final GesuchApiSpec gesuchApiSpec
+    ) {
+        return createGesuchAusbildungFallWithAusbildung(
+            fallApiSpec,
+            ausbildungApiSpec,
+            AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec(),
+            gesuchApiSpec
+        );
     }
 
     public static ConstraintValidatorContextImpl initValidatorContext() {
@@ -496,7 +507,7 @@ public class TestUtil {
         return baseGesuch;
     }
 
-    public static ValidatableResponse executeAndAssert(final Oper operation) {
+    public static ValidatableResponse executeAndAssertOk(final Oper operation) {
         return executeAndAssert(operation, Response.Status.OK.getStatusCode());
     }
 

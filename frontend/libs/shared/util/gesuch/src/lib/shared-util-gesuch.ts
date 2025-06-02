@@ -9,6 +9,7 @@ import {
   startWith,
 } from 'rxjs';
 
+import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 
@@ -132,26 +133,36 @@ type StatusUebergangOption = {
   icon: string;
   titleKey: string;
   typ: StatusUebergang;
+  allowedFor: AvailableBenutzerRole[];
   disabledReason?: string;
 };
 
 /**
  * Options for the status transitions
  */
-export const StatusUebergaengeOptions = {
+export const StatusUebergaengeOptions: Record<
+  StatusUebergang,
+  (context?: {
+    hasAcceptedAllDokuments: boolean;
+    isInvalid: boolean;
+    pendingRechtsabklaerung: boolean;
+  }) => StatusUebergangOption
+> = {
   SET_TO_BEARBEITUNG: () =>
     ({
       icon: 'edit_note',
       titleKey: 'SET_TO_BEARBEITUNG',
       typ: 'SET_TO_BEARBEITUNG',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  EINGEREICHT: () =>
+  EINGEREICHT: (context?: { isInvalid: boolean }) =>
     ({
       icon: 'check_circle_outline',
       titleKey: 'EINGEREICHT',
       typ: 'EINGEREICHT',
-      disabledReason: undefined,
+      allowedFor: ['V0_Jurist'],
+      disabledReason: context?.isInvalid ? 'VALIDIERUNG_FEHLER' : undefined,
     }) as const,
   BEARBEITUNG_ABSCHLIESSEN: (context?: {
     hasAcceptedAllDokuments: boolean;
@@ -168,14 +179,16 @@ export const StatusUebergaengeOptions = {
       icon: 'check',
       titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
       typ: 'BEARBEITUNG_ABSCHLIESSEN',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: disabledReason,
-    };
+    } as const;
   },
   ZURUECKWEISEN: () =>
     ({
       icon: 'undo',
       titleKey: 'ZURUECKWEISEN',
       typ: 'ZURUECKWEISEN',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
   VERFUEGT: () =>
@@ -183,6 +196,7 @@ export const StatusUebergaengeOptions = {
       icon: 'done',
       titleKey: 'VERFUEGT',
       typ: 'VERFUEGT',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
   BEREIT_FUER_BEARBEITUNG: () =>
@@ -190,6 +204,7 @@ export const StatusUebergaengeOptions = {
       icon: 'play_arrow',
       titleKey: 'BEREIT_FUER_BEARBEITUNG',
       typ: 'BEREIT_FUER_BEARBEITUNG',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
   VERSENDET: () =>
@@ -197,13 +212,19 @@ export const StatusUebergaengeOptions = {
       icon: 'mark_email_read',
       titleKey: 'VERSENDET',
       typ: 'VERSENDET',
+      allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  NEGATIVE_VERFUEGUNG_ERSTELLEN: () =>
+  NEGATIVE_VERFUEGUNG_ERSTELLEN: (context?: {
+    pendingRechtsabklaerung: boolean;
+  }) =>
     ({
       icon: 'block',
       titleKey: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
-      disabledReason: undefined,
+      allowedFor: ['V0_Sachbearbeiter', 'V0_Jurist'],
+      disabledReason: context?.pendingRechtsabklaerung
+        ? 'ABKLAERUNG_DURCH_RECHSTABTEILUNG'
+        : undefined,
     }) as const,
-} satisfies Record<StatusUebergang, () => StatusUebergangOption>;
+};

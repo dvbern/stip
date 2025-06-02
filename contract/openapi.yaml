@@ -2069,9 +2069,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
-  '/gesuch/changes/{gesuchId}':
+  '/gesuch/changes/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -2094,8 +2094,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getInitialTrancheChangesByGesuchId
-      summary: Returns the inital tranche changes by GesuchId
+      operationId: getInitialTrancheChanges
+      summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
         parameters:
           - name: gesuchTrancheId
@@ -2275,6 +2275,57 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateSteuerdaten
       summary: Updates the Steuerdaten of the given gesuchTrancheId
+  '/verfuegung/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: getVerfuegung
+      summary: get Verfuegung
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/verfuegung/{verfuegungsId}/token':
+    parameters:
+      - name: verfuegungsId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getVerfuegungsDownloadToken
+      summary: get Token to downlaod Verfuegung
   '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
@@ -2347,7 +2398,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-  '/gesuch/{gesuchTrancheId}/einreichen':
+  '/gesuch/{gesuchTrancheId}/einreichen/gs':
     patch:
       tags:
         - Gesuch
@@ -2372,8 +2423,64 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichen
-      summary: Das Gesuch einreichen
+      operationId: gesuchEinreichenGs
+      summary: Das Gesuch einreichen als Gesuchsteller
+  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchEinreichenJur
+      summary: Das Gesuch einreichen als Jurist
+  '/gesuch/{gesuchId}/verfuegungen':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Verfuegung'
+          description: Returns a List of all Verfuegungen for a Gesuch
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllVerfuegungen
+      summary: All Verfuegungen for a gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -3492,6 +3599,22 @@ paths:
       summary: Create a buchhaltungsentry from a saldokorrektur
 components:
   schemas:
+    Verfuegung:
+      type: object
+      required:
+        - id
+        - timestampErstellt
+        - filename
+        - stipDecision
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          type: string
+        filename:
+          type: string
+        stipDecision:
+          $ref: '#/components/schemas/StipDecision'
     WelcomeMail:
       type: object
       required:
@@ -4292,6 +4415,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTranche'
+        isInitial:
+          type: boolean
     GesuchCreate:
       required:
         - ausbildungId
@@ -5540,8 +5665,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
-        initialTranche:
-          $ref: '#/components/schemas/GesuchTrancheSlim'
+        initialTranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:
