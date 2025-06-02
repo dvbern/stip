@@ -6,6 +6,7 @@ import { default as userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
+import { RolesMap } from '@dv/shared/model/benutzer';
 import {
   Ausbildung,
   GesuchFormular,
@@ -37,8 +38,8 @@ async function setup(formular: GesuchFormular) {
         initialState: {
           benutzers: {
             rolesMap: {
-              Gesuchsteller: true,
-            },
+              V0_Gesuchsteller: true,
+            } satisfies RolesMap,
           },
           gesuchs: mockedGesuchAppWritableGesuchState({
             tranche: { id: '1', typ: 'TRANCHE' },
