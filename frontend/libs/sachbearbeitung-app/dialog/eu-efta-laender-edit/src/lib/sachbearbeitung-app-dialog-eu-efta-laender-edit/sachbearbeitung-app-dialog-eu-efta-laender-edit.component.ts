@@ -26,7 +26,7 @@ import {
 } from '@dv/shared/ui/form';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
-type EuEftaLandEditData = {
+export type EuEftaLandEditData = {
   laender: Land[];
   land?: Land;
 };
@@ -61,8 +61,6 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
   maskitoBfsCode: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, /\d/],
   };
-
-  // Todo: dialog nicht schliessen, wenn call failt. check wie du das bei Ausbildung gemacht hast
 
   uniqueBfsNumberValidator = (): ValidatorFn => (control) => {
     const laender = this.dialogData.laender;
@@ -119,7 +117,6 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     });
   }
 
-  // todo: add custom validator for iso3code
   form = this.formBuilder.group({
     laendercodeBfs: [
       <string | undefined>undefined,

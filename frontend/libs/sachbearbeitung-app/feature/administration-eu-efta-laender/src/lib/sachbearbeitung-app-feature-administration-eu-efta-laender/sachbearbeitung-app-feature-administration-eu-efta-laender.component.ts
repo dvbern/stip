@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
@@ -70,7 +70,6 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
-  private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
   private dialog = inject(MatDialog);
   private sortSig = viewChild(MatSort);
@@ -124,6 +123,23 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     const filter = this.filterChangedSig();
 
     const datasource = new MatTableDataSource(allCountries);
+
+    // Custom sort function to handle empty iso3code values
+    datasource.sortingDataAccessor = (data, sortHeaderId) => {
+      if (sortHeaderId === 'iso3code') {
+        // Return a value that will sort empty/null/undefined to the end
+        return data.iso3code || 'zzz'; // 'zzz' ensures empty values go to end in ascending order
+      }
+      // Handle boolean fields by converting to number for sorting
+      if (typeof data[sortHeaderId as keyof typeof data] === 'boolean') {
+        return data[sortHeaderId as keyof typeof data] ? 1 : 0;
+      }
+      // For undefined/null, return empty string to avoid undefined
+      const value = data[sortHeaderId as keyof typeof data];
+      return value !== undefined && value !== null
+        ? (value as string | number)
+        : '';
+    };
 
     datasource.filterPredicate = (data, filter: string) => {
       const { iso3code, deKurzform, frKurzform, eintragGueltig, isEuEfta } =
@@ -184,6 +200,18 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       },
       { allowSignalWrites: true },
     );
+
+    // Set default sorting
+    effect(() => {
+      const sort = this.sortSig();
+      if (sort && !sort.active) {
+        sort.sort({
+          id: 'deKurzform',
+          start: 'asc',
+          disableClear: false,
+        });
+      }
+    });
   }
 
   openDialog(land?: Land) {
