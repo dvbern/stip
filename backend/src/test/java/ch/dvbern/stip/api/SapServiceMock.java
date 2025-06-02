@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
@@ -93,4 +95,9 @@ public class SapServiceMock extends SapService {
 
     @Override
     public void processRemainderAuszahlungActions() {}
+
+    @Override
+    public SapStatus createInitialAuszahlungOrGetStatus(final UUID auszahlungId) {
+        return SapStatus.SUCCESS;
+    }
 }
