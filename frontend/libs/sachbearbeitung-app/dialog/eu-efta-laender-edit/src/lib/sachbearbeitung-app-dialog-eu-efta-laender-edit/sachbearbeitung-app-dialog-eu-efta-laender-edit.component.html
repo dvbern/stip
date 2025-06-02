@@ -41,7 +41,16 @@
     <!-- ISO3 - Code -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.label' | translate }}</mat-label>
-      <input data-testid="form-euEftaLaender-iso3code" matInput type="text" formControlName="iso3code" />
+      <input
+        data-testid="form-euEftaLaender-iso3code"
+        matInput
+        type="text"
+        [maskito]="maskitoIso3Code"
+        formControlName="iso3code"
+      />
+      <mat-error *dvSharedUiFormMessageError="'notUniqueIso3'">
+        {{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.error.notUniqueIso3' | translate }}
+      </mat-error>
     </mat-form-field>
     <!-- De Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">

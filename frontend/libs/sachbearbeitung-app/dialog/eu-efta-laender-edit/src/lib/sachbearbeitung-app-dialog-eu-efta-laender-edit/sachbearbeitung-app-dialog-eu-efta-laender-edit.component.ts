@@ -84,6 +84,31 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     return duplicateExists ? { notUniqueBfs: true } : null;
   };
 
+  // Custom mask for ISO3 code - limit to exactly 3 uppercase letters
+  maskitoIso3Code: MaskitoOptions = {
+    mask: [/[A-Z]/, /[A-Z]/, /[A-Z]/],
+  };
+
+  // validator for ISO3 code to ensure it's unique
+  uniqueIso3CodeValidator = (): ValidatorFn => (control) => {
+    const laender = this.dialogData.laender;
+    const currentValue = control.value;
+
+    if (!currentValue) {
+      return null;
+    }
+    const currentEditLand = this.dialogData.land;
+
+    const duplicateExists = laender.some((entry) => {
+      const isSameAsCurrent =
+        currentEditLand && entry.iso3code === currentEditLand.iso3code;
+
+      return entry.iso3code === currentValue && !isSameAsCurrent;
+    });
+
+    return duplicateExists ? { notUniqueIso3: true } : null;
+  };
+
   static open(dialog: MatDialog, data: EuEftaLandEditData) {
     return dialog.open<
       SachbearbeitungAppDialogEuEftaLaenderEditComponent,
@@ -100,7 +125,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
       <string | undefined>undefined,
       [Validators.required, this.uniqueBfsNumberValidator()],
     ],
-    iso3code: [<string | undefined>undefined],
+    iso3code: [<string | undefined>undefined, [this.uniqueIso3CodeValidator()]],
     deKurzform: [<string | undefined>undefined, [Validators.required]],
     frKurzform: [<string | undefined>undefined, [Validators.required]],
     itKurzform: [<string | undefined>undefined, [Validators.required]],
@@ -134,6 +159,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
 
     this.dialogRef.close({ ...this.dialogData.land, ...values } as Land);
   }
+
   close() {
     this.dialogRef.close();
   }

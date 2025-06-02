@@ -214,7 +214,7 @@ export class SozialdienstAppFeatureCockpitComponent
     );
   });
 
-  // for delegierungAngenommen
+  // for delegierungAngenommen  "sachbearbeitung-app.admin.euEftaLaender.iso3code.error.notUniqueIso3": "ISO3 Code existiert bereits",
   statusValues = [
     {
       key: 'DELEGIERUNG',
