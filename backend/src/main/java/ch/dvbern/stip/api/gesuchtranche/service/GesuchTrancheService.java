@@ -145,7 +145,7 @@ public class GesuchTrancheService {
         UUID gesuchId
     ) {
         final var allTranchenFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
+            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusFirstChangedToVerfuegt(gesuchId);
 
         final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
         allTranchenOut.addAll(

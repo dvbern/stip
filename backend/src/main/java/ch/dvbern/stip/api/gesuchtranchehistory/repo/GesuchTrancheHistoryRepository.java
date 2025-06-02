@@ -136,8 +136,8 @@ public class GesuchTrancheHistoryRepository {
             .findFirst();
     }
 
-    public List<GesuchTranche> getAllTranchenWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
-        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT)
+    public List<GesuchTranche> getAllTranchenWhereGesuchStatusFirstChangedToVerfuegt(final UUID gesuchId) {
+        return gesuchHistoryService.getFirstWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT)
             .map(Gesuch::getTranchenTranchen)
             .map(Stream::toList)
             .orElse(new ArrayList<>());
