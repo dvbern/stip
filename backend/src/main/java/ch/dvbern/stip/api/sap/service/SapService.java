@@ -199,6 +199,7 @@ public class SapService {
             .isBefore(LocalDate.now());
     }
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public SapStatus createInitialAuszahlungOrGetStatus(final Auszahlung auszahlung) {
         if (auszahlung.getSapBusinessPartnerId() == null) {
             final var createBusinessPartnerStatus = getOrCreateBusinessPartner(auszahlung);
@@ -214,6 +215,7 @@ public class SapService {
                 );
         Buchhaltung relevantBuchhaltung = null;
 
+        auszahlung.getSapDelivery().setPendingSapAction(null);
         if (pendingAuszahlungOpt.isEmpty()) {
             final var relevantStipendienBuchhaltung =
                 buchhaltungService.getLastEntryStipendiumOpt(gesuch.getId()).orElseThrow(NotFoundException::new);
@@ -260,6 +262,7 @@ public class SapService {
                 );
         Buchhaltung relevantBuchhaltung = null;
 
+        auszahlung.getSapDelivery().setPendingSapAction(null);
         if (pendingAuszahlungOpt.isEmpty()) {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
@@ -288,14 +291,8 @@ public class SapService {
     public void processPendingSapAction(Auszahlung auszahlung) {
         if (auszahlung.getSapDelivery() != null) {
             switch (auszahlung.getSapDelivery().getPendingSapAction()) {
-                case AUSZAHLUNG_INITIAL -> {
-                    createInitialAuszahlungOrGetStatus(auszahlung);
-                    auszahlung.getSapDelivery().setPendingSapAction(null);
-                }
-                case AUSZAHLUNG_REMAINDER -> {
-                    createRemainderAuszahlungOrGetStatus(auszahlung);
-                    auszahlung.getSapDelivery().setPendingSapAction(null);
-                }
+                case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(auszahlung);
+                case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(auszahlung);
                 case null -> throw new IllegalStateException("Invalid pending action: null");
                 default -> throw new IllegalStateException(
                     "Invalid pending action: " + auszahlung.getSapDelivery().getPendingSapAction().name()
