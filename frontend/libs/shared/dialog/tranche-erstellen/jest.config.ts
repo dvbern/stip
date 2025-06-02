@@ -1,12 +1,11 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-ui-aenderung-melden-dialog',
+  displayName: 'shared-dialog-tranche-erstellen',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/ui/aenderung-melden-dialog',
+    '../../../../coverage/libs/shared/dialog/tranche-erstellen',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

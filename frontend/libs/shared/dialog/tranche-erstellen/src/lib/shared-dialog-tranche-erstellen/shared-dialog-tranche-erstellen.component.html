@@ -6,12 +6,30 @@
 >
   <span class="material-symbols-rounded">close</span>
 </button>
-<form [formGroup]="form" data-testid="form-aenderung-melden-dialog-form" class="p-4" (ngSubmit)="confirm()">
-  <h3 class="mb-3">{{ 'shared.dialog.gesuch-aenderung.title' | translate }}</h3>
-  <div class="mb-5" [innerHTML]="'shared.dialog.gesuch-aenderung.text' | translate"></div>
+<form
+  [formGroup]="form"
+  data-testid="form-aenderung-melden-dialog-form"
+  class="p-4 tw-block tw-max-w-[580px]"
+  (ngSubmit)="confirm()"
+>
+  <h3 class="mb-4">
+    {{
+      config.appType === 'sachbearbeitung-app'
+        ? ('shared.dialog.gesuch.tranche.create.title' | translate)
+        : ('shared.dialog.gesuch-aenderung.title' | translate)
+    }}
+  </h3>
+  <div
+    class="mb-4"
+    [innerHTML]="
+      config.appType === 'sachbearbeitung-app'
+        ? ('shared.dialog.gesuch.tranche.create.text' | translate)
+        : ('shared.dialog.gesuch-aenderung.text' | translate)
+    "
+  ></div>
   <div class="row">
     <div class="col-6">
-      <mat-form-field dvSharedUiFormField>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | translate }}</mat-label>
         <input
           matInput
@@ -23,12 +41,8 @@
           data-testid="form-aenderung-melden-dialog-gueltig-ab"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
-        <mat-datepicker-toggle matSuffix [for]="vonPicker"></mat-datepicker-toggle>
-        <mat-datepicker
-          (monthSelected)="monthSelectedGueltigAb($event, vonPicker)"
-          #vonPicker
-          [startView]="config.isSachbearbeitungApp ? 'multi-year' : 'month'"
-        ></mat-datepicker>
+        <mat-datepicker-toggle matIconSuffix [for]="vonPicker"></mat-datepicker-toggle>
+        <mat-datepicker #vonPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -41,24 +55,20 @@
       </mat-form-field>
     </div>
     <div class="col-6">
-      <mat-form-field dvSharedUiFormField>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | translate }}</mat-label>
         <input
           matInput
           [dvMaxLength]="'small'"
           [matDatepicker]="bisPicker"
-          [min]="form.controls.gueltigAb.value ?? dialogData.minDate"
+          [min]="oneDayAfterGueltigAbSig() ?? dialogData.minDate"
           [max]="dialogData.maxDate"
           formControlName="gueltigBis"
           data-testid="form-aenderung-melden-dialog-gueltig-bis"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
-        <mat-datepicker-toggle matSuffix [for]="bisPicker"></mat-datepicker-toggle>
-        <mat-datepicker
-          #bisPicker
-          (monthSelected)="monthSelectedGueltigBis($event, bisPicker)"
-          [startView]="config.isSachbearbeitungApp ? 'multi-year' : 'month'"
-        ></mat-datepicker>
+        <mat-datepicker-toggle matIconSuffix [for]="bisPicker"></mat-datepicker-toggle>
+        <mat-datepicker #bisPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
           {{ 'shared.form.error.minDate' | translate: { date: form.controls.gueltigAb.value | date: 'dd.MM.yyyy' } }}
         </mat-error>
@@ -67,6 +77,11 @@
         </mat-error>
       </mat-form-field>
     </div>
+  </div>
+  <div class="group-errors tw-mt-1 tw-text-sm">
+    @if (form.errors?.['dateRangeTooShort']) {
+      <mat-error> {{ 'shared.form.error.dateRangeTooShort' | translate }}</mat-error>
+    }
   </div>
   <div class="row mt-4">
     <mat-form-field class="col-12" dvSharedUiFormField>
@@ -83,12 +98,15 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="d-flex mt-4 justify-content-between">
+  <div class="d-flex mt-5 justify-content-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | translate }}
     </button>
-    <button type="submit" [disabled]="form.invalid" data-testid="dialog-confirm" class="btn btn-primary ms-2">
-      {{ 'shared.form.save' | translate }}
-    </button>
+    <dv-shared-ui-form-save
+      data-testid="dialog-confirm"
+      class="ms-2"
+      [disabled]="form.invalid || form.pristine"
+      [loading]="gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending: { ignoreInitial: true }"
+    ></dv-shared-ui-form-save>
   </div>
 </form>
