@@ -290,6 +290,7 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.saldo": "Solde:",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId": "SAP ID:",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus": "SAP Status:",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapBusinessPartnerId": "SAP Businesspartner ID",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung": "Remarque:",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "La correction du solde a été créée avec succès",
 

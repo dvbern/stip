@@ -1,15 +1,15 @@
-<wsdl:definitions xmlns:p1="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="os_BusinessPartnerCreate" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+<wsdl:definitions name="os_BusinessPartnerCreate" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:p1="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:documentation/>
   <wsp:UsingPolicy wsdl:required="true"/>
   <wsp:Policy wsu:Id="OP_os_BusinessPartnerCreate"/>
   <wsdl:types>
-    <xsd:schema xmlns="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://sap.com/xi/SAPGlobal/GDT">
+    <xsd:schema targetNamespace="http://sap.com/xi/SAPGlobal/GDT" xmlns="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <xsd:attribute name="DeletionIndicator" type="Indicator"/>
       <xsd:simpleType name="Indicator">
         <xsd:restriction base="xsd:boolean"/>
       </xsd:simpleType>
     </xsd:schema>
-    <xsd:schema xmlns:p9="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+    <xsd:schema targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:p9="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
       <xsd:import namespace="http://sap.com/xi/SAPGlobal/GDT"/>
       <xsd:element name="BusinessPartnerCreate_Request" type="BusinessPartnerCreate_Request"/>
       <xsd:element name="BusinessPartnerCreate_Response" type="BusinessPartnerCreate_Response"/>
@@ -1599,23 +1599,23 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="os_BusinessPartnerCreateBinding" type="p1:os_BusinessPartnerCreate">
-    <soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     <wsdl:operation name="os_BusinessPartnerCreate">
-      <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" soapAction="http://sap.com/xi/WebService/soap1.1"/>
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       <wsdl:input>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="os_BusinessPartnerCreateService">
     <wsdl:port name="HTTP_Port" binding="p1:os_BusinessPartnerCreateBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER"/>
+      <soap:address location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
     <wsdl:port name="HTTPS_Port" binding="p1:os_BusinessPartnerCreateBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER"/>
+      <soap:address location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerCreate&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

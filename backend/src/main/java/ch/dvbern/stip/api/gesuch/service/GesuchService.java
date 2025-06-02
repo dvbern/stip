@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
@@ -131,7 +132,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchService {
-
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -398,15 +398,24 @@ public class GesuchService {
         }
 
         sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream().map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ)).toList();
+        final var results = baseQuery.stream()
+            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ))
+            .toList();
 
-        return new PaginatedSbDashboardDto(page, results.size(), Math.toIntExact(countQuery.fetchFirst()), results);
+        return new PaginatedSbDashboardDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
+        );
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findForGs(benutzer.getId()).map(gesuchMapperUtil::mapWithNewestTranche).toList();
+        return gesuchRepository.findForGs(benutzer.getId())
+            .map(gesuchMapperUtil::mapWithNewestTranche)
+            .toList();
     }
 
     @Transactional
@@ -468,7 +477,7 @@ public class GesuchService {
             throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
         }
 
-        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
+        final var gesuchTranche = gesuch.getLatestGesuchTranche();
         final var decision = stipDecisionService.decide(gesuchTranche);
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
@@ -525,7 +534,8 @@ public class GesuchService {
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH;
             }
         }
-        gesuchStatusService.triggerStateMachineEventWithComment(gesuch, gesuchStatusChangeEvent, kommentarDto, true);
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, gesuchStatusChangeEvent, kommentarDto, true);
 
         // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
         return new GesuchZurueckweisenResponseDto()
@@ -634,11 +644,17 @@ public class GesuchService {
         if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
             throw new CustomValidationsException(
                 "Required Unterschriftenblaetter are not uploaded",
-                new CustomConstraintViolation(VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT, "unterschriftenblaetter")
+                new CustomConstraintViolation(
+                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                    "unterschriftenblaetter"
+                )
             );
         }
 
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuch,
+            GesuchStatusChangeEvent.VERSANDBEREIT
+        );
     }
 
     @Transactional
@@ -649,10 +665,12 @@ public class GesuchService {
             .getGesuchTranchen()
             .stream()
             .filter(
-                gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG &&
-                gesuchTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN)
+                gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                && gesuchTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN)
             )
-            .flatMap(gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId()))
+            .flatMap(
+                gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId())
+            )
             .map(gesuchDokumentMapper::toDto)
             .toList();
     }
@@ -691,13 +709,7 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungsblattService.getBerechnungsblattFromGesuch(
             gesuch,
-            gesuch
-                .getNewestGesuchTranche()
-                .orElseThrow(NotFoundException::new)
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale()
+            LocaleUtil.getLocaleFromGesuch(gesuch)
         );
     }
 
@@ -768,9 +780,8 @@ public class GesuchService {
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(
-            aenderungId
-        );
+        final var latestWhereStatusChanged =
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         return gesuchMapperUtil.toWithChangesDto(
             aenderung.getGesuch(),
             aenderung,
@@ -862,7 +873,10 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto einreichedatumManuellAendern(final UUID gesuchId, final EinreichedatumAendernRequestDto dto) {
+    public GesuchDto einreichedatumManuellAendern(
+        final UUID gesuchId,
+        final EinreichedatumAendernRequestDto dto
+    ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var gesuchsperiode = gesuch.getGesuchsperiode();
@@ -894,8 +908,8 @@ public class GesuchService {
     public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        return (currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER)) &&
-        gesuchStatusService.canChangeEinreichedatum(gesuch.isVerfuegt(), gesuch.getGesuchStatus()));
+        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        && gesuchStatusService.canChangeEinreichedatum(gesuch.isVerfuegt(), gesuch.getGesuchStatus());
     }
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
@@ -990,9 +1004,8 @@ public class GesuchService {
 
     @Transactional
     public void resetGesuchZurueckweisenToEingereicht(Gesuch gesuch) {
-        final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId()).orElseThrow(
-            NotFoundException::new
-        );
+        final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId())
+            .orElseThrow(NotFoundException::new);
 
         if (gesuchOfStateEingereicht.getGesuchTranchen().size() != 1) {
             throw new IllegalStateException("Trying to reset to a Gesuch which has more than 1 Tranchen");
@@ -1043,8 +1056,7 @@ public class GesuchService {
             gesuchTrancheHistoryRepository
                 .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
                 .orElseThrow()
-            -
-            1;
+            - 1;
 
         // Select the gesuch just before it changes from STIPENDIENANSPRUCH/KEIN_STIPENDIENANSPRUCH to IN_BEARBEITUNG_SB
         final var gesuchToRevertTo = gesuchHistoryRepository

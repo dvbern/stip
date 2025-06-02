@@ -21,8 +21,9 @@ export interface BuchhaltungEntry {
     rueckforderung?: number;
     saldoAenderung: number;
     saldo: number;
-    sapId?: number;
+    sapId?: string;
     sapStatus?: SapStatus;
+    businessPartnerId?: number;
     comment: string;
     verfuegungId?: string;
     gesuchId?: string;
