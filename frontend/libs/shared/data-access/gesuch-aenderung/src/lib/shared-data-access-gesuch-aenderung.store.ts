@@ -171,6 +171,8 @@ export class GesuchAenderungStore extends signalStore(
   createGesuchAenderung$ = rxMethod<{
     gesuchId: string;
     createAenderungsantragRequest: CreateAenderungsantragRequest;
+    onSuccess: () => void;
+    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(() => {
@@ -179,35 +181,39 @@ export class GesuchAenderungStore extends signalStore(
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ gesuchId, createAenderungsantragRequest }) =>
-        this.gesuchTrancheService
-          .createAenderungsantrag$({
-            gesuchId,
-            createAenderungsantragRequest,
-          })
-          .pipe(
-            handleApiResponse(
-              (gesuchAenderung) => {
-                patchState(this, () => ({
-                  cachedGesuchAenderung: gesuchAenderung,
-                }));
-              },
-              {
-                onSuccess: (data) => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch-aenderung.create.success',
-                  });
-                  this.router.navigate([
-                    'gesuch',
-                    PERSON.route,
-                    gesuchId,
-                    'aenderung',
-                    data.id,
-                  ]);
+      switchMap(
+        ({ gesuchId, createAenderungsantragRequest, onSuccess, onFailure }) =>
+          this.gesuchTrancheService
+            .createAenderungsantrag$({
+              gesuchId,
+              createAenderungsantragRequest,
+            })
+            .pipe(
+              handleApiResponse(
+                (gesuchAenderung) => {
+                  patchState(this, () => ({
+                    cachedGesuchAenderung: gesuchAenderung,
+                  }));
                 },
-              },
+                {
+                  onSuccess: (data) => {
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey:
+                        'shared.dialog.gesuch-aenderung.create.success',
+                    });
+                    this.router.navigate([
+                      'gesuch',
+                      PERSON.route,
+                      gesuchId,
+                      'aenderung',
+                      data.id,
+                    ]);
+                    onSuccess();
+                  },
+                  onFailure,
+                },
+              ),
             ),
-          ),
       ),
     ),
   );
@@ -307,48 +313,28 @@ export class GesuchAenderungStore extends signalStore(
           comment,
           onSuccess: additionalOnSuccess,
         }) => {
-          const [serviceCall$, onFailure] = (
-            {
-              AKZEPTIERT: [
-                () =>
-                  this.gesuchTrancheService.aenderungAkzeptieren$(
-                    { aenderungId },
-                    undefined,
-                    undefined,
-                    {
-                      context: shouldIgnoreBadRequestErrorsIf(true),
-                    },
-                  ),
-                (error: unknown) => {
-                  if (
-                    isSharedModelError(error) &&
-                    error.type === 'validationError' &&
-                    EXPECTED_ERRORS[error.messageKey]
-                  ) {
-                    this.globalNotificationStore.createNotification({
-                      type: 'ERROR',
-                      messageKey: EXPECTED_ERRORS[error.messageKey],
-                    });
-                  }
+          const services$ = {
+            AKZEPTIERT: () =>
+              this.gesuchTrancheService.aenderungAkzeptieren$(
+                { aenderungId },
+                undefined,
+                undefined,
+                {
+                  context: shouldIgnoreBadRequestErrorsIf(true),
                 },
-              ] as const,
-              ABGELEHNT: [
-                () =>
-                  this.gesuchTrancheService.aenderungAblehnen$({
-                    aenderungId,
-                    kommentar: { text: comment },
-                  }),
-              ] as const,
-              MANUELLE_AENDERUNG: [
-                () =>
-                  this.gesuchTrancheService.aenderungManuellAnpassen$({
-                    aenderungId,
-                  }),
-              ] as const,
-            } satisfies Record<AenderungChangeState, unknown>
-          )[target];
+              ),
+            ABGELEHNT: () =>
+              this.gesuchTrancheService.aenderungAblehnen$({
+                aenderungId,
+                kommentar: { text: comment },
+              }),
+            MANUELLE_AENDERUNG: () =>
+              this.gesuchTrancheService.aenderungManuellAnpassen$({
+                aenderungId,
+              }),
+          } satisfies Record<AenderungChangeState, unknown>;
 
-          return serviceCall$().pipe(
+          return services$[target]().pipe(
             handleApiResponse(
               (gesuchAenderung) => {
                 patchState(this, () => ({
@@ -363,7 +349,7 @@ export class GesuchAenderungStore extends signalStore(
                   this.getAllTranchenForGesuch$({ gesuchId });
                   additionalOnSuccess(value.id);
                 },
-                onFailure,
+                onFailure: handleKnownErrors(this.globalNotificationStore),
               },
             ),
           );
@@ -372,3 +358,18 @@ export class GesuchAenderungStore extends signalStore(
     ),
   );
 }
+
+const handleKnownErrors =
+  (notificationStore: GlobalNotificationStore) =>
+  (error: unknown): void => {
+    if (
+      isSharedModelError(error) &&
+      error.type === 'validationError' &&
+      EXPECTED_ERRORS[error.messageKey]
+    ) {
+      notificationStore.createNotification({
+        type: 'ERROR',
+        messageKey: EXPECTED_ERRORS[error.messageKey],
+      });
+    }
+  };

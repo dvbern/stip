@@ -125,17 +125,12 @@ export class SharedDialogTrancheErstellenComponent {
       comment: createTranche.kommentar,
     };
 
-    if (this.dialogData.forAenderung) {
-      return this.dialogRef.close(createTrancheData);
-    }
-
-    this.gesuchAenderungStore.createGesuchTrancheCopy$({
+    const servicePayload = {
       gesuchId: this.dialogData.gesuchId,
-      createGesuchTrancheRequest: createTrancheData,
       onSuccess: () => {
         this.dialogRef.close(null);
       },
-      onFailure: (error) => {
+      onFailure: (error: unknown) => {
         const parsedError = sharedUtilFnErrorTransformer(error);
 
         if (
@@ -151,6 +146,20 @@ export class SharedDialogTrancheErstellenComponent {
           });
         }
       },
+    } as const;
+
+    if (this.dialogData.forAenderung) {
+      this.gesuchAenderungStore.createGesuchAenderung$({
+        createAenderungsantragRequest: createTrancheData,
+        ...servicePayload,
+      });
+
+      return;
+    }
+
+    this.gesuchAenderungStore.createGesuchTrancheCopy$({
+      createGesuchTrancheRequest: createTrancheData,
+      ...servicePayload,
     });
   }
 

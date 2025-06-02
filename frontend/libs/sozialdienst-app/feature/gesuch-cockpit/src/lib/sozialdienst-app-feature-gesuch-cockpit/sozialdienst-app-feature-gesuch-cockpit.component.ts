@@ -143,14 +143,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
       maxDate: new Date(endDate),
     })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.gesuchAenderungStore.createGesuchAenderung$({
-            gesuchId: id,
-            createAenderungsantragRequest: result,
-          });
-        }
-      });
+      .subscribe();
   }
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {

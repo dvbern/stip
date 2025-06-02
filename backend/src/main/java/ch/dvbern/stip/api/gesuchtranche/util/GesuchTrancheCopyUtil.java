@@ -23,7 +23,6 @@ import java.util.Comparator;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
-import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -57,7 +56,11 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
-    private static DateRange validateStartEndDate(final LocalDate startDate, final LocalDate endDate, final Gesuch gesuch) {
+    private static DateRange validateStartEndDate(
+        final LocalDate startDate,
+        final LocalDate endDate,
+        final Gesuch gesuch
+    ) {
         var minStartDate = gesuch
             .getGesuchTranchen()
             .stream()
@@ -114,7 +117,10 @@ public class GesuchTrancheCopyUtil {
         final CreateAenderungsantragRequestDto createDto
     ) {
         var endDate = createDto.getEnd();
-        final var maxDaterange = validateStartEndDate(createDto.getStart(), createDto.getEnd(), original.getGesuch());
+        final var maxDaterange = validateAndClampStartEndDate(
+            new DateRange(createDto.getStart(), createDto.getEnd()),
+            original.getGesuch()
+        );
 
         if (endDate == null) {
             endDate = maxDaterange.getGueltigBis();

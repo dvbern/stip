@@ -1,7 +1,7 @@
 {
-  "name": "shared-ui-aenderung-melden-dialog",
+  "name": "shared-dialog-tranche-erstellen",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/ui/aenderung-melden-dialog/src",
+  "sourceRoot": "libs/shared/dialog/tranche-erstellen/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:dialog", "scope:shared"],
@@ -9,14 +9,14 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/ui/aenderung-melden-dialog/tsconfig.lib.json"
+        "tsConfig": "libs/shared/dialog/tranche-erstellen/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/ui/aenderung-melden-dialog/jest.config.ts"
+        "jestConfig": "libs/shared/dialog/tranche-erstellen/jest.config.ts"
       }
     },
     "lint": {

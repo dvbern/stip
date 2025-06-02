@@ -18,9 +18,9 @@
 package ch.dvbern.stip.api.common.exception;
 
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import jakarta.ws.rs.BadRequestException;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
-import jakarta.ws.rs.BadRequestException;
 
 public class ServerExceptionMappers {
 
