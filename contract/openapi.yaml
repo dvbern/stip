@@ -4864,8 +4864,6 @@ components:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
         elterns:
           type: array
           items:
@@ -4991,8 +4989,6 @@ components:
           $ref: '#/components/schemas/FamiliensituationUpdate'
         partner:
           $ref: '#/components/schemas/PartnerUpdate'
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
         elterns:
           type: array
           items:
