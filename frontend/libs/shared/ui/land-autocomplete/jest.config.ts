@@ -1,11 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sachbearbeitung-app-data-access-eu-efta-laender',
+  displayName: 'shared-ui-land-autocomplete',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/data-access/eu-efta-laender',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/land-autocomplete',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

@@ -15,23 +15,23 @@ import {
   mapCachedData,
 } from '@dv/shared/util/remote-data';
 
-type EuEftaLaenderState = {
+type LandState = {
   laender: CachedRemoteData<Land[]>;
 };
 
-const initialState: EuEftaLaenderState = {
+const initialState: LandState = {
   laender: initial(),
 };
 
-@Injectable()
-export class EuEftaLaenderStore extends signalStore(
+@Injectable({ providedIn: 'root' })
+export class LandStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('EuEftaLaenderStore'),
+  withDevtools('LandStore'),
 ) {
   private landService = inject(LandService);
 
-  euEftaLaenderListViewSig = computed(() => {
+  landListViewSig = computed(() => {
     return fromCachedDataSig(this.laender);
   });
 

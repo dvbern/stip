@@ -1,0 +1,19 @@
+<mat-form-field dvSharedUiFormField class="w-100">
+  <mat-label>{{ 'shared.form.shared.address.country.label' | translate }}</mat-label>
+
+  <input matInput [formControl]="control" data-testid="form-address-land" [matAutocomplete]="landAutocomplete" />
+
+  <mat-autocomplete #landAutocomplete="matAutocomplete" [panelWidth]="'320px'" [displayWith]="displayWithLand">
+    @for (lookup of laenderValuesSig(); track $index) {
+      <mat-option [value]="lookup" [attr.data-testid]="'land-' + lookup.iso3code">
+        {{ lookup.deKurzform }}
+      </mat-option>
+    }
+  </mat-autocomplete>
+
+  <!-- todo: change for land value -->
+  <!-- <mat-hint *dvZuvorHint="changes?.landId | translateChange: 'shared.country.$VALUE'"></mat-hint> -->
+  <mat-error *dvSharedUiFormMessageError="'required'">
+    {{ 'shared.form.error.required' | translate }}
+  </mat-error>
+</mat-form-field>

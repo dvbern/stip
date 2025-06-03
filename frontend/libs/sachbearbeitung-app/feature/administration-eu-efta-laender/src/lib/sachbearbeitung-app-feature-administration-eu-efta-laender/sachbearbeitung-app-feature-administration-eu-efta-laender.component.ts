@@ -29,8 +29,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
-import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
 import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
+import { LandStore } from '@dv/shared/data-access/land';
 import { Land } from '@dv/shared/model/gesuch';
 import { INPUT_DELAY } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
@@ -78,7 +78,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
 
   filterChangedSig = signal<string | null>(null);
 
-  laenderStore = inject(EuEftaLaenderStore);
+  laenderStore = inject(LandStore);
   countryFilter = new FormControl<string | null>(null);
 
   displayedColumns: string[] = [
@@ -117,7 +117,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   );
 
   countryDataSourceSig = computed(() => {
-    const allCountries = this.laenderStore.euEftaLaenderListViewSig() ?? [];
+    const allCountries = this.laenderStore.landListViewSig() ?? [];
     const paginator = this.paginatorSig();
     const sort = this.sortSig();
     const filter = this.filterChangedSig();
@@ -217,7 +217,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   openDialog(land?: Land) {
     SachbearbeitungAppDialogEuEftaLaenderEditComponent.open(this.dialog, {
       land: land,
-      laender: this.laenderStore.euEftaLaenderListViewSig() ?? [],
+      laender: this.laenderStore.landListViewSig() ?? [],
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

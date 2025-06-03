@@ -1,16 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { EuEftaLaenderStore } from './sachbearbeitung-app-data-access-eu-efta-laender.store';
+import { LandStore } from './shared-data-access-land.store';
 
-describe('EuEftaLaenderStore', () => {
-  let store: EuEftaLaenderStore;
+describe('LandStore', () => {
+  let store: LandStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [EuEftaLaenderStore, provideHttpClient()],
+      providers: [LandStore, provideHttpClient()],
     });
-    store = TestBed.inject(EuEftaLaenderStore);
+    store = TestBed.inject(LandStore);
   });
 
   it('is initializable', () => {
@@ -18,7 +18,7 @@ describe('EuEftaLaenderStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.euEftaLaender()).toEqual({
+    expect(store.laender()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

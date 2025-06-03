@@ -1,22 +1,22 @@
 {
-  "name": "sachbearbeitung-app-data-access-eu-efta-laender",
+  "name": "shared-util-data-access-land-lookup",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sachbearbeitung-app/data-access/eu-efta-laender/src",
+  "sourceRoot": "libs/shared/util-data-access/land-lookup/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:sachbearbeitung-app"],
+  "tags": ["type:util-data-access", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/sachbearbeitung-app/data-access/eu-efta-laender/tsconfig.lib.json"
+        "tsConfig": "libs/shared/util-data-access/land-lookup/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/sachbearbeitung-app/data-access/eu-efta-laender/jest.config.ts"
+        "jestConfig": "libs/shared/util-data-access/land-lookup/jest.config.ts"
       }
     },
     "lint": {

@@ -31,6 +31,8 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
+import { SharedUiLandAutocompleteDirective } from '@dv/shared/ui/land-autocomplete-directive';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -66,31 +68,33 @@ type AddresseFormGroup = FormGroup<{
     SharedUiZuvorHintDirective,
     SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
+    SharedUiLandAutocompleteDirective,
+    SharedUiLandAutocompleteComponent,
   ],
   templateUrl: './shared-ui-form-address.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
+export class SharedUiFormAddressComponent implements DoCheck {
   @Input({ required: true }) group!: AddresseFormGroup;
-  // @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
   @Input() changes?: Partial<Adresse>;
 
   // todo: laender direkt von neuer ressource holen
 
-  private countriesService = inject(SharedUtilCountriesService);
-  private laender$ = new BehaviorSubject<Land[]>([]);
+  // private countriesService = inject(SharedUtilCountriesService);
+  // private laender$ = new BehaviorSubject<Land[]>([]);
 
   // todo: still needed?
-  translatedLaender$ = this.laender$.pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender)),
-    map((translatedLaender) =>
-      translatedLaender.filter(
-        (translatedLand) => translatedLand.code !== 'STATELESS',
-      ),
-    ),
-  );
+  // translatedLaender$ = this.laender$.pipe(
+  //   switchMap((laender) => this.countriesService.getCountryList(laender)),
+  //   map((translatedLaender) =>
+  //     translatedLaender.filter(
+  //       (translatedLand) => translatedLand.code !== 'STATELESS',
+  //     ),
+  //   ),
+  // );
   plzValues?: Plz[];
+  // landValues?: Land[];
 
   touchedSig = signal(false);
 
@@ -152,9 +156,9 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
     });
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
+  // displayWithLand(land: Land | undefined): string {
+  //   return land ? land.deKurzform : '';
+  // }
 
   ngDoCheck(): void {
     if (!this.group) {
@@ -170,9 +174,9 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['laender']?.currentValue) {
-      this.laender$.next(changes['laender'].currentValue);
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes['laender']?.currentValue) {
+  //     this.laender$.next(changes['laender'].currentValue);
+  //   }
+  // }
 }
