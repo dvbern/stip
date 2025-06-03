@@ -5904,6 +5904,8 @@ components:
               type: string
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
+            auszahlung:
+              $ref: '#/components/schemas/Auszahlung'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
