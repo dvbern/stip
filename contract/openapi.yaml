@@ -4187,6 +4187,7 @@ components:
         - iban
         - nachname
         - vorname
+        - auszahlungAnSozialdienst
       type: object
       properties:
         vorname:
@@ -4197,6 +4198,8 @@ components:
           type: string
         nachname:
           type: string
+        auszahlungAnSozialdienst:
+          type: boolean
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
