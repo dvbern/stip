@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -114,7 +115,8 @@ class GesuchGetGesucheTest {
          * but not yet a gesuch (or a tranche),
          * an empty gesuch with a empty gesuchtranche should be returned
          */
-        TestUtil.createAusbildung(ausbildungApiSpec, fall.getId());
+        TestUtil
+            .createAusbildung(ausbildungApiSpec, AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec(), fall.getId());
         final var fallDashboardItem2 = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -162,7 +164,7 @@ class GesuchGetGesucheTest {
     @TestAsGesuchsteller
     @Order(7)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -234,7 +236,7 @@ class GesuchGetGesucheTest {
     void prepareForJuristischAbklaeren() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

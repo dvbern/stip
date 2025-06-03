@@ -85,8 +85,8 @@ class GesuchZurueckweisenTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchEinreichen() {
-        TestUtil.executeAndAssert(
-            gesuchApiSpec.gesuchEinreichen()
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.gesuchEinreichenGs()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
@@ -102,12 +102,12 @@ class GesuchZurueckweisenTest {
     @TestAsSachbearbeiter
     @Order(4)
     void trancheErstellen() {
-        TestUtil.executeAndAssert(
+        TestUtil.executeAndAssertOk(
             gesuchApiSpec.changeGesuchStatusToInBearbeitung()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
-        TestUtil.executeAndAssert(
+        TestUtil.executeAndAssertOk(
             gesuchTrancheApiSpec.createGesuchTrancheCopy()
                 .gesuchIdPath(gesuch.getId())
                 .body(CreateGesuchTrancheRequestDtoSpecModel.createGesuchTrancheRequestDtoSpec(gesuch))
@@ -120,7 +120,7 @@ class GesuchZurueckweisenTest {
     @TestAsSachbearbeiter
     @Order(5)
     void gesuchZurueckweisen() {
-        TestUtil.executeAndAssert(
+        TestUtil.executeAndAssertOk(
             gesuchApiSpec.gesuchZurueckweisen()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
                 .body(new KommentarDtoSpec().text("Reset Gesuch for Testing"))

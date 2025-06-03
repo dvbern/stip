@@ -1,10 +1,9 @@
-<wsdl:definitions xmlns:p1="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="os_BusinessPartnerChange" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
-  <script/>
+<wsdl:definitions name="os_BusinessPartnerChange" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:p1="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:documentation/>
   <wsp:UsingPolicy wsdl:required="true"/>
   <wsp:Policy wsu:Id="OP_os_BusinessPartnerChange"/>
   <wsdl:types>
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+    <xsd:schema targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
       <xsd:element name="BusinessPartnerChange_Request" type="BusinessPartnerChange_Request"/>
       <xsd:element name="BusinessPartnerChange_Response" type="BusinessPartnerChange_Response"/>
       <xsd:complexType name="AdditionalData">
@@ -101,7 +100,7 @@
       </xsd:complexType>
       <xsd:complexType name="BusinessPartnerChange_Request">
         <xsd:annotation>
-          <xsd:appinfo source="http://sap.com/xi/VersionID">b3c3a6dddde711ed9fb1000000605fae</xsd:appinfo>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">7aad44b2665111edc88b000000605fae</xsd:appinfo>
         </xsd:annotation>
         <xsd:sequence>
           <xsd:element name="SENDER" type="SenderParmsDelivery"/>
@@ -113,13 +112,12 @@
                     <xsd:sequence>
                       <xsd:element name="BPARTNER">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c6da0ddec11ed9bfe000000605fae</xsd:appinfo>
-                          <xsd:documentation>Geschäftspartnernummer</xsd:documentation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c65665111edc3c0000000605faf</xsd:appinfo>
+                          <xsd:documentation>Geschäftspartnergruppierung</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
-                          <xsd:restriction base="xsd:integer">
-                            <xsd:minInclusive value="1000000000"/>
-                            <xsd:maxInclusive value="1999999999"/>
+                          <xsd:restriction base="xsd:string">
+                            <xsd:maxLength value="10"/>
                           </xsd:restriction>
                         </xsd:simpleType>
                       </xsd:element>
@@ -131,7 +129,7 @@
                     <xsd:sequence>
                       <xsd:element name="EXT_ID" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9725ddec11edcdc4000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c66665111edc0bd000000605faf</xsd:appinfo>
                           <xsd:documentation>Geschäftspartnernummer im externen System</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -142,7 +140,7 @@
                       </xsd:element>
                       <xsd:element name="AHV_NR" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9726ddec11edc2fc000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c67665111edaeb9000000605faf</xsd:appinfo>
                           <xsd:documentation>AHV-Nummer</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -153,7 +151,7 @@
                       </xsd:element>
                       <xsd:element name="UID_NR" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9727ddec11edac0d000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c68665111edbc50000000605faf</xsd:appinfo>
                           <xsd:documentation>Unternehmens-Identifikationsnummer</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -164,7 +162,7 @@
                       </xsd:element>
                       <xsd:element name="ZPV_NR" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9728ddec11eda90f000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c69665111edb6d1000000605faf</xsd:appinfo>
                           <xsd:documentation>ZPV-Nummer</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -181,7 +179,7 @@
                     <xsd:sequence>
                       <xsd:element name="FIRSTNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9729ddec11edb5af000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6a665111edc785000000605faf</xsd:appinfo>
                           <xsd:documentation>Vorname des Geschäftspartners (Person)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -192,7 +190,7 @@
                       </xsd:element>
                       <xsd:element name="LASTNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972addec11eda1a3000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6b665111edb50b000000605faf</xsd:appinfo>
                           <xsd:documentation>Nachname des Geschäftspartners (Person)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -203,7 +201,7 @@
                       </xsd:element>
                       <xsd:element name="CORRESPONDLANGUAGEISO" minOccurs="0" default="DE">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972bddec11ed81da000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6c665111edb59f000000605faf</xsd:appinfo>
                           <xsd:documentation>2-stelliger SAP Language Code</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -214,7 +212,7 @@
                       </xsd:element>
                       <xsd:element name="BIRTHNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972cddec11ed995d000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6d665111eda154000000605faf</xsd:appinfo>
                           <xsd:documentation>Geburtsname des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -225,7 +223,7 @@
                       </xsd:element>
                       <xsd:element name="MIDDLENAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972dddec11edbffc000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6e665111ed8ef2000000605faf</xsd:appinfo>
                           <xsd:documentation>Mittlerer Name oder zweiter Vorname der Person</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -236,7 +234,7 @@
                       </xsd:element>
                       <xsd:element name="SECONDNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972eddec11ed9eaf000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c6f665111edaa26000000605faf</xsd:appinfo>
                           <xsd:documentation>Zweiter Nachname der Person</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -247,7 +245,7 @@
                       </xsd:element>
                       <xsd:element name="TITLE_ACA1" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c972fddec11edb3c9000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c70665111edb7fe000000605faf</xsd:appinfo>
                           <xsd:documentation>Akademischer Titel: Schlüssel</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -264,7 +262,7 @@
                       </xsd:element>
                       <xsd:element name="TITLE_ACA2" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9730ddec11edbd20000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c71665111edb39c000000605faf</xsd:appinfo>
                           <xsd:documentation>Zweiter akademischer Titel (Schlüssel)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -275,7 +273,7 @@
                       </xsd:element>
                       <xsd:element name="TITLE_SPPL" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9731ddec11edbff9000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c72665111ed9775000000605faf</xsd:appinfo>
                           <xsd:documentation>Namenszusatz, z.B. Adelstitel (Schlüssel)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -286,7 +284,7 @@
                       </xsd:element>
                       <xsd:element name="PREFIX1" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9732ddec11edbc2f000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c73665111ed90b0000000605faf</xsd:appinfo>
                           <xsd:documentation>Vorsatzwort zum Namen (Schlüssel)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -297,7 +295,7 @@
                       </xsd:element>
                       <xsd:element name="PREFIX2" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9733ddec11ed9627000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c74665111edaff7000000605faf</xsd:appinfo>
                           <xsd:documentation>2. Vorsatzwort zum Namen (Schlüssel)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -308,7 +306,7 @@
                       </xsd:element>
                       <xsd:element name="NICKNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9734ddec11edb6fa000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c75665111ed9825000000605faf</xsd:appinfo>
                           <xsd:documentation>Rufname des Geschäftspartners (Person)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -319,7 +317,7 @@
                       </xsd:element>
                       <xsd:element name="INITIALS" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9735ddec11edcbd6000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c76665111ed96d5000000605faf</xsd:appinfo>
                           <xsd:documentation>Middle Initial bzw. Initialen der Person</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -330,7 +328,7 @@
                       </xsd:element>
                       <xsd:element name="NAMEFORMAT" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9736ddec11edc611000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c77665111ed954f000000605faf</xsd:appinfo>
                           <xsd:documentation>Format für die Namensaufbereitung</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -341,7 +339,7 @@
                       </xsd:element>
                       <xsd:element name="NAMCOUNTRY" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9737ddec11edc00e000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c78665111ed8c73000000605faf</xsd:appinfo>
                           <xsd:documentation>Land für Namensaufbereitungsregel</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -352,7 +350,7 @@
                       </xsd:element>
                       <xsd:element name="NAMCOUNTRYISO" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9738ddec11ed9b2b000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c79665111ed8161000000605faf</xsd:appinfo>
                           <xsd:documentation>ISO-Code des Landes</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -363,7 +361,7 @@
                       </xsd:element>
                       <xsd:element name="SEX" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9739ddec11edc7b0000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c7a665111eda041000000605faf</xsd:appinfo>
                           <xsd:documentation>Geschlecht des Geschäftspartners (Person)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -376,7 +374,7 @@
                       </xsd:element>
                       <xsd:element name="BIRTHPLACE" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973addec11ed9788000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c7b665111edbf0d000000605faf</xsd:appinfo>
                           <xsd:documentation>Geburtsort des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -387,19 +385,19 @@
                       </xsd:element>
                       <xsd:element name="BIRTHDATE" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973bddec11eda7d5000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c7c665111edcad9000000605faf</xsd:appinfo>
                           <xsd:documentation>Geburtsdatum des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="DEATHDATE" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973cddec11ed8c36000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c7d665111ed85b0000000605faf</xsd:appinfo>
                           <xsd:documentation>Sterbedatum des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="MARITALSTATUS" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973dddec11ed8fda000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0c8c7e665111edb75c000000605faf</xsd:appinfo>
                           <xsd:documentation>Familienstand des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -410,7 +408,7 @@
                       </xsd:element>
                       <xsd:element name="CORRESPONDLANGUAGE" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973eddec11edc825000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb323665111eda33a000000605faf</xsd:appinfo>
                           <xsd:documentation>Geschäftspartner: Korrespondenzsprache</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -421,7 +419,7 @@
                       </xsd:element>
                       <xsd:element name="FULLNAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c973fddec11ed9936000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb324665111ed9b85000000605faf</xsd:appinfo>
                           <xsd:documentation>Vollständiger Name</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -432,7 +430,7 @@
                       </xsd:element>
                       <xsd:element name="EMPLOYER" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9740ddec11eda697000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb325665111eda4fa000000605faf</xsd:appinfo>
                           <xsd:documentation>Name des Arbeitgebers einer natürlichen Person</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -443,7 +441,7 @@
                       </xsd:element>
                       <xsd:element name="OCCUPATION" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9741ddec11ed9e65000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb326665111ed84ef000000605faf</xsd:appinfo>
                           <xsd:documentation>Beruf des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -454,7 +452,7 @@
                       </xsd:element>
                       <xsd:element name="NATIONALITY" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9742ddec11edc3ea000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb327665111edaa5d000000605faf</xsd:appinfo>
                           <xsd:documentation>Nationalität des Geschäftspartners</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -465,7 +463,7 @@
                       </xsd:element>
                       <xsd:element name="NATIONALITYISO" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9743ddec11edbdd7000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb328665111ed8981000000605faf</xsd:appinfo>
                           <xsd:documentation>ISO-Code des Landes</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -476,7 +474,7 @@
                       </xsd:element>
                       <xsd:element name="COUNTRYORIGIN" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9744ddec11edcc78000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb329665111edb9ec000000605faf</xsd:appinfo>
                           <xsd:documentation>Herkunftsland bei Gebietsfremden</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -487,7 +485,7 @@
                       </xsd:element>
                       <xsd:element name="BIRTHDT_STATUS" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9745ddec11ed9cc2000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32a665111ed8b07000000605faf</xsd:appinfo>
                           <xsd:documentation>Date of Birth: Status</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -504,7 +502,7 @@
                     <xsd:sequence>
                       <xsd:element name="NAME1" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9746ddec11edaa73000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32b665111eda659000000605faf</xsd:appinfo>
                           <xsd:documentation>Name 1 der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -515,7 +513,7 @@
                       </xsd:element>
                       <xsd:element name="NAME2" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9747ddec11edc2a0000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32c665111ed96a6000000605faf</xsd:appinfo>
                           <xsd:documentation>Name 2 der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -526,7 +524,7 @@
                       </xsd:element>
                       <xsd:element name="NAME3" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9748ddec11ed85f5000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32d665111edcae0000000605faf</xsd:appinfo>
                           <xsd:documentation>Name 3 der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -537,7 +535,7 @@
                       </xsd:element>
                       <xsd:element name="NAME4" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c9749ddec11edbb78000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32e665111ed901d000000605faf</xsd:appinfo>
                           <xsd:documentation>Name 4 der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -548,7 +546,7 @@
                       </xsd:element>
                       <xsd:element name="LANGU_ISO" minOccurs="0" default="DE">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c974addec11ed8bbc000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb32f665111ed8963000000605faf</xsd:appinfo>
                           <xsd:documentation>Sprache der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -559,7 +557,7 @@
                       </xsd:element>
                       <xsd:element name="LEGALFORM" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c974bddec11edaa78000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb330665111edaed2000000605faf</xsd:appinfo>
                           <xsd:documentation>GP: Rechtsform der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -570,7 +568,7 @@
                       </xsd:element>
                       <xsd:element name="INDUSTRYSECTOR" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c974cddec11edabac000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb331665111ed9120000000605faf</xsd:appinfo>
                           <xsd:documentation>Branche</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -581,19 +579,19 @@
                       </xsd:element>
                       <xsd:element name="FOUNDATIONDATE" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720c974dddec11edbdfc000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb332665111ed9551000000605faf</xsd:appinfo>
                           <xsd:documentation>Gründungsdatum der Organisation</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="LIQUIDATIONDATE" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb92ddec11eda360000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0cb333665111edba02000000605faf</xsd:appinfo>
                           <xsd:documentation>Liquidationsdatum der Organisation</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="LOC_NO_1" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb93ddec11edcb28000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d032e665111eda664000000605faf</xsd:appinfo>
                           <xsd:documentation>Internationale Lokationsnummer (Teil 1)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -604,7 +602,7 @@
                       </xsd:element>
                       <xsd:element name="LOC_NO_2" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb94ddec11edad5c000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d032f665111ed913a000000605faf</xsd:appinfo>
                           <xsd:documentation>Internationale Lokationsnummer (Teil 2)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -615,7 +613,7 @@
                       </xsd:element>
                       <xsd:element name="CHK_DIGIT" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb95ddec11edbaf7000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0330665111edbe4b000000605faf</xsd:appinfo>
                           <xsd:documentation>Prüfziffer der internationalen Lokationsnummer</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -626,7 +624,7 @@
                       </xsd:element>
                       <xsd:element name="LEGALORG" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb96ddec11edc171000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0331665111ed86b6000000605faf</xsd:appinfo>
                           <xsd:documentation>Rechtsträger der Organisation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -643,7 +641,7 @@
                     <xsd:sequence>
                       <xsd:element name="ADR_KIND" default="XXDEFAULT">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb97ddec11ed932f000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0332665111edb28c000000605faf</xsd:appinfo>
                           <xsd:documentation>Adressart</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -654,7 +652,7 @@
                       </xsd:element>
                       <xsd:element name="C_O_NAME" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb98ddec11ed8db1000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0333665111ed9bce000000605faf</xsd:appinfo>
                           <xsd:documentation>c/o-Name</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -665,7 +663,7 @@
                       </xsd:element>
                       <xsd:element name="CITY" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb99ddec11ed9931000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0334665111ed9c75000000605faf</xsd:appinfo>
                           <xsd:documentation>Ort</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -676,7 +674,7 @@
                       </xsd:element>
                       <xsd:element name="DISTRICT" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9addec11ed843e000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0335665111edad3c000000605faf</xsd:appinfo>
                           <xsd:documentation>Ortsteil</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -687,7 +685,7 @@
                       </xsd:element>
                       <xsd:element name="POSTL_COD1" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9bddec11edce9a000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0336665111ed87c5000000605faf</xsd:appinfo>
                           <xsd:documentation>Postleitzahl des Orts</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -698,7 +696,7 @@
                       </xsd:element>
                       <xsd:element name="PO_BOX" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9cddec11eda842000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0337665111eda9d9000000605faf</xsd:appinfo>
                           <xsd:documentation>Postfach</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -709,7 +707,7 @@
                       </xsd:element>
                       <xsd:element name="STREET" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9dddec11eda33c000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0338665111ed9a8f000000605faf</xsd:appinfo>
                           <xsd:documentation>Straße</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -720,7 +718,7 @@
                       </xsd:element>
                       <xsd:element name="HOUSE_NO" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9eddec11edcb8f000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0339665111ed9c30000000605faf</xsd:appinfo>
                           <xsd:documentation>Hausnummer</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -731,7 +729,7 @@
                       </xsd:element>
                       <xsd:element name="COUNTRY" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbb9fddec11ed90db000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033a665111ed8666000000605faf</xsd:appinfo>
                           <xsd:documentation>Länderschlüssel</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -742,7 +740,7 @@
                       </xsd:element>
                       <xsd:element name="POSTL_COD2" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba0ddec11edb461000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033b665111ed85bd000000605faf</xsd:appinfo>
                           <xsd:documentation>Postleitzahl zum Postfach</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -759,7 +757,7 @@
                     <xsd:sequence>
                       <xsd:element name="CONSNUMBER" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba1ddec11ed9d73000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033c665111eda156000000605faf</xsd:appinfo>
                           <xsd:documentation>ID der Kommunikation</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -770,7 +768,7 @@
                       </xsd:element>
                       <xsd:element name="EMAIL" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba2ddec11eda108000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033d665111edc7ef000000605faf</xsd:appinfo>
                           <xsd:documentation>Email-Adresse</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -781,7 +779,7 @@
                       </xsd:element>
                       <xsd:element name="TELEPHONE" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba3ddec11ed8656000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033e665111ed9da7000000605faf</xsd:appinfo>
                           <xsd:documentation>Erste Telefon-Nr.: Vorwahl + Anschluß</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -792,7 +790,7 @@
                       </xsd:element>
                       <xsd:element name="MOBILE" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba4ddec11ed8657000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d033f665111eda47d000000605faf</xsd:appinfo>
                           <xsd:documentation>Erste Mobiltelefon-Nr.: Vorwahl + Anschluß</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -803,7 +801,7 @@
                       </xsd:element>
                       <xsd:element name="FAX" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba5ddec11edc4de000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d0340665111edc997000000605faf</xsd:appinfo>
                           <xsd:documentation>Erste Fax-Nr.: Vorwahl + Anschluss</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -820,7 +818,7 @@
                     <xsd:sequence>
                       <xsd:element name="BANK_ID">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba6ddec11ed9595000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d1937665111ed9210000000605faf</xsd:appinfo>
                           <xsd:documentation>ID der Zahlungsverbindung</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -831,7 +829,7 @@
                       </xsd:element>
                       <xsd:element name="IBAN" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba7ddec11ed82cf000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d1938665111edc91d000000605faf</xsd:appinfo>
                           <xsd:documentation>IBAN (International Bank Account Number)</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -842,19 +840,19 @@
                       </xsd:element>
                       <xsd:element name="BANKDETAILVALIDFROM" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba8ddec11ed83ac000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d1939665111ed8fbc000000605faf</xsd:appinfo>
                           <xsd:documentation>Gültigkeitsdatum (gültig ab)</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="BANKDETAILVALIDTO" type="xsd:date" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbba9ddec11ed8ef3000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d193a665111edcc36000000605faf</xsd:appinfo>
                           <xsd:documentation>Gültigkeitsdatum (gültig bis)</xsd:documentation>
                         </xsd:annotation>
                       </xsd:element>
                       <xsd:element name="ACCOUNTHOLDER" minOccurs="0">
                         <xsd:annotation>
-                          <xsd:appinfo source="http://sap.com/xi/TextID">720cbbaaddec11ed8e6e000000605fae</xsd:appinfo>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">7b0d193b665111edbacd000000605faf</xsd:appinfo>
                           <xsd:documentation>Abweichender Name der Zahlungsverbindung</xsd:documentation>
                         </xsd:annotation>
                         <xsd:simpleType>
@@ -958,23 +956,23 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="os_BusinessPartnerChangeBinding" type="p1:os_BusinessPartnerChange">
-    <soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     <wsdl:operation name="os_BusinessPartnerChange">
-      <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" soapAction="http://sap.com/xi/WebService/soap1.1"/>
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       <wsdl:input>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="os_BusinessPartnerChangeService">
     <wsdl:port name="HTTP_Port" binding="p1:os_BusinessPartnerChangeBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerChange&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER"/>
+      <soap:address location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerChange&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
     <wsdl:port name="HTTPS_Port" binding="p1:os_BusinessPartnerChangeBinding">
-      <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_0000&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerChange&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER"/>
+      <soap:address location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerChange&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

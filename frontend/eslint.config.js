@@ -84,6 +84,7 @@ module.exports = [
             {
               sourceTag: 'type:pattern',
               onlyDependOnLibsWithTags: [
+                'type:dialog',
                 'type:pattern',
                 'type:data-access',
                 'type:event',
@@ -126,6 +127,7 @@ module.exports = [
               sourceTag: 'type:dialog',
               onlyDependOnLibsWithTags: [
                 'type:feature',
+                'type:data-access',
                 'type:ui',
                 'type:util',
                 'type:util-data-access',

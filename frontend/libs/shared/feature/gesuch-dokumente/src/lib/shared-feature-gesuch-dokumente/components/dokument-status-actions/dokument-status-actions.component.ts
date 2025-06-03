@@ -26,6 +26,7 @@ import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 export class DokumentStatusActionsComponent {
   dokumentSig = input.required<SharedModelTableDokument>();
   viewSig = input.required<{
+    canApproveDecline: boolean;
     isSachbearbeitungApp: boolean;
     readonly: boolean;
     gesuchStatus?: Gesuchstatus;

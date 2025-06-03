@@ -182,26 +182,35 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       this.form,
     );
 
-    effect(() => {
-      const geschwister = this.geschwisterSig();
+    effect(
+      () => {
+        const geschwister = this.geschwisterSig();
 
-      this.form.patchValue({
-        ...geschwister,
-        geburtsdatum: parseBackendLocalDateAndPrint(
-          geschwister.geburtsdatum,
-          this.languageSig(),
-        ),
-        ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
-      });
-      this.formUtils.invalidateControlIfValidationFails(
-        this.form,
-        ['wohnsitz'],
-        untracked(this.einreichenStore.validationViewSig).invalidFormularProps
-          .specialValidationErrors,
-        (value) =>
-          this.wohnsitzHelper.wohnsitzValuesSig().includes(value as Wohnsitz),
-      );
-    });
+        this.form.patchValue({
+          ...geschwister,
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            geschwister.geburtsdatum,
+            this.languageSig(),
+          ),
+          ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
+        });
+        this.formUtils.invalidateControlIfValidationFails(
+          this.form,
+          ['wohnsitz'],
+          {
+            shouldReset: true,
+            specialValidationErrors: untracked(
+              this.einreichenStore.validationViewSig,
+            ).invalidFormularProps.specialValidationErrors,
+            validatorFn: (value) =>
+              this.wohnsitzHelper
+                .wohnsitzValuesSig()
+                .includes(value as Wohnsitz),
+          },
+        );
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleSave() {

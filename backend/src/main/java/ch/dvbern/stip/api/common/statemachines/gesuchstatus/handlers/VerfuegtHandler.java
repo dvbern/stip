@@ -45,9 +45,8 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        final var gesuchToUse = gesuchService.getGesuchById(gesuch.getId());
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuchToUse,
+            gesuch,
             configService.getCurrentDmnMajorVersion(),
             configService.getCurrentDmnMinorVersion()
         );
@@ -58,7 +57,7 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
 
         if (berechnungsresultat > 0) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuchToUse,
+                gesuch,
                 berechnungsresultat
             );
         }

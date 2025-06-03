@@ -31,10 +31,10 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -44,35 +44,35 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
     private final AusbildungsstaetteService ausbildungsstaetteService;
 
     @Override
-    @RolesAllowed(STAMMDATEN_CREATE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_CREATE)
     public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaette) {
         ausbildungsstaetteAuthorizer.canCreate();
         return ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaette);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_DELETE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_DELETE)
     public void deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
         ausbildungsstaetteAuthorizer.canDelete();
         ausbildungsstaetteService.deleteAusbildungsstaette(ausbildungsstaetteId);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_READ)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
     public AusbildungsstaetteDto getAusbildungsstaette(UUID ausbildungsstaetteId) {
         ausbildungsstaetteAuthorizer.canRead();
         return ausbildungsstaetteService.findById(ausbildungsstaetteId);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_READ)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
     public List<AusbildungsstaetteDto> getAusbildungsstaetten() {
         ausbildungsstaetteAuthorizer.canRead();
         return ausbildungsstaetteService.getAusbildungsstaetten();
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_UPDATE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
     public AusbildungsstaetteDto updateAusbildungsstaette(
         UUID ausbildungsstaetteId,
         AusbildungsstaetteUpdateDto ausbildungsstaette

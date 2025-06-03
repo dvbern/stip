@@ -6,6 +6,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
@@ -28,8 +29,8 @@ async function setup() {
         initialState: {
           benutzers: {
             rolesMap: {
-              Gesuchsteller: true,
-            },
+              V0_Gesuchsteller: true,
+            } satisfies RolesMap,
           },
           language: {
             language: 'de',

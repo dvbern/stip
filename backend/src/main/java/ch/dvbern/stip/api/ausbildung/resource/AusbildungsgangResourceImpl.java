@@ -30,10 +30,10 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -43,28 +43,28 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     private final AusbildungsgangService ausbildungsgangService;
 
     @Override
-    @RolesAllowed(STAMMDATEN_CREATE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_CREATE)
     public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         ausbildungsgangAuthorizer.canCreate();
         return ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_DELETE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_DELETE)
     public void deleteAusbildungsgang(UUID ausbildungsgangId) {
         ausbildungsgangAuthorizer.canDelete();
         ausbildungsgangService.deleteAusbildungsgang(ausbildungsgangId);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_READ)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
     public AusbildungsgangDto getAusbildungsgang(UUID ausbildungsgangId) {
         ausbildungsgangAuthorizer.canRead();
         return ausbildungsgangService.findById(ausbildungsgangId);
     }
 
     @Override
-    @RolesAllowed(STAMMDATEN_UPDATE)
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
     public AusbildungsgangDto updateAusbildungsgang(
         UUID ausbildungsgangId,
         AusbildungsgangUpdateDto ausbildungsgangUpdateDto

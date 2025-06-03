@@ -41,7 +41,6 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -79,6 +78,7 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -193,7 +193,7 @@ class GesuchServiceTest {
     NotificationRepository notificationRepository;
 
     @InjectMock
-    CustomDokumentTypRepository customDokumentTypRepository;
+    SapService sapService;
 
     @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
@@ -1122,7 +1122,8 @@ class GesuchServiceTest {
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToStipendienanspruch() {
-        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
@@ -1137,7 +1138,8 @@ class GesuchServiceTest {
     @Test
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
     void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest() {
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        Gesuch gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
 
@@ -1458,7 +1460,7 @@ class GesuchServiceTest {
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
         when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
-        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(gesuchToReturn.getNewestGesuchTranche());
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(gesuchToReturn));
@@ -1578,7 +1580,7 @@ class GesuchServiceTest {
                 gesuchInBearbeitungSB
             )
         );
-        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
         when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
             .thenReturn(Optional.of(eingereichtesGesuch));
@@ -1664,6 +1666,8 @@ class GesuchServiceTest {
         // gesuch gets rejected
         gesuchInBearbeitungSpy.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        when(gesuchTrancheService.getGesuchTrancheOrHistorical(any()))
+            .thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSpy.getId(), new KommentarDto("test"));
         final var gesuchSB = gesuchService
             .getGesuchSB(gesuchInBearbeitungSpy.getId(), gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());

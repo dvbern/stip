@@ -181,14 +181,18 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
     public static final String VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.ausbildungsort.if.swiss.message}";
+    public static final String VALIDATION_AUSBILDUNG_NOT_FOUND =
+        "{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
     public static final String VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.oneOfDocumentTypes.required.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
-    public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE = "{" +
-    "jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
+    public static final String VALIDATION_TRANCHE_DATERANGE_TOO_SHORT =
+        "{jakarta.validation.constraints.gesuchTranche.daterangeTooShort.message}";
+    public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE =
+        "{jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
     public static final String VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE =
         "jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message";
     public static final String VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR =

@@ -125,7 +125,7 @@ export class GesuchStore extends signalStore(
     EINGEREICHT: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>
-          this.gesuchService.gesuchEinreichen$({
+          this.gesuchService.gesuchEinreichenJur$({
             gesuchTrancheId,
           }),
         ),

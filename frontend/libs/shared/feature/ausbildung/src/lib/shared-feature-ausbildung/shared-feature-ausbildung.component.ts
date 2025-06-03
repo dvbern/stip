@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
@@ -87,6 +88,7 @@ const KnownErrorKeys = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     TranslatePipe,
     MatFormFieldModule,
     MatButtonModule,
@@ -330,44 +332,74 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     });
 
     // fill form
-    effect(() => {
-      const ausbildung = {
-        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-          .gesuchFormular?.ausbildung,
-      };
-      const ausbildungstaetten =
-        this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    effect(
+      () => {
+        const ausbildung = {
+          ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+            .gesuchFormular?.ausbildung,
+        };
+        const ausbildungstaetten =
+          this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
-      if (ausbildung && ausbildungstaetten) {
-        this.form.patchValue({
-          ...ausbildung,
-          ausbildungsgang: undefined,
-        });
-        const currentAusbildungsgang = ausbildung.ausbildungsgang;
-        if (currentAusbildungsgang) {
-          const ausbildungsstaette = ausbildungstaetten.find(
-            (ausbildungsstaette) =>
-              ausbildungsstaette.ausbildungsgaenge?.find(
-                (ausbildungsgang) =>
-                  ausbildungsgang.id === currentAusbildungsgang.id,
-              ),
-          );
-          const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-            (ausbildungsgang) =>
-              ausbildungsgang.id === currentAusbildungsgang.id,
-          );
+        if (ausbildung && ausbildungstaetten) {
           this.form.patchValue({
-            ausbildungsstaette:
-              getTranslatableProp(
-                ausbildungsstaette,
-                'name',
-                this.languageSig(),
-              ) ?? undefined,
-            ausbildungsgang: ausbildungsgang?.id,
+            ...ausbildung,
+            ausbildungsgang: undefined,
           });
+          const currentAusbildungsgang = ausbildung.ausbildungsgang;
+          if (currentAusbildungsgang) {
+            const ausbildungsstaette = ausbildungstaetten.find(
+              (ausbildungsstaette) =>
+                ausbildungsstaette.ausbildungsgaenge?.find(
+                  (ausbildungsgang) =>
+                    ausbildungsgang.id === currentAusbildungsgang.id,
+                ),
+            );
+            const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+              (ausbildungsgang) =>
+                ausbildungsgang.id === currentAusbildungsgang.id,
+            );
+            this.form.patchValue({
+              ausbildungsstaette:
+                getTranslatableProp(
+                  ausbildungsstaette,
+                  'name',
+                  this.languageSig(),
+                ) ?? undefined,
+              ausbildungsgang: ausbildungsgang?.id,
+            });
+          }
         }
-      } else {
-        this.form.reset();
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(() => {
+      const { readonly } = this.cachedGesuchViewSig();
+      const { invalidFormularProps } = this.einreichenStore.validationViewSig();
+      const nichtGefunden = this.ausbildungNichtGefundenChangedSig();
+
+      if (!readonly && nichtGefunden) {
+        const { errors } = this.form.controls.ausbildungNichtGefunden;
+        if (errors) {
+          delete errors['requiredOff'];
+          this.form.controls.ausbildungNichtGefunden.setErrors(errors);
+        }
+        this.formUtils.invalidateControlIfValidationFails(
+          this.form,
+          ['ausbildungNichtGefunden', 'ausbildungsstaette'],
+          {
+            specialValidationErrors:
+              invalidFormularProps.specialValidationErrors,
+            beforeInvalidate: () => {
+              untracked(() => {
+                this.form.controls.ausbildungNichtGefunden.setErrors({
+                  requiredOff: true,
+                });
+              });
+            },
+          },
+        );
       }
     });
 
@@ -530,6 +562,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             this.globalNotificationStore.createSuccessNotification({
               messageKey: 'shared.ausbildung.saved.success',
             });
+            this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           },
           onFailure,
         });

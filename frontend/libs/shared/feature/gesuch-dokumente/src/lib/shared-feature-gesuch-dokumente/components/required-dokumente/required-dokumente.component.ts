@@ -83,6 +83,7 @@ export class RequiredDokumenteComponent {
     permissions: PermissionMap;
     trancheId: string | undefined;
     trancheSetting: TrancheSetting | undefined;
+    canApproveDecline: boolean;
     isSachbearbeitungApp: boolean;
     allowTypes: string | undefined;
     stepsFlow: GesuchFormStep[];

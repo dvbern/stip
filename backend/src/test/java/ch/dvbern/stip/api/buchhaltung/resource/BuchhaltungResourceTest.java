@@ -107,7 +107,7 @@ class BuchhaltungResourceTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

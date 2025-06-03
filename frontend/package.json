@@ -50,7 +50,8 @@
     "format:write": "nx format:write --all",
     "openapi": "ts-node scripts/openapi-build.ts",
     "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0",
-    "set-version": "ts-node scripts/version-from-env.ts"
+    "set-version": "ts-node scripts/version-from-env.ts",
+    "sync-roles": "npx tsx scripts/keycloak/update.ts sync-roles"
   },
   "private": true,
   "dependencies": {
@@ -66,6 +67,7 @@
     "@angular/platform-browser": "19.2.11",
     "@angular/platform-browser-dynamic": "19.2.11",
     "@angular/router": "19.2.11",
+    "@inquirer/prompts": "^5.3.8",
     "@maskito/angular": "^3.8.0",
     "@maskito/core": "^3.8.0",
     "@maskito/kit": "^3.8.0",
@@ -114,6 +116,7 @@
     "@jscutlery/swc-angular": "^0.20.2",
     "@jscutlery/swc-angular-plugin": "^0.20.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",
+    "@keycloak/keycloak-admin-client": "^26.2.3",
     "@ngrx/eslint-plugin": "19.0.0",
     "@nx/angular": "21.0.3",
     "@nx/devkit": "21.0.3",
@@ -144,6 +147,7 @@
     "@typescript-eslint/utils": "8.19.0",
     "angular-eslint": "19.2.0",
     "autoprefixer": "^10.4.21",
+    "commander": "^13.1.0",
     "dotenv": "^16.5.0",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "10.1.5",
@@ -157,7 +161,7 @@
     "husky": "^9.1.7",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "jest-preset-angular": "14.4.2",
+    "jest-preset-angular": "14.6.0",
     "json-server": "^0.17.4",
     "jsonc-eslint-parser": "^2.4.0",
     "lint-staged": "^15.5.2",

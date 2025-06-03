@@ -17,10 +17,12 @@
 
 package ch.dvbern.stip.api.notification.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -28,6 +30,7 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
@@ -93,7 +96,9 @@ class NotificationServiceTest {
             .setPersonInAusbildung(personInAusbildung);
 
         GesuchTranche gesuchTranche = new GesuchTranche()
-            .setGesuchFormular(gesuchFormular);
+            .setGesuchFormular(gesuchFormular)
+            .setTyp(GesuchTrancheTyp.TRANCHE)
+            .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now()));
 
         Gesuch gesuch = new Gesuch()
             .setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS)

@@ -65,6 +65,7 @@ export class CustomDokumenteComponent {
     allowTypes: string | undefined;
     dokuments: GesuchDokument[];
     permissions: PermissionMap;
+    canApproveDecline: boolean;
     isSachbearbeitungApp: boolean;
     requiredDocumentTypes: CustomDokumentTyp[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;

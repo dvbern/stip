@@ -61,6 +61,7 @@ include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.8.0'
     inputs:
       review-app-url: 'https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER'
+      review-app-auto-stop: '7 days'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@v0.8.0'
     inputs:
