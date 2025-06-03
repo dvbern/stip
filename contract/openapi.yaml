@@ -5865,17 +5865,17 @@ components:
       required:
         - id
         - name
-        - iban
         - adresse
+        - auszahlung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        iban:
-          type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
     SozialdienstSlim:
       required:
         - id
