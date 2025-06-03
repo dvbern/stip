@@ -17,29 +17,123 @@
 
 package ch.dvbern.stip.api.stammdaten.resource;
 
+import java.util.Arrays;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.land.resource.LandResourceImpl;
+import ch.dvbern.stip.api.generator.api.model.land.LandDtoSpecModel;
+import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.LandApiSpec;
+import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(StepwiseExtension.class)
+@RequiredArgsConstructor
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 class LandResourceImplTest {
-    @Inject
-    LandResourceImpl stammdatenResource;
+    private final LandApiSpec landApiSpec = LandApiSpec.land(RequestSpecUtil.quarkusSpec());
+    private UUID createdLandId;
 
-    @TestAsGesuchsteller
     @Test
-    void getLaenderasGS() {
-        assertNotNull(stammdatenResource.getLaender());
+    @Order(1)
+    @TestAsAdmin
+    void createLand() {
+        final var landToCreate = LandDtoSpecModel.landDtoSpec();
+        final var returned = TestUtil.executeAndExtract(LandDtoSpec.class, landApiSpec.createLand().body(landToCreate));
+
+        assertNotNull(returned.getId());
+        createdLandId = returned.getId();
     }
 
-    @TestAsSachbearbeiter
     @Test
-    void getLaenderasSB() {
-        assertNotNull(stammdatenResource.getLaender());
+    @Order(2)
+    @TestAsAdmin
+    void getLaenderContainsNewLand() {
+        final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
+
+        assertNotEquals(0, laender.length);
+        final var createdLand = Arrays.stream(laender)
+            .filter(land -> land.getId().equals(createdLandId))
+            .findFirst()
+            .orElse(null);
+
+        assertNotNull(createdLand, "The Land created before was not returned by the API");
+    }
+
+    @Test
+    @Order(3)
+    @TestAsAdmin
+    void landInaktivSchalten() {
+        final var update = LandDtoSpecModel.landDtoSpec();
+        update.setEintragGueltig(false);
+
+        final var returned = TestUtil.executeAndExtract(
+            LandDtoSpec.class,
+            landApiSpec.updateLand().landIdPath(createdLandId).body(update)
+        );
+
+        assertNotNull(returned);
+        assertFalse(returned.getEintragGueltig());
+    }
+
+    @Test
+    @Order(4)
+    @TestAsAdmin
+    void getLaenderContainsInaktivesLand() {
+        final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
+
+        assertNotEquals(0, laender.length);
+        final var createdLand = Arrays.stream(laender)
+            .filter(land -> land.getId().equals(createdLandId))
+            .findFirst()
+            .orElse(null);
+
+        assertNotNull(createdLand, "The Land created before was not returned by the API");
+        assertFalse(createdLand.getEintragGueltig());
+    }
+
+    // Just run these next tests after creating a Land to ensure we're not dependent on seeding
+
+    @Test
+    @Order(5)
+    @TestAsGesuchsteller
+    void getLaenderAsGS() {
+        doGetLaender();
+    }
+
+    @Test
+    @Order(5)
+    @TestAsSachbearbeiter
+    void getLaenderAsSB() {
+        doGetLaender();
+    }
+
+    private void doGetLaender() {
+        final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
+        assertNotEquals(0, laender.length);
     }
 }
