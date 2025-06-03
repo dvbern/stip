@@ -4187,7 +4187,6 @@ components:
         - iban
         - nachname
         - vorname
-        - kontoinhaber
       type: object
       properties:
         vorname:
@@ -4198,8 +4197,6 @@ components:
           type: string
         nachname:
           type: string
-        kontoinhaber:
-          $ref: '#/components/schemas/Kontoinhaber'
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
@@ -4843,14 +4840,6 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/PartnerUpdate'
-    Kontoinhaber:
-      enum:
-        - GESUCHSTELLER
-        - VATER
-        - MUTTER
-        - SOZIALDIENST_INSTITUTION
-        - ANDERE
-      type: string
     GesuchFormular:
       required:
         - ausbildung
