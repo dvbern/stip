@@ -47,10 +47,23 @@ public final class AusbildungUpdateDtoSpecModel {
         });
     }
 
-    // public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung() {
-    // return TestUtil.createUpdateDtoSpec(
-    // GesuchFormularUpdateDtoSpec::new,
-    // (model) -> model.setAusbildung(ausbildungUpdateDtoSpec())
-    // );
-    // }
+    public static AusbildungUpdateDtoSpec customAusbildungUpdateDtoSpec() {
+        final DateRange gueltigkeitsRange;
+        if (GUELTIGKEIT_PERIODE_23_24 != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        } else {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
+        }
+        return TestUtil.createUpdateDtoSpec(AusbildungUpdateDtoSpec::new, (model) -> {
+            model.setAusbildungBegin(gueltigkeitsRange.getGueltigAb().format(DATE_TIME_FORMATTER));
+            model.setAusbildungEnd(gueltigkeitsRange.getGueltigBis().format(DATE_TIME_FORMATTER));
+            model.setAusbildungNichtGefunden(true);
+            model.setAlternativeAusbildungsstaette("University Gold");
+            model.setAlternativeAusbildungsgang("Silver");
+            model.setFachrichtung("Informatik");
+            model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
+            model.setIsAusbildungAusland(false);
+            model.setAusbildungsort("Bern");
+        });
+    }
 }

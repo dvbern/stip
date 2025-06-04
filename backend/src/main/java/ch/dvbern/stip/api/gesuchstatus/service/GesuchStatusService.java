@@ -94,6 +94,9 @@ public class GesuchStatusService {
         if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
             editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         }
+        if (identifiers.contains(OidcConstants.ROLE_JURIST)) {
+            editStates.addAll(Gesuchstatus.JURIST_CAN_EDIT);
+        }
         if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
             editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
         }

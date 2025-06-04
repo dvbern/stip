@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SALDO,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_ID,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_STATUS,
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_BUSINESS_PARTNER_ID,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_COMMENT,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_VERFUEGUNG_ID,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_GESUCH_ID
@@ -72,10 +73,13 @@ public class BuchhaltungEntryDtoSpec {
   private Integer saldo;
 
   public static final String JSON_PROPERTY_SAP_ID = "sapId";
-  private Integer sapId;
+  private String sapId;
 
   public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
   private SapStatusDtoSpec sapStatus;
+
+  public static final String JSON_PROPERTY_BUSINESS_PARTNER_ID = "businessPartnerId";
+  private Integer businessPartnerId;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
   private String comment;
@@ -297,7 +301,7 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  public BuchhaltungEntryDtoSpec sapId(Integer sapId) {
+  public BuchhaltungEntryDtoSpec sapId(String sapId) {
     
     this.sapId = sapId;
     return this;
@@ -311,14 +315,14 @@ public class BuchhaltungEntryDtoSpec {
   @JsonProperty(JSON_PROPERTY_SAP_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getSapId() {
+  public String getSapId() {
     return sapId;
   }
 
 
   @JsonProperty(JSON_PROPERTY_SAP_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapId(Integer sapId) {
+  public void setSapId(String sapId) {
     this.sapId = sapId;
   }
 
@@ -346,6 +350,32 @@ public class BuchhaltungEntryDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSapStatus(SapStatusDtoSpec sapStatus) {
     this.sapStatus = sapStatus;
+  }
+
+
+  public BuchhaltungEntryDtoSpec businessPartnerId(Integer businessPartnerId) {
+    
+    this.businessPartnerId = businessPartnerId;
+    return this;
+  }
+
+   /**
+   * Get businessPartnerId
+   * @return businessPartnerId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBusinessPartnerId() {
+    return businessPartnerId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBusinessPartnerId(Integer businessPartnerId) {
+    this.businessPartnerId = businessPartnerId;
   }
 
 
@@ -445,6 +475,7 @@ public class BuchhaltungEntryDtoSpec {
         Objects.equals(this.saldo, buchhaltungEntry.saldo) &&
         Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
         Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
+        Objects.equals(this.businessPartnerId, buchhaltungEntry.businessPartnerId) &&
         Objects.equals(this.comment, buchhaltungEntry.comment) &&
         Objects.equals(this.verfuegungId, buchhaltungEntry.verfuegungId) &&
         Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId);
@@ -452,7 +483,7 @@ public class BuchhaltungEntryDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, comment, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, businessPartnerId, comment, verfuegungId, gesuchId);
   }
 
   @Override
@@ -469,6 +500,7 @@ public class BuchhaltungEntryDtoSpec {
     sb.append("    saldo: ").append(toIndentedString(saldo)).append("\n");
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    verfuegungId: ").append(toIndentedString(verfuegungId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");

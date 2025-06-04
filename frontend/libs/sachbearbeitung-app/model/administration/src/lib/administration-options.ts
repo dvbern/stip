@@ -7,7 +7,7 @@ export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.ausbildungsstaette.route.overview',
   iconSymbolName: 'school',
-  allowedRoles: ['V0_Sachbearbeiter-Admin'],
+  allowedRoles: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
 };
 
 export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {

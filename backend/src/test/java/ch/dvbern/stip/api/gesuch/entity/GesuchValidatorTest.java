@@ -44,6 +44,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
@@ -724,6 +725,7 @@ class GesuchValidatorTest {
         Gesuch gesuch = new Gesuch();
         GesuchTranche gesuchTranche = new GesuchTranche().setGesuchFormular(new GesuchFormular());
         gesuchTranche.setId(UUID.randomUUID());
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().add(gesuchTranche);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung

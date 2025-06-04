@@ -43,6 +43,10 @@ public class BaseAuthorizer {
         return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER);
     }
 
+    protected boolean isJurist(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasRole(OidcConstants.ROLE_JURIST);
+    }
+
     protected boolean isGesuchsteller(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_GESUCHSTELLER);
     }

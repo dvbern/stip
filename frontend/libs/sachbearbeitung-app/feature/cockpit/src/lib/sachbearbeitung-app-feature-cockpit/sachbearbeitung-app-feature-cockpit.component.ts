@@ -90,7 +90,10 @@ import {
   sortMap,
 } from '@dv/shared/util-fn/filter-util';
 
-const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
+const DEFAULT_FILTER = {
+  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
+  other: 'ALLE_BEARBEITBAR_MEINE',
+} satisfies Record<string, GesuchFilter>;
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -192,6 +195,11 @@ export class SachbearbeitungAppFeatureCockpitComponent
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = Object.keys(SbDashboardColumn);
 
+  private defaultFilterSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
+
+    return rolesMap.V0_Jurist ? DEFAULT_FILTER.jurist : DEFAULT_FILTER.other;
+  });
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
     typ: [<GesuchTrancheTyp | undefined>undefined],
@@ -217,7 +225,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   versionSig = this.store.selectSignal(selectVersion);
   showViewSig = computed<GesuchFilter>(() => {
     const show = this.show();
-    return show ?? DEFAULT_FILTER;
+    return show ?? this.defaultFilterSig();
   });
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
@@ -426,12 +434,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
     effect(
       () => {
         const query = quickFilterChanged();
+        const defaultFilter = this.defaultFilterSig();
         if (!query) {
           return;
         }
         this.router.navigate(['.'], {
           queryParams: {
-            show: query === DEFAULT_FILTER ? undefined : query,
+            show: query === defaultFilter ? undefined : query,
           },
           queryParamsHandling: 'merge',
           replaceUrl: true,

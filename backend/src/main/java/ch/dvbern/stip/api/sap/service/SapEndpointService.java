@@ -19,268 +19,177 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.sap.generated.businesspartner.change.BusinessPartnerChangeRequest;
-import ch.dvbern.stip.api.sap.generated.businesspartner.change.BusinessPartnerChangeResponse;
-import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateRequest;
-import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
-import ch.dvbern.stip.api.sap.generated.businesspartner.read.BusinessPartnerReadRequest;
-import ch.dvbern.stip.api.sap.generated.businesspartner.read.BusinessPartnerReadResponse;
-import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadRequest;
-import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
-import ch.dvbern.stip.api.sap.generated.importstatus.SenderParms;
-import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateRequest;
-import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateResponse;
-import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerChangeClient;
-import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerCreateClient;
-import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerReadClient;
-import ch.dvbern.stip.api.sap.service.endpoints.clients.ImportStatusReadClient;
-import ch.dvbern.stip.api.sap.service.endpoints.clients.VendorPostingCreateClient;
-import ch.dvbern.stip.api.sap.service.endpoints.util.SapEndpointName;
-import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
-import ch.dvbern.stip.api.sap.service.mapper.BusinessPartnerChangeRequestMapper;
-import ch.dvbern.stip.api.sap.service.mapper.BusinessPartnerCreateRequestMapper;
-import ch.dvbern.stip.api.sap.service.mapper.BusniessPartnerReadRequestMapper;
-import ch.dvbern.stip.api.sap.service.mapper.VendorPostingCreateRequestMapper;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerChangeService;
+import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerCreateService;
+import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerReadService;
+import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadRequest;
+import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.generated.import_status.OsImportStatusReadService;
+import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateService;
+import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
+import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.xml.ws.BindingProvider;
+import jakarta.xml.ws.handler.MessageContext;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+@Slf4j
+@RequestScoped
 @RequiredArgsConstructor
-@ApplicationScoped
 public class SapEndpointService {
+    private final BusinessPartnerCreateMapper businessPartnerCreateMapper;
+    private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
+    private final BusinessPartnerReadMapper businessPartnerReadMapper;
+    private final VendorPostingCreateMapper vendorPostingCreateMapper;
+    private final GeneralMapper generalMapper;
 
-    @Inject
-    ConfigService configService;
+    private static final int MAX_LENGTH_REF_DOC_NO = 16;
 
-    @RestClient
-    ImportStatusReadClient importStatusReadClient;
+    @ConfigProperty(name = "kstip.sap.system-id")
+    BigInteger systemid;
 
-    @RestClient
-    BusinessPartnerCreateClient businessPartnerCreateClient;
+    @ConfigProperty(name = "kstip.sap.auth-header-value")
+    String authHeaderValue;
 
-    @RestClient
-    BusinessPartnerChangeClient businessPartnerChangeClient;
+    @ConfigProperty(name = "kstip.sap.connectionTimeout")
+    Integer connectionTimeout;
 
-    @RestClient
-    VendorPostingCreateClient vendorPostingCreateClient;
+    @ConfigProperty(name = "kstip.sap.receiveTimeout")
+    Integer receiveTimeout;
 
-    @RestClient
-    BusinessPartnerReadClient businessPartnerReadClient;
-
-    private ImportStatusReadResponse getAndParseGetSAPImportStatusResponse(BigDecimal deliveryId) {
-        var request = new ImportStatusReadRequest();
-        var senderParms = new SenderParms();
-        senderParms.setSYSID(BigInteger.valueOf(configService.getSystemid()));
-        request.setSENDER(senderParms);
-        var filterparms = new ImportStatusReadRequest.FILTERPARMS();
-        filterparms.setDELIVERYID(deliveryId);
-        request.setFILTERPARMS(filterparms);
-
-        final var xmlRequest =
-            SoapUtils.buildXmlRequest(request, ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
-        final var xmlResponse = importStatusReadClient.getImportStatus(xmlRequest);
-        return SoapUtils.parseSoapResponse(xmlResponse, ImportStatusReadResponse.class);
+    private void setLogHandler(BindingProvider port) {
+        var handlerChain = port.getBinding().getHandlerChain();
+        handlerChain.add(new SOAPLoggingHandler());
+        port.getBinding().setHandlerChain(handlerChain);
     }
 
-    public Response getImportStatus(@Valid @Positive @NotNull BigDecimal deliveryId) {
-        try {
-            return Response.status(Status.OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
-
-        } catch (WebApplicationException webApplicationException) {
-            return Response.status(Status.BAD_REQUEST).build();
-        }
+    private void setTimeouts(BindingProvider port) {
+        // Set timeout until a connection is established
+        port.getRequestContext().put("javax.xml.ws.client.connectionTimeout", String.valueOf(connectionTimeout));
+        // Set timeout until the response is received
+        port.getRequestContext().put("javax.xml.ws.client.receiveTimeout", String.valueOf(receiveTimeout));
     }
 
-    public Response readBusniessPartner(String extId) {
-        final var businessPartnerReadMapper = new BusniessPartnerReadRequestMapper();
-        var request = businessPartnerReadMapper
-            .toBusinessPartnerReadRequest(extId, BigInteger.valueOf(configService.getSystemid()));
-        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-
-        String xmlRequest = null;
-        xmlRequest =
-            SoapUtils.buildXmlRequest(request, BusinessPartnerReadRequest.class, SapEndpointName.BUSINESPARTNER);
-        String xmlResponse = null;
-
-        try {
-            xmlResponse = businessPartnerReadClient.readBusinessPartner(
-                xmlRequest
-            );
-        } catch (WebApplicationException webApplicationException) {
-            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
-        }
-        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerReadResponse.class);
-        return Response.status(Status.OK).entity(result).build();
+    private void setPortParams(BindingProvider port) {
+        setLogHandler(port);
+        setTimeouts(port);
     }
 
-    /*
-     * Note: specific values are still hardcoded or commented - these have to be discussed in the near future
-     */
-
-    /**
-     * Important: it can take up to 48 hours until a newly created user will be set active in SAP!
-     */
-    public Response createBusinessPartner(@Valid Auszahlung auszahlung, String extId, BigDecimal deliveryId) {
-        final var businessPartnerCreateRequestMapper = new BusinessPartnerCreateRequestMapper();
-        var request = businessPartnerCreateRequestMapper
-            .toBusinessPartnerCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-        request.getSENDER().setDELIVERYID(deliveryId);
-        request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS());
-        request.getBUSINESSPARTNER().getIDKEYS().setEXTID(String.valueOf(extId));
-        request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER());
-        request.getBUSINESSPARTNER().getHEADER().setPARTNCAT("1"); // todo KSTIP-1229: set correct category
-        request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); // todo: set correct language iso
-        request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");// todo KSTIP-1229: set correct language iso
-        request.getBUSINESSPARTNER().getORGDATA().setNAME1("");// todo KSTIP-1229: set correct name 1
-        request.getBUSINESSPARTNER().getORGDATA().setNAME2("");// todo KSTIP-1229: set correct name 2
-        request.getBUSINESSPARTNER().getORGDATA().setNAME3("");// todo KSTIP-1229: set correct name 3
-        request.getBUSINESSPARTNER().getORGDATA().setNAME4("");// todo KSTIP-1229: set correct name 4
-        request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-        request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");// todo KSTIP-1229: set iso country (max 3
-                                                                          // instead of "Schweiz"
-
-        String xmlRequest = null;
-        xmlRequest =
-            SoapUtils.buildXmlRequest(request, BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
-
-        String xmlResponse = null;
-        try {
-            xmlResponse = businessPartnerCreateClient.createBusinessPartner(
-                xmlRequest
-            );
-        } catch (WebApplicationException webApplicationException) {
-            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
-        }
-
-        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerCreateResponse.class);
-        return Response.status(Status.OK).entity(result).build();
-
+    private void setAuthHeader(BindingProvider port) {
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Authorization", Collections.singletonList("Basic " + authHeaderValue));
+        port.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
     }
 
-    /*
-     * Note: specific values are still hardcoded or commented - these have to be discussed in the near future
-     */
-    public Response changeBusinessPartner(
-        @Valid Auszahlung auszahlung,
-        Integer businessPartnerId,
-        BigDecimal deliveryId
+    public static BigDecimal generateDeliveryId() {
+        SecureRandom secureRandom = new SecureRandom();
+        return BigDecimal.valueOf(Math.abs(secureRandom.nextLong() & Long.MAX_VALUE)).setScale(0);
+    }
+
+    public BusinessPartnerCreateResponse createBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
+        final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
+        final var port = businessPartnerCreateService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final BusinessPartnerCreateRequest businessPartnerCreateRequest =
+            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
+        businessPartnerCreateRequest.getBUSINESSPARTNER().setHEADER(businessPartnerCreateMapper.getHeader());
+        return port.osBusinessPartnerCreate(businessPartnerCreateRequest);
+    }
+
+    public BusinessPartnerChangeResponse changeBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
+        final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
+        final var port = businessPartnerChangeService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final BusinessPartnerChangeRequest businessPartnerChangeRequest =
+            businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
+        businessPartnerChangeRequest.getBUSINESSPARTNER()
+            .setHEADER(businessPartnerChangeMapper.getHeader(auszahlung.getSapBusinessPartnerId()));
+        return port.osBusinessPartnerChange(businessPartnerChangeRequest);
+    }
+
+    public BusinessPartnerReadResponse readBusinessPartner(Auszahlung auszahlung) {
+        final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
+        final var port = businessPartnerReadService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final BusinessPartnerReadRequest businessPartnerReadRequest =
+            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, auszahlung);
+        return port.osBusinessPartnerRead(businessPartnerReadRequest);
+    }
+
+    public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
+        final OsImportStatusReadService importStatusReadService = new OsImportStatusReadService();
+        final var port = importStatusReadService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
+        importStatusReadRequest.setSENDER(generalMapper.getSenderParms(systemid));
+        importStatusReadRequest.setFILTERPARMS(new ImportStatusReadRequest.FILTERPARMS());
+        importStatusReadRequest.getFILTERPARMS().setDELIVERYID(deliveryid.setScale(0));
+
+        return port.osImportStatusRead(importStatusReadRequest);
+    }
+
+    public VendorPostingCreateResponse createVendorPosting(
+        Auszahlung auszahlung,
+        Integer amount,
+        BigDecimal sapDeliveryId,
+        String qrIbanAddlInfo,
+        String refDocNo
     ) {
-        final var mapper = new BusinessPartnerChangeRequestMapper();
-        var request = mapper
-            .toBusinessPartnerChangeRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-        request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
-        request.getSENDER().setDELIVERYID(deliveryId);
-        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-        request.getBUSINESSPARTNER().getHEADER().setBPARTNER(businessPartnerId);
+        final OsVendorPostingCreateService vendorPostingCreateService = new OsVendorPostingCreateService();
+        final var port = vendorPostingCreateService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
 
-        request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS());
+        final VendorPostingCreateRequest vendorPostingCreateRequest =
+            vendorPostingCreateMapper
+                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, auszahlung);
 
-        // request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
-        // request.getBUSINESSPARTNER().getHEADER().setBPARTNER("1"); //todo KSTIP-1229: set correct category
-        request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); // todo KSTIP-1229: set correct
-                                                                                   // language iso
-        request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");// todo KSTIP-1229: set correct language iso
-        request.getBUSINESSPARTNER().getORGDATA().setNAME1("");// todo KSTIP-1229: set correct name 1
-        request.getBUSINESSPARTNER().getORGDATA().setNAME2("");// todo KSTIP-1229: set correct name 2
-        request.getBUSINESSPARTNER().getORGDATA().setNAME3("");// todo KSTIP-1229: set correct name 3
-        request.getBUSINESSPARTNER().getORGDATA().setNAME4("");// todo KSTIP-1229: set correct name 4
-        request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-        request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");// todo KSTIP-1229: set iso country (max 3
-                                                                          // instead of "Schweiz"
-
-        String xmlRequest = null;
-        xmlRequest =
-            SoapUtils.buildXmlRequest(request, BusinessPartnerChangeRequest.class, SapEndpointName.BUSINESPARTNER);
-        String xmlResponse = null;
+        XMLGregorianCalendar docDate;
+        XMLGregorianCalendar pstngDate;
         try {
-            xmlResponse = businessPartnerChangeClient.changeBusinessPartner(xmlRequest);
-        } catch (WebApplicationException webApplicationException) {
-            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
+            docDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDate.now().toString());
+            pstngDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDate.now().toString());
+        } catch (DatatypeConfigurationException e) {
+            throw new BadRequestException(e);
         }
 
-        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerChangeResponse.class);
-        return Response.status(Status.OK).entity(result).build();
-    }
-
-    /*
-     * Note: specific values are still hardcoded or commented - these have to be discussed in the near future
-     */
-    public Response createVendorPosting(
-        @Valid Auszahlung auszahlung,
-        Integer businessPartnerId,
-        BigDecimal deliveryId
-    ) {
-        final var mapper = new VendorPostingCreateRequestMapper();
-        var request = mapper
-            .toVendorPostingCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-        request.getSENDER().setDELIVERYID(deliveryId);
-
-        request.getVENDORPOSTING().forEach(vendorposting -> {
-            vendorposting.getVENDOR().setVENDORNO(String.valueOf(businessPartnerId));
-            vendorposting.getVENDOR().setAMTDOCCUR(BigDecimal.valueOf(7162.0));
-            vendorposting.getVENDOR().setZTERM("ZB04");
-
-            vendorposting.getGLACCOUNT().add(new VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT());
-            vendorposting.getGLACCOUNT().get(0).setGLACCOUNT("363710000");
-            vendorposting.getGLACCOUNT().get(0).setITEMNOACC(BigDecimal.valueOf(1));
-            vendorposting.getPOSITION().add(new VendorPostingCreateRequest.VENDORPOSTING.POSITION());
-            vendorposting.getPOSITION().get(0).setITEMNOACC(BigDecimal.valueOf(1));
-            vendorposting.getPOSITION().get(0).setAMTDOCCUR(BigDecimal.valueOf(17779.0));
-
-            vendorposting.setHEADER(new VendorPostingCreateRequest.VENDORPOSTING.HEADER());
-            vendorposting.getHEADER().setDOCTYPE("YK");
-            vendorposting.getHEADER().setCOMPCODE("4800");
-            vendorposting.getHEADER().setHEADERTXT("4890");
-            vendorposting.getHEADER().setREFDOCNO("0001544323");
-
-            XMLGregorianCalendar date;
-            try {
-                LocalDate localDate = LocalDate.now();
-                date = DatatypeFactory.newInstance()
-                    .newXMLGregorianCalendarDate(
-                        localDate.getYear(),
-                        localDate.getMonthValue(),
-                        localDate.getDayOfMonth(),
-                        DatatypeConstants.FIELD_UNDEFINED
-                    );
-            } catch (DatatypeConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-            vendorposting.getHEADER().setDOCDATE(date);
-            vendorposting.getHEADER().setPSTNGDATE(date);
-            vendorposting.getHEADER().setCURRENCY("CHF");
-        });
-
-        String xmlRequest = null;
-        xmlRequest =
-            SoapUtils.buildXmlRequest(request, VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);
-        String xmlResponse = null;
-
-        try {
-            xmlResponse = vendorPostingCreateClient.createVendorPosting(xmlRequest);
-        } catch (WebApplicationException webApplicationException) {
-            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
+        if (refDocNo.length() > MAX_LENGTH_REF_DOC_NO) {
+            refDocNo = refDocNo.substring(0, MAX_LENGTH_REF_DOC_NO);
         }
 
-        final var result = SoapUtils.parseSoapResponse(xmlResponse, VendorPostingCreateResponse.class);
-        return Response.status(Status.OK).entity(result).build();
-    }
+        vendorPostingCreateRequest.getVENDORPOSTING()
+            .get(0)
+            .setHEADER(vendorPostingCreateMapper.toHeader(refDocNo, docDate, pstngDate));
 
+        return port.osVendorPostingCreate(vendorPostingCreateRequest);
+    }
 }

@@ -17,7 +17,7 @@
         {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let verfuegung; dataSource: verfuegungenSig()" class="tw-whitespace-nowrap">
-        {{ verfuegung.timestamp | date: 'dd.MM.yyyy' }}
+        {{ verfuegung.timestampErstellt | date: 'dd.MM.yyyy' }}
       </td>
     </ng-container>
 
@@ -31,7 +31,18 @@
         *dvMatCellDef="let verfuegung; dataSource: verfuegungenSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
       >
-        <a [routerLink]="['/']">{{ verfuegung.documentName }}</a>
+        <button
+          type="button"
+          class="btn btn-link tw-flex tw-max-w-full tw-p-0"
+          [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | translate"
+          [dvDownloadButton]="{
+            type: 'verfuegung',
+            id: verfuegung.id,
+          }"
+        >
+          <span class="tw-truncate tw-text-sm/none" [title]="verfuegung.filename">{{ verfuegung.filename }}</span>
+          <span class="material-symbols-rounded -tw-mt-0.5 tw-ml-1 tw-align-middle tw-text-lg/none">download</span>
+        </button>
       </td>
     </ng-container>
 

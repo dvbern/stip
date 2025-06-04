@@ -310,7 +310,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(21)
     void gesuchEinreichenShouldFail() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -387,7 +387,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(24)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
+        gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
