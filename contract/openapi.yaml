@@ -46,7 +46,7 @@ paths:
               $ref: '#/components/schemas/Auszahlung'
         required: true
       tags:
-        - Gesuch
+        - Auszahlung
       responses:
         '201':
           content:
@@ -70,7 +70,7 @@ paths:
               $ref: '#/components/schemas/AuszahlungUpdate'
         required: true
       tags:
-        - Gesuch
+        - Auszahlung
       responses:
         '200':
           content:
@@ -88,7 +88,7 @@ paths:
       summary: Updates Auszahlung
     get:
       tags:
-        - Gesuch
+        - Auszahlung
       responses:
         '200':
           content:
