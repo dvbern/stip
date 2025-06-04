@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO3CODE_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Entity
@@ -56,8 +57,8 @@ public class Land extends AbstractMandantEntity {
     private String laendercodeBfs;
 
     @Nullable
-    @Column(name = "iso3code", nullable = true)
-    @Size(min = 3, max = 3)
+    @Column(name = "iso3code", nullable = true, length = DB_DEFAULT_STRING_ISO3CODE_LENGTH)
+    @Size(min = DB_DEFAULT_STRING_ISO3CODE_LENGTH, max = DB_DEFAULT_STRING_ISO3CODE_LENGTH)
     private String iso3code;
 
     @NotNull

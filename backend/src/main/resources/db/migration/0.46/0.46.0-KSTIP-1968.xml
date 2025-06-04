@@ -50,7 +50,7 @@
             <column name="is_eu_efta" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="iso3code" type="VARCHAR(255)"/>
+            <column name="iso3code" type="VARCHAR(3)"/>
             <column name="it_kurzform" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
