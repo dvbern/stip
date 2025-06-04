@@ -61,7 +61,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createAuszahlungForGesuch
-      summary: Creates a new Gesuch
+      summary: Creates a new Auszahlung for a Gesuch
     patch:
       requestBody:
         content:
@@ -4253,7 +4253,7 @@ components:
         - type: object
         - $ref: '#/components/schemas/AuszahlungUpdate'
     AuszahlungUpdate:
-      title: Root Type for Zahlungsverbindung
+      title: Root Type for Auszahlung
       type: object
       required:
         - auszahlungAnSozialdienst
@@ -4269,7 +4269,7 @@ components:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
     ZahlungsverbindungUpdate:
-      title: Root Type for Auszahlung
+      title: Root Type for Zahlungsverbindung
       required:
         - adresse
         - iban
@@ -4286,8 +4286,6 @@ components:
           type: string
         nachname:
           type: string
-        auszahlungAnSozialdienst:
-          type: boolean
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
@@ -5959,8 +5957,8 @@ components:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
     SozialdienstSlim:
       required:
         - id
@@ -5983,8 +5981,8 @@ components:
           properties:
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
-            auszahlung:
-              $ref: '#/components/schemas/Auszahlung'
+            zahlungsverbindung:
+              $ref: '#/components/schemas/Zahlungsverbindung'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
