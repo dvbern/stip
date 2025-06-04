@@ -19,7 +19,6 @@ package ch.dvbern.stip.arch;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.SizeOrEmpty;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -47,8 +46,6 @@ class StringAnnotationTest {
             .haveRawType(String.class)
             .should()
             .beAnnotatedWith(Size.class)
-            .orShould()
-            .beAnnotatedWith(SizeOrEmpty.class)
             .andShould()
             .beAnnotatedWith(Column.class);
 

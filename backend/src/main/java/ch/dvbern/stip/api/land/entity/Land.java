@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.land.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.validation.SizeOrEmpty;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -39,9 +38,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "land",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_laendercode_bfs", columnNames = { "laendercode_bfs", "mandant" }
+        name = "UC_land_laendercode_bfs_mandant", columnNames = { "laendercode_bfs", "mandant" }
     ),
-    indexes = @Index(name = "IX_land_mandant", columnList = "mandant,laendercode_bfs")
+    indexes = @Index(name = "IX_land_laendercode_bfs_mandant", columnList = "laendercode_bfs,mandant")
 )
 @Audited
 @Getter
@@ -58,7 +57,7 @@ public class Land extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "iso3code", nullable = true)
-    @SizeOrEmpty(min = 3, max = 3)
+    @Size(min = 3, max = 3)
     private String iso3code;
 
     @NotNull

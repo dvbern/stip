@@ -41,21 +41,6 @@ public class LandRepository implements BaseRepository<Land> {
             .findFirst();
     }
 
-    public boolean isLandEuEfta(final String bfsCode) {
-        final var land = QLand.land;
-        final var entity = new JPAQueryFactory(entityManager)
-            .selectFrom(land)
-            .where(land.laendercodeBfs.eq(bfsCode))
-            .stream()
-            .findFirst();
-
-        if (entity.isEmpty()) {
-            return false;
-        }
-
-        return entity.get().getIsEuEfta();
-    }
-
     public Optional<Land> getByIso3code(final String iso3code) {
         final var land = QLand.land;
         return new JPAQueryFactory(entityManager)

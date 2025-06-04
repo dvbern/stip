@@ -46,12 +46,7 @@ public enum LandGueltigFor {
             return null;
         }
 
-        final var pia = formular.getPersonInAusbildung();
-        if (pia.getAdresse() == null) {
-            return null;
-        }
-
-        return pia.getAdresse().getLand();
+        return formular.getPersonInAusbildung().getAdresse().getLand();
     }
     ),
     ELTERN_MUTTER(
@@ -69,12 +64,7 @@ public enum LandGueltigFor {
             return null;
         }
 
-        final var auszahlung = formular.getAuszahlung();
-        if (auszahlung.getAdresse() == null) {
-            return null;
-        }
-
-        return auszahlung.getAdresse().getLand();
+        return formular.getAuszahlung().getAdresse().getLand();
     }
     ),
     PARTNER(

@@ -117,12 +117,12 @@
         <addPrimaryKey columnNames="rev, id" constraintName="land_audPK" tableName="land_aud"/>
     </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-10">
-        <addUniqueConstraint columnNames="laendercode_bfs, mandant" constraintName="UC_land_laendercode_bfs" tableName="land"/>
+        <addUniqueConstraint columnNames="laendercode_bfs, mandant" constraintName="UC_land_laendercode_bfs_mandant" tableName="land"/>
     </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-11">
-        <createIndex indexName="IX_land_mandant" tableName="land">
-            <column name="mandant"/>
+        <createIndex indexName="IX_land_laendercode_bfs_mandant" tableName="land">
             <column name="laendercode_bfs"/>
+            <column name="mandant"/>
         </createIndex>
     </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-18">
@@ -139,5 +139,11 @@
     </changeSet>
     <changeSet author="fuju (generated)" id="1748359304231-26">
         <dropColumn columnName="nationalitaet" tableName="person_in_ausbildung_aud"/>
+    </changeSet>
+    <changeSet id="1749023977057-1" author="Juri Furer">
+        <dropUniqueConstraint tableName="plz" constraintName="UC_plz_ort_kantonskuerzel" />
+    </changeSet>
+    <changeSet id="1749024012283-1" author="Juri Furer">
+        <addUniqueConstraint columnNames="plz, ort, kantonskuerzel" constraintName="UC_plz_plz_ort_kantonskuerzel" tableName="plz"/>
     </changeSet>
 </databaseChangeLog>

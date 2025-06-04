@@ -26,24 +26,24 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LandGenerator {
     public Land initSwitzerland() {
-        return initForWellKnownLand(WellKnownLand.CH).setIsEuEfta(true);
+        return initForWellKnownLand(WellKnownLand.CHE).setIsEuEfta(true);
     }
 
     public Land initGermany() {
-        return initForWellKnownLand(WellKnownLand.DE).setIsEuEfta(true);
+        return initForWellKnownLand(WellKnownLand.DEU).setIsEuEfta(true);
     }
 
     public Land initIran() {
-        return initForWellKnownLand(WellKnownLand.IR).setIsEuEfta(false);
+        return initForWellKnownLand(WellKnownLand.IRN).setIsEuEfta(false);
     }
 
     private Land initForWellKnownLand(final WellKnownLand wellKnownLand) {
         return (Land) new Land()
-            .setDeKurzform("TEST Schweiz")
-            .setFrKurzform("TEST Schweiz")
-            .setItKurzform("TEST Schweiz")
-            .setEnKurzform("TEST Schweiz")
-            .setIso3code("TCH")
+            .setDeKurzform("TEST Land")
+            .setFrKurzform("TEST Land")
+            .setItKurzform("TEST Land")
+            .setEnKurzform("TEST Land")
+            .setIso3code("TSL")
             .setGueltig(true)
             .setLaendercodeBfs(wellKnownLand.getLaendercodeBfs())
             .setId(UUID.randomUUID());

@@ -37,10 +37,10 @@ public class LandTestSeeding extends Seeder {
     protected void seed() {
         landSeeding.seed();
 
-        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CH.getLaendercodeBfs()).orElseThrow();
+        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CHE.getLaendercodeBfs()).orElseThrow();
         TestConstants.TEST_LAND_SCHWEIZ_ID = switzerland.getId();
 
-        final var iran = landService.getLandByBfsCode(WellKnownLand.IR.getLaendercodeBfs()).orElseThrow();
+        final var iran = landService.getLandByBfsCode(WellKnownLand.IRN.getLaendercodeBfs()).orElseThrow();
         TestConstants.TEST_LAND_NON_EU_EFTA_ID = iran.getId();
     }
 

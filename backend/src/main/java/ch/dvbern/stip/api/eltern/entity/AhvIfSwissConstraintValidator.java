@@ -41,7 +41,7 @@ public class AhvIfSwissConstraintValidator implements ConstraintValidator<AhvIfS
             return true;
         }
 
-        if (!adresse.getLand().is(WellKnownLand.CH)) {
+        if (!adresse.getLand().is(WellKnownLand.CHE)) {
             return true;
         }
 

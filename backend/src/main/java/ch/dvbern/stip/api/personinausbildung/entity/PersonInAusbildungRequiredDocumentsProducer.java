@@ -112,7 +112,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
                 return false;
             }
 
-            return !adresse.getLand().is(WellKnownLand.CH);
+            return !adresse.getLand().is(WellKnownLand.CHE);
         });
     }
 }

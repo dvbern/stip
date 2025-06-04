@@ -45,11 +45,17 @@ public class LandService {
 
     @Transactional
     public LandDto createLand(final LandDto landDto) {
+        if (landDto.getId() != null) {
+            throw new ValidationException("Cannot create Land that already has an ID");
+        }
+
         final var land = landMapper.toEntity(landDto);
 
-        var duplicate = landRepository.getByIso3code(land.getIso3code());
-        if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
-            throw new ValidationException("iso3code must be unique or null");
+        if (landDto.getIso3code() != null) {
+            var duplicate = landRepository.getByIso3code(land.getIso3code());
+            if (duplicate.isPresent()) {
+                throw new ValidationException("iso3code must be unique or null");
+            }
         }
 
         landRepository.persist(land);
@@ -59,14 +65,17 @@ public class LandService {
 
     @Transactional
     public LandDto updateLand(final UUID landId, final LandDto landDto) {
-        final var entity = landRepository.requireById(landId);
-        landMapper.partialUpdate(landDto, entity);
+        final var land = landRepository.requireById(landId);
+        landMapper.partialUpdate(landDto, land);
 
-        return landMapper.toDto(entity);
-    }
+        if (landDto.getIso3code() != null) {
+            var duplicate = landRepository.getByIso3code(land.getIso3code());
+            if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
+                throw new ValidationException("iso3code must be unique or null");
+            }
+        }
 
-    public boolean landInEuEfta(Land land) {
-        return landRepository.isLandEuEfta(land.getLaendercodeBfs());
+        return landMapper.toDto(land);
     }
 
     public Optional<Land> getLandByBfsCode(final String bfsCode) {
@@ -75,9 +84,5 @@ public class LandService {
 
     public Land requireLandById(final UUID id) {
         return landRepository.requireById(id);
-    }
-
-    public Optional<Land> getByIso3code(final String iso3code) {
-        return landRepository.getByIso3code(iso3code);
     }
 }
