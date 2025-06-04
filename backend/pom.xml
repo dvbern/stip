@@ -39,6 +39,7 @@
       file:**/.mvn/**,
       file:**/.quarkus/**</sonar.exclusions>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+    <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
     <spotless.version>2.44.4</spotless.version>
     <surefire-plugin.version>3.5.3</surefire-plugin.version>
