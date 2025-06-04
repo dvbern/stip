@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.api.LandApiSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -72,6 +73,17 @@ class LandResourceImplTest {
     @Test
     @Order(2)
     @TestAsAdmin
+    void createLandWitDuplicateIso3codeFails() {
+        final var landToCreate = LandDtoSpecModel.landDtoSpec();
+        TestUtil.executeAndAssert(
+            landApiSpec.createLand().body(landToCreate),
+            Response.Status.BAD_REQUEST.getStatusCode()
+        );
+    }
+
+    @Test
+    @Order(3)
+    @TestAsAdmin
     void getLaenderContainsNewLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
 
@@ -85,7 +97,7 @@ class LandResourceImplTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @TestAsAdmin
     void landInaktivSchalten() {
         final var update = LandDtoSpecModel.landDtoSpec();
@@ -101,7 +113,7 @@ class LandResourceImplTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @TestAsAdmin
     void getLaenderContainsInaktivesLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
@@ -119,14 +131,14 @@ class LandResourceImplTest {
     // Just run these next tests after creating a Land to ensure we're not dependent on seeding
 
     @Test
-    @Order(5)
+    @Order(6)
     @TestAsGesuchsteller
     void getLaenderAsGS() {
         doGetLaender();
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @TestAsSachbearbeiter
     void getLaenderAsSB() {
         doGetLaender();

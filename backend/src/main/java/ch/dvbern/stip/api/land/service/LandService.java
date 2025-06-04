@@ -21,13 +21,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.repo.LandRepository;
 import ch.dvbern.stip.generated.dto.LandDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_ISO3CODE_NOT_UNIQUE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -46,7 +50,7 @@ public class LandService {
     @Transactional
     public LandDto createLand(final LandDto landDto) {
         if (landDto.getId() != null) {
-            throw new ValidationException("Cannot create Land that already has an ID");
+            throw new BadRequestException("Cannot create Land that already has an ID");
         }
 
         final var land = landMapper.toEntity(landDto);
@@ -54,12 +58,17 @@ public class LandService {
         if (landDto.getIso3code() != null) {
             var duplicate = landRepository.getByIso3code(land.getIso3code());
             if (duplicate.isPresent()) {
-                throw new ValidationException("iso3code must be unique or null");
+                throw new CustomValidationsException(
+                    "iso3code must be unique or null",
+                    new CustomConstraintViolation(
+                        VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
+                        "iso3code"
+                    )
+                );
             }
         }
 
         landRepository.persist(land);
-
         return landMapper.toDto(land);
     }
 
@@ -71,7 +80,13 @@ public class LandService {
         if (landDto.getIso3code() != null) {
             var duplicate = landRepository.getByIso3code(land.getIso3code());
             if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
-                throw new ValidationException("iso3code must be unique or null");
+                throw new CustomValidationsException(
+                    "iso3code must be unique or null",
+                    new CustomConstraintViolation(
+                        VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
+                        "iso3code"
+                    )
+                );
             }
         }
 
