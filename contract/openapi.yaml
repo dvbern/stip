@@ -4275,7 +4275,6 @@ components:
         - iban
         - nachname
         - vorname
-        - auszahlungAnSozialdienst
       type: object
       properties:
         vorname:
@@ -5951,7 +5950,7 @@ components:
       required:
         - id
         - name
-        - auszahlung
+        - zahlungsverbindung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5978,6 +5977,7 @@ components:
             - id
             - name
             - sozialdienstAdmin
+            - zahlungsverbindung
           properties:
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
