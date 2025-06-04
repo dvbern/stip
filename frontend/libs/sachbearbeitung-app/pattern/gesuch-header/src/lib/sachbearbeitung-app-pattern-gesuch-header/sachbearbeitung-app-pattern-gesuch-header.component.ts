@@ -37,6 +37,8 @@ import {
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
@@ -80,6 +82,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
+  private config = inject(SharedModelCompileTimeConfig);
   route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -185,7 +188,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchInfo = this.gesuchStore.gesuchInfo().data;
+    const gesuchStatus = gesuchInfo?.gesuchStatus;
+
     const sbCanBearbeitungAbschliessen =
       this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
     const validations =
@@ -196,16 +201,18 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return {};
     }
 
+    const { permissions } = getGesuchPermissions(
+      gesuchInfo,
+      this.config.appType,
+      rolesMap,
+    );
+
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
-    const pendingRechtsabklaerung =
-      gesuchStatus === 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' &&
-      !rolesMap.V0_Jurist;
-
     const list = StatusUebergaengeMap[gesuchStatus]
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
-          pendingRechtsabklaerung,
+          permissions,
           hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
