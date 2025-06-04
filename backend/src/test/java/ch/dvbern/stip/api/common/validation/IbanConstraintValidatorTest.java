@@ -24,7 +24,8 @@ import static ch.dvbern.stip.api.util.TestConstants.IBAN_AT_NUMMER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_INVALID;
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_LI_NUMMER_VALID;
-import static ch.dvbern.stip.api.util.TestConstants.IBAN_WITH_LETTER;
+import static ch.dvbern.stip.api.util.TestConstants.IBAN_WITH_LETTER_INVALID;
+import static ch.dvbern.stip.api.util.TestConstants.IBAN_WITH_LETTER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.QR_IBAN_CH_INVALID;
 import static ch.dvbern.stip.api.util.TestConstants.QR_IBAN_CH_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -71,6 +72,11 @@ class IbanConstraintValidatorTest {
 
     @Test
     void testIbanWithLetterIsValid() {
-        assertThat(ibanValidator.isValid(IBAN_WITH_LETTER, null), is(true));
+        assertThat(ibanValidator.isValid(IBAN_WITH_LETTER_VALID, null), is(true));
+    }
+
+    @Test
+    void testInvalidIbanWithLetterIsInvalid() {
+        assertThat(ibanValidator.isValid(IBAN_WITH_LETTER_INVALID, null), is(false));
     }
 }
