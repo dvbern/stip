@@ -31,9 +31,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: sendWelcomeEmail
       summary: Sends an e-mail for a newly created user
-  /auszahlung/{fallId}:
+  /auszahlung/{gesuchId}:
     parameters:
-      - name: fallId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -4248,12 +4248,27 @@ components:
         erhalteneAlimentebeitraege:
           type: integer
     Auszahlung:
-      title: Root Type for Auszahlung
       type: object
       allOf:
         - type: object
         - $ref: '#/components/schemas/AuszahlungUpdate'
     AuszahlungUpdate:
+      title: Root Type for Zahlungsverbindung
+      type: object
+      required:
+        - auszahlungAnSozialdienst
+      properties:
+        auszahlungAnSozialdienst:
+          type: boolean
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
+    Zahlungsverbindung:
+      title: Root Type for Zahlungsverbindung
+      type: object
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
+    ZahlungsverbindungUpdate:
       title: Root Type for Auszahlung
       required:
         - adresse
@@ -5938,15 +5953,12 @@ components:
       required:
         - id
         - name
-        - adresse
         - auszahlung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
         auszahlung:
           $ref: '#/components/schemas/AuszahlungUpdate'
     SozialdienstSlim:
@@ -5967,14 +5979,8 @@ components:
           required:
             - id
             - name
-            - adresse
-            - iban
             - sozialdienstAdmin
           properties:
-            adresse:
-              $ref: '#/components/schemas/Adresse'
-            iban:
-              type: string
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
             auszahlung:
