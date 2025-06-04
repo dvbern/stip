@@ -84,7 +84,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createAuszahlungForGesuch
+      operationId: updateAuszahlungForGesuch
       summary: Updates Auszahlung
     get:
       tags:
