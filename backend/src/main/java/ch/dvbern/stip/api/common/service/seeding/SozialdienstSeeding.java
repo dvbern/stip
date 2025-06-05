@@ -87,7 +87,7 @@ public class SozialdienstSeeding extends Seeder {
                     .setDigitaleKommunikation(true)
             );
 
-        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CH.getLaendercodeBfs()).orElseThrow();
+        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CHE.getLaendercodeBfs()).orElseThrow();
         final var adresse = new Adresse()
             .setStrasse("Nussbaumstrasse")
             .setHausnummer("21")

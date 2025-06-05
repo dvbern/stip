@@ -21,13 +21,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.repo.LandRepository;
 import ch.dvbern.stip.generated.dto.LandDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_ISO3CODE_NOT_UNIQUE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -45,28 +49,48 @@ public class LandService {
 
     @Transactional
     public LandDto createLand(final LandDto landDto) {
+        if (landDto.getId() != null) {
+            throw new BadRequestException("Cannot create Land that already has an ID");
+        }
+
         final var land = landMapper.toEntity(landDto);
 
-        var duplicate = landRepository.getByIso3code(land.getIso3code());
-        if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
-            throw new ValidationException("iso3code must be unique or null");
+        if (landDto.getIso3code() != null) {
+            var duplicate = landRepository.getByIso3code(land.getIso3code());
+            if (duplicate.isPresent()) {
+                throw new CustomValidationsException(
+                    "iso3code must be unique or null",
+                    new CustomConstraintViolation(
+                        VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
+                        "iso3code"
+                    )
+                );
+            }
         }
 
         landRepository.persist(land);
-
         return landMapper.toDto(land);
     }
 
     @Transactional
     public LandDto updateLand(final UUID landId, final LandDto landDto) {
-        final var entity = landRepository.requireById(landId);
-        landMapper.partialUpdate(landDto, entity);
+        final var land = landRepository.requireById(landId);
+        landMapper.partialUpdate(landDto, land);
 
-        return landMapper.toDto(entity);
-    }
+        if (landDto.getIso3code() != null) {
+            var duplicate = landRepository.getByIso3code(land.getIso3code());
+            if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
+                throw new CustomValidationsException(
+                    "iso3code must be unique or null",
+                    new CustomConstraintViolation(
+                        VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
+                        "iso3code"
+                    )
+                );
+            }
+        }
 
-    public boolean landInEuEfta(Land land) {
-        return landRepository.isLandEuEfta(land.getLaendercodeBfs());
+        return landMapper.toDto(land);
     }
 
     public Optional<Land> getLandByBfsCode(final String bfsCode) {
@@ -75,9 +99,5 @@ public class LandService {
 
     public Land requireLandById(final UUID id) {
         return landRepository.requireById(id);
-    }
-
-    public Optional<Land> getByIso3code(final String iso3code) {
-        return landRepository.getByIso3code(iso3code);
     }
 }

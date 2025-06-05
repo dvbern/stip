@@ -23,9 +23,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum WellKnownLand {
-    CH("8100"),
-    DE("8207"),
-    IR("8513"),
+    CHE("8100"),
+    DEU("8207"),
+    IRN("8513"),
     STATELESS("8998"),
     STATE_UNKNOWN("8999");
 

@@ -42,16 +42,18 @@ const generatedApis = [
   'Gesuchsjahr',
   'Gesuchsperiode',
   'GesuchTranche',
+  'Land',
   'Mail',
   'Notification',
   'Plz',
   'Sozialdienst',
   'SozialdienstAdmin',
   'Stammdaten',
+  'Steuerdaten',
+  'Steuerdaten',
   'StipDecision',
   'Tenant',
-  'Steuerdaten',
-  'Land',
+  'Verfuegung',
 ];
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');

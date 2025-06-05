@@ -1,4 +1,4 @@
-import { RolesMap } from '@dv/shared/model/benutzer';
+import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DelegierungSlim,
@@ -32,6 +32,13 @@ type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}${P<'A'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
+export type ShortRole = 'gs' | 'sb' | 'ju';
+
+const shortRoleMap = {
+  gs: 'V0_Gesuchsteller',
+  sb: 'V0_Sachbearbeiter',
+  ju: 'V0_Jurist',
+} satisfies Partial<Record<ShortRole, AvailableBenutzerRole>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
   p.charAt(Permissions[perm].index) === perm;
@@ -62,51 +69,61 @@ const parsePermissions = (permission: PermissionFlags) => {
   );
 };
 
-const gs = 'gesuch-app' satisfies AppType;
-const sb = 'sachbearbeitung-app' satisfies AppType;
+const GS_APP = 'gesuch-app' satisfies AppType;
+const SB_APP = 'sachbearbeitung-app' satisfies AppType;
+
+const perm = (flags: PermissionFlags, roles: ShortRole[]) => {
+  return (rolesMap: RolesMap): PermissionFlags =>
+    roles.some((shortRole) => !!rolesMap[shortRoleMap[shortRole]])
+      ? flags
+      : '     ';
+};
+type PermissionCheck = ReturnType<typeof perm>;
 
 /**
  * Define the permissions for the gesuch based on the status.
  *
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
+// prettier-ignore
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'WDF  ', [sb]: '   U ' },
-  EINGEREICHT /**                      */: { [gs]: '     ', [sb]: '   U ' },
-  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: '   U ' },
-  IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'W  UA' },
-  IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: '   U ' },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'W  U ' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: '   U ' },
-  FEHLENDE_DOKUMENTE /**               */: { [gs]: ' DF  ', [sb]: '   U ' },
-  GESUCH_ABGELEHNT /**                 */: { [gs]: '     ', [sb]: '   U ' },
-  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '     ', [sb]: '   U ' },
-  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: '     ' },
-  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '     ', [sb]: '   U ' },
-  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '     ', [sb]: '   U ' },
-  STIPENDIENANSPRUCH /**               */: { [gs]: '     ', [sb]: '     ' },
-  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '     ', [sb]: '   U ' },
-  VERSANDBEREIT /**                    */: { [gs]: '     ', [sb]: '     ' },
-  VERFUEGT /**                         */: { [gs]: '     ', [sb]: '   U ' },
-  VERSENDET /**                        */: { [gs]: '     ', [sb]: '     ' },
-  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: '   U ' },
-} as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
+  IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF  ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  EINGEREICHT                      : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('W  UA', ['sb']) },
+  IN_FREIGABE                      : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('W  U ', ['ju']) },
+  ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF  ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  GESUCH_ABGELEHNT                 : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  JURISTISCHE_ABKLAERUNG           : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  KEIN_STIPENDIENANSPRUCH          : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  NICHT_ANSPRUCHSBERECHTIGT        : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  STIPENDIENANSPRUCH               : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  VERSANDBEREIT                    : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  VERFUEGT                         : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+  VERSENDET                        : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('   U ', ['sb']) },
+} as const satisfies Record<Gesuchstatus, Record<AppType, PermissionCheck>>;
 
 /**
  * Similar as `permissionTableByAppType` but for the tranches
  *
  * @see {@link permissionTableByAppType}
  */
+// prettier-ignore
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /**  */ { [gs]: 'WDF  ', [sb]: '     ' },
-  UEBERPRUEFEN: /**       */ { [gs]: '     ', [sb]: 'W   A' },
-  FEHLENDE_DOKUMENTE: /** */ { [gs]: ' D   ', [sb]: '     ' },
-  AKZEPTIERT: /**         */ { [gs]: '     ', [sb]: '     ' },
-  ABGELEHNT: /**          */ { [gs]: 'WD   ', [sb]: '     ' },
-  MANUELLE_AENDERUNG: /** */ { [gs]: '     ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF  ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  UEBERPRUEFEN:       { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('W   A', ['sb']) },
+  FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D   ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  AKZEPTIERT:         { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  ABGELEHNT:          { [GS_APP]: perm('WD   ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
+  MANUELLE_AENDERUNG: { [GS_APP]: perm('     ', ['gs']), [SB_APP]: perm('     ', ['sb']) },
 } as const satisfies Record<
   GesuchTrancheStatus,
-  Record<AppType, PermissionFlags>
+  Record<AppType, PermissionCheck>
 >;
 
 export const preparePermissions = (
@@ -145,7 +162,8 @@ export const getGesuchPermissions = (
 ): { permissions: PermissionMap; status?: Gesuchstatus } => {
   if (!gesuch || !appType) return { permissions: {} };
 
-  const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
+  const state =
+    permissionTableByAppType[gesuch.gesuchStatus][appType](rolesMap);
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(
@@ -174,7 +192,7 @@ export const getTranchePermissions = (
   const state =
     trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
       appType
-    ];
+    ](rolesMap);
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(

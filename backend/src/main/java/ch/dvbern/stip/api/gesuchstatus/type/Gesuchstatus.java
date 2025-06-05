@@ -79,6 +79,12 @@ public enum Gesuchstatus {
             )
         );
 
+    public static final Set<Gesuchstatus> JURIST_CAN_EDIT = Collections.unmodifiableSet(
+        EnumSet.of(
+            ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        )
+    );
+
     /*
      * Alle Gesuchstatus zwischen eingereicht bis verfügt
      */

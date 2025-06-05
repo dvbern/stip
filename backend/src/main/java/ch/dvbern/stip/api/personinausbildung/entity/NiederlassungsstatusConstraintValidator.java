@@ -35,7 +35,7 @@ public class NiederlassungsstatusConstraintValidator
             return true;
         }
 
-        if (!personInAusbildung.getNationalitaet().is(WellKnownLand.CH)) {
+        if (!personInAusbildung.getNationalitaet().is(WellKnownLand.CHE)) {
             return personInAusbildung.getNiederlassungsstatus() != null;
         }
         constraintValidatorContext.disableDefaultConstraintViolation();

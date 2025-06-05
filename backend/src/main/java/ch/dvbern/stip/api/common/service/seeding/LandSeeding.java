@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -30,6 +31,7 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.stream.Streams;
 
 @Singleton
 @RequiredArgsConstructor
@@ -54,9 +56,7 @@ public class LandSeeding extends Seeder {
         }
 
         final var laender = getLaenderToSeed();
-        if (!laender.isEmpty()) {
-            landRepository.persist(laender);
-        }
+        landRepository.persist(laender);
     }
 
     @Override
@@ -66,10 +66,10 @@ public class LandSeeding extends Seeder {
 
     @SneakyThrows
     private List<Land> getLaenderToSeed() {
+        // See docs/laenderimport.md for documentation on the required structure of the CSV
         try (final var resource = getClass().getResourceAsStream(PATH_TO_CSV)) {
             if (resource == null) {
-                LOG.error("Could not load CSV to seed laender: {}", PATH_TO_CSV);
-                return List.of();
+                throw new FileNotFoundException("Could not load CSV to seed laender: " + PATH_TO_CSV);
             }
 
             try (
@@ -82,12 +82,11 @@ public class LandSeeding extends Seeder {
                     )
                     .build();
             ) {
-                return reader.readAll()
-                    .stream()
+                return Streams.of(reader.iterator())
                     .map(
                         plzLine -> new Land()
                             .setLaendercodeBfs(plzLine[0])
-                            .setIso3code(plzLine[1])
+                            .setIso3code(plzLine[1].isEmpty() ? null : plzLine[1])
                             .setDeKurzform(plzLine[2])
                             .setFrKurzform(plzLine[3])
                             .setItKurzform(plzLine[4])
@@ -101,8 +100,12 @@ public class LandSeeding extends Seeder {
     }
 
     boolean parseJaNein(final String input) {
-        if (input == null || input.length() != 1) {
+        if (input == null) {
             return false;
+        }
+
+        if (input.length() != 1) {
+            throw new IllegalStateException("Input string length must be 1, was: " + input);
         }
 
         final var character = input.charAt(0);

@@ -44,5 +44,7 @@ export * from './stipDecision.service';
 // import { StipDecisionService } from './stipDecision.service';
 export * from './tenant.service';
 // import { TenantService } from './tenant.service';
+export * from './verfuegung.service';
+// import { VerfuegungService } from './verfuegung.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungService, AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungskategorieService, BuchhaltungService, ConfigurationService, DelegierenService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MailService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService];
+// export const APIS = [AusbildungService, AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungskategorieService, BuchhaltungService, ConfigurationService, DelegierenService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MailService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];

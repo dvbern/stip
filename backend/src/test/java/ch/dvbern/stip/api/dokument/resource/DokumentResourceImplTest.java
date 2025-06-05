@@ -116,7 +116,7 @@ class DokumentResourceImplTest {
         when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
         when(gesuchDokumentHistoryRepository.findInHistoryById(any())).thenReturn(gesuchDokument);
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any())).thenReturn(tranche);
-        when(gesuchTrancheHistoryRepository.findCurrentGesuchTrancheOfGesuchInStatus(any(), any()))
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(Optional.empty());
     }
 
@@ -179,7 +179,7 @@ class DokumentResourceImplTest {
         tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
         tranche.getGesuchFormular()
             .getPersonInAusbildung()
-            .setNationalitaet(new Land().setLaendercodeBfs(WellKnownLand.CH.getLaendercodeBfs()));
+            .setNationalitaet(new Land().setLaendercodeBfs(WellKnownLand.CHE.getLaendercodeBfs()));
 
         CustomDokumentTyp customDokumentTyp1 = new CustomDokumentTyp();
         customDokumentTyp1.setId(UUID.randomUUID());

@@ -33,5 +33,6 @@ public class AuszahlungCopyUtil {
         target.setVorname(source.getVorname());
         target.setNachname(source.getNachname());
         target.setIban(source.getIban());
+        target.setSapBusinessPartnerId(source.getSapBusinessPartnerId());
     }
 }

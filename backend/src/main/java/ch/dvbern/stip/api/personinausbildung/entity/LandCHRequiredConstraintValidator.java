@@ -36,7 +36,7 @@ public class LandCHRequiredConstraintValidator
             return true;
         }
 
-        if (personInAusbildung.getNationalitaet().is(WellKnownLand.CH)) {
+        if (personInAusbildung.getNationalitaet().is(WellKnownLand.CHE)) {
             return StringUtils.isNotEmpty(personInAusbildung.getHeimatort());
         }
         constraintValidatorContext.disableDefaultConstraintViolation();

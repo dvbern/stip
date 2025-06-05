@@ -24,6 +24,7 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
@@ -33,7 +34,6 @@ import {
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
-import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -144,19 +144,14 @@ export class GesuchAppFeatureCockpitComponent {
     const {
       gesuch: { id, startDate, endDate },
     } = melden;
-    SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
+    SharedDialogTrancheErstellenComponent.open(this.dialog, {
+      forAenderung: true,
+      gesuchId: id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
     })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.gesuchAenderungStore.createGesuchAenderung$({
-            gesuchId: id,
-            createAenderungsantragRequest: result,
-          });
-        }
-      });
+      .subscribe();
   }
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {

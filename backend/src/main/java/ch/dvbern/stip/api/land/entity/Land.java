@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.land.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.validation.SizeOrEmpty;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -33,15 +32,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO3CODE_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Entity
 @Table(
     name = "land",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_laendercode_bfs", columnNames = { "laendercode_bfs", "mandant" }
+        name = "UC_land_laendercode_bfs_mandant", columnNames = { "laendercode_bfs", "mandant" }
     ),
-    indexes = @Index(name = "IX_land_mandant", columnList = "mandant,laendercode_bfs")
+    indexes = @Index(name = "IX_land_laendercode_bfs_mandant", columnList = "laendercode_bfs,mandant")
 )
 @Audited
 @Getter
@@ -57,8 +57,8 @@ public class Land extends AbstractMandantEntity {
     private String laendercodeBfs;
 
     @Nullable
-    @Column(name = "iso3code", nullable = true)
-    @SizeOrEmpty(min = 3, max = 3)
+    @Column(name = "iso3code", nullable = true, length = DB_DEFAULT_STRING_ISO3CODE_LENGTH)
+    @Size(min = DB_DEFAULT_STRING_ISO3CODE_LENGTH, max = DB_DEFAULT_STRING_ISO3CODE_LENGTH)
     private String iso3code;
 
     @NotNull

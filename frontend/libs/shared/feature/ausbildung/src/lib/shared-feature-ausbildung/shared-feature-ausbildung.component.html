@@ -9,7 +9,7 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw-mt-6 tw-grid tw-min-w-[640px] tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
     [class.lg:tw-grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
@@ -35,6 +35,9 @@
             [matAutocomplete]="staetten"
             [placeholder]="'shared.form.select.empty' | translate"
           />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
           @if (form.controls.ausbildungsstaette.value && isEditableSig()) {
             <button
               type="button"
@@ -213,14 +216,28 @@
       'shared.form.ausbildung.isAusbildungAusland.label' | translate
     }}</mat-checkbox>
 
-    <!-- MANUELL -->
-    <mat-checkbox
-      formControlName="ausbildungNichtGefunden"
-      data-testid="form-education-ausbildungNichtGefunden"
-      (change)="handleManuellChangedByUser()"
-      class="tw-col-start-1"
-      >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
-    >
+    <div class="tw-col-start-1 tw-flex tw-w-full tw-flex-col tw-gap-2 md:tw-col-span-2 lg:tw-col-span-3">
+      <!-- MANUELL -->
+      <mat-checkbox
+        formControlName="ausbildungNichtGefunden"
+        data-testid="form-education-ausbildungNichtGefunden"
+        (change)="handleManuellChangedByUser()"
+        >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
+      >
+      <div class="group-errors">
+        @if (
+          form.controls.ausbildungNichtGefunden.touched && form.controls.ausbildungNichtGefunden.errors?.['requiredOff']
+        ) {
+          <mat-error>
+            {{ 'shared.form.ausbildung.validation.notFound.part1' | translate }}
+            <a [routerLink]="['/administration/ausbildungsstaette']">{{
+              'shared.form.ausbildung.validation.notFound.link' | translate
+            }}</a>
+            {{ 'shared.form.ausbildung.validation.notFound.part2' | translate }}
+          </mat-error>
+        }
+      </div>
+    </div>
 
     <h3 class="tw-mt-6 md:tw-col-span-2 lg:tw-col-span-3">
       {{ 'shared.form.ausbildung.duration.title' | translate }}

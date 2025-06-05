@@ -19,7 +19,6 @@ package ch.dvbern.stip.arch;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.SizeOrEmpty;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -30,6 +29,7 @@ import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO3CODE_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -47,8 +47,6 @@ class StringAnnotationTest {
             .haveRawType(String.class)
             .should()
             .beAnnotatedWith(Size.class)
-            .orShould()
-            .beAnnotatedWith(SizeOrEmpty.class)
             .andShould()
             .beAnnotatedWith(Column.class);
 
@@ -136,7 +134,8 @@ class StringAnnotationTest {
             DB_DEFAULT_STRING_SMALL_LENGTH,
             DB_DEFAULT_STRING_MEDIUM_LENGTH,
             DB_DEFAULT_STRING_INPUT_MAX_LENGTH,
-            DB_DEFAULT_STRING_MAX_LENGTH
+            DB_DEFAULT_STRING_MAX_LENGTH,
+            DB_DEFAULT_STRING_ISO3CODE_LENGTH
         );
 
         public SizeColumnFieldDefinedLengthCondition() {

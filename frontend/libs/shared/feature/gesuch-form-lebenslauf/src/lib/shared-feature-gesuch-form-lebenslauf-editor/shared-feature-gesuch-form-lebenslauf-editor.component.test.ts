@@ -5,6 +5,7 @@ import { render, screen } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { LebenslaufAusbildungsArt } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
@@ -33,8 +34,8 @@ async function setup(type: SharedModelLebenslauf['type']) {
         initialState: {
           benutzers: {
             rolesMap: {
-              Gesuchsteller: true,
-            },
+              V0_Gesuchsteller: true,
+            } satisfies RolesMap,
           },
           language: { language: 'de' },
           gesuchs: mockedGesuchAppWritableGesuchState({}),

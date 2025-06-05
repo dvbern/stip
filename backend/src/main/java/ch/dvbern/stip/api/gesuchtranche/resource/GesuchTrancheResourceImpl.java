@@ -126,7 +126,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public ValidationReportDto gesuchTrancheEinreichenValidierenSB(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.einreichenValidierenSB(gesuchTrancheId);
     }
 

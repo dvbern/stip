@@ -287,7 +287,7 @@ export class EinreichenStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
-        this.gesuchService.gesuchEinreichen$({ gesuchTrancheId }).pipe(
+        this.gesuchService.gesuchEinreichenGs$({ gesuchTrancheId }).pipe(
           handleApiResponse(
             (einreichen) =>
               patchState(this, { einreichungsResult: einreichen }),

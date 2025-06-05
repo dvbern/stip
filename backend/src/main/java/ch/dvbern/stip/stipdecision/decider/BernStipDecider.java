@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
@@ -36,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @StipDeciderTenant(MandantIdentifier.BERN)
 public class BernStipDecider extends BaseStipDecider {
-    private final LandService landService;
     private final PlzService plzService;
 
     @Override
@@ -45,7 +43,7 @@ public class BernStipDecider extends BaseStipDecider {
             return StipDeciderResult.NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG;
         }
         final var stipendienrechtlicherWohnsitzKantonBernResult =
-            StipendienrechtlicherWohnsitzKantonBernChecker.evaluate(gesuchTranche, landService, plzService);
+            StipendienrechtlicherWohnsitzKantonBernChecker.evaluate(gesuchTranche, plzService);
         if (stipendienrechtlicherWohnsitzKantonBernResult != StipDeciderResult.GESUCH_VALID) {
             return stipendienrechtlicherWohnsitzKantonBernResult;
         }
@@ -136,14 +134,13 @@ public class BernStipDecider extends BaseStipDecider {
 
         public static StipDeciderResult evaluate(
             final GesuchTranche gesuchTranche,
-            final LandService landService,
             final PlzService plzService
         ) {
-            final var step1result = evaluateStep1(gesuchTranche, landService);
+            final var step1result = evaluateStep1(gesuchTranche);
             if (step1result != StipDeciderResult.ANSPRUCH_UNKLAR) {
                 return step1result;
             }
-            final var step2result = evaluateStep2(gesuchTranche, landService, plzService);
+            final var step2result = evaluateStep2(gesuchTranche, plzService);
             if (step2result != StipDeciderResult.ANSPRUCH_UNKLAR) {
                 return step2result;
             }
@@ -151,8 +148,7 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static StipDeciderResult evaluateStep1(
-            final GesuchTranche gesuchTranche,
-            final LandService landService
+            final GesuchTranche gesuchTranche
         ) {
             if (piaHasSchweizerBuergerrecht(gesuchTranche)) {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
@@ -160,7 +156,7 @@ public class BernStipDecider extends BaseStipDecider {
             if (piaIsFluechtling(gesuchTranche)) {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
-            if (piaNationalitaetEuEfta(gesuchTranche, landService)) {
+            if (piaNationalitaetEuEfta(gesuchTranche)) {
                 if (piaWohntSchweiz(gesuchTranche)) {
                     return StipDeciderResult.ANSPRUCH_UNKLAR;
                 }
@@ -177,7 +173,6 @@ public class BernStipDecider extends BaseStipDecider {
 
         private static StipDeciderResult evaluateStep2(
             final GesuchTranche gesuchTranche,
-            final LandService landService,
             final PlzService plzService
         ) {
             if (piaVolljaehrig(gesuchTranche) && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)) {
@@ -193,7 +188,7 @@ public class BernStipDecider extends BaseStipDecider {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
 
-            if (!piaNationalitaetEuEfta(gesuchTranche, landService)) {
+            if (!piaNationalitaetEuEfta(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
                     if (piaBernWohnhaft(gesuchTranche, plzService)) {
                         return StipDeciderResult.GESUCH_VALID;
@@ -239,7 +234,7 @@ public class BernStipDecider extends BaseStipDecider {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
                 .getNationalitaet()
-                .is(WellKnownLand.CH);
+                .is(WellKnownLand.CHE);
         }
 
         private static boolean piaIsFluechtling(final GesuchTranche gesuchTranche) {
@@ -253,7 +248,7 @@ public class BernStipDecider extends BaseStipDecider {
                 .getPersonInAusbildung()
                 .getAdresse()
                 .getLand()
-                .is(WellKnownLand.CH);
+                .is(WellKnownLand.CHE);
         }
 
         private static boolean piaHasNiederlassungsbewilligungC(final GesuchTranche gesuchTranche) {
@@ -308,7 +303,7 @@ public class BernStipDecider extends BaseStipDecider {
             return gesuchTranche.getGesuchFormular().getElterns().isEmpty() || gesuchTranche.getGesuchFormular()
                 .getElterns()
                 .stream()
-                .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CH));
+                .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CHE));
         }
 
         private static boolean piaBernZugewiesen(final GesuchTranche gesuchTranche) {
@@ -318,11 +313,9 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static boolean piaNationalitaetEuEfta(
-            final GesuchTranche gesuchTranche,
-            final LandService landService
+            final GesuchTranche gesuchTranche
         ) {
-            return landService
-                .landInEuEfta(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet());
+            return gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet().getIsEuEfta();
         }
 
         private static boolean piaBernWohnhaft(final GesuchTranche gesuchTranche, final PlzService plzService) {

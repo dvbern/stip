@@ -79,6 +79,11 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
+@AusbildungIsDefinedConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class
+    }, property = "ausbildung"
+)
 @FamiliensituationElternEntityRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

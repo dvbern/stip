@@ -4,7 +4,9 @@ import {
   Component,
   DestroyRef,
   computed,
+  effect,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +14,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { InfosAdminStore } from '@dv/sachbearbeitung-app/data-access/infos-admin';
+import { Verfuegung } from '@dv/shared/model/gesuch';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
@@ -30,6 +35,7 @@ export interface GesuchTableColumns {
     MatTableModule,
     TypeSafeMatCellDefDirective,
     RouterLink,
+    SharedUiDownloadButtonDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,28 +43,14 @@ export interface GesuchTableColumns {
 export class SachbearbeitungAppFeatureInfosAdminComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private infosAdminStore = inject(InfosAdminStore);
   verfuegungenTableColumns = ['timestamp', 'verfuegung'];
   verfuegungenSig = computed(() => {
-    const verfuegungen = [
-      {
-        timestamp: '01.01.2021',
-        documentName: 'Pdf-bla-bla 1',
-        link: 'https://www.google.com',
-      },
-      {
-        timestamp: '02.01.2021',
-        documentName: 'Pdf-da-da 2',
-        link: 'https://www.bing.com',
-      },
-    ];
-
-    return new MatTableDataSource<{
-      timestamp: string;
-      documentName: string;
-      link: string;
-    }>(verfuegungen);
+    const verfuegungen = this.infosAdminStore.verfuegungenViewSig();
+    return new MatTableDataSource<Verfuegung>(verfuegungen ?? []);
   });
 
+  gesuchIdSig = input.required<string>({ alias: 'id' });
   gesuchTableColumns = ['timestamp', 'user', 'kommentar'];
 
   gesuchTablelColumnsDummyData = [
@@ -91,6 +83,21 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
       this.gesuchTablelColumnsDummyData,
     );
   });
+
+  constructor() {
+    effect(
+      () => {
+        const gesuchId = this.gesuchIdSig();
+
+        if (!gesuchId) {
+          return;
+        }
+
+        this.infosAdminStore.loadVerfuegungen$({ gesuchId });
+      },
+      { allowSignalWrites: true },
+    );
+  }
 
   gesuchAbbrechen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
