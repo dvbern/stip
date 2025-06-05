@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.util.AuszahlungDiffUtil;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
@@ -48,18 +49,18 @@ public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpda
         final AuszahlungUpdateDto newAuszahlung,
         @MappingTarget final Auszahlung targetAuszahlung
     ) {
-        // resetFieldIf(
-        // () -> AuszahlungDiffUtil.hasAdresseChanged(newAuszahlung, targetAuszahlung),
-        // "Reset Adresse because ID has changed",
-        // () -> {
-        // final var newAdresseId = newAuszahlung.getAdresse().getId();
-        // if (newAdresseId != null) {
-        // targetAuszahlung.setAdresse(adresseRepository.requireById(newAdresseId));
-        // } else {
-        // targetAuszahlung.setAdresse(null);
-        // }
-        // }
-        // );
+        resetFieldIf(
+            () -> AuszahlungDiffUtil.hasAdresseChanged(newAuszahlung, targetAuszahlung),
+            "Reset Adresse because ID has changed",
+            () -> {
+                final var newAdresseId = newAuszahlung.getZahlungsverbindung().getAdresse().getId();
+                if (newAdresseId != null) {
+                    targetAuszahlung.getZahlungsverbindung().setAdresse(adresseRepository.requireById(newAdresseId));
+                } else {
+                    targetAuszahlung.getZahlungsverbindung().setAdresse(null);
+                }
+            }
+        );
     }
 
     public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);

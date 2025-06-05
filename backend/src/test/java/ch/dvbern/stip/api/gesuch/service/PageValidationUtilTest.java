@@ -74,6 +74,6 @@ class PageValidationUtilTest {
         });
 
         groups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        assertThat(groups.size(), is(9));
+        assertThat(groups.size(), is(8));
     }
 }

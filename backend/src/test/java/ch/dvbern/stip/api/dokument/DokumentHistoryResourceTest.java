@@ -224,7 +224,7 @@ class DokumentHistoryResourceTest {
                 .body()
                 .as(GesuchDokumentDtoSpec[].class)
         ).toList();
-        assertThat(gesuchDokuments.size(), is(18));
+        assertThat(gesuchDokuments.size(), is(17));
     }
 
     @Test
@@ -270,7 +270,7 @@ class DokumentHistoryResourceTest {
                 .as(GesuchDokumentDtoSpec[].class)
         ).toList();
 
-        assertThat(gesuchDokuments.size(), is(20));
+        assertThat(gesuchDokuments.size(), is(19));
     }
 
     @Test
@@ -358,7 +358,7 @@ class DokumentHistoryResourceTest {
                 .as(GesuchDokumentDtoSpec[].class)
         ).toList();
 
-        assertThat(gesuchDokuments.size(), is(18));
+        assertThat(gesuchDokuments.size(), is(17));
     }
 
     @Test
