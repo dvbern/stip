@@ -1,5 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
+
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -29,7 +29,7 @@ const initialState: <%= classify(name) %>State = {
 export class <%= classify(name) %>Store extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('<%= classify(name) %>Store'),
+
 ) {
   private <%= camelize(name) %>Service = inject(<%= classify(name) %>Service);
 

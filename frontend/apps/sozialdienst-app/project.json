@@ -74,7 +74,7 @@
             {
               "type": "initial",
               "maximumWarning": "750kb",
-              "maximumError": "1500kb"
+              "maximumError": "1550kb"
             },
             {
               "type": "anyComponentStyle",
@@ -107,7 +107,8 @@
           "buildTarget": "sozialdienst-app:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import {
   Directive,
   TemplateRef,

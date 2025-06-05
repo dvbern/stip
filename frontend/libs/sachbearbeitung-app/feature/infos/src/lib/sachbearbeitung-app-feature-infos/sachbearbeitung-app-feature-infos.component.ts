@@ -7,7 +7,6 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos',
-  standalone: true,
   imports: [
     CommonModule,
     SharedUiRouterOutletWrapperComponent,

@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ViewChild,
+  computed,
   effect,
   inject,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -17,7 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
@@ -39,7 +40,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
-  standalone: true,
   imports: [
     CommonModule,
     SharedUiLoadingComponent,
@@ -65,9 +65,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   providers: [AdminAusbildungsstaetteStore, paginatorTranslationProvider()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
-  implements AfterViewInit
-{
+export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent {
   store = inject(AdminAusbildungsstaetteStore);
   fb = inject(FormBuilder);
   dialog = inject(MatDialog);
@@ -75,8 +73,9 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   formUtils = inject(SharedUtilFormService);
   translate = inject(TranslateService);
 
-  @ViewChild('paginator', { static: false }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort!: MatSort;
+  paginatorSig = viewChild(MatPaginator);
+  sortSig = viewChild(MatSort);
+  filterSig = signal('');
 
   filterColumns = ['filter'];
 
@@ -115,6 +114,24 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     bildungskategorieId: ['', Validators.required],
   });
 
+  private tableDataSig = computed(() => {
+    const tableData = this.store.tableData();
+    return new MatTableDataSource(tableData);
+  });
+  dataSourceSig = computed(() => {
+    const sort = this.sortSig();
+    const paginator = this.paginatorSig();
+    const datasource = this.tableDataSig();
+
+    if (sort) {
+      datasource.sort = sort;
+    }
+    if (paginator) {
+      datasource.paginator = paginator;
+    }
+    return datasource;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     merge(this.gangForm.valueChanges, this.form.valueChanges)
@@ -130,13 +147,18 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
         this.endEdit();
       }
     });
+
+    effect(() => {
+      const filter = this.filterSig();
+      this.dataSourceSig().filter = filter.trim().toLowerCase();
+    });
+
     this.store.loadAusbildungsstaetten({});
     this.store.loadBildungskategorien({});
   }
 
-  ngAfterViewInit() {
-    this.store.setPaginator(this.paginator);
-    this.store.setSort(this.sort);
+  setFilter(filter: string) {
+    this.dataSourceSig().filter = filter.trim();
   }
 
   // Ausbildungsstaette ==========================================================
@@ -152,6 +174,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.editedAusbildungsstaette = newRow;
 
     this.store.addAusbildungsstaetteRow(newRow);
+    this.paginatorSig()?.firstPage();
   }
 
   expandRow(staette: AusbildungsstaetteTableData) {

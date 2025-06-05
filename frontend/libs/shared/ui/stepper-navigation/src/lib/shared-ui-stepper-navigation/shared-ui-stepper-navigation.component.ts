@@ -9,7 +9,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-ui-stepper-navigation',
-  standalone: true,
   imports: [TranslatePipe],
   templateUrl: './shared-ui-stepper-navigation.component.html',
   styleUrls: ['./shared-ui-stepper-navigation.component.scss'],

@@ -49,7 +49,6 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -76,6 +75,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   private einreichenStore = inject(EinreichenStore);
   config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
@@ -163,14 +163,11 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
 
     if (isSachbearbeitungApp) {
-      effect(
-        () => {
-          const { trancheId: gesuchTrancheId } = this.viewSig();
-          if (!gesuchTrancheId) return;
-          this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        const { trancheId: gesuchTrancheId } = this.viewSig();
+        if (!gesuchTrancheId) return;
+        this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
+      });
       effect(() => {
         const steuerdaten = this.originalSteuerdatenSig();
 
@@ -182,21 +179,18 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
           });
         }
       });
-      effect(
-        () => {
-          this.gotReenabledSig();
-          const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
-          this.hiddenFieldSet.setFieldVisibility(
-            this.form.controls.saeule3a,
-            arbeitsverhaeltnis ?? false,
-          );
-          this.hiddenFieldSet.setFieldVisibility(
-            this.form.controls.saeule2,
-            arbeitsverhaeltnis ?? false,
-          );
-        },
-        { allowSignalWrites: true },
-      );
+      effect(() => {
+        this.gotReenabledSig();
+        const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.saeule3a,
+          arbeitsverhaeltnis ?? false,
+        );
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.saeule2,
+          arbeitsverhaeltnis ?? false,
+        );
+      });
     }
   }
 

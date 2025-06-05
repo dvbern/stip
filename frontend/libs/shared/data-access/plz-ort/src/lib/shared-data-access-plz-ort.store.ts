@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import Fuse, { FuseSortFunctionArg } from 'fuse.js';
@@ -25,7 +24,6 @@ const initialState: PlzOrtState = {
 export class PlzOrtStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('PlzStore'),
 ) {
   private plzService = inject(PlzService);
 

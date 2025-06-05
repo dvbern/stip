@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-change-indicator',
-  standalone: true,
   imports: [CommonModule],
   template: '',
   styleUrl: './shared-ui-change-indicator.component.scss',

@@ -22,7 +22,6 @@ export interface RejectDokument {
 
 @Component({
   selector: 'dv-shared-ui-reject-dokument',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

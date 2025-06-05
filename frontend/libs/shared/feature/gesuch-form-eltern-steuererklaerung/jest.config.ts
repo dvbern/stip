@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'shared-feature-gesuch-form-eltern-steuererklaerung',
   preset: '../../../../jest.preset.js',

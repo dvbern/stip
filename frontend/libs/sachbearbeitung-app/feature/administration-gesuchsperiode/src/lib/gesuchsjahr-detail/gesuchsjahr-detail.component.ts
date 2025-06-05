@@ -14,17 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  MatDatepicker,
-  MatDatepickerApply,
-  MatDatepickerInput,
-  MatDatepickerToggle,
-} from '@angular/material/datepicker';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatHint,
-} from '@angular/material/form-field';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoDirective } from '@maskito/angular';
@@ -53,13 +43,11 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { PublishComponent } from '../publish/publish.component';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     MaskitoDirective,
     MatError,
     MatFormFieldModule,
-    MatHint,
     MatInput,
     TranslatePipe,
     ReactiveFormsModule,
@@ -71,10 +59,6 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiMaxLengthDirective,
-    MatDatepicker,
-    MatDatepickerToggle,
-    MatDatepickerInput,
-    MatDatepickerApply,
     PublishComponent,
   ],
   templateUrl: './gesuchsjahr-detail.component.html',
@@ -91,6 +75,7 @@ export class GesuchsjahrDetailComponent {
   store = inject(GesuchsperiodeStore);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   unsavedChangesSig: Signal<boolean>;
   form = this.formBuilder.group({
@@ -113,15 +98,12 @@ export class GesuchsjahrDetailComponent {
         technischesJahr: gesuchsjahr?.technischesJahr.toString(),
       });
     });
-    effect(
-      () => {
-        const id = this.idSig();
-        if (id) {
-          this.store.loadGesuchsjahr$(id);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const id = this.idSig();
+      if (id) {
+        this.store.loadGesuchsjahr$(id);
+      }
+    });
   }
 
   handleSave(config?: { shouldPublishAfterSave: boolean }) {

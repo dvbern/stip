@@ -74,8 +74,8 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
 @Component({
-  selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   standalone: true,
+  selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   imports: [
     CommonModule,
     TranslateDirective,
@@ -387,90 +387,84 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const { hasData, hatKinder, warErwachsenSteuerJahr } =
-          this.formStateSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const { hasData, hatKinder, warErwachsenSteuerJahr } =
+        this.formStateSig();
 
-        const {
-          wohnsitzNotEigenerHaushalt,
-          existiertGerichtlicheAlimentenregelung,
-        } = this.viewSig();
+      const {
+        wohnsitzNotEigenerHaushalt,
+        existiertGerichtlicheAlimentenregelung,
+      } = this.viewSig();
 
-        if (!hasData) {
-          return;
-        }
+      if (!hasData) {
+        return;
+      }
 
-        this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
+      this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
 
-        this.setDisabledStateAndHide(
-          this.form.controls.auswaertigeMittagessenProWoche,
-          !wohnsitzNotEigenerHaushalt,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.wohnkosten,
-          wohnsitzNotEigenerHaushalt,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.alimente,
-          !existiertGerichtlicheAlimentenregelung,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.wgWohnend,
-          wohnsitzNotEigenerHaushalt,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.betreuungskostenKinder,
-          !hatKinder,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.vermoegen,
-          !warErwachsenSteuerJahr,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.veranlagungsCode,
-          this.config.isGesuchApp,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.steuerjahr,
-          this.config.isGesuchApp,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+      this.setDisabledStateAndHide(
+        this.form.controls.auswaertigeMittagessenProWoche,
+        !wohnsitzNotEigenerHaushalt,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.wohnkosten,
+        wohnsitzNotEigenerHaushalt,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.alimente,
+        !existiertGerichtlicheAlimentenregelung,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.wgWohnend,
+        wohnsitzNotEigenerHaushalt,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.betreuungskostenKinder,
+        !hatKinder,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.vermoegen,
+        !warErwachsenSteuerJahr,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.veranlagungsCode,
+        this.config.isGesuchApp,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.steuerjahr,
+        this.config.isGesuchApp,
+      );
+    });
 
     this.steuerjahrValidation.createEffect();
 
     // fill form
-    effect(
-      () => {
-        const { einnahmenKosten } = this.viewSig();
-        if (einnahmenKosten) {
-          this.form.patchValue({
-            ...einnahmenKosten,
-            nettoerwerbseinkommen:
-              einnahmenKosten.nettoerwerbseinkommen.toString(),
-            alimente: einnahmenKosten.alimente?.toString(),
-            zulagen: einnahmenKosten.zulagen?.toString(),
-            renten: einnahmenKosten.renten?.toString(),
-            eoLeistungen: einnahmenKosten.eoLeistungen?.toString(),
-            ergaenzungsleistungen:
-              einnahmenKosten.ergaenzungsleistungen?.toString(),
-            beitraege: einnahmenKosten.beitraege?.toString(),
-            ausbildungskosten: einnahmenKosten.ausbildungskosten?.toString(),
-            fahrkosten: einnahmenKosten.fahrkosten.toString(),
-            wohnkosten: einnahmenKosten.wohnkosten?.toString(),
-            betreuungskostenKinder:
-              einnahmenKosten.betreuungskostenKinder?.toString(),
-            vermoegen: einnahmenKosten.vermoegen?.toString(),
-            veranlagungsCode: einnahmenKosten.veranlagungsCode,
-            steuerjahr: einnahmenKosten.steuerjahr,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const { einnahmenKosten } = this.viewSig();
+      if (einnahmenKosten) {
+        this.form.patchValue({
+          ...einnahmenKosten,
+          nettoerwerbseinkommen:
+            einnahmenKosten.nettoerwerbseinkommen.toString(),
+          alimente: einnahmenKosten.alimente?.toString(),
+          zulagen: einnahmenKosten.zulagen?.toString(),
+          renten: einnahmenKosten.renten?.toString(),
+          eoLeistungen: einnahmenKosten.eoLeistungen?.toString(),
+          ergaenzungsleistungen:
+            einnahmenKosten.ergaenzungsleistungen?.toString(),
+          beitraege: einnahmenKosten.beitraege?.toString(),
+          ausbildungskosten: einnahmenKosten.ausbildungskosten?.toString(),
+          fahrkosten: einnahmenKosten.fahrkosten.toString(),
+          wohnkosten: einnahmenKosten.wohnkosten?.toString(),
+          betreuungskostenKinder:
+            einnahmenKosten.betreuungskostenKinder?.toString(),
+          vermoegen: einnahmenKosten.vermoegen?.toString(),
+          veranlagungsCode: einnahmenKosten.veranlagungsCode,
+          steuerjahr: einnahmenKosten.steuerjahr,
+        });
+      }
+    });
   }
 
   ngOnInit() {

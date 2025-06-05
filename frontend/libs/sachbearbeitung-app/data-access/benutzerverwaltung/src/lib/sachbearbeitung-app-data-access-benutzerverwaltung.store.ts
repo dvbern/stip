@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -65,7 +64,6 @@ const DEFAULT_ROLE = 'default-roles-bern';
 export class BenutzerverwaltungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('BenutzerverwaltungStore'),
 ) {
   private benutzerService = inject(BenutzerService);
   private keycloak = inject(KeycloakHttpService);

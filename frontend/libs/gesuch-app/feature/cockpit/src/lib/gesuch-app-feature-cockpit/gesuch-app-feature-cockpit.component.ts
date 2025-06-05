@@ -49,7 +49,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -96,25 +95,19 @@ export class GesuchAppFeatureCockpitComponent {
     this.fallStore.loadCurrentFall$();
     this.sozialdienstStore.loadAvailableSozialdienste$();
 
-    effect(
-      () => {
-        const fallId = this.gotNewFallSig();
+    effect(() => {
+      const fallId = this.gotNewFallSig();
 
-        if (fallId) {
-          this.dashboardStore.loadDashboard$();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (fallId) {
+        this.dashboardStore.loadDashboard$();
+      }
+    });
 
-    effect(
-      () => {
-        if (this.gesuchUpdatedSig()) {
-          this.dashboardStore.loadDashboard$();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      if (this.gesuchUpdatedSig()) {
+        this.dashboardStore.loadDashboard$();
+      }
+    });
   }
 
   compareById = compareById;

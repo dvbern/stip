@@ -15,7 +15,6 @@ import { Berechnung, BerechnungsValue } from '../../../models';
 
 @Component({
   selector: 'dv-berechnungs-expansion-panel',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

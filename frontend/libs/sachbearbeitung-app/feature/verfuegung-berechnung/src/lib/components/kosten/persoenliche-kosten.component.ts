@@ -11,7 +11,6 @@ import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-persoenliche-kosten',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -219,7 +218,7 @@ import { PersoenlicheBerechnung } from '../../../models';
 
     <!-- Total -->
     <div class="mt-3 d-flex gap-2">
-      <div class="h4 ">
+      <div class="h4">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
             | translate

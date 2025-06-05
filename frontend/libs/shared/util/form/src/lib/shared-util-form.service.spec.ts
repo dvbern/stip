@@ -35,7 +35,7 @@ describe('SharedUtilFormService', () => {
     jest.spyOn(wndw, 'removeEventListener');
     await TestBed.configureTestingModule({
       providers: [provideTranslateService()],
-      declarations: [TestComponent],
+      imports: [TestComponent],
     }).compileComponents();
     service = TestBed.inject(SharedUtilFormService);
     componentFixture = TestBed.createComponent(TestComponent);

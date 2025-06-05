@@ -49,7 +49,6 @@ type GesuchTrancheErstellenData = {
 
 @Component({
   selector: 'dv-shared-dialog-tranche-erstellen',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

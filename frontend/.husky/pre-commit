@@ -2,6 +2,8 @@
 backend="$(git rev-parse --show-toplevel)/backend"
 frontend="$(git rev-parse --show-toplevel)/frontend"
 
+export NX_TUI=false
+
 hasChanges() {
     ! git diff --quiet --stat HEAD -- $1
 }
