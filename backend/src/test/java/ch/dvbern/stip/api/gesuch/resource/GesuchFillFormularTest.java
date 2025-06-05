@@ -294,7 +294,7 @@ class GesuchFillFormularTest {
     @Order(14)
     void addAuszahlung() {
         final var auszahlung = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
-        currentFormular.setAuszahlung(auszahlung);
+        // currentFormular.setAuszahlung(auszahlung);
         patchAndValidate();
     }
 

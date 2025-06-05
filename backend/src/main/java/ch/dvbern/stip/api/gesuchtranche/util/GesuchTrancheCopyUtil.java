@@ -282,14 +282,37 @@ public class GesuchTrancheCopyUtil {
         }
 
         // Auszahlung
-        copy.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(other.getAuszahlung()));
-        final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
-            case GESUCHSTELLER -> piaAdresseCopy;
-            case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-            case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-            default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
-        };
-        copy.getAuszahlung().setAdresse(auszahlungAdresseCopy);
+        copy.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .setAuszahlung(
+                AuszahlungCopyUtil.createCopyIgnoreReferences(
+                    other.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung()
+                )
+            );
+        // todo: specify & adapt for Zahlungsverbindung
+        // final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
+        // case GESUCHSTELLER -> piaAdresseCopy;
+        // case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
+        // case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
+        // default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
+        // };
+        copy.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .setAdresse(
+                copy.getTranche()
+                    .getGesuch()
+                    .getAusbildung()
+                    .getFall()
+                    .getAuszahlung()
+                    .getZahlungsverbindung()
+                    .getAdresse()
+            );
 
         // Einnahmen Kosten
         copy.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(other.getEinnahmenKosten()));

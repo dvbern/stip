@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,8 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SozialdienstUpdateDtoSpec.JSON_PROPERTY_ID,
   SozialdienstUpdateDtoSpec.JSON_PROPERTY_NAME,
-  SozialdienstUpdateDtoSpec.JSON_PROPERTY_IBAN,
-  SozialdienstUpdateDtoSpec.JSON_PROPERTY_ADRESSE
+  SozialdienstUpdateDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("SozialdienstUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,11 +42,8 @@ public class SozialdienstUpdateDtoSpec {
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
 
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
-
-  public static final String JSON_PROPERTY_ADRESSE = "adresse";
-  private AdresseDtoSpec adresse;
+  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public SozialdienstUpdateDtoSpec() {
   }
@@ -104,55 +100,29 @@ public class SozialdienstUpdateDtoSpec {
   }
 
 
-  public SozialdienstUpdateDtoSpec iban(String iban) {
+  public SozialdienstUpdateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
-    this.iban = iban;
+    this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
    /**
-   * Get iban
-   * @return iban
+   * Get zahlungsverbindung
+   * @return zahlungsverbindung
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getIban() {
-    return iban;
+  public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
+    return zahlungsverbindung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IBAN)
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-
-  public SozialdienstUpdateDtoSpec adresse(AdresseDtoSpec adresse) {
-    
-    this.adresse = adresse;
-    return this;
-  }
-
-   /**
-   * Get adresse
-   * @return adresse
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AdresseDtoSpec getAdresse() {
-    return adresse;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
-    this.adresse = adresse;
+  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
   }
 
   @Override
@@ -166,13 +136,12 @@ public class SozialdienstUpdateDtoSpec {
     SozialdienstUpdateDtoSpec sozialdienstUpdate = (SozialdienstUpdateDtoSpec) o;
     return Objects.equals(this.id, sozialdienstUpdate.id) &&
         Objects.equals(this.name, sozialdienstUpdate.name) &&
-        Objects.equals(this.iban, sozialdienstUpdate.iban) &&
-        Objects.equals(this.adresse, sozialdienstUpdate.adresse);
+        Objects.equals(this.zahlungsverbindung, sozialdienstUpdate.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, iban, adresse);
+    return Objects.hash(id, name, zahlungsverbindung);
   }
 
   @Override
@@ -181,8 +150,7 @@ public class SozialdienstUpdateDtoSpec {
     sb.append("class SozialdienstUpdateDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

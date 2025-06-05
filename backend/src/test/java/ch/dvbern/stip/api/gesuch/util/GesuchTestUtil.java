@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -62,16 +62,39 @@ public class GesuchTestUtil {
         gesuchFormular.getPartner().setVorname("a");
         gesuchFormular.getPartner().setNachname("a");
         gesuchFormular.getPartner().setGeburtsdatum(LocalDate.of(1990, 1, 1));
-        gesuchFormular.getAuszahlung().setVorname("a");
-        gesuchFormular.getAuszahlung().setNachname("a");
-        gesuchFormular.getAuszahlung().setIban("CH4489144522237167913");
+        gesuchFormular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .setVorname("a");
+        gesuchFormular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .setNachname("a");
+        gesuchFormular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .setIban("CH4489144522237167913");
         gesuchFormular.getEinnahmenKosten().setRenten(0);
         gesuchFormular.getEinnahmenKosten().setFahrkosten(0);
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(2023);
         gesuchFormular.getEinnahmenKosten().setVerdienstRealisiert(false);
         gesuchFormular.getEinnahmenKosten().setNettoerwerbseinkommen(0);
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
-        gesuchFormular.getAuszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        gesuchFormular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .setAuszahlungAnSozialdienst(false);
         gesuch.setGesuchNummer("23");
 
         return gesuch;
@@ -108,12 +131,15 @@ public class GesuchTestUtil {
     }
 
     public GesuchFormular setupGesuchFormularWithChildEntities() {
-        return new GesuchFormular()
+        var auszahlung =
+            new Auszahlung().setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()).setIban(""));
+        var formular = new GesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
-            .setAuszahlung(new Auszahlung().setAdresse(new Adresse()).setIban(""))
             .setEinnahmenKosten(new EinnahmenKosten())
             .setDarlehen(new Darlehen().setWillDarlehen(false));
+        formular.getTranche().getGesuch().getAusbildung().getFall().setAuszahlung(auszahlung);
+        return formular;
     }
 }

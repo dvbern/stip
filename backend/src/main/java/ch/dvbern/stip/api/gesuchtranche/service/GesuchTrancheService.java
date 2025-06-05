@@ -461,7 +461,6 @@ public class GesuchTrancheService {
         for (final var eltern : lastFreigegebenFormular.getElterns()) {
             gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern).id(null));
         }
-        gesuchFormularUpdateDto.setAuszahlung(auszahlungMapper.toUpdateDto(lastFreigegebenFormular.getAuszahlung()));
         gesuchFormularUpdateDto
             .setEinnahmenKosten(einnahmenKostenMapper.toUpdateDto(lastFreigegebenFormular.getEinnahmenKosten()));
 

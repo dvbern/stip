@@ -312,7 +312,13 @@ public class SapService {
         final var pendingAuszahlungs = auszahlungRepository.findAuszahlungWithPendingSapDelivery().toList();
         for (var auszahlung : pendingAuszahlungs) {
             try {
-                LOG.info(String.format("Processing Auszahlung: %s, %s", auszahlung.getId(), auszahlung.getIban()));
+                LOG.info(
+                    String.format(
+                        "Processing Auszahlung: %s, %s",
+                        auszahlung.getId(),
+                        auszahlung.getZahlungsverbindung().getIban()
+                    )
+                );
                 getBusinessPartnerCreateStatus(auszahlung.getId());
             } catch (Exception e) {
                 LOG.error(
@@ -379,9 +385,15 @@ public class SapService {
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {
+                    // todo: use helper
+
                     createRemainderAuszahlungOrGetStatus(
                         gesuch.getLatestGesuchTranche()
                             .getGesuchFormular()
+                            .getTranche()
+                            .getGesuch()
+                            .getAusbildung()
+                            .getFall()
                             .getAuszahlung()
                             .getId()
                     );

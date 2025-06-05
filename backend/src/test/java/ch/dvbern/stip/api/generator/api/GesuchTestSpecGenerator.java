@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.generator.api;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.DarlehenDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -89,16 +88,16 @@ public class GesuchTestSpecGenerator {
     // });
     // }
 
-    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
-            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith()
-                .setGesuchFormular(
-                    AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
-                );
-        });
-    }
+    // public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
+    // return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
+    // model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+    // model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+    // model.getGesuchTrancheToWorkWith()
+    // .setGesuchFormular(
+    // AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
+    // );
+    // });
+    // }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecGeschwister() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
@@ -183,7 +182,6 @@ public class GesuchTestSpecGenerator {
             );
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
-            model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
             model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
         });

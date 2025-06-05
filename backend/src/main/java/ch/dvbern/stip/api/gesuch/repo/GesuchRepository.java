@@ -246,7 +246,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .selectFrom(gesuch)
             .join(gesuchTranche)
             .on(gesuchTranche.gesuch.id.eq(gesuch.id))
-            .where(gesuchTranche.gesuchFormular.auszahlung.id.eq(auszahlungId))
+            .where(gesuchTranche.gesuchFormular.tranche.gesuch.ausbildung.fall.auszahlung.id.eq(auszahlungId))
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);

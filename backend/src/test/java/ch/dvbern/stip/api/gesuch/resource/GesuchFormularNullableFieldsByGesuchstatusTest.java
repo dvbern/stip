@@ -242,7 +242,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @Order(11)
     void addAuszahlung() {
         final var auszahlung = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
-        currentFormular.setAuszahlung(auszahlung);
+        // currentFormular.setAuszahlung(auszahlung);
         patchGesuch();
         assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
     }

@@ -65,7 +65,7 @@ public abstract class VendorPostingCreateMapper {
         return new BigDecimal(amount);
     }
 
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN toIban(Auszahlung auszahlung);
 
     @Mapping(target = "QRIBAN", constant = "")

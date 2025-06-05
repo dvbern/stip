@@ -29,10 +29,11 @@ public class AuszahlungCopyUtil {
     }
 
     public void copyValues(final Auszahlung source, final Auszahlung target) {
-        target.setKontoinhaber(source.getKontoinhaber());
-        target.setVorname(source.getVorname());
-        target.setNachname(source.getNachname());
-        target.setIban(source.getIban());
+        // target.setKontoinhaber(source.getKontoinhaber());
+        target.getZahlungsverbindung().setVorname(source.getZahlungsverbindung().getVorname());
+        target.getZahlungsverbindung().setNachname(source.getZahlungsverbindung().getNachname());
+        target.getZahlungsverbindung().setIban(source.getZahlungsverbindung().getIban());
         target.setSapBusinessPartnerId(source.getSapBusinessPartnerId());
+        // target.setAuszahlungAnSozialdienst(source.isAuszahlungAnSozialdienst());
     }
 }

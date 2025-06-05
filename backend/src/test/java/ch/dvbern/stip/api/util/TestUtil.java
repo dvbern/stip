@@ -39,7 +39,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
@@ -738,15 +738,24 @@ public class TestUtil {
             )
         );
 
-        gesuchFormular.setAuszahlung(
-            new Auszahlung()
-                .setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse())
-                .setKontoinhaber(Kontoinhaber.GESUCHSTELLER)
-                .setVorname("asd")
-                .setNachname("qwe")
-                .setIban("CH2289144464431833761")
-                .setSapBusinessPartnerId(9887965)
-        );
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung
+            .setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse())
+            .setVorname("asd")
+            .setNachname("qwe")
+            .setIban("CH2289144464431833761");
+
+        gesuchFormular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .setAuszahlung(
+                new Auszahlung()
+                    .setZahlungsverbindung(zahlungsverbindung)
+                    .setAuszahlungAnSozialdienst(false)
+
+                    .setSapBusinessPartnerId(9887965)
+            );
 
         gesuchFormular.setDarlehen(
             new Darlehen()

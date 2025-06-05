@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
@@ -89,10 +90,14 @@ public class SozialdienstSeeding extends Seeder {
             .setOrt("Bern")
             .setPlz("3000")
             .setLand(Land.CH);
-        final var sozialdienst = new Sozialdienst()
-            .setName("[E2E] Sozialdienst")
+        var zahlungsverbindung = new Zahlungsverbindung()
             .setAdresse(adresse)
             .setIban("CH3908704016075473007")
+            .setVorname("Max")
+            .setNachname("Muster");
+        final var sozialdienst = new Sozialdienst()
+            .setName("[E2E] Sozialdienst")
+            .setZahlungsverbindung(zahlungsverbindung)
             .setSozialdienstAdmin(sozialdienstAdmin);
 
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdmin);

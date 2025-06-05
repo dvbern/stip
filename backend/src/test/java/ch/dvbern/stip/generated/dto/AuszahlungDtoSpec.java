@@ -15,8 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.KontoinhaberDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,160 +28,70 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AuszahlungDtoSpec
  */
 @JsonPropertyOrder({
-  AuszahlungDtoSpec.JSON_PROPERTY_VORNAME,
-  AuszahlungDtoSpec.JSON_PROPERTY_ADRESSE,
-  AuszahlungDtoSpec.JSON_PROPERTY_IBAN,
-  AuszahlungDtoSpec.JSON_PROPERTY_NACHNAME,
-  AuszahlungDtoSpec.JSON_PROPERTY_KONTOINHABER
+  AuszahlungDtoSpec.JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST,
+  AuszahlungDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("Auszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AuszahlungDtoSpec {
-  public static final String JSON_PROPERTY_VORNAME = "vorname";
-  private String vorname;
+  public static final String JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST = "auszahlungAnSozialdienst";
+  private Boolean auszahlungAnSozialdienst;
 
-  public static final String JSON_PROPERTY_ADRESSE = "adresse";
-  private AdresseDtoSpec adresse;
-
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
-
-  public static final String JSON_PROPERTY_NACHNAME = "nachname";
-  private String nachname;
-
-  public static final String JSON_PROPERTY_KONTOINHABER = "kontoinhaber";
-  private KontoinhaberDtoSpec kontoinhaber;
+  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public AuszahlungDtoSpec() {
   }
 
-  public AuszahlungDtoSpec vorname(String vorname) {
+  public AuszahlungDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     
-    this.vorname = vorname;
+    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
     return this;
   }
 
    /**
-   * Get vorname
-   * @return vorname
+   * Get auszahlungAnSozialdienst
+   * @return auszahlungAnSozialdienst
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getVorname() {
-    return vorname;
+  public Boolean getAuszahlungAnSozialdienst() {
+    return auszahlungAnSozialdienst;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
+  public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
   }
 
 
-  public AuszahlungDtoSpec adresse(AdresseDtoSpec adresse) {
+  public AuszahlungDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
-    this.adresse = adresse;
+    this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
    /**
-   * Get adresse
-   * @return adresse
+   * Get zahlungsverbindung
+   * @return zahlungsverbindung
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public AdresseDtoSpec getAdresse() {
-    return adresse;
+  public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
+    return zahlungsverbindung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
-    this.adresse = adresse;
-  }
-
-
-  public AuszahlungDtoSpec iban(String iban) {
-    
-    this.iban = iban;
-    return this;
-  }
-
-   /**
-   * Get iban
-   * @return iban
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getIban() {
-    return iban;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-
-  public AuszahlungDtoSpec nachname(String nachname) {
-    
-    this.nachname = nachname;
-    return this;
-  }
-
-   /**
-   * Get nachname
-   * @return nachname
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getNachname() {
-    return nachname;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
-  }
-
-
-  public AuszahlungDtoSpec kontoinhaber(KontoinhaberDtoSpec kontoinhaber) {
-    
-    this.kontoinhaber = kontoinhaber;
-    return this;
-  }
-
-   /**
-   * Get kontoinhaber
-   * @return kontoinhaber
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KONTOINHABER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public KontoinhaberDtoSpec getKontoinhaber() {
-    return kontoinhaber;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_KONTOINHABER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKontoinhaber(KontoinhaberDtoSpec kontoinhaber) {
-    this.kontoinhaber = kontoinhaber;
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
   }
 
   @Override
@@ -194,27 +103,21 @@ public class AuszahlungDtoSpec {
       return false;
     }
     AuszahlungDtoSpec auszahlung = (AuszahlungDtoSpec) o;
-    return Objects.equals(this.vorname, auszahlung.vorname) &&
-        Objects.equals(this.adresse, auszahlung.adresse) &&
-        Objects.equals(this.iban, auszahlung.iban) &&
-        Objects.equals(this.nachname, auszahlung.nachname) &&
-        Objects.equals(this.kontoinhaber, auszahlung.kontoinhaber);
+    return Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
+        Objects.equals(this.zahlungsverbindung, auszahlung.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname, kontoinhaber);
+    return Objects.hash(auszahlungAnSozialdienst, zahlungsverbindung);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungDtoSpec {\n");
-    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    kontoinhaber: ").append(toIndentedString(kontoinhaber)).append("\n");
+    sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

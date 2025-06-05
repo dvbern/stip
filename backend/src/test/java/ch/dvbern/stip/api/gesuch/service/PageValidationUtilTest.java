@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.HashSet;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -51,7 +50,7 @@ class PageValidationUtilTest {
         gesuchFormular.setPersonInAusbildung(new PersonInAusbildung());
         gesuchFormular.setFamiliensituation(new Familiensituation());
         gesuchFormular.setPartner(new Partner());
-        gesuchFormular.setAuszahlung(new Auszahlung());
+        // gesuchFormular.setAuszahlung(new Auszahlung());
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
         gesuchFormular.setLebenslaufItems(new HashSet<>() {
             {

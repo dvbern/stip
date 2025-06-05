@@ -323,14 +323,30 @@ public class TestcaseSeeding extends Seeder {
         final var mutterAdresse = getElternteilByTyp.apply(ElternTyp.MUTTER);
         final var vaterAdresse = getElternteilByTyp.apply(ElternTyp.VATER);
 
-        final var auszahlungAdresse = switch (formular.getAuszahlung().getKontoinhaber()) {
-            case GESUCHSTELLER -> piaAdresse;
-            case MUTTER -> mutterAdresse.getAdresse();
-            case VATER -> vaterAdresse.getAdresse();
-            default -> formular.getAuszahlung().getAdresse();
-        };
+        // todo: specify
+        // final var auszahlungAdresse = switch (formular.getAuszahlung()..getKontoinhaber()) {
+        // case GESUCHSTELLER -> piaAdresse;
+        // case MUTTER -> mutterAdresse.getAdresse();
+        // case VATER -> vaterAdresse.getAdresse();
+        // default -> formular.getAuszahlung().getAdresse();
+        // };
+        // todo: specify
 
-        formular.getAuszahlung().setAdresse(auszahlungAdresse);
+        formular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .setAdresse(
+                formular.getTranche()
+                    .getGesuch()
+                    .getAusbildung()
+                    .getFall()
+                    .getAuszahlung()
+                    .getZahlungsverbindung()
+                    .getAdresse()
+            );
     }
 
     void uploadDocuments(final GesuchTranche tranche, final String json) {
@@ -377,8 +393,15 @@ public class TestcaseSeeding extends Seeder {
             formular.getPartner().getAdresse().setId(null);
         }
 
-        nullId.accept(formular.getAuszahlung());
-        formular.getAuszahlung().getAdresse().setId(null);
+        nullId.accept(formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung());
+        formular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .getAdresse()
+            .setId(null);
         nullId.accept(formular.getEinnahmenKosten().setId(null));
 
         if (formular.getLebenslaufItems() != null) {

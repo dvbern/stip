@@ -21,8 +21,10 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,14 +34,17 @@ class AuszahlungDiffUtilTest {
     @Test
     void hasAdresseChanged() {
         final var knownId = UUID.randomUUID();
+        final var zahlungsverbindung = new Zahlungsverbindung().setAdresse((Adresse) new Adresse().setId(knownId));
         final var original = new Auszahlung()
-            .setAdresse((Adresse) new Adresse().setId(knownId));
+            .setZahlungsverbindung(zahlungsverbindung);
 
         final var updateAdresse = new AdresseDto();
         updateAdresse.setId(knownId);
 
-        final var updateAuszahlung = new AuszahlungUpdateDto();
-        updateAuszahlung.setAdresse(updateAdresse);
+        var updateZahlungsverbindung = new ZahlungsverbindungDto();
+        updateZahlungsverbindung.setAdresse(updateAdresse);
+        var updateAuszahlung = new AuszahlungUpdateDto();
+        updateAuszahlung.setZahlungsverbindung(updateZahlungsverbindung);
 
         assertThat(AuszahlungDiffUtil.hasAdresseChanged(updateAuszahlung, original), is(false));
 

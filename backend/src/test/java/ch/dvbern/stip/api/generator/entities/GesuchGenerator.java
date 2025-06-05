@@ -80,7 +80,6 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
         gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
-        gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
         gesuchFormularToWorkWith.setSteuererklaerung(new ArrayList<>());
         gesuchFormularToWorkWith.getSteuererklaerung().add(new SteuererklaerungUpdateDtoSpec());
@@ -198,7 +197,7 @@ public final class GesuchGenerator {
 
     private static AuszahlungUpdateDtoSpec createAuszahlung() {
         AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
-        auszahlungUpdateDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        auszahlungUpdateDto.getZahlungsverbindung().setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }
 

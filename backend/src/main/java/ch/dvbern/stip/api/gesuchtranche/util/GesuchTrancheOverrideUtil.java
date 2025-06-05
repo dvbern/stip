@@ -17,14 +17,11 @@
 
 package ch.dvbern.stip.api.gesuchtranche.util;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
@@ -70,18 +67,32 @@ public class GesuchTrancheOverrideUtil {
         final var elternAdressen = ElternAdressen.fromGesuchFormular(target);
 
         // Auszahlung
-        if (!Objects.equals(source.getAuszahlung().getKontoinhaber(), target.getAuszahlung().getKontoinhaber())) {
-            final var auszahlungAdresseCopy = switch (source.getAuszahlung().getKontoinhaber()) {
-                case GESUCHSTELLER -> target.getAuszahlung().getAdresse();
-                case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-                case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-                default -> AdresseCopyUtil.createCopy(source.getAuszahlung().getAdresse());
-            };
+        // todo: specify
+        // if (!Objects.equals(source.getAuszahlung().getKontoinhaber(), target.getAuszahlung().getKontoinhaber())) {
+        // final var auszahlungAdresseCopy = switch (source.getAuszahlung().getKontoinhaber()) {
+        // case GESUCHSTELLER -> target.getAuszahlung().getAdresse();
+        // case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
+        // case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
+        // default -> AdresseCopyUtil.createCopy(source.getAuszahlung().getAdresse());
+        // };
+        //
+        // target.getAuszahlung().setAdresse(auszahlungAdresseCopy);
+        // }
 
-            target.getAuszahlung().setAdresse(auszahlungAdresseCopy);
-        }
-
-        AuszahlungCopyUtil.copyValues(source.getAuszahlung(), target.getAuszahlung());
+        final var auszahlungAdresseCopy =
+            AdresseCopyUtil.createCopy(
+                source.getTranche()
+                    .getGesuch()
+                    .getAusbildung()
+                    .getFall()
+                    .getAuszahlung()
+                    .getZahlungsverbindung()
+                    .getAdresse()
+            );
+        AuszahlungCopyUtil.copyValues(
+            source.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung(),
+            target.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung()
+        );
 
         // Einnahmen Kosten
         EinnahmenKostenCopyUtil.copyValues(source.getEinnahmenKosten(), target.getEinnahmenKosten());

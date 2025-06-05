@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.auszahlung.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -32,15 +31,18 @@ import org.apache.commons.lang3.tuple.Pair;
 public class AuszahlungRequiredDocumentsProducer implements RequiredDocumentsProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var auszahlung = formular.getAuszahlung();
+        // todo: use helper method
+        final var auszahlung = formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung();
         if (auszahlung == null) {
             return ImmutablePair.of("", Set.of());
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-        if (
-            auszahlung.getKontoinhaber() == Kontoinhaber.SOZIALDIENST_INSTITUTION ||
-            auszahlung.getKontoinhaber() == Kontoinhaber.ANDERE
+        if (true
+        // auszahlung.isAuszahlungAnSozialdienst()
+        // todo: specify
+        // auszahlung.getKontoinhaber() == Kontoinhaber.SOZIALDIENST_INSTITUTION ||
+        // auszahlung.getKontoinhaber() == Kontoinhaber.ANDERE
         ) {
             requiredDocs.add(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG);
         }

@@ -17,9 +17,15 @@
 
 package ch.dvbern.stip.api.auszahlung.entity;
 
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import java.util.List;
+import java.util.Set;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,19 +34,43 @@ class AuszahlungRequiredDocumentsProducerTest {
     private AuszahlungRequiredDocumentsProducer producer;
 
     private GesuchFormular formular;
+    private GesuchTranche tranche;
+    private Gesuch gesuch;
+    private Ausbildung ausbildung;
+    private Fall fall;
 
     @BeforeEach
     void setup() {
         producer = new AuszahlungRequiredDocumentsProducer();
         formular = new GesuchFormular();
+
+        fall = new Fall();
+        ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        fall.setAusbildungs(Set.of(ausbildung));
+
+        gesuch = new Gesuch();
+        gesuch.setAusbildung(ausbildung);
+        ausbildung.setGesuchs(List.of(gesuch));
+
+        tranche = new GesuchTranche();
+        tranche.setGesuch(gesuch);
+        gesuch.setGesuchTranchen(List.of(tranche));
+
+        tranche.setGesuchFormular(formular);
+        formular.setTranche(tranche);
     }
 
     @Test
     void requiresIfKontoinhaberSozialdienst() {
-        formular.setAuszahlung(
-            new Auszahlung()
-                .setKontoinhaber(Kontoinhaber.SOZIALDIENST_INSTITUTION)
-        );
+        formular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .setAuszahlung(
+                new Auszahlung()
+                    .setAuszahlungAnSozialdienst(true)
+            );
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.assertCount(requiredDocs, 1);
@@ -49,10 +79,14 @@ class AuszahlungRequiredDocumentsProducerTest {
 
     @Test
     void requiresIfKontoinhaberAndere() {
-        formular.setAuszahlung(
-            new Auszahlung()
-                .setKontoinhaber(Kontoinhaber.ANDERE)
-        );
+        formular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .setAuszahlung(
+                new Auszahlung()
+                    .setAuszahlungAnSozialdienst(false)
+            );
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.assertCount(requiredDocs, 1);

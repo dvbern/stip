@@ -15,27 +15,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.util;
+package ch.dvbern.stip.api.auszahlung.resource;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.common.util.NullDiffUtil;
+import java.util.UUID;
+
+import ch.dvbern.stip.generated.api.AuszahlungResource;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class AuszahlungDiffUtil {
-    public boolean hasAdresseChanged(AuszahlungUpdateDto newAuszahlung, Auszahlung toUpdate) {
-        if (
-            NullDiffUtil.hasNullChanged(
-                newAuszahlung.getZahlungsverbindung().getAdresse(),
-                toUpdate.getZahlungsverbindung().getAdresse()
-            )
-        ) {
-            return true;
-        }
+public class AuszahlungResourceImpl implements AuszahlungResource {
+    @Override
+    public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
+        return null;
+    }
 
-        return newAuszahlung.getZahlungsverbindung().getAdresse().getId() != toUpdate.getZahlungsverbindung()
-            .getAdresse()
-            .getId();
+    @Override
+    public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
+        return null;
+    }
+
+    @Override
+    public UUID updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
+        return null;
     }
 }

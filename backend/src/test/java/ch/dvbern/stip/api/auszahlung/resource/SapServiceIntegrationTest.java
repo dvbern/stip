@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import io.quarkus.test.junit.QuarkusTest;
@@ -55,17 +55,18 @@ class SapServiceIntegrationTest {
     private static @NotNull Auszahlung createAuszahlung() {
         final var auszahlung = new Auszahlung();
 
-        auszahlung.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlung.setAuszahlungAnSozialdienst(false);
         auszahlung.setId(UUID.randomUUID());
-        auszahlung.setVorname("Vorname");
-        auszahlung.setNachname("Nachname");
+        auszahlung.setZahlungsverbindung(new Zahlungsverbindung());
+        auszahlung.getZahlungsverbindung().setVorname("Vorname");
+        auszahlung.getZahlungsverbindung().setNachname("Nachname");
         final var adresse = new Adresse();
         adresse.setStrasse("Teststrasse");
         adresse.setHausnummer("1");
         adresse.setPlz("3000");
         adresse.setOrt("Bern");
-        auszahlung.setAdresse(adresse);
-        auszahlung.setIban("CH4689144846113617661");
+        auszahlung.getZahlungsverbindung().setAdresse(adresse);
+        auszahlung.getZahlungsverbindung().setIban("CH4689144846113617661");
         return auszahlung;
     }
 
