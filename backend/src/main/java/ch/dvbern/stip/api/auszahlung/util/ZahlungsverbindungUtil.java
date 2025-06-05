@@ -30,11 +30,9 @@ public class ZahlungsverbindungUtil {
             return null;
         }
         if (auszahlung.isAuszahlungAnSozialdienst()) {
-            // checkbox is set -> automatic from fall
-            return auszahlung.getZahlungsverbindung();
-        } else {
-            // manually set -> take from sozialdienst
             return auszahlung.getFall().getDelegierung().getSozialdienst().getZahlungsverbindung();
         }
+
+        return auszahlung.getZahlungsverbindung();
     }
 }
