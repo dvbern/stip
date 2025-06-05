@@ -364,7 +364,6 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
-            DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
             DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
