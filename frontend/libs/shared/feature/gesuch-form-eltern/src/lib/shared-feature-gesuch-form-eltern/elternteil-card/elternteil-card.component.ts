@@ -12,7 +12,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
-  standalone: true,
   imports: [TranslatePipe, SharedUiIconChipComponent],
   templateUrl: './elternteil-card.component.html',
   styleUrls: ['./elternteil-card.component.scss'],

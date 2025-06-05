@@ -41,7 +41,6 @@ const INPUT_DELAY = 600;
 const ROLE_TRANSATION_PREFIX = 'shared.role.';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -144,13 +143,10 @@ export class BenutzerOverviewComponent {
 
   constructor() {
     this.store.loadAllSbAppBenutzers$();
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
+    });
   }
 
   expandRolesForBenutzer(benutzerId: string) {

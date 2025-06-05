@@ -31,8 +31,12 @@ describe('SharedUiFormControlProxyDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiFormControlProxyDirective, ReactiveFormsModule],
-      declarations: [TestComponent, TestWrapperComponent],
+      imports: [
+        SharedUiFormControlProxyDirective,
+        ReactiveFormsModule,
+        TestComponent,
+        TestWrapperComponent,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestWrapperComponent);

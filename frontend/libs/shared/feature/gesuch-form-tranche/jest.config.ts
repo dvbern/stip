@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-feature-gesuch-form-tranche',
   preset: '../../../../jest.preset.js',

@@ -23,7 +23,6 @@ export type CustomDokumentDialogResult = {
 
 @Component({
   selector: 'dv-create-custom-dokument-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

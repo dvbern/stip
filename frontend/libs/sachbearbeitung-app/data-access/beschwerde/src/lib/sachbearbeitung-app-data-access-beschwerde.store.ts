@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -31,7 +30,6 @@ const initialState: BeschwerdeState = {
 export class BeschwerdeStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('BeschwerdeStore'),
 ) {
   private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);

@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { endOfDay, format } from 'date-fns';
@@ -38,7 +37,6 @@ const initialState: AusbildungState = {
 export class AusbildungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('AusbildungStore'),
 ) {
   private ausbildungService = inject(AusbildungService);
 

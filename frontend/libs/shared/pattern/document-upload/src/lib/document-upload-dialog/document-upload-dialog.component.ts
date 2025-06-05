@@ -26,7 +26,6 @@ import { UploadStore } from '../upload.store';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-dialog',
-  standalone: true,
   imports: [
     TranslatePipe,
     MatDialogModule,

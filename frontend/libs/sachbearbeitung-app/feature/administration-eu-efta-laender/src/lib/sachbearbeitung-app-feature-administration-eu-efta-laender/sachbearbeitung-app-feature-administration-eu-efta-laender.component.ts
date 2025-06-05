@@ -26,7 +26,6 @@ const sharedCountryKeyPrefix = 'shared.country.';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -119,31 +118,28 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       );
     });
 
-    effect(
-      () => {
-        const selectedCountries = this.countryListChangedSig();
+    effect(() => {
+      const selectedCountries = this.countryListChangedSig();
 
-        if (!selectedCountries) {
-          return;
-        }
+      if (!selectedCountries) {
+        return;
+      }
 
-        const remainingCountries =
-          untracked(this.laenderStore.euEftaLaenderListViewSig)?.filter(
-            (l) => !selectedCountries.includes(l.land),
-          ) ?? [];
+      const remainingCountries =
+        untracked(this.laenderStore.euEftaLaenderListViewSig)?.filter(
+          (l) => !selectedCountries.includes(l.land),
+        ) ?? [];
 
-        this.laenderStore.saveLaender$([
-          ...selectedCountries.map((land) => ({
-            land: land as Land,
-            isEuEfta: true,
-          })),
-          ...remainingCountries.map(({ land }) => ({
-            land,
-            isEuEfta: false,
-          })),
-        ]);
-      },
-      { allowSignalWrites: true },
-    );
+      this.laenderStore.saveLaender$([
+        ...selectedCountries.map((land) => ({
+          land: land as Land,
+          isEuEfta: true,
+        })),
+        ...remainingCountries.map(({ land }) => ({
+          land,
+          isEuEfta: false,
+        })),
+      ]);
+    });
   }
 }

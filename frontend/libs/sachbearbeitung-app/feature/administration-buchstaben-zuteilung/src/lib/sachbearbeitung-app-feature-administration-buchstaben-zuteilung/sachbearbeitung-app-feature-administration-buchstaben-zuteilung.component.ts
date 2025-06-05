@@ -31,7 +31,6 @@ import {
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFormFieldDirective,
-  SharedUiFormMessageErrorDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -47,7 +46,6 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
 @Component({
   selector:
     'dv-sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -62,7 +60,6 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     TranslatePipe,
     SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
     SharedUiRdIsPendingPipe,
     SharedUiMaxLengthDirective,
     SharedUiClearButtonComponent,

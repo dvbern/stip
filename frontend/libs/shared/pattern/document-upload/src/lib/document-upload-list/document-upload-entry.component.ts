@@ -26,7 +26,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-entry',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

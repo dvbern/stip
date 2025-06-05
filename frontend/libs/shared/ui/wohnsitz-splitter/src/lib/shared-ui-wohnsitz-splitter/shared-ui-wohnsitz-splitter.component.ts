@@ -10,7 +10,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-wohnsitz-splitter',
-  standalone: true,
   imports: [
     SharedUiPercentageSplitterComponent,
     SharedUiPercentageSplitterDirective,

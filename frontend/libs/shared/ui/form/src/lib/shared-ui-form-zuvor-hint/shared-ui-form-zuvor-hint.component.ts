@@ -28,9 +28,9 @@ import { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.directiv
  * ></dv-shared-ui-form-zuvor-hint>
  */
 @Component({
+  standalone: true,
   selector: 'dv-shared-ui-form-zuvor-hint',
   imports: [SharedUiZuvorHintDirective],
-  standalone: true,
   template: `
     <div class="form-hints">
       <span *dvZuvorHint="changes"></span>

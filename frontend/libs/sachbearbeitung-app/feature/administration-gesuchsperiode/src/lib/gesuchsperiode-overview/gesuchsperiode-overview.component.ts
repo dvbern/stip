@@ -19,7 +19,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import { Gesuchsjahr } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiRdIsPendingPipe,
@@ -30,7 +29,6 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     MatTableModule,
@@ -42,7 +40,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     TranslatePipe,
     TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
-    SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,

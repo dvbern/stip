@@ -16,8 +16,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { capitalize } from '@angular-architects/ngrx-toolkit';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -28,23 +27,20 @@ import {
   selectLanguage,
 } from '@dv/shared/data-access/language';
 import { Language } from '@dv/shared/model/language';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
   selector: 'dv-shared-pattern-app-header',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
-    RouterOutlet,
     RouterLink,
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
-    SharedUiIconChipComponent,
     SharedUiMandantStylesDvComponent,
   ],
   templateUrl: './shared-pattern-app-header.component.html',
@@ -81,7 +77,7 @@ export class SharedPatternAppHeaderComponent {
     }
     return {
       src: `assets/images/logo_kanton_${identifier}_full.svg`,
-      name: capitalize(identifier),
+      name: capitalized(identifier),
     };
   });
 

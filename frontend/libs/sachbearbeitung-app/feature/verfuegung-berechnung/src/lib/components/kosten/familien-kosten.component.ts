@@ -11,7 +11,6 @@ import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-kosten',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -153,7 +152,7 @@ import { FamilienBerechnung } from '../../../models';
             | translate
         }}
       </div>
-      <div class=" text-end h4 flex-grow-1 text-nowrap">
+      <div class="text-end h4 flex-grow-1 text-nowrap">
         {{ kostenSig().total | formatChf }}
       </div>
     </div>

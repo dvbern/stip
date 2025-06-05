@@ -54,7 +54,6 @@ import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -136,40 +135,31 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchStore.loadGesuchInfo$({ gesuchId });
-          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchStore.loadGesuchInfo$({ gesuchId });
+        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      }
+    });
 
-    effect(
-      () => {
-        const gesuchTrancheId = this.gesuchTrancheIdSig();
-        if (gesuchTrancheId) {
-          this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchTrancheId = this.gesuchTrancheIdSig();
+      if (gesuchTrancheId) {
+        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+      }
+    });
 
-    effect(
-      () => {
-        const gesuch = this.otherGesuchInfoSourceSig();
+    effect(() => {
+      const gesuch = this.otherGesuchInfoSourceSig();
 
-        if (gesuch?.id) {
-          this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
-          this.einreichnenStore.validateSteps$({
-            gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (gesuch?.id) {
+        this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
+        this.einreichnenStore.validateSteps$({
+          gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
+        });
+      }
+    });
   }
 
   availableTrancheInteractionSig = computed(() => {

@@ -45,7 +45,6 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
-  SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
@@ -53,7 +52,6 @@ import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -67,7 +65,6 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-auszahlungen',
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -76,7 +73,6 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     MatSelectModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    SharedUiProgressBarComponent,
     TranslatePipe,
     MaskitoDirective,
     SharedUiInfoContainerComponent,
@@ -84,7 +80,6 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiZuvorHintDirective,
-    SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
@@ -166,32 +161,29 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       ),
     );
 
-    effect(
-      () => {
-        const { gesuchFormular } = this.viewSig();
-        if (isDefined(gesuchFormular)) {
-          const initalValue = gesuchFormular.auszahlung;
-          this.form.patchValue(
-            {
-              ...initalValue,
-              iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
-            },
-            { emitEvent: false },
+    effect(() => {
+      const { gesuchFormular } = this.viewSig();
+      if (isDefined(gesuchFormular)) {
+        const initalValue = gesuchFormular.auszahlung;
+        this.form.patchValue(
+          {
+            ...initalValue,
+            iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
+          },
+          { emitEvent: false },
+        );
+        if (initalValue) {
+          this.handleKontoinhaberinChanged(
+            initalValue?.kontoinhaber,
+            gesuchFormular,
           );
-          if (initalValue) {
-            this.handleKontoinhaberinChanged(
-              initalValue?.kontoinhaber,
-              gesuchFormular,
-            );
-            SharedUiFormAddressComponent.patchForm(
-              this.form.controls.adresse,
-              initalValue.adresse,
-            );
-          }
+          SharedUiFormAddressComponent.patchForm(
+            this.form.controls.adresse,
+            initalValue.adresse,
+          );
         }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
 
     effect(() => {
       this.gotReenabledSig();
@@ -202,20 +194,17 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       }
     });
 
-    effect(
-      () => {
-        const kontoinhaberin = kontoinhaberinChangesSig();
-        if (kontoinhaberin === undefined) {
-          return;
-        }
-        const { gesuchFormular } = this.viewSig();
-        this.form.reset({
-          kontoinhaber: kontoinhaberin,
-        });
-        this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const kontoinhaberin = kontoinhaberinChangesSig();
+      if (kontoinhaberin === undefined) {
+        return;
+      }
+      const { gesuchFormular } = this.viewSig();
+      this.form.reset({
+        kontoinhaber: kontoinhaberin,
+      });
+      this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
+    });
   }
 
   ngOnInit(): void {

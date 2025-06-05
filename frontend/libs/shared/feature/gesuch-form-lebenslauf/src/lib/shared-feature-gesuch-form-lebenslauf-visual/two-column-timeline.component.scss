@@ -4,12 +4,11 @@
   .wrapper {
     display: grid;
 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 8px var(--dv-gutter-x);
     @media screen and (max-width: 992px) {
       grid-gap: 8px 8px;
     }
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .box {
@@ -32,11 +31,10 @@
     border-radius: var(--dv-border-radius);
 
     h5 {
+      overflow: hidden;
       @media screen and (max-width: 992px) {
         font-size: 16px;
       }
-
-      overflow: hidden;
     }
 
     small {

@@ -11,7 +11,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-ui-form-save',
-  standalone: true,
   imports: [CommonModule, SharedUiLoadingComponent, TranslatePipe],
   templateUrl: './shared-ui-form-save.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
