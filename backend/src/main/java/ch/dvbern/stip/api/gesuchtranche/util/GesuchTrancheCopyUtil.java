@@ -22,7 +22,6 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
-import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -199,6 +198,7 @@ public class GesuchTrancheCopyUtil {
                 original.getGesuchDokuments()
             )
         );
+
         return newTranche;
     }
 
@@ -280,39 +280,6 @@ public class GesuchTrancheCopyUtil {
 
             eltern.setAdresse(adresseCopy);
         }
-
-        // Auszahlung
-        copy.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .setAuszahlung(
-                AuszahlungCopyUtil.createCopyIgnoreReferences(
-                    other.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung()
-                )
-            );
-        // todo: specify & adapt for Zahlungsverbindung
-        // final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
-        // case GESUCHSTELLER -> piaAdresseCopy;
-        // case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-        // case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-        // default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
-        // };
-        copy.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .getAuszahlung()
-            .getZahlungsverbindung()
-            .setAdresse(
-                copy.getTranche()
-                    .getGesuch()
-                    .getAusbildung()
-                    .getFall()
-                    .getAuszahlung()
-                    .getZahlungsverbindung()
-                    .getAdresse()
-            );
 
         // Einnahmen Kosten
         copy.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(other.getEinnahmenKosten()));

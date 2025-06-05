@@ -62,39 +62,13 @@ public class GesuchTestUtil {
         gesuchFormular.getPartner().setVorname("a");
         gesuchFormular.getPartner().setNachname("a");
         gesuchFormular.getPartner().setGeburtsdatum(LocalDate.of(1990, 1, 1));
-        gesuchFormular.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .getAuszahlung()
-            .getZahlungsverbindung()
-            .setVorname("a");
-        gesuchFormular.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .getAuszahlung()
-            .getZahlungsverbindung()
-            .setNachname("a");
-        gesuchFormular.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .getAuszahlung()
-            .getZahlungsverbindung()
-            .setIban("CH4489144522237167913");
+
         gesuchFormular.getEinnahmenKosten().setRenten(0);
         gesuchFormular.getEinnahmenKosten().setFahrkosten(0);
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(2023);
         gesuchFormular.getEinnahmenKosten().setVerdienstRealisiert(false);
         gesuchFormular.getEinnahmenKosten().setNettoerwerbseinkommen(0);
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
-        gesuchFormular.getTranche()
-            .getGesuch()
-            .getAusbildung()
-            .getFall()
-            .getAuszahlung()
-            .setAuszahlungAnSozialdienst(false);
         gesuch.setGesuchNummer("23");
 
         return gesuch;
@@ -139,7 +113,6 @@ public class GesuchTestUtil {
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setEinnahmenKosten(new EinnahmenKosten())
             .setDarlehen(new Darlehen().setWillDarlehen(false));
-        formular.getTranche().getGesuch().getAusbildung().getFall().setAuszahlung(auszahlung);
         return formular;
     }
 }

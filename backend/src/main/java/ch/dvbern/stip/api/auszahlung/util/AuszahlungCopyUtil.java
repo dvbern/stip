@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.util;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -29,13 +30,23 @@ public class AuszahlungCopyUtil {
     }
 
     public void copyValues(final Auszahlung source, final Auszahlung target) {
-        // target.setKontoinhaber(source.getKontoinhaber());
         target.setAuszahlungAnSozialdienst(source.isAuszahlungAnSozialdienst());
-        target.getZahlungsverbindung().setVorname(source.getZahlungsverbindung().getVorname());
-        target.getZahlungsverbindung().setNachname(source.getZahlungsverbindung().getNachname());
-        target.getZahlungsverbindung().setIban(source.getZahlungsverbindung().getIban());
-        target.getZahlungsverbindung()
-            .setSapBusinessPartnerId(source.getZahlungsverbindung().getSapBusinessPartnerId());
-        // target.setAuszahlungAnSozialdienst(source.isAuszahlungAnSozialdienst());
+
+        final var zahlungsVerbindungCopy = createZahlungsverbindungCopyIgnoreReferences(source.getZahlungsverbindung());
+        target.setZahlungsverbindung(zahlungsVerbindungCopy);
+    }
+
+    public void copyZahlungsverbindungValues(final Zahlungsverbindung source, final Zahlungsverbindung target) {
+        target.setVorname(source.getVorname());
+        target.setNachname(source.getNachname());
+        target.setIban(source.getIban());
+        target
+            .setSapBusinessPartnerId(source.getSapBusinessPartnerId());
+    }
+
+    public Zahlungsverbindung createZahlungsverbindungCopyIgnoreReferences(final Zahlungsverbindung other) {
+        final var copy = new Zahlungsverbindung();
+        copyZahlungsverbindungValues(other, copy);
+        return copy;
     }
 }

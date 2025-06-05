@@ -692,6 +692,14 @@ public class TestUtil {
     public static Gesuch getFullGesuch() {
         var gesuch = getGesuchForBerechnung(UUID.randomUUID());
         gesuch.setGesuchNummer("asd");
+        var ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(1));
+        ausbildung.setAusbildungEnd(LocalDate.now().plusYears(1));
+        var fall = new Fall();
+        ausbildung.setFall(fall);
+        fall.setAusbildungs(Set.of(ausbildung));
+        gesuch.setAusbildung(ausbildung);
+
         gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 

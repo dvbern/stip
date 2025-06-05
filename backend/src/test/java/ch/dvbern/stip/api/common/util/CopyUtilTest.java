@@ -87,7 +87,7 @@ class CopyUtilTest {
         tranche.setTyp(null);
 
         var trancheDto = gesuchTrancheMapper.toDto(tranche);
-
+        // ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular.getTranche()
         var trancheCopy = GesuchTrancheCopyUtil.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
         var copyDto = gesuchTrancheMapper.toDto(trancheCopy);
 

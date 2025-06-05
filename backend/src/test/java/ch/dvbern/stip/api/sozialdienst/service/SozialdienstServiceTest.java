@@ -46,6 +46,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static ch.dvbern.stip.api.util.TestConstants.IBAN_AT_NUMMER_VALID;
+import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -120,7 +122,9 @@ class SozialdienstServiceTest {
         adresse2.setOrt("Ort");
 
         Zahlungsverbindung zahlungsverbindung1 = new Zahlungsverbindung();
+        zahlungsverbindung1.setIban(IBAN_CH_NUMMER_VALID);
         Zahlungsverbindung zahlungsverbindung2 = new Zahlungsverbindung();
+        zahlungsverbindung2.setIban(IBAN_AT_NUMMER_VALID);
 
         sozialdienstA = new Sozialdienst();
         sozialdienstA.setName("Sozialdienst");

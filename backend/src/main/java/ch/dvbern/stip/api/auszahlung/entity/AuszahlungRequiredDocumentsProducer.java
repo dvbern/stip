@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.auszahlung.entity;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
@@ -31,22 +30,26 @@ import org.apache.commons.lang3.tuple.Pair;
 public class AuszahlungRequiredDocumentsProducer implements RequiredDocumentsProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+        // todo: move out of gesuchformular!!! Documents still required in future?
+        // delete / alter?
+        return ImmutablePair.of("", Set.of());
+
         // todo: use helper method
-        final var auszahlung = formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung();
-        if (auszahlung == null) {
-            return ImmutablePair.of("", Set.of());
-        }
-
-        final var requiredDocs = new HashSet<DokumentTyp>();
-        if (true
+        // final var auszahlung = formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung();
+        // if (auszahlung == null) {
+        // return ImmutablePair.of("", Set.of());
+        // }
+        //
+        // final var requiredDocs = new HashSet<DokumentTyp>();
+        // if (
         // auszahlung.isAuszahlungAnSozialdienst()
-        // todo: specify
-        // auszahlung.getKontoinhaber() == Kontoinhaber.SOZIALDIENST_INSTITUTION ||
-        // auszahlung.getKontoinhaber() == Kontoinhaber.ANDERE
-        ) {
-            requiredDocs.add(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG);
-        }
-
-        return ImmutablePair.of("auszahlung", requiredDocs);
+        // // todo: specify
+        // // auszahlung.getKontoinhaber() == Kontoinhaber.SOZIALDIENST_INSTITUTION ||
+        // // auszahlung.getKontoinhaber() == Kontoinhaber.ANDERE
+        // ) {
+        // requiredDocs.add(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG);
+        // }
+        //
+        // return ImmutablePair.of("auszahlung", requiredDocs);
     }
 }
