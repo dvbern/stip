@@ -19,23 +19,35 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.RequiredArgsConstructor;
 
+@Validated
+@RequestScoped
+@RequiredArgsConstructor
 public class AuszahlungResourceImpl implements AuszahlungResource {
+    private final AuszahlungAuthorizer auszahlungAuthorizer;
+
     @Override
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
+        auszahlungAuthorizer.canCreateAuszahlungForGesuch(gesuchId);
         return null;
     }
 
     @Override
     public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
+        auszahlungAuthorizer.canReadAuszahlungForGesuch(gesuchId);
         return null;
     }
 
     @Override
     public UUID updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
+        auszahlungAuthorizer.canUpdateAuszahlungForGesuch(gesuchId);
         return null;
     }
 }
