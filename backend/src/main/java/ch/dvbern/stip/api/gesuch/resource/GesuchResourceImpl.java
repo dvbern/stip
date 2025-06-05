@@ -248,7 +248,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
         gesuchAuthorizer.sbCanRead();
         return verfuegungService.getVerfuegungenByGesuch(gesuchId);
@@ -304,9 +304,9 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.sbCanReadInitialTranche(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canReadInitialTranche(gesuchTrancheId);
         return gesuchService.getChangesByInitialTrancheId(gesuchTrancheId);
     }
 
@@ -388,7 +388,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
-        gesuchAuthorizer.sbCanGetBerechnung(gesuchId);
+        gesuchAuthorizer.canGetBerechnung(gesuchId);
         return gesuchService.getBerechnungsresultat(gesuchId);
     }
 
@@ -428,7 +428,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
-        gesuchAuthorizer.sbCanGetBerechnung(gesuchId);
+        gesuchAuthorizer.canGetBerechnung(gesuchId);
 
         return DokumentDownloadUtil.getFileDownloadToken(
             gesuchId,
@@ -459,16 +459,16 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
-        gesuchTrancheAuthorizer.sbCanRead();
+        gesuchTrancheAuthorizer.sbOrJuristCanRead();
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
     @RolesAllowed(GS_GESUCH_READ)
     @Override
     public FallDashboardItemDto getSozialdienstMitarbeiterDashboard(UUID fallId) {
-        delegierenAuthorizer.canReadFallDashboard();
+        delegierenAuthorizer.canReadFallDashboard(fallId);
         return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
     }
 

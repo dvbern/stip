@@ -31,10 +31,8 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -57,7 +55,6 @@ class GesuchAuthorizerCanDeleteTest {
     private GesuchAuthorizer authorizer;
     private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
-    private GesuchTrancheStatusService gesuchTrancheStatusService;
     private GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @BeforeEach
@@ -75,7 +72,6 @@ class GesuchAuthorizerCanDeleteTest {
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
-        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
         gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
 
@@ -89,7 +85,6 @@ class GesuchAuthorizerCanDeleteTest {
         GesuchRepository gesuchRepository = Mockito.mock(GesuchRepository.class);
         GesuchTrancheRepository gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
-        final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
         final var sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
@@ -112,6 +107,7 @@ class GesuchAuthorizerCanDeleteTest {
             null,
             fallRepository,
             sozialdienstService,
+            null,
             null
         );
 
@@ -120,9 +116,8 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchTrancheRepository,
             gesuchRepository,
             sozialdienstService,
-            gesuchStatusService,
-            gesuchTrancheStatusService,
-            gesuchTrancheHistoryService
+            gesuchTrancheHistoryService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -131,7 +126,6 @@ class GesuchAuthorizerCanDeleteTest {
         when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(gesuchStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
     }
 
     @Test

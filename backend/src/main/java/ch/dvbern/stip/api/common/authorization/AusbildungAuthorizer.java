@@ -53,12 +53,12 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         // Admins, Sachbearbeiter or Jurist can always read every Gesuch
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        if (isSbOrJurist(currentBenutzer)) {
             return;
         }
 
         if (
-            AuthorizerUtil.isGesuchstellerOfAusbildungOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
                 ausbildungRepository.requireById(ausbildungId),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
@@ -80,7 +80,9 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var gesuch = ausbildung.getGesuchs().get(0);
 
-        if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+        if (
+            isSachbearbeiter(currentBenutzer) && Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus())
+        ) {
             return true;
         }
 
@@ -89,7 +91,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         }
 
         return Objects.isNull(gesuch.getEinreichedatum())
-        && AuthorizerUtil.isGesuchstellerOfAusbildungOrDelegatedToSozialdienst(
+        && AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
             ausbildung,
             benutzerService.getCurrentBenutzer(),
             sozialdienstService

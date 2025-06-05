@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,14 +25,12 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -43,35 +40,33 @@ import lombok.RequiredArgsConstructor;
 public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
-    private final GesuchStatusService gesuchStatusService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final SozialdienstService sozialdienstService;
     private final DokumentRepository dokumentRepository;
 
-    @Transactional
-    public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+    public void assertGsCanModifyDokumentOfTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (
             !AuthorizerUtil
-                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
         ) {
             forbidden();
         }
 
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
-            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
+            && Gesuchstatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuch.getGesuchStatus())
         ) {
             return;
         }
 
         if (
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(gesuchTranche.getStatus())
+            && GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
         ) {
             return;
         }
@@ -79,56 +74,36 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
+    public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
+        assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
+    }
+
     public void canDeleteDokument(final UUID dokumentId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var gesuchTranche = dokument.getGesuchDokumente().get(0).getGesuchTranche();
-        final var gesuch = gesuchTranche.getGesuch();
 
-        if (
-            !AuthorizerUtil
-                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
-        ) {
-            forbidden();
-        }
-
-        if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
-            && gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())
-        ) {
-            return;
-        }
-
-        if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(gesuchTranche.getStatus())
-        ) {
-            return;
-        }
-
-        forbidden();
+        assertGsCanModifyDokumentOfTranche(gesuchTranche.getId());
     }
 
-    @Transactional
     public void canUpdateGesuchDokument(UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         final var trancheTyp = gesuchDokument.getGesuchTranche().getTyp();
 
-        if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
-            AuthorizerUtil.gesuchStatusOneOfOrElseThrow(
-                gesuchDokument.getGesuchTranche().getGesuch(),
-                List.of(Gesuchstatus.IN_BEARBEITUNG_SB)
-            );
-        } else if (trancheTyp == GesuchTrancheTyp.AENDERUNG) {
-            AuthorizerUtil.gesuchTrancheStatusOneOfOrElseThrow(
-                gesuchDokument.getGesuchTranche(),
-                List.of(GesuchTrancheStatus.UEBERPRUEFEN)
-            );
+        if (
+            trancheTyp == GesuchTrancheTyp.TRANCHE
+            && gesuchDokument.getGesuchTranche().getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB
+        ) {
+            return;
         }
+        if (
+            trancheTyp == GesuchTrancheTyp.AENDERUNG
+            && gesuchDokument.getGesuchTranche().getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
+        ) {
+            return;
+        }
+        forbidden();
     }
 
-    @Transactional
     public void canGetGesuchDokumentKommentar(final UUID gesuchDokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         // Sachbearbeiter and Jurists can always read every Gesuch
@@ -143,7 +118,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
         if (
-            AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuch,
                 currentBenutzer,
                 sozialdienstService
@@ -155,7 +130,6 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
     public void canGetGesuchDokumentForTranche(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isSbOrJurist(currentBenutzer)) {
@@ -164,7 +138,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         if (
-            AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuchTranche.getGesuch(),
                 currentBenutzer,
                 sozialdienstService

@@ -25,16 +25,6 @@ import jakarta.ws.rs.ForbiddenException;
 
 @Authorizer
 public class BaseAuthorizer {
-    protected boolean isAdminOrSb(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER));
-    }
-
-    protected boolean isAdminSbOrJurist(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasOneOfRoles(
-            Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_JURIST)
-        );
-    }
-
     protected boolean isSbOrJurist(final Benutzer currentBenutzer) {
         return currentBenutzer.hasOneOfRoles(
             Set.of(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_JURIST)
@@ -51,18 +41,6 @@ public class BaseAuthorizer {
 
     protected boolean isJurist(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_JURIST);
-    }
-
-    protected boolean isGesuchsteller(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasRole(OidcConstants.ROLE_GESUCHSTELLER);
-    }
-
-    protected boolean isGesuchstellerAndNotAdmin(final Benutzer currentBenutzer) {
-        return isGesuchsteller(currentBenutzer) && !isAdmin(currentBenutzer);
-    }
-
-    protected boolean isSozMitarbeiter(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasRole(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
     }
 
     protected boolean isSuperUser(final Benutzer currentBenutzer) {

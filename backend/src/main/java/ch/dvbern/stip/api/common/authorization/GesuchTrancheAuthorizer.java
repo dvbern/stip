@@ -22,21 +22,20 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.SetUtils;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -46,16 +45,15 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchRepository gesuchRepository;
     private final SozialdienstService sozialdienstService;
-    private final GesuchStatusService gesuchStatusService;
-    private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private final RequiredDokumentService requiredDokumentService;
 
     @Transactional
-    public void sbCanReadInitialTranche(final UUID trancheId) {
+    public void canReadInitialTranche(final UUID trancheId) {
         GesuchTranche tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         Gesuch gesuch = gesuchRepository.requireById(tranche.getGesuch().getId());
         if (!gesuch.isVerfuegt()) {
-            throw new BadRequestException();
+            throw new IllegalStateException("Gesuch was not Verfuegt");
         }
     }
 
@@ -78,12 +76,12 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     public void canDeleteAenderung(final UUID gesuchTrancheId) {
         assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
         assertGesuchTrancheIsOfTyp(gesuchTrancheId, GesuchTrancheTyp.AENDERUNG);
-        assertGesuchTrancheIsInGesuchStatus(gesuchTrancheId, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
     }
 
     @Transactional
     public void canAenderungEinreichen(final UUID gesuchTrancheId) {
-        assertGesuchTrancheIsInOneOfGesuchStatus(
+        assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
             gesuchTrancheId,
             GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN
         );
@@ -91,26 +89,23 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        gsCanRead(gesuchTrancheId);
+        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
     }
 
     @Transactional
     public void canFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
-        assertGesuchTrancheIsInGesuchStatus(gesuchTrancheId, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
 
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
 
         if (
-            gesuchTranche.getGesuchDokuments()
-                .stream()
-                .noneMatch(
-                    gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
-                    && gesuchDokument.getDokumente().isEmpty()
-                )
+            requiredDokumentService
+                .getGSCanFehlendeDokumenteEinreichen(gesuchTranche.getGesuch(), benutzerService.getCurrentBenutzer())
         ) {
             return;
         }
+
         forbidden();
     }
 
@@ -118,110 +113,78 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     public void canFehlendeDokumenteUebermitteln(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
 
-        switch (gesuchTranche.getTyp()) {
-            case AENDERUNG -> assertGesuchTrancheIsInGesuchStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
-            default -> throw new BadRequestException();
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
+        } else {
+            throw new IllegalStateException();
         }
 
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
 
-        if (
-            gesuch.getGesuchTranchen()
-                .stream()
-                .flatMap(gesuchTranche1 -> gesuchTranche1.getGesuchDokuments().stream())
-                .noneMatch(
-                    gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND
-                    && !gesuchDokument.getDokumente().isEmpty()
-                )
-        ) {
+        if (requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)) {
             return;
         }
+
         forbidden();
     }
 
     @Transactional
     public void canAenderungAkzeptieren(final UUID gesuchTrancheId) {
-        sbCanUpdateTrancheStatus(gesuchTrancheId);
+        assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
     }
 
     @Transactional
     public void canAenderungAblehnen(final UUID gesuchTrancheId) {
-        sbCanUpdateTrancheStatus(gesuchTrancheId);
+        assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
     }
 
     @Transactional
     public void canAenderungManuellAnpassen(final UUID gesuchTrancheId) {
-        sbCanUpdateTrancheStatus(gesuchTrancheId);
-    }
-
-    @Transactional
-    public void sbCanUpdateTrancheStatus(final UUID gesuchTrancheId) {
-        assertGesuchTrancheIsInGesuchStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
+        assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.UEBERPRUEFEN);
     }
 
     @Transactional
     public void canUpdateTranche(final GesuchTranche gesuchTranche) {
-
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            canUpdateAenderung(gesuchTranche);
+            canUpdateAenderungsTranche(gesuchTranche);
         } else {
             canUpdateNormalTranche(gesuchTranche);
         }
     }
 
     @Transactional
-    public void canUpdateAenderung(final GesuchTranche gesuchTranche) {
-        assertBenutzerCanEditGesuchTranche(gesuchTranche.getId());
-
+    public void canUpdateAenderungsTranche(final GesuchTranche gesuchTranche) {
         if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
-            assertGesuchTrancheIsInOneOfGesuchStatus(
+            assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
                 gesuchTranche.getId(),
                 GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT
             );
             return;
         }
 
+        assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
+            gesuchTranche.getId(),
+            GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT
+        );
+
         assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
     }
 
     private void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {
-        assertBenutzerCanEditGesuch(gesuchTranche.getGesuch().getId());
-
         if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
+            assertGesuchOfTrancheIsInOneOfGesuchstatus(
+                gesuchTranche.getId(),
+                SetUtils.union(Gesuchstatus.SACHBEARBEITER_CAN_EDIT, Gesuchstatus.JURIST_CAN_EDIT)
+            );
             return;
         }
+
+        assertGesuchOfTrancheIsInOneOfGesuchstatus(gesuchTranche.getId(), Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
 
         assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
     }
 
-    public void assertBenutzerCanEditGesuchTranche(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        if (
-            gesuchTrancheStatusService.benutzerCanEdit(
-                benutzerService.getCurrentBenutzer(),
-                gesuchTranche
-                    .getStatus()
-            )
-        ) {
-            return;
-        }
-        forbidden();
-    }
-
-    public void assertBenutzerCanEditGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (
-            gesuchStatusService.benutzerCanEdit(
-                benutzerService.getCurrentBenutzer(),
-                gesuch.getGesuchStatus()
-            )
-        ) {
-            return;
-        }
-        forbidden();
-    }
-
-    public void assertGesuchTrancheIsInOneOfGesuchStatus(
+    public void assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
         final UUID gesuchTrancheId,
         final Set<GesuchTrancheStatus> gesuchTrancheStatusSet
     ) {
@@ -232,11 +195,22 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    public void assertGesuchTrancheIsInGesuchStatus(
+    public void assertGesuchTrancheIsInGesuchTrancheStatus(
         final UUID gesuchTrancheId,
         final GesuchTrancheStatus gesuchTrancheStatus
     ) {
-        assertGesuchTrancheIsInOneOfGesuchStatus(gesuchTrancheId, Set.of(gesuchTrancheStatus));
+        assertGesuchTrancheIsInOneOfGesuchTrancheStatus(gesuchTrancheId, Set.of(gesuchTrancheStatus));
+    }
+
+    public void assertGesuchOfTrancheIsInOneOfGesuchstatus(
+        final UUID gesuchTrancheId,
+        final Set<Gesuchstatus> gesuchstatusSet
+    ) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        if (gesuchstatusSet.contains(gesuchTranche.getGesuch().getGesuchStatus())) {
+            return;
+        }
+        forbidden();
     }
 
     public void assertGesuchTrancheIsOfTyp(
@@ -253,7 +227,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         final UUID gesuchTrancheId
     ) {
         if (
-            !AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+            !AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch(),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService

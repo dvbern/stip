@@ -55,6 +55,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -67,11 +68,11 @@ class GesuchAuthorizerCanGetBerechnungTest {
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.sbCanGetBerechnung(gesuch.getId());
+            authorizer.canGetBerechnung(gesuch.getId());
         });
         Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
             gesuch.setGesuchStatus(gesuchstatus);
-            assertDoesNotThrow(() -> authorizer.sbCanGetBerechnung(gesuch.getId()));
+            assertDoesNotThrow(() -> authorizer.canGetBerechnung(gesuch.getId()));
 
         });
     }

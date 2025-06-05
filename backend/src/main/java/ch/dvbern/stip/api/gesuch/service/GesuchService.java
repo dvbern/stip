@@ -258,11 +258,6 @@ public class GesuchService {
         var trancheToUpdate = gesuch
             .getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
-        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            preventUpdateVonGesuchIfReadOnly(gesuch);
-        } else if (trancheToUpdate.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            preventUpdateVonAenderungIfReadOnly(trancheToUpdate);
-        }
 
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
@@ -431,11 +426,6 @@ public class GesuchService {
         return fallDashboardItemMapper.toDto(fall);
     }
 
-    @Transactional
-    public List<GesuchDto> findAllForFall(UUID fallId) {
-        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
-    }
-
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
         return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
     }
@@ -443,7 +433,6 @@ public class GesuchService {
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-        preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
@@ -682,24 +671,6 @@ public class GesuchService {
         notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
     }
 
-    private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
-            throw new IllegalStateException(
-                "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
-            );
-        }
-    }
-
-    private void preventUpdateVonAenderungIfReadOnly(GesuchTranche gesuchTranche) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, gesuchTranche.getStatus())) {
-            throw new IllegalStateException(
-                "Cannot update or delete the Aenderung when status is: " + gesuchTranche.getStatus()
-            );
-        }
-    }
-
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
@@ -909,7 +880,7 @@ public class GesuchService {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
-        && gesuchStatusService.canChangeEinreichedatum(gesuch.isVerfuegt(), gesuch.getGesuchStatus());
+        && Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus()) && !gesuch.isVerfuegt();
     }
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {

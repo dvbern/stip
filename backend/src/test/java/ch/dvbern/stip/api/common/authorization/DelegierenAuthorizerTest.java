@@ -115,16 +115,6 @@ class DelegierenAuthorizerTest {
     }
 
     @Test
-    void canReadDelegierung_shouldFail_asNONSozialdienstMitarbeiterOfSozialdienst() {
-        // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
-
-        // act & assert
-        assertThrows(ForbiddenException.class, () -> delegierenAuthorizer.canReadDelegierung());
-    }
-
-    @Test
     void canReadFallDashboard_shouldWork_asDelegierterMitarbeiterOfSozialdienst() {
         // arrange
         setupSozialdienstMitarbeiter();
@@ -134,7 +124,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
     }
 
     @Test
@@ -150,7 +140,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
     }
 
     @Test

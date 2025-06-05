@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
-    private final GesuchStatusService gesuchStatusService;
     private final BenutzerService benutzerService;
 
     @Transactional
@@ -45,9 +44,10 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         if (gesuch.isVerfuegt()) {
             forbidden();
         }
-        if (!gesuchStatusService.canUploadUnterschriftenblatt(benutzer, gesuch.getGesuchStatus())) {
-            forbidden();
+        if (Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus())) {
+            return;
         }
+        forbidden();
     }
 
     public void canGetUnterschriftenblaetter() {

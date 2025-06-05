@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.resource;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.generator.api.model.delegieren.DelegierungCreateDtoSpecModel;
@@ -126,7 +127,7 @@ class DelegierenResourceImplTest {
 
     @Test
     @Order(99)
-    @TestAsAdmin
+    @TestAsSuperUser
     @Transactional
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

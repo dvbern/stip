@@ -33,7 +33,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import io.quarkus.security.ForbiddenException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -73,7 +73,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,
@@ -189,7 +188,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,
@@ -224,7 +222,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,

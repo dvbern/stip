@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -46,6 +46,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
+    private final RequiredDokumentService requiredDokumentService;
 
     @Transactional
     public void sbCanChangeGesuchStatusToInBearbeitung(final UUID gesuchId) {
@@ -74,47 +75,37 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanGesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
-        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
-        sbCanPerformUpdateOrCreateAction(gesuchId);
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
-    }
-
-    @Transactional
-    public void sbCanGesuchZurueckweisen(final UUID gesuchId) {
-        sbCanPerformUpdateOrCreateAction(gesuchId);
-        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_SB);
-    }
-
-    @Transactional
-    public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (
-            gesuch.getGesuchTranchen()
-                .stream()
-                .flatMap(gesuchTranche -> gesuchTranche.getGesuchDokuments().stream())
-                .anyMatch(
-                    gesuchDokument -> gesuchDokument.getStatus()
-                        .equals(
-                            Dokumentstatus.AUSSTEHEND
-                        )
-                    && gesuchDokument.getDokumente().isEmpty()
-                )
-        ) {
-            forbidden();
-        }
-
-        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.EINGEREICHT);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Transactional
-    public void sbCanGetBerechnung(final UUID gesuchId) {
+    public void sbCanGesuchZurueckweisen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+    }
+
+    @Transactional
+    public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            !requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(gesuch, benutzerService.getCurrentBenutzer())
+        ) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void canGetBerechnung(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
     }
 
@@ -130,7 +121,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void gsCanRead(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
     }
 
     @Transactional
@@ -145,17 +136,17 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void gsOrAdminCanDelete(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdmin(currentBenutzer) || isSuperUser(currentBenutzer)) {
+        if (isSuperUser(currentBenutzer)) {
             return;
         }
 
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
-        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
     }
 
     @Transactional
     public void gsCanGesuchEinreichen(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.EINGEREICHT);
     }
@@ -175,7 +166,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanCreateTranche(final UUID gesuchId) {
-        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
     }
 
     @Transactional
@@ -189,7 +180,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void gsCanCreateAenderung(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN);
     }
 
@@ -212,12 +203,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanBearbeitungAbschliessen(final UUID gesuchId) {
-        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_FREIGABE);
-    }
-
-    private void sbCanPerformUpdateOrCreateAction(final UUID gesuchId) {
-        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_SB);
     }
 
     public void assertCanPerformStatusChange(final UUID gesuchId, GesuchStatusChangeEvent gesuchStatusChangeEvent) {
@@ -239,25 +226,19 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Set.of(gesuchStatus));
     }
 
-    public void assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+    public void assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(
         final UUID gesuchId
     ) {
-        if (
-            !AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
-                gesuchRepository.requireById(gesuchId),
-                benutzerService.getCurrentBenutzer(),
-                sozialdienstService
-            )
-        ) {
-            forbidden();
-        }
+        assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(
+            gesuchRepository.requireById(gesuchId).getAusbildung().getFall()
+        );
     }
 
     public void assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(
         final Fall fall
     ) {
         if (
-            !AuthorizerUtil.isGesuchstellerOfFallOrDelegatedToSozialdienst(
+            !AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
                 fall,
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService

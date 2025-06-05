@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
@@ -44,23 +45,31 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canReadDelegierung() {
-        final var sozialdienst = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer();
-        if (sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienst.getId())) {
-            return;
-        }
-        forbidden();
+        permitAll();
     }
 
     @Transactional
-    public void canReadFallDashboard() {
-        canReadDelegierung();
+    public void canReadFallDashboard(final UUID fallId) {
+        final Fall fall = fallRepository.requireById(fallId);
+        if (fall.getDelegierung() == null) {
+            forbidden();
+        }
+
+        if (
+            sozialdienstService
+                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getDelegierung().getSozialdienst().getId())
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
     public void canDelegate(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
-        if (!AuthorizerUtil.isGesuchstellerOfFallWithoutDelegierung(currentBenutzer, fall)) {
+        if (!AuthorizerUtil.isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall)) {
             forbidden();
         }
     }

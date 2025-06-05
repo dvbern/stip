@@ -348,14 +348,6 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var allowedStates = Set.of(
-            Gesuchstatus.STIPENDIENANSPRUCH,
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH
-        );
-
-        if (!allowedStates.contains(gesuch.getGesuchStatus())) {
-            throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
-        }
 
         if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();

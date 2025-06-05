@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,18 +47,6 @@ public class FallAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void gsCanGet() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        final var fallOpt = fallRepository.findFallForGsOptional(currentBenutzer.getId());
-        if (fallOpt.isEmpty()) {
-            return;
-        }
-
-        final var fall = fallOpt.get();
-
-        if (AuthorizerUtil.isGesuchstellerOfFallOrDelegatedToSozialdienst(fall, currentBenutzer, sozialdienstService)) {
-            return;
-        }
-        forbidden();
+        permitAll();
     }
 }

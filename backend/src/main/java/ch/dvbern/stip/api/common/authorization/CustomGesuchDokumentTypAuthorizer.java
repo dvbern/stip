@@ -23,15 +23,12 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -42,13 +39,10 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
-    private final GesuchStatusService gesuchStatusService;
     private final SozialdienstService sozialdienstService;
-    private final GesuchTrancheStatusService gesuchTrancheStatusService;
 
-    @Transactional
-    public void canCreateCustomDokumentTyp(UUID trancheId) {
-        final var tranche = gesuchTrancheRepository.requireById(trancheId);
+    private void assertCanModifyCustomDokumentTypOfTranche(final UUID gesuchTrancheId) {
+        final var tranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = tranche.getGesuch();
 
         if (tranche.getTyp() == GesuchTrancheTyp.AENDERUNG && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN) {
@@ -64,8 +58,11 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
-    public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
+    public void canCreateCustomDokumentTyp(final UUID gesuchTrancheId) {
+        assertCanModifyCustomDokumentTypOfTranche(gesuchTrancheId);
+    }
+
+    public void canReadCustomDokumentOfTyp(final UUID customDokumentTypId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isSbOrJurist(currentBenutzer)) {
             return;
@@ -76,7 +73,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
         if (
             AuthorizerUtil
-                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
         ) {
             return;
         }
@@ -84,18 +81,28 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
     public void canUpload(final UUID customDokumentTypId) {
         final var customDokumentTyp = customDokumentTypRepository.findById(customDokumentTypId);
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchTranche = customDokumentTyp.getGesuchDokument().getGesuchTranche();
         final var gesuch = gesuchTranche.getGesuch();
+        if (
+            !AuthorizerUtil
+                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+        ) {
+            forbidden();
+        }
 
         if (
-            AuthorizerUtil
-                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
-            && (gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
-            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
+        ) {
+            return;
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            && Gesuchstatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuch.getGesuchStatus())
         ) {
             return;
         }
@@ -103,7 +110,6 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
     public void canDeleteTyp(final UUID gesuchDokumentTypId) {
         final var customGesuchDokument =
             gesuchDokumentRepository.findByCustomDokumentTyp(gesuchDokumentTypId)
@@ -115,20 +121,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        final var currentTranche = customGesuchDokument.getGesuchTranche();
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var isAenderung = currentTranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG);
-
-        if (isAenderung && !gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, currentTranche.getStatus())) {
-            forbidden();
-        }
-
-        final var isTranche = currentTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
-
-        final var customDokumentTyp = customDokumentTypRepository.requireById(gesuchDokumentTypId);
-        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
-        if (isTranche && !gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())) {
-            forbidden();
-        }
+        assertCanModifyCustomDokumentTypOfTranche(customGesuchDokument.getGesuchTranche().getId());
     }
+
 }
