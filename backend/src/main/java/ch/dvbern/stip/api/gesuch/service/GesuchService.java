@@ -729,7 +729,7 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getChangesByInitialTrancheId(UUID trancheId) {
-        final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
+        final var tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =

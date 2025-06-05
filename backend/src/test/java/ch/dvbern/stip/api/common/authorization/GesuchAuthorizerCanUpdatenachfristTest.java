@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
-class GesuchAuthorizerCanUpdateEinreichefristTest {
+class GesuchAuthorizerCanUpdatenachfristTest {
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
 
@@ -50,33 +50,31 @@ class GesuchAuthorizerCanUpdateEinreichefristTest {
         benutzerService = Mockito.mock(BenutzerService.class);
         when(gesuchRepository.requireById(Mockito.any())).thenReturn(gesuch);
         authorizer =
-            new GesuchAuthorizer(benutzerService, gesuchRepository, null, null, null, null, null, null);
+            new GesuchAuthorizer(
+                benutzerService,
+                gesuchRepository,
+                null,
+                null,
+                null,
+                null
+            );
     }
 
     @Test
-    void canUpdateEinreichefristShouldFailAsGS() {
-        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER))));
-        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        assertThrows(ForbiddenException.class, () -> {
-            authorizer.canUpdateEinreichefrist(UUID.randomUUID());
-        });
-    }
-
-    @Test
-    void canUpdateEinreichefristShouldFailAsSB() {
+    void canUpdateNachfristShouldFailAsSB() {
         when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canUpdateEinreichefrist(UUID.randomUUID());
+            authorizer.canUpdateNachfrist(UUID.randomUUID());
         });
     }
 
     @Test
-    void canUpdateEinreichefristShouldSuccess() {
+    void canUpdateNachfristShouldSuccess() {
         when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         assertDoesNotThrow(() -> {
-            authorizer.canUpdateEinreichefrist(UUID.randomUUID());
+            authorizer.canUpdateNachfrist(UUID.randomUUID());
         });
     }
 

@@ -17,28 +17,24 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -46,74 +42,145 @@ import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.SACHBEARBEITER_C
 public class GesuchAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchRepository gesuchRepository;
-    private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchStatusService gesuchStatusService;
     private final FallRepository fallRepository;
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
-    public void canGetBerechnung(final UUID gesuchID) {
-        final var gesuch = gesuchRepository.requireById(gesuchID);
-        if (!Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+    public void sbCanChangeGesuchStatusToInBearbeitung(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToNegativeVerfuegung(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToVersandbereit(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSANDBEREIT);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGT);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToVersendet(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSENDET);
+    }
+
+    @Transactional
+    public void sbCanGesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
+        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    @Transactional
+    public void sbCanGesuchZurueckweisen(final UUID gesuchId) {
+        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_SB);
+    }
+
+    @Transactional
+    public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
+        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            gesuch.getGesuchTranchen()
+                .stream()
+                .flatMap(gesuchTranche -> gesuchTranche.getGesuchDokuments().stream())
+                .anyMatch(
+                    gesuchDokument -> gesuchDokument.getStatus()
+                        .equals(
+                            Dokumentstatus.AUSSTEHEND
+                        )
+                    && gesuchDokument.getDokumente().isEmpty()
+                )
+        ) {
             forbidden();
         }
+
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Transactional
-    public void canReadChanges(final UUID gesuchID) {
+    public void sbCanGetBerechnung(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
+    }
+
+    @Transactional
+    public void sbCanRead() {
+        permitAll();
+    }
+
+    @Transactional
+    public void sbOrJuristCanRead() {
+        permitAll();
+    }
+
+    @Transactional
+    public void gsCanRead(final UUID gesuchId) {
+        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+    }
+
+    @Transactional
+    public void gsSbOrJuristCanRead(final UUID gesuchId) {
+        if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+        gsCanRead(gesuchId);
+    }
+
+    @Transactional
+    public void gsOrAdminCanDelete(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        if (isAdmin(currentBenutzer) || isSuperUser(currentBenutzer)) {
             return;
         }
 
-        forbidden();
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
+        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
     }
 
     @Transactional
-    protected Gesuch fetchGesuchOfTranche(final UUID trancheId) {
-        GesuchTranche tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
-        // fetch the gesuchId of this tranche
-        // then fetch current gesuch data
-        // (because gesuch of audited tranche could still be in other state than VERFUEGT)
-        final var gesuchId = tranche.getGesuch().getId();
-        return gesuchRepository.requireById(gesuchId);
-    }
-
-    private void canReadGesuchOfTranche(final UUID trancheId) {
-        final var gesuch = fetchGesuchOfTranche(trancheId);
-        canRead(gesuch.getId());
+    public void gsCanGesuchEinreichen(final UUID gesuchId) {
+        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
     @Transactional
-    public void canReadInitialTranche(final UUID trancheId) {
-        canReadGesuchOfTranche(trancheId);
-        final var gesuch = fetchGesuchOfTranche(trancheId);
-        if (gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT).isEmpty()) {
-            throw new BadRequestException();
-        }
-
+    public void juristCanGesuchEinreichen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }
 
     @Transactional
-    public void canRead(final UUID gesuchId) {
+    public void gsCanCreate() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var fall =
+            fallRepository.findFallForGsOptional(currentBenutzer.getId()).orElseThrow(NotFoundException::new);
+        assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(fall);
+    }
 
-        // Admins and Sachbearbeiter can always read every Gesuch
-        if (isAdminSbOrJurist(currentBenutzer)) {
-            return;
-        }
+    @Transactional
+    public void sbCanCreateTranche(final UUID gesuchId) {
+        sbCanPerformUpdateOrCreateAction(gesuchId);
+    }
 
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
-
-        final BooleanSupplier isGesuchsteller = () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
-
-        // Gesuchsteller can only read their own Gesuch
-        if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
+    @Transactional
+    public void sbCanUpdateEinreichedatum(final UUID gesuchId) {
+        if (gesuchService.canUpdateEinreichedatum(gesuchRepository.requireById(gesuchId))) {
             return;
         }
 
@@ -121,132 +188,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDelete(final UUID gesuchId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        if (isAdminOrSb(currentBenutzer) || isSuperUser(currentBenutzer)) {
-            return;
-        }
-
-        // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-
-        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchstellerAndNotAdmin(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canGsGesuchEinreichen(final UUID gesuchId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
-        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canJurGesuchEinreichen(final UUID gesuchId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        if (isJurist(currentBenutzer) && Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus())) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canCreate() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var fall = fallRepository.findFallForGsOptional(currentBenutzer.getId());
-
-        if (fall.isEmpty()) {
-            return;
-        }
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall.get(), sozialdienstService);
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId());
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canCreateTranche(final UUID gesuchId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        if (isAdmin(currentBenutzer)) {
-            return;
-        }
-
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
-
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB;
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canUpdateEinreichedatum(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchService.canUpdateEinreichedatum(gesuch)) {
-            return;
-        }
-
-        forbidden();
-    }
-
-    @Transactional
-    public void canCreateAenderung(UUID gesuchId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-        && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
-
-        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
-        && Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus());
-
-        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
-            return;
-        }
-
-        forbidden();
+    public void gsCanCreateAenderung(final UUID gesuchId) {
+        assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuchId);
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN);
     }
 
     public void canGetGsDashboard() {
@@ -261,28 +205,65 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void sbCanReadTranche(final UUID aenderungId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(aenderungId);
-        canRead(gesuchTranche.getGesuch().getId());
+    @Transactional
+    public void canUpdateNachfrist(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST);
     }
 
     @Transactional
-    public void canUpdateEinreichefrist(final UUID gesuchId) {
+    public void sbCanBearbeitungAbschliessen(final UUID gesuchId) {
+        sbCanPerformUpdateOrCreateAction(gesuchId);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_FREIGABE);
+    }
+
+    private void sbCanPerformUpdateOrCreateAction(final UUID gesuchId) {
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_SB);
+    }
+
+    public void assertCanPerformStatusChange(final UUID gesuchId, GesuchStatusChangeEvent gesuchStatusChangeEvent) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!gesuchStatusService.canFire(gesuch, gesuchStatusChangeEvent)) {
+            forbidden();
+        }
+    }
+
+    public void assertGesuchIsInOneOfGesuchStatus(final UUID gesuchId, final Set<Gesuchstatus> gesuchStatusSet) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuchStatusSet.contains(gesuch.getGesuchStatus())) {
+            return;
+        }
+        forbidden();
+    }
+
+    public void assertGesuchIsInGesuchStatus(final UUID gesuchId, final Gesuchstatus gesuchStatus) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Set.of(gesuchStatus));
+    }
+
+    public void assertIsGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+        final UUID gesuchId
+    ) {
         if (
-            !SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuch.getGesuchStatus())
-            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+            !AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
+                gesuchRepository.requireById(gesuchId),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
         ) {
             forbidden();
         }
     }
 
-    @Transactional
-    public void canBearbeitungAbschliessen(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS) {
-            return;
+    public void assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(
+        final Fall fall
+    ) {
+        if (
+            !AuthorizerUtil.isGesuchstellerOfFallOrDelegatedToSozialdienst(
+                fall,
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
         }
-        forbidden();
     }
 }

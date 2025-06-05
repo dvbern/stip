@@ -40,6 +40,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_GS;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_SB;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.VERSENDET;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -140,9 +142,9 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_GESUCHSTELLER,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
-                    IN_BEARBEITUNG_SB,
+                    BEREIT_FUER_BEARBEITUNG,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    null
                 ),
             Arguments
                 .of(
@@ -151,16 +153,16 @@ class GesuchDokumentAuthorizerTest {
                     // setup to not throw (succeed)
                     VERSENDET,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    GesuchTrancheStatus.IN_BEARBEITUNG_GS
                 ),
             Arguments
                 .of(
                     OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
-                    IN_BEARBEITUNG_SB,
+                    IN_BEARBEITUNG_GS,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    null
                 ),
             Arguments
                 .of(
@@ -169,7 +171,7 @@ class GesuchDokumentAuthorizerTest {
                     // setup to not throw (succeed)
                     VERSENDET,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    GesuchTrancheStatus.FEHLENDE_DOKUMENTE
                 )
         );
     }

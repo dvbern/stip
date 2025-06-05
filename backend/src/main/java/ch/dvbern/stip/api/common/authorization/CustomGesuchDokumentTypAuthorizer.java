@@ -21,7 +21,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -52,30 +51,33 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var tranche = gesuchTrancheRepository.requireById(trancheId);
         final var gesuch = tranche.getGesuch();
 
-        // condition 1
-        final var isAnAenderungInUeberpruefung = tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-        && tranche.getStatus().equals(GesuchTrancheStatus.UEBERPRUEFEN);
-        // condition 2
-        final var isGesuchstatusInBearbeitungSB = gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB);
-        final var isATranche = tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
-
-        if (!((isATranche && isGesuchstatusInBearbeitungSB) || isAnAenderungInUeberpruefung)) {
-            forbidden();
+        if (tranche.getTyp() == GesuchTrancheTyp.AENDERUNG && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN) {
+            return;
         }
 
+        if (
+            tranche.getTyp() == GesuchTrancheTyp.TRANCHE && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
     public void canReadCustomDokumentOfTyp(UUID customDokumentTypId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        if (isSbOrJurist(currentBenutzer)) {
             return;
         }
 
         final var customDokumentTyp = customDokumentTypRepository.requireById(customDokumentTypId);
         final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
 
-        if (AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)) {
+        if (
+            AuthorizerUtil
+                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+        ) {
             return;
         }
 
@@ -90,17 +92,11 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var gesuch = gesuchTranche.getGesuch();
 
         if (
-            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
-                gesuch,
-                currentBenutzer,
-                () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
-                || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG,
-                this::forbidden,
-                sozialdienstService
-            )
+            AuthorizerUtil
+                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+            && (gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
+            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
         ) {
-            return;
-        } else if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
             return;
         }
 
@@ -109,29 +105,28 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDeleteTyp(final UUID gesuchDokumentTypId) {
-        final var customDokumentTyp = customDokumentTypRepository.requireById(gesuchDokumentTypId);
-        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
         final var customGesuchDokument =
             gesuchDokumentRepository.findByCustomDokumentTyp(gesuchDokumentTypId)
                 .orElseThrow();
-        final var currentTranche = customGesuchDokument.getGesuchTranche();
-        final var isAnyFileAttached = !customGesuchDokument.getDokumente().isEmpty();
-        final var isTranche = currentTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
-        final var isAenderung = currentTranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG);
 
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminOrSb(currentBenutzer)) {
-            forbidden();
-        }
+        final var isAnyFileAttached = !customGesuchDokument.getDokumente().isEmpty();
 
         if (isAnyFileAttached) {
             forbidden();
         }
 
+        final var currentTranche = customGesuchDokument.getGesuchTranche();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var isAenderung = currentTranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG);
+
         if (isAenderung && !gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, currentTranche.getStatus())) {
             forbidden();
         }
 
+        final var isTranche = currentTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE);
+
+        final var customDokumentTyp = customDokumentTypRepository.requireById(gesuchDokumentTypId);
+        final var gesuch = customDokumentTyp.getGesuchDokument().getGesuchTranche().getGesuch();
         if (isTranche && !gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())) {
             forbidden();
         }

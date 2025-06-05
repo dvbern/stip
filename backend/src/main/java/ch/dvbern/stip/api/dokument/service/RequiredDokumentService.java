@@ -63,7 +63,7 @@ public class RequiredDokumentService {
 
         if (
             !AuthorizerUtil
-                .isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
+                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
         ) {
             return false;
         }

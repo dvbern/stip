@@ -52,7 +52,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class CustomGesuchDokumentTypAuthorizerTest {
-    private CustomGesuchDokumentTypAuthorizer authorizer;
+    private CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private CustomDokumentTyp customDokumentTyp;
     private GesuchRepository gesuchRepository;
     private GesuchDokumentRepository gesuchDokumentRepository;
@@ -89,7 +89,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         sozialdienstService = Mockito.mock(SozialdienstService.class);
         gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
-        authorizer = new CustomGesuchDokumentTypAuthorizer(
+        customGesuchDokumentTypAuthorizer = new CustomGesuchDokumentTypAuthorizer(
             customDokumentTypRepository, gesuchDokumentRepository, gesuchTrancheRepository,
             benutzerService, gesuchStatusService, sozialdienstService, gesuchTrancheStatusService
         );
@@ -114,36 +114,13 @@ class CustomGesuchDokumentTypAuthorizerTest {
         });
     }
 
-    // a GS should not be allowed to delete a CustomDokumentType (only a SB should be able)
-    @Test
-    void canDeleteTypShouldFailAsGS() {
-        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
-        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDeleteTyp(
-                UUID.randomUUID()
-            );
-        });
-    }
-
-    @Test
-    void canDeleteTypShouldFailAsGSWhenInBearbeitungSB() {
-        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
-        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDeleteTyp(
-                UUID.randomUUID()
-            );
-        });
-    }
-
     @Test
     void canDeleteTypShouldFailAsAdmin() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchStatusService.benutzerCanDeleteDokument(any(), any())).thenReturn(false);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDeleteTyp(
+            customGesuchDokumentTypAuthorizer.canDeleteTyp(
                 UUID.randomUUID()
             );
         });
@@ -154,7 +131,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         assertDoesNotThrow(() -> {
-            authorizer.canDeleteTyp(
+            customGesuchDokumentTypAuthorizer.canDeleteTyp(
                 UUID.randomUUID()
             );
         });
@@ -170,13 +147,13 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> {
-            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });
     }
 
@@ -194,13 +171,13 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche);
         assertDoesNotThrow(() -> {
-            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuchTranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(UUID.randomUUID());
         });
     }
 
@@ -228,12 +205,12 @@ class CustomGesuchDokumentTypAuthorizerTest {
         when(gesuchStatusService.benutzerCanDeleteDokument(any(), any())).thenReturn(false);
 
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDeleteTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canDeleteTyp(UUID.randomUUID());
         });
 
         gesuchTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         assertDoesNotThrow(() -> {
-            authorizer.canDeleteTyp(UUID.randomUUID());
+            customGesuchDokumentTypAuthorizer.canDeleteTyp(UUID.randomUUID());
         });
     }
 

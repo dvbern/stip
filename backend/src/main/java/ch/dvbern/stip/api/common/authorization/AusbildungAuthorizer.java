@@ -20,13 +20,10 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.service.FallService;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,17 +35,9 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class AusbildungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    private final GesuchStatusService gesuchStatusService;
     private final AusbildungRepository ausbildungRepository;
     private final SozialdienstService sozialdienstService;
     private final FallService fallService;
-
-    private boolean isGesuchstellerOfAusbildung(final Benutzer currentBenutzer, final Ausbildung ausbildung) {
-        return Objects.equals(
-            ausbildung.getFall().getGesuchsteller().getId(),
-            currentBenutzer.getId()
-        );
-    }
 
     @Transactional
     public void canCreate(final UUID fallId) {
@@ -68,17 +57,15 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final var ausbildung = ausbildungRepository.requireById(ausbildungId);
         if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(ausbildung, sozialdienstService)
+            AuthorizerUtil.isGesuchstellerOfAusbildungOrDelegatedToSozialdienst(
+                ausbildungRepository.requireById(ausbildungId),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
         ) {
             return;
         }
-
-        if (isGesuchstellerOfAusbildung(currentBenutzer, ausbildung)) {
-            return;
-        }
-
         forbidden();
     }
 
@@ -93,16 +80,6 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var gesuch = ausbildung.getGesuchs().get(0);
 
-        if (
-            AuthorizerUtil.isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(
-                gesuch,
-                currentBenutzer,
-                sozialdienstService
-            ) && gesuch.getEinreichedatum() == null
-        ) {
-            return true;
-        }
-
         if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
             return true;
         }
@@ -111,8 +88,12 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return true;
         }
 
-        return false;
-
+        return Objects.isNull(gesuch.getEinreichedatum())
+        && AuthorizerUtil.isGesuchstellerOfAusbildungOrDelegatedToSozialdienst(
+            ausbildung,
+            benutzerService.getCurrentBenutzer(),
+            sozialdienstService
+        );
     }
 
     public void canUpdate(final UUID ausbildungId) {

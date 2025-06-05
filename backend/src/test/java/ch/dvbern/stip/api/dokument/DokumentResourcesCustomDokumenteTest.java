@@ -185,16 +185,6 @@ class DokumentResourcesCustomDokumenteTest {
     }
 
     // testAsGS
-    // upload newly created required document
-    @Test
-    @TestAsGesuchsteller
-    @Order(8)
-    void test_upload_custom_gesuchdokuments() {
-        File file = new File(TEST_PNG_FILE_LOCATION);
-        TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
-    }
-
-    // testAsGS
     // uploaded document should NOT appear in required documents
     @Test
     @TestAsGesuchsteller
@@ -211,20 +201,6 @@ class DokumentResourcesCustomDokumenteTest {
             .as(DokumenteToUploadDto.class);
         final var result = requiredDocuments.getCustomDokumentTyps();
         assertThat(result.size(), is(0));
-    }
-
-    // testAsSB
-    // delete should fail
-    @Test
-    @TestAsSachbearbeiter
-    @Order(10)
-    void test_delete_required_custom_gesuchdokument_typ_should_fail() {
-        dokumentApiSpec.deleteCustomDokumentTyp()
-            .customDokumentTypIdPath(customDokumentId)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -282,9 +258,19 @@ class DokumentResourcesCustomDokumenteTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
+    // testAsGS
+    // upload newly created required document
     @Test
     @TestAsGesuchsteller
     @Order(14)
+    void test_upload_custom_gesuchdokuments() {
+        File file = new File(TEST_PNG_FILE_LOCATION);
+        TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(15)
     void test_read_custom_gesuchdokument() {
         var dokumentDtoList = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
             .customDokumentTypIdPath(customDokumentId)
@@ -323,11 +309,25 @@ class DokumentResourcesCustomDokumenteTest {
         assertThat(actualFileContent.length(), is(greaterThan(0)));
     }
 
+    // testAsSB
+    // delete should fail
+    @Test
+    @TestAsSachbearbeiter
+    @Order(16)
+    void test_delete_required_custom_gesuchdokument_typ_should_fail() {
+        dokumentApiSpec.deleteCustomDokumentTyp()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+    }
+
     // testAsGS
     // delete file
     @Test
     @TestAsGesuchsteller
-    @Order(15)
+    @Order(17)
     void test_delete_required_custom_gesuchdokuments() {
         dokumentApiSpec.deleteDokument()
             .dokumentIdPath(dokumentId)
@@ -338,7 +338,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsAdmin
-    @Order(16)
+    @Order(18)
     void delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
@@ -348,7 +348,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(19)
     void reset() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
@@ -357,14 +357,14 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(20)
     void fillGesuch_2() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(19)
+    @Order(21)
     void gesuchEinreichen_2() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -376,7 +376,7 @@ class DokumentResourcesCustomDokumenteTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(20)
+    @Order(22)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -396,7 +396,7 @@ class DokumentResourcesCustomDokumenteTest {
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(21)
+    @Order(23)
     void test_delete_required_custom_gesuchdokument_should_success() {
         // first, prepare a new custom gesuch dokument type
         test_create_custom_gesuchdokument();
@@ -407,6 +407,17 @@ class DokumentResourcesCustomDokumenteTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        var nullableDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDtoSpec.class)
+            .getValue();
+
+        assertThat(nullableDokumentDto, Matchers.nullValue());
     }
 
     // testAsGS
@@ -414,7 +425,7 @@ class DokumentResourcesCustomDokumenteTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(22)
+    @Order(24)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
         final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)

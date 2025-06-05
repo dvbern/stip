@@ -37,7 +37,7 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canUpload(final UUID gesuchId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminOrSb(benutzer)) {
+        if (!isSachbearbeiter(benutzer)) {
             forbidden();
         }
 
@@ -59,8 +59,8 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchForDokument = gesuchRepository.requireGesuchForDokument(dokumentId);
 
-        // Only Admins/ SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
-        if (isAdminOrSb(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
+        // Only SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
+        if (isSachbearbeiter(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
             return;
         }
 

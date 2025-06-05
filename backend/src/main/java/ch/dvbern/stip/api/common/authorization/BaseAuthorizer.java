@@ -35,6 +35,12 @@ public class BaseAuthorizer {
         );
     }
 
+    protected boolean isSbOrJurist(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasOneOfRoles(
+            Set.of(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_JURIST)
+        );
+    }
+
     protected boolean isAdmin(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_ADMIN);
     }
@@ -53,6 +59,10 @@ public class BaseAuthorizer {
 
     protected boolean isGesuchstellerAndNotAdmin(final Benutzer currentBenutzer) {
         return isGesuchsteller(currentBenutzer) && !isAdmin(currentBenutzer);
+    }
+
+    protected boolean isSozMitarbeiter(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasRole(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
     }
 
     protected boolean isSuperUser(final Benutzer currentBenutzer) {

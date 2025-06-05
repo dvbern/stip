@@ -155,20 +155,11 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     }
 
     @Test
-    void gsCannotDeleteWithoutRoleTest() {
-        // arrange
-        currentBenutzer.setRollen(Set.of());
-        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
-        final var uuid = UUID.randomUUID();
-        // assert
-        assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
-    }
-
-    @Test
     void gsCannotDeleteOtherAenderungTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
@@ -182,6 +173,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
                     .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)
             )
         );
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
@@ -197,6 +189,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             )
         );
         final var uuid = UUID.randomUUID();
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
     }

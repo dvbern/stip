@@ -43,6 +43,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -106,7 +107,7 @@ class DelegierenResourceImplTest {
                 .fallIdPath(fall.getId())
                 .sozialdienstIdPath(sozialdienst.getId())
                 .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
-            Response.Status.UNAUTHORIZED.getStatusCode()
+            Status.FORBIDDEN.getStatusCode()
         );
     }
 

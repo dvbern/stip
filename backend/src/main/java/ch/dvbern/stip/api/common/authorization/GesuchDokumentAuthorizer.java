@@ -20,11 +20,9 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.common.authorization.util.DokumentAuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -34,7 +32,6 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -58,22 +55,23 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
 
-        final BooleanSupplier canBenutzerUpload =
-            () -> gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
-            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG;
+        if (
+            !AuthorizerUtil
+                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+        ) {
+            forbidden();
+        }
 
         if (
-            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
-                gesuch,
-                currentBenutzer,
-                canBenutzerUpload,
-                this::forbidden,
-                sozialdienstService
-            )
+            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            && gesuchStatusService.benutzerCanUploadDokument(currentBenutzer, gesuch.getGesuchStatus())
         ) {
             return;
-        } else if (
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerUpload.getAsBoolean()
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(gesuchTranche.getStatus())
         ) {
             return;
         }
@@ -83,27 +81,28 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDeleteDokument(final UUID dokumentId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var gesuchTranche = dokument.getGesuchDokumente().get(0).getGesuchTranche();
         final var gesuch = gesuchTranche.getGesuch();
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        final BooleanSupplier canBenutzerDeleteDokument =
-            () -> gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())
-            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG;
 
         if (
-            DokumentAuthorizerUtil.isDelegiertAndCanUploadOrDelete(
-                gesuch,
-                currentBenutzer,
-                canBenutzerDeleteDokument,
-                this::forbidden,
-                sozialdienstService
-            )
+            !AuthorizerUtil
+                .isGesuchstellerOfGesuchOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+        ) {
+            forbidden();
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            && gesuchStatusService.benutzerCanDeleteDokument(currentBenutzer, gesuch.getGesuchStatus())
         ) {
             return;
-        } else if (
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) && canBenutzerDeleteDokument.getAsBoolean()
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(gesuchTranche.getStatus())
         ) {
             return;
         }
@@ -113,13 +112,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdateGesuchDokument(UUID gesuchDokumentId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        if (!isAdminOrSb(currentBenutzer)) {
-            throw new ForbiddenException();
-        }
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-
         final var trancheTyp = gesuchDokument.getGesuchTranche().getTyp();
 
         if (trancheTyp == GesuchTrancheTyp.TRANCHE) {
@@ -138,9 +131,8 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetGesuchDokumentKommentar(final UUID gesuchDokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        // Admins and Sachbearbeiter can always read every Gesuch
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        // Sachbearbeiter and Jurists can always read every Gesuch
+        if (isSbOrJurist(currentBenutzer)) {
             return;
         }
 
@@ -151,7 +143,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
         if (
-            AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
                 gesuch,
                 currentBenutzer,
                 sozialdienstService
@@ -166,13 +158,13 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetGesuchDokumentForTranche(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        if (isSbOrJurist(currentBenutzer)) {
             return;
         }
 
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         if (
-            AuthorizerUtil.isGesuchstellerOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOfGesuchOrDelegatedToSozialdienst(
                 gesuchTranche.getGesuch(),
                 currentBenutzer,
                 sozialdienstService

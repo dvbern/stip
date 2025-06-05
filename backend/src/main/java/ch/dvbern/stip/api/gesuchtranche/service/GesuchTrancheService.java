@@ -268,7 +268,12 @@ public class GesuchTrancheService {
         var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         // query GesuchTrancheHistory, if requested tranche might have been overwritten
         if (gesuchTranche == null) {
-            return gesuchTrancheHistoryRepository.getGesuchDokumenteForGesuchTrancheOfLatestRevision(gesuchTrancheId);
+            return gesuchTrancheHistoryService
+                .getLatestTranche(gesuchTrancheId)
+                .getGesuchDokuments()
+                .stream()
+                .map(gesuchDokumentMapper::toDto)
+                .toList();
         }
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
