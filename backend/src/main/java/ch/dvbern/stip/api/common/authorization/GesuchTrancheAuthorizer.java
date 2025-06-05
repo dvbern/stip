@@ -174,6 +174,10 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         assertBenutzerCanEditGesuchTranche(gesuchTranche.getId());
 
         if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
+            assertGesuchTrancheIsInOneOfGesuchStatus(
+                gesuchTranche.getId(),
+                GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT
+            );
             return;
         }
 
