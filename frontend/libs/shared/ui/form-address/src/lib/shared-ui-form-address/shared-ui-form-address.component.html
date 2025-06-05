@@ -80,49 +80,11 @@
 
   <!-- Land -->
   <div class="col-12 col-md-6">
-    <!-- <mat-form-field dvSharedUiFormField class="w-100">
-      <mat-label>{{ 'shared.form.shared.address.country.label' | translate }}</mat-label> -->
-    <!-- todo: change for land value -->
-    <!-- todo: rename testid and adjust tests -->
-
-    <!-- <mat-select
-        formControlName="landId"
-        data-testid="form-address-land"
-        [placeholder]="'shared.form.select.empty' | translate"
-      >
-        @for (l of translatedLaender$ | async; track trackByIndex($index)) {
-          <mat-option [value]="l.code" [attr.data-testid]="l.code">
-            {{ l.text }}
-          </mat-option>
-        }
-      </mat-select> -->
-
-    <!-- <input
-        matInput
-        formControlName="landId"
-        data-testid="form-address-landId"
-        dvLandAutocomplete
-        [matAutocomplete]="landAutocomplete"
-        [autocompleteSig]="landAutocomplete"
-        [landControlSig]="group.controls.landId"
-        (landLookupValuesSig)="landValues = $event"
-      /> -->
-
-    <!-- <mat-autocomplete #landAutocomplete="matAutocomplete" [panelWidth]="'320px'" [displayWith]="displayWithLand">
-        @for (lookup of landValues; track $index) {
-          <mat-option [value]="lookup" [attr.data-testid]="'land-' + lookup.iso3code">
-            {{ lookup.deKurzform }}
-          </mat-option>
-        }
-      </mat-autocomplete> -->
-
-    <!-- todo: change for land value -->
-    <!-- <mat-hint *dvZuvorHint="changes?.landId | translateChange: 'shared.country.$VALUE'"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field> -->
-
-    <dv-shared-ui-land-autocomplete [landIdControlSig]="group.controls.landId"></dv-shared-ui-land-autocomplete>
+    <dv-shared-ui-land-autocomplete
+      data-testid="form-address-land-autocomplete-component"
+      [landIdControlSig]="group.controls.landId"
+      [zuvorHintValueSig]="changes?.landId"
+      [languageSig]="languageSig()"
+    ></dv-shared-ui-land-autocomplete>
   </div>
 </div>

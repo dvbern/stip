@@ -1,12 +1,15 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { SharedUtilDataAccessLandLookupService } from './land-lookup.service';
+import { LandLookupService } from './shared-util-data-access-land-lookup.service';
 
 describe('LandLookupService', () => {
   let service: LandLookupService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient()],
+    });
     service = TestBed.inject(LandLookupService);
   });
 

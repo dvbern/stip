@@ -190,7 +190,6 @@
       "@dv/shared/ui/info-dialog": ["libs/shared/ui/info-dialog/src/index.ts"],
       "@dv/shared/ui/kommentar-dialog": ["libs/shared/ui/kommentar-dialog/src/index.ts"],
       "@dv/shared/ui/land-autocomplete": ["libs/shared/ui/land-autocomplete/src/index.ts"],
-      "@dv/shared/ui/land-autocomplete-directive": ["libs/shared/ui/land-autocomplete-directive/src/index.ts"],
       "@dv/shared/ui/language-selector": ["libs/shared/ui/language-selector/src/index.ts"],
       "@dv/shared/ui/loading": ["libs/shared/ui/loading/src/index.ts"],
       "@dv/shared/ui/mandant-styles-dv": ["libs/shared/ui/mandant-styles-dv/src/index.ts"],

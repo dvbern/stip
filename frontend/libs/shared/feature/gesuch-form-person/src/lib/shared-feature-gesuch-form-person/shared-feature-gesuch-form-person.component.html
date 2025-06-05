@@ -114,7 +114,7 @@
           class="col-12 col-xl-8"
           [group]="form.controls.adresse"
           [changes]="view.formChanges?.adresse"
-          [language]="languageSig()"
+          [languageSig]="languageSig()"
         />
       </div>
 
@@ -337,30 +337,13 @@
 
       <div class="row g-4 mt-1">
         <!-- NATIONALITAET -->
-
-        <!-- todo: rename testid and adjust tests -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <mat-form-field class="flex-grow-1" dvSharedUiFormField>
-            <mat-label>{{ 'shared.form.person.nationality.label' | translate }}</mat-label>
-            <mat-select
-              formControlName="nationalitaetId"
-              data-testid="form-person-nationalitaet"
-              [placeholder]="'shared.form.select.empty' | translate"
-            >
-              @for (l of translatedLaender$ | async; track $index) {
-                <mat-option [value]="l.code" [attr.data-testid]="l.code">
-                  {{ l.text }}
-                </mat-option>
-              }
-            </mat-select>
-            <!-- todo: show land name -->
-            <mat-hint
-              *dvZuvorHint="view.formChanges?.nationalitaetId | translateChange: 'shared.country.$VALUE'"
-            ></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <dv-shared-ui-land-autocomplete
+            data-testid="form-person-nationalitaet-autocomplete-component"
+            [landIdControlSig]="form.controls.nationalitaetId"
+            [zuvorHintValueSig]="view.formChanges?.nationalitaetId"
+            [languageSig]="languageSig()"
+          ></dv-shared-ui-land-autocomplete>
         </div>
 
         <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
@@ -415,7 +398,7 @@
           ></div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
-          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center">
+          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
               <input type="text" matInput dvMaxLength formControlName="heimatort" data-testid="form-person-heimatort" />

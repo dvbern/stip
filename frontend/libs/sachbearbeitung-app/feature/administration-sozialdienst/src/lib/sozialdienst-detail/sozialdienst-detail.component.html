@@ -41,7 +41,11 @@
 
     <!-- Adresse -->
     <div class="row g-4 mt-1">
-      <dv-shared-ui-form-address class="col-12 col-xl-8" [group]="form.controls.adresse" [language]="languageSig()" />
+      <dv-shared-ui-form-address
+        class="col-12 col-xl-8"
+        [group]="form.controls.adresse"
+        [languageSig]="languageSig()"
+      />
     </div>
 
     <fieldset formGroupName="sozialdienstAdmin">

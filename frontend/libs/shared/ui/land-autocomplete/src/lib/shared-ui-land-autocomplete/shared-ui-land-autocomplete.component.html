@@ -1,18 +1,30 @@
-<mat-form-field dvSharedUiFormField class="w-100">
+<mat-form-field dvSharedUiFormField class="tw-w-full">
   <mat-label>{{ 'shared.form.shared.address.country.label' | translate }}</mat-label>
 
-  <input matInput [formControl]="control" data-testid="form-address-land" [matAutocomplete]="landAutocomplete" />
+  <input
+    matInput
+    [formControl]="control"
+    (blur)="onBlur()"
+    data-testid="land-autocomplete-input"
+    [placeholder]="'shared.form.select.empty' | translate"
+    [matAutocomplete]="landAutocomplete"
+  />
 
-  <mat-autocomplete #landAutocomplete="matAutocomplete" [panelWidth]="'320px'" [displayWith]="displayWithLand">
-    @for (lookup of laenderValuesSig(); track $index) {
-      <mat-option [value]="lookup" [attr.data-testid]="'land-' + lookup.iso3code">
-        {{ lookup.deKurzform }}
+  <mat-autocomplete
+    (opened)="toggleOpen()"
+    (closed)="toggleOpen()"
+    [panelWidth]="'320px'"
+    [displayWith]="languageDisplayFieldFNSig()"
+    #landAutocomplete="matAutocomplete"
+  >
+    @for (land of laenderValuesSig(); track $index) {
+      <mat-option [value]="land" [attr.data-testid]="'land-' + land.iso3code">
+        {{ land.displayValue }}
       </mat-option>
     }
   </mat-autocomplete>
 
-  <!-- todo: change for land value -->
-  <!-- <mat-hint *dvZuvorHint="changes?.landId | translateChange: 'shared.country.$VALUE'"></mat-hint> -->
+  <mat-hint *dvZuvorHint="zuvorHintLandNameSig()"></mat-hint>
   <mat-error *dvSharedUiFormMessageError="'required'">
     {{ 'shared.form.error.required' | translate }}
   </mat-error>

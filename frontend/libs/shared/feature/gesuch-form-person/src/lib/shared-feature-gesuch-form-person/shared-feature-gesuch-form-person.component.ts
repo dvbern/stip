@@ -10,7 +10,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormControl,
@@ -28,9 +28,9 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { isAfter, subDays, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
@@ -64,6 +64,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
+import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -73,7 +74,6 @@ import {
   addWohnsitzControls,
   prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -127,6 +127,7 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
+    SharedUiLandAutocompleteComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,9 +137,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
   private einreichenStore = inject(EinreichenStore);
+  private landStore = inject(LandStore);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
@@ -157,22 +158,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   updateValidity$ = new Subject<unknown>();
-  // todo: 1968 new laenderSig
-  laenderSig = computed(() => []);
-  translatedLaender$ = toObservable(this.laenderSig).pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender)),
-  );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
-
-  // todo: 1968
-  nationalitaetIso3CodeSig = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const id = this.form.controls.nationalitaetId.value;
-
-    return 'CHE';
-  });
-  nationalitaetCH = 'CHE';
 
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
@@ -227,18 +214,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
       : null;
   });
+
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
-    // todo:
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
-
+    const laender = this.landStore.landListViewSig();
     const kanton = this.plzStore.getKantonByPlz(plz);
 
-    // todo: add check for Land CH ISO Code?
-    return kanton && kanton === WohnsitzKanton.BE
-      ? //&& eltern?.some((e) => e.adresse.land !== 'CH')
-        DokumentTyp.PERSON_AUSWEIS
+    return kanton &&
+      kanton === WohnsitzKanton.BE &&
+      eltern?.some((e) => {
+        return (
+          laender?.find((l) => l.id === e.adresse.landId)?.iso3code !==
+          this.nationalitaetCH
+        );
+      })
+      ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
 
@@ -341,6 +332,16 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
+  private nationalitaetIdChangedSig = toSignal(
+    this.form.controls.nationalitaetId.valueChanges,
+  );
+
+  nationalitaetIso3CodeSig = computed(() => {
+    const id = this.nationalitaetIdChangedSig();
+    const laender = this.landStore.landListViewSig();
+    return laender?.find((land) => land.id === id)?.iso3code;
+  });
+  nationalitaetCH = 'CHE';
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -452,17 +453,13 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
 
     // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
-    const nationalitaetChangedSig = toSignal(
-      this.form.controls.nationalitaetId.valueChanges,
-    );
+
     effect(
       () => {
         this.gotReenabledSig();
-        const nationalitaetChanged = nationalitaetChangedSig();
-        // If nationality is Switzerland
-        // todo: check for ISO Code CH?
-        // if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
-        if (nationalitaetChanged) {
+        // If nationality is Switzerland, show heimatort and vormundschaft
+        const nationalitaetIso3Code = this.nationalitaetIso3CodeSig();
+        if (nationalitaetIso3Code === this.nationalitaetCH) {
           updateVisbilityAndDisbledState({
             hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.heimatort,
@@ -484,7 +481,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           });
         }
         // No nationality was selected
-        else if (!isDefined(nationalitaetChanged)) {
+        else if (!isDefined(nationalitaetIso3Code)) {
           updateVisbilityAndDisbledState({
             hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.niederlassungsstatus,

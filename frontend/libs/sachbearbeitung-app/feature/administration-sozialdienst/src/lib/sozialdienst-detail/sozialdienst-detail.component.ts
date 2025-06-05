@@ -22,6 +22,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import {
@@ -75,11 +76,11 @@ export class SozialdienstDetailComponent implements OnDestroy {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
   private globalStore = inject(Store);
+  private landStore = inject(LandStore);
 
   idSig = input.required<string | undefined>({ alias: 'id' });
   store = inject(SozialdienstStore);
-  // todo: 1968
-  // laenderSig = signal<Land[]>(['CH']);
+
   languageSig = this.globalStore.selectSignal(selectLanguage);
 
   MASK_IBAN = MASK_IBAN;
@@ -110,16 +111,18 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
         if (id) {
           this.store.loadSozialdienst$({ sozialdienstId: id });
-          // disable email field
+          // disable email field since it cannot be updated
           this.form.controls.sozialdienstAdmin.controls.email.disable({
             emitEvent: false,
           });
         } else {
-          // todo: new behavior 1968
           // set country to CH, since all sozialdienst are in CH
-          this.form.controls.adresse.controls.landId.setValue('CH', {
-            emitEvent: false,
-          });
+          const laender = this.landStore.landListViewSig();
+          const chLandId = laender?.find((l) => l.iso3code === 'CHE')?.id;
+
+          if (chLandId) {
+            this.form.controls.adresse.controls.landId.setValue(chLandId);
+          }
         }
         this.form.controls.adresse.controls.landId.disable({
           emitEvent: false,

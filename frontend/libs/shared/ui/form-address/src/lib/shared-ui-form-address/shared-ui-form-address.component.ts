@@ -4,9 +4,7 @@ import {
   Component,
   DoCheck,
   Input,
-  OnChanges,
-  SimpleChanges,
-  inject,
+  input,
   signal,
 } from '@angular/core';
 import {
@@ -22,21 +20,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
-import { BehaviorSubject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 
-import { Adresse, Land, Plz } from '@dv/shared/model/gesuch';
+import { Adresse, Plz } from '@dv/shared/model/gesuch';
+import { Language } from '@dv/shared/model/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
-import { SharedUiLandAutocompleteDirective } from '@dv/shared/ui/land-autocomplete-directive';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
-import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type AddresseFormGroup = FormGroup<{
@@ -66,9 +60,7 @@ type AddresseFormGroup = FormGroup<{
     SharedUiFormMessageErrorDirective,
     SharedUiPlzOrtAutocompleteDirective,
     SharedUiZuvorHintDirective,
-    SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
-    SharedUiLandAutocompleteDirective,
     SharedUiLandAutocompleteComponent,
   ],
   templateUrl: './shared-ui-form-address.component.html',
@@ -76,25 +68,9 @@ type AddresseFormGroup = FormGroup<{
 })
 export class SharedUiFormAddressComponent implements DoCheck {
   @Input({ required: true }) group!: AddresseFormGroup;
-  @Input({ required: true }) language!: string;
+  languageSig = input.required<Language>();
   @Input() changes?: Partial<Adresse>;
-
-  // todo: laender direkt von neuer ressource holen
-
-  // private countriesService = inject(SharedUtilCountriesService);
-  // private laender$ = new BehaviorSubject<Land[]>([]);
-
-  // todo: still needed?
-  // translatedLaender$ = this.laender$.pipe(
-  //   switchMap((laender) => this.countriesService.getCountryList(laender)),
-  //   map((translatedLaender) =>
-  //     translatedLaender.filter(
-  //       (translatedLand) => translatedLand.code !== 'STATELESS',
-  //     ),
-  //   ),
-  // );
   plzValues?: Plz[];
-  // landValues?: Land[];
 
   touchedSig = signal(false);
 
@@ -156,10 +132,6 @@ export class SharedUiFormAddressComponent implements DoCheck {
     });
   }
 
-  // displayWithLand(land: Land | undefined): string {
-  //   return land ? land.deKurzform : '';
-  // }
-
   ngDoCheck(): void {
     if (!this.group) {
       return;
@@ -173,10 +145,4 @@ export class SharedUiFormAddressComponent implements DoCheck {
       this.touchedSig.set(true);
     }
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes['laender']?.currentValue) {
-  //     this.laender$.next(changes['laender'].currentValue);
-  //   }
-  // }
 }

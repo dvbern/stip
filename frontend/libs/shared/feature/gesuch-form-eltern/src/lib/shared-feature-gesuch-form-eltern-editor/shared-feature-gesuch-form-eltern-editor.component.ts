@@ -28,12 +28,12 @@ import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   ElternTyp,
   ElternUpdate,
   GesuchFormularType,
-  Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
 } from '@dv/shared/model/gesuch';
 import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
@@ -113,14 +113,14 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
   private store = inject(Store);
+  private landStore = inject(LandStore);
 
   gesuchFormularSig = input.required<GesuchFormularType>();
   elternteilSig = input.required<
     Omit<Partial<ElternUpdate>, 'elternTyp'> &
       Required<Pick<ElternUpdate, 'elternTyp'>>
   >();
-  // todo: 1968
-  // @Input({ required: true }) laender!: Land[];
+
   @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
@@ -270,17 +270,17 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       { allowSignalWrites: true },
     );
     const landChangedSig = this.formUtils.signalFromChanges(
-      // todo: check Land
       this.form.controls.adresse.controls.landId,
       { useDefault: true },
     );
 
-    // todo: 1968 check new behavior
-    // make SVN required if CH
+    // sozialversicherungsnummer required if land is CH
     effect(
       () => {
-        const land = landChangedSig();
-        const svnIsRequired = land === 'CH';
+        const landId = landChangedSig();
+        const laender = this.landStore.landListViewSig();
+        const svnIsRequired =
+          laender?.find((l) => l.id === landId)?.iso3code === 'CHE';
 
         this.formUtils.setRequired(
           this.form.controls.sozialversicherungsnummer,
