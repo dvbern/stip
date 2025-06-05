@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.auszahlung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -70,4 +72,15 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
     @IbanConstraint
     private String iban;
 
+    @Nullable
+    @Column(name = "sap_business_partner_id", nullable = true)
+    private Integer sapBusinessPartnerId;
+
+    @Nullable
+    @OneToOne(optional = true)
+    @JoinColumn(
+        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_auszahlung_sapdelivery_id"),
+        nullable = true
+    )
+    private SapDelivery sapDelivery;
 }

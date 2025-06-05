@@ -47,7 +47,7 @@ public abstract class VendorPostingCreateMapper {
         XMLGregorianCalendar pstngdate
     );
 
-    @Mapping(source = "auszahlung.sapBusinessPartnerId", target = "VENDORNO")
+    @Mapping(source = "auszahlung.zahlungsverbindung.sapBusinessPartnerId", target = "VENDORNO")
     @Mapping(source = ".", target = "AMTDOCCUR", qualifiedByName = "getAmtdoccur")
     @Mapping(target = "ZTERM", constant = "ZB04")
     @Mapping(source = ".", target = "ITEMTEXT", qualifiedByName = "getQrIbanAddlInfo")

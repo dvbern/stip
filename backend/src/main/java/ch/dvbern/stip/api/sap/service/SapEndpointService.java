@@ -30,6 +30,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungUtil;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
@@ -120,6 +121,7 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerChangeResponse changeBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
+        final var zahlungsverbindung = ZahlungsverbindungUtil.getZahlungsverbindung(auszahlung);
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
@@ -128,7 +130,7 @@ public class SapEndpointService {
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
         businessPartnerChangeRequest.getBUSINESSPARTNER()
-            .setHEADER(businessPartnerChangeMapper.getHeader(auszahlung.getSapBusinessPartnerId()));
+            .setHEADER(businessPartnerChangeMapper.getHeader(zahlungsverbindung.getSapBusinessPartnerId()));
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 

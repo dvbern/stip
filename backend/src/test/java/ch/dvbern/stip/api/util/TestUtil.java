@@ -743,7 +743,8 @@ public class TestUtil {
             .setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse())
             .setVorname("asd")
             .setNachname("qwe")
-            .setIban("CH2289144464431833761");
+            .setIban("CH2289144464431833761")
+            .setSapBusinessPartnerId(9887965);
 
         gesuchFormular.getTranche()
             .getGesuch()
@@ -753,8 +754,6 @@ public class TestUtil {
                 new Auszahlung()
                     .setZahlungsverbindung(zahlungsverbindung)
                     .setAuszahlungAnSozialdienst(false)
-
-                    .setSapBusinessPartnerId(9887965)
             );
 
         gesuchFormular.setDarlehen(

@@ -18,15 +18,8 @@
 package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -54,14 +47,6 @@ public class Auszahlung extends AbstractMandantEntity {
     private boolean auszahlungAnSozialdienst;
 
     @Nullable
-    @Column(name = "sap_business_partner_id", nullable = true)
-    private Integer sapBusinessPartnerId;
-
-    @Nullable
-    @OneToOne(optional = true)
-    @JoinColumn(
-        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_auszahlung_sapdelivery_id"),
-        nullable = true
-    )
-    private SapDelivery sapDelivery;
+    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "auszahlung")
+    private Fall fall;
 }

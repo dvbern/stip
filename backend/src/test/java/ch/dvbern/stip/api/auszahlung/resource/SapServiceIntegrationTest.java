@@ -89,7 +89,7 @@ class SapServiceIntegrationTest {
     @Order(2)
     void changeBusinessPartnerTest() {
         final var auszahlung = createAuszahlung();
-        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         deliveryid = SapEndpointService.generateDeliveryId();
 
         final var businessPartnerChangeResponse = sapEndpointService.changeBusinessPartner(auszahlung, deliveryid);
@@ -104,7 +104,7 @@ class SapServiceIntegrationTest {
     @Order(3)
     void readBusinessPartnerTest() {
         final var auszahlung = createAuszahlung();
-        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
 
         final var businessPartnerReadResponse = sapEndpointService.readBusinessPartner(auszahlung);
         assertThat(
@@ -128,7 +128,7 @@ class SapServiceIntegrationTest {
     @Order(5)
     void createVendorPostingTest() {
         final var auszahlung = createAuszahlung();
-        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         deliveryid = SapEndpointService.generateDeliveryId();
 
         final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(
