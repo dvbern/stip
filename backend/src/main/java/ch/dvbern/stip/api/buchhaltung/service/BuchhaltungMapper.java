@@ -31,7 +31,7 @@ import org.mapstruct.Named;
 public abstract class BuchhaltungMapper {
     @Mapping(source = "stipendium", target = "stipendienBetrag")
     @Mapping(source = "betrag", target = "saldoAenderung")
-    @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
+    @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlungForGesuch")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
     @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapDeliveryId")
     @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
@@ -39,7 +39,7 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "gesuch.id", target = "gesuchId")
     public abstract BuchhaltungEntryDto toDto(Buchhaltung buchhaltung);
 
-    @Named("getAuszahlung")
+    @Named("getAuszahlungForGesuch")
     Integer getAuszahlung(Buchhaltung buchhaltung) {
         if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() > 0) {
             return buchhaltung.getBetrag();

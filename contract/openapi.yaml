@@ -76,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UUID'
+                $ref: '#/components/schemas/Auszahlung'
           description: Auszahlung updated
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -95,7 +95,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Auszahlung'
-          description: Auszahlung updated
+          description: return Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':

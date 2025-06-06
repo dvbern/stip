@@ -33,5 +33,5 @@ public interface AuszahlungResource {
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    UUID updateAuszahlungForGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
+    AuszahlungDto updateAuszahlungForGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
 }

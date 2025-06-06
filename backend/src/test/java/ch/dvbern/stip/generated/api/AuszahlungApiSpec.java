@@ -249,7 +249,7 @@ public class AuszahlungApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (required)
-     * return UUID
+     * return AuszahlungDtoSpec
      */
     public static class UpdateAuszahlungForGesuchOper implements Oper {
 
@@ -280,10 +280,10 @@ public class AuszahlungApiSpec {
         /**
          * PATCH /auszahlung/{gesuchId}
          * @param handler handler
-         * @return UUID
+         * @return AuszahlungDtoSpec
          */
-        public UUID executeAs(Function<Response, Response> handler) {
-            TypeRef<UUID> type = new TypeRef<UUID>(){};
+        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 

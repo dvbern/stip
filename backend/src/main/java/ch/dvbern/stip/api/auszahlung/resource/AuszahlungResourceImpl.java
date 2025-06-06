@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
@@ -32,22 +33,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
+    private final AuszahlungService auszahlungService;
 
     @Override
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
         auszahlungAuthorizer.canCreateAuszahlungForGesuch(gesuchId);
+        auszahlungService.createAuszahlungForGesuch(gesuchId, auszahlungDto);
         return null;
     }
 
     @Override
     public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
         auszahlungAuthorizer.canReadAuszahlungForGesuch(gesuchId);
-        return null;
+        return auszahlungService.getAuszahlungForGesuch(gesuchId);
     }
 
     @Override
-    public UUID updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
+    public AuszahlungDto updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(gesuchId);
-        return null;
+        return auszahlungService.updateAuszahlungForGesuch(gesuchId, auszahlungUpdateDto);
     }
 }
