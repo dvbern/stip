@@ -17,26 +17,24 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
-import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
-import ch.dvbern.stip.generated.dto.ZahlungsverbindungUpdateDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
-@Mapper(config = MappingConfig.class, uses = { AdresseMapper.class })
+@RequiredArgsConstructor
+@RequestScoped
+public class ZahlungsverbindungService {
+    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
+    private final ZahlungsverbindungMapper zahlungsverbindungMapper;
 
-public abstract class ZahlungsverbindungMapper
-extends EntityUpdateMapper<ZahlungsverbindungUpdateDto, Zahlungsverbindung> {
-    public abstract Zahlungsverbindung toEntity(ZahlungsverbindungDto zahlungsverbindungDto);
-
-    public abstract ZahlungsverbindungDto toDto(Zahlungsverbindung zahlungsverbindung);
-
-    public abstract Zahlungsverbindung partialUpdate(
-        final ZahlungsverbindungDto dto,
-        @MappingTarget Zahlungsverbindung zahlungsverbindung
-    );
+    @Transactional
+    public Zahlungsverbindung createZahlungsverbindung(final ZahlungsverbindungDto dto) {
+        final var zahlungsverbindung = zahlungsverbindungMapper.toEntity(dto);
+        zahlungsverbindungRepository.persist(zahlungsverbindung);
+        return zahlungsverbindung;
+    }
 
 }
