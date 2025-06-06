@@ -324,11 +324,11 @@ public class TestcaseSeeding extends Seeder {
         final var vaterAdresse = getElternteilByTyp.apply(ElternTyp.VATER);
 
         // todo: specify
-        // final var auszahlungAdresse = switch (formular.getAuszahlung()..getKontoinhaber()) {
+        // final var auszahlungAdresse = switch (formular.getAuszahlungForGesuch()..getKontoinhaber()) {
         // case GESUCHSTELLER -> piaAdresse;
         // case MUTTER -> mutterAdresse.getAdresse();
         // case VATER -> vaterAdresse.getAdresse();
-        // default -> formular.getAuszahlung().getAdresse();
+        // default -> formular.getAuszahlungForGesuch().getAdresse();
         // };
         // todo: specify
 

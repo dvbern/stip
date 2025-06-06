@@ -22,9 +22,11 @@ import java.util.UUID;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -35,19 +37,22 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
     private final AuszahlungService auszahlungService;
 
+    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
     @Override
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
         auszahlungAuthorizer.canCreateAuszahlungForGesuch(gesuchId);
-        auszahlungService.createAuszahlungForGesuch(gesuchId, auszahlungDto);
-        return null;
+        return auszahlungService.createAuszahlungForGesuch(gesuchId, auszahlungDto);
     }
 
+    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
     @Override
     public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
         auszahlungAuthorizer.canReadAuszahlungForGesuch(gesuchId);
         return auszahlungService.getAuszahlungForGesuch(gesuchId);
     }
 
+    // todo: add permission ausbildung create
+    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
     @Override
     public AuszahlungDto updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(gesuchId);

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.auszahlung.repo;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
@@ -33,6 +34,13 @@ import lombok.RequiredArgsConstructor;
 public class AuszahlungRepository implements BaseRepository<Auszahlung> {
     private final EntityManager entityManager;
     static final QAuszahlung AUSZAHLUNG = QAuszahlung.auszahlung;
+
+    public Auszahlung findAuszahlungByFallId(final UUID fallId) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(AUSZAHLUNG)
+            .where(AUSZAHLUNG.fall.id.eq(fallId))
+            .fetchFirst();
+    }
 
     public Stream<Auszahlung> findAuszahlungWithPendingSapDelivery() {
         return new JPAQueryFactory(entityManager)
