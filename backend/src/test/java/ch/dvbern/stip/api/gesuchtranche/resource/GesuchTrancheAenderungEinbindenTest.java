@@ -58,7 +58,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -341,7 +340,6 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     @TestAsSachbearbeiter
     @Order(13)
-    @Disabled
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
@@ -367,7 +365,6 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     @TestAsGesuchsteller
     @Order(14)
-    @Disabled
     void aenderungEinreichenAgain() {
         final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -399,7 +396,6 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     @TestAsSachbearbeiter
     @Order(15)
-    @Disabled
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -425,7 +421,6 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsSachbearbeiter
     @Order(16)
     @Test
-    @Disabled
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
@@ -438,7 +433,6 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     @Order(17)
     @TestAsSachbearbeiter
-    @Disabled
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
