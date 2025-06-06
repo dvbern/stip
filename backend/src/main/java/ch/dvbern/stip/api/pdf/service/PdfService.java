@@ -251,13 +251,9 @@ public class PdfService {
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
-        final String ausbildungsStaette = locale.getLanguage().equals("de")
-            ? gesuch.getAusbildung().getAusbildungsgang().getAusbildungsstaette().getNameDe()
-            : gesuch.getAusbildung().getAusbildungsgang().getAusbildungsstaette().getNameFr();
 
-        final String ausbildungsGang = locale.getLanguage().equals("de")
-            ? gesuch.getAusbildung().getAusbildungsgang().getBezeichnungDe()
-            : gesuch.getAusbildung().getAusbildungsgang().getBezeichnungFr();
+        final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
+        final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
 
         final Cell ausbildungsgang = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, ausbildungsStaette, ausbildungsGang);
 
