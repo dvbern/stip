@@ -46,7 +46,7 @@ export const MASK_IBAN: MaskitoOptions = {
     /\d/,
     /\d/,
     ' ',
-    /(\d|[A-z])/,
+    /(\d|[A-Za-z])/,
   ],
 };
 
