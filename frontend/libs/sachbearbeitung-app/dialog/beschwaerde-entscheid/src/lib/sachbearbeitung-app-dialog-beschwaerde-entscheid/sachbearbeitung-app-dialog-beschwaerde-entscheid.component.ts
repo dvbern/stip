@@ -44,7 +44,6 @@ export interface BeschwerdeentscheidUploadDialogResult {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-beschwaerde-entscheid',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

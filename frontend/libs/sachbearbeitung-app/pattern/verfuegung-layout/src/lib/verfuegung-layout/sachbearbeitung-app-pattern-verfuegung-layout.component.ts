@@ -25,14 +25,12 @@ import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-verfuegung-layout',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -40,7 +38,6 @@ import { isPending } from '@dv/shared/util/remote-data';
     RouterLinkActive,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
   ],
@@ -98,14 +95,11 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchStore.loadGesuchInfo$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchStore.loadGesuchInfo$({ gesuchId });
+      }
+    });
   }
 }

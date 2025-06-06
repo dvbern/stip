@@ -11,6 +11,7 @@ import {
 
 import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
+import { PermissionMap } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 
 /**
@@ -145,7 +146,7 @@ export const StatusUebergaengeOptions: Record<
   (context?: {
     hasAcceptedAllDokuments: boolean;
     isInvalid: boolean;
-    pendingRechtsabklaerung: boolean;
+    permissions: PermissionMap;
   }) => StatusUebergangOption
 > = {
   SET_TO_BEARBEITUNG: () =>
@@ -156,7 +157,7 @@ export const StatusUebergaengeOptions: Record<
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  EINGEREICHT: (context?: { isInvalid: boolean }) =>
+  EINGEREICHT: (context) =>
     ({
       icon: 'check_circle_outline',
       titleKey: 'EINGEREICHT',
@@ -215,16 +216,14 @@ export const StatusUebergaengeOptions: Record<
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  NEGATIVE_VERFUEGUNG_ERSTELLEN: (context?: {
-    pendingRechtsabklaerung: boolean;
-  }) =>
+  NEGATIVE_VERFUEGUNG_ERSTELLEN: (context) =>
     ({
       icon: 'block',
       titleKey: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       allowedFor: ['V0_Sachbearbeiter', 'V0_Jurist'],
-      disabledReason: context?.pendingRechtsabklaerung
-        ? 'ABKLAERUNG_DURCH_RECHSTABTEILUNG'
-        : undefined,
+      disabledReason: context?.permissions.canNegativVerfuegen
+        ? undefined
+        : 'CANNOT_NEGATIV_VERFUEGEN',
     }) as const,
 };

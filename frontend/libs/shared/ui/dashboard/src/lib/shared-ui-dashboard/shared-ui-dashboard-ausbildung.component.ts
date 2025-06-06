@@ -17,7 +17,6 @@ import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.c
 
 @Component({
   selector: 'dv-shared-ui-dashboard-ausbildung',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

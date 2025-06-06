@@ -23,7 +23,6 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
-  standalone: true,
   imports: [
     TranslatePipe,
     SharedFeatureGesuchFormGeschwisterEditorComponent,

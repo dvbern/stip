@@ -24,7 +24,6 @@ import {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

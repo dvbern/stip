@@ -12,7 +12,6 @@ import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-einnahmen',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

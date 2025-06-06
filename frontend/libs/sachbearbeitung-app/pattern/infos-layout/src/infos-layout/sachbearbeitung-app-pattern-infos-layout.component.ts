@@ -18,13 +18,11 @@ import {
 } from '@dv/sachbearbeitung-app/model/infos';
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-infos-layout',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -32,7 +30,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     RouterLinkActive,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
   ],

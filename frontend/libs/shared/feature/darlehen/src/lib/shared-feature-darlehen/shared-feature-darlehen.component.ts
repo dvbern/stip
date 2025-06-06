@@ -55,7 +55,6 @@ import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darl
 
 @Component({
   selector: 'dv-shared-feature-darlehen',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -166,69 +165,63 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     );
 
     // set disabled state
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const readonly = this.viewSig().readonly;
-        const willDarlehen = this.willDarlehenChangedSig() ?? false;
+    effect(() => {
+      this.gotReenabledSig();
+      const readonly = this.viewSig().readonly;
+      const willDarlehen = this.willDarlehenChangedSig() ?? false;
 
-        const disable = readonly || !willDarlehen;
+      const disable = readonly || !willDarlehen;
 
-        this.formUtils.setDisabledState(
-          this.form.controls.betragDarlehen,
-          disable,
-          !willDarlehen,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.betragBezogenKanton,
-          disable,
-          !willDarlehen,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.schulden,
-          disable,
-          !willDarlehen,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.anzahlBetreibungen,
-          disable,
-          !willDarlehen,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.gruende,
-          disable,
-          !willDarlehen,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+      this.formUtils.setDisabledState(
+        this.form.controls.betragDarlehen,
+        disable,
+        !willDarlehen,
+      );
+      this.formUtils.setDisabledState(
+        this.form.controls.betragBezogenKanton,
+        disable,
+        !willDarlehen,
+      );
+      this.formUtils.setDisabledState(
+        this.form.controls.schulden,
+        disable,
+        !willDarlehen,
+      );
+      this.formUtils.setDisabledState(
+        this.form.controls.anzahlBetreibungen,
+        disable,
+        !willDarlehen,
+      );
+      this.formUtils.setDisabledState(
+        this.form.controls.gruende,
+        disable,
+        !willDarlehen,
+      );
+    });
 
     // fill form
-    effect(
-      () => {
-        const { darlehen } = this.viewSig();
-        if (darlehen) {
-          this.form.patchValue({
-            willDarlehen: darlehen.willDarlehen,
-            betragDarlehen: darlehen.betragDarlehen?.toString(),
-            betragBezogenKanton: darlehen.betragBezogenKanton?.toString(),
-            schulden: darlehen.schulden?.toString(),
-            anzahlBetreibungen: darlehen.anzahlBetreibungen,
-            gruende: {
-              grundNichtBerechtigt: darlehen.grundNichtBerechtigt,
-              grundAusbildungZwoelfJahre: darlehen.grundAusbildungZwoelfJahre,
-              grundHoheGebuehren: darlehen.grundHoheGebuehren,
-              grundAnschaffungenFuerAusbildung:
-                darlehen.grundAnschaffungenFuerAusbildung,
-              grundZweitausbildung: darlehen.grundZweitausbildung,
-            },
-          });
-        } else {
-          this.form.reset();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const { darlehen } = this.viewSig();
+      if (darlehen) {
+        this.form.patchValue({
+          willDarlehen: darlehen.willDarlehen,
+          betragDarlehen: darlehen.betragDarlehen?.toString(),
+          betragBezogenKanton: darlehen.betragBezogenKanton?.toString(),
+          schulden: darlehen.schulden?.toString(),
+          anzahlBetreibungen: darlehen.anzahlBetreibungen,
+          gruende: {
+            grundNichtBerechtigt: darlehen.grundNichtBerechtigt,
+            grundAusbildungZwoelfJahre: darlehen.grundAusbildungZwoelfJahre,
+            grundHoheGebuehren: darlehen.grundHoheGebuehren,
+            grundAnschaffungenFuerAusbildung:
+              darlehen.grundAnschaffungenFuerAusbildung,
+            grundZweitausbildung: darlehen.grundZweitausbildung,
+          },
+        });
+      } else {
+        this.form.reset();
+      }
+    });
   }
 
   private buildUpdatedGesuchFromForm() {

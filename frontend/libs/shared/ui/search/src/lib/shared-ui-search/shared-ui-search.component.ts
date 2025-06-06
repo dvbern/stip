@@ -7,7 +7,6 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 @Component({
   selector: 'dv-shared-ui-search',
-  standalone: true,
   imports: [
     MatFormFieldModule,
     MatInputModule,

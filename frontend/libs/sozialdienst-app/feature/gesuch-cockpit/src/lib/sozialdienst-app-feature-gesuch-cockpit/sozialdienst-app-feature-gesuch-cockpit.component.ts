@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -41,7 +42,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
@@ -86,27 +86,21 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (this.gesuchUpdatedSig() && fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (this.gesuchUpdatedSig() && fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
   }
 
   compareById = compareById;

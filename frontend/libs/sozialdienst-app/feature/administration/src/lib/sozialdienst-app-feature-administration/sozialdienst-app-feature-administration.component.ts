@@ -7,7 +7,6 @@ import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/soziald
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-administration',
-  standalone: true,
   imports: [
     CommonModule,
     SharedUiRouterOutletWrapperComponent,
