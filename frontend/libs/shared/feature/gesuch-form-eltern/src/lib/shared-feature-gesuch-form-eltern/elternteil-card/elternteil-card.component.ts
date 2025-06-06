@@ -4,10 +4,11 @@ import {
   EventEmitter,
   Input,
   Output,
+  input,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
+import { ElternTyp, ElternUpdate, Land } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({

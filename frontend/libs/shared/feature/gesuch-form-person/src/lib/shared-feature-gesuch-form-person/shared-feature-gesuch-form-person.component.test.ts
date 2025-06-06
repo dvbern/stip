@@ -86,10 +86,11 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       'form-address-coAdresse',
     ];
 
+    // todo: fix test
     const matSelects = [
       'form-person-anrede',
       'form-person-zivilstand',
-      'form-person-nationalitaet',
+      'form-person-nationalitaetId',
       'form-person-wohnsitz',
       // 'form-person-niederlassungsstatus',
       // 'form-person-zustaendigerKanton',
