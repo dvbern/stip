@@ -10,6 +10,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -98,7 +99,7 @@ public interface GesuchResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    UUID createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
+    GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @DELETE
     @Path("/{gesuchId}")

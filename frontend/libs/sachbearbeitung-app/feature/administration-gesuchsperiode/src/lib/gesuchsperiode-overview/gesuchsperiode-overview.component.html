@@ -44,9 +44,12 @@
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.status' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            <mat-chip [color]="gesuchsperiode.statusColor" highlighted>{{
-              'shared.gesuch.periode.status.' + gesuchsperiode.gueltigkeitStatus | translate
-            }}</mat-chip>
+            <mat-chip
+              [class.opacity-50]="gesuchsperiode.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
+              [color]="gesuchsperiode.statusColor"
+              highlighted
+              >{{ 'shared.gesuch.periode.status.' + gesuchsperiode.gueltigkeitStatus | translate }}</mat-chip
+            >
           </td>
         </ng-container>
 

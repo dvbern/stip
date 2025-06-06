@@ -1,8 +1,12 @@
 <ng-template dvHeaderSuffix>
   @if (store.currentGesuchsperiodeViewSig(); as view) {
-    <mat-chip class="ms-2" [color]="view?.statusColor" highlighted>{{
-      'shared.gesuch.periode.status.' + view.gueltigkeitStatus | translate
-    }}</mat-chip>
+    <mat-chip
+      class="ms-2 fw-normal fs-4"
+      [class.opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
+      [color]="view?.statusColor"
+      highlighted
+      >{{ 'shared.gesuch.periode.status.' + view.gueltigkeitStatus | translate }}</mat-chip
+    >
   }
 </ng-template>
 
@@ -27,7 +31,7 @@
     (ngSubmit)="handleSave()"
     class="col-12 col-xl-7"
   >
-    @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache) {
+    @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
       <h1 class="h2 mb-4">
@@ -159,23 +163,6 @@
           />
           <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #aufschaltterminStartDatepicker></mat-datepicker>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Aufschalttermin Stopp -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStopp.label' | translate }}</mat-label>
-          <input
-            formControlName="aufschaltterminStopp"
-            data-testid="form-gesuchsperiode-aufschalttermin-stopp"
-            matInput
-            [dvMaxLength]="'small'"
-            [matDatepicker]="aufschaltterminStoppDatepicker"
-          />
-          <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #aufschaltterminStoppDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -997,7 +984,7 @@
       @if (store.currentGesuchsperiodeViewSig()?.isEditable ?? true) {
         <dv-shared-ui-form-save
           class="mt-4"
-          [loading]="store.currentGesuchsperiode() | rdIsPending"
+          [loading]="store.currentGesuchsperiode() | rdIsPending: { ignoreInitial: true }"
         ></dv-shared-ui-form-save>
       }
     }

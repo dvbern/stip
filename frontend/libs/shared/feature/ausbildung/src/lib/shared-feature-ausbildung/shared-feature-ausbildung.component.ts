@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -40,8 +41,11 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelError } from '@dv/shared/model/error';
-import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
+import {
+  AusbildungsPensum,
+  Ausbildungsstaette,
+  GesuchsperiodeSelectErrorType,
+} from '@dv/shared/model/gesuch';
 import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
@@ -70,18 +74,18 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
-type KnownErrors = Record<'periodeNotFound', true | null>;
 
-const KnownErrorKeys = {
-  'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message':
-    {
-      periodeNotFound: true,
-    },
-} satisfies Record<string, KnownErrors>;
+const gesuchsPeriodenSelectErrorMap: Record<
+  GesuchsperiodeSelectErrorType,
+  { [key: string]: true }
+> = {
+  INAKTIVE_PERIODE_GEFUNDEN: { inactivePeriod: true },
+  KEINE_AKTIVE_PERIODE_GEFUNDEN: { periodeNotFound: true },
+  PERIODE_IN_ENTWURF_GEFUNDEN: { periodeIsDraft: true },
+};
 
 @Component({
   selector: 'dv-shared-feature-ausbildung',
@@ -107,7 +111,11 @@ const KnownErrorKeys = {
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
-  providers: [AusbildungStore, AusbildungsstaetteStore],
+  providers: [
+    AusbildungStore,
+    AusbildungsstaetteStore,
+    provideDateFnsAdapter(),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureAusbildungComponent implements OnInit {
@@ -331,6 +339,20 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       });
     });
 
+    effect(
+      () => {
+        const error =
+          this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
+
+        if (error) {
+          this.withAusbildungRange((ctrl) =>
+            ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
+          );
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
     // fill form
     effect(
       () => {
@@ -520,17 +542,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
     const { type, fallId } = this.usageTypeSig();
 
-    const onFailure = (error: unknown) => {
-      const { parsedError, knownError } = parseKnownError(error);
-
-      if (!knownError) {
-        this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
-        return;
-      }
-
-      this.withAusbildungRange((ctrl) => ctrl.setErrors(knownError));
-    };
-
     switch (type) {
       case 'dialog': {
         this.ausbildungStore.createAusbildung$({
@@ -539,10 +550,11 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             ...formValues,
             ...ausbildungsgang,
           },
-          onSuccess: () => {
-            this.ausbildungSaved.emit();
+          onSuccess: (response) => {
+            if (response.ausbildung) {
+              this.ausbildungSaved.emit();
+            }
           },
-          onFailure,
         });
         break;
       }
@@ -564,7 +576,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             });
             this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           },
-          onFailure,
         });
         break;
       }
@@ -581,20 +592,3 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   };
 }
-
-const isKnownErrorKey = (key: string): key is keyof typeof KnownErrorKeys =>
-  key in KnownErrorKeys;
-
-const parseKnownError = (
-  error: unknown,
-): { knownError?: KnownErrors; parsedError: SharedModelError } => {
-  const parsedError = sharedUtilFnErrorTransformer(error);
-  if (parsedError.type === 'validationError') {
-    const key = parsedError.messageKey;
-    if (isKnownErrorKey(key)) {
-      return { knownError: KnownErrorKeys[key], parsedError };
-    }
-  }
-
-  return { parsedError };
-};

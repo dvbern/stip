@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchsperiode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
-import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -49,7 +48,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -74,7 +72,6 @@ class GesuchsperiodeResourceTest {
         }
 
         newPeriode.setAufschaltterminStart(LocalDate.now().with(firstDayOfYear()));
-        newPeriode.setAufschaltterminStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setEinreichfrist(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
@@ -103,20 +100,6 @@ class GesuchsperiodeResourceTest {
             .as(GesuchsperiodeDtoSpec[].class);
 
         assertThat(gesuchsperioden.length, is(4));
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(3)
-    void getAktiveTest() {
-        var gesuchsperioden = api.getAktiveGesuchsperioden()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchsperiodeDtoSpec[].class);
-
-        assertThat(gesuchsperioden.length, is(in(List.of(3, 2))));
     }
 
     @Test

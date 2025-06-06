@@ -179,7 +179,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         fallnummer: fallNummer,
         gesuchsperiode: periode
           ? this.translate.instant(
-              `shared.form.tranche.gesuchsperiode.semester.${periode.semester}`,
+              'shared.form.tranche.gesuchsperiode',
               periode,
             )
           : '',
