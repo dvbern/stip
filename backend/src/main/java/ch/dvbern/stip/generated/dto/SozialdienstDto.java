@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -27,7 +26,6 @@ public class SozialdienstDto  implements Serializable {
   private @Valid String name;
   private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
-  private @Valid AdresseDto adresse;
 
   /**
    **/
@@ -105,24 +103,6 @@ public class SozialdienstDto  implements Serializable {
     this.zahlungsverbindung = zahlungsverbindung;
   }
 
-  /**
-   **/
-  public SozialdienstDto adresse(AdresseDto adresse) {
-    this.adresse = adresse;
-    return this;
-  }
-
-  
-  @JsonProperty("adresse")
-  public AdresseDto getAdresse() {
-    return adresse;
-  }
-
-  @JsonProperty("adresse")
-  public void setAdresse(AdresseDto adresse) {
-    this.adresse = adresse;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -136,13 +116,12 @@ public class SozialdienstDto  implements Serializable {
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
-        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung) &&
-        Objects.equals(this.adresse, sozialdienst.adresse);
+        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, adresse);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
   }
 
   @Override
@@ -154,7 +133,6 @@ public class SozialdienstDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }

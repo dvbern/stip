@@ -21,6 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
@@ -35,6 +38,7 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -42,6 +46,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -71,6 +76,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -112,8 +118,10 @@ class SozialdienstBenutzerServiceTest {
 
     SozialdienstBenutzerService sozialdienstBenutzerService;
     SozialdienstBenutzerService sozialdienstBenutzerServiceMock;
+    ZahlungsverbindungService zahlungsverbindungServiceMock;
 
     SozialdienstDto sozialdienstDto;
+    Zahlungsverbindung zahlungsverbindung;
 
     private static final String VALID_IBAN_1 = "CH5089144653587876648";
 
@@ -135,29 +143,45 @@ class SozialdienstBenutzerServiceTest {
         final var mockKcRoleMappingResource = Mockito.mock(RoleMappingResource.class);
         final var mockKcRoleScopeResource = Mockito.mock(RoleScopeResource.class);
 
-        Mockito.when(mockKecloakAdminClient.realm(ArgumentMatchers.any())).thenReturn(mockKcRealmResource);
-        Mockito.when(mockKcRealmResource.users()).thenReturn(mockKcUsersResource);
+        zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setIban(VALID_IBAN_1);
+        zahlungsverbindung.setNachname("Test");
+        zahlungsverbindung.setVorname("Test");
+        var adresse = new Adresse();
+        adresse.setLand(Land.CH);
+        adresse.setStrasse("Musterstrasse");
+        adresse.setHausnummer("1");
+        adresse.setPlz("3000");
+        adresse.setOrt("Bern");
+        zahlungsverbindung.setAdresse(adresse);
+
+        zahlungsverbindungServiceMock = Mockito.mock(ZahlungsverbindungService.class);
+        when(zahlungsverbindungServiceMock.createZahlungsverbindung(Mockito.any())).thenReturn(zahlungsverbindung);
+
+        when(mockKecloakAdminClient.realm(ArgumentMatchers.any())).thenReturn(mockKcRealmResource);
+        when(mockKcRealmResource.users()).thenReturn(mockKcUsersResource);
 
         var mockCreatedResponse = Mockito.mock(Response.class);
-        Mockito.when(mockCreatedResponse.getStatus()).thenReturn(Status.CREATED.getStatusCode());
-        Mockito.when(mockCreatedResponse.getHeaderString("location"))
+        when(mockCreatedResponse.getStatus()).thenReturn(Status.CREATED.getStatusCode());
+        when(mockCreatedResponse.getHeaderString("location"))
             .thenReturn("https://localhost:8080/sozialdienst/" + UUID.randomUUID().toString());
 
-        Mockito.when(mockKcUsersResource.create(ArgumentMatchers.any())).thenReturn(mockCreatedResponse);
-        Mockito.when(mockKcUsersResource.get(ArgumentMatchers.any())).thenReturn(mockKcUserResource);
+        when(mockKcUsersResource.create(ArgumentMatchers.any())).thenReturn(mockCreatedResponse);
+        when(mockKcUsersResource.get(ArgumentMatchers.any())).thenReturn(mockKcUserResource);
 
-        Mockito.when(mockKcUserResource.roles()).thenReturn(mockKcRoleMappingResource);
-        Mockito.when(mockKcRoleMappingResource.realmLevel()).thenReturn(mockKcRoleScopeResource);
-        Mockito.when(mockKcRoleScopeResource.listAvailable()).thenReturn(List.of());
+        when(mockKcUserResource.roles()).thenReturn(mockKcRoleMappingResource);
+        when(mockKcRoleMappingResource.realmLevel()).thenReturn(mockKcRoleScopeResource);
+        when(mockKcRoleScopeResource.listAvailable()).thenReturn(List.of());
 
         var mockDeletedResource = Mockito.mock(Response.class);
-        Mockito.when(mockDeletedResource.getStatus()).thenReturn(Status.NO_CONTENT.getStatusCode());
-        Mockito.when(mockKcUsersResource.delete(ArgumentMatchers.any())).thenReturn(mockDeletedResource);
+        when(mockDeletedResource.getStatus()).thenReturn(Status.NO_CONTENT.getStatusCode());
+        when(mockKcUsersResource.delete(ArgumentMatchers.any())).thenReturn(mockDeletedResource);
 
-        Mockito.when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
+        when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
         sozialdienstBenutzerServiceMock.setup();
         sozialdienstService = new SozialdienstService(
-            benutzerService, sozialdienstRepository, sozialdienstMapper, sozialdienstBenutzerServiceMock
+            benutzerService, sozialdienstRepository, sozialdienstMapper, sozialdienstBenutzerServiceMock,
+            zahlungsverbindungServiceMock
         );
     }
 
@@ -169,7 +193,7 @@ class SozialdienstBenutzerServiceTest {
         var sozialdienstCreateDto = new SozialdienstCreateDto();
 
         sozialdienstCreateDto.setName("a");
-        sozialdienstCreateDto.setIban(VALID_IBAN_1);
+        // sozialdienstCreateDto.setIban(VALID_IBAN_1);
         var sdAdresse = new AdresseDto();
         sdAdresse.setStrasse("Musterstrasse");
         sdAdresse.setPlz("12345");
@@ -177,6 +201,13 @@ class SozialdienstBenutzerServiceTest {
         sdAdresse.setHausnummer("1");
         sdAdresse.setLand(Land.CH);
         sozialdienstCreateDto.setAdresse(sdAdresse);
+
+        var zahlungsverbindungDto = new ZahlungsverbindungDto();
+        zahlungsverbindungDto.setVorname("Test");
+        zahlungsverbindungDto.setNachname("Test");
+        zahlungsverbindungDto.setAdresse(sdAdresse);
+        zahlungsverbindungDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        sozialdienstCreateDto.setZahlungsverbindung(zahlungsverbindungDto);
 
         var sozialdienstAdminDto = new SozialdienstAdminDto();
         sozialdienstAdminDto.setKeycloakId(UUID.randomUUID().toString());

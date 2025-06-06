@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.generator.api.model.sozialdienst;
 
+import ch.dvbern.stip.api.generator.api.model.gesuch.ZahlungsverbindungDtoSpecModel;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
@@ -35,7 +36,7 @@ public class SozialdienstCreateDtoSpecModel {
             model.setSozialdienstAdmin(admin);
             model.setAdresse(adresse);
             model.setName("Test Sozialdienst");
-            model.setIban(VALID_IBAN);
+            model.setZahlungsverbindung(ZahlungsverbindungDtoSpecModel.zahlungsverbindungDtoSpec());
         });
     }
 }

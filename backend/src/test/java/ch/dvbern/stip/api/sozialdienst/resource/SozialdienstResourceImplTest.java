@@ -130,7 +130,6 @@ class SozialdienstResourceImplTest {
         var updateDto = new SozialdienstUpdateDtoSpec();
         updateDto.setId(dtoSpec.getId());
         updateDto.setZahlungsverbindung(dtoSpec.getZahlungsverbindung());
-        updateDto.getZahlungsverbindung().setAdresse(dtoSpec.getAdresse());
         updateDto.setName(dtoSpec.getName());
         updateDto.getZahlungsverbindung().setIban(VALID_IBAN_2);
 
@@ -156,7 +155,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec.class);
         assertThat(updated.getSozialdienstAdmin(), notNullValue());
         assertTrue(updated.getName().contains("updated"));
-        assertTrue(updated.getAdresse().getStrasse().contains("updated"));
+        assertTrue(updated.getZahlungsverbindung().getAdresse().getStrasse().contains("updated"));
         checkSozialdienstResponse(updated);
         checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
@@ -182,7 +181,6 @@ class SozialdienstResourceImplTest {
 
     private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getId());
-        assertNotNull(dtoSpec.getAdresse());
         assertNotNull(dtoSpec.getName());
         assertNotNull(dtoSpec.getZahlungsverbindung().getIban());
     }

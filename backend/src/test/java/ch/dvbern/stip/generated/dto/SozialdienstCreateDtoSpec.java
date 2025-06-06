@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SozialdienstCreateDtoSpec.JSON_PROPERTY_NAME,
-  SozialdienstCreateDtoSpec.JSON_PROPERTY_IBAN,
+  SozialdienstCreateDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG,
   SozialdienstCreateDtoSpec.JSON_PROPERTY_ADRESSE,
   SozialdienstCreateDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN
 })
@@ -40,8 +41,8 @@ public class SozialdienstCreateDtoSpec {
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
 
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
+  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
@@ -78,29 +79,29 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  public SozialdienstCreateDtoSpec iban(String iban) {
+  public SozialdienstCreateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
-    this.iban = iban;
+    this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
    /**
-   * Get iban
-   * @return iban
+   * Get zahlungsverbindung
+   * @return zahlungsverbindung
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getIban() {
-    return iban;
+  public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
+    return zahlungsverbindung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IBAN)
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
+  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
   }
 
 
@@ -165,14 +166,14 @@ public class SozialdienstCreateDtoSpec {
     }
     SozialdienstCreateDtoSpec sozialdienstCreate = (SozialdienstCreateDtoSpec) o;
     return Objects.equals(this.name, sozialdienstCreate.name) &&
-        Objects.equals(this.iban, sozialdienstCreate.iban) &&
+        Objects.equals(this.zahlungsverbindung, sozialdienstCreate.zahlungsverbindung) &&
         Objects.equals(this.adresse, sozialdienstCreate.adresse) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienstCreate.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, iban, adresse, sozialdienstAdmin);
+    return Objects.hash(name, zahlungsverbindung, adresse, sozialdienstAdmin);
   }
 
   @Override
@@ -180,7 +181,7 @@ public class SozialdienstCreateDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstCreateDtoSpec {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");

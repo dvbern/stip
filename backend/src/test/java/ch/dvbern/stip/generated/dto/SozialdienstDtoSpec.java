@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SozialdienstDtoSpec.JSON_PROPERTY_ID,
   SozialdienstDtoSpec.JSON_PROPERTY_NAME,
-  SozialdienstDtoSpec.JSON_PROPERTY_ADRESSE,
   SozialdienstDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN,
   SozialdienstDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
@@ -45,9 +43,6 @@ public class SozialdienstDtoSpec {
 
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
-
-  public static final String JSON_PROPERTY_ADRESSE = "adresse";
-  private AdresseDtoSpec adresse;
 
   public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
   private SozialdienstBenutzerDtoSpec sozialdienstAdmin;
@@ -107,32 +102,6 @@ public class SozialdienstDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setName(String name) {
     this.name = name;
-  }
-
-
-  public SozialdienstDtoSpec adresse(AdresseDtoSpec adresse) {
-    
-    this.adresse = adresse;
-    return this;
-  }
-
-   /**
-   * Get adresse
-   * @return adresse
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public AdresseDtoSpec getAdresse() {
-    return adresse;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAdresse(AdresseDtoSpec adresse) {
-    this.adresse = adresse;
   }
 
 
@@ -198,14 +167,13 @@ public class SozialdienstDtoSpec {
     SozialdienstDtoSpec sozialdienst = (SozialdienstDtoSpec) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
-        Objects.equals(this.adresse, sozialdienst.adresse) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
         Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, adresse, sozialdienstAdmin, zahlungsverbindung);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
   }
 
   @Override
@@ -214,7 +182,6 @@ public class SozialdienstDtoSpec {
     sb.append("class SozialdienstDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");

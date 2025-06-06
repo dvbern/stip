@@ -5933,14 +5933,14 @@ components:
     SozialdienstCreate:
       required:
         - name
-        - iban
+        - zahlungsverbindung
         - adresse
         - sozialdienstAdmin
       properties:
         name:
           type: string
-        iban:
-          type: string
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
         adresse:
           $ref: '#/components/schemas/Adresse'
         sozialdienstAdmin:
@@ -5966,8 +5966,6 @@ components:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'
