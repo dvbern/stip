@@ -36,6 +36,7 @@ public class AuszahlungService {
     private final AuszahlungRepository auszahlungRepository;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final AuszahlungMapper auszahlungMapper;
+    private final ZahlungsverbindungMapper zahlungsverbindungMapper;
 
     @Transactional
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
@@ -62,6 +63,8 @@ public class AuszahlungService {
         // todo: add if else
         var fall = getFallOfGesuch(gesuchId);
         var auszahlung = fall.getAuszahlung();
+        zahlungsverbindungMapper
+            .partialUpdate(auszahlungUpdateDto.getZahlungsverbindung(), auszahlung.getZahlungsverbindung());
         auszahlungMapper.partialUpdate(auszahlungUpdateDto, auszahlung);
         return auszahlungMapper.toDto(auszahlung);
     }

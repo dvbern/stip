@@ -55,7 +55,8 @@ class AuszahlungMapperTest {
         Mockito.when(repo.requireById(targetAdresseId)).thenReturn(target.getZahlungsverbindung().getAdresse());
         Mockito.when(repo.requireById(updateAdresseId)).thenReturn((Adresse) new Adresse().setId(updateAdresseId));
 
-        final var mapper = new AuszahlungMapperImpl();
+        final var zahlungsverbindungMapper = new ZahlungsverbindungMapperImpl();
+        final var mapper = new AuszahlungMapperImpl(zahlungsverbindungMapper);
         mapper.adresseRepository = repo;
 
         mapper.resetDependentDataBeforeUpdate(updateAuszahlung, target);

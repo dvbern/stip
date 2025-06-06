@@ -29,7 +29,7 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
 public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
     @Inject
     AdresseRepository adresseRepository;
