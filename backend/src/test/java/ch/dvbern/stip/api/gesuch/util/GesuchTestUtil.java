@@ -18,15 +18,18 @@
 package ch.dvbern.stip.api.gesuch.util;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -39,6 +42,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.util.TestConstants;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -71,7 +75,27 @@ public class GesuchTestUtil {
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
         gesuch.setGesuchNummer("23");
 
+        setupValidFall(gesuch, gesuchFormular);
         return gesuch;
+    }
+
+    private void setupValidFall(Gesuch gesuch, GesuchFormular gesuchFormular) {
+        var ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(1));
+        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(6));
+        var fall = new Fall();
+        var auszahlung = new Auszahlung();
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setId(UUID.randomUUID());
+        zahlungsverbindung.setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse());
+        zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindung.setVorname(gesuchFormular.getPersonInAusbildung().getVorname());
+        zahlungsverbindung.setNachname(gesuchFormular.getPersonInAusbildung().getNachname());
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
+        fall.setAusbildungs(Set.of(ausbildung));
+        gesuch.setAusbildung(ausbildung);
     }
 
     public Gesuch setupValidGesuchInState(Gesuchstatus status) {
