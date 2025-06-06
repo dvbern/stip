@@ -312,6 +312,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
               this.gesuchStore.setStatus$[nextStatus]({
                 gesuchTrancheId,
                 grundId: result.entityId,
+                kanton: result.kanton,
               });
             }
           });

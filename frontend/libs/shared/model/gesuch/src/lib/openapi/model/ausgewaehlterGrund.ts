@@ -9,8 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { WohnsitzKanton } from './wohnsitzKanton';
 
 export interface AusgewaehlterGrund { 
     decisionId: string;
+    kanton?: WohnsitzKanton;
 }
+
+
 

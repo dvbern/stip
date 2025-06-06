@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -15,8 +22,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { AblehnungGrundStore } from '@dv/shared/global/ablehnung-grund';
+import {
+  StipDecision,
+  StipDecisionText,
+  WohnsitzKanton,
+} from '@dv/shared/model/gesuch';
 import { SharedUiFormMessageErrorDirective } from '@dv/shared/ui/form';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 
 export interface GrundAuswahlDialogData {
   titleKey: string;
@@ -27,6 +42,7 @@ export interface GrundAuswahlDialogData {
 
 export interface GrundAuswahlDialogResult {
   entityId: string;
+  kanton: WohnsitzKanton | null;
 }
 
 @Component({
@@ -52,11 +68,14 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
+  private formUtils = inject(SharedUtilFormService);
   dialogData = inject<GrundAuswahlDialogData>(MAT_DIALOG_DATA);
   store = inject(AblehnungGrundStore);
+  readonly kantone = Object.values(WohnsitzKanton);
 
   form = this.formBuilder.group({
-    grundId: [<string | undefined>undefined, [Validators.required]],
+    grund: [<StipDecisionText | null>null, [Validators.required]],
+    kanton: [<WohnsitzKanton | null>null, [Validators.required]],
   });
 
   static open(dialog: MatDialog, data: GrundAuswahlDialogData) {
@@ -66,14 +85,31 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
       GrundAuswahlDialogResult
     >(SachbearbeitungAppUiGrundAuswahlDialogComponent, { data });
   }
+  constructor() {
+    effect(() => {
+      const showKanton = this.showKantonFieldSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.kanton,
+        !showKanton,
+        true,
+      );
+    });
+  }
+
+  readonly grundSig = toSignal(this.form.controls.grund.valueChanges);
+
+  readonly showKantonFieldSig = computed(
+    () =>
+      this.grundSig()?.stipDecision === StipDecision.KEIN_WOHNSITZ_KANTON_BE,
+  );
 
   confirm() {
     if (!this.form.valid) {
       return;
     }
 
-    const { grundId } = convertTempFormToRealValues(this.form, ['grundId']);
-    this.dialogRef.close({ entityId: grundId });
+    const { grund, kanton } = convertTempFormToRealValues(this.form, ['grund']);
+    this.dialogRef.close({ entityId: grund.id, kanton });
   }
 
   cancel() {

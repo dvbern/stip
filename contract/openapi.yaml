@@ -6386,6 +6386,12 @@ components:
         - ANSPRUCH_UNKLAR
     StipDecisionText:
       type: object
+      required:
+        - id
+        - stipDecision
+        - titleDe
+        - textDe
+        - textFr
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -6404,6 +6410,9 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
+        kanton:
+          $ref: '#/components/schemas/WohnsitzKanton'
+
     DokumenteToUpload:
       type: object
       properties:
