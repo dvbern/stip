@@ -6,7 +6,6 @@ import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutz
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 
 @Component({
-  standalone: true,
   imports: [RouterOutlet, GlobalNotificationsComponent],
   selector: 'dv-root',
   templateUrl: './app.component.html',

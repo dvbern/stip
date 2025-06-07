@@ -34,7 +34,8 @@ public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.STIPENDIENANSPRUCH;
+        return transition.getSource() == Gesuchstatus.VERSENDET
+        && transition.getDestination() == Gesuchstatus.STIPENDIENANSPRUCH;
     }
 
     @Override

@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { merge, partition, pipe, shareReplay, switchMap, tap } from 'rxjs';
@@ -27,7 +26,6 @@ const initialState: FallState = {
 export class FallStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('FallStore'),
 ) {
   private storeUtilService = inject(StoreUtilService);
   private fallService = inject(FallService);

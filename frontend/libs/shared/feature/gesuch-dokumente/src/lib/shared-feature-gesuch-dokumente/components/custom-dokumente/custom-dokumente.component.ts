@@ -39,7 +39,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
 
 @Component({
   selector: 'dv-custom-dokumente',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -168,16 +167,13 @@ export class CustomDokumenteComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const el = this.dokumentStore.expandedComponentList();
+    effect(() => {
+      const el = this.dokumentStore.expandedComponentList();
 
-        if (el !== 'custom') {
-          this.expandedRowSig.set(null);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (el !== 'custom') {
+        this.expandedRowSig.set(null);
+      }
+    });
   }
 
   expandRow(dokument: SharedModelTableCustomDokument) {

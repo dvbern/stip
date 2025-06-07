@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'gesuch-app-feature-gesuch-form-kinder',
   preset: '../../../../jest.preset.js',

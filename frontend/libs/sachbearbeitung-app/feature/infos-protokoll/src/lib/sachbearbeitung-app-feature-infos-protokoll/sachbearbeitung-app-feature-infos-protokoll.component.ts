@@ -22,7 +22,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -41,7 +40,7 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
   displayedColumns = ['datum', 'status', 'user', 'kommentar'];
   statusprotokollStore = inject(StatusprotokollStore);
   store = inject(Store);
-
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
 
   sortSig = viewChild(MatSort);
@@ -56,14 +55,11 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        this.statusprotokollStore.loadCachedStatusprotokoll$({
-          gesuchId,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      this.statusprotokollStore.loadCachedStatusprotokoll$({
+        gesuchId,
+      });
+    });
   }
 }

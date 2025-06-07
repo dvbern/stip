@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
@@ -70,6 +71,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -101,6 +103,7 @@ import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -110,6 +113,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -125,6 +129,7 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -286,10 +291,41 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public GesuchCreateResponseDto createGesuch(final GesuchCreateDto gesuchCreateDto) {
+        final var result = createGesuchForAusbildung(gesuchCreateDto);
+        if (result.getLeft() != null) {
+            return new GesuchCreateResponseDto(result.getLeft().getId(), null);
+        }
+
+        LocalDate contextDate = null;
+        if (result.getRight().getLeft() != null) {
+            contextDate = result.getRight().getLeft().getAufschaltterminStart();
+        }
+
+        return new GesuchCreateResponseDto(
+            null,
+            new GesuchsperiodeSelectErrorDto(
+                result.getRight().getRight(),
+                contextDate
+            )
+        );
+    }
+
+    @Transactional
+    public Pair<GesuchDto, Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType>> createGesuchForAusbildung(
+        GesuchCreateDto gesuchCreateDto
+    ) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
-        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(gesuch.getAusbildung());
+        final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            gesuch.getAusbildung()
+        );
+
+        if (potential.getRight() != null) {
+            return Pair.of(null, potential);
+        }
+
+        final var gesuchsperiode = potential.getLeft();
 
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
@@ -301,9 +337,12 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithTranche(
-            gesuch,
-            gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+        return Pair.of(
+            gesuchMapperUtil.mapWithTranche(
+                gesuch,
+                gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+            ),
+            null
         );
     }
 

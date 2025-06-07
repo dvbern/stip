@@ -6,7 +6,6 @@ import { SachbearbeitungAppPatternBasicLayoutComponent } from '@dv/sachbearbeitu
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-unauthorized',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

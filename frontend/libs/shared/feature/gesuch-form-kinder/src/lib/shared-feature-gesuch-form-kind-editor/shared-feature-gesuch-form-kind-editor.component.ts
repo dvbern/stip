@@ -43,7 +43,6 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
-import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -54,7 +53,6 @@ import {
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
-import { SharedUiWohnsitzSplitterComponent } from '@dv/shared/ui/wohnsitz-splitter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -81,7 +79,6 @@ const MEDIUM_AGE = 20;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-kinder-editor',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -94,14 +91,12 @@ const MEDIUM_AGE = 20;
     MatSelectModule,
     MatRadioModule,
     MaskitoDirective,
-    SharedUiWohnsitzSplitterComponent,
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
-    SharedUiChangeIndicatorComponent,
     SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
@@ -197,17 +192,14 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.form,
     );
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.erhalteneAlimentebeitraege,
-          this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
-          !this.viewSig().readonly,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.erhalteneAlimentebeitraege,
+        this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
+        !this.viewSig().readonly,
+      );
+    });
   }
 
   ngOnChanges() {

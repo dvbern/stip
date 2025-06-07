@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-version-text',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './shared-ui-version-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

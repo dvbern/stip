@@ -22,7 +22,6 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
   selector: 'dv-additional-dokumente',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

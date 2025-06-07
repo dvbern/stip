@@ -1,6 +1,5 @@
 import { Injectable, Signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { map, pipe, switchMap, tap } from 'rxjs';
@@ -65,7 +64,6 @@ const aenderungStatusMap = {
 export class GesuchAenderungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('GesuchAenderungStore'),
 ) {
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);

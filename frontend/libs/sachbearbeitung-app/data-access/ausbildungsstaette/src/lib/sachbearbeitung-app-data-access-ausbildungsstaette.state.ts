@@ -1,9 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -24,79 +21,35 @@ import {
   RemoteData,
   failure,
   initial,
+  isPending,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 export interface AdminAusbildungsstaetteState {
-  tableData: MatTableDataSource<AusbildungsstaetteTableData>;
+  tableData: AusbildungsstaetteTableData[];
   bildungskategorien: RemoteData<Bildungskategorie[]>;
   response: RemoteData<Ausbildungsstaette[]>;
 }
+const initialState: AdminAusbildungsstaetteState = {
+  tableData: [],
+  bildungskategorien: initial(),
+  response: initial(),
+};
 @Injectable()
 export class AdminAusbildungsstaetteStore extends signalStore(
   { protectedState: false },
-  withState(() => {
-    const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
-
-    tableData.sortingDataAccessor = (data, sortHeaderId) => {
-      const value = data[sortHeaderId as keyof AusbildungsstaetteTableData];
-
-      if (typeof value === 'string') {
-        return value.toLocaleLowerCase();
-      }
-
-      return sortHeaderId;
-    };
-
-    tableData.filterPredicate = (data, filter) => {
-      const f = filter.trim().toLocaleLowerCase();
-
-      return (
-        data.nameDe.toLocaleLowerCase().includes(f) ||
-        data.nameFr.toLocaleLowerCase().includes(f)
-      );
-    };
-
-    const initialState: AdminAusbildungsstaetteState = {
-      tableData,
-      bildungskategorien: initial(),
-      response: initial(),
-    };
-
-    return initialState;
-  }),
+  withState(initialState),
 ) {
   private ausbildungsStaetteService = inject(AusbildungsstaetteService);
   private ausbildungsgangService = inject(AusbildungsgangService);
   private bildungskategorieService = inject(BildungskategorieService);
 
-  ausbildungsstaetteCount = computed(() => this.tableData().data.length ?? 0);
-  loading = computed(() => this.response.type() === 'pending');
-  sortedBildungskategorien = computed(
-    () => this.bildungskategorien().data?.sort((a, b) => a.bfs - b.bfs) ?? [],
+  ausbildungsstaetteCount = computed(() => this.tableData().length);
+  loading = computed(() => isPending(this.response()));
+  sortedBildungskategorien = computed(() =>
+    [...(this.bildungskategorien().data ?? [])].sort((a, b) => a.bfs - b.bfs),
   );
-
-  setPaginator(paginator: MatPaginator) {
-    patchState(this, (state) => {
-      state.tableData.paginator = paginator;
-      return state;
-    });
-  }
-
-  setSort(sort: MatSort) {
-    patchState(this, (state) => {
-      state.tableData.sort = sort;
-      return state;
-    });
-  }
-
-  setFilter(filter: string) {
-    patchState(this, (state) => {
-      state.tableData.filter = filter;
-      return state;
-    });
-  }
 
   // Ausbildungsstaette ==========================================================
   loadAusbildungsstaetten = rxMethod(
@@ -110,20 +63,15 @@ export class AdminAusbildungsstaetteStore extends signalStore(
         this.ausbildungsStaetteService.getAusbildungsstaetten$().pipe(
           tapResponse({
             next: (ausbildungsstaetten) =>
-              patchState(this, (state) => {
-                state.tableData.data = ausbildungsstaetten.map(
-                  (ausbildungsstaette) => ({
-                    ...ausbildungsstaette,
-                    ausbildungsgaengeCount:
-                      ausbildungsstaette.ausbildungsgaenge?.length ?? 0,
-                  }),
-                );
-
-                return {
-                  ...state,
-                  response: success(ausbildungsstaetten),
-                };
-              }),
+              patchState(this, (state) => ({
+                ...state,
+                tableData: ausbildungsstaetten.map((ausbildungsstaette) => ({
+                  ...ausbildungsstaette,
+                  ausbildungsgaengeCount:
+                    ausbildungsstaette.ausbildungsgaenge?.length ?? 0,
+                })),
+                response: success(ausbildungsstaetten),
+              })),
             error: (error: HttpErrorResponse) => {
               patchState(this, {
                 response: failure(error),
@@ -137,25 +85,17 @@ export class AdminAusbildungsstaetteStore extends signalStore(
   );
 
   addAusbildungsstaetteRow(newRow: AusbildungsstaetteTableData) {
-    patchState(this, (state) => {
-      state.tableData.paginator?.firstPage();
-
-      const data = [newRow, ...state.tableData.data];
-
-      state.tableData.data = data;
-
-      return state;
-    });
+    patchState(this, (state) => ({
+      ...state,
+      tableData: [newRow, ...state.tableData],
+    }));
   }
 
   removeNewAusbildungsstaetteRow(staette: AusbildungsstaetteTableData) {
-    patchState(this, (state) => {
-      const data = state.tableData.data.filter((s) => s.id !== staette.id);
-
-      state.tableData.data = data;
-
-      return state;
-    });
+    patchState(this, (state) => ({
+      ...state,
+      tableData: state.tableData.filter((s) => s.id !== staette.id),
+    }));
   }
 
   handleCreateUpdateAusbildungsstaette = rxMethod<AusbildungsstaetteTableData>(
@@ -182,22 +122,19 @@ export class AdminAusbildungsstaetteStore extends signalStore(
               tapResponse({
                 next: (ausbildungsstaette: Ausbildungsstaette) => {
                   patchState(this, (state) => {
-                    const data = state.tableData.data.map((s) => {
-                      if (s.id === 'new') {
-                        return {
-                          ...s,
-                          ...ausbildungsstaette,
-                        };
-                      }
-
-                      return s;
-                    });
-
-                    state.tableData.data = data;
+                    const tableData = state.tableData.map((s) =>
+                      s.id === 'new'
+                        ? {
+                            ...s,
+                            ...ausbildungsstaette,
+                          }
+                        : s,
+                    );
 
                     return {
                       ...state,
-                      response: success(data),
+                      tableData,
+                      response: success(tableData),
                     };
                   });
                 },
@@ -222,7 +159,7 @@ export class AdminAusbildungsstaetteStore extends signalStore(
             tapResponse({
               next: (ausbildungsstaette: Ausbildungsstaette) => {
                 patchState(this, (state) => {
-                  const data = state.tableData.data.map((s) => {
+                  const tableData = state.tableData.map((s) => {
                     if (s.id === staette.id) {
                       return {
                         ...s,
@@ -233,11 +170,10 @@ export class AdminAusbildungsstaetteStore extends signalStore(
                     return s;
                   });
 
-                  state.tableData.data = data;
-
                   return {
                     ...state,
-                    response: success(data),
+                    tableData,
+                    response: success(tableData),
                   };
                 });
               },
@@ -270,15 +206,14 @@ export class AdminAusbildungsstaetteStore extends signalStore(
             tapResponse({
               next: () => {
                 patchState(this, (state) => {
-                  const data = state.tableData.data.filter(
+                  const tableData = state.tableData.filter(
                     (s) => s.id !== staette.id,
                   );
 
-                  state.tableData.data = data;
-
                   return {
                     ...state,
-                    response: success(data),
+                    tableData,
+                    response: success(tableData),
                   };
                 });
               },
@@ -296,50 +231,38 @@ export class AdminAusbildungsstaetteStore extends signalStore(
 
   // Ausbildungsgang  ==========================================================
   addAusbildungsgangRow(ausbildungsstaetteId: string, newRow: Ausbildungsgang) {
-    patchState(this, (state) => {
-      const data = state.tableData.data.map((staette) => {
-        if (staette.id === ausbildungsstaetteId) {
-          return {
-            ...staette,
-            ausbildungsgaengeCount: staette.ausbildungsgaengeCount + 1,
-            ausbildungsgaenge: [newRow, ...(staette.ausbildungsgaenge ?? [])],
-          };
-        }
-
-        return staette;
-      });
-
-      state.tableData.data = data;
-
-      return state;
-    });
+    patchState(this, (state) => ({
+      ...state,
+      tableData: state.tableData.map((staette) =>
+        staette.id === ausbildungsstaetteId
+          ? {
+              ...staette,
+              ausbildungsgaengeCount: staette.ausbildungsgaengeCount + 1,
+              ausbildungsgaenge: [newRow, ...(staette.ausbildungsgaenge ?? [])],
+            }
+          : staette,
+      ),
+    }));
   }
 
   removeNewAusbildungsgangRow(
     staette: AusbildungsstaetteTableData,
     gang: Ausbildungsgang,
   ) {
-    patchState(this, (state) => {
-      const data = state.tableData.data.map((s) => {
-        if (s.id === staette.id) {
-          const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
-            (g) => g.id !== gang.id,
-          );
-
-          return {
-            ...s,
-            ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
-            ausbildungsgaenge,
-          };
-        }
-
-        return s;
-      });
-
-      state.tableData.data = data;
-
-      return state;
-    });
+    patchState(this, (state) => ({
+      ...state,
+      tableData: state.tableData.map((s) =>
+        s.id === staette.id
+          ? {
+              ...s,
+              ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
+              ausbildungsgaenge: s.ausbildungsgaenge?.filter(
+                (g) => g.id !== gang.id,
+              ),
+            }
+          : s,
+      ),
+    }));
   }
 
   handleCreateUpdateAusbildungsgang = rxMethod<{
@@ -375,32 +298,21 @@ export class AdminAusbildungsstaetteStore extends signalStore(
             tapResponse({
               next: (gang: Ausbildungsgang) => {
                 patchState(this, (state) => {
-                  const data = state.tableData.data.map((s) => {
-                    if (s.id === staette.id) {
-                      const ausbildungsgaenge = s.ausbildungsgaenge?.map(
-                        (g) => {
-                          if (g.id === gang.id) {
-                            return gang;
-                          }
-
-                          return g;
-                        },
-                      );
-
-                      return {
-                        ...s,
-                        ausbildungsgaenge,
-                      };
-                    }
-
-                    return s;
-                  });
-
-                  state.tableData.data = data;
+                  const tableData = state.tableData.map((s) =>
+                    s.id === staette.id
+                      ? {
+                          ...s,
+                          ausbildungsgaenge: s.ausbildungsgaenge?.map((g) =>
+                            g.id === gang.id ? gang : g,
+                          ),
+                        }
+                      : s,
+                  );
 
                   return {
                     ...state,
-                    response: success(data),
+                    tableData,
+                    response: success(tableData),
                   };
                 });
               },
@@ -426,34 +338,29 @@ export class AdminAusbildungsstaetteStore extends signalStore(
           response: pending(),
         });
       }),
-      switchMap(({ staette, gang }) => {
-        return this.ausbildungsgangService
+      switchMap(({ staette, gang }) =>
+        this.ausbildungsgangService
           .deleteAusbildungsgang$({ ausbildungsgangId: gang.id })
           .pipe(
             tapResponse({
               next: () => {
                 patchState(this, (state) => {
-                  const data = state.tableData.data.map((s) => {
-                    if (s.id === staette.id) {
-                      const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
-                        (g) => g.id !== gang.id,
-                      );
-
-                      return {
-                        ...s,
-                        ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
-                        ausbildungsgaenge,
-                      };
-                    }
-
-                    return s;
-                  });
-
-                  state.tableData.data = data;
+                  const tableData = state.tableData.map((s) =>
+                    s.id === staette.id
+                      ? {
+                          ...s,
+                          ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
+                          ausbildungsgaenge: s.ausbildungsgaenge?.filter(
+                            (g) => g.id !== gang.id,
+                          ),
+                        }
+                      : s,
+                  );
 
                   return {
                     ...state,
-                    response: success(data),
+                    tableData,
+                    response: success(tableData),
                   };
                 });
               },
@@ -463,8 +370,8 @@ export class AdminAusbildungsstaetteStore extends signalStore(
                 });
               },
             }),
-          );
-      }),
+          ),
+      ),
       takeUntilDestroyed(),
     ),
   );
@@ -512,29 +419,22 @@ export class AdminAusbildungsstaetteStore extends signalStore(
         tapResponse({
           next: (gang: Ausbildungsgang) => {
             patchState(this, (state) => {
-              const data = state.tableData.data.map((s) => {
-                if (s.id === staette.id) {
-                  return {
-                    ...s,
-                    ausbildungsgaengeCount: s.ausbildungsgaengeCount + 1,
-                    ausbildungsgaenge: s.ausbildungsgaenge?.map((g) => {
-                      if (g.id === 'new') {
-                        return gang;
-                      }
-
-                      return g;
-                    }),
-                  };
-                }
-
-                return s;
-              });
-
-              state.tableData.data = data;
+              const tableData = state.tableData.map((s) =>
+                s.id === staette.id
+                  ? {
+                      ...s,
+                      ausbildungsgaengeCount: s.ausbildungsgaengeCount + 1,
+                      ausbildungsgaenge: s.ausbildungsgaenge?.map((g) =>
+                        g.id === 'new' ? gang : g,
+                      ),
+                    }
+                  : s,
+              );
 
               return {
                 ...state,
-                response: success(data),
+                tableData,
+                response: success(tableData),
               };
             });
           },

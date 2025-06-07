@@ -15,7 +15,6 @@ import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 import {
@@ -28,13 +27,11 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
-  standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
     TranslatePipe,
     MatExpansionModule,
-    SharedUiFormatChfPipe,
     BerechnungsCardComponent,
     PersoenlicheEinnahmenComponent,
     PersoenlicheKostenComponent,
@@ -48,6 +45,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   indexSig = input.required<string>({ alias: 'index' });
   expansionState = {
     persoenlich: {
@@ -189,17 +187,14 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
-        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      if (!gesuchId) {
+        return;
+      }
+      this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+    });
   }
 }
 

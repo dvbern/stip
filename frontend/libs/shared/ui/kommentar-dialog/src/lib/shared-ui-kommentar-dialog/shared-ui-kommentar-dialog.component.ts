@@ -40,7 +40,6 @@ export interface OptionalKommentarDialogResult {
 
 @Component({
   selector: 'dv-shared-ui-kommentar-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
