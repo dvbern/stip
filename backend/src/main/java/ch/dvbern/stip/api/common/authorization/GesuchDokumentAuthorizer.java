@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -80,9 +81,15 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     public void canDeleteDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuchTranche = dokument.getGesuchDokumente().get(0).getGesuchTranche();
+        final var gesuchDokument = dokument.getGesuchDokumente().getFirst();
+        final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertGsCanModifyDokumentOfTranche(gesuchTranche.getId());
+        if (gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND) {
+            return;
+        }
+
+        forbidden();
     }
 
     public void canUpdateGesuchDokument(UUID gesuchDokumentId) {

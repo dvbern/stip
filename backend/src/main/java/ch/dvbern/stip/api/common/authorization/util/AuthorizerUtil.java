@@ -17,18 +17,13 @@
 
 package ch.dvbern.stip.api.common.authorization.util;
 
-import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import io.quarkus.security.ForbiddenException;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -45,25 +40,6 @@ public class AuthorizerUtil {
         return sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
             delegierung.getSozialdienst().getId()
         );
-    }
-
-    public static void gesuchStatusOneOfOrElseThrow(final Gesuch gesuch, final List<Gesuchstatus> statesToVerify) {
-        if (!statesToVerify.contains(gesuch.getGesuchStatus())) {
-            throw new ForbiddenException(
-                "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statesToVerify.toString()
-            );
-        }
-    }
-
-    public static void gesuchTrancheStatusOneOfOrElseThrow(
-        final GesuchTranche gesuchTranche,
-        final List<GesuchTrancheStatus> statesToVerify
-    ) {
-        if (!statesToVerify.contains(gesuchTranche.getStatus())) {
-            throw new ForbiddenException(
-                "GesuchTrancheStatus " + gesuchTranche.getStatus().toString() + " not " + statesToVerify.toString()
-            );
-        }
     }
 
     public boolean isGesuchstellerOfWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
