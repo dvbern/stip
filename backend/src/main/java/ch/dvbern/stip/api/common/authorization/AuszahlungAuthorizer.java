@@ -18,9 +18,12 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,22 +33,55 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final SozialdienstService sozialdienstService;
+    private final GesuchRepository gesuchRepository;
 
-    // todo: add restrictions in methods
     @Transactional
     public void canCreateAuszahlungForGesuch(UUID gesuchId) {
-        permitAll();
+        canUpdateAuszahlungForGesuch(gesuchId);
     }
 
     @Transactional
     public void canReadAuszahlungForGesuch(UUID gesuchId) {
-        permitAll();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final BooleanSupplier isAdminOrSB = () -> isAdminOrSb(currentBenutzer);
+        final BooleanSupplier isGesuchstellerOfGesuch =
+            () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+        final BooleanSupplier isDelegiertAndIsMitarbeiterOfSozialdienst = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        if (
+            !isAdminOrSB.getAsBoolean() && isGesuchstellerOfGesuch.getAsBoolean()
+            || isDelegiertAndIsMitarbeiterOfSozialdienst.getAsBoolean()
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
     public void canUpdateAuszahlungForGesuch(UUID gesuchId) {
-        permitAll();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
+
+        final BooleanSupplier hasDelegierung = () -> gesuch.getAusbildung().getFall().getDelegierung() != null;
+
+        if (
+            isMitarbeiterAndCanEdit.getAsBoolean()
+            || !hasDelegierung.getAsBoolean() && isGesuchstellerAndCanEdit.getAsBoolean()
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
 }
