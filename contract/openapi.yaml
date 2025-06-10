@@ -31,9 +31,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: sendWelcomeEmail
       summary: Sends an e-mail for a newly created user
-  /auszahlung/{gesuchId}:
+  /auszahlung/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
