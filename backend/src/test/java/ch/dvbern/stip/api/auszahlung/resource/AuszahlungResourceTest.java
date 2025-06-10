@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -145,4 +146,10 @@ public class AuszahlungResourceTest {
             .as(AuszahlungDtoSpec.class);
     }
 
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    void test_delete_gesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
 }
