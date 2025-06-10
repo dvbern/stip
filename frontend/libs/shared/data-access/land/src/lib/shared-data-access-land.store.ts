@@ -89,9 +89,12 @@ export class LandStore extends signalStore(
           handleApiResponse((land) => {
             patchState(this, (state) => ({
               laender: mapCachedData(state.laender, (laender) => {
-                // todo: check sorting from backend, if there is any?
+                // todo: add sorting by lang and field
                 if (isSuccess(land)) {
-                  return [...laender, land.data];
+                  return [...laender, land.data].sort(
+                    (a, b) =>
+                      Number(a.laendercodeBfs) - Number(b.laendercodeBfs),
+                  );
                 }
                 return laender;
               }),

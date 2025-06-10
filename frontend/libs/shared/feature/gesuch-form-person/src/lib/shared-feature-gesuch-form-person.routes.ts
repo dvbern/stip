@@ -9,12 +9,7 @@ export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // ausbildungsstaette needed for the planned ausbildung at the bottom of lebenslauf
-      // todo: provide new store for laender
-      // provideState(sharedDataAccessStammdatensFeature),
-      // provideEffects(sharedDataAccessStammdatenEffects),
-    ],
+    providers: [],
     data: {
       shouldReuseRoute: false,
     },

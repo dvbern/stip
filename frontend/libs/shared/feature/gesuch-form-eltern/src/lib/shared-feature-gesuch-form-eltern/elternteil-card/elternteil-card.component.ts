@@ -1,20 +1,26 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   Output,
-  input,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { ElternTyp, ElternUpdate, Land } from '@dv/shared/model/gesuch';
+import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiTranslatedLandPipe } from '@dv/shared/ui/translated-land';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
   standalone: true,
-  imports: [TranslatePipe, SharedUiIconChipComponent],
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    SharedUiIconChipComponent,
+    SharedUiTranslatedLandPipe,
+  ],
   templateUrl: './elternteil-card.component.html',
   styleUrls: ['./elternteil-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -196,11 +196,15 @@ export class SharedUiLandAutocompleteComponent
       this.landId = landId;
       const land = this.laenderSig()?.find((l) => l.id === landId);
       if (land) {
-        this.autocompleteControl.setValue(land);
+        this.autocompleteControl.setValue(land, {
+          emitEvent: false,
+        });
       }
     } else {
       this.landId = undefined;
-      this.autocompleteControl.setValue(undefined);
+      this.autocompleteControl.setValue(undefined, {
+        emitEvent: false,
+      });
     }
   }
 
