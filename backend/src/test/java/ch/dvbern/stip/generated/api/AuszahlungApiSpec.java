@@ -90,14 +90,14 @@ public class AuszahlungApiSpec {
      * Creates a new Auszahlung for a Gesuch
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #fallIdPath  (required)
      * @see #body  (required)
      * return UUID
      */
     public static class CreateAuszahlungForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/auszahlung/{gesuchId}";
+        public static final String REQ_URI = "/auszahlung/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -110,7 +110,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * POST /auszahlung/{gesuchId}
+         * POST /auszahlung/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -121,7 +121,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * POST /auszahlung/{gesuchId}
+         * POST /auszahlung/{fallId}
          * @param handler handler
          * @return UUID
          */
@@ -139,14 +139,14 @@ public class AuszahlungApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public CreateAuszahlungForGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public CreateAuszahlungForGesuchOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
@@ -174,13 +174,13 @@ public class AuszahlungApiSpec {
      * Get Auszahlung
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #fallIdPath  (required)
      * return AuszahlungDtoSpec
      */
     public static class GetAuszahlungForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/auszahlung/{gesuchId}";
+        public static final String REQ_URI = "/auszahlung/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -192,7 +192,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * GET /auszahlung/{gesuchId}
+         * GET /auszahlung/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -203,7 +203,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * GET /auszahlung/{gesuchId}
+         * GET /auszahlung/{fallId}
          * @param handler handler
          * @return AuszahlungDtoSpec
          */
@@ -212,14 +212,14 @@ public class AuszahlungApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetAuszahlungForGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetAuszahlungForGesuchOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
@@ -247,14 +247,14 @@ public class AuszahlungApiSpec {
      * Updates Auszahlung
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #fallIdPath  (required)
      * @see #body  (required)
      * return AuszahlungDtoSpec
      */
     public static class UpdateAuszahlungForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/auszahlung/{gesuchId}";
+        public static final String REQ_URI = "/auszahlung/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -267,7 +267,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * PATCH /auszahlung/{gesuchId}
+         * PATCH /auszahlung/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -278,7 +278,7 @@ public class AuszahlungApiSpec {
         }
 
         /**
-         * PATCH /auszahlung/{gesuchId}
+         * PATCH /auszahlung/{fallId}
          * @param handler handler
          * @return AuszahlungDtoSpec
          */
@@ -296,14 +296,14 @@ public class AuszahlungApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public UpdateAuszahlungForGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public UpdateAuszahlungForGesuchOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 

@@ -100,7 +100,7 @@ public class AuszahlungResourceTest {
         auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
 
         auszahlungId = auszahlungApiSpec.createAuszahlungForGesuch()
-            .gesuchIdPath(gesuch.getId())
+            .fallIdPath(gesuch.getFallId())
             .body(auszahlungDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -116,7 +116,7 @@ public class AuszahlungResourceTest {
     @Order(4)
     void getAuszahlungForGesuch() {
         auszahlung = auszahlungApiSpec.getAuszahlungForGesuch()
-            .gesuchIdPath(gesuch.getId())
+            .fallIdPath(gesuch.getFallId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -134,8 +134,8 @@ public class AuszahlungResourceTest {
         auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlungAnSozialdienst());
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
 
-        var updatedAuszahlung = auszahlungApiSpec.updateAuszahlungForGesuch()
-            .gesuchIdPath(gesuch.getId())
+        auszahlungApiSpec.updateAuszahlungForGesuch()
+            .fallIdPath(gesuch.getFallId())
             .body(auszahlungUpdate)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -144,6 +144,26 @@ public class AuszahlungResourceTest {
             .extract()
             .body()
             .as(AuszahlungDtoSpec.class);
+    }
+
+    /*
+     * Since no Delegation is existing, the endpoint should return a BadRequest Error
+     */
+    @Test
+    @TestAsGesuchsteller
+    @Order(5)
+    void updateAuszahlungForGesuchWithFlagSetToTrue() {
+        var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
+        auszahlungUpdate.setAuszahlungAnSozialdienst(true);
+        auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
+
+        auszahlungApiSpec.updateAuszahlungForGesuch()
+            .fallIdPath(gesuch.getFallId())
+            .body(auszahlungUpdate)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.BAD_REQUEST_400);
     }
 
     @Test

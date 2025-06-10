@@ -22,6 +22,7 @@ import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,22 +36,23 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
     private final GesuchRepository gesuchRepository;
+    private final FallRepository fallRepository;
 
     @Transactional
-    public void canCreateAuszahlungForGesuch(UUID gesuchId) {
-        canUpdateAuszahlungForGesuch(gesuchId);
+    public void canCreateAuszahlungForGesuch(UUID fallId) {
+        canUpdateAuszahlungForGesuch(fallId);
     }
 
     @Transactional
-    public void canReadAuszahlungForGesuch(UUID gesuchId) {
+    public void canReadAuszahlungForGesuch(UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var fall = fallRepository.requireById(fallId);
 
         final BooleanSupplier isAdminOrSB = () -> isAdminOrSb(currentBenutzer);
         final BooleanSupplier isGesuchstellerOfGesuch =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+            () -> AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall);
         final BooleanSupplier isDelegiertAndIsMitarbeiterOfSozialdienst = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
 
         if (
             !isAdminOrSB.getAsBoolean() && isGesuchstellerOfGesuch.getAsBoolean()
@@ -63,16 +65,16 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateAuszahlungForGesuch(UUID gesuchId) {
+    public void canUpdateAuszahlungForGesuch(UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var fall = fallRepository.requireById(fallId);
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch);
+        && AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall);
 
-        final BooleanSupplier hasDelegierung = () -> gesuch.getAusbildung().getFall().getDelegierung() != null;
+        final BooleanSupplier hasDelegierung = () -> fall.getDelegierung() != null;
 
         if (
             isMitarbeiterAndCanEdit.getAsBoolean()

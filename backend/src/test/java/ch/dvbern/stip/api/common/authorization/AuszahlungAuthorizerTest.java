@@ -69,7 +69,8 @@ class AuszahlungAuthorizerTest {
         sozialdienstService = Mockito.mock(SozialdienstService.class);
         sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
 
-        auszahlungAuthorizer = new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository);
+        auszahlungAuthorizer =
+            new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository, fallRepository);
 
     }
 

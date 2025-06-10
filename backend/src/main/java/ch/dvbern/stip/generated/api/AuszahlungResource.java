@@ -17,21 +17,21 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/auszahlung/{gesuchId}")
+@Path("/auszahlung/{fallId}")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface AuszahlungResource {
 
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    UUID createAuszahlungForGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AuszahlungDto auszahlungDto);
+    UUID createAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungDto auszahlungDto);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    AuszahlungDto getAuszahlungForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    AuszahlungDto getAuszahlungForGesuch(@PathParam("fallId") UUID fallId);
 
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    AuszahlungDto updateAuszahlungForGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
+    AuszahlungDto updateAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
 }

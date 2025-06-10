@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
-import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestScoped
 public class AuszahlungService {
+    private final FallRepository fallRepository;
     private final GesuchRepository gesuchRepository;
     private final AuszahlungRepository auszahlungRepository;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
@@ -40,8 +41,8 @@ public class AuszahlungService {
     private final ZahlungsverbindungService zahlungsverbindungService;
 
     @Transactional
-    public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
-        var fall = getFallOfGesuch(gesuchId);
+    public UUID createAuszahlungForGesuch(UUID fallId, AuszahlungDto auszahlungDto) {
+        var fall = fallRepository.requireById(fallId);
         var zahlungsverbindung = zahlungsverbindungService.createOrGetZahlungsverbindungForAuszahlung(
             fall,
             auszahlungDto.getAuszahlungAnSozialdienst(),
@@ -55,15 +56,13 @@ public class AuszahlungService {
     }
 
     @Transactional
-    public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var fallId = gesuch.getAusbildung().getFall().getId();
+    public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
         return auszahlungMapper.toDto(auszahlungRepository.findAuszahlungByFallId(fallId));
     }
 
     @Transactional
-    public AuszahlungDto updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        var fall = getFallOfGesuch(gesuchId);
+    public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+        var fall = fallRepository.requireById(fallId);
         var auszahlung = fall.getAuszahlung();
         auszahlung.setAuszahlungAnSozialdienst(auszahlungUpdateDto.getAuszahlungAnSozialdienst());
         final var zahlungsverbindung = zahlungsverbindungService.getZahlungsverbindungForAuszahlung(
@@ -73,10 +72,5 @@ public class AuszahlungService {
         );
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
         return auszahlungMapper.toDto(auszahlung);
-    }
-
-    private Fall getFallOfGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return gesuch.getAusbildung().getFall();
     }
 }

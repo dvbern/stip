@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -82,7 +83,10 @@ public class ZahlungsverbindungService {
     }
 
     private Zahlungsverbindung getZahlungsverbindungOfDelegation(final Fall fall) {
-        return fall.getDelegierung().getSozialdienst().getZahlungsverbindung();
+        if (fall.getDelegierung() != null) {
+            return fall.getDelegierung().getSozialdienst().getZahlungsverbindung();
+        }
+        throw new BadRequestException("Keine Delegation vorhanden");
     }
 
 }
