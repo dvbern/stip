@@ -16,7 +16,6 @@ type NotificationDialogData = {
 
 @Component({
   selector: 'dv-shared-ui-notification-dialog',
-  standalone: true,
   imports: [CommonModule, TranslatePipe, SharedUiTooltipDateComponent],
   templateUrl: './shared-ui-notification-dialog.component.html',
   styleUrl: './shared-ui-notification-dialog.component.scss',

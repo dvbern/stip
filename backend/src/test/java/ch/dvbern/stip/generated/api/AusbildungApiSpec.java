@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import java.util.UUID;
@@ -91,7 +92,7 @@ public class AusbildungApiSpec {
      * 
      *
      * @see #body  (required)
-     * return AusbildungDtoSpec
+     * return AusbildungCreateResponseDtoSpec
      */
     public static class CreateAusbildungOper implements Oper {
 
@@ -122,10 +123,10 @@ public class AusbildungApiSpec {
         /**
          * POST /ausbildung
          * @param handler handler
-         * @return AusbildungDtoSpec
+         * @return AusbildungCreateResponseDtoSpec
          */
-        public AusbildungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AusbildungDtoSpec> type = new TypeRef<AusbildungDtoSpec>(){};
+        public AusbildungCreateResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungCreateResponseDtoSpec> type = new TypeRef<AusbildungCreateResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 

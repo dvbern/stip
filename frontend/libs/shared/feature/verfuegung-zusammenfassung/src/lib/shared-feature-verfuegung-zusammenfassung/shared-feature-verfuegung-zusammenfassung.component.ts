@@ -1,4 +1,4 @@
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +24,6 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 
 @Component({
   selector: 'lib-shared-feature-verfuegung-zusammenfassung',
-  standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
@@ -37,7 +36,6 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
-    DecimalPipe,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
@@ -51,16 +49,13 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
   gesuchIdSig = this.store.selectSignal(selectRouteId);
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
-        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      if (!gesuchId) {
+        return;
+      }
+      this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+    });
   }
 }

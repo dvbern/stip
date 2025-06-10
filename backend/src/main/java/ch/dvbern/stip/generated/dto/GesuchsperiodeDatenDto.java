@@ -28,7 +28,6 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
-  private @Valid LocalDate aufschaltterminStopp;
   private @Valid LocalDate einreichefristNormal;
   private @Valid LocalDate einreichefristReduziert;
   private @Valid Integer ausbKostenSekII;
@@ -208,26 +207,6 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   @JsonProperty("aufschaltterminStart")
   public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
-  }
-
-  /**
-   * dd.MM.yyyy
-   **/
-  public GesuchsperiodeDatenDto aufschaltterminStopp(LocalDate aufschaltterminStopp) {
-    this.aufschaltterminStopp = aufschaltterminStopp;
-    return this;
-  }
-
-  
-  @JsonProperty("aufschaltterminStopp")
-  @NotNull
-  public LocalDate getAufschaltterminStopp() {
-    return aufschaltterminStopp;
-  }
-
-  @JsonProperty("aufschaltterminStopp")
-  public void setAufschaltterminStopp(LocalDate aufschaltterminStopp) {
-    this.aufschaltterminStopp = aufschaltterminStopp;
   }
 
   /**
@@ -1084,7 +1063,6 @@ public class GesuchsperiodeDatenDto  implements Serializable {
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeDaten.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeDaten.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiodeDaten.aufschaltterminStart) &&
-        Objects.equals(this.aufschaltterminStopp, gesuchsperiodeDaten.aufschaltterminStopp) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiodeDaten.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiodeDaten.einreichefristReduziert) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiodeDaten.ausbKostenSekII) &&
@@ -1133,7 +1111,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, einreichfrist);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, einreichfrist);
   }
 
   @Override
@@ -1148,7 +1126,6 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
-    sb.append("    aufschaltterminStopp: ").append(toIndentedString(aufschaltterminStopp)).append("\n");
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");

@@ -53,7 +53,6 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -225,18 +224,14 @@ export class SharedFeatureGesuchDokumenteComponent {
         });
       });
 
-    effect(
-      () => {
-        if (
-          this.config.isSachbearbeitungApp &&
-          this.dokumentsStore.dokumenteCanFlagsSig()
-            .sbCanBearbeitungAbschliessen
-        ) {
-          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      if (
+        this.config.isSachbearbeitungApp &&
+        this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen
+      ) {
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+      }
+    });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }

@@ -28,7 +28,6 @@ export type EinreichedatumAendernDialogResult = EinreichedatumAendernRequest;
 
 @Component({
   selector: 'dv-shared-dialog-einreichedatum-aendern',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

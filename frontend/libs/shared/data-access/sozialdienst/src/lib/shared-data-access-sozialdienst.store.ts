@@ -1,6 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -68,7 +67,6 @@ export type SozialdienstBenutzerViewEntry = SozialdienstBenutzer & {
 export class SozialdienstStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('SozialdienstStore'),
 ) {
   private router = inject(Router);
   private sozialdienstService = inject(SozialdienstService);

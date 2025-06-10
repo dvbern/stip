@@ -18,14 +18,15 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
-import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -36,12 +37,14 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Slf4j
 public class GesuchsperiodenService {
+    private static final String PROPERTY_PATH = "gesuchsperiode";
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
@@ -78,44 +81,73 @@ public class GesuchsperiodenService {
         return gesuchsperiode.map(gesuchsperiodeMapper::toDatenDto);
     }
 
-    public List<GesuchsperiodeDto> getAllActive() {
-        return gesuchsperiodeRepository
-            .findAllActiveForDate(LocalDate.now())
-            .map(gesuchsperiodeMapper::toDto)
-            .toList();
+    public Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeForAusbildung(
+        final Ausbildung ausbildung
+    ) {
+        if (ausbildung.getAusbildungBegin().isBefore(LocalDate.now())) {
+            return getGesuchsperiodeDateInPast(ausbildung.getAusbildungBegin());
+        } else {
+            return getGesuchsperiodeDateInFuture(ausbildung.getAusbildungBegin());
+        }
     }
 
-    public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
-        final var ausbildungBegin = ausbildung.getAusbildungBegin();
-
-        for (int yearOffset = 1; yearOffset >= -1; yearOffset--) {
-            var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
-
-            if (ausbildungsBeginAssumed.isBefore(ausbildungBegin)) {
-                break;
-            }
-
-            var eligibleGesuchsperiode =
-                gesuchsperiodeRepository.findAllStartBeforeOrAt(ausbildungsBeginAssumed);
-
-            if (
-                (eligibleGesuchsperiode != null) &&
-                eligibleGesuchsperiode
-                    .getGesuchsperiodeStart()
-                    .plusMonths(6)
-                    .isAfter(ausbildungsBeginAssumed)
-            ) {
-                return eligibleGesuchsperiode;
-            }
+    Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeDateInFuture(final LocalDate ausbildungBegin) {
+        final var overlappingPerioden = gesuchsperiodeRepository.findAllStartAndStopIntersect(ausbildungBegin);
+        if (overlappingPerioden.isEmpty()) {
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
         }
 
-        throw new CustomValidationsException(
-            "No valid gesuchsperiode found for the ausbildungsbegin provided",
-            new CustomConstraintViolation(
-                VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
-                "gesuchsperiode"
-            )
-        );
+        // get is fine here, as the list is guaranteed not empty
+        final var toAssign =
+            overlappingPerioden.stream().max(Comparator.comparing(Gesuchsperiode::getAufschaltterminStart)).get();
+        if (toAssign.getGueltigkeitStatus() == GueltigkeitStatus.ARCHIVIERT) {
+            LOG.error("A Gesuchsperiode in the future is archiviert");
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        }
+
+        if (toAssign.isActiveFor(LocalDate.now())) {
+            return Pair.of(toAssign, null);
+        }
+
+        return switch (toAssign.getGueltigkeitStatus()) {
+            case ENTWURF -> Pair.of(toAssign, GesuchsperiodeSelectErrorType.PERIODE_IN_ENTWURF_GEFUNDEN);
+            case PUBLIZIERT -> Pair.of(toAssign, GesuchsperiodeSelectErrorType.INAKTIVE_PERIODE_GEFUNDEN);
+            case ARCHIVIERT -> Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        };
+    }
+
+    private Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType> getGesuchsperiodeDateInPast(
+        final LocalDate ausbildungBegin
+    ) {
+        final var currentlyPublic = gesuchsperiodeRepository.findAllPublicStartAndStopIntersect(LocalDate.now());
+        final var isFruehling = DateUtil.isFruehling(ausbildungBegin);
+
+        Gesuchsperiode toAssign;
+        if (isFruehling) {
+            final var toAssignOpt = currentlyPublic.stream()
+                .filter(gesuchsperiode -> DateUtil.isFruehling(gesuchsperiode.getGesuchsperiodeStart()))
+                .findFirst();
+
+            if (toAssignOpt.isEmpty()) {
+                LOG.error("No active Fruehling periode found");
+                return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+            }
+
+            toAssign = toAssignOpt.get();
+        } else {
+            final var toAssignOpt = currentlyPublic.stream()
+                .filter(gesuchsperiode -> DateUtil.isHerbst(gesuchsperiode.getGesuchsperiodeStart()))
+                .findFirst();
+
+            if (toAssignOpt.isEmpty()) {
+                LOG.error("No active Herbst periode found");
+                return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+            }
+
+            toAssign = toAssignOpt.get();
+        }
+
+        return Pair.of(toAssign, null);
     }
 
     @Transactional
@@ -146,5 +178,15 @@ public class GesuchsperiodenService {
         if (isReadonly(gesuchsperiode)) {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");
         }
+    }
+
+    @Transactional
+    public void setOutdatedGesuchsperiodenToArchiviert() {
+        final var outdatedGesuchsperioden = gesuchsperiodeRepository.findAllPubliziertStoppBefore(LocalDate.now());
+        LOG.info("Found {} Gesuchsperioden to be archived", outdatedGesuchsperioden.size());
+        outdatedGesuchsperioden.forEach(gesuchsperiode -> {
+            gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
+            LOG.info("Updated Gesuchsperiode with id %s to Gueltigkeisstatus ARCHIVIERT");
+        });
     }
 }

@@ -14,7 +14,6 @@ import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry
 
 @Component({
   selector: 'dv-shared-ui-dashboard-gesuch',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,

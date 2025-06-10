@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
@@ -39,6 +40,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -128,4 +130,26 @@ public class Ausbildung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "status", nullable = false)
     private AusbildungsStatus status = AusbildungsStatus.AKTIV;
+
+    @Transient
+    public String getAusbildungsstaetteOrAlternative(final Locale locale) {
+        if (isAusbildungNichtGefunden()) {
+            return getAlternativeAusbildungsstaette();
+        } else {
+            return locale.getLanguage().equals("de")
+                ? getAusbildungsgang().getAusbildungsstaette().getNameDe()
+                : getAusbildungsgang().getAusbildungsstaette().getNameFr();
+        }
+    }
+
+    @Transient
+    public String getAusbildungsgangOrAlternative(final Locale locale) {
+        if (isAusbildungNichtGefunden()) {
+            return getAlternativeAusbildungsgang();
+        } else {
+            return locale.getLanguage().equals("de")
+                ? getAusbildungsgang().getBezeichnungDe()
+                : getAusbildungsgang().getBezeichnungFr();
+        }
+    }
 }

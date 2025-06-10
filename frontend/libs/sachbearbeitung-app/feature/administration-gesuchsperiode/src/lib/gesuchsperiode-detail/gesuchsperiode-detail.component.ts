@@ -18,7 +18,6 @@ import {
 import { MatChipsModule } from '@angular/material/chips';
 import {
   MatDatepicker,
-  MatDatepickerApply,
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
@@ -65,7 +64,6 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { PublishComponent } from '../publish/publish.component';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     MaskitoDirective,
@@ -91,7 +89,6 @@ import { PublishComponent } from '../publish/publish.component';
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
-    MatDatepickerApply,
     MatChipsModule,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
@@ -108,6 +105,7 @@ export class GesuchsperiodeDetailComponent {
   translate = inject(TranslateService);
   maskitoYear = maskitoYear;
   maskitoNumber = maskitoNumber;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   unsavedChangesSig: Signal<boolean>;
 
@@ -122,7 +120,6 @@ export class GesuchsperiodeDetailComponent {
     gesuchsperiodeStart: [<string | null>null, [Validators.required]],
     gesuchsperiodeStopp: [<string | null>null, [Validators.required]],
     aufschaltterminStart: [<string | null>null, [Validators.required]],
-    aufschaltterminStopp: [<string | null>null, [Validators.required]],
     einreichefristNormal: [<string | null>null, [Validators.required]],
     einreichefristReduziert: [<string | null>null, [Validators.required]],
     fristNachreichenDokumente: [<number | null>null, [Validators.required]],
@@ -255,18 +252,15 @@ export class GesuchsperiodeDetailComponent {
       initialValue: false,
     });
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(
-      () => {
-        const id = this.idSig();
-        this.store.loadAllGesuchsjahre$();
-        if (id) {
-          this.store.loadGesuchsperiode$(id);
-        } else {
-          this.store.loadLatestGesuchsperiode$();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const id = this.idSig();
+      this.store.loadAllGesuchsjahre$();
+      if (id) {
+        this.store.loadGesuchsperiode$(id);
+      } else {
+        this.store.loadLatestGesuchsperiode$();
+      }
+    });
     effect(() => {
       const gesuchsJahre = this.store.gesuchsjahre.data();
       if (!gesuchsJahre) {
@@ -289,7 +283,6 @@ export class GesuchsperiodeDetailComponent {
               'gesuchsperiodeStart',
               'gesuchsperiodeStopp',
               'aufschaltterminStart',
-              'aufschaltterminStopp',
               'einreichefristNormal',
               'einreichefristReduziert',
               'fristNachreichenDokumente',

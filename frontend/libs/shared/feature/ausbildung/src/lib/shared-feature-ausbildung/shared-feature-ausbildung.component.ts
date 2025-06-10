@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -40,8 +41,11 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelError } from '@dv/shared/model/error';
-import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
+import {
+  AusbildungsPensum,
+  Ausbildungsstaette,
+  GesuchsperiodeSelectErrorType,
+} from '@dv/shared/model/gesuch';
 import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
@@ -70,22 +74,21 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
-type KnownErrors = Record<'periodeNotFound', true | null>;
 
-const KnownErrorKeys = {
-  'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message':
-    {
-      periodeNotFound: true,
-    },
-} satisfies Record<string, KnownErrors>;
+const gesuchsPeriodenSelectErrorMap: Record<
+  GesuchsperiodeSelectErrorType,
+  { [key: string]: true }
+> = {
+  INAKTIVE_PERIODE_GEFUNDEN: { inactivePeriod: true },
+  KEINE_AKTIVE_PERIODE_GEFUNDEN: { periodeNotFound: true },
+  PERIODE_IN_ENTWURF_GEFUNDEN: { periodeIsDraft: true },
+};
 
 @Component({
   selector: 'dv-shared-feature-ausbildung',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -108,7 +111,11 @@ const KnownErrorKeys = {
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
-  providers: [AusbildungStore, AusbildungsstaetteStore],
+  providers: [
+    AusbildungStore,
+    AusbildungsstaetteStore,
+    provideDateFnsAdapter(),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureAusbildungComponent implements OnInit {
@@ -265,22 +272,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const controls = this.form.controls;
 
     // abhaengige Validierung zuruecksetzen on valueChanges
-    effect(
-      () => {
-        const value = this.ausbildungNichtGefundenChangedSig();
-        const {
-          alternativeAusbildungsgang,
-          alternativeAusbildungsstaette,
-          ausbildungsgang,
-          ausbildungsstaette,
-        } = this.form.controls;
-        this.formUtils.setRequired(ausbildungsgang, !value);
-        this.formUtils.setRequired(ausbildungsstaette, !value);
-        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
-        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const value = this.ausbildungNichtGefundenChangedSig();
+      const {
+        alternativeAusbildungsgang,
+        alternativeAusbildungsstaette,
+        ausbildungsgang,
+        ausbildungsstaette,
+      } = this.form.controls;
+      this.formUtils.setRequired(ausbildungsgang, !value);
+      this.formUtils.setRequired(ausbildungsstaette, !value);
+      this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
+      this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
+    });
 
     [
       { control: controls.ausbildungBegin, getAdditionalValidators: () => [] },
@@ -319,24 +323,32 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
 
     (['begin', 'end'] as const).forEach((type) =>
-      effect(
-        () => {
-          this[`${type}ChangedSig`]();
-          controls[`ausbildung${capitalized(type)}`].updateValueAndValidity();
-        },
-        { allowSignalWrites: true },
-      ),
+      effect(() => {
+        this[`${type}ChangedSig`]();
+        controls[`ausbildung${capitalized(type)}`].updateValueAndValidity();
+      }),
     );
+
+    effect(() => {
+      this.beginChangedSig();
+
+      this.ausbildungStore.resetAusbildungErrors();
+
+      setTimeout(() => {
+        this.withAusbildungRange((ctrl) => ctrl.updateValueAndValidity());
+      });
+    });
 
     effect(
       () => {
-        this.beginChangedSig();
+        const error =
+          this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
 
-        this.ausbildungStore.resetAusbildungErrors();
-
-        setTimeout(() => {
-          this.withAusbildungRange((ctrl) => ctrl.updateValueAndValidity());
-        });
+        if (error) {
+          this.withAusbildungRange((ctrl) =>
+            ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
+          );
+        }
       },
       { allowSignalWrites: true },
     );
@@ -418,22 +430,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.isAusbildungAusland),
       ),
     );
-    effect(
-      () => {
-        const isAusbildungAusland = !!isAusbildungAuslandSig();
+    effect(() => {
+      const isAusbildungAusland = !!isAusbildungAuslandSig();
 
-        if (isAusbildungAusland) {
-          this.form.controls.ausbildungsort.reset();
-        }
+      if (isAusbildungAusland) {
+        this.form.controls.ausbildungsort.reset();
+      }
 
-        this.formUtils.setDisabledState(
-          this.form.controls.ausbildungsort,
-          !this.isEditableSig() || isAusbildungAusland,
-          false,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsort,
+        !this.isEditableSig() || isAusbildungAusland,
+        false,
+      );
+    });
 
     // When Staette null, disable gang
     const staetteSig = toSignal(
@@ -441,27 +450,24 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.ausbildungsstaette),
       ),
     );
-    effect(
-      () => {
-        const isWritable = this.isEditableSig();
-        const staette = staetteSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.ausbildungsgang,
-          !isWritable || !staette,
-          isWritable,
-        );
+    effect(() => {
+      const isWritable = this.isEditableSig();
+      const staette = staetteSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsgang,
+        !isWritable || !staette,
+        isWritable,
+      );
 
-        if (!staette) {
-          this.form.controls.ausbildungsgang.reset();
-          this.form.controls.besuchtBMS.reset();
-          if (!this.form.controls.ausbildungNichtGefunden) {
-            this.form.controls.fachrichtung.reset();
-            this.form.controls.ausbildungsort.reset();
-          }
+      if (!staette) {
+        this.form.controls.ausbildungsgang.reset();
+        this.form.controls.besuchtBMS.reset();
+        if (!this.form.controls.ausbildungNichtGefunden) {
+          this.form.controls.fachrichtung.reset();
+          this.form.controls.ausbildungsort.reset();
         }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
 
     // When Ausbildungsgang is null, disable fachrichtung. But only if ausbildungNichtGefunden is false
     const ausbildungsgangSig = toSignal(
@@ -474,18 +480,14 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.ausbildungNichtGefunden),
       ),
     );
-    effect(
-      () => {
-        const isWritable = this.isEditableSig();
-        this.formUtils.setDisabledState(
-          this.form.controls.fachrichtung,
-          !isWritable ||
-            (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
-          isWritable,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const isWritable = this.isEditableSig();
+      this.formUtils.setDisabledState(
+        this.form.controls.fachrichtung,
+        !isWritable || (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
+        isWritable,
+      );
+    });
   }
 
   ngOnInit() {
@@ -540,17 +542,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
     const { type, fallId } = this.usageTypeSig();
 
-    const onFailure = (error: unknown) => {
-      const { parsedError, knownError } = parseKnownError(error);
-
-      if (!knownError) {
-        this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
-        return;
-      }
-
-      this.withAusbildungRange((ctrl) => ctrl.setErrors(knownError));
-    };
-
     switch (type) {
       case 'dialog': {
         this.ausbildungStore.createAusbildung$({
@@ -559,10 +550,11 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             ...formValues,
             ...ausbildungsgang,
           },
-          onSuccess: () => {
-            this.ausbildungSaved.emit();
+          onSuccess: (response) => {
+            if (response.ausbildung) {
+              this.ausbildungSaved.emit();
+            }
           },
-          onFailure,
         });
         break;
       }
@@ -584,7 +576,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             });
             this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           },
-          onFailure,
         });
         break;
       }
@@ -601,20 +592,3 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   };
 }
-
-const isKnownErrorKey = (key: string): key is keyof typeof KnownErrorKeys =>
-  key in KnownErrorKeys;
-
-const parseKnownError = (
-  error: unknown,
-): { knownError?: KnownErrors; parsedError: SharedModelError } => {
-  const parsedError = sharedUtilFnErrorTransformer(error);
-  if (parsedError.type === 'validationError') {
-    const key = parsedError.messageKey;
-    if (isKnownErrorKey(key)) {
-      return { knownError: KnownErrorKeys[key], parsedError };
-    }
-  }
-
-  return { parsedError };
-};
