@@ -111,6 +111,8 @@ public class GesuchTrancheValidatorService {
                 gesuch.getId()
             );
         }
+
+        validateAuszahlung(gesuch);
     }
 
     @Transactional
@@ -123,6 +125,22 @@ public class GesuchTrancheValidatorService {
             validator.validate(gesuch, validationGroups.toArray(new Class<?>[0]));
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+    }
+
+    private void validateAuszahlung(final Gesuch toValidate) {
+        final var violations =
+            validator.validate(toValidate.getAusbildung().getFall().getAuszahlung());
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Keine Auszahlung vorhanden", violations);
+        }
+
+        var zahlungsverbindungViolations =
+            validator.validate(toValidate.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung());
+        if (!violations.isEmpty()) {
+            throw new ValidationsException(
+                "Zahlungsverbindung ist nicht vollstaendig ausgefuellt", zahlungsverbindungViolations
+            );
         }
     }
 }
