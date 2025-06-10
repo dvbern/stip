@@ -98,6 +98,10 @@ public final class OidcPermissions {
     public static final String DELEGIERUNG_READ = "V0_DELEGIERUNG_READ";
     public static final String DELEGIERUNG_UPDATE = "V0_DELEGIERUNG_UPDATE";
 
+    public static final String AUSZAHLUNG_CREATE = "V0_AUSZAHLUNG_CREATE";
+    public static final String AUSZAHLUNG_UPDATE = "V0_AUSZAHLUNG_UPDATE";
+    public static final String AUSZAHLUNG_READ = "V0_AUSZAHLUNG_READ";
+
     private OidcPermissions() {
 
     }

@@ -37,22 +37,21 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
     private final AuszahlungService auszahlungService;
 
-    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
+    @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
     @Override
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
         auszahlungAuthorizer.canCreateAuszahlungForGesuch(gesuchId);
         return auszahlungService.createAuszahlungForGesuch(gesuchId, auszahlungDto);
     }
 
-    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
+    @RolesAllowed(OidcPermissions.AUSZAHLUNG_READ)
     @Override
     public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
         auszahlungAuthorizer.canReadAuszahlungForGesuch(gesuchId);
         return auszahlungService.getAuszahlungForGesuch(gesuchId);
     }
 
-    // todo: add permission ausbildung create
-    @RolesAllowed(OidcPermissions.GS_GESUCH_UPDATE)
+    @RolesAllowed(OidcPermissions.AUSZAHLUNG_UPDATE)
     @Override
     public AuszahlungDto updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(gesuchId);
