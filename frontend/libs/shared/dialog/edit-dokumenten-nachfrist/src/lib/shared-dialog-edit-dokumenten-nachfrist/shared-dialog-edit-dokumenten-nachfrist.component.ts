@@ -34,7 +34,6 @@ type EditNachfristResult = {
 
 @Component({
   selector: 'dv-shared-dialog-edit-dokumenten-nachfrist',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

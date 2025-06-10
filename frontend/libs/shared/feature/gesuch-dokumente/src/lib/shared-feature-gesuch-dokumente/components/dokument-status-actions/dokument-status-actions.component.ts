@@ -14,7 +14,6 @@ import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 
 @Component({
   selector: 'dv-dokument-status-actions',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

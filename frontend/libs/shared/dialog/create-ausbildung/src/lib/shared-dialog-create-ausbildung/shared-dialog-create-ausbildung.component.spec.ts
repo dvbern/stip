@@ -9,9 +9,11 @@ import {
 import { provideMockStore } from '@ngrx/store/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   mockConfigsState,
+  mockedGesuchAppWritableGesuchState,
   provideSharedPatternJestTestSetup,
 } from '@dv/shared/pattern/jest-test-setup';
 
@@ -29,7 +31,7 @@ const dialogData: CreateAusbildungData = {
   fallId: 'asdf',
 };
 
-describe('GesuchAppDialogCreateAusbildungComponent', () => {
+describe('SharedDialogCreateAusbildungComponent', () => {
   let component: SharedDialogCreateAusbildungComponent;
   let fixture: ComponentFixture<SharedDialogCreateAusbildungComponent>;
 
@@ -39,7 +41,13 @@ describe('GesuchAppDialogCreateAusbildungComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
+            benutzers: {
+              rolesMap: {
+                V0_Gesuchsteller: true,
+              } satisfies RolesMap,
+            },
             configs: mockConfigsState(),
+            gesuchs: mockedGesuchAppWritableGesuchState({}),
           },
         }),
         provideHttpClient(),

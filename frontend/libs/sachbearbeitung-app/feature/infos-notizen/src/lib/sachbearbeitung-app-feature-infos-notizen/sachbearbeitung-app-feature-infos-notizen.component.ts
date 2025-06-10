@@ -42,7 +42,6 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -70,7 +69,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   displayedColumns = ['notizTyp', 'datum', 'user', 'betreff', 'actions'];
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
-
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
@@ -84,16 +83,13 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        this.notizStore.loadNotizen$({
-          gesuchId,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.notizStore.loadNotizen$({
+        gesuchId,
+      });
+    });
   }
 
   createNotiz(notizTyp: GesuchNotizTyp) {

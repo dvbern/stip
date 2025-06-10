@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'shared-pattern-route-reuse-strategy-configurable',
   preset: '../../../../jest.preset.js',

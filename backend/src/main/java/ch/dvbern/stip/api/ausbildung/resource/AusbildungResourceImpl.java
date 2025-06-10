@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungResource;
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -42,7 +43,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
 
     @Override
     @RolesAllowed(AUSBILDUNG_CREATE)
-    public AusbildungDto createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
+    public AusbildungCreateResponseDto createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
         ausbildungAuthorizer.canCreate(ausbildungUpdateDto.getFallId());
         return ausbildungService.createAusbildung(ausbildungUpdateDto);
     }

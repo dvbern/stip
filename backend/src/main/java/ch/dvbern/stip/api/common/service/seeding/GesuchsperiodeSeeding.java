@@ -145,7 +145,6 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setGesuchsperiodeStart(from)
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(aufschaltterminStart)
-            .setAufschaltterminStopp(aufschaltterminStopp)
             .setEinreichefristNormal(einreichefristNormal)
             .setEinreichefristReduziert(einreichefristReduziert)
             .setAusbKostenSekII(2000)

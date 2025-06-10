@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { endOfDay, format } from 'date-fns';
@@ -7,36 +6,37 @@ import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   Ausbildung,
+  AusbildungCreateResponse,
   AusbildungService,
   AusbildungUpdate,
 } from '@dv/shared/model/gesuch';
-import {
-  noGlobalErrorsIf,
-  shouldIgnoreBadRequestErrorsIf,
-} from '@dv/shared/util/http';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
-  cachedResult,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungState = {
   ausbildung: CachedRemoteData<Ausbildung>;
+  ausbildungResponse: RemoteData<AusbildungCreateResponse>;
 };
 
 const initialState: AusbildungState = {
   ausbildung: initial(),
+  ausbildungResponse: initial(),
 };
 
 @Injectable()
 export class AusbildungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('AusbildungStore'),
 ) {
   private ausbildungService = inject(AusbildungService);
 
@@ -51,9 +51,13 @@ export class AusbildungStore extends signalStore(
     };
   });
 
+  ausbildungCreateErrorResponseViewSig = computed(() => {
+    return fromCachedDataSig(this.ausbildungResponse)?.error;
+  });
+
   resetAusbildungErrors = () => {
-    patchState(this, (state) => ({
-      ausbildung: { ...state.ausbildung, error: undefined },
+    patchState(this, () => ({
+      ausbildungResponse: initial(),
     }));
   };
 
@@ -76,39 +80,49 @@ export class AusbildungStore extends signalStore(
 
   createAusbildung$ = rxMethod<{
     ausbildung: AusbildungUpdate;
-    onSuccess: () => void;
-    onFailure: (error: unknown) => void;
+    onSuccess: (response: AusbildungCreateResponse) => void;
   }>(
     pipe(
       tap(({ ausbildung }) => {
         patchState(this, () => ({
           ausbildung: cachedPending(success(ausbildung as Ausbildung)),
+          ausbildungResponse: pending(),
         }));
       }),
-      switchMap(({ ausbildung: ausbildungUpdate, onSuccess, onFailure }) =>
-        this.ausbildungService
-          .createAusbildung$({ ausbildungUpdate }, undefined, undefined, {
-            context: shouldIgnoreBadRequestErrorsIf(
-              true,
-              noGlobalErrorsIf(true),
-            ),
-          })
-          .pipe(
-            handleApiResponse(
-              (ausbildung) => {
-                patchState(this, () => ({
-                  ausbildung: cachedResult(
-                    success(ausbildungUpdate as Ausbildung),
-                    ausbildung,
-                  ),
-                }));
-              },
-              {
-                onSuccess,
-                onFailure,
-              },
-            ),
+      switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
+        this.ausbildungService.createAusbildung$({ ausbildungUpdate }).pipe(
+          handleApiResponse(
+            (res) => {
+              patchState(this, () => {
+                if (!isSuccess(res)) {
+                  return {
+                    ausbildung: res,
+                    ausbildungResponse: res,
+                  };
+                }
+                if (isDefined(res.data.error)) {
+                  return {
+                    ausbildung: initial(),
+                    ausbildungResponse: res,
+                  };
+                }
+                if (isDefined(res.data.ausbildung)) {
+                  return {
+                    ausbildung: success(res.data.ausbildung),
+                    ausbildungResponse: res,
+                  };
+                }
+                return {
+                  ausbildung: initial(),
+                  ausbildungResponse: res,
+                };
+              });
+            },
+            {
+              onSuccess,
+            },
           ),
+        ),
       ),
     ),
   );
@@ -117,7 +131,6 @@ export class AusbildungStore extends signalStore(
     ausbildungId: string;
     ausbildungUpdate: AusbildungUpdate;
     onSuccess: () => void;
-    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(() => {
@@ -125,7 +138,7 @@ export class AusbildungStore extends signalStore(
           ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess, onFailure }) =>
+      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess }) =>
         this.ausbildungService
           .updateAusbildung$({
             ausbildungId,
@@ -138,7 +151,6 @@ export class AusbildungStore extends signalStore(
               },
               {
                 onSuccess,
-                onFailure,
               },
             ),
           ),

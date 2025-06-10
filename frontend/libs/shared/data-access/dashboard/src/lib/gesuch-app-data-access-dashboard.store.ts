@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { differenceInDays, endOfDay, format, isAfter } from 'date-fns';
@@ -43,7 +42,6 @@ const initialState: DashboardState = {
 export class DashboardStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('DashboardStore'),
 ) {
   private gesuchService = inject(GesuchService);
   private appType = inject(SharedModelCompileTimeConfig).appType;

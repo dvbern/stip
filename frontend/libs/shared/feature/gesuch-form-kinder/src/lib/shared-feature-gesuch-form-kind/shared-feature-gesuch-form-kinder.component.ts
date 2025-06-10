@@ -22,7 +22,6 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-kinder',
-  standalone: true,
   imports: [
     TranslatePipe,
     SharedFeatureGesuchFormKinderEditorComponent,

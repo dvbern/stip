@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Slf4j
 @Singleton
@@ -84,7 +83,6 @@ public class GesuchTestSeeding extends Seeder {
             .setGesuchsperiodeStart(start)
             .setGesuchsperiodeStopp(stopp)
             .setAufschaltterminStart(LocalDate.now().with(firstDayOfYear()))
-            .setAufschaltterminStopp(LocalDate.now().with(lastDayOfYear()))
             .setEinreichefristNormal(LocalDate.now())
             .setEinreichefristReduziert(LocalDate.now().plusMonths(3))
             .setAusbKostenSekII(1)

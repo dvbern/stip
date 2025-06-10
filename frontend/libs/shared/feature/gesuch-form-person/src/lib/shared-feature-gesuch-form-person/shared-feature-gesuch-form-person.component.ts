@@ -104,7 +104,6 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -418,204 +417,181 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl:
-            this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
-          visible: !zivilrechtlichIdentisch,
-          disabled: this.viewSig().readonly,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl:
-            this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
-          visible: !zivilrechtlichIdentisch,
-          disabled: this.viewSig().readonly,
-        });
-        this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
-        this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
+        visible: !zivilrechtlichIdentisch,
+        disabled: this.viewSig().readonly,
+      });
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
+        visible: !zivilrechtlichIdentisch,
+        disabled: this.viewSig().readonly,
+      });
+      this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
+      this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
+    });
 
     // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
     const nationalitaetChangedSig = toSignal(
       this.form.controls.nationalitaet.valueChanges,
     );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const nationalitaetChanged = nationalitaetChangedSig();
-        // If nationality is Switzerland
-        if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.heimatort,
-            visible: true,
-            disabled: this.viewSig().readonly,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.vormundschaft,
-            visible: true,
-            disabled: this.viewSig().readonly,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.niederlassungsstatus,
-            visible: false,
-            disabled: this.viewSig().readonly,
-            resetOnInvisible: true,
-          });
-        }
-        // No nationality was selected
-        else if (!isDefined(nationalitaetChanged)) {
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.niederlassungsstatus,
-            visible: false,
-            disabled: this.viewSig().readonly,
-            resetOnInvisible: true,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.heimatort,
-            visible: false,
-            disabled: this.viewSig().readonly,
-            resetOnInvisible: true,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.vormundschaft,
-            visible: false,
-            disabled: this.viewSig().readonly,
-            resetOnInvisible: true,
-          });
-        }
-        // Any other nationality was selected
-        else {
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.niederlassungsstatus,
-            visible: true,
-            disabled: this.viewSig().readonly,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.heimatort,
-            visible: false,
-            disabled: this.viewSig().readonly,
-            resetOnInvisible: true,
-          });
-          updateVisbilityAndDisbledState({
-            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-            formControl: this.form.controls.vormundschaft,
-            visible: false,
-            disabled: this.viewSig().readonly,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      const nationalitaetChanged = nationalitaetChangedSig();
+      // If nationality is Switzerland
+      if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.heimatort,
+          visible: true,
+          disabled: this.viewSig().readonly,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.vormundschaft,
+          visible: true,
+          disabled: this.viewSig().readonly,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.niederlassungsstatus,
+          visible: false,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+      }
+      // No nationality was selected
+      else if (!isDefined(nationalitaetChanged)) {
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.niederlassungsstatus,
+          visible: false,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.heimatort,
+          visible: false,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.vormundschaft,
+          visible: false,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+      }
+      // Any other nationality was selected
+      else {
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.niederlassungsstatus,
+          visible: true,
+          disabled: this.viewSig().readonly,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.heimatort,
+          visible: false,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.vormundschaft,
+          visible: false,
+          disabled: this.viewSig().readonly,
+        });
+      }
+    });
 
     // einreisedatum visibility and disabled state
     const niederlassungsstatusChangedSig = toSignal(
       this.form.controls.niederlassungsstatus.valueChanges,
     );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const niederlassungsstatus = niederlassungsstatusChangedSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const niederlassungsstatus = niederlassungsstatusChangedSig();
 
-        // Niederlassung B -> required einreisedatum
-        const showEinreisedatum =
-          niederlassungsstatus ===
-          Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
-        this.formUtils.setRequired(
-          this.form.controls.einreisedatum,
-          showEinreisedatum,
-        );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.einreisedatum,
-          visible: showEinreisedatum,
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
+      // Niederlassung B -> required einreisedatum
+      const showEinreisedatum =
+        niederlassungsstatus === Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
+      this.formUtils.setRequired(
+        this.form.controls.einreisedatum,
+        showEinreisedatum,
+      );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.einreisedatum,
+        visible: showEinreisedatum,
+        disabled: this.viewSig().readonly,
+        resetOnInvisible: true,
+      });
 
-        // Fluechtling -> required zustaendigerKanton
-        const showZustaendigerKanton =
-          niederlassungsstatus === Niederlassungsstatus.FLUECHTLING;
+      // Fluechtling -> required zustaendigerKanton
+      const showZustaendigerKanton =
+        niederlassungsstatus === Niederlassungsstatus.FLUECHTLING;
 
-        this.formUtils.setRequired(
-          this.form.controls.zustaendigerKanton,
-          showZustaendigerKanton,
-        );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.zustaendigerKanton,
-          visible: showZustaendigerKanton,
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.formUtils.setRequired(
+        this.form.controls.zustaendigerKanton,
+        showZustaendigerKanton,
+      );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.zustaendigerKanton,
+        visible: showZustaendigerKanton,
+        disabled: this.viewSig().readonly,
+        resetOnInvisible: true,
+      });
+    });
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const vormundschaft = !!this.vormundschaftChangedSig();
+    effect(() => {
+      this.gotReenabledSig();
+      const vormundschaft = !!this.vormundschaftChangedSig();
 
-        // Beistandschaft = True -> required zuständiger KESB
-        this.formUtils.setRequired(
-          this.form.controls.zustaendigeKESB,
-          vormundschaft,
-        );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.zustaendigeKESB,
-          visible: vormundschaft,
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      // Beistandschaft = True -> required zuständiger KESB
+      this.formUtils.setRequired(
+        this.form.controls.zustaendigeKESB,
+        vormundschaft,
+      );
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.zustaendigeKESB,
+        visible: vormundschaft,
+        disabled: this.viewSig().readonly,
+        resetOnInvisible: true,
+      });
+    });
     // einresiedatum warning
     const einreisedatumChangedSig = toSignal(
       this.form.controls.einreisedatum.valueChanges,
     );
-    effect(
-      () => {
-        const einreisedatum = parseDateForVariant(
-          einreisedatumChangedSig(),
-          new Date(),
-          'date',
-        );
-        this.showEinreiseDatumWarningSig.set(
-          einreisedatum
-            ? isAfter(einreisedatum, subYears(new Date(), 5))
-            : false,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const einreisedatum = parseDateForVariant(
+        einreisedatumChangedSig(),
+        new Date(),
+        'date',
+      );
+      this.showEinreiseDatumWarningSig.set(
+        einreisedatum ? isAfter(einreisedatum, subYears(new Date(), 5)) : false,
+      );
+    });
 
     // dislable form if readonly
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const { readonly } = this.viewSig();
+      if (readonly) {
+        this.form.disable({ emitEvent: false });
+      }
+    });
   }
 
   ngOnInit() {

@@ -6,7 +6,6 @@ import { GesuchAppPatternGesuchStepLayoutComponent } from '@dv/sozialdienst-app/
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-form',
-  standalone: true,
   imports: [
     SharedUiRouterOutletWrapperComponent,
     GesuchAppPatternGesuchStepLayoutComponent,

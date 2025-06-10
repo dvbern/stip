@@ -7,7 +7,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-mandant-styles-dv',
-  standalone: true,
   imports: [CommonModule],
   template: '',
   styleUrl: './shared-ui-mandant-styles-dv.component.scss',

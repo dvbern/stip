@@ -25,7 +25,6 @@ type UpdateSteuerdatenDialogResult = {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-update-steuerdaten',
-  standalone: true,
   imports: [
     CommonModule,
     MaskitoDirective,

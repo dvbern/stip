@@ -23,7 +23,6 @@ type AllowedValues =
 
 @Component({
   selector: 'dv-shared-ui-clear-button',
-  standalone: true,
   imports: [CommonModule, SharedUiIconChipComponent, TranslatePipe],
   templateUrl: './shared-ui-clear-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

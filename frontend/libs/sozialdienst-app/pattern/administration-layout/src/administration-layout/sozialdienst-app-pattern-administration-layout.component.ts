@@ -24,7 +24,6 @@ import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
 
 @Component({
   selector: 'dv-sozialdienst-app-pattern-administration-layout',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

@@ -17,7 +17,6 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'dv-shared-ui-confirm-dialog',
-  standalone: true,
   imports: [CommonModule, TranslatePipe],
   templateUrl: './shared-ui-confirm-dialog.component.html',
   styleUrl: './shared-ui-confirm-dialog.component.scss',

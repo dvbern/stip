@@ -35,11 +35,6 @@ public interface GesuchsperiodeResource {
     void deleteGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
 
     @GET
-    @Path("/aktive")
-    @Produces({ "application/json", "text/plain" })
-    List<GesuchsperiodeDto> getAktiveGesuchsperioden();
-
-    @GET
     @Path("/{gesuchsperiodeId}")
     @Produces({ "application/json", "text/plain" })
     GesuchsperiodeWithDatenDto getGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);

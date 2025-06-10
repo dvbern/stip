@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-ui-change-indicator',
   preset: '../../../../jest.preset.js',

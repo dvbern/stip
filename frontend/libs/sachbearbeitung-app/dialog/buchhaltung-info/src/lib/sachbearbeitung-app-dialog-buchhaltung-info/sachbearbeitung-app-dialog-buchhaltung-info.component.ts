@@ -14,7 +14,6 @@ type BuchhaltungInfoData = BuchhaltungEntry;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-buchhaltung-info',
-  standalone: true,
   imports: [CommonModule, TranslatePipe, SharedUiFormatChfPipe],
   templateUrl: './sachbearbeitung-app-dialog-buchhaltung-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
