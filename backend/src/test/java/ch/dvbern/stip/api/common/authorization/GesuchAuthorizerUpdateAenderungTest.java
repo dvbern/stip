@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -61,6 +63,8 @@ class GesuchAuthorizerUpdateAenderungTest {
     BenutzerService benutzerService;
     @InjectMock
     private GesuchTrancheRepository gesuchTrancheRepository;
+    @InjectMock
+    private GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     @InjectMock
     private GesuchRepository gesuchRepository;
     @InjectMock
@@ -103,6 +107,9 @@ class GesuchAuthorizerUpdateAenderungTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(aenderung);
         when(gesuchTrancheRepository.findById(any())).thenReturn(aenderung);
+        when(gesuchTrancheRepository.findByIdOptional(any())).thenReturn(Optional.of(aenderung));
+        when(gesuchTrancheHistoryRepository.getLatestExistingVersionOfTranche(any()))
+            .thenReturn(Optional.of(aenderung));
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
     }

@@ -12,7 +12,6 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
-  standalone: true,
   imports: [
     RouterLink,
     MatSidenavModule,

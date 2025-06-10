@@ -46,7 +46,6 @@ type AddresseFormGroup = FormGroup<{
 
 @Component({
   selector: 'dv-shared-ui-form-address',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

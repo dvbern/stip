@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -93,7 +93,6 @@ class GesuchGetGesucheTest {
     @TestAsGesuchsteller
     @Order(2)
     void getGsDashboardNoAusbildungTest() {
-
         final var fall = TestUtil.getOrCreateFall(fallApiSpec);
         final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -105,8 +104,6 @@ class GesuchGetGesucheTest {
             .as(FallDashboardItemDto.class);
 
         assertThat(fallDashboardItem, is(notNullValue()));
-
-        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
 
         assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
 
@@ -223,7 +220,7 @@ class GesuchGetGesucheTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(11)
     @AlwaysRun
     void deleteGesuch() {
@@ -285,7 +282,7 @@ class GesuchGetGesucheTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(16)
     @AlwaysRun
     void deleteOtherGesuch() {

@@ -40,7 +40,6 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -193,13 +192,10 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   constructor() {
     this.laenderStore.loadLaender$();
 
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.countryDataSourceSig().filter = JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.countryDataSourceSig().filter = JSON.stringify(filterValues);
+    });
 
     // Set default sorting
     effect(() => {

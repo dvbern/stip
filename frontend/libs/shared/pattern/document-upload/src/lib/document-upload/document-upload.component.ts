@@ -27,8 +27,8 @@ type DialogType = SharedPatternDocumentUploadDialogComponent;
 type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
 
 @Component({
-  selector: 'dv-shared-pattern-document-upload',
   standalone: true,
+  selector: 'dv-shared-pattern-document-upload',
   imports: [
     CommonModule,
     TranslatePipe,

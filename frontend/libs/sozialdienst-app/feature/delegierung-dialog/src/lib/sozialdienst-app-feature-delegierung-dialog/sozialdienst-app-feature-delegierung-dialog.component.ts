@@ -55,7 +55,6 @@ export interface DelegierungDialogData {
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-delegierung-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

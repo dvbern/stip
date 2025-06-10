@@ -293,7 +293,7 @@ public class BerechnungService {
             )
             .toList();
 
-        if (gesuch.getEinreichedatum() == null) {
+        if (Objects.isNull(gesuch.getEinreichedatum())) {
             throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
         }
 

@@ -83,7 +83,7 @@ public class Benutzer extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private BenutzerStatus benutzerStatus;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "benutzer_rollen",
         joinColumns = @JoinColumn(name = "benutzer_id"),

@@ -19,7 +19,6 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
 
 @Component({
   selector: 'dv-shared-pattern-gesuch-step-nav',
-  standalone: true,
   imports: [RouterLink, TranslatePipe, SharedUiChangeIndicatorComponent],
   templateUrl: './shared-pattern-gesuch-step-nav.component.html',
   styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],

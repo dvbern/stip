@@ -81,7 +81,6 @@ const MEDIUM_AGE_ADULT = 40;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-editor',
-  standalone: true,
   imports: [
     CommonModule,
     MaskitoDirective,
@@ -250,94 +249,83 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
-        this.formUtils.setDisabledState(
-          this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
-          zivilrechtlichIdentisch,
-          true,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
-          zivilrechtlichIdentisch,
-          true,
-        );
-        this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
-        this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.gotReenabledSig();
+      const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
+      this.formUtils.setDisabledState(
+        this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
+        zivilrechtlichIdentisch,
+        true,
+      );
+      this.formUtils.setDisabledState(
+        this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
+        zivilrechtlichIdentisch,
+        true,
+      );
+      this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
+      this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
+    });
     const landChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.adresse.controls.landId,
       { useDefault: true },
     );
 
     // sozialversicherungsnummer required if land is CH
-    effect(
-      () => {
-        const landId = landChangedSig();
-        const laender = this.landStore.landListViewSig();
-        const svnIsRequired =
-          laender?.find((l) => l.id === landId)?.iso3code === 'CHE';
+    effect(() => {
+      const landId = landChangedSig();
+      const laender = this.landStore.landListViewSig();
+      const svnIsRequired =
+        laender?.find((l) => l.id === landId)?.iso3code === 'CHE';
 
-        this.formUtils.setRequired(
-          this.form.controls.sozialversicherungsnummer,
-          svnIsRequired,
+      this.formUtils.setRequired(
+        this.form.controls.sozialversicherungsnummer,
+        svnIsRequired,
+      );
+      this.svnIsRequiredSig.set(svnIsRequired);
+    });
+
+    effect(() => {
+      const elternteil = this.elternteilSig();
+      const gesuchFormular = this.gesuchFormularSig();
+
+      this.form.patchValue({
+        ...elternteil,
+        ...this.numberConverter.toString(elternteil),
+        geburtsdatum: parseBackendLocalDateAndPrint(
+          elternteil.geburtsdatum,
+          this.languageSig(),
+        ),
+      });
+
+      if (elternteil.adresse) {
+        SharedUiFormAddressComponent.patchForm(
+          this.form.controls.adresse,
+          elternteil.adresse,
         );
-        this.svnIsRequiredSig.set(svnIsRequired);
-      },
-      { allowSignalWrites: true },
-    );
+      }
 
-    effect(
-      () => {
-        const elternteil = this.elternteilSig();
-        const gesuchFormular = this.gesuchFormularSig();
-
-        this.form.patchValue({
-          ...elternteil,
-          ...this.numberConverter.toString(elternteil),
-          geburtsdatum: parseBackendLocalDateAndPrint(
-            elternteil.geburtsdatum,
-            this.languageSig(),
-          ),
-        });
-
-        if (elternteil.adresse) {
-          SharedUiFormAddressComponent.patchForm(
-            this.form.controls.adresse,
-            elternteil.adresse,
-          );
-        }
-
-        const otherElternteil = gesuchFormular.elterns?.find(
-          (e) => e.elternTyp !== elternteil.elternTyp,
+      const otherElternteil = gesuchFormular.elterns?.find(
+        (e) => e.elternTyp !== elternteil.elternTyp,
+      );
+      if (
+        otherElternteil &&
+        otherElternteil.wohnkosten &&
+        !isDefined(elternteil.wohnkosten)
+      ) {
+        this.form.controls.wohnkosten.patchValue(
+          otherElternteil.wohnkosten.toString(),
         );
-        if (
-          otherElternteil &&
-          otherElternteil.wohnkosten &&
-          !isDefined(elternteil.wohnkosten)
-        ) {
-          this.form.controls.wohnkosten.patchValue(
-            otherElternteil.wohnkosten.toString(),
-          );
-        }
+      }
 
-        const svValidators = [
-          sharedUtilValidatorAhv(
-            `eltern${capitalized(lowercased(elternteil.elternTyp))}`,
-            gesuchFormular,
-          ),
-        ];
-        this.form.controls.sozialversicherungsnummer.clearValidators();
-        this.form.controls.sozialversicherungsnummer.addValidators(
-          svValidators,
-        );
-      },
-      { allowSignalWrites: true },
-    );
+      const svValidators = [
+        sharedUtilValidatorAhv(
+          `eltern${capitalized(lowercased(elternteil.elternTyp))}`,
+          gesuchFormular,
+        ),
+      ];
+      this.form.controls.sozialversicherungsnummer.clearValidators();
+      this.form.controls.sozialversicherungsnummer.addValidators(svValidators);
+    });
   }
 
   handleSave() {

@@ -1240,7 +1240,7 @@ class GesuchServiceTest {
 
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
-        gesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
@@ -1255,11 +1255,11 @@ class GesuchServiceTest {
         customGesuchDokument.setId(UUID.randomUUID());
         customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
-        customGesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
         // add gesuchdokumente to gesuch
-        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(customGesuchDokument);
-        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(gesuchDokument);
+        gesuch.getNewestGesuchTranche().orElseThrow().getGesuchDokuments().add(customGesuchDokument);
+        gesuch.getNewestGesuchTranche().orElseThrow().getGesuchDokuments().add(gesuchDokument);
 
         gesuch.getAusbildung().setFall(fall);
 
@@ -1305,7 +1305,7 @@ class GesuchServiceTest {
 
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
-        gesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
@@ -1320,11 +1320,11 @@ class GesuchServiceTest {
         customGesuchDokument.setId(UUID.randomUUID());
         customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
-        customGesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
         // add gesuchdokumente to gesuch
-        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(customGesuchDokument);
-        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(gesuchDokument);
+        gesuch.getNewestGesuchTranche().orElseThrow().getGesuchDokuments().add(customGesuchDokument);
+        gesuch.getNewestGesuchTranche().orElseThrow().getGesuchDokuments().add(gesuchDokument);
 
         gesuch.getAusbildung().setFall(fall);
 

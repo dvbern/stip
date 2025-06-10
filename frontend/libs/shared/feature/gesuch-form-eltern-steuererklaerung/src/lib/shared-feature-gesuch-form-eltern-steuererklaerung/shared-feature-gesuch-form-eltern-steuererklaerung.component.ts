@@ -52,7 +52,6 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
 
 @Component({
   selector: 'lib-shared-feature-gesuch-form-eltern-steuererklaerung',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -78,6 +77,7 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   config = inject(SharedModelCompileTimeConfig);
   destroyRef = inject(DestroyRef);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);

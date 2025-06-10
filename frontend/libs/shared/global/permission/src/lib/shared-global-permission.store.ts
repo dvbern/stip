@@ -1,6 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -22,7 +21,6 @@ const initialState: PermissionState = {
 export class PermissionStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('PermissionStore'),
 ) {
   private authService = inject(OAuthService);
   private store = inject(Store);

@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.authorization.Authorizer;
 import ch.dvbern.stip.api.common.authorization.BaseAuthorizer;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,18 +37,9 @@ public class BeschwerdeEntscheidAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreate(final UUID gesuchId) {
-        canRead();
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (!Gesuchstatus.SACHBEARBEITER_CAN_CREATE_BESCHWERDE_ENTSCHEID.contains(gesuch.getGesuchStatus())) {
             forbidden();
         }
     }
-
-    @Transactional
-    public void canRead() {
-        if (!isAdminOrSb(benutzerService.getCurrentBenutzer())) {
-            throw new UnauthorizedException();
-        }
-    }
-
 }

@@ -77,7 +77,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       'form-person-email',
       'form-person-telefonnummer',
       'form-person-geburtsdatum',
-      'form-person-heimatort',
+      // 'form-person-heimatort',
       // 'form-person-einreisedatum',
       'form-address-plz',
       'form-address-ort',

@@ -15,7 +15,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
   selector: 'dv-shared-ui-aenderungs-entry',
-  standalone: true,
   imports: [CommonModule, TranslatePipe, RouterLink, SharedUiIconChipComponent],
   templateUrl: './shared-ui-aenderungs-entry.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

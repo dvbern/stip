@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -139,10 +139,10 @@ public class DeleteGesuchAsGSTest {
      * are cleaned
      */
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(9)
     @AlwaysRun
-    void deleteAsAdmin() {
+    void deleteAsSuperUser() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }

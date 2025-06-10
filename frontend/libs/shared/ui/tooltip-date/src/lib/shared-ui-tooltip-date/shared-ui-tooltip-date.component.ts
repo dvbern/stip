@@ -11,7 +11,6 @@ import { fromBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
   selector: 'dv-shared-ui-tooltip-date',
-  standalone: true,
   imports: [CommonModule, MatTooltipModule],
   templateUrl: './shared-ui-tooltip-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

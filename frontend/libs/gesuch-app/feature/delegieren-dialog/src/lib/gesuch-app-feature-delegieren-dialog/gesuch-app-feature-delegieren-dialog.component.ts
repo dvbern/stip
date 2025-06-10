@@ -42,7 +42,6 @@ export interface DelegierenDialogResult {
 
 @Component({
   selector: 'dv-gesuch-app-feature-delegieren-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

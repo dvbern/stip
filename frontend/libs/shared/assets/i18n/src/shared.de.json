@@ -266,6 +266,7 @@
 
   "shared.gesuch.periode.status.ENTWURF": "Entwurf",
   "shared.gesuch.periode.status.PUBLIZIERT": "Publik - Aktiv",
+  "shared.gesuch.periode.status.PUBLIZIERT_INAKTIV": "Publik - Inaktiv",
   "shared.gesuch.periode.status.ARCHIVIERT": "Archiviert",
 
   "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",
@@ -368,8 +369,7 @@
   "shared.form.tranche.gesuchsnummer.label": "Gesuchsnummer",
   "shared.form.tranche.fallnummer.label": "Fallnummer",
   "shared.form.tranche.gesuchsperiode.label": "Gesuchsperiode",
-  "shared.form.tranche.gesuchsperiode.semester.herbst": "Herbst {{ year }}",
-  "shared.form.tranche.gesuchsperiode.semester.fruehling": "Frühling {{ year }}",
+  "shared.form.tranche.gesuchsperiode": "{{ bezeichnungDe }}",
   "shared.form.tranche.einreichefrist.label": "Einreichefrist",
   "shared.form.tranche.sachbearbeiter.label": "Sachbearbeiter",
   "shared.form.tranche.einreichedatum.label": "Einreichedatum des Gesuchs",
@@ -473,7 +473,9 @@
   "shared.form.ausbildung.form.error.monthYearAfter": "Das Enddatum muss nach dem {{ date }} sein",
   "shared.form.ausbildung.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
-  "shared.form.ausbildung.form.error.periodeNotFound": "Für den angegebenen Zeitraum wurde keine verfügbare Stipendium-Periode gefunden",
+  "shared.form.ausbildung.form.error.periodeNotFound": "Es ist keine aktive Gesuchsperiode für diesen Ausbildungsbeginn vorhanden",
+  "shared.form.ausbildung.form.error.inactivePeriod": "Die Gesuchsperiode für diesen Ausbildungsbeginn wird am {{ date }} geöffnet",
+  "shared.form.ausbildung.form.error.periodeIsDraft": "Die Gesuchsperiode für diesen Ausbildungsbeginn wird voraussichtlich am {{ date }} geöffnet",
   "shared.form.ausbildung.validation.notFound": "Die fehlende Ausbildung muss erstellt werden",
   "shared.form.ausbildung.validation.notFound.part1": "Die fehlende Ausbildung muss noch bei den",
   "shared.form.ausbildung.validation.notFound.link": "Ausbildungstaetten",

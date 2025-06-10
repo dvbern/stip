@@ -14,7 +14,6 @@ import { SharedUiTranslatedLandPipe } from '@dv/shared/ui/translated-land';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

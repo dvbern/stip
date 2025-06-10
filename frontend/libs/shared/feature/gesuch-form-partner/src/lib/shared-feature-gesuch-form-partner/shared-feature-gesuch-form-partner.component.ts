@@ -76,7 +76,6 @@ const MEDIUM_AGE_ADULT = 30;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-partner',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -184,99 +183,88 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-    effect(
-      () => {
-        const { gesuchFormular } = this.viewSig();
-        const svValidators = [
-          Validators.required,
-          sharedUtilValidatorAhv('partner', gesuchFormular),
-        ];
-        this.form.controls.sozialversicherungsnummer.clearValidators();
-        this.form.controls.sozialversicherungsnummer.addValidators(
-          svValidators,
-        );
+    effect(() => {
+      const { gesuchFormular } = this.viewSig();
+      const svValidators = [
+        Validators.required,
+        sharedUtilValidatorAhv('partner', gesuchFormular),
+      ];
+      this.form.controls.sozialversicherungsnummer.clearValidators();
+      this.form.controls.sozialversicherungsnummer.addValidators(svValidators);
 
-        if (gesuchFormular?.partner) {
-          const partner = gesuchFormular.partner;
-          const partnerForForm = {
-            ...partner,
-            geburtsdatum: partner.geburtsdatum.toString(),
-          };
-          this.form.patchValue({
-            ...partnerForForm,
-            geburtsdatum: parseBackendLocalDateAndPrint(
-              partner.geburtsdatum,
-              this.languageSig(),
-            ),
-            jahreseinkommen: partnerForForm.jahreseinkommen?.toString(),
-            fahrkosten: partnerForForm.fahrkosten?.toString(),
-            verpflegungskosten: partnerForForm.verpflegungskosten?.toString(),
-          });
-          SharedUiFormAddressComponent.patchForm(
-            this.form.controls.adresse,
-            partnerForForm.adresse,
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        const { gesuch, gesuchFormular } = this.viewSig();
-        const rolesMap = this.permissionStore.rolesMapSig();
-        const { trancheTyp } = this.cacheSig();
-        const { permissions } = preparePermissions(
-          trancheTyp,
-          gesuch,
-          this.appType,
-          rolesMap,
+      if (gesuchFormular?.partner) {
+        const partner = gesuchFormular.partner;
+        const partnerForForm = {
+          ...partner,
+          geburtsdatum: partner.geburtsdatum.toString(),
+        };
+        this.form.patchValue({
+          ...partnerForForm,
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            partner.geburtsdatum,
+            this.languageSig(),
+          ),
+          jahreseinkommen: partnerForForm.jahreseinkommen?.toString(),
+          fahrkosten: partnerForForm.fahrkosten?.toString(),
+          verpflegungskosten: partnerForForm.verpflegungskosten?.toString(),
+        });
+        SharedUiFormAddressComponent.patchForm(
+          this.form.controls.adresse,
+          partnerForForm.adresse,
         );
-        if (
-          gesuch &&
-          gesuchFormular &&
-          isStepDisabled(PARTNER, gesuch, permissions)
-        ) {
-          this.store.dispatch(
-            SharedEventGesuchFormPartner.nextStepTriggered({
-              gesuchId: gesuch.id,
-              trancheId: gesuch.gesuchTrancheToWorkWith.id,
-              gesuchFormular,
-              origin: PARTNER,
-            }),
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const noAusbildungMitEinkommenOderErwerbstaetigkeit =
-          !this.ausbildungMitEinkommenOderErwerbstaetigSig();
-        if (this.viewSig().readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
-        } else {
-          this.formUtils.setDisabledState(
-            this.form.controls.jahreseinkommen,
-            noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true,
-          );
-          this.formUtils.setDisabledState(
-            this.form.controls.fahrkosten,
-            noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true,
-          );
-          this.formUtils.setDisabledState(
-            this.form.controls.verpflegungskosten,
-            noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true,
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
+    effect(() => {
+      const { gesuch, gesuchFormular } = this.viewSig();
+      const rolesMap = this.permissionStore.rolesMapSig();
+      const { trancheTyp } = this.cacheSig();
+      const { permissions } = preparePermissions(
+        trancheTyp,
+        gesuch,
+        this.appType,
+        rolesMap,
+      );
+      if (
+        gesuch &&
+        gesuchFormular &&
+        isStepDisabled(PARTNER, gesuch, permissions)
+      ) {
+        this.store.dispatch(
+          SharedEventGesuchFormPartner.nextStepTriggered({
+            gesuchId: gesuch.id,
+            trancheId: gesuch.gesuchTrancheToWorkWith.id,
+            gesuchFormular,
+            origin: PARTNER,
+          }),
+        );
+      }
+    });
+    effect(() => {
+      this.gotReenabledSig();
+      const noAusbildungMitEinkommenOderErwerbstaetigkeit =
+        !this.ausbildungMitEinkommenOderErwerbstaetigSig();
+      if (this.viewSig().readonly) {
+        Object.values(this.form.controls).forEach((control) =>
+          control.disable(),
+        );
+      } else {
+        this.formUtils.setDisabledState(
+          this.form.controls.jahreseinkommen,
+          noAusbildungMitEinkommenOderErwerbstaetigkeit,
+          true,
+        );
+        this.formUtils.setDisabledState(
+          this.form.controls.fahrkosten,
+          noAusbildungMitEinkommenOderErwerbstaetigkeit,
+          true,
+        );
+        this.formUtils.setDisabledState(
+          this.form.controls.verpflegungskosten,
+          noAusbildungMitEinkommenOderErwerbstaetigkeit,
+          true,
+        );
+      }
+    });
   }
 
   ngOnInit() {

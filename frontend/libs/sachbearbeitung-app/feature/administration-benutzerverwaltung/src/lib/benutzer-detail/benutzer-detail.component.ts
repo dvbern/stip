@@ -29,14 +29,10 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -50,13 +46,13 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     SharedUiMaxLengthDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
   ],
   templateUrl: './benutzer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BenutzeDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -75,34 +71,28 @@ export class BenutzeDetailComponent implements OnDestroy {
   constructor() {
     this.store.loadAvailableRoles$();
 
-    effect(
-      () => {
-        const id = this.idSig();
+    effect(() => {
+      const id = this.idSig();
 
-        if (id) {
-          this.store.loadBenutzerWithRoles$(id);
+      if (id) {
+        this.store.loadBenutzerWithRoles$(id);
 
-          // disable email field
-          this.form.controls.email.disable({ emitEvent: false });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+        // disable email field
+        this.form.controls.email.disable({ emitEvent: false });
+      }
+    });
 
-    effect(
-      () => {
-        const benutzer = this.store.benutzer().data;
-        if (benutzer) {
-          this.form.patchValue({
-            name: benutzer.lastName,
-            vorname: benutzer.firstName,
-            email: benutzer.email,
-            roles: benutzer.roles,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const benutzer = this.store.benutzer().data;
+      if (benutzer) {
+        this.form.patchValue({
+          name: benutzer.lastName,
+          vorname: benutzer.firstName,
+          email: benutzer.email,
+          roles: benutzer.roles,
+        });
+      }
+    });
   }
 
   compareById = compareById;

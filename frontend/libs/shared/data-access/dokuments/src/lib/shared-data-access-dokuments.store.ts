@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -63,7 +62,6 @@ const initialState: DokumentsState = {
 export class DokumentsStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('DokumentsStore'),
 ) {
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);

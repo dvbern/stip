@@ -18,15 +18,12 @@
 package ch.dvbern.stip.api.gesuchstatus.service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -82,68 +79,6 @@ public class GesuchStatusService {
                 // ignored
             }
         }
-    }
-
-    public boolean benutzerCanEdit(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
-        final var identifiers = benutzer.getRollenIdentifiers();
-        final var editStates = new HashSet<Gesuchstatus>();
-
-        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
-        }
-        if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
-        }
-        if (identifiers.contains(OidcConstants.ROLE_JURIST)) {
-            editStates.addAll(Gesuchstatus.JURIST_CAN_EDIT);
-        }
-        if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
-            editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
-        }
-        if (identifiers.contains(OidcConstants.ROLE_SUPER_USER)) {
-            editStates.addAll(List.of(Gesuchstatus.values()));
-        }
-
-        return editStates.contains(gesuchstatus);
-    }
-
-    public boolean canChangeEinreichedatum(final boolean wasVerfuegt, final Gesuchstatus gesuchstatus) {
-        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !wasVerfuegt;
-    }
-
-    public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
-        final var editStates = new HashSet<Gesuchstatus>();
-        if (benutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT);
-        }
-
-        return editStates.contains(gesuchstatus);
-    }
-
-    public boolean benutzerCanUploadDokument(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
-        final var identifiers = benutzer.getRollenIdentifiers();
-        final var editStates = new HashSet<Gesuchstatus>();
-
-        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_UPLOAD_DOCUMENT);
-        }
-
-        return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
-    }
-
-    public boolean benutzerCanDeleteDokument(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
-        final var identifiers = benutzer.getRollenIdentifiers();
-        final var editStates = new HashSet<Gesuchstatus>();
-
-        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_DELETE_DOKUMENTE);
-        }
-
-        return editStates.contains(gesuchstatus) || benutzerCanEdit(benutzer, gesuchstatus);
-    }
-
-    public boolean canCreateBuchhaltungSaldokorrektur(final Gesuchstatus gesuchstatus) {
-        return Gesuchstatus.SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR.contains(gesuchstatus);
     }
 
     public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {

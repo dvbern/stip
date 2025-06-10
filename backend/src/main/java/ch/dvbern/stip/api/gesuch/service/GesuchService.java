@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
@@ -70,6 +71,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -101,6 +103,7 @@ import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -110,6 +113,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -125,6 +129,7 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -258,11 +263,6 @@ public class GesuchService {
         var trancheToUpdate = gesuch
             .getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
-        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            preventUpdateVonGesuchIfReadOnly(gesuch);
-        } else if (trancheToUpdate.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            preventUpdateVonAenderungIfReadOnly(trancheToUpdate);
-        }
 
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
@@ -291,10 +291,41 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public GesuchCreateResponseDto createGesuch(final GesuchCreateDto gesuchCreateDto) {
+        final var result = createGesuchForAusbildung(gesuchCreateDto);
+        if (result.getLeft() != null) {
+            return new GesuchCreateResponseDto(result.getLeft().getId(), null);
+        }
+
+        LocalDate contextDate = null;
+        if (result.getRight().getLeft() != null) {
+            contextDate = result.getRight().getLeft().getAufschaltterminStart();
+        }
+
+        return new GesuchCreateResponseDto(
+            null,
+            new GesuchsperiodeSelectErrorDto(
+                result.getRight().getRight(),
+                contextDate
+            )
+        );
+    }
+
+    @Transactional
+    public Pair<GesuchDto, Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType>> createGesuchForAusbildung(
+        GesuchCreateDto gesuchCreateDto
+    ) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
-        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(gesuch.getAusbildung());
+        final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            gesuch.getAusbildung()
+        );
+
+        if (potential.getRight() != null) {
+            return Pair.of(null, potential);
+        }
+
+        final var gesuchsperiode = potential.getLeft();
 
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
@@ -306,9 +337,12 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithTranche(
-            gesuch,
-            gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+        return Pair.of(
+            gesuchMapperUtil.mapWithTranche(
+                gesuch,
+                gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+            ),
+            null
         );
     }
 
@@ -431,11 +465,6 @@ public class GesuchService {
         return fallDashboardItemMapper.toDto(fall);
     }
 
-    @Transactional
-    public List<GesuchDto> findAllForFall(UUID fallId) {
-        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
-    }
-
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
         return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
     }
@@ -443,7 +472,6 @@ public class GesuchService {
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-        preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
@@ -682,24 +710,6 @@ public class GesuchService {
         notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
     }
 
-    private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
-            throw new IllegalStateException(
-                "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
-            );
-        }
-    }
-
-    private void preventUpdateVonAenderungIfReadOnly(GesuchTranche gesuchTranche) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, gesuchTranche.getStatus())) {
-            throw new IllegalStateException(
-                "Cannot update or delete the Aenderung when status is: " + gesuchTranche.getStatus()
-            );
-        }
-    }
-
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
@@ -729,7 +739,7 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getChangesByInitialTrancheId(UUID trancheId) {
-        final var tranche = gesuchTrancheHistoryRepository.getLatestVersion(trancheId);
+        final var tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
@@ -909,7 +919,7 @@ public class GesuchService {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
-        && gesuchStatusService.canChangeEinreichedatum(gesuch.isVerfuegt(), gesuch.getGesuchStatus());
+        && Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus()) && !gesuch.isVerfuegt();
     }
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {

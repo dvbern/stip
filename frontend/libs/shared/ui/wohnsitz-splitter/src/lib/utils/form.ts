@@ -107,34 +107,31 @@ export const prepareWohnsitzForm = (payload: {
     );
   });
 
-  effect(
-    () => {
-      refreshSig();
-      const { gesuchFormular } = viewSig();
-      const { elternteilUnbekanntVerstorben } =
-        viewSig().gesuchFormular?.familiensituation ?? {};
-      const wohnsitzNotMutterVater =
-        wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+  effect(() => {
+    refreshSig();
+    const { gesuchFormular } = viewSig();
+    const { elternteilUnbekanntVerstorben } =
+      viewSig().gesuchFormular?.familiensituation ?? {};
+    const wohnsitzNotMutterVater =
+      wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
 
-      updateWohnsitzControlsState(
-        form,
-        wohnsitzNotMutterVater ||
-          viewSig().readonly ||
-          !showWohnsitzSplitterSig() ||
-          !!elternteilUnbekanntVerstorben,
-      );
+    updateWohnsitzControlsState(
+      form,
+      wohnsitzNotMutterVater ||
+        viewSig().readonly ||
+        !showWohnsitzSplitterSig() ||
+        !!elternteilUnbekanntVerstorben,
+    );
 
-      if (wohnsitzNotMutterVater) {
-        form.wohnsitzAnteilMutter.reset();
-        form.wohnsitzAnteilVater.reset();
-      } else if (gesuchFormular) {
-        const anteile = wohnsitzAnteileAsString();
-        form.wohnsitzAnteilMutter.patchValue(anteile.wohnsitzAnteilMutter);
-        form.wohnsitzAnteilVater.patchValue(anteile.wohnsitzAnteilVater);
-      }
-    },
-    { allowSignalWrites: true },
-  );
+    if (wohnsitzNotMutterVater) {
+      form.wohnsitzAnteilMutter.reset();
+      form.wohnsitzAnteilVater.reset();
+    } else if (gesuchFormular) {
+      const anteile = wohnsitzAnteileAsString();
+      form.wohnsitzAnteilMutter.patchValue(anteile.wohnsitzAnteilMutter);
+      form.wohnsitzAnteilVater.patchValue(anteile.wohnsitzAnteilVater);
+    }
+  });
 
   return {
     wohnsitzAnteileFromNumber,

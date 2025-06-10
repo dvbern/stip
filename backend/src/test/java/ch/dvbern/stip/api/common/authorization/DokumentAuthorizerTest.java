@@ -30,8 +30,11 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -63,18 +66,20 @@ class DokumentAuthorizerTest {
         var fall = new Fall();
         fall.setAusbildungs(Set.of(gesuch.getAusbildung()));
         gesuch.getAusbildung().setFall(fall);
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
 
         final var gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
         gesuchDokument = new GesuchDokument();
-        gesuchDokument.setGesuchTranche(new GesuchTranche().setGesuch(new Gesuch()));
+        gesuchDokument.setGesuchTranche(new GesuchTranche().setGesuch(gesuch));
+        gesuchDokument.getGesuchTranche()
+            .setTyp(GesuchTrancheTyp.TRANCHE)
+            .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
 
         Mockito.when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
         final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
-        // skip this step in authorizer
-        Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(new GesuchTranche().setGesuch(gesuch));
         dokumentAuthorizer = new DokumentAuthorizer(
-            gesuchRepository, benutzerService, gesuchTrancheRepository, gesuchDokumentRepository, sozialdienstService
+            gesuchRepository, benutzerService, gesuchTrancheRepository, sozialdienstService
         );
     }
 

@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { format, getMonth } from 'date-fns';
+import { format } from 'date-fns';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
@@ -31,10 +31,8 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
           : undefined,
       periode: periode
         ? {
-            semester:
-              getMonth(Date.parse(periode?.gesuchsperiodeStart)) < 6
-                ? ('fruehling' as const)
-                : ('herbst' as const),
+            bezeichnungDe: periode.bezeichnungDe,
+            bezeichnungFr: periode.bezeichnungFr,
             year: format(Date.parse(periode?.gesuchsperiodeStart), 'yy'),
             einreichefrist: periode?.einreichefristNormal,
           }

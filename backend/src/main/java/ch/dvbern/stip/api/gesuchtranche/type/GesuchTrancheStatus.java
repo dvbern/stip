@@ -30,22 +30,15 @@ public enum GesuchTrancheStatus {
     FEHLENDE_DOKUMENTE;
 
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
-        EnumSet.of(
-            IN_BEARBEITUNG_GS
-        )
+        EnumSet.of(IN_BEARBEITUNG_GS)
     );
 
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
-        EnumSet.of(
-            IN_BEARBEITUNG_GS
-        )
+        EnumSet.of(IN_BEARBEITUNG_GS)
     );
 
     public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(
-        EnumSet.of(
-            UEBERPRUEFEN,
-            MANUELLE_AENDERUNG
-        )
+        EnumSet.of(UEBERPRUEFEN)
     );
 
     public static final Set<GesuchTrancheStatus> ADMIN_CAN_EDIT = Collections.unmodifiableSet(
@@ -58,7 +51,7 @@ public enum GesuchTrancheStatus {
         )
     );
 
-    public static final Set<GesuchTrancheStatus> GESUCHSTELLER_PENDING = Collections.unmodifiableSet(
+    public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_MODIFY_DOKUMENT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             FEHLENDE_DOKUMENTE
