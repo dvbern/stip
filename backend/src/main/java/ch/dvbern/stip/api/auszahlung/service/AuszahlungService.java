@@ -37,21 +37,25 @@ public class AuszahlungService {
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final AuszahlungMapper auszahlungMapper;
     private final ZahlungsverbindungMapper zahlungsverbindungMapper;
+    private final ZahlungsverbindungService zahlungsverbindungService;
 
     @Transactional
     public UUID createAuszahlungForGesuch(UUID gesuchId, AuszahlungDto auszahlungDto) {
-        var auszahlung = auszahlungMapper.toEntity(auszahlungDto);
         var fall = getFallOfGesuch(gesuchId);
+        var zahlungsverbindung = zahlungsverbindungService.createOrGetZahlungsverbindungForAuszahlung(
+            fall,
+            auszahlungDto.getAuszahlungAnSozialdienst(),
+            auszahlungDto.getZahlungsverbindung()
+        );
+        var auszahlung = auszahlungMapper.toEntity(auszahlungDto);
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
         fall.setAuszahlung(auszahlung);
-        // todo: add if else
-        zahlungsverbindungRepository.persistAndFlush(auszahlung.getZahlungsverbindung());
         auszahlungRepository.persistAndFlush(auszahlung);
         return auszahlung.getId();
     }
 
     @Transactional
     public AuszahlungDto getAuszahlungForGesuch(UUID gesuchId) {
-        // todo: add if else
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fallId = gesuch.getAusbildung().getFall().getId();
         return auszahlungMapper.toDto(auszahlungRepository.findAuszahlungByFallId(fallId));
@@ -59,13 +63,15 @@ public class AuszahlungService {
 
     @Transactional
     public AuszahlungDto updateAuszahlungForGesuch(UUID gesuchId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        // todo : resetDependentDataBeforeUpdate required?
-        // todo: add if else
         var fall = getFallOfGesuch(gesuchId);
         var auszahlung = fall.getAuszahlung();
-        zahlungsverbindungMapper
-            .partialUpdate(auszahlungUpdateDto.getZahlungsverbindung(), auszahlung.getZahlungsverbindung());
-        auszahlungMapper.partialUpdate(auszahlungUpdateDto, auszahlung);
+        auszahlung.setAuszahlungAnSozialdienst(auszahlungUpdateDto.getAuszahlungAnSozialdienst());
+        final var zahlungsverbindung = zahlungsverbindungService.getZahlungsverbindungForAuszahlung(
+            fall,
+            auszahlung.isAuszahlungAnSozialdienst(),
+            auszahlung.getZahlungsverbindung()
+        );
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
         return auszahlungMapper.toDto(auszahlung);
     }
 
