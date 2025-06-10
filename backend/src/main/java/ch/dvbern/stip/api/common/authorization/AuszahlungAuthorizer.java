@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -84,6 +85,19 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
+    }
+
+    @Transactional
+    public void canSetFlag(UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+
+        if (
+            AuthorizerUtil
+                .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)
+        ) {
+            return;
+        }
+        throw new BadRequestException();
     }
 
 }

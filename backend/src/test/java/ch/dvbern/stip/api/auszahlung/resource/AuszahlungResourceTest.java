@@ -87,6 +87,30 @@ public class AuszahlungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(3)
+    void createAuszahlungWithFlagSetToTrueShouldFail() {
+        AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
+        auszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
+        ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
+        final var adresse =
+            AdresseSpecModel.adresseDtoSpec();
+        zahlungsverbindungDtoSpec.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindungDtoSpec.setVorname("Max");
+        zahlungsverbindungDtoSpec.setNachname("Muster");
+        zahlungsverbindungDtoSpec.setAdresse(adresse);
+        auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
+
+        auszahlungApiSpec.createAuszahlungForGesuch()
+            .fallIdPath(gesuch.getFallId())
+            .body(auszahlungDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.BAD_REQUEST_400);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
     void createAuszahlung() {
         AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
@@ -113,7 +137,7 @@ public class AuszahlungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void getAuszahlungForGesuch() {
         auszahlung = auszahlungApiSpec.getAuszahlungForGesuch()
             .fallIdPath(gesuch.getFallId())
@@ -128,7 +152,7 @@ public class AuszahlungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(6)
     void updateAuszahlungForGesuch() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlungAnSozialdienst());
@@ -151,7 +175,7 @@ public class AuszahlungResourceTest {
      */
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(7)
     void updateAuszahlungForGesuchWithFlagSetToTrue() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);
