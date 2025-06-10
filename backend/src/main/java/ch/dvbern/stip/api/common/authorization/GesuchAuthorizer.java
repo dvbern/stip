@@ -81,7 +81,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
-        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN);
+        assertGesuchIsInOneOfGesuchStatus(
+            gesuchId,
+            Set.of(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
+        );
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
