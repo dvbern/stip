@@ -34,6 +34,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -162,7 +163,7 @@ class GesuchTrancheServiceTest {
         CreateAenderungsantragRequestDto requestDto = new CreateAenderungsantragRequestDto();
 
         assertThrows(
-            IllegalStateException.class,
+            ForbiddenException.class,
             () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto)
         );
         Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());

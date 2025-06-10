@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,17 +41,17 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canRead() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isAdminSbOrJurist(currentBenutzer)) {
+        if (isSbOrJurist(currentBenutzer)) {
             return;
         }
-        throw new ForbiddenException();
+        forbidden();
     }
 
     @Transactional
     public void canUpdate(UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        if (isAdminOrSb(currentBenutzer)) {
+        if (isSachbearbeiter(currentBenutzer)) {
             return;
         }
 
@@ -65,7 +64,7 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new ForbiddenException();
+        forbidden();
     }
 
     private boolean userCanUpdate(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {

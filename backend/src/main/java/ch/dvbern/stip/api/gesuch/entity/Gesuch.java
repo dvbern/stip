@@ -205,10 +205,6 @@ public class Gesuch extends AbstractMandantEntity {
             .filter(tranche -> tranche.getGueltigkeit().contains(date) && tranche.getTyp() == GesuchTrancheTyp.TRANCHE);
     }
 
-    public GesuchTranche getCurrentGesuchTranche() {
-        return getGesuchTrancheValidOnDate(LocalDate.now()).orElseThrow();
-    }
-
     public Optional<GesuchTranche> getNewestGesuchTranche() {
         if (gesuchTranchen.isEmpty()) {
             return Optional.empty();

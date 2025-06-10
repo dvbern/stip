@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -102,8 +102,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
     }
 
     @Test
-    @Order(3)
-    @TestAsAdmin
+    @Order(99)
+    @TestAsSuperUser
     void deleteGesuch() {
         for (final var gesuchToDelete : gesucheToDelete) {
             TestUtil.deleteGesuch(gesuchApiSpec, gesuchToDelete);
