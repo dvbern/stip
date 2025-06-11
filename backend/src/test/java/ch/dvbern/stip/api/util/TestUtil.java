@@ -54,6 +54,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -76,6 +77,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -83,11 +85,13 @@ import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -201,6 +205,33 @@ public class TestUtil {
             final var file = TestUtil.getTestPng();
             TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
         }
+    }
+
+    public static void fillAuszahlung(
+        final UUID fallId,
+        final AuszahlungApiSpec auszahlungApiSpec,
+        final AuszahlungDtoSpec auszahlung
+    ) {
+        auszahlungApiSpec.createAuszahlungForGesuch()
+            .fallIdPath(fallId)
+            .body(auszahlung)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+    }
+
+    public static AuszahlungDtoSpec getAuszahlungDtoSpec() {
+        var zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
+        zahlungsverbindungDtoSpec.adresse(AdresseSpecModel.adresseDtoSpec());
+        zahlungsverbindungDtoSpec.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindungDtoSpec.setNachname("Mustermann");
+        zahlungsverbindungDtoSpec.setVorname("Max");
+        return new AuszahlungDtoSpec().auszahlungAnSozialdienst(false)
+            .zahlungsverbindung(
+                zahlungsverbindungDtoSpec
+            );
     }
 
     public static Optional<FallDtoSpec> getFall(final FallApiSpec fallApiSpec) {

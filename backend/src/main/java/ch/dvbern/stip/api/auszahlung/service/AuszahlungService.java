@@ -52,14 +52,14 @@ public class AuszahlungService {
             auszahlungDto.getZahlungsverbindung()
         );
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
-        fall.setAuszahlung(auszahlung);
         auszahlungRepository.persistAndFlush(auszahlung);
+        fall.setAuszahlung(auszahlung);
         return auszahlung.getId();
     }
 
     @Transactional
     public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
-        return auszahlungMapper.toDto(auszahlungRepository.findAuszahlungByFallId(fallId));
+        return auszahlungMapper.toDto(fallRepository.requireById(fallId).getAuszahlung());
     }
 
     @Transactional

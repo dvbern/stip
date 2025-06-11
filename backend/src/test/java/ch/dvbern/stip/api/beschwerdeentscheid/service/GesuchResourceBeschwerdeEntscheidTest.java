@@ -304,6 +304,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
     @Test
     @TestAsAdmin
+    @StepwiseExtension.AlwaysRun
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

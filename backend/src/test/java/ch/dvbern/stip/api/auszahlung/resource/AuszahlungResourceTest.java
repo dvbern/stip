@@ -35,6 +35,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
@@ -65,16 +66,18 @@ public class AuszahlungResourceTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private GesuchDtoSpec gesuch;
+    private FallDtoSpec fall;
 
-    private UUID auszahlungId;
     private AuszahlungDtoSpec auszahlung;
+    private UUID auszahlungId;
     private ZahlungsverbindungDto zahlungsverbindungDto;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void setupCreateGesuch() {
+    void createGesuch() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        fall = TestUtil.getFall(fallApiSpec).orElseThrow(() -> new RuntimeException("Failed to create/ get fall"));
     }
 
     @Test
@@ -87,6 +90,13 @@ public class AuszahlungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(3)
+    void setupFillAuszahlung() {
+        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, TestUtil.getAuszahlungDtoSpec());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
     void createAuszahlungWithFlagSetToTrueShouldFail() {
         AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
@@ -100,7 +110,7 @@ public class AuszahlungResourceTest {
         auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
 
         auszahlungApiSpec.createAuszahlungForGesuch()
-            .fallIdPath(gesuch.getFallId())
+            .fallIdPath(fall.getId())
             .body(auszahlungDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -110,7 +120,7 @@ public class AuszahlungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void createAuszahlung() {
         AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
@@ -124,7 +134,7 @@ public class AuszahlungResourceTest {
         auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
 
         auszahlungId = auszahlungApiSpec.createAuszahlungForGesuch()
-            .fallIdPath(gesuch.getFallId())
+            .fallIdPath(fall.getId())
             .body(auszahlungDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -140,7 +150,7 @@ public class AuszahlungResourceTest {
     @Order(5)
     void getAuszahlungForGesuch() {
         auszahlung = auszahlungApiSpec.getAuszahlungForGesuch()
-            .fallIdPath(gesuch.getFallId())
+            .fallIdPath(fall.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -159,7 +169,7 @@ public class AuszahlungResourceTest {
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
 
         auszahlungApiSpec.updateAuszahlungForGesuch()
-            .fallIdPath(gesuch.getFallId())
+            .fallIdPath(fall.getId())
             .body(auszahlungUpdate)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -182,7 +192,7 @@ public class AuszahlungResourceTest {
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
 
         auszahlungApiSpec.updateAuszahlungForGesuch()
-            .fallIdPath(gesuch.getFallId())
+            .fallIdPath(fall.getId())
             .body(auszahlungUpdate)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -192,6 +202,7 @@ public class AuszahlungResourceTest {
 
     @Test
     @TestAsAdmin
+    @StepwiseExtension.AlwaysRun
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

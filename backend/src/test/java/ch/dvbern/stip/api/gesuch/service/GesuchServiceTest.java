@@ -29,6 +29,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -87,6 +89,7 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -964,6 +967,15 @@ class GesuchServiceTest {
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindung.setAdresse(tranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
+        zahlungsverbindung.setNachname(tranche.getGesuchFormular().getPersonInAusbildung().getNachname());
+        zahlungsverbindung.setVorname(tranche.getGesuchFormular().getPersonInAusbildung().getVorname());
+        var auszahlung = new Auszahlung();
+        auszahlung.setAuszahlungAnSozialdienst(false);
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
+        tranche.getGesuch().getAusbildung().getFall().setAuszahlung(auszahlung);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 

@@ -18,9 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -54,7 +52,7 @@ public class Auszahlung extends AbstractMandantEntity {
     @Column(name = "auszahlung_an_sozialdienst", nullable = false)
     private boolean auszahlungAnSozialdienst;
 
-    @Nullable
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "auszahlung")
-    private Fall fall;
+    // @Nullable
+    // @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "auszahlung")
+    // private Fall fall;
 }
