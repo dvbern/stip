@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungReferenceCheckerService;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -59,6 +60,7 @@ class AuszahlungAuthorizerTest {
     private DelegierungRepository delegierungRepository;
     private SozialdienstService sozialdienstService;
     private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private ZahlungsverbindungReferenceCheckerService zahlungsverbindungReferenceCheckerService;
 
     @BeforeEach
     void setUp() {
@@ -69,9 +71,13 @@ class AuszahlungAuthorizerTest {
         delegierungRepository = Mockito.mock(DelegierungRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
         sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
+        zahlungsverbindungReferenceCheckerService = Mockito.mock(ZahlungsverbindungReferenceCheckerService.class);
 
         auszahlungAuthorizer =
-            new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository, fallRepository);
+            new AuszahlungAuthorizer(
+                benutzerService, sozialdienstService, gesuchRepository, fallRepository,
+                zahlungsverbindungReferenceCheckerService
+            );
 
     }
 
@@ -213,6 +219,28 @@ class AuszahlungAuthorizerTest {
             ForbiddenException.class,
             () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID())
         );
+    }
+
+    @Test
+    void canUpdate_shouldNotWork_whenReferenceOfZahlungsverbindung_isEqualTo_ZahlungsverbindungOfDelegatedSozialdienst() {
+        // arrange
+        setupSozialdienstMitarbeiterAsCurrentBenutzer();
+        setupGesuchWithoutDelegierung();
+        setupGesuchstellerAsCurrentBenutzer();
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
+        when(zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(any()))
+            .thenReturn(true);
+
+        assertThrows(
+            ForbiddenException.class,
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID())
+        );
+
+        // arrange
+        when(zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(any()))
+            .thenReturn(false);
+        // act & assert
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID()));
     }
 
     @Test

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
+import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungReferenceCheckerService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -38,6 +39,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
+    private final ZahlungsverbindungReferenceCheckerService zahlungsverbindungReferenceCheckerService;
 
     @Transactional
     public void canCreateAuszahlungForGesuch(UUID fallId) {
@@ -70,6 +72,8 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
+        preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(fallId);
+
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
@@ -98,6 +102,16 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
             return;
         }
         throw new BadRequestException();
+    }
+
+    private void preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(UUID fallId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (
+            isGesuchsteller(currentBenutzer)
+            && zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(fallId)
+        ) {
+            forbidden();
+        }
     }
 
 }
