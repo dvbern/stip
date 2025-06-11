@@ -20,10 +20,8 @@ package ch.dvbern.stip.api.auszahlung.service;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
-import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -34,11 +32,8 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 public class AuszahlungService {
     private final FallRepository fallRepository;
-    private final GesuchRepository gesuchRepository;
     private final AuszahlungRepository auszahlungRepository;
-    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final AuszahlungMapper auszahlungMapper;
-    private final ZahlungsverbindungMapper zahlungsverbindungMapper;
     private final ZahlungsverbindungService zahlungsverbindungService;
     private final AuszahlungAuthorizer auszahlungAuthorizer;
 
