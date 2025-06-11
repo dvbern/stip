@@ -39,7 +39,7 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "gesuch.id", target = "gesuchId")
     public abstract BuchhaltungEntryDto toDto(Buchhaltung buchhaltung);
 
-    @Named("getAuszahlungForGesuch")
+    @Named("getAuszahlung")
     Integer getAuszahlung(Buchhaltung buchhaltung) {
         if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() > 0) {
             return buchhaltung.getBetrag();
