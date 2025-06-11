@@ -31,7 +31,7 @@ import org.mapstruct.Named;
 public abstract class BuchhaltungMapper {
     @Mapping(source = "stipendium", target = "stipendienBetrag")
     @Mapping(source = "betrag", target = "saldoAenderung")
-    @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlungForGesuch")
+    @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
     @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapDeliveryId")
     @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
