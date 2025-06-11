@@ -45,7 +45,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "zahlungsverbindung",
     indexes = {
         @Index(name = "IX_zahlungsverbindung_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_zahlungsverbindung", columnList = "mandant")
+        @Index(name = "IX_zahlungsverbindung_mandant", columnList = "mandant")
     }
 )
 @Getter
@@ -63,7 +63,7 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"))
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_adresse_id"))
     private Adresse adresse;
 
     @NotNull
@@ -79,7 +79,7 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
     @Nullable
     @OneToOne(optional = true)
     @JoinColumn(
-        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_auszahlung_sapdelivery_id"),
+        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_sapdelivery_id"),
         nullable = true
     )
     private SapDelivery sapDelivery;
