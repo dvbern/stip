@@ -17,23 +17,15 @@
 
 package ch.dvbern.stip.api.auszahlung.util;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class AuszahlungCopyUtil {
-    public Auszahlung createCopyIgnoreReferences(final Auszahlung other) {
-        final var copy = new Auszahlung();
-        copyValues(other, copy);
+public class ZahlungsverbindungCopyUtil {
+    public Zahlungsverbindung createCopyIgnoreReferences(final Zahlungsverbindung other) {
+        final var copy = new Zahlungsverbindung();
+        copyZahlungsverbindungValues(other, copy);
         return copy;
-    }
-
-    public void copyValues(final Auszahlung source, final Auszahlung target) {
-        target.setAuszahlungAnSozialdienst(source.isAuszahlungAnSozialdienst());
-
-        final var zahlungsVerbindungCopy = createZahlungsverbindungCopyIgnoreReferences(source.getZahlungsverbindung());
-        target.setZahlungsverbindung(zahlungsVerbindungCopy);
     }
 
     public void copyZahlungsverbindungValues(final Zahlungsverbindung source, final Zahlungsverbindung target) {
@@ -44,9 +36,4 @@ public class AuszahlungCopyUtil {
             .setSapBusinessPartnerId(source.getSapBusinessPartnerId());
     }
 
-    public Zahlungsverbindung createZahlungsverbindungCopyIgnoreReferences(final Zahlungsverbindung other) {
-        final var copy = new Zahlungsverbindung();
-        copyZahlungsverbindungValues(other, copy);
-        return copy;
-    }
 }
