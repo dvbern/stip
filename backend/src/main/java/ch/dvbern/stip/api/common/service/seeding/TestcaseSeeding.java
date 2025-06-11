@@ -319,19 +319,6 @@ public class TestcaseSeeding extends Seeder {
                 .orElse(null);
         };
 
-        final var piaAdresse = formular.getPersonInAusbildung().getAdresse();
-        final var mutterAdresse = getElternteilByTyp.apply(ElternTyp.MUTTER);
-        final var vaterAdresse = getElternteilByTyp.apply(ElternTyp.VATER);
-
-        // todo: specify
-        // final var auszahlungAdresse = switch (formular.getAuszahlungForGesuch()..getKontoinhaber()) {
-        // case GESUCHSTELLER -> piaAdresse;
-        // case MUTTER -> mutterAdresse.getAdresse();
-        // case VATER -> vaterAdresse.getAdresse();
-        // default -> formular.getAuszahlungForGesuch().getAdresse();
-        // };
-        // todo: specify
-
         formular.getTranche()
             .getGesuch()
             .getAusbildung()

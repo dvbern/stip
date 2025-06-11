@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil.ElternAdressen;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -63,8 +62,6 @@ public class GesuchTrancheOverrideUtil {
 
         // Eltern
         ElternCopyUtil.doOverrideOfSet(target.getElterns(), source.getElterns());
-        final var elternAdressen = ElternAdressen.fromGesuchFormular(target);
-        // todo KSTIP-2026: is elternAdressen still used?
 
         // Einnahmen Kosten
         EinnahmenKostenCopyUtil.copyValues(source.getEinnahmenKosten(), target.getEinnahmenKosten());

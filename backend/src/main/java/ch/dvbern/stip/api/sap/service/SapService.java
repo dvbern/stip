@@ -400,17 +400,8 @@ public class SapService {
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {
-                    // todo: use helper
-
                     createRemainderAuszahlungOrGetStatus(
-                        gesuch.getLatestGesuchTranche()
-                            .getGesuchFormular()
-                            .getTranche()
-                            .getGesuch()
-                            .getAusbildung()
-                            .getFall()
-                            .getAuszahlung()
-                            .getId()
+                        gesuch.getAusbildung().getFall().getAuszahlung().getId()
                     );
                 } catch (Exception e) {
                     LOG.error(
