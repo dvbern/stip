@@ -164,6 +164,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.alimente.no.alimenteregelung.null.message}";
     public static final String VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE =
         "dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message";
+    public static final String VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE =
+        "{dvbern.stip.validation.gesuch.einreichen.auszahlung.valid.message}";
     public static final String VALIDATION_IBAN_MESSAGE = "{jakarta.validation.constraints.iban.message}";
     public static final String VALIDATION_EINREISEDATUM_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.personInAusbildung.einreisedatum.required}";

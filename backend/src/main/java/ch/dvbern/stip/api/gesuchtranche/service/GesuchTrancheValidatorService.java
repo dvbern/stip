@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
@@ -42,6 +45,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -129,18 +134,21 @@ public class GesuchTrancheValidatorService {
     }
 
     private void validateAuszahlung(final Gesuch toValidate) {
-        final var violations =
-            validator.validate(toValidate.getAusbildung().getFall().getAuszahlung());
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Keine Auszahlung vorhanden", violations);
-        }
+        var isAuszahlungExisting = Objects.nonNull(toValidate.getAusbildung().getFall().getAuszahlung());
+        var violations =
+            isAuszahlungExisting
+                ? validator.validate(toValidate.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung())
+                : null;
 
-        var zahlungsverbindungViolations =
-            validator.validate(toValidate.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung());
-        if (!violations.isEmpty()) {
-            throw new ValidationsException(
-                "Zahlungsverbindung ist nicht vollstaendig ausgefuellt", zahlungsverbindungViolations
+        if (!isAuszahlungExisting || !violations.isEmpty()) {
+            throw new CustomValidationsException(
+                "Keine Auszahlung vorhanden",
+                new CustomConstraintViolation(
+                    VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
+                    "auszahlung"
+                )
             );
         }
     }
+
 }
