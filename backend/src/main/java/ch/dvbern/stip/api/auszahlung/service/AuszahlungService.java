@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
@@ -45,27 +44,19 @@ public class AuszahlungService {
         auszahlungRepository.persistAndFlush(auszahlung);
         fall.setAuszahlung(auszahlung);
 
-        var auszahlungDto = auszahlungMapper.toDto(auszahlung);
-        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
-        return auszahlungDto;
+        return auszahlungMapper.toDto(auszahlung);
     }
 
     @Transactional
     public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
-        var auszahlungDto = auszahlungMapper.toDto(fall.getAuszahlung());
-        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
-        return auszahlungDto;
+        return auszahlungMapper.toDto(fall.getAuszahlung());
     }
 
     @Transactional
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         final var fall = fallRepository.requireById(fallId);
-
         var auszahlung = auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
-
-        var auszahlungDto = auszahlungMapper.toDto(auszahlung);
-        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
-        return auszahlungDto;
+        return auszahlungMapper.toDto(auszahlung);
     }
 }

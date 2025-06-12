@@ -17,20 +17,23 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
 public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
     @Inject
-    AdresseRepository adresseRepository;
+    FallRepository fallRepository;
 
     public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
 
@@ -42,4 +45,10 @@ public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpda
     );
 
     public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
+
+    @AfterMapping
+    protected void setIsDelegatedFlag(final Auszahlung auszahlung, @MappingTarget AuszahlungDto auszahlungDto) {
+        final var fall = fallRepository.findByAuszahlungId(auszahlung.getId());
+        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+    }
 }
