@@ -108,7 +108,7 @@ export class SharedUiLandAutocompleteComponent
       runInInjectionContext(this.injector, () => {
         effect(() => {
           // access the private touchedReactive signal as workaround
-          const touched = control['touchedReactive']?.();
+          const touched = control['touchedReactive']();
           if (touched) {
             this.markAsTouched();
           }
