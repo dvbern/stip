@@ -43,11 +43,15 @@ public class AuthorizerUtil {
     }
 
     public boolean isGesuchstellerOfWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
+        return isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer)
+        && fall.getDelegierung() == null;
+    }
+
+    public boolean isGesuchstellerOfIgnoreDelegation(final Fall fall, final Benutzer currentBenutzer) {
         return Objects.equals(
             fall.getGesuchsteller().getId(),
             currentBenutzer.getId()
-        )
-        && fall.getDelegierung() == null;
+        );
     }
 
     public boolean isGesuchstellerOfOrDelegatedToSozialdienst(

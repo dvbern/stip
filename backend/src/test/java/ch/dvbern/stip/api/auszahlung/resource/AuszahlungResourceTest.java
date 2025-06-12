@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -201,7 +201,7 @@ class AuszahlungResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @StepwiseExtension.AlwaysRun
     @Order(99)
     void test_delete_gesuch() {

@@ -133,6 +133,7 @@ class AuszahlungAuthorizerTest {
         ausbildung.setGesuchs(List.of(gesuch));
         ausbildung.setFall(fall);
         fall.setAusbildungs(Set.of(ausbildung));
+        fall.setGesuchsteller(new Benutzer());
 
         when(fallRepository.requireById(any())).thenReturn(fall);
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);
@@ -158,6 +159,7 @@ class AuszahlungAuthorizerTest {
         ausbildung.setGesuchs(List.of(gesuch));
         ausbildung.setFall(fall);
         fall.setAusbildungs(Set.of(ausbildung));
+        fall.setGesuchsteller(new Benutzer());
 
         when(fallRepository.requireById(any())).thenReturn(fall);
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);

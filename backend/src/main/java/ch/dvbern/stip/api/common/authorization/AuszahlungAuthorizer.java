@@ -51,14 +51,14 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
-        final BooleanSupplier isAdminOrSB = () -> isAdminOrSb(currentBenutzer);
+        final BooleanSupplier isSB = () -> isSachbearbeiter(currentBenutzer);
         final BooleanSupplier isGesuchstellerOfGesuch =
-            () -> AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall);
+            () -> AuthorizerUtil.isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer);
         final BooleanSupplier isDelegiertAndIsMitarbeiterOfSozialdienst = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
 
         if (
-            !isAdminOrSB.getAsBoolean() && isGesuchstellerOfGesuch.getAsBoolean()
+            !isSB.getAsBoolean() && isGesuchstellerOfGesuch.getAsBoolean()
             || isDelegiertAndIsMitarbeiterOfSozialdienst.getAsBoolean()
         ) {
             return;
@@ -76,8 +76,8 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
 
         final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
-        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchsteller(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall);
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> AuthorizerUtil.isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall);
 
         final BooleanSupplier hasDelegierung = () -> fall.getDelegierung() != null;
 
@@ -106,8 +106,9 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
 
     private void preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var fall = fallRepository.requireById(fallId);
         if (
-            isGesuchsteller(currentBenutzer)
+            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(fall, currentBenutzer, sozialdienstService)
             && zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(fallId)
         ) {
             forbidden();
