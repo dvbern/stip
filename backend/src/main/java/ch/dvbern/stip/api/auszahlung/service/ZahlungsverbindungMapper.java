@@ -17,12 +17,16 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungDiffUtil;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungUpdateDto;
+import jakarta.inject.Inject;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -30,6 +34,9 @@ import org.mapstruct.MappingTarget;
 
 public abstract class ZahlungsverbindungMapper
 extends EntityUpdateMapper<ZahlungsverbindungUpdateDto, Zahlungsverbindung> {
+    @Inject
+    AdresseRepository adresseRepository;
+
     public abstract Zahlungsverbindung toEntity(ZahlungsverbindungDto zahlungsverbindungDto);
 
     public abstract ZahlungsverbindungDto toDto(Zahlungsverbindung zahlungsverbindung);
@@ -38,5 +45,25 @@ extends EntityUpdateMapper<ZahlungsverbindungUpdateDto, Zahlungsverbindung> {
         final ZahlungsverbindungDto dto,
         @MappingTarget Zahlungsverbindung zahlungsverbindung
     );
+
+    // @Override
+    @BeforeMapping
+    protected void resetDependentDataBeforeUpdate(
+        final ZahlungsverbindungDto newZahlungsverbindung,
+        @MappingTarget final Zahlungsverbindung targetZahlungsverbindung
+    ) {
+        resetFieldIf(
+            () -> ZahlungsverbindungDiffUtil.hasAdresseChanged(newZahlungsverbindung, targetZahlungsverbindung),
+            "Reset Adresse because ID has changed",
+            () -> {
+                final var newAdresseId = newZahlungsverbindung.getAdresse().getId();
+                if (newAdresseId != null) {
+                    targetZahlungsverbindung.setAdresse(adresseRepository.requireById(newAdresseId));
+                } else {
+                    targetZahlungsverbindung.setAdresse(null);
+                }
+            }
+        );
+    }
 
 }

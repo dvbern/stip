@@ -17,28 +17,20 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
-import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.inject.Inject;
-import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = { AdresseMapper.class, ZahlungsverbindungMapper.class })
+@Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
 public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
     @Inject
     AdresseRepository adresseRepository;
-
-    @Inject
-    FallRepository fallRepository;
 
     public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
 
@@ -48,32 +40,6 @@ public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpda
         AuszahlungUpdateDto auszahlungUpdateDto,
         @MappingTarget Auszahlung auszahlung
     );
-
-    @BeforeMapping
-    protected void setDelegated(final Auszahlung auszahlung, @MappingTarget AuszahlungDto auszahlungDto) {
-        final var isDelegated = Objects.nonNull(fallRepository.findByAuszahlungId(auszahlung.getId()).getDelegierung());
-        auszahlungDto.setIsDelegated(isDelegated);
-    }
-
-    // @Override
-    // @BeforeMapping
-    // protected void resetDependentDataBeforeUpdate(
-    // final AuszahlungUpdateDto newAuszahlung,
-    // @MappingTarget final Auszahlung targetAuszahlung
-    // ) {
-    // resetFieldIf(
-    // () -> AuszahlungDiffUtil.hasAdresseChanged(newAuszahlung, targetAuszahlung),
-    // "Reset Adresse because ID has changed",
-    // () -> {
-    // final var newAdresseId = newAuszahlung.getZahlungsverbindung().getAdresse().getId();
-    // if (newAdresseId != null) {
-    // targetAuszahlung.getZahlungsverbindung().setAdresse(adresseRepository.requireById(newAdresseId));
-    // } else {
-    // targetAuszahlung.getZahlungsverbindung().setAdresse(null);
-    // }
-    // }
-    // );
-    // }
 
     public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
 }

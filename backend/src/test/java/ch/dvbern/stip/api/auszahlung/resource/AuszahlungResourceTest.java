@@ -168,6 +168,9 @@ class AuszahlungResourceTest {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlungAnSozialdienst());
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
+        final var adresse =
+            AdresseSpecModel.adresseDtoSpec();
+        auszahlungUpdate.getZahlungsverbindung().setAdresse(adresse);
 
         auszahlungApiSpec.updateAuszahlungForGesuch()
             .fallIdPath(fall.getId())

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
@@ -48,25 +49,42 @@ public class AuszahlungService {
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
         auszahlungRepository.persistAndFlush(auszahlung);
         fall.setAuszahlung(auszahlung);
-        return auszahlungMapper.toDto(auszahlung);
+
+        var auszahlungDto = auszahlungMapper.toDto(auszahlung);
+        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+        return auszahlungDto;
     }
 
     @Transactional
     public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
-        return auszahlungMapper.toDto(fallRepository.requireById(fallId).getAuszahlung());
+        final var fall = fallRepository.requireById(fallId);
+        var auszahlungDto = auszahlungMapper.toDto(fall.getAuszahlung());
+        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+        return auszahlungDto;
     }
 
     @Transactional
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        var fall = fallRepository.requireById(fallId);
-        var auszahlung = fall.getAuszahlung();
-        auszahlung.setAuszahlungAnSozialdienst(auszahlungUpdateDto.getAuszahlungAnSozialdienst());
+        final var fall = fallRepository.requireById(fallId);
+
+        // reset dependent data before update
+        // fall.getAuszahlung().getZahlungsverbindung().setAdresse(null);
+        var auszahlung = auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
+
+        // prevent:
+        // Suppressed: org.hibernate.HibernateException: identifier of an instance of
+        // ch.dvbern.stip.api.adresse.entity.Adresse was altered from d60ca9c7-ab02-4148-83ba-73c35f806795 to
+        // cc065bf5-a721-4992-8034-a6eb376b4ac8
+
         final var zahlungsverbindung = zahlungsverbindungService.getZahlungsverbindungForAuszahlung(
             fall,
             auszahlung.isAuszahlungAnSozialdienst(),
             auszahlung.getZahlungsverbindung()
         );
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
-        return auszahlungMapper.toDto(auszahlung);
+
+        var auszahlungDto = auszahlungMapper.toDto(auszahlung);
+        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+        return auszahlungDto;
     }
 }

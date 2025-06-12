@@ -17,24 +17,24 @@
 
 package ch.dvbern.stip.api.auszahlung.util;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.util.NullDiffUtil;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class AuszahlungDiffUtil {
-    public boolean hasAdresseChanged(AuszahlungUpdateDto newAuszahlung, Auszahlung toUpdate) {
+public class ZahlungsverbindungDiffUtil {
+    public boolean hasAdresseChanged(ZahlungsverbindungDto zahlungsverbindungUpdateDto, Zahlungsverbindung toUpdate) {
         if (
             NullDiffUtil.hasNullChanged(
-                newAuszahlung.getZahlungsverbindung().getAdresse(),
-                toUpdate.getZahlungsverbindung().getAdresse()
+                zahlungsverbindungUpdateDto.getAdresse(),
+                toUpdate.getAdresse()
             )
         ) {
             return true;
         }
 
-        return newAuszahlung.getZahlungsverbindung().getAdresse().getId() != toUpdate.getZahlungsverbindung()
+        return zahlungsverbindungUpdateDto.getAdresse().getId() != toUpdate
             .getAdresse()
             .getId();
     }

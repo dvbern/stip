@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-class AuszahlungDiffUtilTest {
+class ZahlungsverbindungDiffUtilTest {
     @Test
     void hasAdresseChanged() {
         final var knownId = UUID.randomUUID();
@@ -46,9 +46,15 @@ class AuszahlungDiffUtilTest {
         var updateAuszahlung = new AuszahlungUpdateDto();
         updateAuszahlung.setZahlungsverbindung(updateZahlungsverbindung);
 
-        assertThat(AuszahlungDiffUtil.hasAdresseChanged(updateAuszahlung, original), is(false));
+        assertThat(
+            ZahlungsverbindungDiffUtil.hasAdresseChanged(updateZahlungsverbindung, original.getZahlungsverbindung()),
+            is(false)
+        );
 
         updateAdresse.setId(UUID.randomUUID());
-        assertThat(AuszahlungDiffUtil.hasAdresseChanged(updateAuszahlung, original), is(true));
+        assertThat(
+            ZahlungsverbindungDiffUtil.hasAdresseChanged(updateZahlungsverbindung, original.getZahlungsverbindung()),
+            is(true)
+        );
     }
 }
