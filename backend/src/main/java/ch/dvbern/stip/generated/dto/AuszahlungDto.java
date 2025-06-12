@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AuszahlungDto  implements Serializable {
   private @Valid Boolean auszahlungAnSozialdienst;
+  private @Valid Boolean isDelegated;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
   /**
@@ -40,6 +41,25 @@ public class AuszahlungDto  implements Serializable {
   @JsonProperty("auszahlungAnSozialdienst")
   public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
+  }
+
+  /**
+   **/
+  public AuszahlungDto isDelegated(Boolean isDelegated) {
+    this.isDelegated = isDelegated;
+    return this;
+  }
+
+  
+  @JsonProperty("isDelegated")
+  @NotNull
+  public Boolean getIsDelegated() {
+    return isDelegated;
+  }
+
+  @JsonProperty("isDelegated")
+  public void setIsDelegated(Boolean isDelegated) {
+    this.isDelegated = isDelegated;
   }
 
   /**
@@ -71,12 +91,13 @@ public class AuszahlungDto  implements Serializable {
     }
     AuszahlungDto auszahlung = (AuszahlungDto) o;
     return Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
+        Objects.equals(this.isDelegated, auszahlung.isDelegated) &&
         Objects.equals(this.zahlungsverbindung, auszahlung.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(auszahlungAnSozialdienst, zahlungsverbindung);
+    return Objects.hash(auszahlungAnSozialdienst, isDelegated, zahlungsverbindung);
   }
 
   @Override
@@ -85,6 +106,7 @@ public class AuszahlungDto  implements Serializable {
     sb.append("class AuszahlungDto {\n");
     
     sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
+    sb.append("    isDelegated: ").append(toIndentedString(isDelegated)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();

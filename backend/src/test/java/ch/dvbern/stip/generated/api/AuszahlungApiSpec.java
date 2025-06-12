@@ -92,7 +92,7 @@ public class AuszahlungApiSpec {
      *
      * @see #fallIdPath  (required)
      * @see #body  (required)
-     * return UUID
+     * return AuszahlungDtoSpec
      */
     public static class CreateAuszahlungForGesuchOper implements Oper {
 
@@ -123,19 +123,19 @@ public class AuszahlungApiSpec {
         /**
          * POST /auszahlung/{fallId}
          * @param handler handler
-         * @return UUID
+         * @return AuszahlungDtoSpec
          */
-        public UUID executeAs(Function<Response, Response> handler) {
-            TypeRef<UUID> type = new TypeRef<UUID>(){};
+        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param auszahlungDtoSpec (AuszahlungDtoSpec)  (required)
+         * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAuszahlungForGesuchOper body(AuszahlungDtoSpec auszahlungDtoSpec) {
-            reqSpec.setBody(auszahlungDtoSpec);
+        public CreateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
+            reqSpec.setBody(auszahlungUpdateDtoSpec);
             return this;
         }
 

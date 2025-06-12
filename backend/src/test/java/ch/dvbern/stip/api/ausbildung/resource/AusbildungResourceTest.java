@@ -114,7 +114,7 @@ class AusbildungResourceTest {
     void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungDtoSpec());
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

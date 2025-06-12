@@ -85,7 +85,7 @@ import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
@@ -210,7 +210,7 @@ public class TestUtil {
     public static void fillAuszahlung(
         final UUID fallId,
         final AuszahlungApiSpec auszahlungApiSpec,
-        final AuszahlungDtoSpec auszahlung
+        final AuszahlungUpdateDtoSpec auszahlung
     ) {
         auszahlungApiSpec.createAuszahlungForGesuch()
             .fallIdPath(fallId)
@@ -222,13 +222,13 @@ public class TestUtil {
 
     }
 
-    public static AuszahlungDtoSpec getAuszahlungDtoSpec() {
+    public static AuszahlungUpdateDtoSpec getAuszahlungUpdateDtoSpec() {
         var zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         zahlungsverbindungDtoSpec.adresse(AdresseSpecModel.adresseDtoSpec());
         zahlungsverbindungDtoSpec.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         zahlungsverbindungDtoSpec.setNachname("Mustermann");
         zahlungsverbindungDtoSpec.setVorname("Max");
-        return new AuszahlungDtoSpec().auszahlungAnSozialdienst(false)
+        return new AuszahlungUpdateDtoSpec().auszahlungAnSozialdienst(false)
             .zahlungsverbindung(
                 zahlungsverbindungDtoSpec
             );

@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
@@ -91,14 +92,14 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(3)
     void setupFillAuszahlung() {
-        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, TestUtil.getAuszahlungDtoSpec());
+        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(4)
     void createAuszahlungWithFlagSetToTrueShouldFail() {
-        AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
+        var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
         ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         final var adresse =
@@ -122,7 +123,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void createAuszahlung() {
-        AuszahlungDtoSpec auszahlungDtoSpec = new AuszahlungDtoSpec();
+        var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
         ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         final var adresse =
@@ -133,7 +134,7 @@ class AuszahlungResourceTest {
         zahlungsverbindungDtoSpec.setAdresse(adresse);
         auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
 
-        auszahlungId = auszahlungApiSpec.createAuszahlungForGesuch()
+        auszahlungApiSpec.createAuszahlungForGesuch()
             .fallIdPath(fall.getId())
             .body(auszahlungDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -142,7 +143,7 @@ class AuszahlungResourceTest {
             .statusCode(HttpStatus.OK_200)
             .extract()
             .body()
-            .as(UUID.class);
+            .as(AuszahlungDto.class);
     }
 
     @Test

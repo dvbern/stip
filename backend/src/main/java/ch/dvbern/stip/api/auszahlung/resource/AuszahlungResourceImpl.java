@@ -39,9 +39,9 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
 
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
     @Override
-    public UUID createAuszahlungForGesuch(UUID fallId, AuszahlungDto auszahlungDto) {
+    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId);
-        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungDto);
+        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_READ)

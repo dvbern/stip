@@ -38,23 +38,25 @@ public class AuszahlungService {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
 
     @Transactional
-    public UUID createAuszahlungForGesuch(UUID fallId, AuszahlungDto auszahlungDto) {
+    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         var fall = fallRepository.requireById(fallId);
-        var auszahlung = auszahlungMapper.toEntity(auszahlungDto);
+        var auszahlung = auszahlungMapper.toEntity(auszahlungUpdateDto);
 
-        if (auszahlungDto.getAuszahlungAnSozialdienst().booleanValue() != auszahlung.isAuszahlungAnSozialdienst()) {
+        if (
+            auszahlungUpdateDto.getAuszahlungAnSozialdienst().booleanValue() != auszahlung.isAuszahlungAnSozialdienst()
+        ) {
             auszahlungAuthorizer.canSetFlag(fallId);
         }
 
         var zahlungsverbindung = zahlungsverbindungService.createOrGetZahlungsverbindungForAuszahlung(
             fall,
-            auszahlungDto.getAuszahlungAnSozialdienst(),
-            auszahlungDto.getZahlungsverbindung()
+            auszahlungUpdateDto.getAuszahlungAnSozialdienst(),
+            auszahlungUpdateDto.getZahlungsverbindung()
         );
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
         auszahlungRepository.persistAndFlush(auszahlung);
         fall.setAuszahlung(auszahlung);
-        return auszahlung.getId();
+        return auszahlungMapper.toDto(auszahlung);
     }
 
     @Transactional

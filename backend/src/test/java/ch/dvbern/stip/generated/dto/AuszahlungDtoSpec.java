@@ -28,12 +28,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AuszahlungDtoSpec
  */
 @JsonPropertyOrder({
+  AuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED,
   AuszahlungDtoSpec.JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST,
   AuszahlungDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("Auszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AuszahlungDtoSpec {
+  public static final String JSON_PROPERTY_IS_DELEGATED = "isDelegated";
+  private Boolean isDelegated;
+
   public static final String JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST = "auszahlungAnSozialdienst";
   private Boolean auszahlungAnSozialdienst;
 
@@ -42,6 +46,32 @@ public class AuszahlungDtoSpec {
 
   public AuszahlungDtoSpec() {
   }
+
+  public AuszahlungDtoSpec isDelegated(Boolean isDelegated) {
+    
+    this.isDelegated = isDelegated;
+    return this;
+  }
+
+   /**
+   * Get isDelegated
+   * @return isDelegated
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_IS_DELEGATED)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getIsDelegated() {
+    return isDelegated;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IS_DELEGATED)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIsDelegated(Boolean isDelegated) {
+    this.isDelegated = isDelegated;
+  }
+
 
   public AuszahlungDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     
@@ -103,19 +133,21 @@ public class AuszahlungDtoSpec {
       return false;
     }
     AuszahlungDtoSpec auszahlung = (AuszahlungDtoSpec) o;
-    return Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
+    return Objects.equals(this.isDelegated, auszahlung.isDelegated) &&
+        Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
         Objects.equals(this.zahlungsverbindung, auszahlung.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(auszahlungAnSozialdienst, zahlungsverbindung);
+    return Objects.hash(isDelegated, auszahlungAnSozialdienst, zahlungsverbindung);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungDtoSpec {\n");
+    sb.append("    isDelegated: ").append(toIndentedString(isDelegated)).append("\n");
     sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");

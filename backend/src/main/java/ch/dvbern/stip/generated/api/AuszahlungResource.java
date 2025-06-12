@@ -24,7 +24,7 @@ public interface AuszahlungResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    UUID createAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungDto auszahlungDto);
+    AuszahlungDto createAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
 
     @GET
     @Produces({ "application/json", "text/plain" })

@@ -425,7 +425,7 @@ class GesuchFillFormularTest {
     // @TestAsGesuchsteller
     // @Order(21)
     // void addAuszahlung() {
-    // TestUtil.fillAuszahlung(patchGesuch().getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungDtoSpec());
+    // TestUtil.fillAuszahlung(patchGesuch().getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     // }
 
     @Test
