@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -54,9 +56,11 @@ public class DokumentDownloadUtil {
         final String dokumentPathPrefix,
         final String fileName
     ) {
+        Supplier<CompletionStage<ResponsePublisher<GetObjectResponse>>> stageSupplier =
+            () -> getDownloadDokumentFuture(s3, bucketName, dokumentPathPrefix + objectId);
         return RestMulti.fromUniResponse(
             Uni.createFrom()
-                .completionStage(() -> getDownloadDokumentFuture(s3, bucketName, dokumentPathPrefix + objectId)),
+                .completionStage(stageSupplier),
             response -> Multi.createFrom()
                 .safePublisher(AdaptersToFlow.publisher(response))
                 .map(byteBuffer -> {

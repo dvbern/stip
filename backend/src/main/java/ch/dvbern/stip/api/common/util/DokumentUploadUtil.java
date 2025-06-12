@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
@@ -83,8 +84,10 @@ public class DokumentUploadUtil {
     ) {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         final var key = dokumentPathPrefix + objectId;
+        Supplier<CompletableFuture<PutObjectResponse>> stageSupplier =
+            () -> getUploadDokumentFuture(s3, fileUpload, configService.getBucketName(), key);
         return Uni.createFrom()
-            .completionStage(() -> getUploadDokumentFuture(s3, fileUpload, configService.getBucketName(), key))
+            .completionStage(stageSupplier)
             .onItem()
             .invoke(() -> serviceCallback.accept(objectId))
             .onItem()
