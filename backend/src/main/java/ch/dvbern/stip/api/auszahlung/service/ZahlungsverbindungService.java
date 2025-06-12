@@ -17,15 +17,12 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -40,53 +37,6 @@ public class ZahlungsverbindungService {
         final var zahlungsverbindung = zahlungsverbindungMapper.toEntity(dto);
         zahlungsverbindungRepository.persist(zahlungsverbindung);
         return zahlungsverbindung;
-    }
-
-    @Transactional
-    public Zahlungsverbindung createOrGetZahlungsverbindungForAuszahlung(
-        final Fall fall,
-        Boolean auszahlungAnSozialdienst,
-        ZahlungsverbindungDto zahlungsverbindungDto
-    ) {
-        if (auszahlungAnSozialdienst) {
-            return getZahlungsverbindungOfDelegation(fall);
-        }
-        final var zahlungsverbindung = zahlungsverbindungMapper.toEntity(zahlungsverbindungDto);
-        zahlungsverbindungRepository.persistAndFlush(zahlungsverbindung);
-        return zahlungsverbindung;
-    }
-
-    @Transactional
-    public Zahlungsverbindung getZahlungsverbindungForAuszahlung(
-        final Fall fall,
-        Boolean auszahlungAnSozialdienst,
-        Zahlungsverbindung newZahlungsverbindung
-    ) {
-        if (auszahlungAnSozialdienst) {
-            return getZahlungsverbindungOfDelegation(fall);
-        }
-
-        return newZahlungsverbindung;
-    }
-
-    @Transactional
-    public void setZahlungsverbindungOfAuszahlung(
-        final Fall fall,
-        Boolean auszahlungAnSozialdienst,
-        Auszahlung auszahlung
-    ) {
-        if (auszahlungAnSozialdienst) {
-            auszahlung.setZahlungsverbindung(fall.getDelegierung().getSozialdienst().getZahlungsverbindung());
-        } else {
-            zahlungsverbindungRepository.persistAndFlush(auszahlung.getZahlungsverbindung());
-        }
-    }
-
-    private Zahlungsverbindung getZahlungsverbindungOfDelegation(final Fall fall) {
-        if (fall.getDelegierung() != null) {
-            return fall.getDelegierung().getSozialdienst().getZahlungsverbindung();
-        }
-        throw new BadRequestException("Keine Delegation vorhanden");
     }
 
 }

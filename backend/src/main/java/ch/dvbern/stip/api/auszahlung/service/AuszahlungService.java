@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
+import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
@@ -34,19 +35,13 @@ public class AuszahlungService {
     private final FallRepository fallRepository;
     private final AuszahlungRepository auszahlungRepository;
     private final AuszahlungMapper auszahlungMapper;
-    private final ZahlungsverbindungService zahlungsverbindungService;
+    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
     @Transactional
     public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         var fall = fallRepository.requireById(fallId);
         var auszahlung = auszahlungMapper.toEntity(auszahlungUpdateDto);
-
-        var zahlungsverbindung = zahlungsverbindungService.createOrGetZahlungsverbindungForAuszahlung(
-            fall,
-            auszahlungUpdateDto.getAuszahlungAnSozialdienst(),
-            auszahlungUpdateDto.getZahlungsverbindung()
-        );
-        auszahlung.setZahlungsverbindung(zahlungsverbindung);
+        zahlungsverbindungRepository.persistAndFlush(auszahlung.getZahlungsverbindung());
         auszahlungRepository.persistAndFlush(auszahlung);
         fall.setAuszahlung(auszahlung);
 
@@ -67,21 +62,7 @@ public class AuszahlungService {
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         final var fall = fallRepository.requireById(fallId);
 
-        // reset dependent data before update
-        // fall.getAuszahlung().getZahlungsverbindung().setAdresse(null);
         var auszahlung = auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
-
-        // prevent:
-        // Suppressed: org.hibernate.HibernateException: identifier of an instance of
-        // ch.dvbern.stip.api.adresse.entity.Adresse was altered from d60ca9c7-ab02-4148-83ba-73c35f806795 to
-        // cc065bf5-a721-4992-8034-a6eb376b4ac8
-
-        final var zahlungsverbindung = zahlungsverbindungService.getZahlungsverbindungForAuszahlung(
-            fall,
-            auszahlung.isAuszahlungAnSozialdienst(),
-            auszahlung.getZahlungsverbindung()
-        );
-        auszahlung.setZahlungsverbindung(zahlungsverbindung);
 
         var auszahlungDto = auszahlungMapper.toDto(auszahlung);
         auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
