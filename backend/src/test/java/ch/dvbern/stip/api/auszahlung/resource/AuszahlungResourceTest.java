@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.auszahlung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -116,7 +117,7 @@ class AuszahlungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(HttpStatus.BAD_REQUEST_400);
+            .statusCode(HttpStatus.FORBIDDEN_403);
     }
 
     @Test
@@ -188,9 +189,9 @@ class AuszahlungResourceTest {
      * Since no Delegation is existing, the endpoint should return a BadRequest Error
      */
     @Test
-    @TestAsGesuchsteller
+    @TestAsSozialdienstMitarbeiter
     @Order(7)
-    void updateAuszahlungForGesuchWithFlagSetToTrue() {
+    void updateAuszahlungForGesuchShouldFailWithFlagSetToTrue() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
@@ -201,7 +202,7 @@ class AuszahlungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(HttpStatus.BAD_REQUEST_400);
+            .statusCode(HttpStatus.FORBIDDEN_403);
     }
 
     @Test

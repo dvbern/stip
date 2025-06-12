@@ -40,7 +40,7 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
     @Override
     public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId);
+        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
         auszahlungAuthorizer.canUpdateFlag(fallId, auszahlungUpdateDto);
         return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
@@ -55,7 +55,7 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_UPDATE)
     @Override
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        auszahlungAuthorizer.canUpdateAuszahlungForGesuch(fallId);
+        auszahlungAuthorizer.canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
         auszahlungAuthorizer.canUpdateFlag(fallId, auszahlungUpdateDto);
         return auszahlungService.updateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }

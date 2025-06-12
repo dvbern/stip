@@ -44,12 +44,12 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final ZahlungsverbindungReferenceCheckerService zahlungsverbindungReferenceCheckerService;
 
     @Transactional
-    public void canCreateAuszahlungForGesuch(UUID fallId) {
-        canUpdateAuszahlungForGesuch(fallId);
+    public void canCreateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
+        canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 
     @Transactional
-    public void canReadAuszahlungForGesuch(UUID fallId) {
+    public void canReadAuszahlungForGesuch(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
@@ -70,9 +70,14 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateAuszahlungForGesuch(UUID fallId) {
+    public void canUpdateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
+
+        // update should not be possible in this endpoint if flag = true
+        if (auszahlungUpdateDto.getAuszahlungAnSozialdienst()) {
+            forbidden();
+        }
 
         preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(fallId);
 
@@ -114,7 +119,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canSetFlag(UUID fallId) {
+    public void canSetFlag(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
 
         if (
@@ -126,7 +131,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         throw new BadRequestException();
     }
 
-    private void preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(UUID fallId) {
+    private void preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
         if (

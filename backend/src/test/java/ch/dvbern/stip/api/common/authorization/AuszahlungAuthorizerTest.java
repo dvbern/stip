@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,8 +177,11 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
+        var updateDto = new AuszahlungUpdateDto();
+        updateDto.setAuszahlungAnSozialdienst(false);
+
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID()));
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto));
     }
 
     @Test
@@ -189,10 +193,13 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
+        var updateDto = new AuszahlungUpdateDto();
+        updateDto.setAuszahlungAnSozialdienst(false);
+
         // act & assert
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID())
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
         );
     }
 
@@ -203,8 +210,11 @@ class AuszahlungAuthorizerTest {
         setupGesuchWithoutDelegierung();
         setupGesuchstellerAsCurrentBenutzer();
 
+        var updateDto = new AuszahlungUpdateDto();
+        updateDto.setAuszahlungAnSozialdienst(false);
+
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID()));
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto));
 
     }
 
@@ -216,10 +226,13 @@ class AuszahlungAuthorizerTest {
         setupGesuchstellerAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
+        var updateDto = new AuszahlungUpdateDto();
+        updateDto.setAuszahlungAnSozialdienst(false);
+
         // act & assert
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID())
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
         );
     }
 
@@ -229,13 +242,17 @@ class AuszahlungAuthorizerTest {
         setupSozialdienstMitarbeiterAsCurrentBenutzer();
         setupGesuchWithoutDelegierung();
         setupGesuchstellerAsCurrentBenutzer();
+
+        var updateDto = new AuszahlungUpdateDto();
+        updateDto.setAuszahlungAnSozialdienst(false);
+
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
         when(zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(any()))
             .thenReturn(true);
 
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID())
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
         );
 
         // arrange
