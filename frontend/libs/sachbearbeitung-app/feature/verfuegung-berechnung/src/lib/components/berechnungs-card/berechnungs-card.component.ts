@@ -14,7 +14,6 @@ import { Berechnung } from '../../../models';
 
 @Component({
   selector: 'dv-berechnungs-card',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

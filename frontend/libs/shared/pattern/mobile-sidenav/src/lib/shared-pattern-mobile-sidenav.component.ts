@@ -23,7 +23,6 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
 
 @Component({
   selector: 'dv-shared-pattern-mobile-sidenav',
-  standalone: true,
   imports: [
     CommonModule,
     MatSidenavModule,

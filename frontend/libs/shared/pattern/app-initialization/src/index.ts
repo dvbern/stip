@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgZone } from '@angular/core';
+import { NgZone, inject, provideAppInitializer } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { lastValueFrom, of } from 'rxjs';
@@ -99,18 +99,16 @@ function initializeOidc(
 
 export const provideSharedPatternAppInitialization = () => {
   return [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeOidc,
-      multi: true,
-      deps: [
-        Router,
-        SharedUtilTenantConfigService,
-        TenantService,
-        OAuthService,
-        SharedModelCompileTimeConfig,
-        NgZone,
-      ],
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initializeOidc(
+        inject(Router),
+        inject(SharedUtilTenantConfigService),
+        inject(TenantService),
+        inject(OAuthService),
+        inject(SharedModelCompileTimeConfig),
+        inject(NgZone),
+      );
+      return initializerFn();
+    }),
   ];
 };

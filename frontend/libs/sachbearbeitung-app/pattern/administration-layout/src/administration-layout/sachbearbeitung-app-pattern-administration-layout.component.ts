@@ -20,19 +20,16 @@ import {
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-administration-layout',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
     RouterModule,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
-    SharedUiSearchComponent,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,

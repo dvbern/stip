@@ -27,6 +27,7 @@ export class TypeSafeMatRowDefDirective<T> extends MatRowDef<T> {
     | Observable<T[]>
     | MatTableDataSource<T>;
   @Input({ alias: 'dvMatRowDefColumns' }) override columns!: string[];
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   onlyIfFnSig = input<Predicate<T> | undefined>(undefined, { alias: 'onlyIf' });
 
   static ngTemplateContextGuard<T>(

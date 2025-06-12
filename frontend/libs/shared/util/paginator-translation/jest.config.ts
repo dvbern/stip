@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'shared-util-paginator-translation',
   preset: '../../../../jest.preset.js',

@@ -81,7 +81,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     }
 
     @Override
-    @RolesAllowed(NOTIZ_CREATE)
+    @RolesAllowed(NOTIZ_READ)
     public List<GesuchNotizDto> getNotizen(UUID gesuchId) {
         authorizer.canGet();
         return service.getAllByGesuchId(gesuchId);

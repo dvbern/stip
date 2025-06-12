@@ -51,7 +51,6 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-tranche',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -138,72 +137,66 @@ export class SharedFeatureGesuchFormTrancheComponent {
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       });
 
-    effect(
-      () => {
-        const { gesuchId } = this.currentGesuchSig();
-        if (gesuchId && this.isSbApp) {
-          this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const { gesuchId } = this.currentGesuchSig();
+      if (gesuchId && this.isSbApp) {
+        this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
+      }
+    });
 
-    effect(
-      () => {
-        const {
-          isEditingAenderung,
-          gesuch,
-          tranche,
-          gesuchsNummer,
-          fallNummer,
-          periode,
-          sachbearbeiter,
-          appType,
-        } = this.viewSig();
+    effect(() => {
+      const {
+        isEditingAenderung,
+        gesuch,
+        tranche,
+        gesuchsNummer,
+        fallNummer,
+        periode,
+        sachbearbeiter,
+        appType,
+      } = this.viewSig();
 
-        // Also used to react to language change
-        // if not used anymore, still call it if this.translate is still used
-        const language = this.languageSig();
+      // Also used to react to language change
+      // if not used anymore, still call it if this.translate is still used
+      const language = this.languageSig();
 
-        const defaultComment = this.defaultCommentSig();
-        if (!tranche) {
-          return;
-        }
-        const pia = tranche.gesuchFormular?.personInAusbildung;
-        const useTrancheStatus =
-          isEditingAenderung && tranche.status !== 'UEBERPRUEFEN';
-        const status = useTrancheStatus ? tranche.status : gesuch?.gesuchStatus;
-        const type = useTrancheStatus ? 'tranche' : 'contract';
+      const defaultComment = this.defaultCommentSig();
+      if (!tranche) {
+        return;
+      }
+      const pia = tranche.gesuchFormular?.personInAusbildung;
+      const useTrancheStatus =
+        isEditingAenderung && tranche.status !== 'UEBERPRUEFEN';
+      const status = useTrancheStatus ? tranche.status : gesuch?.gesuchStatus;
+      const type = useTrancheStatus ? 'tranche' : 'contract';
 
-        this.form.patchValue({
-          status: this.translate.instant(
-            `${appType}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
-          ),
-          pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
-          gesuchsnummer: gesuchsNummer,
-          fallnummer: fallNummer,
-          gesuchsperiode: periode
-            ? this.translate.instant(
-                `shared.form.tranche.gesuchsperiode.semester.${periode.semester}`,
-                periode,
-              )
-            : '',
-          einreichefrist: formatBackendLocalDate(
-            periode?.einreichefrist,
-            language,
-          ),
-          sachbearbeiter: sachbearbeiter,
-          von: formatBackendLocalDate(tranche.gueltigAb, language),
-          bis: formatBackendLocalDate(tranche.gueltigBis, language),
-          bemerkung: tranche.comment ?? defaultComment,
-          einreichedatum: parseBackendLocalDateAndPrint(
-            gesuch?.einreichedatum,
-            language,
-          ),
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.form.patchValue({
+        status: this.translate.instant(
+          `${appType}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
+        ),
+        pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
+        gesuchsnummer: gesuchsNummer,
+        fallnummer: fallNummer,
+        gesuchsperiode: periode
+          ? this.translate.instant(
+              'shared.form.tranche.gesuchsperiode',
+              periode,
+            )
+          : '',
+        einreichefrist: formatBackendLocalDate(
+          periode?.einreichefrist,
+          language,
+        ),
+        sachbearbeiter: sachbearbeiter,
+        von: formatBackendLocalDate(tranche.gueltigAb, language),
+        bis: formatBackendLocalDate(tranche.gueltigBis, language),
+        bemerkung: tranche.comment ?? defaultComment,
+        einreichedatum: parseBackendLocalDateAndPrint(
+          gesuch?.einreichedatum,
+          language,
+        ),
+      });
+    });
 
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 

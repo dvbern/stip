@@ -14,7 +14,6 @@ import { SharedPatternDocumentUploadEntryComponent } from './document-upload-ent
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-list',
-  standalone: true,
   imports: [MatFormFieldModule, SharedPatternDocumentUploadEntryComponent],
   templateUrl: './document-upload-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -268,7 +268,12 @@ public class GesuchTrancheService {
         var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         // query GesuchTrancheHistory, if requested tranche might have been overwritten
         if (gesuchTranche == null) {
-            return gesuchTrancheHistoryRepository.getGesuchDokumenteForGesuchTrancheOfLatestRevision(gesuchTrancheId);
+            return gesuchTrancheHistoryService
+                .getLatestTranche(gesuchTrancheId)
+                .getGesuchDokuments()
+                .stream()
+                .map(gesuchDokumentMapper::toDto)
+                .toList();
         }
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
@@ -343,14 +348,6 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var allowedStates = Set.of(
-            Gesuchstatus.STIPENDIENANSPRUCH,
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH
-        );
-
-        if (!allowedStates.contains(gesuch.getGesuchStatus())) {
-            throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
-        }
 
         if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();

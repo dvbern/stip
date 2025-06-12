@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'shared-ui-confirm-dialog',
   preset: '../../../../jest.preset.js',

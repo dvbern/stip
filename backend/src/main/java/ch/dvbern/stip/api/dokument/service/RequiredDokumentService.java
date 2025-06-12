@@ -53,17 +53,16 @@ public class RequiredDokumentService {
         final Benutzer benutzer
     ) {
         if (
+            !AuthorizerUtil
+                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
+        ) {
+            return false;
+        }
+        if (
             (gesuch.getGesuchStatus() != Gesuchstatus.FEHLENDE_DOKUMENTE)
             && gesuch.getGesuchTranchen()
                 .stream()
                 .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
-        ) {
-            return false;
-        }
-
-        if (
-            !AuthorizerUtil
-                .isGesuchstellerWithoutDelegierungOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
         ) {
             return false;
         }
@@ -98,7 +97,7 @@ public class RequiredDokumentService {
                 .stream()
                 .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
                 .anyMatch(
-                    tranche -> GesuchTrancheStatus.GESUCHSTELLER_PENDING.contains(tranche.getStatus())
+                    tranche -> GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(tranche.getStatus())
                 );
 
         if (containsAenderungenPendingOnGs) {

@@ -20,7 +20,6 @@ import { RemoteData } from '@dv/shared/util/remote-data';
 @Component({
   selector:
     'dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish',
-  standalone: true,
   imports: [
     TranslatePipe,
     SharedUiInfoContainerComponent,

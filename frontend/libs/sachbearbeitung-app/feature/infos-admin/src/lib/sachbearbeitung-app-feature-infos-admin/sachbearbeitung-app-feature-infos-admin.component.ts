@@ -11,7 +11,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { InfosAdminStore } from '@dv/sachbearbeitung-app/data-access/infos-admin';
@@ -28,13 +27,11 @@ export interface GesuchTableColumns {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-admin',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
-    RouterLink,
     SharedUiDownloadButtonDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
@@ -50,6 +47,7 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
     return new MatTableDataSource<Verfuegung>(verfuegungen ?? []);
   });
 
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
   gesuchTableColumns = ['timestamp', 'user', 'kommentar'];
 

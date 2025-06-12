@@ -30,7 +30,6 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-abschluss',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,

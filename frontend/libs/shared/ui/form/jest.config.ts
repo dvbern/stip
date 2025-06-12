@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'shared-ui-form',
   preset: '../../../../jest.preset.js',

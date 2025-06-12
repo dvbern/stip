@@ -71,7 +71,6 @@ const MEDIUM_AGE = 20;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister-editor',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -102,6 +101,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private einreichenStore = inject(EinreichenStore);
 
   geschwisterSig = input.required<Partial<GeschwisterUpdate>>({
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'geschwister',
   });
   @Input({ required: true }) changes:

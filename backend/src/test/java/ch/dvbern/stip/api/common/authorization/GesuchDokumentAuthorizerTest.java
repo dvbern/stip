@@ -33,13 +33,15 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import io.quarkus.security.ForbiddenException;
+import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_GS;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_SB;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.VERSENDET;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -71,7 +73,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,
@@ -140,9 +141,9 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_GESUCHSTELLER,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
-                    IN_BEARBEITUNG_SB,
+                    BEREIT_FUER_BEARBEITUNG,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    null
                 ),
             Arguments
                 .of(
@@ -151,16 +152,16 @@ class GesuchDokumentAuthorizerTest {
                     // setup to not throw (succeed)
                     VERSENDET,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    GesuchTrancheStatus.IN_BEARBEITUNG_GS
                 ),
             Arguments
                 .of(
                     OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
-                    IN_BEARBEITUNG_SB,
+                    IN_BEARBEITUNG_GS,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    null
                 ),
             Arguments
                 .of(
@@ -169,7 +170,7 @@ class GesuchDokumentAuthorizerTest {
                     // setup to not throw (succeed)
                     VERSENDET,
                     // Tranchestatus (if AENDERUNG)
-                    GesuchTrancheStatus.UEBERPRUEFEN
+                    GesuchTrancheStatus.FEHLENDE_DOKUMENTE
                 )
         );
     }
@@ -187,7 +188,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,
@@ -222,7 +222,6 @@ class GesuchDokumentAuthorizerTest {
         authorizer = new GesuchDokumentAuthorizer(
             gesuchTrancheRepository,
             benutzerService,
-            null,
             gesuchDokumentRepository,
             null,
             null,

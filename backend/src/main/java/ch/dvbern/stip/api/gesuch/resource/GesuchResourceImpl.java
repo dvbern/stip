@@ -57,6 +57,7 @@ import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -122,7 +123,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto changeGesuchStatusToInBearbeitung(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToInBearbeitung(gesuchId);
+
         gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -135,7 +137,8 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToNegativeVerfuegung(gesuchId);
+
         gesuchService.changeGesuchStatusToNegativeVerfuegung(
             gesuchId,
             ausgewaehlterGrundDto.getDecisionId()
@@ -148,7 +151,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToVersandbereit(gesuchId);
+
         gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
@@ -158,7 +162,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToVerfuegt(gesuchId);
+
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -169,7 +174,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToVersendet(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToVersendet(gesuchId);
+
         gesuchService.gesuchStatusToVersendet(gesuchId);
         gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -205,23 +211,22 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_CREATE)
-    public UUID createGesuch(GesuchCreateDto gesuchCreateDto) {
-        gesuchAuthorizer.canCreate();
-        final var created = gesuchService.createGesuch(gesuchCreateDto);
-        return created.getId();
+    public GesuchCreateResponseDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+        gesuchAuthorizer.gsCanCreate();
+        return gesuchService.createGesuch(gesuchCreateDto);
     }
 
     @Override
     @RolesAllowed({ GS_GESUCH_DELETE, ADMIN_GESUCH_DELETE })
     public void deleteGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canDelete(gesuchId);
+        gesuchAuthorizer.gsOrAdminCanDelete(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public EinreichedatumStatusDto canEinreichedatumAendern(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.sbOrJuristCanRead();
         return gesuchService.canUpdateEinreichedatum(gesuchId);
     }
 
@@ -231,21 +236,21 @@ public class GesuchResourceImpl implements GesuchResource {
         UUID gesuchId,
         EinreichedatumAendernRequestDto einreichedatumAendernRequestDto
     ) {
-        gesuchAuthorizer.canUpdateEinreichedatum(gesuchId);
+        gesuchAuthorizer.sbCanUpdateEinreichedatum(gesuchId);
         return gesuchService.einreichedatumManuellAendern(gesuchId, einreichedatumAendernRequestDto);
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(UUID gesuchId) {
         beschwerdeVerlaufAuthorizer.canRead();
         return beschwerdeverlaufService.getAllBeschwerdeVerlaufEntriesByGesuchId(gesuchId);
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.sbCanRead();
         return verfuegungService.getVerfuegungenByGesuch(gesuchId);
     }
 
@@ -254,8 +259,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto gesuchEinreichenGs(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canGsGesuchEinreichen(gesuchId);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.gsCanGesuchEinreichen(gesuchId);
+
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -266,8 +271,8 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto gesuchEinreichenJur(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.canJurGesuchEinreichen(gesuchId);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.juristCanGesuchEinreichen(gesuchId);
+
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
@@ -278,7 +283,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanGesuchFehlendeDokumenteUebermitteln(gesuchId);
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
@@ -287,7 +292,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
         return gesuchService.getGesuchInfo(gesuchId);
     }
 
@@ -299,16 +304,16 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchWithChangesDto getInitialTrancheChanges(UUID gesuchTrancheId) {
-        gesuchAuthorizer.canReadInitialTranche(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canReadInitialTranche(gesuchTrancheId);
         return gesuchService.getChangesByInitialTrancheId(gesuchTrancheId);
     }
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canRead(aenderungId);
+        gesuchTrancheAuthorizer.gsCanRead(aenderungId);
         return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
     }
 
@@ -359,7 +364,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
         return gesuchHistoryService.getStatusprotokoll(gesuchId);
     }
 
@@ -376,14 +381,13 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public void updateNachfristDokumente(UUID gesuchId, NachfristAendernRequestDto nachfristAendernRequestDto) {
-        gesuchAuthorizer.canUpdateEinreichefrist(gesuchId);
+        gesuchAuthorizer.canUpdateNachfrist(gesuchId);
         gesuchService.updateNachfristDokumente(gesuchId, nachfristAendernRequestDto.getNewNachfrist());
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
         return gesuchService.getBerechnungsresultat(gesuchId);
     }
@@ -424,7 +428,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
         return DokumentDownloadUtil.getFileDownloadToken(
@@ -441,7 +444,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
 
-        gesuchAuthorizer.canReadChanges(gesuchId);
+        gesuchAuthorizer.sbOrJuristCanRead();
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
@@ -451,21 +454,21 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
 
-        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.gsCanRead(gesuchId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_READ)
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
-        gesuchAuthorizer.sbCanReadTranche(aenderungId);
+        gesuchTrancheAuthorizer.sbOrJuristCanRead();
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
     @RolesAllowed(GS_GESUCH_READ)
     @Override
     public FallDashboardItemDto getSozialdienstMitarbeiterDashboard(UUID fallId) {
-        delegierenAuthorizer.canReadFallDashboard();
+        delegierenAuthorizer.canReadFallDashboard(fallId);
         return gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(fallId);
     }
 
@@ -475,7 +478,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
-        gesuchAuthorizer.canBearbeitungAbschliessen(gesuchId);
+        gesuchAuthorizer.sbCanBearbeitungAbschliessen(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
@@ -489,7 +492,8 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
+
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
@@ -500,15 +504,18 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanGesuchZurueckweisen(gesuchId);
+
         return gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
     }
 
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdateTrancheStatus(gesuchTrancheId);
-        gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.gsCanFehlendeDokumenteEinreichen(gesuchId);
+
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
     }
