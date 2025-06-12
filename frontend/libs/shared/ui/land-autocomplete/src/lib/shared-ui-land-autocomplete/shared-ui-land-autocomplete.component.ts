@@ -27,6 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { Land } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { ISO3_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -66,6 +67,8 @@ export class SharedUiLandAutocompleteComponent
   // Inputs
   zuvorHintValueSig = input<string | undefined>(undefined);
   languageSig = input.required<Language>();
+  testIdSig = input<string>('form-address-land');
+  labelKeySig = input<string>('shared.form.shared.address.country.label');
 
   // Component state
   private isOpen = false;
@@ -105,8 +108,7 @@ export class SharedUiLandAutocompleteComponent
       runInInjectionContext(this.injector, () => {
         effect(() => {
           // access the private touchedReactive signal as workaround
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const touched = (control as any).touchedReactive();
+          const touched = control['touchedReactive']?.();
           if (touched) {
             this.markAsTouched();
           }
@@ -146,34 +148,59 @@ export class SharedUiLandAutocompleteComponent
 
   laenderValuesSig = computed(() => {
     const landInputVal = this.autocompleteControlValueChangesSig();
-    const laender = this.laenderSig()?.filter((l) => l.eintragGueltig);
+    const laender = this.laenderSig();
     const languageDisplayField = this.languageDisplayFieldSig();
 
     if (laender) {
       if (typeof landInputVal === 'string') {
-        return laender
-          .filter((land) =>
-            land[languageDisplayField]
-              .toLowerCase()
-              .includes(landInputVal.toLowerCase()),
-          )
-          .map((land) => ({
-            ...land,
-            displayValue: land[languageDisplayField],
-          }));
+        return (
+          laender
+            .filter(
+              (land) =>
+                land.eintragGueltig &&
+                land[languageDisplayField]
+                  .toLowerCase()
+                  .startsWith(landInputVal.toLowerCase()),
+            )
+            // put Schweiz at the top only if string.length is 0
+            .sort((a, b) => {
+              const zerolength = landInputVal.length === 0;
+              if (zerolength && a.iso3code === ISO3_SCHWEIZ) return -1;
+              if (zerolength && b.iso3code === ISO3_SCHWEIZ) return 1;
+              return a[languageDisplayField].localeCompare(
+                b[languageDisplayField],
+              );
+            })
+            .map((land) => ({
+              ...land,
+              displayValue: land[languageDisplayField],
+            }))
+        );
       } else if (isLand(landInputVal)) {
         // When a Land object is selected
         this.onChange(landInputVal.id);
         return [];
       } else if (!landInputVal && this.landId) {
-        // Necessary to hadle reloads and leander come in late
+        // Necessary to hadle situtions when leander come in after wirteValue is called, eg. reloading the page
         const selectedLand = laender.find((l) => l.id === this.landId);
         if (selectedLand) {
-          this.autocompleteControl.setValue(selectedLand, {
-            emitEvent: false,
-          });
+          this.setAutocomplete(selectedLand);
           return [];
         }
+      } else {
+        return laender
+          .filter((land) => land.eintragGueltig)
+          .sort((a, b) => {
+            if (a.iso3code === ISO3_SCHWEIZ) return -1;
+            if (b.iso3code === ISO3_SCHWEIZ) return 1;
+            return a[languageDisplayField].localeCompare(
+              b[languageDisplayField],
+            );
+          })
+          .map((land) => ({
+            ...land,
+            displayValue: land[languageDisplayField],
+          }));
       }
     }
 
@@ -198,9 +225,7 @@ export class SharedUiLandAutocompleteComponent
       this.landId = landId;
       const land = this.laenderSig()?.find((l) => l.id === landId);
       if (land) {
-        this.autocompleteControl.setValue(land, {
-          emitEvent: false,
-        });
+        this.setAutocomplete(land);
       }
     } else {
       this.landId = undefined;
@@ -250,6 +275,19 @@ export class SharedUiLandAutocompleteComponent
       this.landId = undefined;
       this.onChange(undefined);
       this.autocompleteControl.setValue(undefined);
+    }
+  }
+
+  private setAutocomplete(land: Land) {
+    this.autocompleteControl.setValue(land, {
+      emitEvent: false,
+    });
+    // set an error if the land no longer valid
+    if (!land.eintragGueltig) {
+      this.autocompleteControl.setErrors({
+        invalidLand: true,
+      });
+      this.markAsTouched();
     }
   }
 }

@@ -30,6 +30,7 @@ import {
   PATTERN_EMAIL,
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
+import { ISO3_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -113,7 +114,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
       } else {
         // set country to CH, since all sozialdienst are in CH
         const laender = this.landStore.landListViewSig();
-        const chLandId = laender?.find((l) => l.iso3code === 'CHE')?.id;
+        const chLandId = laender?.find((l) => l.iso3code === ISO3_SCHWEIZ)?.id;
 
         if (chLandId) {
           this.form.controls.adresse.controls.landId.setValue(chLandId);

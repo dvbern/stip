@@ -33,6 +33,10 @@ export class LandStore extends signalStore(
     return fromCachedDataSig(this.laender);
   });
 
+  landAdminViewSig = computed(() => {
+    return fromCachedDataSig(this.laender);
+  });
+
   loadLaender$ = rxMethod<void>(
     pipe(
       tap(() => {

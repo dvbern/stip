@@ -99,6 +99,7 @@
   "shared.form.error.email": "Die eingegebene E-Mail ist ungültig",
   "shared.form.error.telefonnummer": "Die Telefonnummer ist ungültig",
   "shared.form.error.tranche.daterangeTooShort": "Die Zeitspanne der Tranche ist zu kurz",
+  "shared.form.error.land.invalidLand": "Das Land ist ungültig",
   "shared.weiterangaben": "Weitere Angaben",
   "shared.table.noData": "Keine Daten verfügbar",
   "shared.table.noEntries": "Keine Einträge",

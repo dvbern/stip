@@ -49,6 +49,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
+import { ISO3_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   SharedPatternDocumentUploadComponent,
@@ -219,15 +220,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const plz = this.plzChangedSig();
     const laender = this.landStore.landListViewSig();
     const kanton = this.plzStore.getKantonByPlz(plz);
+    const elternNichtSchweizer = eltern?.some((e) => {
+      return (
+        laender?.find((l) => l.id === e.adresse.landId)?.iso3code !==
+        ISO3_SCHWEIZ
+      );
+    });
 
-    return kanton &&
-      kanton === WohnsitzKanton.BE &&
-      eltern?.some((e) => {
-        return (
-          laender?.find((l) => l.id === e.adresse.landId)?.iso3code !==
-          this.nationalitaetCH
-        );
-      })
+    return kanton && kanton === WohnsitzKanton.BE && elternNichtSchweizer
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
@@ -340,7 +340,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const laender = this.landStore.landListViewSig();
     return laender?.find((land) => land.id === id)?.iso3code;
   });
-  nationalitaetCH = 'CHE';
+  iso3Schweiz = ISO3_SCHWEIZ;
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -452,7 +452,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       this.gotReenabledSig();
       // If nationality is Switzerland, show heimatort and vormundschaft
       const nationalitaetIso3Code = this.nationalitaetIso3CodeSig();
-      if (nationalitaetIso3Code === this.nationalitaetCH) {
+      if (nationalitaetIso3Code === ISO3_SCHWEIZ) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.heimatort,

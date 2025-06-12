@@ -37,6 +37,7 @@ import {
   MASK_SOZIALVERSICHERUNGSNUMMER,
 } from '@dv/shared/model/gesuch';
 import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
+import { ISO3_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -275,7 +276,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       const landId = landChangedSig();
       const laender = this.landStore.landListViewSig();
       const svnIsRequired =
-        laender?.find((l) => l.id === landId)?.iso3code === 'CHE';
+        laender?.find((l) => l.id === landId)?.iso3code === ISO3_SCHWEIZ;
 
       this.formUtils.setRequired(
         this.form.controls.sozialversicherungsnummer,

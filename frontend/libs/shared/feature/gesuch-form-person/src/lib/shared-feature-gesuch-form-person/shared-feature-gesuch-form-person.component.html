@@ -339,7 +339,8 @@
         <!-- NATIONALITAET -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
           <dv-shared-ui-land-autocomplete
-            data-testid="form-person-nationalitaet-autocomplete-component"
+            [testIdSig]="'form-person-nationalitaet'"
+            [labelKeySig]="'shared.form.person.nationality.label'"
             formControlName="nationalitaetId"
             [zuvorHintValueSig]="view.formChanges?.nationalitaetId"
             [languageSig]="languageSig()"
@@ -525,7 +526,7 @@
 
         <!-- VORMUNDSCHAFT -->
 
-        @if (nationalitaetIso3CodeSig() === nationalitaetCH) {
+        @if (nationalitaetIso3CodeSig() === iso3Schweiz) {
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
             <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
               'shared.form.person.guardianship.label' | translate

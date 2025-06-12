@@ -9,7 +9,7 @@ import { provideLandLookupMock } from '@dv/shared/util-fn/comp-test';
 
 import { SharedUiLandAutocompleteComponent } from './shared-ui-land-autocomplete.component';
 
-describe('SharedUiLandAutocompleteComponent', () => {
+describe('SharedUiLandAutocompleteComponent Unit Test', () => {
   let component: SharedUiLandAutocompleteComponent;
   let fixture: ComponentFixture<SharedUiLandAutocompleteComponent>;
   let formControl: FormControl<string | null | undefined>;
@@ -48,7 +48,7 @@ describe('SharedUiLandAutocompleteComponent', () => {
 
   it('should display filtered countries when typing', async () => {
     const input = fixture.nativeElement.querySelector(
-      '[data-testid="land-autocomplete-input"]',
+      '[data-testid="form-address-land"]',
     );
 
     // Type 'Sch' to filter for Switzerland
@@ -58,17 +58,17 @@ describe('SharedUiLandAutocompleteComponent', () => {
 
     // Check if the filtered options are displayed correctly
     const filteredLaender = component.laenderValuesSig();
-    expect(filteredLaender).toHaveLength(2); // Switzerland and Germany
+    expect(filteredLaender).toHaveLength(1); // Switzerland
     expect(filteredLaender[0].deKurzform).toBe('Schweiz');
   });
 
   it('should select a country and emit its ID', async () => {
     const input = fixture.nativeElement.querySelector(
-      '[data-testid="land-autocomplete-input"]',
+      '[data-testid="form-address-land"]',
     );
 
     // Type to filter for Germany
-    input.value = 'Deut';
+    input.value = 'Deu';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 

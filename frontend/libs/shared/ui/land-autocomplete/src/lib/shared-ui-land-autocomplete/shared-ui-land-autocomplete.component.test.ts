@@ -23,12 +23,12 @@ async function setup(language: Language = 'de') {
   });
 }
 
-describe(SharedUiLandAutocompleteComponent.name, () => {
+describe('SharedUiLandAutocompleteComponent Component Test', () => {
   it('should set the correct value when a land is searched and selected', async () => {
     const { getByTestId } = await setup();
     const user = userEvent.setup();
 
-    const autocompleteInput = getByTestId('land-autocomplete-input');
+    const autocompleteInput = getByTestId('form-address-land');
     expect(autocompleteInput).toBeInTheDocument();
 
     await user.type(autocompleteInput, 'Sch');
@@ -37,7 +37,7 @@ describe(SharedUiLandAutocompleteComponent.name, () => {
     expect(listbox).toBeInTheDocument();
 
     const options = screen.getAllByRole('option');
-    expect(options.length).toBe(2); // Should show Switzerland and Germany
+    expect(options.length).toBe(1); // Should show Switzerland
 
     expect(options[0]).toHaveTextContent('Schweiz');
 
@@ -49,7 +49,7 @@ describe(SharedUiLandAutocompleteComponent.name, () => {
     const { getByTestId } = await setup('fr');
     const user = userEvent.setup();
 
-    const autocompleteInput = getByTestId('land-autocomplete-input');
+    const autocompleteInput = getByTestId('form-address-land');
 
     await user.type(autocompleteInput, 'Sui');
     const options = screen.getAllByRole('option');

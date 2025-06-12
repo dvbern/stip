@@ -176,7 +176,7 @@ const fillBasicForm = async () => {
   await user.type(screen.getByTestId('form-address-plz'), '3000');
   await user.type(screen.getByTestId('form-address-ort'), 'Bern');
 
-  await clickAutocompleteOption('land-autocomplete-input', 'Sch', 'Schweiz');
+  await clickAutocompleteOption('form-address-land', 'Sch', 'Schweiz');
 
   fireEvent.input(screen.getByTestId('form-partner-geburtsdatum'), {
     target: { value: '01.01.1990' },
