@@ -105,8 +105,7 @@ export class SharedUiLandAutocompleteComponent
       runInInjectionContext(this.injector, () => {
         effect(() => {
           // access the private touchedReactive signal as workaround
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const touched = (control as any).touchedReactive();
+          const touched = control['touchedReactive']();
           if (touched) {
             this.markAsTouched();
           }
