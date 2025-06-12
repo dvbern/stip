@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
@@ -26,6 +27,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -89,6 +91,26 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
+    }
+
+    @Transactional
+    public void canUpdateFlag(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
+        final var fall = fallRepository.requireById(fallId);
+
+        // auszahlung will be created, flag is set to default value (false)
+        if (Objects.isNull(fall.getAuszahlung()) && !auszahlungUpdateDto.getAuszahlungAnSozialdienst()) {
+            return;
+        }
+
+        // auszahlung already exists & flag does not change
+        if (
+            Objects.nonNull(fall.getAuszahlung())
+            && fall.getAuszahlung().isAuszahlungAnSozialdienst() == (auszahlungUpdateDto.getAuszahlungAnSozialdienst())
+        ) {
+            return;
+        }
+
+        canSetFlag(fallId);
     }
 
     @Transactional

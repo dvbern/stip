@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.auszahlung.service;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
-import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
@@ -35,18 +34,11 @@ public class AuszahlungService {
     private final AuszahlungRepository auszahlungRepository;
     private final AuszahlungMapper auszahlungMapper;
     private final ZahlungsverbindungService zahlungsverbindungService;
-    private final AuszahlungAuthorizer auszahlungAuthorizer;
 
     @Transactional
     public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         var fall = fallRepository.requireById(fallId);
         var auszahlung = auszahlungMapper.toEntity(auszahlungUpdateDto);
-
-        if (
-            auszahlungUpdateDto.getAuszahlungAnSozialdienst().booleanValue() != auszahlung.isAuszahlungAnSozialdienst()
-        ) {
-            auszahlungAuthorizer.canSetFlag(fallId);
-        }
 
         var zahlungsverbindung = zahlungsverbindungService.createOrGetZahlungsverbindungForAuszahlung(
             fall,
@@ -66,16 +58,8 @@ public class AuszahlungService {
 
     @Transactional
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        checkIfFlagIsReadonly(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
         var fall = fallRepository.requireById(fallId);
         var auszahlung = fall.getAuszahlung();
-
-        if (
-            auszahlungUpdateDto.getAuszahlungAnSozialdienst().booleanValue() != auszahlung.isAuszahlungAnSozialdienst()
-        ) {
-            auszahlungAuthorizer.canSetFlag(fallId);
-        }
-
         auszahlung.setAuszahlungAnSozialdienst(auszahlungUpdateDto.getAuszahlungAnSozialdienst());
         final var zahlungsverbindung = zahlungsverbindungService.getZahlungsverbindungForAuszahlung(
             fall,
@@ -84,11 +68,5 @@ public class AuszahlungService {
         );
         auszahlung.setZahlungsverbindung(zahlungsverbindung);
         return auszahlungMapper.toDto(auszahlung);
-    }
-
-    private void checkIfFlagIsReadonly(final UUID fallId, Boolean isAuszahlungAnSozialdienst) {
-        if (isAuszahlungAnSozialdienst.booleanValue()) {
-            auszahlungAuthorizer.canSetFlag(fallId);
-        }
     }
 }

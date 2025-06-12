@@ -41,6 +41,7 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     @Override
     public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId);
+        auszahlungAuthorizer.canUpdateFlag(fallId, auszahlungUpdateDto);
         return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 
@@ -55,6 +56,7 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     @Override
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(fallId);
+        auszahlungAuthorizer.canUpdateFlag(fallId, auszahlungUpdateDto);
         return auszahlungService.updateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 }
