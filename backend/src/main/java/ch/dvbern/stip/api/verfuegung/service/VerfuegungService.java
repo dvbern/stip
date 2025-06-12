@@ -81,6 +81,22 @@ public class VerfuegungService {
         verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
+    @Transactional
+    public void createVerfuegungOhneAnspruch(final Gesuch gesuch, final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruch(gesuch, verfuegung.getStipDecision());
+
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
+        );
+        verfuegung.setObjectId(objectId);
+        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+    }
+
     public List<VerfuegungDto> getVerfuegungenByGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
