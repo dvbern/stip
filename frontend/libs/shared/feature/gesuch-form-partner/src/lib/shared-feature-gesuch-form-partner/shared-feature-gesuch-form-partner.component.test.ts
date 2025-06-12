@@ -1,53 +1,12 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-// Mock land data
-const mockLaender: Land[] = [
-  {
-    id: '1',
-    deKurzform: 'Schweiz',
-    frKurzform: 'Suisse',
-    enKurzform: 'Switzerland',
-    itKurzform: 'Svizzera',
-    laendercodeBfs: '8100',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-  {
-    id: '2',
-    deKurzform: 'Deutschland',
-    frKurzform: 'Allemagne',
-    enKurzform: 'Germany',
-    itKurzform: 'Germania',
-    laendercodeBfs: '8207',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-  {
-    id: '3',
-    deKurzform: 'Österreich',
-    frKurzform: 'Autriche',
-    enKurzform: 'Austria',
-    itKurzform: 'Austria',
-    laendercodeBfs: '8204',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-];
-
-// Mock LandLookupService
-const mockLandLookupService = {
-  getCachedLandLookup: jest.fn().mockReturnValue(signal(mockLaender)),
-};
-
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { Land } from '@dv/shared/model/gesuch';
 import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
@@ -55,9 +14,11 @@ import {
   provideSharedOAuthServiceWithGesuchstellerJWT,
 } from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
-import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
+import {
+  checkMatCheckbox,
+  clickAutocompleteOption,
+  provideLandLookupMock,
+} from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner.component';
 
@@ -89,9 +50,9 @@ async function setup() {
           configs: mockConfigsState(),
         },
       }),
-      { provide: LandLookupService, useValue: mockLandLookupService },
       provideSharedOAuthServiceWithGesuchstellerJWT(),
       provideMaterialDefaultOptions(),
+      provideLandLookupMock(),
       provideHttpClient(),
       provideHttpClientTesting(),
       provideCompileTimeConfig(),
@@ -129,6 +90,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is not selected', async () => {
     const { getByTestId, detectChanges } = await setup();
     const user = await fillBasicForm();
+    // await clickAutocompleteOption('land-autocomplete-input', 'Schweiz');
 
     await user.click(getByTestId('button-save-continue'));
 
@@ -140,6 +102,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is selected', async () => {
     const { getByTestId, container, detectChanges } = await setup();
     const user = await fillBasicForm();
+    // await clickAutocompleteOption('land-autocomplete-input', 'Schweiz');
     await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
@@ -166,6 +129,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
 
   it('should reset jahreseinkommen, verpflegunskosten and fahrkosten if "ausbildungMitEinkommenOderErwerbstaetig" is selected, unselected, and selected again', async () => {
     const { getByTestId, detectChanges } = await setup();
+
     const checkbox = await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
@@ -212,41 +176,11 @@ const fillBasicForm = async () => {
   await user.type(screen.getByTestId('form-address-plz'), '3000');
   await user.type(screen.getByTestId('form-address-ort'), 'Bern');
 
-  // put into utility function
-  // screen.getByTestId('form-address-land').click();
-  // await waitFor(() =>
-  //   expect(screen.queryByRole('listbox')).toBeInTheDocument(),
-  // );
-  // screen.getByTestId('CH').click();
-  // await selectLandAutocomplete('Sch', 'land-autocomplete-input');
-
-  fireEvent.input(screen.getByTestId('land-autocomplete-input'), {
-    target: { value: 'Sch' },
-  });
-
-  await waitFor(() =>
-    expect(screen.queryByRole('listbox')).toBeInTheDocument(),
-  );
+  await clickAutocompleteOption('land-autocomplete-input', 'Sch', 'Schweiz');
 
   fireEvent.input(screen.getByTestId('form-partner-geburtsdatum'), {
     target: { value: '01.01.1990' },
   });
 
   return user;
-};
-
-const selectLandAutocomplete = async (land: string, testId: string) => {
-  // const autocomplete = screen.getByTestId(testId);
-  // await userEvent.type(autocomplete, land);
-
-  fireEvent.input(screen.getByTestId(testId), {
-    target: { value: land },
-  });
-
-  await waitFor(() =>
-    expect(screen.queryByRole('listbox')).toBeInTheDocument(),
-  );
-
-  const option = screen.getByTestId(land);
-  await userEvent.click(option);
 };

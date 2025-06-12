@@ -36,6 +36,24 @@ export async function clickMatSelectOption(
   await prepareEvent().click(option);
 }
 
+export async function clickAutocompleteOption(
+  autocompleteTestId: string,
+  searchText: string,
+  optionText: string,
+) {
+  const autocomplete = screen.getByTestId(autocompleteTestId);
+
+  await prepareEvent().type(autocomplete, searchText);
+  await waitFor(() =>
+    expect(screen.queryByRole('listbox')).toBeInTheDocument(),
+  );
+  const listbox = screen.getByRole('listbox');
+  const option = within(listbox).getByText(optionText);
+  await prepareEvent().click(option);
+
+  return autocomplete;
+}
+
 export async function clickFirstMatSelectOption(selectTestId: string) {
   await clickMatSelectOptionByIndex(selectTestId, 0);
 }

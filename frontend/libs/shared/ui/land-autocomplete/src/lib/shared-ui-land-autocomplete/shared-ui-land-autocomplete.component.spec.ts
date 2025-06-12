@@ -1,56 +1,13 @@
 import { provideHttpClient } from '@angular/common/http';
-import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideTranslateService } from '@ngx-translate/core';
 
 import { Land } from '@dv/shared/model/gesuch';
-import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
+import { provideLandLookupMock } from '@dv/shared/util-fn/comp-test';
 
 import { SharedUiLandAutocompleteComponent } from './shared-ui-land-autocomplete.component';
-
-// Mock land data
-const mockLaender: Land[] = [
-  {
-    id: '1',
-    deKurzform: 'Schweiz',
-    frKurzform: 'Suisse',
-    enKurzform: 'Switzerland',
-    itKurzform: 'Svizzera',
-    iso3code: 'CHE',
-    laendercodeBfs: '8100',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-  {
-    id: '2',
-    deKurzform: 'Deutschland',
-    frKurzform: 'Allemagne',
-    enKurzform: 'Germany',
-    itKurzform: 'Germania',
-    iso3code: 'DEU',
-    laendercodeBfs: '8207',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-  {
-    id: '3',
-    deKurzform: 'Österreich',
-    frKurzform: 'Autriche',
-    enKurzform: 'Austria',
-    itKurzform: 'Austria',
-    iso3code: 'AUT',
-    laendercodeBfs: '8204',
-    eintragGueltig: true,
-    isEuEfta: true,
-  },
-];
-
-// Mock LandLookupService
-const mockLandLookupService = {
-  getCachedLandLookup: jest.fn().mockReturnValue(signal(mockLaender)),
-};
 
 describe('SharedUiLandAutocompleteComponent', () => {
   let component: SharedUiLandAutocompleteComponent;
@@ -67,7 +24,7 @@ describe('SharedUiLandAutocompleteComponent', () => {
       providers: [
         provideHttpClient(),
         provideTranslateService(),
-        { provide: LandLookupService, useValue: mockLandLookupService },
+        provideLandLookupMock(),
       ],
     }).compileComponents();
 
@@ -116,14 +73,15 @@ describe('SharedUiLandAutocompleteComponent', () => {
     fixture.detectChanges();
 
     // Simulate selecting Germany from the autocomplete
-    const deutschlandOption = mockLaender.find(
-      (l) => l.deKurzform === 'Deutschland',
-    );
+    const deutschlandOption = component
+      .laenderValuesSig()
+      .find((land) => land.deKurzform === 'Deutschland');
+
     component.autocompleteControl.setValue(deutschlandOption);
     fixture.detectChanges();
 
     // Verify that the correct ID was emitted
-    expect(formControl.value).toBe('2');
+    expect(formControl.value).toBe('uuid2');
   });
 
   it('should display correct language-specific names', () => {
@@ -142,18 +100,18 @@ describe('SharedUiLandAutocompleteComponent', () => {
 
   it('should write value and display correct country', () => {
     // Write a country ID to the component
-    component.writeValue('1');
+    component.writeValue('uuid1');
     fixture.detectChanges();
 
     // Verify that Switzerland is selected
     const selectedLand = component.autocompleteControl.value as Land;
-    expect(selectedLand?.id).toBe('1');
+    expect(selectedLand?.id).toBe('uuid1');
     expect(selectedLand?.deKurzform).toBe('Schweiz');
   });
 
   it('should clear value when undefined is written', () => {
     // First set a value
-    component.writeValue('1');
+    component.writeValue('uuid1');
     fixture.detectChanges();
 
     // Then clear it
@@ -177,7 +135,7 @@ describe('SharedUiLandAutocompleteComponent', () => {
   });
 
   it('should show zuvor hint when provided', () => {
-    fixture.componentRef.setInput('zuvorHintValueSig', '2');
+    fixture.componentRef.setInput('zuvorHintValueSig', 'uuid2');
     fixture.detectChanges();
 
     const hintName = component.zuvorHintLandNameSig();

@@ -10,7 +10,6 @@ import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 @Pipe({
   name: 'translatedLand',
-  standalone: true,
 })
 export class SharedUiTranslatedLandPipe implements PipeTransform {
   private store = inject(Store);

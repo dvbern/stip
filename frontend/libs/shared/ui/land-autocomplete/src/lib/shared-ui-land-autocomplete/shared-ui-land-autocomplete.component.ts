@@ -86,6 +86,8 @@ export class SharedUiLandAutocompleteComponent
   };
 
   constructor() {
+    // this is a workaround to get access to the NgControl instance and not run into circular dependency issues
+    // https://stackoverflow.com/questions/45755958/how-to-get-formcontrol-instance-from-controlvalueaccessor
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
