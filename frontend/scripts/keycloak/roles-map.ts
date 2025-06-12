@@ -44,7 +44,6 @@ export const PERMISSION_ROLE_LIST = [
     'GESUCH_UPDATE_SB',
     'GESUCH_READ_SB',
     'BUCHHALTUNG_ENTRY_CREATE',
-    'BUCHHALTUNG_ENTRY_READ',
     'CUSTOM_DOKUMENT_CREATE',
     'CUSTOM_DOKUMENT_DELETE',
     'DOKUMENT_ABLEHNEN_AKZEPTIEREN',
@@ -75,6 +74,7 @@ export const PERMISSION_ROLE_LIST = [
     'NOTIZ_UPDATE',
     'NOTIZ_DELETE',
     'SEND_EMAIL',
+    'BUCHHALTUNG_ENTRY_READ',
   ],
   [
     ['Sozialdienst-Admin', 'Sachbearbeiter-Admin'],

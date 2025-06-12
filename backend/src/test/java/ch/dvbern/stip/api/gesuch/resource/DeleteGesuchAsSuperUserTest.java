@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -50,7 +51,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class DeleteGesuchAsAdminTest {
+class DeleteGesuchAsSuperUserTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -111,10 +112,10 @@ class DeleteGesuchAsAdminTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(7)
     @AlwaysRun
-    void deleteGesuchAsAdminInStatusEingereicht() {
+    void deleteGesuchAsSuperUserInStatusEingereicht() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }

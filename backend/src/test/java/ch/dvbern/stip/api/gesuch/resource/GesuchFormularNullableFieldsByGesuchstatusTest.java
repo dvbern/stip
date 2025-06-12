@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -396,7 +396,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     @StepwiseExtension.AlwaysRun
     void deleteGesuch() {

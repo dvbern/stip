@@ -31,10 +31,8 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -50,13 +48,13 @@ import static org.mockito.Mockito.when;
 
 class GesuchAuthorizerCanDeleteTest {
     private Benutzer currentBenutzer;
+    private Benutzer otherBenutzer;
     private Benutzer sbBenutzer;
     private Benutzer adminBenutzer;
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
     private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
-    private GesuchTrancheStatusService gesuchTrancheStatusService;
     private GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @BeforeEach
@@ -74,16 +72,11 @@ class GesuchAuthorizerCanDeleteTest {
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
-        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
 
         gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
 
-        final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
-            .setGesuch(gesuch)
-            .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-
         UUID otherBenutzerId = UUID.randomUUID();
-        final var otherBenutzer = new Benutzer();
+        otherBenutzer = new Benutzer();
         otherBenutzer.setId(otherBenutzerId);
         otherBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
 
@@ -92,7 +85,6 @@ class GesuchAuthorizerCanDeleteTest {
         GesuchRepository gesuchRepository = Mockito.mock(GesuchRepository.class);
         GesuchTrancheRepository gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
-        final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
         final var sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
@@ -103,11 +95,15 @@ class GesuchAuthorizerCanDeleteTest {
                             .setGesuchsteller(currentBenutzer)
                     )
             );
+
+        final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
+            .setGesuch(gesuch)
+            .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
             benutzerService,
             gesuchRepository,
-            gesuchTrancheRepository,
             null,
             fallRepository,
             sozialdienstService,
@@ -120,17 +116,16 @@ class GesuchAuthorizerCanDeleteTest {
             gesuchTrancheRepository,
             gesuchRepository,
             sozialdienstService,
-            gesuchStatusService,
-            gesuchTrancheStatusService,
-            gesuchTrancheHistoryService
+            gesuchTrancheHistoryService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(gesuchStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
     }
 
     @Test
@@ -146,30 +141,19 @@ class GesuchAuthorizerCanDeleteTest {
     }
 
     @Test
-    void canReadChangesTest() {
-        // arrange
-        final var uuid = UUID.randomUUID();
-        assertThrows(ForbiddenException.class, () -> authorizer.canReadChanges(uuid));
-
-        when(benutzerService.getCurrentBenutzer()).thenReturn(sbBenutzer);
-
+    void sbOrJuristCanReadTest() {
         // assert
-        assertDoesNotThrow(() -> authorizer.canReadChanges(uuid));
-
-        // arrange
-        when(benutzerService.getCurrentBenutzer()).thenReturn(adminBenutzer);
-
-        // assert
-        assertDoesNotThrow(() -> authorizer.canReadChanges(uuid));
+        assertDoesNotThrow(() -> authorizer.sbOrJuristCanRead());
     }
 
     @Test
     void canDeleteOwnTest() {
         // arrange
         final var uuid = UUID.randomUUID();
+        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
         // assert
-        assertDoesNotThrow(() -> authorizer.canDelete(uuid));
+        assertDoesNotThrow(() -> authorizer.gsOrAdminCanDelete(uuid));
     }
 
     @Test
@@ -177,10 +161,11 @@ class GesuchAuthorizerCanDeleteTest {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
+        when(benutzerService.getCurrentBenutzer()).thenReturn(otherBenutzer);
 
         // assert
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDelete(uuid);
+            authorizer.gsOrAdminCanDelete(uuid);
         });
     }
 
@@ -191,6 +176,6 @@ class GesuchAuthorizerCanDeleteTest {
         final var uuid = UUID.randomUUID();
 
         // assert
-        assertDoesNotThrow(() -> authorizer.canDelete(uuid));
+        assertDoesNotThrow(() -> authorizer.gsOrAdminCanDelete(uuid));
     }
 }

@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class BuchhaltungAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canCreateBuchhaltungSaldokorrektur(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusService.canCreateBuchhaltungSaldokorrektur(gesuch.getGesuchStatus())) {
+        if (Gesuchstatus.SACHBEARBEITER_CAN_CREATE_SALDOKORREKTUR.contains(gesuch.getGesuchStatus())) {
             return;
         }
 

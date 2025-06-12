@@ -18,9 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -29,15 +27,11 @@ import lombok.RequiredArgsConstructor;
 public class BeschwerdeVerlaufAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
 
-    @Transactional
     public void canCreate() {
-        if (!isAdminOrSb(benutzerService.getCurrentBenutzer())) {
-            throw new UnauthorizedException();
-        }
+        permitAll();
     }
 
-    @Transactional
     public void canRead() {
-        canCreate();
+        permitAll();
     }
 }

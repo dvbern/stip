@@ -611,7 +611,7 @@ class GesuchValidatorTest {
             GesuchEinreichenValidationGroup.class
         );
 
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setDarlehen(null);
+        gesuch.getNewestGesuchTranche().orElseThrow().getGesuchFormular().setDarlehen(null);
         assertOneMessage(
             VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE,
             gesuch,

@@ -134,7 +134,10 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
             .setGesuch(gesuch);
-        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var numberOfDays =
             String.valueOf(DateUtil.getDaysBetween(LocalDate.now(), gesuch.getNachfristDokumente()));
@@ -157,7 +160,10 @@ public class NotificationService {
     }
 
     public void createGesuchFehlendeDokumenteEinreichenNotification(final Gesuch gesuch) {
-        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         String msg = Templates.getFehlendeDokumenteEinreichenText(anrede, pia.getNachname(), sprache).render();
@@ -170,7 +176,10 @@ public class NotificationService {
     }
 
     public void createGesuchFehlendeDokumenteNichtEingereichtText(final Gesuch gesuch) {
-        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();

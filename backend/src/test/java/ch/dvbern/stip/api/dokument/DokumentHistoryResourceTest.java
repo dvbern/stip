@@ -23,9 +23,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -464,7 +464,7 @@ class DokumentHistoryResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     @AlwaysRun
     void deleteGesuch() {

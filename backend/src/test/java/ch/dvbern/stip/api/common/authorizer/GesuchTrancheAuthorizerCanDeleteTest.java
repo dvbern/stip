@@ -31,10 +31,8 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
@@ -61,8 +59,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     private GesuchTrancheRepository gesuchTrancheRepository;
     private GesuchRepository gesuchRepository;
     private SozialdienstService sozialdienstService;
-    private GesuchStatusService gesuchStatusService;
-    private GesuchTrancheStatusService gesuchTrancheStatusService;
     private GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @BeforeEach
@@ -97,8 +93,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
-        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        gesuchTrancheStatusService = Mockito.mock(GesuchTrancheStatusService.class);
         gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
 
         authorizer = new GesuchTrancheAuthorizer(
@@ -106,9 +100,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             gesuchTrancheRepository,
             gesuchRepository,
             sozialdienstService,
-            gesuchStatusService,
-            gesuchTrancheStatusService,
-            gesuchTrancheHistoryService
+            gesuchTrancheHistoryService,
+            null
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -155,20 +148,11 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     }
 
     @Test
-    void gsCannotDeleteWithoutRoleTest() {
-        // arrange
-        currentBenutzer.setRollen(Set.of());
-        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
-        final var uuid = UUID.randomUUID();
-        // assert
-        assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
-    }
-
-    @Test
     void gsCannotDeleteOtherAenderungTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
@@ -182,6 +166,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
                     .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)
             )
         );
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
@@ -197,6 +182,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             )
         );
         final var uuid = UUID.randomUUID();
+        gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
@@ -224,7 +210,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         gesuch.setAusbildung(ausbildung);
 
         final var uuid = UUID.randomUUID();
-        when(gesuchTrancheStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
         // gesuchTrancheRepository.requireAenderungById(gesuchTrancheId)
         // assert
         assertThrows(ForbiddenException.class, () -> authorizer.canAenderungEinreichen(uuid));
@@ -254,7 +239,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         fall.setAusbildungs(Set.of(ausbildung));
 
         final var uuid = UUID.randomUUID();
-        when(gesuchTrancheStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
         // assert
         assertDoesNotThrow(() -> authorizer.canAenderungEinreichen(uuid));
     }

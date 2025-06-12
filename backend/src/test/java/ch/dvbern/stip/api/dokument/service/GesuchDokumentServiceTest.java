@@ -290,7 +290,7 @@ class GesuchDokumentServiceTest {
         // Arrange
         Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
         gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
-        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+        GesuchDokument customGesuchDokument = gesuch.getNewestGesuchTranche().orElseThrow().getGesuchDokuments().get(0);
         customGesuchDokument.setGesuchTranche(gesuch.getGesuchTranchen().get(0));
 
         CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();

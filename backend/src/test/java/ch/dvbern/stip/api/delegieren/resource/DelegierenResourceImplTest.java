@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.resource;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.generator.api.model.delegieren.DelegierungCreateDtoSpecModel;
@@ -43,6 +44,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -106,7 +108,7 @@ class DelegierenResourceImplTest {
                 .fallIdPath(fall.getId())
                 .sozialdienstIdPath(sozialdienst.getId())
                 .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
-            Response.Status.UNAUTHORIZED.getStatusCode()
+            Status.FORBIDDEN.getStatusCode()
         );
     }
 
@@ -125,7 +127,7 @@ class DelegierenResourceImplTest {
 
     @Test
     @Order(99)
-    @TestAsAdmin
+    @TestAsSuperUser
     @Transactional
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

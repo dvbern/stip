@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.dokument;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -187,7 +187,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
