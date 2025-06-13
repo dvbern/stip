@@ -29,7 +29,6 @@ import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-approval',
-  standalone: true,
   imports: [
     CommonModule,
     SharedUiIconBadgeComponent,

@@ -25,9 +25,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -47,19 +46,14 @@ public class SteuerdatenService {
     private final GesuchTrancheRepository trancheRepository;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenRepository steuerdatenRepository;
-    private final GesuchFormularRepository gesuchFormularRepository;
     private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-
-    public Steuerdaten getSteuerdatenById(UUID id) {
-        return steuerdatenRepository.requireById(id);
-    }
+    private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
         // query history if tranche does not exist anymore
         var gesuchTranche = trancheRepository.findById(gesuchTrancheId);
         if (gesuchTranche == null) {
-            gesuchTranche = gesuchTrancheHistoryRepository.getLatestVersion(gesuchTrancheId);
+            gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
         }
         return gesuchTranche.getGesuchFormular().getSteuerdaten();
     }

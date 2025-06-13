@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
@@ -147,6 +148,7 @@ public final class GesuchGenerator {
         gesuch.getGesuchTranchen()
             .add(
                 (GesuchTranche) new GesuchTranche()
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
                     .setGueltigkeit(gueltigkeitsRange)
                     .setGesuch(gesuch)
                     .setId(UUID.randomUUID())

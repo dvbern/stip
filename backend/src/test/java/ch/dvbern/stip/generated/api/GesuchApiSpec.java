@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
@@ -39,6 +40,7 @@ import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,6 +102,7 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getAllBeschwerdeVerlaufEntrys(),
+                getAllVerfuegungen(),
                 getBerechnungForGesuch(),
                 getBerechnungsBlattForGesuch(),
                 getBerechnungsblattDownloadToken(),
@@ -193,6 +196,10 @@ public class GesuchApiSpec {
 
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
+    }
+
+    public GetAllVerfuegungenOper getAllVerfuegungen() {
+        return new GetAllVerfuegungenOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
@@ -1063,7 +1070,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #body  (required)
-     * return UUID
+     * return GesuchCreateResponseDtoSpec
      */
     public static class CreateGesuchOper implements Oper {
 
@@ -1094,10 +1101,10 @@ public class GesuchApiSpec {
         /**
          * POST /gesuch
          * @param handler handler
-         * @return UUID
+         * @return GesuchCreateResponseDtoSpec
          */
-        public UUID executeAs(Function<Response, Response> handler) {
-            TypeRef<UUID> type = new TypeRef<UUID>(){};
+        public GesuchCreateResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchCreateResponseDtoSpec> type = new TypeRef<GesuchCreateResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1721,6 +1728,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetAllBeschwerdeVerlaufEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * All Verfuegungen for a gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;VerfuegungDtoSpec&gt;
+     */
+    public static class GetAllVerfuegungenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/verfuegungen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllVerfuegungenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/verfuegungen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/verfuegungen
+         * @param handler handler
+         * @return List&lt;VerfuegungDtoSpec&gt;
+         */
+        public List<VerfuegungDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<VerfuegungDtoSpec>> type = new TypeRef<List<VerfuegungDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllVerfuegungenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllVerfuegungenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllVerfuegungenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

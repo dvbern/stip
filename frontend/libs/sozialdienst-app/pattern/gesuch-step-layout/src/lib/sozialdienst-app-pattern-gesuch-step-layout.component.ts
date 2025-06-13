@@ -13,11 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  isDefined,
-} from '@ngx-translate/core';
+import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -49,11 +45,9 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
   selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
-    TranslateDirective,
     TranslatePipe,
     MatSidenavModule,
     MatMenuModule,
@@ -71,6 +65,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'step',
   });
 
@@ -128,15 +123,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      }
+    });
   }
 
   handleLanguageChangeHeader(language: Language) {

@@ -18,17 +18,16 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,28 +45,32 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canReadDelegierung() {
-        final var sozialdienst = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer();
-        if (sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienst.getId())) {
-            return;
-        }
-        forbidden();
+        permitAll();
     }
 
     @Transactional
-    public void canReadFallDashboard() {
-        canReadDelegierung();
+    public void canReadFallDashboard(final UUID fallId) {
+        final Fall fall = fallRepository.requireById(fallId);
+        if (fall.getDelegierung() == null) {
+            forbidden();
+        }
+
+        if (
+            sozialdienstService
+                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getDelegierung().getSozialdienst().getId())
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
     public void canDelegate(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (!isGesuchsteller(currentBenutzer)) {
-            forbidden();
-        }
-
         final var fall = fallRepository.requireById(fallId);
-        if (!AuthorizerUtil.isGesuchstellerOfFallWithoutDelegierung(currentBenutzer, fall)) {
-            throw new UnauthorizedException();
+        if (!AuthorizerUtil.isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall)) {
+            forbidden();
         }
     }
 
@@ -76,19 +79,14 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         final DelegierterMitarbeiterAendernDto delegierterMitarbeiterAendernDto
     ) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
-
-        final BooleanSupplier isCurrentBenutzerMitarbeiterOfSozialdienst =
-            () -> sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId());
-
         final var targetUser = sozialdienstBenutzerRepository.requireById(
             delegierterMitarbeiterAendernDto.getMitarbeiterId()
         );
-        final BooleanSupplier isTargetUserBenutzerOfSameSozialdienst = () -> sozialdienstService
-            .isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser);
 
         if (
-            isCurrentBenutzerMitarbeiterOfSozialdienst.getAsBoolean()
-            && isTargetUserBenutzerOfSameSozialdienst.getAsBoolean()
+            sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())
+            && sozialdienstService
+                .isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser)
         ) {
             return;
         }

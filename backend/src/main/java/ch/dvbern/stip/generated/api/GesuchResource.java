@@ -10,6 +10,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -22,6 +23,7 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.VerfuegungDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -97,7 +99,7 @@ public interface GesuchResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    UUID createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
+    GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @DELETE
     @Path("/{gesuchId}")
@@ -140,6 +142,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/verfuegungen")
+    @Produces({ "application/json", "text/plain" })
+    List<VerfuegungDto> getAllVerfuegungen(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")

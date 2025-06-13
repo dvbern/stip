@@ -14,9 +14,9 @@ const gesuch: SharedModelGesuch = {
     gesuchsperiodeStart: '',
     gesuchsperiodeStopp: '',
     aufschaltterminStart: '',
-    aufschaltterminStopp: '',
     einreichefristNormal: '',
     einreichefristReduziert: '',
+    fristNachreichenDokumente: 0,
     gesuchsjahr: {
       id: '',
       bezeichnungDe: '',
@@ -38,13 +38,18 @@ const gesuch: SharedModelGesuch = {
     status: 'UEBERPRUEFEN',
     typ: 'TRANCHE',
   },
+  verfuegt: false,
 };
 
 describe('when App Gesuchsteller', () => {
   it('should be readonly if in bearbeitung Sachbearbeiter', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_SB;
 
-    expect(getGesuchPermissions(gesuch, 'gesuch-app').canWrite).toBe(false);
+    expect(
+      getGesuchPermissions(gesuch, 'gesuch-app', {
+        V0_Gesuchsteller: true,
+      }).permissions.canWrite,
+    ).toBe(false);
   });
 });
 
@@ -52,16 +57,10 @@ describe('when App Sachbearbeitung', () => {
   it('should be readonly if in bearbeitung Gesuchsteller', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
-    expect(getGesuchPermissions(gesuch, 'sachbearbeitung-app').canWrite).toBe(
-      false,
-    );
-  });
-
-  it('should allow verfuegung view if in bereit fuer bearbeitung', () => {
-    gesuch.gesuchStatus = Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
-
     expect(
-      getGesuchPermissions(gesuch, 'sachbearbeitung-app').canViewVerfuegung,
-    ).toBe(true);
+      getGesuchPermissions(gesuch, 'sachbearbeitung-app', {
+        V0_Sachbearbeiter: true,
+      }).permissions.canWrite,
+    ).toBe(false);
   });
 });

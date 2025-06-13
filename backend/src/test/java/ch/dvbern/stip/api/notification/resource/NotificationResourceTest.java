@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.notification.resource;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -102,7 +102,7 @@ class NotificationResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     @AlwaysRun
     void deleteGesuch() {

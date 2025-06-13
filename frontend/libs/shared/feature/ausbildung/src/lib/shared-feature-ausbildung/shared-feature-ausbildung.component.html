@@ -1,6 +1,6 @@
 @if (
   (ausbildungStore.ausbildung() | rdIsPendingWithoutCache: { ignoreInitial: true }) ||
-  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache)
+  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache: { ignoreInitial: true })
 ) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
@@ -9,7 +9,7 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw-mt-6 tw-grid tw-min-w-[640px] tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
     [class.lg:tw-grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
@@ -268,6 +268,20 @@
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'periodeNotFound'" class="tw-whitespace-nowrap">
         {{ 'shared.form.ausbildung.form.error.periodeNotFound' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'inactivePeriod'" class="tw-whitespace-nowrap">
+        {{
+          'shared.form.ausbildung.form.error.inactivePeriod'
+            | translate
+              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
+        }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="tw-whitespace-nowrap">
+        {{
+          'shared.form.ausbildung.form.error.periodeIsDraft'
+            | translate
+              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
+        }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
         {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}

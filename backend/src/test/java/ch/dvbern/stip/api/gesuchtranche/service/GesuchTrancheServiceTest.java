@@ -34,6 +34,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,7 @@ class GesuchTrancheServiceTest {
         gesuch = new Gesuch().setGesuchTranchen(
             List.of(
                 new GesuchTranche()
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
                     .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX))
             )
         );
@@ -74,7 +76,7 @@ class GesuchTrancheServiceTest {
     @Test
     void onlyOneAenderungShouldBeAllowed() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // act & assert
         assertTrue(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -84,7 +86,7 @@ class GesuchTrancheServiceTest {
     @Test
     void onlyOneAenderungShouldBeAllowed_Tranche() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // assert
         assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -94,7 +96,7 @@ class GesuchTrancheServiceTest {
     @Test
     void aenderungShouldBeAllowedWhenStateAbgelehnt() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
         assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -104,7 +106,7 @@ class GesuchTrancheServiceTest {
     @Test
     void aenderungShouldBeAllowedWhenStateAbgelehnt_Tranche() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
         assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -114,7 +116,7 @@ class GesuchTrancheServiceTest {
     @Test
     void aenderungShouldBeAllowedWhenStateAngenommen() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
         assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -124,7 +126,7 @@ class GesuchTrancheServiceTest {
     @Test
     void aenderungShouldBeAllowedWhenStateAngenommen_Tranche() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
         assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
@@ -137,7 +139,7 @@ class GesuchTrancheServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.deleteById(any())).thenReturn(true);
         when(gesuchTrancheRepository.findById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
         //assert
@@ -149,7 +151,7 @@ class GesuchTrancheServiceTest {
     @Description("Aenderung create should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
     void aenderungEinreichenAllowedStatesTest() {
         // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
@@ -161,7 +163,7 @@ class GesuchTrancheServiceTest {
         CreateAenderungsantragRequestDto requestDto = new CreateAenderungsantragRequestDto();
 
         assertThrows(
-            IllegalStateException.class,
+            ForbiddenException.class,
             () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto)
         );
         Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());

@@ -10,7 +10,6 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 
 @Component({
   selector: 'dv-shared-ui-badge',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './shared-ui-badge.component.html',
   styleUrl: './shared-ui-badge.component.scss',

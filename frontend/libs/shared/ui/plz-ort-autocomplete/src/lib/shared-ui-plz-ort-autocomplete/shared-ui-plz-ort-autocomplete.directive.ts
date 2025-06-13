@@ -59,9 +59,9 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
         map(([plz, plzLookup]) =>
           !plz
             ? []
-            : plzLookup.list?.fuzzyPlz
+            : (plzLookup.list?.fuzzyPlz
                 .search(plz.toString(), { limit: 15 })
-                ?.map((r) => r.item) ?? [],
+                ?.map((r) => r.item) ?? []),
         ),
         takeUntilDestroyed(this.destroyRef),
       )

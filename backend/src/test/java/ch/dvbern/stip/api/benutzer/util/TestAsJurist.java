@@ -38,6 +38,7 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
         OidcConstants.ROLE_JURIST,
         OidcPermissions.NOTIZ_CREATE,
         OidcPermissions.NOTIZ_UPDATE,
+        OidcPermissions.NOTIZ_READ,
         OidcPermissions.AUSBILDUNGSSTAETTE_CREATE,
         OidcPermissions.AUSBILDUNGSSTAETTE_READ,
         OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE,

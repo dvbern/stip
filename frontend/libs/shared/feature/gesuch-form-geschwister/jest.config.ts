@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName: 'gesuch-app-feature-gesuch-form-geschwister',
   preset: '../../../../jest.preset.js',

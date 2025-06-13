@@ -18,7 +18,6 @@ import {
   Ausbildungsstaette,
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import {
   dateFromMonthYearString,
   printDateAsMonthYear,
@@ -39,8 +38,7 @@ import {
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, SharedUiIconChipComponent],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './two-column-timeline.component.html',
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

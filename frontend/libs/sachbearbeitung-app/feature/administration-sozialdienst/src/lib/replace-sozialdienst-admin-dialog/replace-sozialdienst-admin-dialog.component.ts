@@ -24,7 +24,6 @@ export interface ReplaceSozialdienstAdminDialogResult {
 }
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

@@ -1,5 +1,4 @@
 import { Injectable, computed } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
 import { SharedModelError } from '@dv/shared/model/error';
@@ -29,7 +28,7 @@ const initialState: State = {
 @Injectable({ providedIn: 'root' })
 export class GlobalNotificationStore extends signalStore(
   { protectedState: false },
-  withDevtools('GlobalNotificationStore'),
+
   withState(initialState),
 ) {
   mostImportantNotificationSig = computed(() =>

@@ -1,0 +1,68 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="luca.fondo (generated)" id="1747638029918-1">
+        <createTable tableName="verfuegung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="verfuegungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column name="filepath" type="VARCHAR(255)"/>
+            <column name="filesize" type="VARCHAR(255)"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="stip_decision" type="VARCHAR(255)"/>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1747638029918-2">
+        <createTable tableName="verfuegung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column name="filepath" type="VARCHAR(255)"/>
+            <column name="filesize" type="VARCHAR(255)"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="stip_decision" type="VARCHAR(255)"/>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1747638029918-3">
+        <addPrimaryKey columnNames="rev, id" constraintName="verfuegung_audPK" tableName="verfuegung_aud"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1747638029918-12">
+        <createIndex indexName="IX_verfuegung_mandant" tableName="verfuegung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1747638029918-13">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="verfuegung_aud" constraintName="FKcofp5cmoodxyra4it64014lpw" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1747638029918-14">
+        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="verfuegung" constraintName="FKm5pscygsjy4a2i5fch4jmfdqd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

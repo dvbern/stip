@@ -238,4 +238,27 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .findFirst()
             .orElseThrow(NotFoundException::new);
     }
+
+    public Gesuch findGesuchByAuszahlungId(final UUID auszahlungId) {
+        final var gesuch = QGesuch.gesuch;
+        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .join(gesuchTranche)
+            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .where(gesuchTranche.gesuchFormular.auszahlung.id.eq(auszahlungId))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
+    }
+
+    public List<Gesuch> findGesuchsByGesuchsperiodeId(final UUID gesuchsperiodeId) {
+        final var gesuch = QGesuch.gesuch;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .where(gesuch.gesuchsperiode.id.eq(gesuchsperiodeId))
+            .stream()
+            .toList();
+    }
 }

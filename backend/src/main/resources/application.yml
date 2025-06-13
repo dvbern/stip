@@ -16,6 +16,8 @@ kstip:
   sap:
     system-id: '${STIP_SAP_SYSID}'
     auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
+    connectionTimeout: 6000
+    receiveTimeout: 1000
   seeding:
     seed-on:
       - 'dev'
@@ -65,10 +67,27 @@ kstip:
     cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
     hashkey: 'checksum:multihash'
+  gesuchsperiode:
+    cron: '0 0 0 1/1 * ? *' # Fires daily at 00:00
   unterschriftenblatt:
     cron: '0 0 9 1/1 * ? *' # Fires daily at 09:00
   fehlendedokumente:
-    cron: '0 0 10 1/1 * ? *' # Fires daily at 09:00
+    cron: '0 0 10 1/1 * ? *' # Fires daily at 10:00
+  sapbusinesspartner:
+    bern:
+      cron: '0 0/2 * * * ? *' # Fires every 2 minutes, starting at XX:00
+    dv:
+      cron: '0 1/2 * * * ? *' # Fires every 2 minutes, starting at XX:01
+  sappendingauszahlung:
+    bern:
+      cron: '0 5/2 * * * ? *' # Fires every 2 minutes, starting at XX:05
+    dv:
+      cron: '0 6/2 * * * ? *' # Fires every 2 minutes, starting at XX:06
+  sapremainderauszahlung:
+    bern:
+      cron: '0 10/2 * * * ? *' # Fires every 2 minutes, starting at XX:10
+    dv:
+      cron: '0 11/2 * * * ? *' # Fires every 2 minutes, starting at XX:11
   bern:
     welcome-mail:
       kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
@@ -177,31 +196,38 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
-  # For the generation of the classes fot the NESKO SOAP interface
+# For the generation of the classes fot the NESKO SOAP interface
 #  cxf:
 #    codegen:
 #      wsdl2java:
+#        sap-BusinessPartnerCreate-params:
+#          includes: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
+#          wsdl-location: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
+#        sap-BusinessPartnerRead-params:
+#          includes: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
+#          wsdl-location: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
+#        sap-BusinessPartnerSearch-params:
+#          includes: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
+#          wsdl-location: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
+#        sap-BusinessPartnerChange-params:
+#          includes: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
+#          wsdl-location: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
+#        sap-GetImportStatus-params:
+#          includes: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
+#          wsdl-location: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
+#        sap-VendorPostingCreate-params:
+#          includes: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
+#          wsdl-location: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
 #        nesko-params:
 #          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
 #          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
 #          bindings:
 #            - 'src/main/resources/wsdl/nesko/binding.xml'
 
+
   rest-client:
     GeoCollection-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
-    AuszahlungSapImportStatusEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_ImportStatusRead&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS'
-    AuszahlungSapBusinessPartnerCreateEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerCreate&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapBusinessPartnerChangeEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerChange&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    AuszahlungSapVendorPostingCreateEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
-    AuszahlungSapBusinessPartnerReadEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerRead&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
-    NeskoGetSteuerdatenEndpoint:
-      url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService'
 #   store-type: jdbc-tx
 '%dev':
   quarkus:

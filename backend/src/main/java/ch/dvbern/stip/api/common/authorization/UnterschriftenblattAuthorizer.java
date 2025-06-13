@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +31,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
-    private final GesuchStatusService gesuchStatusService;
     private final BenutzerService benutzerService;
 
     @Transactional
     public void canUpload(final UUID gesuchId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        if (!isAdminOrSb(benutzer)) {
+        if (!isSachbearbeiter(benutzer)) {
             forbidden();
         }
 
@@ -45,9 +44,10 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         if (gesuch.isVerfuegt()) {
             forbidden();
         }
-        if (!gesuchStatusService.canUploadUnterschriftenblatt(benutzer, gesuch.getGesuchStatus())) {
-            forbidden();
+        if (Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus())) {
+            return;
         }
+        forbidden();
     }
 
     public void canGetUnterschriftenblaetter() {
@@ -59,8 +59,8 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var gesuchForDokument = gesuchRepository.requireGesuchForDokument(dokumentId);
 
-        // Only Admins/ SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
-        if (isAdminOrSb(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
+        // Only SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
+        if (isSachbearbeiter(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
             return;
         }
 

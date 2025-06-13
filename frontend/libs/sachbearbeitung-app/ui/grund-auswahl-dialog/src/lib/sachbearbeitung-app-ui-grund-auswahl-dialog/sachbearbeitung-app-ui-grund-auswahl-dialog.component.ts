@@ -47,7 +47,6 @@ export interface GrundAuswahlDialogResult {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-ui-grund-auswahl-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

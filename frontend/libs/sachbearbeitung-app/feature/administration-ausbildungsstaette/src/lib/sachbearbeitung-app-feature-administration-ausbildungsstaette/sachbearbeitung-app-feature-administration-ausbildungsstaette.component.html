@@ -2,14 +2,14 @@
   @if (store.loading()) {
     <dv-shared-ui-loading class="loading-spinner"></dv-shared-ui-loading>
   }
-  @if (store.tableData(); as ausbildungstaetteSource) {
+  @if (dataSourceSig(); as ausbildungstaetteSource) {
     <form [formGroup]="form">
       <table
         mat-table
         matSort
         matSortActive="nameDe"
         matSortDirection="asc"
-        [dataSource]="store.tableData()"
+        [dataSource]="ausbildungstaetteSource"
         multiTemplateDataRows
         class="highlight-expanded"
       >
@@ -44,7 +44,7 @@
                   #filter
                   matInput
                   dvMaxLength
-                  (keyup)="store.setFilter(filter.value)"
+                  (keyup)="filterSig.set(filter.value)"
                   type="text"
                   [placeholder]="'sachbearbeitung-app.admin.ausbildungsstaette.filter' | translate"
                 />
@@ -54,7 +54,7 @@
                   type="button"
                   class="btn btn-link position-absolute p-0 btn-sm"
                   aria-label="Clear"
-                  (click)="store.setFilter(''); filter.value = ''"
+                  (click)="filterSig.set(''); filter.value = ''"
                 >
                   <span class="material-symbols-rounded align-middle">clear</span>
                 </button>

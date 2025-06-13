@@ -6,7 +6,6 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
-  standalone: true,
   imports: [
     SharedUiRouterOutletWrapperComponent,
     SachbearbeitungAppPatternGesuchStepLayoutComponent,

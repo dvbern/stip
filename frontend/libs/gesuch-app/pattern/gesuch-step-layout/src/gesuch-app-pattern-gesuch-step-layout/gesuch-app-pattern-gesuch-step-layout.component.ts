@@ -47,7 +47,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
   selector: 'dv-gesuch-app-pattern-gesuch-step-layout',
-  standalone: true,
   imports: [
     CommonModule,
     SharedPatternGesuchStepNavComponent,
@@ -67,6 +66,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   stepSig = input<GesuchFormStep | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'step',
   });
 
@@ -125,15 +125,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
-        if (gesuchId) {
-          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      }
+    });
   }
 
   handleLanguageChangeHeader(language: Language) {

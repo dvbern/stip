@@ -20,9 +20,9 @@ package ch.dvbern.stip.api.buchhaltung.resource;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -228,7 +228,7 @@ class BuchhaltungResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @AlwaysRun
     @Order(99)
     void deleteGesuch() {

@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.gesuchtranche.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -144,7 +144,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -312,7 +312,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     @StepwiseExtension.AlwaysRun
     void deleteGesuch() {

@@ -38,7 +38,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 const INPUT_DELAY = 600;
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
@@ -117,14 +116,11 @@ export class SozialdienstOverviewComponent {
 
   constructor() {
     this.store.loadAllSozialdienste$();
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.sozialDiensteListDataSourceSig().filter =
-          JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.sozialDiensteListDataSourceSig().filter =
+        JSON.stringify(filterValues);
+    });
   }
 
   deleteSozialdienst(sozialdienst: Sozialdienst) {

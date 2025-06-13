@@ -19,6 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Ausbildung } from '../model/ausbildung';
+import { AusbildungCreateResponse } from '../model/ausbildungCreateResponse';
 import { AusbildungUpdate } from '../model/ausbildungUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -108,9 +109,9 @@ export class AusbildungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildung>;
-     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildung>>;
-     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildung>>;
+     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<AusbildungCreateResponse>;
+     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<AusbildungCreateResponse>>;
+     public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<AusbildungCreateResponse>>;
      public createAusbildung$(requestParameters: AusbildungServiceCreateAusbildungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const ausbildungUpdate = requestParameters.ausbildungUpdate;
         if (ausbildungUpdate === null || ausbildungUpdate === undefined) {
@@ -172,7 +173,7 @@ export class AusbildungService {
         }
 
         const localVarPath = `/ausbildung`;
-        return this.httpClient.request<Ausbildung>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<AusbildungCreateResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: ausbildungUpdate,

@@ -32,7 +32,6 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',
-  standalone: true,
   imports: [
     TranslatePipe,
     SharedFeatureGesuchFormElternEditorComponent,
@@ -64,33 +63,30 @@ export class SharedFeatureGesuchFormElternComponent {
   constructor() {
     this.store.dispatch(SharedEventGesuchFormEltern.init());
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
-    effect(
-      () => {
-        const { loading, gesuch, gesuchFormular } = this.viewSig();
-        const rolesMap = this.permissionStore.rolesMapSig();
-        const { trancheTyp } = this.cacheSig();
-        const { permissions } = preparePermissions(
-          trancheTyp,
-          gesuch,
-          this.appType,
-          rolesMap,
+    effect(() => {
+      const { loading, gesuch, gesuchFormular } = this.viewSig();
+      const rolesMap = this.permissionStore.rolesMapSig();
+      const { trancheTyp } = this.cacheSig();
+      const { permissions } = preparePermissions(
+        trancheTyp,
+        gesuch,
+        this.appType,
+        rolesMap,
+      );
+      if (
+        !loading &&
+        gesuch &&
+        gesuchFormular &&
+        isStepDisabled(ELTERN, gesuch, permissions)
+      ) {
+        this.store.dispatch(
+          SharedEventGesuchFormEltern.nextTriggered({
+            id: gesuch?.id,
+            origin: ELTERN,
+          }),
         );
-        if (
-          !loading &&
-          gesuch &&
-          gesuchFormular &&
-          isStepDisabled(ELTERN, gesuch, permissions)
-        ) {
-          this.store.dispatch(
-            SharedEventGesuchFormEltern.nextTriggered({
-              id: gesuch?.id,
-              origin: ELTERN,
-            }),
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
   }
 
   trackByIndex(index: number) {

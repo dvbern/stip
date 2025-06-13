@@ -11,7 +11,6 @@ import { delay, map } from 'rxjs';
 
 @Component({
   selector: 'dv-shared-ui-router-outlet-wrapper',
-  standalone: true,
   imports: [RouterModule],
   templateUrl: './shared-ui-router-outlet-wrapper.component.html',
   styleUrls: ['./shared-ui-router-outlet-wrapper.component.scss'],
