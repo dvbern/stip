@@ -36,6 +36,9 @@ export const PERMISSION_ROLE_LIST = [
     'CUSTOM_DOKUMENT_READ',
     'NOTIFICATION_READ',
     'UNTERSCHRIFTENBLATT_READ',
+    'AUSZAHLUNG_CREATE',
+    'AUSZAHLUNG_UPDATE',
+    'AUSZAHLUNG_READ',
   ],
   [
     ['Sachbearbeiter'],
