@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.beschwerdeverlauf.service;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -175,7 +175,7 @@ class GesuchResourceBeschwerdeVerlaufTest {
 
     @Test
     @Order(99)
-    @TestAsAdmin
+    @TestAsSuperUser
     @StepwiseExtension.AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

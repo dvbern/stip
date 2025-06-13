@@ -17,8 +17,39 @@
 
 package ch.dvbern.stip.api.buchhaltung.type;
 
+import java.math.BigInteger;
+
 public enum SapStatus {
-    SUCCESS,
-    FAILURE,
+    /**
+     * Initial: Die Delivery wurde noch nicht vollständig verarbeitet.
+     */
     IN_PROGRESS,
+    /**
+     * Erfolgreich: Alle Belege/Datensätze der Delivery wurden erfolgreich verarbeitet.
+     */
+    SUCCESS,
+    /**
+     * Teilerfolg: Mindestens ein Beleg/Datensätze der Delivery enthält einen Fehler und einen
+     * Erfolgsfall.
+     */
+    PARTIAL_SUCCESS,
+    /**
+     * Fehler: Alle Belege/Datensätze der Delivery enthalten Fehler.
+     */
+    FAILURE,
+    /**
+     * Abgeschlossen: Alle oder ein Teil der Belege der Delivery wurden nicht bearbeitet.
+     */
+    SUSPENDED;
+
+    public static SapStatus parse(final BigInteger code) {
+        return switch (code.intValue()) {
+            case 0 -> IN_PROGRESS;
+            case 1 -> SUCCESS;
+            case 2 -> PARTIAL_SUCCESS;
+            case 3 -> FAILURE;
+            case 4 -> SUSPENDED;
+            default -> throw new IllegalStateException("Unexpected value: " + code);
+        };
+    }
 }

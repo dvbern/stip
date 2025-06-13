@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { Notification } from '@dv/shared/model/gesuch';
@@ -20,11 +19,9 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   selector: 'dv-shared-ui-notifications',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
-    RouterLink,
     MatPaginatorModule,
     SharedUiIconChipComponent,
     SharedUiTooltipDateComponent,
@@ -37,6 +34,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 export class SharedUiNotificationsComponent {
   private dialog = inject(MatDialog);
   readonly pageSize = 5;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   notificationsSig = input.required<Notification[]>({ alias: 'notifications' });
   newPageSig = signal<PageEvent | null>(null);
 

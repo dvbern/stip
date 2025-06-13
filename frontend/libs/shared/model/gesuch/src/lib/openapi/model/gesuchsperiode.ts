@@ -20,7 +20,6 @@ export interface Gesuchsperiode {
     gesuchsperiodeStart: string;
     gesuchsperiodeStopp: string;
     aufschaltterminStart: string;
-    aufschaltterminStopp: string;
     einreichefristNormal: string;
     einreichefristReduziert: string;
     gesuchsjahr: Gesuchsjahr;

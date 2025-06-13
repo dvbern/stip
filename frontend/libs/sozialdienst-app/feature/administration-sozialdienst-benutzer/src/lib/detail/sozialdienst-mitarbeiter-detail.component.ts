@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
@@ -36,9 +36,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 
 @Component({
-  standalone: true,
   imports: [
-    RouterLink,
     ReactiveFormsModule,
     TranslatePipe,
     MatInputModule,
@@ -56,6 +54,7 @@ import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 export class SozialdienstMitarbeiterDetailComponent
   implements OnInit, OnDestroy
 {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input<string | undefined>(undefined, { alias: 'id' });
 
   private router = inject(Router);

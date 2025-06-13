@@ -12,7 +12,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -39,11 +38,9 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,
-    RouterLink,
     MatTableModule,
     MatTooltipModule,
     MatPaginatorModule,
@@ -97,18 +94,15 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
+      if (!gesuchId) {
+        return;
+      }
 
-        this.buchhaltungStore.loadBuchhaltung$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      this.buchhaltungStore.loadBuchhaltung$({ gesuchId });
+    });
   }
 
   isStartOfNewGesuch(_: number, buchhaltungEntry: BuchhaltungEntryView) {

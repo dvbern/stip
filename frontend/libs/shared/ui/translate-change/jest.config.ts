@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-ui-translate-change',
   preset: '../../../../jest.preset.js',

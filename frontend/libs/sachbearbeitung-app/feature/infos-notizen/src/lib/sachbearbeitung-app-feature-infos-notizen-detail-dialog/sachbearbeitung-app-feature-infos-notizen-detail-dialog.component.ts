@@ -44,7 +44,6 @@ export type NotizDialogResult = {
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

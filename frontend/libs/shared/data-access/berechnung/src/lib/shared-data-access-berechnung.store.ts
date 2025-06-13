@@ -1,5 +1,4 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
@@ -30,7 +29,6 @@ const initialState: BerechnungState = {
 export class BerechnungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
-  withDevtools('BerechnungStore'),
 ) {
   private gesuchService = inject(GesuchService);
 

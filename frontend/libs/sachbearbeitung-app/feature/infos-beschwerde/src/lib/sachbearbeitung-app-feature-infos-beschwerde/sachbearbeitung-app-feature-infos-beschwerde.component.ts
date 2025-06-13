@@ -15,7 +15,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -34,16 +33,13 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
-  standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
-    SharedUiKommentarDialogComponent,
     SharedUiTruncateTooltipDirective,
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
@@ -75,6 +71,7 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
     ].includes(gesuchStatus);
   });
   gesuchStore = inject(GesuchStore);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
   displayColumns = [
     'timestampErstellt',
@@ -105,19 +102,16 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
+      if (!gesuchId) {
+        return;
+      }
 
-        this.gesuchStore.loadGesuchInfo$({ gesuchId });
-        this.beschwerdeStore.loadBeschwerden$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      this.gesuchStore.loadGesuchInfo$({ gesuchId });
+      this.beschwerdeStore.loadBeschwerden$({ gesuchId });
+    });
   }
 
   entscheidHochladen() {

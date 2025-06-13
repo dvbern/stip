@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'dv-shared-ui-info-container',
   standalone: true,
+  selector: 'dv-shared-ui-info-container',
   imports: [CommonModule],
   templateUrl: './shared-ui-info-container.component.html',
   styleUrl: './shared-ui-info-container.component.scss',
@@ -20,6 +20,7 @@ import {
 })
 export class SharedUiInfoContainerComponent {
   typeSig = input<'info' | 'light' | 'warning' | 'danger' | 'success'>('info', {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'type',
   });
   @HostBinding('class') defaultClasses = 'rounded rounded-lg';

@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -24,13 +25,13 @@ import {
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
-import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiDashboardAusbildungComponent,
@@ -41,7 +42,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
@@ -86,27 +86,21 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
 
-    effect(
-      () => {
-        const fallId = this.fallIdSig();
+    effect(() => {
+      const fallId = this.fallIdSig();
 
-        if (this.gesuchUpdatedSig() && fallId) {
-          this.dashboardStore.loadSozialdienstDashboard$({ fallId });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (this.gesuchUpdatedSig() && fallId) {
+        this.dashboardStore.loadSozialdienstDashboard$({ fallId });
+      }
+    });
   }
 
   compareById = compareById;
@@ -136,19 +130,14 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     const {
       gesuch: { id, startDate, endDate },
     } = melden;
-    SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
+    SharedDialogTrancheErstellenComponent.open(this.dialog, {
+      forAenderung: true,
+      gesuchId: id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
     })
       .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.gesuchAenderungStore.createGesuchAenderung$({
-            gesuchId: id,
-            createAenderungsantragRequest: result,
-          });
-        }
-      });
+      .subscribe();
   }
 
   deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {

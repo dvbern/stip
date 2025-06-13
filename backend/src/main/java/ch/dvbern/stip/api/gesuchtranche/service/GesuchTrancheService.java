@@ -34,7 +34,6 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -100,7 +99,6 @@ public class GesuchTrancheService {
     private final RequiredDokumentService requiredDokumentService;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
@@ -145,12 +143,13 @@ public class GesuchTrancheService {
         UUID gesuchId
     ) {
         final var allTranchenFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusChangedToVerfuegt(gesuchId);
+            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusFirstChangedToVerfuegt(gesuchId);
 
         final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
         allTranchenOut.addAll(
             allTranchenList.stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .sorted(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigAb()))
                 .toList()
         );
         allTranchenOut.addAll(
@@ -269,7 +268,12 @@ public class GesuchTrancheService {
         var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         // query GesuchTrancheHistory, if requested tranche might have been overwritten
         if (gesuchTranche == null) {
-            return gesuchTrancheHistoryRepository.getGesuchDokumenteForGesuchTrancheOfLatestRevision(gesuchTrancheId);
+            return gesuchTrancheHistoryService
+                .getLatestTranche(gesuchTrancheId)
+                .getGesuchDokuments()
+                .stream()
+                .map(gesuchDokumentMapper::toDto)
+                .toList();
         }
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
@@ -344,20 +348,12 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var allowedStates = Set.of(
-            Gesuchstatus.STIPENDIENANSPRUCH,
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH
-        );
-
-        if (!allowedStates.contains(gesuch.getGesuchStatus())) {
-            throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
-        }
 
         if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();
         }
 
-        final var trancheToCopy = gesuch.getTrancheValidOnDate(aenderungsantragCreateDto.getStart())
+        final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(aenderungsantragCreateDto.getStart())
             .orElseThrow(NotFoundException::new);
 
         final var newTranche = GesuchTrancheCopyUtil
@@ -378,7 +374,7 @@ public class GesuchTrancheService {
         final CreateGesuchTrancheRequestDto createDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = gesuch.getTrancheValidOnDate(createDto.getStart())
+        final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(createDto.getStart())
             .orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(
             trancheToCopy,

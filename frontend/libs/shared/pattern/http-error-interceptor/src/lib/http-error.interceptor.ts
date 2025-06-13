@@ -9,6 +9,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   HANDLE_NOT_FOUND,
   HANDLE_UNAUTHORIZED,
+  IGNORE_BAD_REQUEST_ERRORS,
   IGNORE_ERRORS,
   IGNORE_NOT_FOUND_ERRORS,
   NO_GLOBAL_ERRORS,
@@ -61,6 +62,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
 
           const storableError = JSON.parse(JSON.stringify(error));
           const errorToDispatch = sharedUtilFnErrorTransformer(storableError);
+          console.log('HttpErrorInterceptor', errorToDispatch);
           let hasBeenHandled = false;
 
           // Run all known handlers and stop if one returns a result
@@ -98,33 +100,47 @@ const handleUnknownHttpError = (
   notificationStore: GlobalNotificationStore,
 ) => {
   return (error: SharedModelError) => {
-    if (error.type === 'unknownHttpError') {
-      if (error.status === 400 && req.context.get(IGNORE_ERRORS)) {
-        return handledError(throwError(() => error));
-      }
-      if (error.status === 401) {
-        const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
-        if (unauthorizedHandler) {
-          unauthorizedHandler(error);
-        } else {
-          // Redirect to the login page and use the root URL as the redirect URI
-          // to prevent the user being redirected back to the login page after a successful login
-          // because of another unhandled 401 error
-          oauth.redirectUri = location.origin + '/';
-          oauth.logOut();
+    switch (error.type) {
+      case 'validationError': {
+        if (
+          error.status === 400 &&
+          req.context.get(IGNORE_BAD_REQUEST_ERRORS)
+        ) {
+          return handledError(throwError(() => error));
         }
-        return handledError(EMPTY);
+        break;
       }
-      // Check for 403 FORBIDDEN
-      if (error.status === 403) {
-        notificationStore.handleForbiddenError(error);
-        return handledError();
-      }
-      // Check for 404 NOT FOUND if a handler is provided
-      const notFoundHandler = req.context.get(HANDLE_NOT_FOUND);
-      if (notFoundHandler && error.status === 404) {
-        notFoundHandler(error);
-        return handledError();
+      case 'unknownHttpError': {
+        if (
+          error.status === 400 &&
+          req.context.get(IGNORE_BAD_REQUEST_ERRORS)
+        ) {
+          return handledError(throwError(() => error));
+        }
+        if (error.status === 401) {
+          const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
+          if (unauthorizedHandler) {
+            unauthorizedHandler(error);
+          } else {
+            // Redirect to the login page and use the root URL as the redirect URI
+            // to prevent the user being redirected back to the login page after a successful login
+            // because of another unhandled 401 error
+            oauth.redirectUri = location.origin + '/';
+            oauth.logOut();
+          }
+          return handledError(EMPTY);
+        }
+        // Check for 403 FORBIDDEN
+        if (error.status === 403) {
+          notificationStore.handleForbiddenError(error);
+          return handledError();
+        }
+        // Check for 404 NOT FOUND if a handler is provided
+        const notFoundHandler = req.context.get(HANDLE_NOT_FOUND);
+        if (notFoundHandler && error.status === 404) {
+          notFoundHandler(error);
+          return handledError();
+        }
       }
     }
     return unhandledError;

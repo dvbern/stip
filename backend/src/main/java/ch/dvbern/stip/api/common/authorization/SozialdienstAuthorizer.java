@@ -78,7 +78,7 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        throw new UnauthorizedException();
+        forbidden();
     }
 
     @Transactional

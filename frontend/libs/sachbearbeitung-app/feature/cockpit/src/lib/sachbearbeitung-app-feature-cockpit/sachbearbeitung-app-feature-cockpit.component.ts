@@ -124,7 +124,6 @@ type DashboardFormFields =
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
-  standalone: true,
   imports: [
     A11yModule,
     CommonModule,
@@ -353,29 +352,21 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   constructor() {
     // Handle the case where the page is higher than the total number of pages
-    effect(
-      () => {
-        const { page, pageSize } = this.getInputs();
-        const totalEntries =
-          this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
+    effect(() => {
+      const { page, pageSize } = this.getInputs();
+      const totalEntries =
+        this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
 
-        if (
-          page &&
-          pageSize &&
-          totalEntries &&
-          page * pageSize > totalEntries
-        ) {
-          this.router.navigate(['.'], {
-            queryParams: {
-              page: Math.ceil(totalEntries / pageSize) - 1,
-            },
-            queryParamsHandling: 'merge',
-            replaceUrl: true,
-          });
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
+        this.router.navigate(['.'], {
+          queryParams: {
+            page: Math.ceil(totalEntries / pageSize) - 1,
+          },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      }
+    });
 
     // Handle normal filter form control changes
     effect(
@@ -450,30 +441,27 @@ export class SachbearbeitungAppFeatureCockpitComponent
     );
 
     // When the route param inputs change, load the gesuche
-    effect(
-      () => {
-        const {
-          query,
-          filter,
-          startEndFilter,
-          sortColumn,
-          sortOrder,
-          page,
-          pageSize,
-        } = this.getInputs();
+    effect(() => {
+      const {
+        query,
+        filter,
+        startEndFilter,
+        sortColumn,
+        sortOrder,
+        page,
+        pageSize,
+      } = this.getInputs();
 
-        this.gesuchStore.loadGesuche$({
-          getGesucheSBQueryType: query,
-          ...filter,
-          ...startEndFilter,
-          sortColumn,
-          sortOrder,
-          page: page ?? 0,
-          pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+      this.gesuchStore.loadGesuche$({
+        getGesucheSBQueryType: query,
+        ...filter,
+        ...startEndFilter,
+        sortColumn,
+        sortOrder,
+        page: page ?? 0,
+        pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
+      });
+    });
   }
 
   /**

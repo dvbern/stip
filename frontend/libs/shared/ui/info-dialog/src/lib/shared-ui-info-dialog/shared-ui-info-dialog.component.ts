@@ -10,7 +10,6 @@ export interface InfoDialogData {
 
 @Component({
   selector: 'dv-shared-ui-info-dialog',
-  standalone: true,
   imports: [CommonModule, TranslatePipe],
   templateUrl: './shared-ui-info-dialog.component.html',
   styleUrl: './shared-ui-info-dialog.component.scss',

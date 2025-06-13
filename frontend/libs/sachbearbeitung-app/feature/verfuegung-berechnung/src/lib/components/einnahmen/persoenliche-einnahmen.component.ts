@@ -11,7 +11,6 @@ import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-persoenliche-einnahmen',
-  standalone: true,
   imports: [
     CommonModule,
     TranslatePipe,

@@ -36,7 +36,6 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +55,8 @@ class DelegierenAuthorizerTest {
     private DelegierungRepository delegierungRepository;
     private SozialdienstService sozialdienstService;
     private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+
+    private Fall fall;
 
     @BeforeEach
     void setUp() {
@@ -90,7 +91,7 @@ class DelegierenAuthorizerTest {
         sozialdienst.setSozialdienstBenutzers(List.of(sozialdienstbenutzer));
 
         // the fall is delegiert to the current sozialdienst-mitarbeiter
-        var fall = new Fall();
+        fall = new Fall();
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(sozialdienstbenutzer);
@@ -114,16 +115,6 @@ class DelegierenAuthorizerTest {
     }
 
     @Test
-    void canReadDelegierung_shouldFail_asNONSozialdienstMitarbeiterOfSozialdienst() {
-        // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
-
-        // act & assert
-        assertThrows(ForbiddenException.class, () -> delegierenAuthorizer.canReadDelegierung());
-    }
-
-    @Test
     void canReadFallDashboard_shouldWork_asDelegierterMitarbeiterOfSozialdienst() {
         // arrange
         setupSozialdienstMitarbeiter();
@@ -133,7 +124,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
     }
 
     @Test
@@ -149,7 +140,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadFallDashboard(UUID.randomUUID()));
     }
 
     @Test
@@ -159,6 +150,7 @@ class DelegierenAuthorizerTest {
         setupDelegierung();
         final Benutzer benutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().get();
         when(benutzerService.getCurrentBenutzer()).thenReturn(benutzer);
+        fall.setGesuchsteller(benutzer);
 
         // act & assert
         assertThrows(ForbiddenException.class, () -> delegierenAuthorizer.canDelegate(UUID.randomUUID()));
@@ -179,7 +171,7 @@ class DelegierenAuthorizerTest {
         fall.setGesuchsteller(gesuchsteller);
 
         // act & assert
-        assertThrows(UnauthorizedException.class, () -> delegierenAuthorizer.canDelegate(UUID.randomUUID()));
+        assertThrows(ForbiddenException.class, () -> delegierenAuthorizer.canDelegate(UUID.randomUUID()));
     }
 
     @Test

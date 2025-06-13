@@ -17,17 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.GesuchTrancheStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusStateChangeHandler;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
@@ -81,27 +76,6 @@ public class GesuchTrancheStatusService {
         );
 
         // TODO: KSTIP-XXXX - Save kommentarDto.getText() in Nachricht and Protokoll
-    }
-
-    public boolean benutzerCanEdit(final Benutzer benutzer, final GesuchTrancheStatus gesuchTrancheStatus) {
-        final var identifiers = benutzer.getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-        final var editStates = new HashSet<GesuchTrancheStatus>();
-        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            editStates.addAll(GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT);
-        }
-
-        if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT);
-        }
-
-        if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
-            editStates.addAll(GesuchTrancheStatus.ADMIN_CAN_EDIT);
-        }
-
-        return editStates.contains(gesuchTrancheStatus);
     }
 
     StateMachine<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachine(

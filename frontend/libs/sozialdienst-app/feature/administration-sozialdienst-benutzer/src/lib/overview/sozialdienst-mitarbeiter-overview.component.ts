@@ -40,7 +40,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 const INPUT_DELAY = 600;
 
 @Component({
-  standalone: true,
   imports: [
     RouterLink,
     TranslatePipe,
@@ -112,13 +111,10 @@ export class SozialdienstMitarbeiterOverviewComponent {
 
   constructor() {
     this.store.loadSozialdienstBenutzerList$();
-    effect(
-      () => {
-        const filterValues = this.filterFormChangedSig();
-        this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const filterValues = this.filterFormChangedSig();
+      this.benutzerListDataSourceSig().filter = JSON.stringify(filterValues);
+    });
   }
 
   deleteBenutzer(benutzer: SozialdienstBenutzer) {

@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.steuerdaten.resource;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -200,7 +200,7 @@ class SteuerdatenResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @AlwaysRun
     @Order(99)
     void deleteGesuch() {

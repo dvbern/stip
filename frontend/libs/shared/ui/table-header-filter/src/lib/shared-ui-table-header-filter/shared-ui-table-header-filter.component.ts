@@ -8,7 +8,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-table-header-filter',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './shared-ui-table-header-filter.component.html',
   styleUrl: './shared-ui-table-header-filter.component.scss',

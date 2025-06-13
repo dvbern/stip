@@ -63,7 +63,6 @@ public class GesuchsperiodeApiSpec {
         return Arrays.asList(
                 createGesuchsperiode(),
                 deleteGesuchsperiode(),
-                getAktiveGesuchsperioden(),
                 getGesuchsperiode(),
                 getGesuchsperioden(),
                 getLatest(),
@@ -78,10 +77,6 @@ public class GesuchsperiodeApiSpec {
 
     public DeleteGesuchsperiodeOper deleteGesuchsperiode() {
         return new DeleteGesuchsperiodeOper(createReqSpec());
-    }
-
-    public GetAktiveGesuchsperiodenOper getAktiveGesuchsperioden() {
-        return new GetAktiveGesuchsperiodenOper(createReqSpec());
     }
 
     public GetGesuchsperiodeOper getGesuchsperiode() {
@@ -244,67 +239,6 @@ public class GesuchsperiodeApiSpec {
          * @return operation
          */
         public DeleteGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Get all active Gesuchsperioden
-     * 
-     *
-     * return List&lt;GesuchsperiodeDtoSpec&gt;
-     */
-    public static class GetAktiveGesuchsperiodenOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchsperiode/aktive";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAktiveGesuchsperiodenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchsperiode/aktive
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchsperiode/aktive
-         * @param handler handler
-         * @return List&lt;GesuchsperiodeDtoSpec&gt;
-         */
-        public List<GesuchsperiodeDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchsperiodeDtoSpec>> type = new TypeRef<List<GesuchsperiodeDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAktiveGesuchsperiodenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAktiveGesuchsperiodenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

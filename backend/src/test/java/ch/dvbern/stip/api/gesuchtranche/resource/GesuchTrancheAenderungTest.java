@@ -17,10 +17,10 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -138,7 +138,7 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
+            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -325,7 +325,7 @@ class GesuchTrancheAenderungTest {
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 
     @Test
-    @TestAsAdmin
+    @TestAsSuperUser
     @Order(99)
     @AlwaysRun
     void deleteGesuch() {

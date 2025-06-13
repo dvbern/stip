@@ -31,7 +31,7 @@ public final class CreateGesuchTrancheRequestDtoSpecModel {
         return TestUtil.createUpdateDtoSpec(CreateGesuchTrancheRequestDtoSpec::new, (model) -> {
             model.setComment("Testing Tranchen");
             model.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1).with(firstDayOfMonth()));
-            model.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigBis().plusMonths(1).with(lastDayOfMonth()));
+            model.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigBis().with(lastDayOfMonth()));
         });
     }
 }

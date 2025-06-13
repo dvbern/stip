@@ -1,16 +1,6 @@
 import { Provider } from '@angular/core';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MatDateFormats,
-} from '@angular/material/core';
-import {
-  DateFnsAdapter,
-  provideDateFnsAdapter,
-} from '@angular/material-date-fns-adapter';
-
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { DateAdapter, MatDateFormats } from '@angular/material/core';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 
 import { DvDateAdapter } from './date-adapter';
 
@@ -48,27 +38,4 @@ export const MAT_DEFAULT_FORMATS: MatDateFormats = {
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM yyyy',
   },
-};
-
-export const provideMonthYearSachbearbeiterDateAdapter = () => {
-  return [
-    {
-      provide: DateAdapter,
-      useClass: DateFnsAdapter,
-      deps: [MAT_DATE_LOCALE],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useFactory: (config: SharedModelCompileTimeConfig) => {
-        return config.isSachbearbeitungApp
-          ? MONTH_YEAR_FORMAT
-          : MAT_DEFAULT_FORMATS;
-      },
-      deps: [SharedModelCompileTimeConfig],
-    },
-    {
-      provide: DateAdapter,
-      useClass: DvDateAdapter,
-    },
-  ];
 };

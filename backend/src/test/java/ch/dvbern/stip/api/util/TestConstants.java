@@ -51,6 +51,8 @@ public final class TestConstants {
     public static final String QR_IBAN_CH_INVALID = "CH6030808002425998193";
     public static final String IBAN_LI_NUMMER_VALID = "LI7408806123456789012";
     public static final String IBAN_AT_NUMMER_VALID = "AT483200000012345864";
+    public static final String IBAN_WITH_LETTER_VALID = "CH780023323395150249Q";
+    public static final String IBAN_WITH_LETTER_INVALID = "CH780023323395150249A";
 
     public static UUID TEST_AUSBILDUNGSGANG_ID;
     public static UUID TEST_BILDUNGSKATEGORIE_ID;

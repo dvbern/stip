@@ -45,14 +45,7 @@ public enum Gesuchstatus {
     GESUCH_ABGELEHNT,
     NEGATIVE_VERFUEGUNG;
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_DELETE_DOKUMENTE = Collections.unmodifiableSet(
-        EnumSet.of(
-            IN_BEARBEITUNG_GS,
-            FEHLENDE_DOKUMENTE
-        )
-    );
-
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_UPLOAD_DOCUMENT = Collections.unmodifiableSet(
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_MODIFY_DOKUMENT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             FEHLENDE_DOKUMENTE
@@ -68,14 +61,7 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.of(
-                IN_BEARBEITUNG_SB,
-                BEREIT_FUER_BEARBEITUNG,
-                IN_FREIGABE,
-                WARTEN_AUF_UNTERSCHRIFTENBLATT,
-                VERSANDBEREIT,
-                VERSENDET,
-                NICHT_ANSPRUCHSBERECHTIGT,
-                ANSPRUCH_MANUELL_PRUEFEN
+                IN_BEARBEITUNG_SB
             )
         );
 
@@ -137,10 +123,6 @@ public enum Gesuchstatus {
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
         EnumSet.of(
-            VERFUEGT,
-            VERSANDBEREIT,
-            VERSENDET,
-            WARTEN_AUF_UNTERSCHRIFTENBLATT,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH
         )

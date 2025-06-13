@@ -1,0 +1,1356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="os_BusinessPartnerSearch" targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:p1="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation/>
+  <wsp:UsingPolicy wsdl:required="true"/>
+  <wsp:Policy wsu:Id="OP_os_BusinessPartnerSearch"/>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://sap.com/xi/SAPGlobal/GDT" xmlns="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:attribute name="DeletionIndicator" type="Indicator"/>
+      <xsd:simpleType name="Indicator">
+        <xsd:restriction base="xsd:boolean"/>
+      </xsd:simpleType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:p9="http://sap.com/xi/SAPGlobal/GDT" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+      <xsd:import namespace="http://sap.com/xi/SAPGlobal/GDT"/>
+      <xsd:element name="BusinessPartnerSearch_Response" type="BusinessPartnerSearch_Response"/>
+      <xsd:element name="BusinessPartnerSearch_Request" type="BusinessPartnerSearch_Request"/>
+      <xsd:complexType name="BusinessPartnerSearch_Response">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">1664d01aeec611eb934f000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="BUSINESS_PARTNER" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a3e4f6fe618f11eb9872c2c10d8e829b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="HEADER" type="BusinessPartner_HEADER">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a9458e21d87a11ebbe3c506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ID_KEYS" type="BusinessPartner_ID_KEYS">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a9458e22d87a11eba32a506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="PERS_DATA" type="BusinessPartner_PERS_DATA" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a9458e23d87a11ebc202506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ORG_DATA" type="BusinessPartner_ORG_DATA" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a9458e24d87a11eb818c506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ADDRESS" type="BusinessPartner_ADDRESS" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a3e4e1b7618f11eba4a2c2c10d8e829b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="COMMUNICATION" type="BusinessPartner_COMMUNICATION" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a9458e25d87a11eba69e506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="ADDITIONAL_DATA" type="AdditionalData" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">164c8027eec611ebcedc506b8db148ca</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="RETURN_CODE" type="ReturnCode" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a3e55a53618f11ebb489c2c10d8e829b</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="AdditionalData">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">61777f85e18111ebc138000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="KEY">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">fe98fb98d7dd11ebc049506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Schlüssel zum Feld</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="VALUE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">fe98fb99d7dd11eb84db506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Feldwert</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="255"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="INDEX">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">fe98fb9ad7dd11eb8e46506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Position (optional)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal">
+                <xsd:totalDigits value="10"/>
+                <xsd:fractionDigits value="0"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_ID_KEYS">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">b7e84e18328d11ec99ec00000188603e</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="EXT_ID">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">d7ba27a31c2e11ebcd2900059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geschäftspartnernummer im externen System</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="20"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="AHV_NR">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">d7ba27a41c2e11ebb12100059a3c7a00</xsd:appinfo>
+              <xsd:documentation>AHV-Nummer</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="13"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="UID_NR">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">ad3ff079d7e411ebaa44506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Unternehmens-Identifikationsnummer</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="12"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="ZPV_NR">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">ad3ff07ad7e411eba8cf506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>ZPV-Nummer</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_ADDRESS">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">5c414f60665111edc229000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="ADR_KIND">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d838567665111eda774000000605fae</xsd:appinfo>
+              <xsd:documentation>Adressart (XXDEFAULT = Standardadresse)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="C_O_NAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d838568665111eda70b000000605fae</xsd:appinfo>
+              <xsd:documentation>c/o-Name</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="CITY">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d838569665111edce82000000605fae</xsd:appinfo>
+              <xsd:documentation>Ort</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="DISTRICT">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856a665111ed9b72000000605fae</xsd:appinfo>
+              <xsd:documentation>Ortsteil</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="POSTL_COD1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856b665111edcd67000000605fae</xsd:appinfo>
+              <xsd:documentation>Postleitzahl des Orts</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PO_BOX">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856c665111eda955000000605fae</xsd:appinfo>
+              <xsd:documentation>Postfach</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="STREET">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856d665111edc963000000605fae</xsd:appinfo>
+              <xsd:documentation>Straße</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="HOUSE_NO">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856e665111edab79000000605fae</xsd:appinfo>
+              <xsd:documentation>Hausnummer</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="COUNTRY">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d83856f665111ed8845000000605fae</xsd:appinfo>
+              <xsd:documentation>Länderschlüssel</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="POSTL_COD2" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6d838570665111edb598000000605fae</xsd:appinfo>
+              <xsd:documentation>Postleitzahl zum Postfach</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_PERS_DATA">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">5dfe42f8eec411eb83e2000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="FIRSTNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208bc1c2f11eb807300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Vorname des Geschäftspartners (Person)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="LASTNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208bd1c2f11ebaf1f00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Nachname des Geschäftspartners (Person)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="CORRESPONDLANGUAGEISO">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d691c2f11eb991e00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>2-stelliger SAP Language Code</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="BIRTHNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208be1c2f11eb88de00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geburtsname des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="MIDDLENAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208bf1c2f11ebca2500059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Mittlerer Name oder zweiter Vorname der Person</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="SECONDNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208c01c2f11eb817c00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Zweiter Nachname der Person</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="TITLE_ACA1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208c11c2f11ebcef500059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Akademischer Titel: Schlüssel</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="TITLE_ACA2">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e208c21c2f11ebbe3c00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Zweiter akademischer Titel (Schlüssel)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="TITLE_SPPL">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e239ff1c2f11eb831b00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Namenszusatz, z.B. Adelstitel (Schlüssel)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PREFIX1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e23a001c2f11eb9f1500059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Vorsatzwort zum Namen (Schlüssel)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PREFIX2">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e23a011c2f11eba6b300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>2. Vorsatzwort zum Namen (Schlüssel)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NICKNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e23a021c2f11ebc04800059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Rufname des Geschäftspartners (Person)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="INITIALS">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e23a031c2f11eb91ec00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Middle Initial bzw. Initialen der Person</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAMEFORMAT">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e23a041c2f11ebbf2b00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Format für die Namensaufbereitung</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAMCOUNTRY">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e2656e1c2f11eb800300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Land für Namensaufbereitungsregel</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAMCOUNTRYISO">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e2656f1c2f11eb87a400059a3c7a00</xsd:appinfo>
+              <xsd:documentation>ISO-Code des Landes</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="SEX">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e265701c2f11ebb4b600059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geschlecht des Geschäftspartners (Person)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="BIRTHPLACE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e265711c2f11eb92a300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geburtsort des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="BIRTHDATE" minOccurs="0" default="1000-01-01" nillable="true">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e265721c2f11eb803500059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geburtsdatum des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:date">
+                  <xsd:attribute ref="p9:DeletionIndicator"/>
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="DEATHDATE" minOccurs="0" default="1000-01-01" nillable="true">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e265731c2f11ebaf0100059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Sterbedatum des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:date">
+                  <xsd:attribute ref="p9:DeletionIndicator"/>
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="MARITALSTATUS">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e265741c2f11eba3d000059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Familienstand des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="CORRESPONDLANGUAGE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d681c2f11ebb1ce00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Geschäftspartner: Korrespondenzsprache</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="FULLNAME">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6a1c2f11ebb91900059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Vollständiger Name</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="80"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="EMPLOYER">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6b1c2f11ebc9e600059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Name des Arbeitgebers einer natürlichen Person</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="35"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="OCCUPATION">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6c1c2f11ebb0e900059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Beruf des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NATIONALITY">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6d1c2f11ebb24300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Nationalität des Geschäftspartners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NATIONALITYISO">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6e1c2f11ebbf9100059a3c7a00</xsd:appinfo>
+              <xsd:documentation>ISO-Code des Landes</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="COUNTRYORIGIN">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d6f1c2f11eb8bc300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Herkunftsland bei Gebietsfremden</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="BIRTHDT_STATUS">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a2e28d701c2f11ebbcce00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Date of Birth: Status</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartnerSearch_Request">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">3a7aa0fc512011ec86d000000188603e</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="SENDER" type="SenderParms">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">4c7ffafb0c6411eb840400059a3c7a00</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="FILTER_PARMS">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0c7af45e617b11eba888c2c10d8e829b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="ONLY_WITH_REF" type="xsd:boolean" default="true">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a45aa33a618211ebcee7c2c10d8e829b</xsd:appinfo>
+                    <xsd:documentation>Nur Geschäftspartner mit Referenz lesen</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="READ_ALL_DETAILS" type="xsd:boolean" default="false">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">342468d7618c11ebb83bc2c10d8e829b</xsd:appinfo>
+                    <xsd:documentation>Alle Details lesen / (bei false nur Basis-Daten)</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="OFFSET" minOccurs="0" default="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">ed732d56d87a11ebab30506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:integer">
+                      <xsd:totalDigits value="6"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="LIMIT" minOccurs="0" default="100">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">ed732d57d87a11eba3cb506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:integer">
+                      <xsd:totalDigits value="6"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="FILTER_PARMS_ID" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6cbc55fc0c6511ebb65600059a3c7a00</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="BPARTNER" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">1758ff21619f11ebb716c2c10d8e829b</xsd:appinfo>
+                    <xsd:documentation>SAP ID eines Business Partners</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="EXT_ID" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf861cf111eb974700059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>Geschäftspartnernummer im externen System</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="20"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="AHV_NR" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf881cf111eb9c3900059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>AHV-Nummer</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="13"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="UID_NR" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf891cf111eba49600059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>Unternehmens-Identifikationsnummer</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="12"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="ZPV_NR" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf871cf111ebba1e00059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>ZPV-Nummer</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="DELIVERY_ID" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">0c7af45d617b11ebabc9c2c10d8e829b</xsd:appinfo>
+                    <xsd:documentation>Suche mit Delivery ID</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:decimal">
+                      <xsd:totalDigits value="19"/>
+                      <xsd:fractionDigits value="0"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="FILTER_PARMS_BASE" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">8f559277d87011eb92f4506b8d80085b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="PARTN_CAT" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">bd5a19575e4011ebb4a6bef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Geschäftspartnertyp</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:enumeration value="1"/>
+                      <xsd:enumeration value="2"/>
+                      <xsd:length value="1"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="NAME" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf8a1cf111ebc16800059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>Nachname/Firmenname</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="VORNAME" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf8b1cf111ebadf400059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>Vorname</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="GEBDAT" type="xsd:date" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">49beaf8c1cf111eb8ab500059a3c7a00</xsd:appinfo>
+                    <xsd:documentation>Geburtsdatum</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="FILTER_PARMS_ADDR" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">22b72f460c6611eb91fa00059a3c7a00</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="ADR_KIND" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b87603a5e4011eba2dcbef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Adressart (XXDEFAULT = Standardadresse)</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="C_O_NAME" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b87603c5e4011ebbe96bef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>c/o-Name</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="CITY" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b87603d5e4011eb817cbef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Ort</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="DISTRICT" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">15ff3eb6d87c11ebb53e506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="POSTL_COD1" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b87603e5e4011eba0fcbef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Postleitzahl des Orts</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="PO_BOX" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">4f82fd30d87c11ebb451506b8d80085b</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="STREET" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b87603f5e4011eba7d5bef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Straße</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="HOUSE_NO" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b8760405e4011ebc6d2bef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Hausnummer</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="10"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="COUNTRY" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">7b8760415e4011eb9d57bef8ed32e1c3</xsd:appinfo>
+                    <xsd:documentation>Länderschlüssel</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="3"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="FILTER_PARMS_COMM" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">fe599a1cd87b11eb96b4506b8d80085b</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="EMAIL" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">fe599a18d87b11ebb03d506b8d80085b</xsd:appinfo>
+                    <xsd:documentation>Email</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="241"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="TELEPHONE" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">fe599a19d87b11ebbc03506b8d80085b</xsd:appinfo>
+                    <xsd:documentation>Telefon</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="30"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="MOBILE" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">fe599a1ad87b11ebce2a506b8d80085b</xsd:appinfo>
+                    <xsd:documentation>Mobile Nummer</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="30"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="FAX" minOccurs="0">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">fe599a1bd87b11ebb5aa506b8d80085b</xsd:appinfo>
+                    <xsd:documentation>Fax</xsd:documentation>
+                  </xsd:annotation>
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:maxLength value="30"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_HEADER">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">a981c684aa0611ec9b2100000188603e</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="BPARTNER">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aa32bd07aa0611ecc815000000605fae</xsd:appinfo>
+              <xsd:documentation>SAP ID eines Business Partners</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PARTN_CAT">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aa32bd08aa0611ec8486000000605fae</xsd:appinfo>
+              <xsd:documentation>Geschäftspartnertyp: (1: Person, 2: Organisation )</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PARTN_TYP">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aa32bd09aa0611ec87d8000000605fae</xsd:appinfo>
+              <xsd:documentation>Geschäftspartnerart</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PARTN_GRP" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aa32bd0aaa0611ec9de1000000605fae</xsd:appinfo>
+              <xsd:documentation>Geschäftspartnergruppierung</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="PARTN_TAXKD" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:length value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_COMMUNICATION">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">07ffc476d88011ebbf9f000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="CONSNUMBER">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">5a81f7f1d87711eba8b0506b8d80085b</xsd:appinfo>
+              <xsd:documentation>ID der Kommunikation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:integer">
+                <xsd:totalDigits value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="EMAIL">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">34f3b1b2d7e911ebc73f506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Email-Adresse</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="241"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="TELEPHONE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">34f3b1b3d7e911eba718506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Telefon-Nr.: Vorwahl + Anschluß</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="30"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="MOBILE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">34f3b1b4d7e911eb9d2b506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Mobiltelefon-Nr.: Vorwahl + Anschluß</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="30"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="FAX">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">34f3b1b5d7e911ebb9e1506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Fax-Nr.: Vorwahl + Anschluss</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="30"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ReturnCode">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">b157b495035511ed8e3900000188603e</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="TYPE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">b1bc62d7035511eda740000000605fae</xsd:appinfo>
+              <xsd:documentation>S = Success, W = Warning, E = Error, I = Info</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="MSG_NR">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">b1bc62d8035511ed8018000000605fae</xsd:appinfo>
+              <xsd:documentation>Eindeutige ID der Nachricht</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:integer">
+                <xsd:totalDigits value="3"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="MESSAGE">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">b1bc9aff035511edb719000000605fae</xsd:appinfo>
+              <xsd:documentation>Text der Nachricht</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="220"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="ID" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">b1bc9b00035511ed99ec000000605fae</xsd:appinfo>
+              <xsd:documentation>Nachrichtenklasse</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="20"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SenderParms">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">27615df1d80211eba2ce000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="SYSID">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">ac36ac4ad80211ebc5df506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>4-Stellige ID der Fachapplikation/Umsystem/Liefersystem</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:integer">
+                <xsd:totalDigits value="4"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="BETRIEB" minOccurs="0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">ac36de46d80211eba140506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Betrieb/Mandant. Nur bei Mehrmandantensystemen relevant</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="12"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="VERSION" minOccurs="0" default="1.0">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">ac36de47d80211eb8096506b8d8a2ecc</xsd:appinfo>
+              <xsd:documentation>Version der Schnittstelle. Wird erst im Life Cycle wichtig, wenn neue Versionen der Schnittstelle notwendig werden. Defaultwert ist 1.0</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BusinessPartner_ORG_DATA">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">751066c0eec411eba860000000605fae</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="NAME1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ac71c3011eba80800059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Name 1 der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAME2">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ac81c3011eb9e5300059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Name 2 der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAME3">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ac91c3011eb876200059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Name 3 der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="NAME4">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3aca1c3011ebcb8600059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Name 4 der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="40"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="LANGU_ISO">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">d33e2a10d88611eb8182506b8db478dd</xsd:appinfo>
+              <xsd:documentation>Sprache der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="LEGALFORM">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3acb1c3011eb92e000059a3c7a00</xsd:appinfo>
+              <xsd:documentation>GP: Rechtsform der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="INDUSTRYSECTOR">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3acc1c3011ebcc7700059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Branche</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="10"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="FOUNDATIONDATE" minOccurs="0" default="1000-01-01" nillable="true">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3acd1c3011eb860c00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Gründungsdatum der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:date">
+                  <xsd:attribute ref="p9:DeletionIndicator"/>
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="LIQUIDATIONDATE" minOccurs="0" default="1000-01-01" nillable="true">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ace1c3011eb9d7600059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Liquidationsdatum der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:date">
+                  <xsd:attribute ref="p9:DeletionIndicator"/>
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="LOC_NO_1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3acf1c3011ebcd9900059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Internationale Lokationsnummer (Teil 1)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="7"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="LOC_NO_2">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ad01c3011ebc94a00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Internationale Lokationsnummer (Teil 2)</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="5"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="CHK_DIGIT">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ad11c3011eb978c00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Prüfziffer der internationalen Lokationsnummer</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="LEGALORG">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">9d0b3ad21c3011ebb87a00059a3c7a00</xsd:appinfo>
+              <xsd:documentation>Rechtsträger der Organisation</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="BusinessPartnerSearch_Request">
+    <wsdl:documentation/>
+    <wsdl:part name="BusinessPartnerSearch_Request" element="p1:BusinessPartnerSearch_Request"/>
+  </wsdl:message>
+  <wsdl:message name="BusinessPartnerSearch_Response">
+    <wsdl:documentation/>
+    <wsdl:part name="BusinessPartnerSearch_Response" element="p1:BusinessPartnerSearch_Response"/>
+  </wsdl:message>
+  <wsdl:portType name="os_BusinessPartnerSearch">
+    <wsdl:documentation/>
+    <wsdl:operation name="os_BusinessPartnerSearch">
+      <wsdl:documentation/>
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_os_BusinessPartnerSearch"/>
+      </wsp:Policy>
+      <wsdl:input message="p1:BusinessPartnerSearch_Request"/>
+      <wsdl:output message="p1:BusinessPartnerSearch_Response"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="os_BusinessPartnerSearchBinding" type="p1:os_BusinessPartnerSearch">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    <wsdl:operation name="os_BusinessPartnerSearch">
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="os_BusinessPartnerSearchService">
+    <wsdl:port name="HTTP_Port" binding="p1:os_BusinessPartnerSearchBinding">
+      <soap:address location="http://sap-po-dev.infra.be.ch:50100/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerSearch&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    </wsdl:port>
+    <wsdl:port name="HTTPS_Port" binding="p1:os_BusinessPartnerSearchBinding">
+      <soap:address location="https://sap-po-dev.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=BC_2080&amp;receiverParty=&amp;receiverService=&amp;interface=os_BusinessPartnerSearch&amp;interfaceNamespace=urn%3Abe.ch%3AKTBE_MDG%3ABUSINESS_PARTNER" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,6 +1,5 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
   displayName:
     'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',

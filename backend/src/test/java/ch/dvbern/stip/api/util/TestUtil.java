@@ -80,6 +80,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.Oper;
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
@@ -238,7 +239,7 @@ public class TestUtil {
     ) {
         ausbildungUpdateDtoSpec.setFallId(fallId);
 
-        return ausbildungApiSpec.createAusbildung()
+        final var response = ausbildungApiSpec.createAusbildung()
             .body(ausbildungUpdateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -246,7 +247,15 @@ public class TestUtil {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(AusbildungDtoSpec.class);
+            .as(AusbildungCreateResponseDtoSpec.class);
+
+        if (response.getError() != null) {
+            throw new IllegalStateException(
+                "The server has seeded wrong data for the tests, error: " + response.getError().getType()
+            );
+        }
+
+        return response.getAusbildung();
     }
 
     public static GesuchDtoSpec createGesuchAusbildungFallWithAusbildung(
@@ -781,6 +790,7 @@ public class TestUtil {
 
     public static Gesuch setupGesuchWithCustomDokument() {
         GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchTranche.setGesuchDokuments(List.of(setupCustomGesuchDokument()));
         Gesuch gesuch = new Gesuch();
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
