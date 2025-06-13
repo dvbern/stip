@@ -46,7 +46,6 @@ extends EntityUpdateMapper<ZahlungsverbindungUpdateDto, Zahlungsverbindung> {
         @MappingTarget Zahlungsverbindung zahlungsverbindung
     );
 
-    // @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(
         final ZahlungsverbindungDto newZahlungsverbindung,

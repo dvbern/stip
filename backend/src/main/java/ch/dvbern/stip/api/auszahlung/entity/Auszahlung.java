@@ -52,7 +52,4 @@ public class Auszahlung extends AbstractMandantEntity {
     @Column(name = "auszahlung_an_sozialdienst", nullable = false)
     private boolean auszahlungAnSozialdienst;
 
-    // @Nullable
-    // @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "auszahlung")
-    // private Fall fall;
 }
