@@ -60,7 +60,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
             .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
 
         if (
-            !isSB.getAsBoolean() && isGesuchstellerOfGesuch.getAsBoolean()
+            isSB.getAsBoolean() || isGesuchstellerOfGesuch.getAsBoolean()
             || isDelegiertAndIsMitarbeiterOfSozialdienst.getAsBoolean()
         ) {
             return;
