@@ -52,55 +52,61 @@ export class LandStore extends signalStore(
     ),
   );
 
-  updateLand$ = rxMethod<{ land: Land; landId: string }>(
+  updateLand$ = rxMethod<{ land: Land; landId: string; onSuccess: () => void }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           laender: cachedPending(state.laender),
         }));
       }),
-      switchMap((req) =>
+      switchMap(({ onSuccess, ...req }) =>
         this.landService.updateLand$(req).pipe(
-          handleApiResponse((res) => {
-            patchState(this, (state) => ({
-              laender: mapCachedData(state.laender, (laender) => {
-                if (isSuccess(res)) {
-                  return laender.map((land) =>
-                    land.id === req.landId ? { ...land, ...res.data } : land,
-                  );
-                } else {
-                  return laender;
-                }
-              }),
-            }));
-          }),
+          handleApiResponse(
+            (res) => {
+              patchState(this, (state) => ({
+                laender: mapCachedData(state.laender, (laender) => {
+                  if (isSuccess(res)) {
+                    return laender.map((land) =>
+                      land.id === req.landId ? { ...land, ...res.data } : land,
+                    );
+                  } else {
+                    return laender;
+                  }
+                }),
+              }));
+            },
+            { onSuccess },
+          ),
         ),
       ),
     ),
   );
 
-  createLand$ = rxMethod<{ land: Land }>(
+  createLand$ = rxMethod<{ land: Land; onSuccess: () => void }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           laender: cachedPending(state.laender),
         }));
       }),
-      switchMap((land) =>
-        this.landService.createLand$(land).pipe(
-          handleApiResponse((land) => {
-            patchState(this, (state) => ({
-              laender: mapCachedData(state.laender, (laender) => {
-                if (isSuccess(land)) {
-                  return [...laender, land.data].sort(
-                    (a, b) =>
-                      Number(a.laendercodeBfs) - Number(b.laendercodeBfs),
-                  );
-                }
-                return laender;
-              }),
-            }));
-          }),
+      switchMap(({ land, onSuccess }) =>
+        this.landService.createLand$({ land }).pipe(
+          handleApiResponse(
+            (land) => {
+              patchState(this, (state) => ({
+                laender: mapCachedData(state.laender, (laender) => {
+                  if (isSuccess(land)) {
+                    return [...laender, land.data].sort(
+                      (a, b) =>
+                        Number(a.laendercodeBfs) - Number(b.laendercodeBfs),
+                    );
+                  }
+                  return laender;
+                }),
+              }));
+            },
+            { onSuccess },
+          ),
         ),
       ),
     ),

@@ -90,7 +90,6 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is not selected', async () => {
     const { getByTestId, detectChanges } = await setup();
     const user = await fillBasicForm();
-    // await clickAutocompleteOption('land-autocomplete-input', 'Schweiz');
 
     await user.click(getByTestId('button-save-continue'));
 
@@ -102,7 +101,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is selected', async () => {
     const { getByTestId, container, detectChanges } = await setup();
     const user = await fillBasicForm();
-    // await clickAutocompleteOption('land-autocomplete-input', 'Schweiz');
+
     await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );

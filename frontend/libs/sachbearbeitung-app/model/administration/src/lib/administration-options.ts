@@ -102,12 +102,3 @@ export const CHILD_OPTION_SOZIALDIENST = (
   titleTranslationKey,
   parentRoute: OPTION_SOZIALDIENST.route,
 });
-
-export const CHILD_OPTION_EUEFTA = (
-  titleTranslationKey: string,
-): ChildAdminOption => ({
-  type: 'CHILD',
-  route: 'sozialdienst',
-  titleTranslationKey,
-  parentRoute: OPTION_SOZIALDIENST.route,
-});

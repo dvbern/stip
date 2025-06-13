@@ -94,6 +94,8 @@
   "sachbearbeitung-app.admin.euEftaLaender.enKurzform.label": "Eng forme courte",
   "sachbearbeitung-app.admin.euEftaLaender.euEfta.label": "EU/Efta",
   "sachbearbeitung-app.admin.euEftaLaender-dialog.submit": "Enregistrer",
+  "sachbearbeitung-app.admin.euEftaLaender.edit.success": "Le pays a été modifié avec succès.",
+  "sachbearbeitung-app.admin.euEftaLaender.create.success": "Le pays a été créé avec succès.",
 
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Publier l'année de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Les modifications ne sont plus possibles après la publication.",

@@ -4,6 +4,12 @@
   <div class="tw-dv-table">
     <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
       <table mat-table [dataSource]="countryDataSourceSig()" matSort>
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.admin.euEftaLaender.description' | translate
+          }}
+        </caption>
+
         <!-- ISO3 Code -->
         <ng-container matColumnDef="iso3code">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">

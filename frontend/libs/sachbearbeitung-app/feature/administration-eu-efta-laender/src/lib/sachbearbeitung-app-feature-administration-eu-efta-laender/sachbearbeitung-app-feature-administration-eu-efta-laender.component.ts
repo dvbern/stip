@@ -31,6 +31,7 @@ import { debounceTime, map } from 'rxjs';
 
 import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
 import { LandStore } from '@dv/shared/data-access/land';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { Land } from '@dv/shared/model/gesuch';
 import { INPUT_DELAY } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
@@ -73,6 +74,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private dialog = inject(MatDialog);
   private sortSig = viewChild(MatSort);
   private destroyRef = inject(DestroyRef);
+  private notificationStore = inject(GlobalNotificationStore);
   paginatorSig = viewChild(MatPaginator);
 
   filterChangedSig = signal<string | null>(null);
@@ -117,75 +119,11 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
 
   countryDataSourceSig = computed(() => {
     const allCountries = this.laenderStore.landListViewSig() ?? [];
-    const paginator = this.paginatorSig();
-    const sort = this.sortSig();
-    const filter = this.filterChangedSig();
-
     const datasource = new MatTableDataSource(allCountries);
 
-    // Custom sort function to handle empty iso3code values
-    datasource.sortingDataAccessor = (data, sortHeaderId) => {
-      if (sortHeaderId === 'iso3code') {
-        // Return a value that will sort empty/null/undefined to the end
-        return data.iso3code || 'zzz'; // 'zzz' ensures empty values go to end in ascending order
-      }
-      // Handle boolean fields by converting to number for sorting
-      if (typeof data[sortHeaderId as keyof typeof data] === 'boolean') {
-        return data[sortHeaderId as keyof typeof data] ? 1 : 0;
-      }
-      // For undefined/null, return empty string to avoid undefined
-      const value = data[sortHeaderId as keyof typeof data];
-      return value !== undefined && value !== null
-        ? (value as string | number)
-        : '';
-    };
+    this.configureDatasource(datasource);
+    this.applyFilterToDataSource(datasource);
 
-    datasource.filterPredicate = (data, filter: string) => {
-      const { iso3code, deKurzform, frKurzform, eintragGueltig, isEuEfta } =
-        JSON.parse(filter);
-      if (
-        iso3code &&
-        !data.iso3code?.toLowerCase().includes(iso3code.toLowerCase())
-      ) {
-        return false;
-      }
-      if (
-        deKurzform &&
-        !data.deKurzform.toLowerCase().includes(deKurzform.toLowerCase())
-      ) {
-        return false;
-      }
-      if (
-        frKurzform &&
-        !data.frKurzform.toLowerCase().includes(frKurzform.toLowerCase())
-      ) {
-        return false;
-      }
-      if (
-        typeof eintragGueltig === 'boolean' &&
-        data.eintragGueltig !== eintragGueltig
-      ) {
-        return false;
-      }
-      if (typeof isEuEfta === 'boolean' && data.isEuEfta !== isEuEfta) {
-        return false;
-      }
-      return true;
-    };
-
-    datasource.sort = this.sortSig() ?? null;
-
-    if (paginator) {
-      datasource.paginator = paginator;
-    }
-
-    if (sort) {
-      datasource.sort = sort;
-    }
-
-    if (filter) {
-      datasource.filter = filter.trim().toLowerCase();
-    }
     return datasource;
   });
 
@@ -223,10 +161,108 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
         }
 
         if (land.id) {
-          this.laenderStore.updateLand$({ land, landId: land.id });
+          this.laenderStore.updateLand$({
+            land,
+            landId: land.id,
+            onSuccess: () => {
+              this.notificationStore.createSuccessNotification({
+                messageKey:
+                  'sachbearbeitung-app.admin.euEftaLaender.edit.success',
+              });
+            },
+          });
         } else {
-          this.laenderStore.createLand$({ land });
+          this.laenderStore.createLand$({
+            land,
+            onSuccess: () => {
+              this.notificationStore.createSuccessNotification({
+                messageKey:
+                  'sachbearbeitung-app.admin.euEftaLaender.create.success',
+              });
+            },
+          });
         }
       });
+  }
+
+  private configureDatasource(datasource: MatTableDataSource<Land>): void {
+    datasource.sortingDataAccessor = this.createSortingDataAccessor();
+    datasource.filterPredicate = this.createFilterPredicate();
+
+    const paginator = this.paginatorSig();
+    const sort = this.sortSig();
+
+    if (paginator) {
+      datasource.paginator = paginator;
+    }
+
+    if (sort) {
+      datasource.sort = sort;
+    }
+  }
+
+  private createSortingDataAccessor() {
+    return (data: Land, sortHeaderId: string) => {
+      if (sortHeaderId === 'iso3code') {
+        return data.iso3code ?? 'zzz';
+      }
+
+      const value = data[sortHeaderId as keyof Land];
+
+      if (typeof value === 'boolean') {
+        return value ? 1 : 0;
+      }
+
+      return value !== undefined && value !== null
+        ? (value as string | number)
+        : '';
+    };
+  }
+
+  private createFilterPredicate() {
+    return (data: Land, filter: string) => {
+      const filterCriteria = JSON.parse(filter);
+      return this.matchesAllFilterCriteria(data, filterCriteria);
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private matchesAllFilterCriteria(data: Land, criteria: any): boolean {
+    return (
+      this.matchesTextFilter(data.iso3code, criteria.iso3code) &&
+      this.matchesTextFilter(data.deKurzform, criteria.deKurzform) &&
+      this.matchesTextFilter(data.frKurzform, criteria.frKurzform) &&
+      this.matchesBooleanFilter(data.eintragGueltig, criteria.eintragGueltig) &&
+      this.matchesBooleanFilter(data.isEuEfta, criteria.isEuEfta)
+    );
+  }
+
+  private matchesTextFilter(
+    dataValue: string | null | undefined,
+    filterValue: string | null,
+  ): boolean {
+    if (!filterValue) {
+      return true;
+    }
+    return (
+      dataValue?.toLowerCase().includes(filterValue.toLowerCase()) ?? false
+    );
+  }
+
+  private matchesBooleanFilter(
+    dataValue: boolean,
+    filterValue: boolean | undefined,
+  ): boolean {
+    if (typeof filterValue !== 'boolean') {
+      return true;
+    }
+    return dataValue === filterValue;
+  }
+
+  private applyFilterToDataSource(datasource: MatTableDataSource<Land>): void {
+    const filter = this.filterChangedSig();
+    if (filter) {
+      datasource.filter = filter.trim().toLowerCase();
+    }
   }
 }

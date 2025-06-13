@@ -151,60 +151,27 @@ export class SharedUiLandAutocompleteComponent
     const laender = this.laenderSig();
     const languageDisplayField = this.languageDisplayFieldSig();
 
-    if (laender) {
-      if (typeof landInputVal === 'string') {
-        return (
-          laender
-            .filter(
-              (land) =>
-                land.eintragGueltig &&
-                land[languageDisplayField]
-                  .toLowerCase()
-                  .startsWith(landInputVal.toLowerCase()),
-            )
-            // put Schweiz at the top only if string.length is 0
-            .sort((a, b) => {
-              const zerolength = landInputVal.length === 0;
-              if (zerolength && a.iso3code === ISO3_SCHWEIZ) return -1;
-              if (zerolength && b.iso3code === ISO3_SCHWEIZ) return 1;
-              return a[languageDisplayField].localeCompare(
-                b[languageDisplayField],
-              );
-            })
-            .map((land) => ({
-              ...land,
-              displayValue: land[languageDisplayField],
-            }))
-        );
-      } else if (isLand(landInputVal)) {
-        // When a Land object is selected
-        this.onChange(landInputVal.id);
-        return [];
-      } else if (!landInputVal && this.landId) {
-        // Necessary to hadle situtions when leander come in after wirteValue is called, eg. reloading the page
-        const selectedLand = laender.find((l) => l.id === this.landId);
-        if (selectedLand) {
-          this.setAutocomplete(selectedLand);
-          return [];
-        }
-      } else {
-        return laender
-          .filter((land) => land.eintragGueltig)
-          .sort((a, b) => {
-            if (a.iso3code === ISO3_SCHWEIZ) return -1;
-            if (b.iso3code === ISO3_SCHWEIZ) return 1;
-            return a[languageDisplayField].localeCompare(
-              b[languageDisplayField],
-            );
-          })
-          .map((land) => ({
-            ...land,
-            displayValue: land[languageDisplayField],
-          }));
-      }
+    if (!laender) {
+      return [];
     }
 
-    return [];
+    if (typeof landInputVal === 'string') {
+      return this.handleStringInput(
+        landInputVal,
+        laender,
+        languageDisplayField,
+      );
+    }
+
+    if (isLand(landInputVal)) {
+      return this.handleLandSelection(landInputVal);
+    }
+
+    if (!landInputVal && this.landId) {
+      return this.handleInitialLandLoad(laender);
+    }
+
+    return this.getDefaultLandList(laender, languageDisplayField);
   });
 
   zuvorHintLandNameSig = computed(() => {
@@ -212,9 +179,11 @@ export class SharedUiLandAutocompleteComponent
     const languageDisplayField = this.languageDisplayFieldSig();
 
     if (zuvorHintValue) {
-      return this.laenderSig()?.find((land) => land.id === zuvorHintValue)?.[
-        languageDisplayField
-      ];
+      return (
+        this.laenderSig()?.find((land) => land.id === zuvorHintValue)?.[
+          languageDisplayField
+        ] ?? undefined
+      );
     }
     return undefined;
   });
@@ -289,6 +258,69 @@ export class SharedUiLandAutocompleteComponent
       });
       this.markAsTouched();
     }
+  }
+
+  private handleStringInput(
+    inputValue: string,
+    laender: Land[],
+    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+  ): Array<Land & { displayValue: string }> {
+    const filteredLaender = laender.filter(
+      (land) =>
+        land.eintragGueltig &&
+        land[languageDisplayField]
+          ?.toLowerCase()
+          .startsWith(inputValue.toLowerCase()),
+    );
+
+    return this.sortAndMapLaender(
+      filteredLaender,
+      languageDisplayField,
+      inputValue.length === 0,
+    );
+  }
+
+  private handleLandSelection(selectedLand: Land): never[] {
+    this.onChange(selectedLand.id);
+    return [];
+  }
+
+  private handleInitialLandLoad(laender: Land[]): never[] {
+    const selectedLand = laender.find((l) => l.id === this.landId);
+    if (selectedLand) {
+      this.setAutocomplete(selectedLand);
+    }
+    return [];
+  }
+
+  private getDefaultLandList(
+    laender: Land[],
+    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+  ): Array<Land & { displayValue: string }> {
+    const validLaender = laender.filter((land) => land.eintragGueltig);
+    return this.sortAndMapLaender(validLaender, languageDisplayField, true);
+  }
+
+  private sortAndMapLaender(
+    laender: Land[],
+    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+    shouldPrioritizeSwitzerland: boolean,
+  ): Array<Land & { displayValue: string }> {
+    const sortedLaender = [...laender]; // create a shallow copy before sorting
+    sortedLaender.sort((a, b) => {
+      if (shouldPrioritizeSwitzerland) {
+        if (a.iso3code === ISO3_SCHWEIZ) return -1;
+        if (b.iso3code === ISO3_SCHWEIZ) return 1;
+      }
+      return (a[languageDisplayField] ?? '').localeCompare(
+        b[languageDisplayField] ?? '',
+      );
+    });
+
+    return sortedLaender.map((land) => ({
+      ...land,
+      displayValue: land[languageDisplayField] ?? '',
+    }));
   }
 }
 
