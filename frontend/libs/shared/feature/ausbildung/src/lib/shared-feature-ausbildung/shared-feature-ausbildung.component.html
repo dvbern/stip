@@ -1,6 +1,6 @@
 @if (
   (ausbildungStore.ausbildung() | rdIsPendingWithoutCache: { ignoreInitial: true }) ||
-  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache)
+  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache: { ignoreInitial: true })
 ) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
