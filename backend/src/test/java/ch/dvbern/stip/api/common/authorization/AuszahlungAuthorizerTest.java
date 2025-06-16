@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -42,6 +37,11 @@ import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -83,6 +83,7 @@ class AuszahlungAuthorizerTest {
         var benutzer = new Benutzer();
         benutzer.setRollen(Set.of(rolle));
 
+        // a mock of requireById is required for test setup
         gesuchRepository.requireById(UUID.randomUUID()).getAusbildung().getFall().setGesuchsteller(benutzer);
     }
 
