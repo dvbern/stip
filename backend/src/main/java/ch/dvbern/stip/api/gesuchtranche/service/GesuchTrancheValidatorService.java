@@ -135,12 +135,13 @@ public class GesuchTrancheValidatorService {
     }
 
     private void validateAuszahlung(final Gesuch toValidate) {
-        var zahlungsverbindungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung())
-            .map(Auszahlung::getZahlungsverbindung);
-        var violations = zahlungsverbindungOpt.map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
+        var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
+        var violations = auszahlungOpt
+            .map(Auszahlung::getZahlungsverbindung)
+            .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
             .orElse(Set.of());
 
-        if (!violations.isEmpty()) {
+        if (auszahlungOpt.isEmpty() || !violations.isEmpty()) {
             throw new CustomValidationsException(
                 "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
                 new CustomConstraintViolation(
