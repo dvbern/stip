@@ -67,8 +67,7 @@ class AuszahlungAuthorizerTest {
         delegierungRepository = Mockito.mock(DelegierungRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
 
-        auszahlungAuthorizer =
-            new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository, fallRepository);
+        auszahlungAuthorizer = new AuszahlungAuthorizer(benutzerService, sozialdienstService, fallRepository);
     }
 
     private void setupGesuchstellerAsCurrentBenutzer() {
@@ -160,7 +159,8 @@ class AuszahlungAuthorizerTest {
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto));
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(uuid, updateDto));
     }
 
     @Test
@@ -176,9 +176,10 @@ class AuszahlungAuthorizerTest {
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
+        final var uuid = UUID.randomUUID();
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(uuid, updateDto)
         );
     }
 
@@ -193,7 +194,8 @@ class AuszahlungAuthorizerTest {
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto));
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(uuid, updateDto));
 
     }
 
@@ -209,9 +211,10 @@ class AuszahlungAuthorizerTest {
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
+        final var uuid = UUID.randomUUID();
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
+            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(uuid, updateDto)
         );
     }
 
@@ -224,7 +227,8 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID()));
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(uuid));
     }
 
     @Test
@@ -236,7 +240,8 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
         // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID()));
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(uuid));
     }
 
     @Test
@@ -250,7 +255,9 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID()));
+        // act & assert
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(uuid));
     }
 
     @Test
@@ -259,10 +266,12 @@ class AuszahlungAuthorizerTest {
         setupGesuchWithoutDelegierung();
         setFallAndGesuchstellerOfGesuch();
         setupSozialdienstMitarbeiterAsCurrentBenutzer();
+
         // act & assert
+        final var uuid = UUID.randomUUID();
         assertThrows(
             ForbiddenException.class,
-            () -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID())
+            () -> auszahlungAuthorizer.canReadAuszahlungForGesuch(uuid)
         );
     }
 
@@ -274,7 +283,9 @@ class AuszahlungAuthorizerTest {
         setupGesuchstellerAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
-        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
+        // act & assert
+        final var uuid = UUID.randomUUID();
+        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(uuid, true));
     }
 
     @Test
@@ -283,9 +294,12 @@ class AuszahlungAuthorizerTest {
         setupSozialdienstMitarbeiterAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
+        // act & assert
+        final var uuid1 = UUID.randomUUID();
         setupGesuchWithoutDelegierung();
-        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
+        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(uuid1, true));
         setupDelegierung();
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
+        final var uuid2 = UUID.randomUUID();
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canSetFlag(uuid2, true));
     }
 }
