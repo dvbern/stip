@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
-import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -30,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class ZahlungsverbindungService {
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final ZahlungsverbindungMapper zahlungsverbindungMapper;
-    private final FallRepository fallRepository;
 
     @Transactional
     public Zahlungsverbindung createZahlungsverbindung(final ZahlungsverbindungDto dto) {
