@@ -215,7 +215,7 @@ export const getTranchePermissions = (
 export const canCurrentlyEdit = (
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung: DelegierungSlim | undefined,
+  delegierung: DelegierungSlim | boolean | undefined,
 ) => {
   // Only apply special rules for the gesuch-app
   if (appType !== 'gesuch-app') {
