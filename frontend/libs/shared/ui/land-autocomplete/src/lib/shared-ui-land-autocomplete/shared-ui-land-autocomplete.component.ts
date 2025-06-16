@@ -27,7 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { Land } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
-import { ISO3_SCHWEIZ } from '@dv/shared/model/ui-constants';
+import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -164,11 +164,15 @@ export class SharedUiLandAutocompleteComponent
     }
 
     if (isLand(landInputVal)) {
-      return this.handleLandSelection(landInputVal);
+      return this.handleLandSelection(
+        landInputVal,
+        laender,
+        languageDisplayField,
+      );
     }
 
     if (!landInputVal && this.landId) {
-      return this.handleInitialLandLoad(laender);
+      return this.handleInitialLandLoad(laender, languageDisplayField);
     }
 
     return this.getDefaultLandList(laender, languageDisplayField);
@@ -280,17 +284,24 @@ export class SharedUiLandAutocompleteComponent
     );
   }
 
-  private handleLandSelection(selectedLand: Land): never[] {
+  private handleLandSelection(
+    selectedLand: Land,
+    laender: Land[],
+    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+  ) {
     this.onChange(selectedLand.id);
-    return [];
+    return this.getDefaultLandList(laender, languageDisplayField);
   }
 
-  private handleInitialLandLoad(laender: Land[]): never[] {
+  private handleInitialLandLoad(
+    laender: Land[],
+    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+  ) {
     const selectedLand = laender.find((l) => l.id === this.landId);
     if (selectedLand) {
       this.setAutocomplete(selectedLand);
     }
-    return [];
+    return this.getDefaultLandList(laender, languageDisplayField);
   }
 
   private getDefaultLandList(
@@ -309,8 +320,8 @@ export class SharedUiLandAutocompleteComponent
     const sortedLaender = [...laender]; // create a shallow copy before sorting
     sortedLaender.sort((a, b) => {
       if (shouldPrioritizeSwitzerland) {
-        if (a.iso3code === ISO3_SCHWEIZ) return -1;
-        if (b.iso3code === ISO3_SCHWEIZ) return 1;
+        if (a.laendercodeBfs === BFSCODE_SCHWEIZ) return -1;
+        if (b.laendercodeBfs === BFSCODE_SCHWEIZ) return 1;
       }
       return (a[languageDisplayField] ?? '').localeCompare(
         b[languageDisplayField] ?? '',
