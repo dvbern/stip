@@ -43,7 +43,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuszahlungUpdate'
+              $ref: '#/components/schemas/FallAuszahlungUpdate'
         required: true
       tags:
         - Auszahlung
@@ -52,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: Created Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -67,7 +67,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuszahlungUpdate'
+              $ref: '#/components/schemas/FallAuszahlungUpdate'
         required: true
       tags:
         - Auszahlung
@@ -76,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: Updated Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -94,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: return Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4223,16 +4223,16 @@ components:
           type: string
         erhalteneAlimentebeitraege:
           type: integer
-    Auszahlung:
+    FallAuszahlung:
       type: object
-      required: 
+      required:
         - isDelegated
       properties:
-        value:
-          $ref: '#/components/schemas/AuszahlungUpdate'
+        auszahlung:
+          $ref: '#/components/schemas/FallAuszahlungUpdate'
         isDelegated:
           type: boolean
-    AuszahlungUpdate:
+    FallAuszahlungUpdate:
       title: Root Type for Auszahlung
       type: object
       required:

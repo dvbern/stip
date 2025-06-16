@@ -49,10 +49,10 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestConstants;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
@@ -202,8 +202,8 @@ public final class GesuchGenerator {
         return einnahmenKostenUpdateDto;
     }
 
-    private static AuszahlungUpdateDtoSpec createAuszahlung() {
-        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
+    private static FallAuszahlungUpdateDtoSpec createAuszahlung() {
+        FallAuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
         auszahlungUpdateDto.getZahlungsverbindung().setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }

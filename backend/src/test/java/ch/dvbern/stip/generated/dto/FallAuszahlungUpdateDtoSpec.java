@@ -25,25 +25,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * AuszahlungUpdateDtoSpec
+ * FallAuszahlungUpdateDtoSpec
  */
 @JsonPropertyOrder({
-  AuszahlungUpdateDtoSpec.JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST,
-  AuszahlungUpdateDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
+  FallAuszahlungUpdateDtoSpec.JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST,
+  FallAuszahlungUpdateDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
-@JsonTypeName("AuszahlungUpdate")
+@JsonTypeName("FallAuszahlungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class AuszahlungUpdateDtoSpec {
+public class FallAuszahlungUpdateDtoSpec {
   public static final String JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST = "auszahlungAnSozialdienst";
   private Boolean auszahlungAnSozialdienst;
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
-  public AuszahlungUpdateDtoSpec() {
+  public FallAuszahlungUpdateDtoSpec() {
   }
 
-  public AuszahlungUpdateDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+  public FallAuszahlungUpdateDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
     return this;
@@ -69,7 +69,7 @@ public class AuszahlungUpdateDtoSpec {
   }
 
 
-  public AuszahlungUpdateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public FallAuszahlungUpdateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
@@ -102,9 +102,9 @@ public class AuszahlungUpdateDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuszahlungUpdateDtoSpec auszahlungUpdate = (AuszahlungUpdateDtoSpec) o;
-    return Objects.equals(this.auszahlungAnSozialdienst, auszahlungUpdate.auszahlungAnSozialdienst) &&
-        Objects.equals(this.zahlungsverbindung, auszahlungUpdate.zahlungsverbindung);
+    FallAuszahlungUpdateDtoSpec fallAuszahlungUpdate = (FallAuszahlungUpdateDtoSpec) o;
+    return Objects.equals(this.auszahlungAnSozialdienst, fallAuszahlungUpdate.auszahlungAnSozialdienst) &&
+        Objects.equals(this.zahlungsverbindung, fallAuszahlungUpdate.zahlungsverbindung);
   }
 
   @Override
@@ -115,7 +115,7 @@ public class AuszahlungUpdateDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AuszahlungUpdateDtoSpec {\n");
+    sb.append("class FallAuszahlungUpdateDtoSpec {\n");
     sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");

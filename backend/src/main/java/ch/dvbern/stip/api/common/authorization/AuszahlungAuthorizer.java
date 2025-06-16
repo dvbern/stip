@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
 
     @Transactional
-    public void canCreateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
+    public void canCreateAuszahlungForGesuch(final UUID fallId, final FallAuszahlungUpdateDto auszahlungUpdateDto) {
         canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 
@@ -66,7 +66,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
+    public void canUpdateAuszahlungForGesuch(final UUID fallId, final FallAuszahlungUpdateDto auszahlungUpdateDto) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 

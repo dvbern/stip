@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("AuszahlungUpdate")
+@JsonTypeName("FallAuszahlungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AuszahlungUpdateDto  implements Serializable {
+public class FallAuszahlungUpdateDto  implements Serializable {
   private @Valid Boolean auszahlungAnSozialdienst;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
   /**
    **/
-  public AuszahlungUpdateDto auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+  public FallAuszahlungUpdateDto auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
     return this;
   }
@@ -44,7 +44,7 @@ public class AuszahlungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AuszahlungUpdateDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+  public FallAuszahlungUpdateDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
@@ -69,9 +69,9 @@ public class AuszahlungUpdateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuszahlungUpdateDto auszahlungUpdate = (AuszahlungUpdateDto) o;
-    return Objects.equals(this.auszahlungAnSozialdienst, auszahlungUpdate.auszahlungAnSozialdienst) &&
-        Objects.equals(this.zahlungsverbindung, auszahlungUpdate.zahlungsverbindung);
+    FallAuszahlungUpdateDto fallAuszahlungUpdate = (FallAuszahlungUpdateDto) o;
+    return Objects.equals(this.auszahlungAnSozialdienst, fallAuszahlungUpdate.auszahlungAnSozialdienst) &&
+        Objects.equals(this.zahlungsverbindung, fallAuszahlungUpdate.zahlungsverbindung);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class AuszahlungUpdateDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AuszahlungUpdateDto {\n");
+    sb.append("class FallAuszahlungUpdateDto {\n");
     
     sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");

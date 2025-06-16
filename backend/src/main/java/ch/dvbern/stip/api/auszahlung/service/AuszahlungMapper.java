@@ -22,8 +22,8 @@ import java.util.Objects;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,24 +31,24 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
 public abstract class AuszahlungMapper {
-    public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
+    public abstract Auszahlung toEntity(FallAuszahlungUpdateDto auszahlungUpdateDto);
 
     @Mapping(
-        source = "auszahlung.auszahlungAnSozialdienst", target = "value.auszahlungAnSozialdienst",
+        source = "auszahlung.auszahlungAnSozialdienst", target = "auszahlung.auszahlungAnSozialdienst",
         defaultValue = "false"
     )
-    @Mapping(source = "auszahlung.zahlungsverbindung", target = "value.zahlungsverbindung")
-    public abstract AuszahlungDto toDto(Fall fall);
+    @Mapping(source = "auszahlung.zahlungsverbindung", target = "auszahlung.zahlungsverbindung")
+    public abstract FallAuszahlungDto toDto(Fall fall);
 
     public abstract Auszahlung partialUpdate(
-        AuszahlungUpdateDto auszahlungUpdateDto,
+        FallAuszahlungUpdateDto auszahlungUpdateDto,
         @MappingTarget Auszahlung auszahlung
     );
 
-    public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
+    public abstract FallAuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
 
     @AfterMapping
-    protected void setIsDelegatedFlag(final Fall fall, @MappingTarget AuszahlungDto auszahlungDto) {
+    protected void setIsDelegatedFlag(final Fall fall, @MappingTarget FallAuszahlungDto auszahlungDto) {
         auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
     }
 }

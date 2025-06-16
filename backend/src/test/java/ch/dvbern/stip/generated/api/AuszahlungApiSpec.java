@@ -13,8 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class AuszahlungApiSpec {
      *
      * @see #fallIdPath  (required)
      * @see #body  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class CreateAuszahlungForGesuchOper implements Oper {
 
@@ -123,19 +123,19 @@ public class AuszahlungApiSpec {
         /**
          * POST /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
+         * @param fallAuszahlungUpdateDtoSpec (FallAuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
-            reqSpec.setBody(auszahlungUpdateDtoSpec);
+        public CreateAuszahlungForGesuchOper body(FallAuszahlungUpdateDtoSpec fallAuszahlungUpdateDtoSpec) {
+            reqSpec.setBody(fallAuszahlungUpdateDtoSpec);
             return this;
         }
 
@@ -175,7 +175,7 @@ public class AuszahlungApiSpec {
      * 
      *
      * @see #fallIdPath  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class GetAuszahlungForGesuchOper implements Oper {
 
@@ -205,10 +205,10 @@ public class AuszahlungApiSpec {
         /**
          * GET /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -249,7 +249,7 @@ public class AuszahlungApiSpec {
      *
      * @see #fallIdPath  (required)
      * @see #body  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class UpdateAuszahlungForGesuchOper implements Oper {
 
@@ -280,19 +280,19 @@ public class AuszahlungApiSpec {
         /**
          * PATCH /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
+         * @param fallAuszahlungUpdateDtoSpec (FallAuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
-            reqSpec.setBody(auszahlungUpdateDtoSpec);
+        public UpdateAuszahlungForGesuchOper body(FallAuszahlungUpdateDtoSpec fallAuszahlungUpdateDtoSpec) {
+            reqSpec.setBody(fallAuszahlungUpdateDtoSpec);
             return this;
         }
 

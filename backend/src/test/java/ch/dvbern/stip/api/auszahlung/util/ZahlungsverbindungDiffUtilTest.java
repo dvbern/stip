@@ -23,7 +23,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ class ZahlungsverbindungDiffUtilTest {
 
         var updateZahlungsverbindung = new ZahlungsverbindungDto();
         updateZahlungsverbindung.setAdresse(updateAdresse);
-        var updateAuszahlung = new AuszahlungUpdateDto();
+        var updateAuszahlung = new FallAuszahlungUpdateDto();
         updateAuszahlung.setZahlungsverbindung(updateZahlungsverbindung);
 
         assertThat(

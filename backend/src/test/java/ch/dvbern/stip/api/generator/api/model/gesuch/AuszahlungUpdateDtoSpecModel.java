@@ -18,11 +18,11 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 
 public final class AuszahlungUpdateDtoSpecModel {
-    public static AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model) -> {
+    public static FallAuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(FallAuszahlungUpdateDtoSpec::new, (model) -> {
             // todo: specify
             // model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             // model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
