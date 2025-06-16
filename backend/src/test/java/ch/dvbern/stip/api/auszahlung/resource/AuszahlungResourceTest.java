@@ -32,9 +32,9 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
@@ -95,7 +95,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void createAuszahlungWithFlagSetToTrueShouldFail() {
-        var fallAuszahlungDtoSpec = new FallAuszahlungUpdateDtoSpec();
+        var fallAuszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
         fallAuszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
         ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         final var adresse =
@@ -119,7 +119,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void createAuszahlung() {
-        var auszahlungDtoSpec = new FallAuszahlungUpdateDtoSpec();
+        var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
         ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         final var adresse =
@@ -161,7 +161,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(6)
     void updateAuszahlungForGesuch() {
-        var auszahlungUpdate = new FallAuszahlungUpdateDtoSpec();
+        var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlung().getAuszahlungAnSozialdienst());
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getAuszahlung().getZahlungsverbindung());
         final var adresse =
@@ -187,7 +187,7 @@ class AuszahlungResourceTest {
     @TestAsSozialdienstMitarbeiter
     @Order(7)
     void updateAuszahlungForGesuchShouldFailWithFlagSetToTrue() {
-        var auszahlungUpdate = new FallAuszahlungUpdateDtoSpec();
+        var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);
         auszahlungUpdate.setZahlungsverbindung(auszahlung.getAuszahlung().getZahlungsverbindung());
 

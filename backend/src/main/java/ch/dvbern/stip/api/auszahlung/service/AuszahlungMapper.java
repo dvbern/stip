@@ -22,8 +22,8 @@ import java.util.Objects;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,7 +31,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
 public abstract class AuszahlungMapper {
-    public abstract Auszahlung toEntity(FallAuszahlungUpdateDto auszahlungUpdateDto);
+    public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
 
     @Mapping(
         source = "auszahlung.auszahlungAnSozialdienst", target = "auszahlung.auszahlungAnSozialdienst",
@@ -41,11 +41,11 @@ public abstract class AuszahlungMapper {
     public abstract FallAuszahlungDto toDto(Fall fall);
 
     public abstract Auszahlung partialUpdate(
-        FallAuszahlungUpdateDto auszahlungUpdateDto,
+        AuszahlungUpdateDto auszahlungUpdateDto,
         @MappingTarget Auszahlung auszahlung
     );
 
-    public abstract FallAuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
+    public abstract FallAuszahlungDto toUpdateDto(Auszahlung auszahlung);
 
     @AfterMapping
     protected void setIsDelegatedFlag(final Fall fall, @MappingTarget FallAuszahlungDto auszahlungDto) {

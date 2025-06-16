@@ -18,11 +18,11 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 
 public final class AuszahlungUpdateDtoSpecModel {
-    public static FallAuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(FallAuszahlungUpdateDtoSpec::new, (model) -> {
+    public static AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model) -> {
         });
     }
 }

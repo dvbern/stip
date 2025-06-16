@@ -37,7 +37,7 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -155,7 +155,7 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
-        var updateDto = new FallAuszahlungUpdateDto();
+        var updateDto = new AuszahlungUpdateDto();
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
@@ -172,7 +172,7 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
-        var updateDto = new FallAuszahlungUpdateDto();
+        var updateDto = new AuszahlungUpdateDto();
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
@@ -190,7 +190,7 @@ class AuszahlungAuthorizerTest {
         setupGesuchWithoutDelegierung();
         setupGesuchstellerAsCurrentBenutzer();
 
-        var updateDto = new FallAuszahlungUpdateDto();
+        var updateDto = new AuszahlungUpdateDto();
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert
@@ -207,7 +207,7 @@ class AuszahlungAuthorizerTest {
         setupGesuchstellerAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
-        var updateDto = new FallAuszahlungUpdateDto();
+        var updateDto = new AuszahlungUpdateDto();
         updateDto.setAuszahlungAnSozialdienst(false);
 
         // act & assert

@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class FallAuszahlungDtoSpec {
   public static final String JSON_PROPERTY_AUSZAHLUNG = "auszahlung";
-  private FallAuszahlungUpdateDtoSpec auszahlung;
+  private AuszahlungUpdateDtoSpec auszahlung;
 
   public static final String JSON_PROPERTY_IS_DELEGATED = "isDelegated";
   private Boolean isDelegated;
@@ -43,7 +43,7 @@ public class FallAuszahlungDtoSpec {
   public FallAuszahlungDtoSpec() {
   }
 
-  public FallAuszahlungDtoSpec auszahlung(FallAuszahlungUpdateDtoSpec auszahlung) {
+  public FallAuszahlungDtoSpec auszahlung(AuszahlungUpdateDtoSpec auszahlung) {
     
     this.auszahlung = auszahlung;
     return this;
@@ -57,14 +57,14 @@ public class FallAuszahlungDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public FallAuszahlungUpdateDtoSpec getAuszahlung() {
+  public AuszahlungUpdateDtoSpec getAuszahlung() {
     return auszahlung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAuszahlung(FallAuszahlungUpdateDtoSpec auszahlung) {
+  public void setAuszahlung(AuszahlungUpdateDtoSpec auszahlung) {
     this.auszahlung = auszahlung;
   }
 

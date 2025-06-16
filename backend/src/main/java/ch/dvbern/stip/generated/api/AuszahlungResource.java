@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -24,7 +24,7 @@ public interface AuszahlungResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    FallAuszahlungDto createAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull FallAuszahlungUpdateDto fallAuszahlungUpdateDto);
+    FallAuszahlungDto createAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
 
     @GET
     @Produces({ "application/json", "text/plain" })
@@ -33,5 +33,5 @@ public interface AuszahlungResource {
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    FallAuszahlungDto updateAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull FallAuszahlungUpdateDto fallAuszahlungUpdateDto);
+    FallAuszahlungDto updateAuszahlungForGesuch(@PathParam("fallId") UUID fallId,@Valid @NotNull AuszahlungUpdateDto auszahlungUpdateDto);
 }

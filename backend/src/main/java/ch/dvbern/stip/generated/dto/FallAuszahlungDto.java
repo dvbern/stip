@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class FallAuszahlungDto  implements Serializable {
   private @Valid Boolean isDelegated;
-  private @Valid FallAuszahlungUpdateDto auszahlung;
+  private @Valid AuszahlungUpdateDto auszahlung;
 
   /**
    **/
@@ -44,19 +44,19 @@ public class FallAuszahlungDto  implements Serializable {
 
   /**
    **/
-  public FallAuszahlungDto auszahlung(FallAuszahlungUpdateDto auszahlung) {
+  public FallAuszahlungDto auszahlung(AuszahlungUpdateDto auszahlung) {
     this.auszahlung = auszahlung;
     return this;
   }
 
   
   @JsonProperty("auszahlung")
-  public FallAuszahlungUpdateDto getAuszahlung() {
+  public AuszahlungUpdateDto getAuszahlung() {
     return auszahlung;
   }
 
   @JsonProperty("auszahlung")
-  public void setAuszahlung(FallAuszahlungUpdateDto auszahlung) {
+  public void setAuszahlung(AuszahlungUpdateDto auszahlung) {
     this.auszahlung = auszahlung;
   }
 

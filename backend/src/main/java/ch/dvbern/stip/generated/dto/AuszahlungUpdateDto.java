@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("FallAuszahlungUpdate")
+@JsonTypeName("AuszahlungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class FallAuszahlungUpdateDto  implements Serializable {
+public class AuszahlungUpdateDto  implements Serializable {
   private @Valid Boolean auszahlungAnSozialdienst;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
   /**
    **/
-  public FallAuszahlungUpdateDto auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+  public AuszahlungUpdateDto auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
     return this;
   }
@@ -44,7 +44,7 @@ public class FallAuszahlungUpdateDto  implements Serializable {
 
   /**
    **/
-  public FallAuszahlungUpdateDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+  public AuszahlungUpdateDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
@@ -69,9 +69,9 @@ public class FallAuszahlungUpdateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    FallAuszahlungUpdateDto fallAuszahlungUpdate = (FallAuszahlungUpdateDto) o;
-    return Objects.equals(this.auszahlungAnSozialdienst, fallAuszahlungUpdate.auszahlungAnSozialdienst) &&
-        Objects.equals(this.zahlungsverbindung, fallAuszahlungUpdate.zahlungsverbindung);
+    AuszahlungUpdateDto auszahlungUpdate = (AuszahlungUpdateDto) o;
+    return Objects.equals(this.auszahlungAnSozialdienst, auszahlungUpdate.auszahlungAnSozialdienst) &&
+        Objects.equals(this.zahlungsverbindung, auszahlungUpdate.zahlungsverbindung);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class FallAuszahlungUpdateDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FallAuszahlungUpdateDto {\n");
+    sb.append("class AuszahlungUpdateDto {\n");
     
     sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");

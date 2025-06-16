@@ -13,8 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
-import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -131,11 +131,11 @@ public class AuszahlungApiSpec {
         }
 
          /**
-         * @param fallAuszahlungUpdateDtoSpec (FallAuszahlungUpdateDtoSpec)  (required)
+         * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAuszahlungForGesuchOper body(FallAuszahlungUpdateDtoSpec fallAuszahlungUpdateDtoSpec) {
-            reqSpec.setBody(fallAuszahlungUpdateDtoSpec);
+        public CreateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
+            reqSpec.setBody(auszahlungUpdateDtoSpec);
             return this;
         }
 
@@ -288,11 +288,11 @@ public class AuszahlungApiSpec {
         }
 
          /**
-         * @param fallAuszahlungUpdateDtoSpec (FallAuszahlungUpdateDtoSpec)  (required)
+         * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAuszahlungForGesuchOper body(FallAuszahlungUpdateDtoSpec fallAuszahlungUpdateDtoSpec) {
-            reqSpec.setBody(fallAuszahlungUpdateDtoSpec);
+        public UpdateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
+            reqSpec.setBody(auszahlungUpdateDtoSpec);
             return this;
         }
 
