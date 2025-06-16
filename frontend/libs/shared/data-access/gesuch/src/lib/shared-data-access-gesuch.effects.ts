@@ -239,7 +239,6 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormPerson.saveTriggered,
         SharedEventGesuchFormElternSteuerdaten.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
-        SharedEventGesuchFormAuszahlung.saveTriggered,
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
         SharedEventGesuchFormDarlehen.saveTriggered,
       ),

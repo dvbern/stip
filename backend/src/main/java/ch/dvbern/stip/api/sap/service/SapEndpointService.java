@@ -120,6 +120,7 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerChangeResponse changeBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
+        final var zahlungsverbindung = auszahlung.getZahlungsverbindung();
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
@@ -128,7 +129,7 @@ public class SapEndpointService {
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
         businessPartnerChangeRequest.getBUSINESSPARTNER()
-            .setHEADER(businessPartnerChangeMapper.getHeader(auszahlung.getSapBusinessPartnerId()));
+            .setHEADER(businessPartnerChangeMapper.getHeader(zahlungsverbindung.getSapBusinessPartnerId()));
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 

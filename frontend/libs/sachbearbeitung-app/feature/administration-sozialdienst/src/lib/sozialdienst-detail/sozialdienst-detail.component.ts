@@ -25,12 +25,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import {
-  Land,
-  MASK_IBAN,
-  PATTERN_EMAIL,
-  Sozialdienst,
-} from '@dv/shared/model/gesuch';
+import { Land, MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -83,16 +78,18 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
   form = this.formBuilder.group({
     name: [<string | null>null, [Validators.required]],
-    adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
-      this.formBuilder,
-    ),
-    iban: [
-      <string | undefined>undefined,
-      [Validators.required, ibanValidator()],
-    ],
-    sozialdienstAdmin: this.formBuilder.group({
+    zahlungsverbindung: this.formBuilder.group({
+      adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
+        this.formBuilder,
+      ),
+      iban: [
+        <string | undefined>undefined,
+        [Validators.required, ibanValidator()],
+      ],
       vorname: [<string | null>null, [Validators.required]],
       nachname: [<string | null>null, [Validators.required]],
+    }),
+    sozialdienstAdmin: this.formBuilder.group({
       email: [
         <string | null>null,
         [Validators.required, Validators.pattern(PATTERN_EMAIL)],
@@ -112,11 +109,16 @@ export class SozialdienstDetailComponent implements OnDestroy {
         });
       } else {
         // set country to CH, since all sozialdienst are in CH
-        this.form.controls.adresse.controls.land.setValue('CH', {
-          emitEvent: false,
-        });
+        this.form.controls.zahlungsverbindung.controls.adresse.controls.land.setValue(
+          'CH',
+          {
+            emitEvent: false,
+          },
+        );
       }
-      this.form.controls.adresse.controls.land.disable({ emitEvent: false });
+      this.form.controls.zahlungsverbindung.controls.adresse.controls.land.disable(
+        { emitEvent: false },
+      );
     });
 
     effect(() => {
@@ -124,16 +126,18 @@ export class SozialdienstDetailComponent implements OnDestroy {
       if (sozialdienst) {
         this.form.patchValue({
           name: sozialdienst.name,
-          iban: sozialdienst.iban?.substring(2),
-          sozialdienstAdmin: {
+          zahlungsverbindung: {
+            iban: sozialdienst.zahlungsverbindung.iban?.substring(2),
             vorname: sozialdienst.sozialdienstAdmin.vorname,
             nachname: sozialdienst.sozialdienstAdmin.nachname,
+          },
+          sozialdienstAdmin: {
             email: sozialdienst.sozialdienstAdmin.email,
           },
         });
         SharedUiFormAddressComponent.patchForm(
-          this.form.controls.adresse,
-          sozialdienst.adresse,
+          this.form.controls.zahlungsverbindung.controls.adresse,
+          sozialdienst.zahlungsverbindung.adresse,
         );
       }
     });
@@ -154,25 +158,35 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
     const values = convertTempFormToRealValues(this.form);
 
-    const addressFormValues = SharedUiFormAddressComponent.getRealValues(
-      this.form.controls.adresse,
+    const zahlungsverbindung = convertTempFormToRealValues(
+      this.form.controls.zahlungsverbindung,
     );
 
-    const sozialdienstAdminFormValues = convertTempFormToRealValues(
+    const adresse = SharedUiFormAddressComponent.getRealValues(
+      this.form.controls.zahlungsverbindung.controls.adresse,
+    );
+
+    const sozialdienstAdmin = convertTempFormToRealValues(
       this.form.controls.sozialdienstAdmin,
     );
 
-    const updateRequest: Sozialdienst = {
+    const updateRequest = {
       ...values,
       id: sozialdienst.id,
-      iban: 'CH' + values.iban,
-      adresse: {
-        ...sozialdienst.adresse,
-        ...addressFormValues,
+      name: values.name,
+      zahlungsverbindung: {
+        ...zahlungsverbindung,
+        iban: 'CH' + zahlungsverbindung.iban,
+        adresse: {
+          ...sozialdienst.zahlungsverbindung.adresse,
+          ...adresse,
+        },
       },
       sozialdienstAdmin: {
-        ...sozialdienstAdminFormValues,
+        ...sozialdienstAdmin,
         id: sozialdienst.sozialdienstAdmin.id,
+        vorname: zahlungsverbindung.vorname,
+        nachname: zahlungsverbindung.nachname,
       },
     };
 
@@ -186,8 +200,12 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
     const values = convertTempFormToRealValues(this.form);
 
+    const zahlungsverbindung = convertTempFormToRealValues(
+      this.form.controls.zahlungsverbindung,
+    );
+
     const adresse = SharedUiFormAddressComponent.getRealValues(
-      this.form.controls.adresse,
+      this.form.controls.zahlungsverbindung.controls.adresse,
     );
 
     const sozialdienstAdmin = convertTempFormToRealValues(
@@ -195,11 +213,16 @@ export class SozialdienstDetailComponent implements OnDestroy {
     );
 
     const createRequest = {
-      ...values,
-      iban: 'CH' + values.iban,
-      adresse,
+      name: values.name,
+      zahlungsverbindung: {
+        ...zahlungsverbindung,
+        iban: 'CH' + zahlungsverbindung.iban,
+        adresse,
+      },
       sozialdienstAdmin: {
         ...sozialdienstAdmin,
+        vorname: zahlungsverbindung.vorname,
+        nachname: zahlungsverbindung.nachname,
       },
     };
 

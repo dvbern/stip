@@ -55,6 +55,9 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_MITARBEITER_ID;
         OidcPermissions.FALL_CREATE,
         OidcPermissions.DELEGIERUNG_READ,
         OidcPermissions.DELEGIERUNG_UPDATE,
+        OidcPermissions.AUSZAHLUNG_CREATE,
+        OidcPermissions.AUSZAHLUNG_UPDATE,
+        OidcPermissions.AUSZAHLUNG_READ,
         "default-roles-bern"
     }
 )

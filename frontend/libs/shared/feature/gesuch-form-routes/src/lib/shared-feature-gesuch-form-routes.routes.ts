@@ -69,8 +69,8 @@ export const baseGesuchFormRoutes: Routes = [
     },
     title: AUSZAHLUNG.translationKey,
     loadChildren: () =>
-      import('@dv/shared/feature/gesuch-form-auszahlungen').then(
-        (m) => m.gesuchAppFeatureGesuchFormAuszahlungenRoutes,
+      import('@dv/shared/feature/gesuch-form-auszahlung').then(
+        (m) => m.sharedFeatureGesuchFormAuszahlungRoutes,
       ),
   },
   {

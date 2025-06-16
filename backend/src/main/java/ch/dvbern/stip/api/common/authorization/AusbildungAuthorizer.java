@@ -58,7 +58,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         }
 
         if (
-            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+            AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 ausbildungRepository.requireById(ausbildungId),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
@@ -91,7 +91,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         }
 
         return Objects.isNull(gesuch.getEinreichedatum())
-        && AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+        && AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
             ausbildung,
             benutzerService.getCurrentBenutzer(),
             sozialdienstService

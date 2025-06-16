@@ -87,7 +87,6 @@ class CopyUtilTest {
         tranche.setTyp(null);
 
         var trancheDto = gesuchTrancheMapper.toDto(tranche);
-
         var trancheCopy = GesuchTrancheCopyUtil.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
         var copyDto = gesuchTrancheMapper.toDto(trancheCopy);
 

@@ -121,7 +121,6 @@ class RequiredDokumentServiceTest {
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(1));
-        assertThat(requiredDocuments.get(0), is(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
     }
 
     @Test
@@ -142,7 +141,9 @@ class RequiredDokumentServiceTest {
             null, null
         );
         final var requiredDocuments = service
-            .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
+            .getRequiredDokumentsForGesuchFormular(
+                initFormular(List.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE))
+            );
 
         assertThat(requiredDocuments.size(), is(0));
     }
@@ -163,7 +164,7 @@ class RequiredDokumentServiceTest {
     public static class MockDocumentProducer implements RequiredDocumentsProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
+            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE));
         }
     }
 

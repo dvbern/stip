@@ -20,11 +20,11 @@ package ch.dvbern.stip.api.sozialdienst.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.validation.IbanConstraint;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +39,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
@@ -59,18 +58,6 @@ public class Sozialdienst extends AbstractMandantEntity {
     private String name;
 
     @NotNull
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @IbanConstraint
-    private String iban;
-
-    @NotNull
-    @OneToOne(optional = false)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_adresse_id"))
-    private Adresse adresse;
-
-    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(
         name = "sozialdienst_admin_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_sozialdienst_admin_id")
@@ -85,4 +72,9 @@ public class Sozialdienst extends AbstractMandantEntity {
     @NotNull
     @OneToMany(mappedBy = "sozialdienst")
     private List<Delegierung> delegierungen = new ArrayList<>();
+
+    @Nullable
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "sozialdienst_zahlungsverbindung_id"))
+    private Zahlungsverbindung zahlungsverbindung;
 }
