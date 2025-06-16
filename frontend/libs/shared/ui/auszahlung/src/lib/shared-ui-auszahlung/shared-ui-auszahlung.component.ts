@@ -24,7 +24,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { AuszahlungUpdate, MASK_IBAN } from '@dv/shared/model/gesuch';
+import { FallAuszahlungUpdate, MASK_IBAN } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
@@ -74,7 +74,7 @@ export class SharedUiAuszahlungComponent {
   private formUtils = inject(SharedUtilFormService);
 
   auszahlungViewSig = input.required<SharedModelAuszahlung>();
-  saveTriggered = output<AuszahlungUpdate>();
+  saveTriggered = output<FallAuszahlungUpdate>();
   continueTriggered = output<void>();
   formIsUnsaved = output<boolean>();
 
@@ -114,7 +114,7 @@ export class SharedUiAuszahlungComponent {
     );
 
     effect(() => {
-      const auszahlung = this.auszahlungViewSig().auszahlung?.value;
+      const auszahlung = this.auszahlungViewSig().auszahlung?.auszahlung;
       if (isDefined(auszahlung)) {
         this.form.patchValue(
           {
@@ -158,7 +158,7 @@ export class SharedUiAuszahlungComponent {
   }
 
   private buildUpdatedGesuchFromForm() {
-    const auszahlung = this.auszahlungViewSig().auszahlung?.value;
+    const auszahlung = this.auszahlungViewSig().auszahlung?.auszahlung;
     const formData = this.form.getRawValue();
     const zahlungsverbindungData = convertTempFormToRealValues(
       this.form.controls.zahlungsverbindung,
