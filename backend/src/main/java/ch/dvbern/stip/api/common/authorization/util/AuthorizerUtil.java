@@ -17,14 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization.util;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import lombok.experimental.UtilityClass;
-
-import java.util.Objects;
 
 @UtilityClass
 public class AuthorizerUtil {
