@@ -182,7 +182,7 @@ export class GesuchStore extends signalStore(
     NEGATIVE_VERFUEGUNG_ERSTELLEN: rxMethod<{
       gesuchTrancheId: string;
       grundId: string;
-      kanton: WohnsitzKanton | null;
+      kanton: WohnsitzKanton | undefined;
     }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId, grundId, kanton }) =>
@@ -190,7 +190,7 @@ export class GesuchStore extends signalStore(
             gesuchTrancheId,
             ausgewaehlterGrund: {
               decisionId: grundId,
-              kanton: kanton ?? undefined,
+              kanton: kanton,
             },
           }),
         ),

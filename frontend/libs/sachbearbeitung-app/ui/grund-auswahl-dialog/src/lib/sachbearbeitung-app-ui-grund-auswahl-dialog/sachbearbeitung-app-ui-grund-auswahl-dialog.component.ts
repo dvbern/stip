@@ -42,7 +42,7 @@ export interface GrundAuswahlDialogData {
 
 export interface GrundAuswahlDialogResult {
   entityId: string;
-  kanton: WohnsitzKanton | null;
+  kanton?: WohnsitzKanton;
 }
 
 @Component({
@@ -73,8 +73,8 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   readonly kantone = Object.values(WohnsitzKanton);
 
   form = this.formBuilder.group({
-    grund: [<StipDecisionText | null>null, [Validators.required]],
-    kanton: [<WohnsitzKanton | null>null, [Validators.required]],
+    grund: [<StipDecisionText | undefined>undefined, [Validators.required]],
+    kanton: [<WohnsitzKanton | undefined>undefined, [Validators.required]],
   });
 
   static open(dialog: MatDialog, data: GrundAuswahlDialogData) {
