@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.QDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
+import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
@@ -241,9 +242,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Gesuch findGesuchByAuszahlungId(final UUID auszahlungId) {
         final var gesuch = QGesuch.gesuch;
+        final var fall = QFall.fall;
+        // join is necessary as querydsl defaults to max 4 levels of depth
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuch)
-            .where(gesuch.ausbildung.fall.auszahlung.id.eq(auszahlungId))
+            .join(fall)
+            .on(fall.id.eq(gesuch.ausbildung.fall.id))
+            .where(fall.auszahlung.id.eq(auszahlungId))
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
