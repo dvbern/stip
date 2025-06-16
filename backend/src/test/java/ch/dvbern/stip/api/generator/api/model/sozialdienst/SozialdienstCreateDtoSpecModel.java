@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.generator.api.model.sozialdienst;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.ZahlungsverbindungDtoSpecModel;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import lombok.experimental.UtilityClass;
@@ -28,13 +27,9 @@ import lombok.experimental.UtilityClass;
 public class SozialdienstCreateDtoSpecModel {
     private static final String VALID_IBAN = "CH5089144653587876648";
 
-    public SozialdienstCreateDtoSpec sozialdienstCreateDtoSpec(
-        final SozialdienstAdminDtoSpec admin,
-        final AdresseDtoSpec adresse
-    ) {
+    public SozialdienstCreateDtoSpec sozialdienstCreateDtoSpec(final SozialdienstAdminDtoSpec admin) {
         return TestUtil.createUpdateDtoSpec(SozialdienstCreateDtoSpec::new, model -> {
             model.setSozialdienstAdmin(admin);
-            model.setAdresse(adresse);
             model.setName("Test Sozialdienst");
             model.setZahlungsverbindung(ZahlungsverbindungDtoSpecModel.zahlungsverbindungDtoSpec());
         });

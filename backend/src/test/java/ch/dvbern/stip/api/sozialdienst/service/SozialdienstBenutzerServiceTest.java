@@ -200,7 +200,6 @@ class SozialdienstBenutzerServiceTest {
         sdAdresse.setOrt("Musterort");
         sdAdresse.setHausnummer("1");
         sdAdresse.setLand(Land.CH);
-        sozialdienstCreateDto.setAdresse(sdAdresse);
 
         var zahlungsverbindungDto = new ZahlungsverbindungDto();
         zahlungsverbindungDto.setVorname("Test");

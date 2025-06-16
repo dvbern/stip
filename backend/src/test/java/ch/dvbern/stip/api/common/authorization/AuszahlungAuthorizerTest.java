@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungReferenceCheckerService;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -37,7 +36,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
-import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.ws.rs.BadRequestException;
@@ -60,8 +58,6 @@ class AuszahlungAuthorizerTest {
     private GesuchRepository gesuchRepository;
     private DelegierungRepository delegierungRepository;
     private SozialdienstService sozialdienstService;
-    private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
-    private ZahlungsverbindungReferenceCheckerService zahlungsverbindungReferenceCheckerService;
 
     @BeforeEach
     void setUp() {
@@ -71,15 +67,9 @@ class AuszahlungAuthorizerTest {
         fallRepository = Mockito.mock(FallRepository.class);
         delegierungRepository = Mockito.mock(DelegierungRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
-        sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
-        zahlungsverbindungReferenceCheckerService = Mockito.mock(ZahlungsverbindungReferenceCheckerService.class);
 
         auszahlungAuthorizer =
-            new AuszahlungAuthorizer(
-                benutzerService, sozialdienstService, gesuchRepository, fallRepository,
-                zahlungsverbindungReferenceCheckerService
-            );
-
+            new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository, fallRepository);
     }
 
     private void setupGesuchstellerAsCurrentBenutzer() {
@@ -143,14 +133,6 @@ class AuszahlungAuthorizerTest {
     }
 
     private void setupGesuchWithoutDelegierung() {
-        // arrange
-        final var sozialdienstbenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().get();
-
-        // current sozialdienstbenutzer is mitarbeiter of the current sozialdienst
-        var sozialdienst = new Sozialdienst();
-        sozialdienst.setId(UUID.randomUUID());
-        sozialdienst.setSozialdienstBenutzers(List.of(sozialdienstbenutzer));
-
         // the fall is delegiert to the current sozialdienst-mitarbeiter
         var fall = new Fall();
 
@@ -163,8 +145,6 @@ class AuszahlungAuthorizerTest {
         fall.setGesuchsteller(new Benutzer());
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
     }
 
@@ -237,32 +217,6 @@ class AuszahlungAuthorizerTest {
     }
 
     @Test
-    void canUpdate_shouldNotWork_whenReferenceOfZahlungsverbindung_isEqualTo_ZahlungsverbindungOfDelegatedSozialdienst() {
-        // arrange
-        setupSozialdienstMitarbeiterAsCurrentBenutzer();
-        setupGesuchWithoutDelegierung();
-        setupGesuchstellerAsCurrentBenutzer();
-
-        var updateDto = new AuszahlungUpdateDto();
-        updateDto.setAuszahlungAnSozialdienst(false);
-
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
-        when(zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(any()))
-            .thenReturn(true);
-
-        assertThrows(
-            ForbiddenException.class,
-            () -> auszahlungAuthorizer.canUpdateAuszahlungForGesuch(UUID.randomUUID(), updateDto)
-        );
-
-        // arrange
-        when(zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(any()))
-            .thenReturn(false);
-        // act & assert
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canReadAuszahlungForGesuch(UUID.randomUUID()));
-    }
-
-    @Test
     void canRead_shouldWork_withoutDelegation_asGesuchsteller() {
         // arrange
         setupSozialdienstMitarbeiterAsCurrentBenutzer();
@@ -303,9 +257,9 @@ class AuszahlungAuthorizerTest {
     @Test
     void canRead_shoulNOTdWork_asSozialdienstmitarbeiter_withoutDelegation() {
         // arrange
-        setupSozialdienstMitarbeiterAsCurrentBenutzer();
         setupGesuchWithoutDelegierung();
         setFallAndGesuchstellerOfGesuch();
+        setupSozialdienstMitarbeiterAsCurrentBenutzer();
         // act & assert
         assertThrows(
             ForbiddenException.class,
@@ -321,7 +275,7 @@ class AuszahlungAuthorizerTest {
         setupGesuchstellerAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
-        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID()));
+        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
     }
 
     @Test
@@ -331,8 +285,8 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         setupGesuchWithoutDelegierung();
-        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID()));
+        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
         setupDelegierung();
-        assertDoesNotThrow(() -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID()));
+        assertDoesNotThrow(() -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
     }
 }

@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.sozialdienst.resource;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -70,9 +69,8 @@ class SozialdienstResourceImplTest {
     @Test
     @TestAsAdmin
     void createSozialdienst() {
-        final var adresse = AdresseSpecModel.adresseDtoSpec();
         final var admin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
-        final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin, adresse);
+        final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin);
 
         dtoSpec = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,

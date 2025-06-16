@@ -19,9 +19,7 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.BooleanSupplier;
 
-import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungReferenceCheckerService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -41,7 +39,6 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
-    private final ZahlungsverbindungReferenceCheckerService zahlungsverbindungReferenceCheckerService;
 
     @Transactional
     public void canCreateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
@@ -53,15 +50,15 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
-        final BooleanSupplier isSB = () -> isSachbearbeiter(currentBenutzer);
-        final BooleanSupplier isGesuchstellerOfGesuch =
-            () -> AuthorizerUtil.isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer);
-        final BooleanSupplier isDelegiertAndIsMitarbeiterOfSozialdienst = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
-
+        if (isSachbearbeiter(currentBenutzer)) {
+            return;
+        }
         if (
-            isSB.getAsBoolean() || isGesuchstellerOfGesuch.getAsBoolean()
-            || isDelegiertAndIsMitarbeiterOfSozialdienst.getAsBoolean()
+            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+                fall,
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
         ) {
             return;
         }
@@ -74,23 +71,16 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
-        // update should not be possible in this endpoint if flag = true
-        if (auszahlungUpdateDto.getAuszahlungAnSozialdienst()) {
+        if (
+            !AuthorizerUtil
+                .canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, currentBenutzer, sozialdienstService)
+        ) {
             forbidden();
         }
 
-        preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(fallId);
-
-        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
-            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService);
-        final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall);
-
-        final BooleanSupplier hasDelegierung = () -> fall.getDelegierung() != null;
-
         if (
-            isMitarbeiterAndCanEdit.getAsBoolean()
-            || !hasDelegierung.getAsBoolean() && isGesuchstellerAndCanEdit.getAsBoolean()
+            !auszahlungUpdateDto.getAuszahlungAnSozialdienst()
+            || Objects.isNull(auszahlungUpdateDto.getZahlungsverbindung())
         ) {
             return;
         }
@@ -99,47 +89,17 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateFlag(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
-        final var fall = fallRepository.requireById(fallId);
-
-        // auszahlung will be created, flag is set to default value (false)
-        if (Objects.isNull(fall.getAuszahlung()) && !auszahlungUpdateDto.getAuszahlungAnSozialdienst()) {
-            return;
-        }
-
-        // auszahlung already exists & flag does not change
-        if (
-            Objects.nonNull(fall.getAuszahlung())
-            && fall.getAuszahlung().isAuszahlungAnSozialdienst() == (auszahlungUpdateDto.getAuszahlungAnSozialdienst())
-        ) {
-            return;
-        }
-
-        canSetFlag(fallId);
-    }
-
-    @Transactional
-    public void canSetFlag(final UUID fallId) {
+    public void canSetFlag(final UUID fallId, boolean auszahlungAnSozialdienst) {
         final var fall = fallRepository.requireById(fallId);
 
         if (
+            !auszahlungAnSozialdienst ||
             AuthorizerUtil
                 .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)
         ) {
             return;
         }
         throw new BadRequestException();
-    }
-
-    private void preventUpdateIfZahlungsverbindungOfDelegatedSozialdienst(final UUID fallId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var fall = fallRepository.requireById(fallId);
-        if (
-            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(fall, currentBenutzer, sozialdienstService)
-            && zahlungsverbindungReferenceCheckerService.isCurrentZahlungsverbindungOfDelegatedSozialdienst(fallId)
-        ) {
-            forbidden();
-        }
     }
 
 }

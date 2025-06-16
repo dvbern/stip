@@ -4225,12 +4225,11 @@ components:
           type: integer
     Auszahlung:
       type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/AuszahlungUpdate'
       required: 
         - isDelegated
       properties:
+        value:
+          $ref: '#/components/schemas/AuszahlungUpdate'
         isDelegated:
           type: boolean
     AuszahlungUpdate:
@@ -5935,15 +5934,12 @@ components:
       required:
         - name
         - zahlungsverbindung
-        - adresse
         - sozialdienstAdmin
       properties:
         name:
           type: string
         zahlungsverbindung:
           $ref: '#/components/schemas/Zahlungsverbindung'
-        adresse:
-          $ref: '#/components/schemas/Adresse'
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstUpdate:

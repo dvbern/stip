@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -42,7 +43,7 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Auszahlung extends AbstractMandantEntity {
     @Nullable
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, cascade = CascadeType.PERSIST)
     @JoinColumn(
         name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "FK_auszahlung_zahlungsverbindung_id"),
         nullable = true

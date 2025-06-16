@@ -20,24 +20,25 @@ package ch.dvbern.stip.api.auszahlung.service;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
-import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
-public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
-    @Inject
-    FallRepository fallRepository;
-
+public abstract class AuszahlungMapper {
     public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
 
-    public abstract AuszahlungDto toDto(Auszahlung auszahlung);
+    @Mapping(
+        source = "auszahlung.auszahlungAnSozialdienst", target = "value.auszahlungAnSozialdienst",
+        defaultValue = "false"
+    )
+    @Mapping(source = "auszahlung.zahlungsverbindung", target = "value.zahlungsverbindung")
+    public abstract AuszahlungDto toDto(Fall fall);
 
     public abstract Auszahlung partialUpdate(
         AuszahlungUpdateDto auszahlungUpdateDto,
@@ -47,8 +48,7 @@ public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpda
     public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
 
     @AfterMapping
-    protected void setIsDelegatedFlag(final Auszahlung auszahlung, @MappingTarget AuszahlungDto auszahlungDto) {
-        final var fall = fallRepository.findByAuszahlungId(auszahlung.getId());
+    protected void setIsDelegatedFlag(final Fall fall, @MappingTarget AuszahlungDto auszahlungDto) {
         auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
     }
 }

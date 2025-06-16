@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -20,28 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class AuszahlungDto  implements Serializable {
-  private @Valid Boolean auszahlungAnSozialdienst;
   private @Valid Boolean isDelegated;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
-
-  /**
-   **/
-  public AuszahlungDto auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
-    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
-    return this;
-  }
-
-  
-  @JsonProperty("auszahlungAnSozialdienst")
-  @NotNull
-  public Boolean getAuszahlungAnSozialdienst() {
-    return auszahlungAnSozialdienst;
-  }
-
-  @JsonProperty("auszahlungAnSozialdienst")
-  public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
-    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
-  }
+  private @Valid AuszahlungUpdateDto value;
 
   /**
    **/
@@ -64,20 +44,20 @@ public class AuszahlungDto  implements Serializable {
 
   /**
    **/
-  public AuszahlungDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
-    this.zahlungsverbindung = zahlungsverbindung;
+  public AuszahlungDto value(AuszahlungUpdateDto value) {
+    this.value = value;
     return this;
   }
 
   
-  @JsonProperty("zahlungsverbindung")
-  public ZahlungsverbindungDto getZahlungsverbindung() {
-    return zahlungsverbindung;
+  @JsonProperty("value")
+  public AuszahlungUpdateDto getValue() {
+    return value;
   }
 
-  @JsonProperty("zahlungsverbindung")
-  public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
-    this.zahlungsverbindung = zahlungsverbindung;
+  @JsonProperty("value")
+  public void setValue(AuszahlungUpdateDto value) {
+    this.value = value;
   }
 
 
@@ -90,14 +70,13 @@ public class AuszahlungDto  implements Serializable {
       return false;
     }
     AuszahlungDto auszahlung = (AuszahlungDto) o;
-    return Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
-        Objects.equals(this.isDelegated, auszahlung.isDelegated) &&
-        Objects.equals(this.zahlungsverbindung, auszahlung.zahlungsverbindung);
+    return Objects.equals(this.isDelegated, auszahlung.isDelegated) &&
+        Objects.equals(this.value, auszahlung.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(auszahlungAnSozialdienst, isDelegated, zahlungsverbindung);
+    return Objects.hash(isDelegated, value);
   }
 
   @Override
@@ -105,9 +84,8 @@ public class AuszahlungDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungDto {\n");
     
-    sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
     sb.append("    isDelegated: ").append(toIndentedString(isDelegated)).append("\n");
-    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
+    sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");
     return sb.toString();
   }

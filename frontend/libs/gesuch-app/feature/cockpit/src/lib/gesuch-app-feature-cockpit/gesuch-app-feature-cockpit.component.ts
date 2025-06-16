@@ -8,11 +8,11 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
-import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -34,6 +34,8 @@ import {
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
+import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
+import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -52,8 +54,11 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   imports: [
     CommonModule,
     TranslatePipe,
+    TranslateDirective,
     MatSelectModule,
-    GesuchAppPatternMainLayoutComponent,
+    RouterLink,
+    SharedPatternMainLayoutComponent,
+    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,

@@ -1,0 +1,42 @@
+<dv-shared-pattern-main-layout>
+  <div class="container tw-relative tw-my-12 tw-justify-between">
+    <h1 class="tw-mb-8">
+      {{ 'shared.auszahlung.title' | translate }}
+    </h1>
+    <dv-shared-ui-auszahlung
+      [auszahlungViewSig]="auszahlungViewSig()"
+      (saveTriggered)="handleSave($event)"
+      (formIsUnsaved)="hasUnsavedChanges = $event"
+    ></dv-shared-ui-auszahlung>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <div dvHeaderMobileAddons></div>
+  <div dvMobileNavContent></div>
+
+  <!-- DESKTOP HEADER (LEFT) -->
+  <div dvHeaderDesktopLeft class="tw-flex tw-flex-grow tw-items-center tw-gap-4">
+    <a
+      [routerLink]="['/']"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-dashboard"
+    >
+      <i class="material-symbols-rounded text-white me-2">dashboard</i>
+      <span translate>shared.menu.dashboard</span>
+    </a>
+
+    @let fallId = fallIdSig();
+    <a
+      [routerLink]="['/auszahlung', fallId]"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-auszahlung"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      <span translate>shared.menu.auszahlung</span>
+    </a>
+  </div>
+
+  <!-- DESKTOP HEADER (RIGHT) -->
+  <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
+</dv-shared-pattern-main-layout>

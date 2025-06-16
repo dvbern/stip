@@ -54,7 +54,7 @@ public class RequiredDokumentService {
     ) {
         if (
             !AuthorizerUtil
-                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
+                .canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(gesuch, benutzer, sozialdienstService)
         ) {
             return false;
         }

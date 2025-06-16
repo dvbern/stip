@@ -147,7 +147,7 @@ export class SharedUtilFormService {
   /**
    * Used to add or remove the required validators, validity checks are also triggered afterwards
    */
-  setRequired(control: FormControl, required: boolean) {
+  setRequired(control: FormControl | FormGroup, required: boolean) {
     if (required) {
       control.addValidators(Validators.required);
     } else {

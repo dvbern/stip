@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,24 +28,46 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AuszahlungDtoSpec
  */
 @JsonPropertyOrder({
-  AuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED,
-  AuszahlungDtoSpec.JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST,
-  AuszahlungDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
+  AuszahlungDtoSpec.JSON_PROPERTY_VALUE,
+  AuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED
 })
 @JsonTypeName("Auszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AuszahlungDtoSpec {
+  public static final String JSON_PROPERTY_VALUE = "value";
+  private AuszahlungUpdateDtoSpec value;
+
   public static final String JSON_PROPERTY_IS_DELEGATED = "isDelegated";
   private Boolean isDelegated;
 
-  public static final String JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST = "auszahlungAnSozialdienst";
-  private Boolean auszahlungAnSozialdienst;
-
-  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
-  private ZahlungsverbindungDtoSpec zahlungsverbindung;
-
   public AuszahlungDtoSpec() {
   }
+
+  public AuszahlungDtoSpec value(AuszahlungUpdateDtoSpec value) {
+    
+    this.value = value;
+    return this;
+  }
+
+   /**
+   * Get value
+   * @return value
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public AuszahlungUpdateDtoSpec getValue() {
+    return value;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValue(AuszahlungUpdateDtoSpec value) {
+    this.value = value;
+  }
+
 
   public AuszahlungDtoSpec isDelegated(Boolean isDelegated) {
     
@@ -72,58 +94,6 @@ public class AuszahlungDtoSpec {
     this.isDelegated = isDelegated;
   }
 
-
-  public AuszahlungDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
-    
-    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
-    return this;
-  }
-
-   /**
-   * Get auszahlungAnSozialdienst
-   * @return auszahlungAnSozialdienst
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getAuszahlungAnSozialdienst() {
-    return auszahlungAnSozialdienst;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
-    this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
-  }
-
-
-  public AuszahlungDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
-    
-    this.zahlungsverbindung = zahlungsverbindung;
-    return this;
-  }
-
-   /**
-   * Get zahlungsverbindung
-   * @return zahlungsverbindung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
-    return zahlungsverbindung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
-    this.zahlungsverbindung = zahlungsverbindung;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -133,23 +103,21 @@ public class AuszahlungDtoSpec {
       return false;
     }
     AuszahlungDtoSpec auszahlung = (AuszahlungDtoSpec) o;
-    return Objects.equals(this.isDelegated, auszahlung.isDelegated) &&
-        Objects.equals(this.auszahlungAnSozialdienst, auszahlung.auszahlungAnSozialdienst) &&
-        Objects.equals(this.zahlungsverbindung, auszahlung.zahlungsverbindung);
+    return Objects.equals(this.value, auszahlung.value) &&
+        Objects.equals(this.isDelegated, auszahlung.isDelegated);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isDelegated, auszahlungAnSozialdienst, zahlungsverbindung);
+    return Objects.hash(value, isDelegated);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungDtoSpec {\n");
+    sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("    isDelegated: ").append(toIndentedString(isDelegated)).append("\n");
-    sb.append("    auszahlungAnSozialdienst: ").append(toIndentedString(auszahlungAnSozialdienst)).append("\n");
-    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

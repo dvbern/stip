@@ -241,12 +241,9 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Gesuch findGesuchByAuszahlungId(final UUID auszahlungId) {
         final var gesuch = QGesuch.gesuch;
-        final var gesuchTranche = QGesuchTranche.gesuchTranche;
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuch)
-            .join(gesuchTranche)
-            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
-            .where(gesuchTranche.gesuchFormular.tranche.gesuch.ausbildung.fall.auszahlung.id.eq(auszahlungId))
+            .where(gesuch.ausbildung.fall.auszahlung.id.eq(auszahlungId))
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);

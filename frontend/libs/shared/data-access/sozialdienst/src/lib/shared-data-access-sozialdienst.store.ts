@@ -252,8 +252,7 @@ export class SozialdienstStore extends signalStore(
       }),
       exhaustMap(({ sozialdienst }) => {
         const sozialdienstUpdate: SozialdienstUpdate = {
-          adresse: sozialdienst.adresse,
-          iban: sozialdienst.iban,
+          zahlungsverbindung: sozialdienst.zahlungsverbindung,
           id: sozialdienst.id,
           name: sozialdienst.name,
         };

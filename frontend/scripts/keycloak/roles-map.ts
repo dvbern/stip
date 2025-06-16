@@ -79,6 +79,7 @@ export const PERMISSION_ROLE_LIST = [
     'NOTIZ_DELETE',
     'SEND_EMAIL',
     'BUCHHALTUNG_ENTRY_READ',
+    'AUSZAHLUNG_READ',
   ],
   [
     ['Sozialdienst-Admin', 'Sachbearbeiter-Admin'],

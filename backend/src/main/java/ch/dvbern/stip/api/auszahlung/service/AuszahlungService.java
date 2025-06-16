@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
+import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 public class AuszahlungService {
     private final FallRepository fallRepository;
-    private final AuszahlungRepository auszahlungRepository;
     private final AuszahlungMapper auszahlungMapper;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
@@ -40,23 +39,27 @@ public class AuszahlungService {
     public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         var fall = fallRepository.requireById(fallId);
         var auszahlung = auszahlungMapper.toEntity(auszahlungUpdateDto);
-        zahlungsverbindungRepository.persistAndFlush(auszahlung.getZahlungsverbindung());
-        auszahlungRepository.persistAndFlush(auszahlung);
         fall.setAuszahlung(auszahlung);
 
-        return auszahlungMapper.toDto(auszahlung);
+        return auszahlungMapper.toDto(fall);
     }
 
     @Transactional
     public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
-        return auszahlungMapper.toDto(fall.getAuszahlung());
+        return auszahlungMapper.toDto(fall);
     }
 
     @Transactional
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         final var fall = fallRepository.requireById(fallId);
-        var auszahlung = auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
-        return auszahlungMapper.toDto(auszahlung);
+        final var zahlungsverbindung = fall.getAuszahlung().getZahlungsverbindung();
+
+        if (auszahlungUpdateDto.getAuszahlungAnSozialdienst() && Objects.nonNull(zahlungsverbindung)) {
+            zahlungsverbindungRepository.delete(zahlungsverbindung);
+        }
+
+        auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
+        return auszahlungMapper.toDto(fall);
     }
 }

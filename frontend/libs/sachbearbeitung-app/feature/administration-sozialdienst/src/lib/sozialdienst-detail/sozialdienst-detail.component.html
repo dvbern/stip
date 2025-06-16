@@ -7,7 +7,13 @@
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}</mat-label>
-          <input formControlName="name" data-testid="form-sozialdienst-name" matInput dvMaxLength type="text" />
+          <input
+            [formControl]="form.controls.name"
+            data-testid="form-sozialdienst-name"
+            matInput
+            dvMaxLength
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -15,6 +21,7 @@
       </div>
     </div>
 
+    @let zahlungsverbindungControls = form.controls.zahlungsverbindung.controls;
     <!-- IBAN -->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
@@ -24,7 +31,7 @@
           data-testid="form-sozialdienst-iban"
           matInput
           type="text"
-          [formControlName]="'iban'"
+          [formControl]="zahlungsverbindungControls.iban"
           [maskito]="MASK_IBAN"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
@@ -43,7 +50,7 @@
     <div class="row g-4 mt-1">
       <dv-shared-ui-form-address
         class="col-12 col-xl-8"
-        [group]="form.controls.adresse"
+        [group]="form.controls.zahlungsverbindung.controls.adresse"
         [laender]="laenderSig()"
         [language]="languageSig()"
       />
@@ -77,7 +84,7 @@
               {{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}
             </mat-label>
             <input
-              formControlName="nachname"
+              [formControl]="zahlungsverbindungControls.nachname"
               data-testid="form-sozialdienst-nachname"
               matInput
               dvMaxLength
@@ -95,7 +102,13 @@
             <mat-label>
               {{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}
             </mat-label>
-            <input formControlName="vorname" data-testid="form-sozialdienst-vorname" matInput dvMaxLength type="text" />
+            <input
+              [formControl]="zahlungsverbindungControls.vorname"
+              data-testid="form-sozialdienst-vorname"
+              matInput
+              dvMaxLength
+              type="text"
+            />
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -103,6 +116,7 @@
         </div>
       </div>
 
+      @let sozialdienstControls = form.controls.sozialdienstAdmin.controls;
       <!-- E-Mail Adresse -->
       <div class="row g-4 mt-1">
         <div
@@ -115,7 +129,7 @@
             </mat-label>
             <input
               data-testid="form-sozialdienst-email"
-              formControlName="email"
+              [formControl]="sozialdienstControls.email"
               matInput
               dvMaxLength
               type="email"

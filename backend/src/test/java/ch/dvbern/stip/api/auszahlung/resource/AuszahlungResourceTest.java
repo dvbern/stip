@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.auszahlung.resource;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -39,7 +37,6 @@ import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -71,8 +68,6 @@ class AuszahlungResourceTest {
     private FallDtoSpec fall;
 
     private AuszahlungDtoSpec auszahlung;
-    private UUID auszahlungId;
-    private ZahlungsverbindungDto zahlungsverbindungDto;
 
     @Test
     @TestAsGesuchsteller
@@ -167,8 +162,8 @@ class AuszahlungResourceTest {
     @Order(6)
     void updateAuszahlungForGesuch() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
-        auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlungAnSozialdienst());
-        auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
+        auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getValue().getAuszahlungAnSozialdienst());
+        auszahlungUpdate.setZahlungsverbindung(auszahlung.getValue().getZahlungsverbindung());
         final var adresse =
             AdresseSpecModel.adresseDtoSpec();
         auszahlungUpdate.getZahlungsverbindung().setAdresse(adresse);
@@ -194,7 +189,7 @@ class AuszahlungResourceTest {
     void updateAuszahlungForGesuchShouldFailWithFlagSetToTrue() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);
-        auszahlungUpdate.setZahlungsverbindung(auszahlung.getZahlungsverbindung());
+        auszahlungUpdate.setZahlungsverbindung(auszahlung.getValue().getZahlungsverbindung());
 
         auszahlungApiSpec.updateAuszahlungForGesuch()
             .fallIdPath(fall.getId())
