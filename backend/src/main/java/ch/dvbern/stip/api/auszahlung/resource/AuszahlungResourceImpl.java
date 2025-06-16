@@ -37,14 +37,6 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
     private final AuszahlungService auszahlungService;
 
-    @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
-    @Override
-    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-        auszahlungAuthorizer.canSetFlag(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
-        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-    }
-
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_READ)
     @Override
     public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
@@ -52,11 +44,17 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
         return auszahlungService.getAuszahlungForGesuch(fallId);
     }
 
+    @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
+    @Override
+    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
+        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
+    }
+
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_UPDATE)
     @Override
     public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-        auszahlungAuthorizer.canSetFlag(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
         return auszahlungService.updateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 }

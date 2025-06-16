@@ -23,11 +23,9 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -36,15 +34,8 @@ import lombok.RequiredArgsConstructor;
 public class AuszahlungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
-    private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
 
-    @Transactional
-    public void canCreateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
-        canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-    }
-
-    @Transactional
     public void canReadAuszahlungForGesuch(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
@@ -65,7 +56,10 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    @Transactional
+    public void canCreateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
+        canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
+    }
+
     public void canUpdateAuszahlungForGesuch(final UUID fallId, final AuszahlungUpdateDto auszahlungUpdateDto) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
@@ -84,10 +78,9 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        forbidden();
+        canSetFlag(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
     }
 
-    @Transactional
     public void canSetFlag(final UUID fallId, boolean auszahlungAnSozialdienst) {
         final var fall = fallRepository.requireById(fallId);
 

@@ -67,8 +67,7 @@ class AuszahlungAuthorizerTest {
         delegierungRepository = Mockito.mock(DelegierungRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
 
-        auszahlungAuthorizer =
-            new AuszahlungAuthorizer(benutzerService, sozialdienstService, gesuchRepository, fallRepository);
+        auszahlungAuthorizer = new AuszahlungAuthorizer(benutzerService, sozialdienstService, fallRepository);
     }
 
     private void setupGesuchstellerAsCurrentBenutzer() {
