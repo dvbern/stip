@@ -78,27 +78,6 @@ public class GesuchTestSpecGenerator {
         });
     }
 
-    // public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
-    // return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
-    // model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-    // model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-    // model.getGesuchTrancheToWorkWith().setGesuchFormular(
-    // AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
-    // );
-    // });
-    // }
-
-    // public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
-    // return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
-    // model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-    // model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-    // model.getGesuchTrancheToWorkWith()
-    // .setGesuchFormular(
-    // AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
-    // );
-    // });
-    // }
-
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecGeschwister() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());

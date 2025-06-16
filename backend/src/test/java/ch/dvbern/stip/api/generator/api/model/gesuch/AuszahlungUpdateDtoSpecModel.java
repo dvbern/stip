@@ -23,11 +23,6 @@ import ch.dvbern.stip.generated.dto.FallAuszahlungUpdateDtoSpec;
 public final class AuszahlungUpdateDtoSpecModel {
     public static FallAuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(FallAuszahlungUpdateDtoSpec::new, (model) -> {
-            // todo: specify
-            // model.setAdresse(AdresseSpecModel.adresseDtoSpec());
-            // model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
-            // model.setVorname("John");
-            // model.setNachname("Doe");
         });
     }
 }

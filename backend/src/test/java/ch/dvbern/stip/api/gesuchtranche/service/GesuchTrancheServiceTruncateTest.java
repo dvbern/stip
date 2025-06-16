@@ -355,7 +355,6 @@ class GesuchTrancheServiceTruncateTest {
             .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
             .setFamiliensituation(new Familiensituation())
             .setPartner(null)
-            // .setAuszahlung(new Auszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER))
             .setEinnahmenKosten(new EinnahmenKosten())
             .setDarlehen(new Darlehen());
     }
