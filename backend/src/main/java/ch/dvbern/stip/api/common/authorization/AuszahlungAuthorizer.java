@@ -48,7 +48,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
             return;
         }
         if (
-            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOf(
                 fall,
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService

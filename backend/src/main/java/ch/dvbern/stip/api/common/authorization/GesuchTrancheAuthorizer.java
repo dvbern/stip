@@ -241,7 +241,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         final UUID gesuchTrancheId
     ) {
         if (
-            !AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+            !AuthorizerUtil.isGesuchstellerOf(
                 gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch().getAusbildung().getFall(),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
