@@ -14,7 +14,7 @@
   <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
 
   <form [formGroup]="form" class="tw-mt-5" novalidate>
-    <div class="tw-flex tw-w-full tw-gap-4">
+    <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
       <mat-form-field dvSharedUiFormField [ngClass]="{ 'tw-w-4/5': showKantonFieldSig() }" class="tw-w-full">
         <mat-select
           formControlName="grund"
@@ -31,7 +31,7 @@
       </mat-form-field>
 
       @if (showKantonFieldSig()) {
-        <mat-form-field dvSharedUiFormField class="tw-w-1/5">
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-select
             formControlName="kanton"
             [placeholder]="'shared.form.select.empty' | translate"
