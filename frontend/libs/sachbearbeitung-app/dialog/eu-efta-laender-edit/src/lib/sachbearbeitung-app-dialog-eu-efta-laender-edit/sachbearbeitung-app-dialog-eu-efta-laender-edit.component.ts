@@ -57,7 +57,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
   dialogData = inject<EuEftaLandEditData>(MAT_DIALOG_DATA);
   private formBuilder = inject(NonNullableFormBuilder);
 
-  // Custom mask for BFS code - limit to exactly 4 digits
+  // Custom mask for BFS code - limit to exactly 4 uppercase letters A-Z, no special chars
   maskitoBfsCode: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, /\d/],
   };
@@ -84,7 +84,15 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
 
   // Custom mask for ISO3 code - limit to exactly 3 uppercase letters
   maskitoIso3Code: MaskitoOptions = {
-    mask: [/[A-Z]/, /[A-Z]/, /[A-Z]/],
+    mask: [/[a-zA-Z]/, /[a-zA-Z]/, /[a-zA-Z]/],
+    postprocessors: [
+      ({ selection, value }) => {
+        return {
+          selection,
+          value: value.toUpperCase(),
+        };
+      },
+    ],
   };
 
   // validator for ISO3 code to ensure it's unique
@@ -153,6 +161,11 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
       'itKurzform',
       'enKurzform',
     ]);
+
+    // if iso3code is an empty string, set it to undefined
+    if (values.iso3code === '') {
+      values.iso3code = undefined;
+    }
 
     this.dialogRef.close({ ...this.dialogData.land, ...values } as Land);
   }

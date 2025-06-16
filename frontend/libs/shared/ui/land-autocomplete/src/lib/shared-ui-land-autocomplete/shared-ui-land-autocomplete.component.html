@@ -10,6 +10,18 @@
     [matAutocomplete]="landAutocomplete"
   />
 
+  @if (landId && autocompleteControl.enabled) {
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="resetControl()"
+      data-testid="button-form-education-ausbildungsstaette-clear"
+    >
+      <span class="material-symbols-rounded align-middle">clear</span>
+    </button>
+  }
   <mat-autocomplete
     (opened)="toggleOpen()"
     (closed)="toggleOpen()"

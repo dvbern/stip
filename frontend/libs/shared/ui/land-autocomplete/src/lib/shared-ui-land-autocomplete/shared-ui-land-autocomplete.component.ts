@@ -20,6 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -50,6 +51,7 @@ import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiZuvorHintDirective,
+    MatButtonModule,
   ],
   templateUrl: './shared-ui-land-autocomplete.component.html',
   styleUrl: './shared-ui-land-autocomplete.component.scss',
@@ -74,7 +76,7 @@ export class SharedUiLandAutocompleteComponent
   private isOpen = false;
   private disabled = false;
   private touched = false;
-  private landId: string | undefined;
+  landId: string | undefined;
   // Internal autocomplete control - works with Land objects and searchstrings
   autocompleteControl = this.fb.nonNullable.control<Land | string | undefined>(
     undefined,
@@ -230,6 +232,15 @@ export class SharedUiLandAutocompleteComponent
     this.isOpen = !this.isOpen;
   }
 
+  resetControl() {
+    this.autocompleteControl.setValue(undefined, {
+      emitEvent: false,
+    });
+    this.landId = undefined;
+    this.onChange(undefined);
+    this.markAsTouched();
+  }
+
   markAsTouched() {
     if (!this.touched) {
       this.onTouched();
@@ -244,10 +255,23 @@ export class SharedUiLandAutocompleteComponent
       this.onTouched();
     }
     const value = this.autocompleteControl.value;
-    if (!isLand(value) && !this.isOpen) {
-      this.landId = undefined;
-      this.onChange(undefined);
-      this.autocompleteControl.setValue(undefined);
+    if (!isLand(value)) {
+      // find the landId from the current value
+      if (typeof value === 'string' && value.length > 0) {
+        const land = this.laenderSig()?.find(
+          (l) =>
+            l[this.languageDisplayFieldSig()]?.toLowerCase() ===
+            value.toLowerCase(),
+        );
+        if (land) {
+          this.landId = land.id;
+          this.setAutocomplete(land);
+        } else {
+          this.landId = undefined;
+          this.onChange(undefined);
+          this.autocompleteControl.setValue(undefined);
+        }
+      }
     }
   }
 
