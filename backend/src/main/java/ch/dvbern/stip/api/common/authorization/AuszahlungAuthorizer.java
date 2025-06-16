@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -99,7 +98,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         ) {
             return;
         }
-        throw new BadRequestException();
+        forbidden();
     }
 
 }
