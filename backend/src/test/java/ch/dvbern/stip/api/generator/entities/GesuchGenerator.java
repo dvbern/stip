@@ -17,6 +17,14 @@
 
 package ch.dvbern.stip.api.generator.entities;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
@@ -54,14 +62,6 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
