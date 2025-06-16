@@ -38,7 +38,6 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
-import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -275,7 +274,7 @@ class AuszahlungAuthorizerTest {
         setupGesuchstellerAsCurrentBenutzer();
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
-        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
+        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
     }
 
     @Test
@@ -285,7 +284,7 @@ class AuszahlungAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         setupGesuchWithoutDelegierung();
-        assertThrows(BadRequestException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
+        assertThrows(ForbiddenException.class, () -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
         setupDelegierung();
         assertDoesNotThrow(() -> auszahlungAuthorizer.canSetFlag(UUID.randomUUID(), true));
     }
