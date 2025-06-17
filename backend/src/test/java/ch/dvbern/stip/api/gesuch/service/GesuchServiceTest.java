@@ -17,8 +17,10 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -76,6 +78,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
@@ -89,6 +92,8 @@ import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -203,6 +208,12 @@ class GesuchServiceTest {
 
     @InjectMock
     FallRepository fallRepository;
+
+    @InjectMock
+    VerfuegungRepository verfuegungRepository;
+
+    @InjectMock
+    PdfService pdfService;
 
     static final String TENANT_ID = "bern";
 
@@ -1145,6 +1156,11 @@ class GesuchServiceTest {
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
+        var verfuegung = new Verfuegung();
+        verfuegung.setTimestampErstellt(LocalDateTime.now());
+        gesuch.getVerfuegungs().add(verfuegung);
+        when(pdfService.createVerfuegungOhneAnspruch(any(), any())).thenReturn(new ByteArrayOutputStream());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(
