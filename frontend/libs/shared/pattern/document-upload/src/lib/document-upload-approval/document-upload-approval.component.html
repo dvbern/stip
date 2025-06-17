@@ -1,7 +1,7 @@
 @let dokumentRd = dokumentsStore.dokument();
 
 @if (uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
-  @if (dokumentRd | rdIsPendingWithoutCache) {
+  @if (dokumentRd | rdIsPendingWithoutCache: { ignoreInitial: true }) {
     <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
   } @else {
     @if (dokumentRd.data?.id) {

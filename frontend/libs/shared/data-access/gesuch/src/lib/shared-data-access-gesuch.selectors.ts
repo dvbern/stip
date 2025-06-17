@@ -302,7 +302,6 @@ export function prepareTranchenChanges(
       personInAusbildung: null,
       elterns: null,
       partner: null,
-      auszahlung: null,
     },
   ).map((step) => `${step}.adresse.id`);
 

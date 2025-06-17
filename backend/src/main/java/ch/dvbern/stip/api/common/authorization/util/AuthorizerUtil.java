@@ -43,43 +43,56 @@ public class AuthorizerUtil {
     }
 
     public boolean isGesuchstellerOfWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
-        return Objects.equals(
-            fall.getGesuchsteller().getId(),
-            currentBenutzer.getId()
-        )
+        return isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer)
         && fall.getDelegierung() == null;
     }
 
-    public boolean isGesuchstellerOfOrDelegatedToSozialdienst(
+    public boolean isGesuchstellerOfIgnoreDelegation(final Fall fall, final Benutzer currentBenutzer) {
+        return Objects.equals(
+            fall.getGesuchsteller().getId(),
+            currentBenutzer.getId()
+        );
+    }
+
+    public boolean canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
         final Gesuch gesuch,
         final Benutzer currentBenutzer,
         final SozialdienstService sozialdienstService
     ) {
-        return isGesuchstellerOfOrDelegatedToSozialdienst(
+        return canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
             gesuch.getAusbildung().getFall(),
             currentBenutzer,
             sozialdienstService
         );
     }
 
-    public boolean isGesuchstellerOfOrDelegatedToSozialdienst(
+    public boolean canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
         final Ausbildung ausbildung,
         final Benutzer currentBenutzer,
         final SozialdienstService sozialdienstService
     ) {
-        return isGesuchstellerOfOrDelegatedToSozialdienst(
+        return canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
             ausbildung.getFall(),
             currentBenutzer,
             sozialdienstService
         );
     }
 
-    public boolean isGesuchstellerOfOrDelegatedToSozialdienst(
+    public boolean canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
         final Fall fall,
         final Benutzer currentBenutzer,
         final SozialdienstService sozialdienstService
     ) {
         return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)
         || isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall);
+    }
+
+    public boolean isGesuchstellerOf(
+        final Fall fall,
+        final Benutzer currentBenutzer,
+        final SozialdienstService sozialdienstService
+    ) {
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)
+        || isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer);
     }
 }

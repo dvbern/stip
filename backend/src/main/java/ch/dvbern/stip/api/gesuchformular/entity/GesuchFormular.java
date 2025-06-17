@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
@@ -34,7 +33,6 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
-import ch.dvbern.stip.api.gesuchformular.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
@@ -256,7 +254,6 @@ import org.hibernate.envers.Audited;
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
-        @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
     }
@@ -291,12 +288,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "partner_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"))
     @HasPageValidation(PartnerPageValidation.class)
     private @Valid Partner partner;
-
-    @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"))
-    @HasPageValidation(AusbildungPageValidation.class)
-    private @Valid Auszahlung auszahlung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

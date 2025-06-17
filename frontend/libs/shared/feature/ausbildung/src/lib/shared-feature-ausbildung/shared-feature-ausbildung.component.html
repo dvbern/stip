@@ -1,6 +1,6 @@
 @if (
   (ausbildungStore.ausbildung() | rdIsPendingWithoutCache: { ignoreInitial: true }) ||
-  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache)
+  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache: { ignoreInitial: true })
 ) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
@@ -304,7 +304,6 @@
         (change)="markDatesAsTouched()"
         (blur)="onDateBlur(form.controls.ausbildungEnd)"
       />
-
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>

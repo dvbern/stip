@@ -1,0 +1,50 @@
+<dv-shared-pattern-main-layout>
+  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+    <a
+      routerLink="/"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-overview"
+    >
+      <i class="material-symbols-rounded text-white me-2">list</i>
+      <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+    </a>
+    @let fallId = fallIdSig();
+    <a
+      [routerLink]="['/fall', fallId]"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-overview"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
+      <span>{{ 'sozialdienst-app.header.fall' | translate }}</span>
+    </a>
+    <a
+      [routerLink]="['/auszahlung', fallId]"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none active"
+      data-testid="gesuch-step-nav-auszahlung"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      {{ 'shared.menu.auszahlung' | translate }}
+    </a>
+    <a
+      *dvHasRoles="['V0_Sozialdienst-Admin']"
+      routerLink="/administration"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-administration"
+    >
+      <i class="material-symbols-rounded text-white me-2">settings</i>
+      <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+    </a>
+  </div>
+  <div class="container tw-relative tw-my-12 tw-justify-between">
+    <h1 class="tw-mb-8">
+      {{ 'shared.auszahlung.title' | translate }}
+    </h1>
+    <dv-shared-ui-auszahlung
+      [auszahlungViewSig]="auszahlungViewSig()"
+      (saveTriggered)="handleSave($event)"
+      (formIsUnsaved)="hasUnsavedChanges = $event"
+    ></dv-shared-ui-auszahlung>
+  </div>
+</dv-shared-pattern-main-layout>

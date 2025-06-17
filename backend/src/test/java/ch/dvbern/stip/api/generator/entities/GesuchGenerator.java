@@ -28,6 +28,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -80,7 +81,6 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
         gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
-        gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
         gesuchFormularToWorkWith.setSteuererklaerung(new ArrayList<>());
         gesuchFormularToWorkWith.getSteuererklaerung().add(new SteuererklaerungUpdateDtoSpec());
@@ -120,6 +120,12 @@ public final class GesuchGenerator {
             .appendPattern("MM.yyyy")
             .parseDefaulting(ChronoField.DAY_OF_MONTH, 31)
             .toFormatter();
+
+        var fall = new Fall();
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID)
+            .setNachname("Mustermann")
+            .setVorname("Max");
 
         var ausbildung = new Ausbildung()
             .setFall(new Fall())
@@ -198,7 +204,7 @@ public final class GesuchGenerator {
 
     private static AuszahlungUpdateDtoSpec createAuszahlung() {
         AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
-        auszahlungUpdateDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        auszahlungUpdateDto.getZahlungsverbindung().setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }
 

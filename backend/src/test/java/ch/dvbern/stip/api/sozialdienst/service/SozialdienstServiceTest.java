@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.land.service.LandService;
@@ -30,7 +31,6 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -46,6 +46,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -125,20 +126,30 @@ class SozialdienstServiceTest {
         adresse2.setStrasse("Musterstrasse");
         adresse2.setOrt("Ort");
 
+        Zahlungsverbindung zahlungsverbindung1 = new Zahlungsverbindung();
+        zahlungsverbindung1.setVorname("Vorname");
+        zahlungsverbindung1.setNachname("Nachname");
+        zahlungsverbindung1.setAdresse(adresse1);
+        zahlungsverbindung1.setIban(IBAN_CH_NUMMER_VALID);
+
+        Zahlungsverbindung zahlungsverbindung2 = new Zahlungsverbindung();
+        zahlungsverbindung2.setVorname("Vorname");
+        zahlungsverbindung2.setNachname("Nachname");
+        zahlungsverbindung2.setAdresse(adresse2);
+        zahlungsverbindung2.setIban(IBAN_CH_NUMMER_VALID);
+
         sozialdienstA = new Sozialdienst();
         sozialdienstA.setName("Sozialdienst");
-        sozialdienstA.setAdresse(adresse1);
+        sozialdienstA.setZahlungsverbindung(zahlungsverbindung1);
         sozialdienstA.setSozialdienstBenutzers(List.of(benutzerOfSozialdienstA));
         sozialdienstA.setSozialdienstAdmin(sozialdienstAdminOfSozialdienstA);
-        sozialdienstA.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         sozialdienstRepository.persistAndFlush(sozialdienstA);
 
         sozialdienstB = new Sozialdienst();
         sozialdienstB.setName("Sozialdienst");
-        sozialdienstB.setAdresse(adresse2);
+        sozialdienstB.setZahlungsverbindung(zahlungsverbindung2);
         sozialdienstB.setSozialdienstBenutzers(List.of(benutzerOfSozialdienstB));
         sozialdienstB.setSozialdienstAdmin(sozialdienstAdminOfSozialdienstB);
-        sozialdienstB.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         sozialdienstRepository.persistAndFlush(sozialdienstB);
 
         sozialdienstBenutzerRepository.persistAndFlush(benutzerOfSozialdienstA);

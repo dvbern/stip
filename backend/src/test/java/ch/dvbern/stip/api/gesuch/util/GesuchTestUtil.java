@@ -18,15 +18,18 @@
 package ch.dvbern.stip.api.gesuch.util;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -39,6 +42,7 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.util.TestConstants;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -62,19 +66,36 @@ public class GesuchTestUtil {
         gesuchFormular.getPartner().setVorname("a");
         gesuchFormular.getPartner().setNachname("a");
         gesuchFormular.getPartner().setGeburtsdatum(LocalDate.of(1990, 1, 1));
-        gesuchFormular.getAuszahlung().setVorname("a");
-        gesuchFormular.getAuszahlung().setNachname("a");
-        gesuchFormular.getAuszahlung().setIban("CH4489144522237167913");
+
         gesuchFormular.getEinnahmenKosten().setRenten(0);
         gesuchFormular.getEinnahmenKosten().setFahrkosten(0);
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(2023);
         gesuchFormular.getEinnahmenKosten().setVerdienstRealisiert(false);
         gesuchFormular.getEinnahmenKosten().setNettoerwerbseinkommen(0);
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
-        gesuchFormular.getAuszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
         gesuch.setGesuchNummer("23");
 
+        setupValidFall(gesuch, gesuchFormular);
         return gesuch;
+    }
+
+    private void setupValidFall(Gesuch gesuch, GesuchFormular gesuchFormular) {
+        var ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().plusMonths(1));
+        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(6));
+        var fall = new Fall();
+        var auszahlung = new Auszahlung();
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setId(UUID.randomUUID());
+        zahlungsverbindung.setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse());
+        zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindung.setVorname(gesuchFormular.getPersonInAusbildung().getVorname());
+        zahlungsverbindung.setNachname(gesuchFormular.getPersonInAusbildung().getNachname());
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
+        fall.setAusbildungs(Set.of(ausbildung));
+        gesuch.setAusbildung(ausbildung);
     }
 
     public Gesuch setupValidGesuchInState(Gesuchstatus status) {
@@ -109,15 +130,17 @@ public class GesuchTestUtil {
     }
 
     public GesuchFormular setupGesuchFormularWithChildEntities() {
-        return new GesuchFormular()
+        var auszahlung =
+            new Auszahlung().setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()).setIban(""));
+        var formular = new GesuchFormular()
             .setPersonInAusbildung(
                 new PersonInAusbildung().setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()))
                     .setNationalitaet(LandGenerator.initSwitzerland())
             )
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
-            .setAuszahlung(new Auszahlung().setAdresse(new Adresse()).setIban(""))
             .setEinnahmenKosten(new EinnahmenKosten())
             .setDarlehen(new Darlehen().setWillDarlehen(false));
+        return formular;
     }
 }

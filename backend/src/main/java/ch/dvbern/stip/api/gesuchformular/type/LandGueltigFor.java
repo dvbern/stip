@@ -60,11 +60,24 @@ public enum LandGueltigFor {
     AUSZAHLUNG(
     "auszahlung",
     formular -> {
-        if (formular.getAuszahlung() == null) {
+        if (formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung() == null) {
             return null;
         }
 
-        return formular.getAuszahlung().getAdresse().getLand();
+        if (
+            formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung().getZahlungsverbindung() == null
+        ) {
+            return null;
+        }
+
+        return formular.getTranche()
+            .getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getAuszahlung()
+            .getZahlungsverbindung()
+            .getAdresse()
+            .getLand();
     }
     ),
     PARTNER(

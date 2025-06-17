@@ -87,7 +87,7 @@ export class SozialdienstOverviewComponent {
   sozialDiensteListDataSourceSig = computed(() => {
     const dienste = this.store.sozialdienste().data?.map((sozialdienst) => ({
       ...sozialdienst,
-      ort: sozialdienst.adresse.ort,
+      ort: sozialdienst.zahlungsverbindung.adresse.ort,
     }));
     const datasource = new MatTableDataSource(dienste);
     const sort = this.sortSig();

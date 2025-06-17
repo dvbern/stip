@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.sozialdienst.service;
 
-import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
@@ -28,7 +28,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = { SozialdienstAdminMapper.class, AdresseMapper.class })
+@Mapper(config = MappingConfig.class, uses = { SozialdienstAdminMapper.class, ZahlungsverbindungMapper.class })
 public interface SozialdienstMapper {
     Sozialdienst toEntity(SozialdienstCreateDto dto);
 

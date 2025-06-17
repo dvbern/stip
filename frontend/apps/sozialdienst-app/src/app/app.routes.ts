@@ -51,6 +51,13 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
           ),
       },
+      {
+        path: 'auszahlung',
+        loadChildren: () =>
+          import('@dv/sozialdienst-app/feature/auszahlung').then(
+            (m) => m.sozialdienstAppFeatureAuszahlungRoutes,
+          ),
+      },
     ],
   },
 ];

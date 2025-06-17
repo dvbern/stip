@@ -73,7 +73,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
         if (
             AuthorizerUtil
-                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+                .canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
         ) {
             return;
         }
@@ -88,7 +88,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var gesuch = gesuchTranche.getGesuch();
         if (
             !AuthorizerUtil
-                .isGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
+                .canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
         ) {
             forbidden();
         }

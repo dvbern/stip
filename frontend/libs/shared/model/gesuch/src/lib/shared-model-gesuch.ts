@@ -45,12 +45,14 @@ export type FormPropsExcluded = Exclude<
 export type GSFormStepProps =
   | FormPropsExcluded
   | GSSteuererklaerungSteps
+  | 'auszahlung'
   | 'dokuments'
   | 'abschluss';
 
 export type SBFormStepProps =
   | FormPropsExcluded
   | SBSteuerdatenSteps
+  | 'auszahlung'
   | 'dokuments';
 
 export type AllFormSteps = GSFormStepProps | SBFormStepProps;

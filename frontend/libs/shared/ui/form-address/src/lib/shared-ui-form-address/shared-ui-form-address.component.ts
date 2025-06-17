@@ -13,6 +13,7 @@ import {
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -73,22 +74,30 @@ export class SharedUiFormAddressComponent implements DoCheck {
 
   touchedSig = signal(false);
 
-  static buildAddressFormGroup(fb: NonNullableFormBuilder): AddresseFormGroup {
-    return fb.group({
-      coAdresse: [<string | undefined>undefined, []],
-      strasse: [<string | undefined>undefined, [Validators.required]],
-      hausnummer: [<string | undefined>undefined, []],
-      plzOrt: fb.group({
-        plz: [<string | undefined>undefined, [Validators.required]],
-        ort: [<string | undefined>undefined, [Validators.required]],
-      }),
-      landId: [
-        <string | undefined>undefined,
-        {
-          validators: Validators.required,
-        },
-      ],
-    });
+  static buildAddressFormGroup(
+    fb: NonNullableFormBuilder,
+    validators?: ValidatorFn | ValidatorFn[],
+  ): AddresseFormGroup {
+    return fb.group(
+      {
+        coAdresse: [<string | undefined>undefined, []],
+        strasse: [<string | undefined>undefined, [Validators.required]],
+        hausnummer: [<string | undefined>undefined, []],
+        plzOrt: fb.group({
+          plz: [<string | undefined>undefined, [Validators.required]],
+          ort: [<string | undefined>undefined, [Validators.required]],
+        }),
+        landId: [
+          <string | undefined>undefined,
+          {
+            validators: Validators.required,
+          },
+        ],
+      },
+      {
+        validators: validators ?? null,
+      },
+    );
   }
 
   static getRealValues(form: AddresseFormGroup) {

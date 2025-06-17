@@ -1,0 +1,121 @@
+@let view = auszahlungViewSig();
+@let zahlungsverbindungControls = form.controls.zahlungsverbindung.controls;
+
+@if (!view.auszahlung) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  <form
+    [formGroup]="form"
+    [dvSharedUiFormReadonly]="view.readonly"
+    data-testid="form-auszahlung-form"
+    novalidate
+    class="tw-dv-form-grid tw-gap-x-6 tw-gap-y-4"
+    (ngSubmit)="handleSave()"
+  >
+    @if (view.auszahlung.isDelegated) {
+      <mat-checkbox
+        class="md:tw-col-span-2 lg:tw-col-span-3"
+        [formControl]="form.controls.auszahlungAnSozialdienst"
+        data-testid="form-auszahlung-auszahlungAnSozialdienst"
+      >
+        {{ 'shared.form.auszahlung.anSozialidenst' | translate }}
+      </mat-checkbox>
+    }
+
+    @if (!form.controls.auszahlungAnSozialdienst.value) {
+      <!-- Nachname -->
+      <mat-form-field dvSharedUiFormField>
+        <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
+        <input
+          matInput
+          dvMaxLength
+          type="text"
+          [formControl]="zahlungsverbindungControls.nachname"
+          data-testid="form-auszahlung-nachname"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Vorname -->
+      <mat-form-field dvSharedUiFormField>
+        <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
+        <input
+          matInput
+          dvMaxLength
+          type="text"
+          [formControl]="zahlungsverbindungControls.vorname"
+          data-testid="form-auszahlung-vorname"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- ADRESSE -->
+
+      <dv-shared-ui-form-address
+        class="tw-col-start-1 md:tw-col-span-2 lg:tw-col-span-2"
+        [group]="zahlungsverbindungControls.adresse"
+        [languageSig]="view.language"
+      />
+
+      <!-- IBAN -->
+      <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-flex-grow">
+        <mat-label>{{ 'shared.form.auszahlung.iban.label' | translate }}</mat-label>
+        <span matTextPrefix>CH</span>
+        <input
+          data-testid="form-auszahlung-iban"
+          matInput
+          type="text"
+          [formControl]="zahlungsverbindungControls.iban"
+          [maskito]="MASK_IBAN"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
+          {{ 'shared.form.error.invalidIBAN' | translate }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
+          {{ 'shared.form.error.invalidIBAN' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        type="button"
+        (click)="ibanDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.auszahlung.iban.label'"
+        [dialogMessageKey]="'shared.form.auszahlung.iban.info'"
+        #ibanDialog="dvSharedUiInfoDialog"
+      ></div>
+    }
+
+    <!-- Buttons -->
+    <dv-shared-ui-step-form-buttons class="md:tw-col-span-2 lg:tw-col-span-3">
+      @if (view.backlink) {
+        <a [routerLink]="view.backlink" class="btn btn-secondary" data-testid="button-back">
+          {{ 'shared.form.back' | translate }}
+        </a>
+      }
+      @if (view.readonly) {
+        <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
+          {{ 'shared.form.gonext' | translate }}
+        </button>
+      } @else {
+        <dv-shared-ui-form-save
+          [disabled]="form.invalid || form.pristine"
+          [loading]="view.isLoading"
+        ></dv-shared-ui-form-save>
+      }
+    </dv-shared-ui-step-form-buttons>
+  </form>
+}

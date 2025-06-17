@@ -29,6 +29,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -928,6 +930,57 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
+    void validateEinreichenInvalidWithoutAuszahlung() {
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
+        final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
+        final var famsit = new FamiliensituationUpdateDto();
+        famsit.setElternVerheiratetZusammen(false);
+        famsit.setGerichtlicheAlimentenregelung(false);
+        famsit.setElternteilUnbekanntVerstorben(true);
+        famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
+        tranche.getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
+
+        tranche.getGesuchFormular().setTranche(tranche);
+        tranche.setGesuchDokuments(
+            Arrays.stream(DokumentTyp.values())
+                .map(x -> {
+                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche);
+                    gesuchDokument.addDokument(new Dokument());
+                    return gesuchDokument;
+                })
+                .toList()
+        );
+
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
+        tranche.setTyp(GesuchTrancheTyp.TRANCHE);
+
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(TestUtil.prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
+
+        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
+
+        assertThat(
+            reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getElterns()
+                .size(),
+            reportDto.getValidationErrors().size(),
+            Matchers.is(1)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
     void validateEinreichenValid() {
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
         final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
@@ -964,6 +1017,16 @@ class GesuchServiceTest {
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
+        var zahlungsverbindung = new Zahlungsverbindung();
+        zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindung.setAdresse(tranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
+        zahlungsverbindung.setNachname(tranche.getGesuchFormular().getPersonInAusbildung().getNachname());
+        zahlungsverbindung.setVorname(tranche.getGesuchFormular().getPersonInAusbildung().getVorname());
+
+        var auszahlung = new Auszahlung();
+        auszahlung.setAuszahlungAnSozialdienst(false);
+        auszahlung.setZahlungsverbindung(zahlungsverbindung);
+        tranche.getGesuch().getAusbildung().getFall().setAuszahlung(auszahlung);
 
         final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
 

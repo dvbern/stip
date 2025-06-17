@@ -382,6 +382,10 @@ export const isStepValid = (
     return toDocumentStepState(invalidProps);
   }
 
+  if (field === 'auszahlung') {
+    return undefined;
+  }
+
   return toStepState(field, isDefined(formular?.[field]), invalidProps);
 };
 

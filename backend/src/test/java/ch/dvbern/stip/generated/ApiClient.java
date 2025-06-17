@@ -45,6 +45,9 @@ public class ApiClient {
     public AusbildungsstaetteApiSpec ausbildungsstaette() {
         return AusbildungsstaetteApiSpec.ausbildungsstaette(config.reqSpecSupplier);
     }
+    public AuszahlungApiSpec auszahlung() {
+        return AuszahlungApiSpec.auszahlung(config.reqSpecSupplier);
+    }
     public BenutzerApiSpec benutzer() {
         return BenutzerApiSpec.benutzer(config.reqSpecSupplier);
     }

@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.sozialdienst.resource;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -70,9 +69,8 @@ class SozialdienstResourceImplTest {
     @Test
     @TestAsAdmin
     void createSozialdienst() {
-        final var adresse = AdresseSpecModel.adresseDtoSpec();
         final var admin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
-        final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin, adresse);
+        final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin);
 
         dtoSpec = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,
@@ -129,13 +127,13 @@ class SozialdienstResourceImplTest {
     void updateSozialdienst() {
         var updateDto = new SozialdienstUpdateDtoSpec();
         updateDto.setId(dtoSpec.getId());
-        updateDto.setAdresse(dtoSpec.getAdresse());
+        updateDto.setZahlungsverbindung(dtoSpec.getZahlungsverbindung());
         updateDto.setName(dtoSpec.getName());
-        updateDto.setIban(VALID_IBAN_2);
+        updateDto.getZahlungsverbindung().setIban(VALID_IBAN_2);
 
         final var newStreetname = "updated street";
         final var newName = "updated sozialdienst";
-        updateDto.getAdresse().setStrasse(newStreetname);
+        updateDto.getZahlungsverbindung().getAdresse().setStrasse(newStreetname);
         updateDto.setName(newName);
 
         apiSpec.updateSozialdienst()
@@ -155,7 +153,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec.class);
         assertThat(updated.getSozialdienstAdmin(), notNullValue());
         assertTrue(updated.getName().contains("updated"));
-        assertTrue(updated.getAdresse().getStrasse().contains("updated"));
+        assertTrue(updated.getZahlungsverbindung().getAdresse().getStrasse().contains("updated"));
         checkSozialdienstResponse(updated);
         checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
@@ -181,9 +179,8 @@ class SozialdienstResourceImplTest {
 
     private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getId());
-        assertNotNull(dtoSpec.getAdresse());
         assertNotNull(dtoSpec.getName());
-        assertNotNull(dtoSpec.getIban());
+        assertNotNull(dtoSpec.getZahlungsverbindung().getIban());
     }
 
     private void checkSozialdienstAdminResponse(SozialdienstBenutzerDtoSpec dtoSpec) {

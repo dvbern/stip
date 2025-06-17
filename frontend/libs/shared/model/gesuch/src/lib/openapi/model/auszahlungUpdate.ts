@@ -9,16 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Adresse } from './adresse';
-import { Kontoinhaber } from './kontoinhaber';
+import { Zahlungsverbindung } from './zahlungsverbindung';
 
 export interface AuszahlungUpdate { 
-    vorname: string;
-    adresse: Adresse;
-    iban: string;
-    nachname: string;
-    kontoinhaber: Kontoinhaber;
+    auszahlungAnSozialdienst: boolean;
+    zahlungsverbindung?: Zahlungsverbindung;
 }
-
-
 
