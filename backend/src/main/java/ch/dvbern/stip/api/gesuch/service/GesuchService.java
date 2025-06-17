@@ -602,7 +602,7 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        verfuegungService.createVerfuegung(gesuchId, UUID.randomUUID());
+        verfuegungService.createVerfuegung(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 
