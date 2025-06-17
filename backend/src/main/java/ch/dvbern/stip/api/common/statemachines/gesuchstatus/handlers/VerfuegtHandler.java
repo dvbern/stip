@@ -61,7 +61,7 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
             ? stipendien.getBerechnungReduziert()
             : stipendien.getBerechnung();
 
-        if (berechnungsresultat < 500) {
+        if (berechnungsresultat == 0) {
             verfuegungService.createVerfuegungOhneAnspruch(
                 gesuch,
                 gesuch.getVerfuegungs()
