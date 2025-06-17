@@ -104,6 +104,8 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -215,6 +217,8 @@ class GesuchServiceTest {
     @InjectMock
     PdfService pdfService;
 
+    @InjectMock
+    StipDecisionTextRepository stipDecisionTextRepository;
     static final String TENANT_ID = "bern";
 
     @BeforeAll
@@ -1161,6 +1165,7 @@ class GesuchServiceTest {
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         gesuch.getVerfuegungs().add(verfuegung);
         when(pdfService.createVerfuegungOhneAnspruch(any(), any())).thenReturn(new ByteArrayOutputStream());
+        when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(
