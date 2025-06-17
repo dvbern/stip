@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
@@ -98,16 +99,18 @@ public class PdfService {
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream createNegativeVerfuegungPdf(final Gesuch gesuch, final StipDecision stipDecision) {
+    public ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
         final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
-        return this.createPdf(gesuch, negativeVerfuegungSection, stipDecision);
+        return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
 
     private ByteArrayOutputStream createPdf(
-        final Gesuch gesuch,
-        final PdfSection section,
-        final StipDecision stipDecision
+        final Verfuegung verfuegung,
+        final PdfSection section
     ) {
+        final Gesuch gesuch = verfuegung.getGesuch();
+        final StipDecision stipDecision = verfuegung.getStipDecision();
+
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final FontProgram font;
         final FontProgram fontBold;
@@ -147,7 +150,7 @@ public class PdfService {
             document.add(logo);
 
             header(gesuch, document, leftMargin, translator);
-            section.render(gesuch, document, leftMargin, translator, stipDecision);
+            section.render(verfuegung, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -400,12 +403,13 @@ public class PdfService {
     }
 
     private void negativeVerfuegung(
-        final Gesuch gesuch,
+        final Verfuegung verfuegung,
         final Document document,
         final float leftMargin,
-        final TL translator,
-        StipDecision stipDecision
+        final TL translator
     ) throws IOException {
+        final var gesuch = verfuegung.getGesuch();
+
         final Locale locale = gesuch
             .getLatestGesuchTranche()
             .getGesuchFormular()
@@ -483,11 +487,14 @@ public class PdfService {
         );
 
         String decision = locale.getLanguage().equals("de")
-            ? stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextDe()
-            : stipDecisionTextRepository.getTextByStipDecision(stipDecision).getTextFr();
+            ? stipDecisionTextRepository.getTextByStipDecision(verfuegung.getStipDecision()).getTextDe()
+            : stipDecisionTextRepository.getTextByStipDecision(verfuegung.getStipDecision()).getTextFr();
 
         decision = decision.replace("{AUSBILDUNGSJAHR}", ausbildungsjahr);
         decision = decision.replace("{EINREICHEDATUM}", einreichedatum);
+        // todo: translator & key
+        final String wohnsitzKantonName = translator.translate(verfuegung.getKanton().tlKey);
+        decision = decision.replace("{WOHNSITZKANTON}", wohnsitzKantonName);
 
         document.add(createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
 
@@ -624,7 +631,7 @@ public class PdfService {
 
     @FunctionalInterface
     private static interface PdfSection {
-        void render(Gesuch gesuch, Document document, float leftMargin, TL translator, StipDecision stipDecision)
+        void render(Verfuegung verfuegung, Document document, float leftMargin, TL translator)
         throws IOException;
     }
 }

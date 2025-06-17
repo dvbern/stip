@@ -141,7 +141,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.changeGesuchStatusToNegativeVerfuegung(
             gesuchId,
-            ausgewaehlterGrundDto.getDecisionId()
+            ausgewaehlterGrundDto
         );
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }

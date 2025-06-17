@@ -22,19 +22,67 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets AusbildungCreateErrorType
+ * Gets or Sets Kanton
  */
-public enum AusbildungCreateErrorTypeDtoSpec {
+public enum KantonDtoSpec {
   
-  KEINE_AKTIVE_PERIODE_GEFUNDEN("KEINE_AKTIVE_PERIODE_GEFUNDEN"),
+  AG("AG"),
   
-  PERIODE_IN_ENTWURF_GEFUNDEN("PERIODE_IN_ENTWURF_GEFUNDEN"),
+  AI("AI"),
   
-  INAKTIVE_PERIODE_GEFUNDEN("INAKTIVE_PERIODE_GEFUNDEN");
+  AR("AR"),
+  
+  BL("BL"),
+  
+  BS("BS"),
+  
+  BE("BE"),
+  
+  FR("FR"),
+  
+  GE("GE"),
+  
+  GL("GL"),
+  
+  GR("GR"),
+  
+  JU("JU"),
+  
+  LU("LU"),
+  
+  NE("NE"),
+  
+  NW("NW"),
+  
+  OW("OW"),
+  
+  SG("SG"),
+  
+  SH("SH"),
+  
+  SZ("SZ"),
+  
+  SO("SO"),
+  
+  TI("TI"),
+  
+  TG("TG"),
+  
+  UR("UR"),
+  
+  VD("VD"),
+  
+  VS("VS"),
+  
+  ZG("ZG"),
+  
+  ZH("ZH"),
+  
+  AUSLAND("AUSLAND");
 
   private String value;
 
-  AusbildungCreateErrorTypeDtoSpec(String value) {
+  KantonDtoSpec(String value) {
     this.value = value;
   }
 
@@ -49,8 +97,8 @@ public enum AusbildungCreateErrorTypeDtoSpec {
   }
 
   @JsonCreator
-  public static AusbildungCreateErrorTypeDtoSpec fromValue(String value) {
-    for (AusbildungCreateErrorTypeDtoSpec b : AusbildungCreateErrorTypeDtoSpec.values()) {
+  public static KantonDtoSpec fromValue(String value) {
+    for (KantonDtoSpec b : KantonDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

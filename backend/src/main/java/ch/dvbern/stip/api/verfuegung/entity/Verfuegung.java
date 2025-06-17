@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.verfuegung.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.stipdecision.type.Kanton;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -74,5 +76,10 @@ public class Verfuegung extends AbstractMandantEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_id", nullable = false)
     private Gesuch gesuch;
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    @Column(name = "wohnsitz_kanton")
+    private Kanton kanton;
 
 }
