@@ -56,6 +56,13 @@ public class VerfuegungService {
     private final VerfuegungMapper verfuegungMapper;
 
     @Transactional
+    public void createVerfuegung(final UUID gesuchId) {
+        final Verfuegung verfuegung = new Verfuegung();
+        verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
+        verfuegungRepository.persistAndFlush(verfuegung);
+    }
+
+    @Transactional
     public void createVerfuegung(final UUID gesuchId, final UUID stipDecisionId) {
         final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
 
