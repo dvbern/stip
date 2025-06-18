@@ -31,6 +31,79 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: sendWelcomeEmail
       summary: Sends an e-mail for a newly created user
+  /auszahlung/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuszahlungUpdate'
+        required: true
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: Created Auszahlung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAuszahlungForGesuch
+      summary: Creates a new Auszahlung for a Gesuch
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuszahlungUpdate'
+        required: true
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: Updated Auszahlung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAuszahlungForGesuch
+      summary: Updates Auszahlung
+    get:
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: return Auszahlung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAuszahlungForGesuch
+      summary: Get Auszahlung
   /gesuch:
     post:
       requestBody:
@@ -3695,7 +3768,6 @@ components:
         - KINDER_ALIMENTENVERORDUNG
         - PARTNER_AUSBILDUNG_LOHNABRECHNUNG
         - PARTNER_BELEG_OV_ABONNEMENT
-        - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
         - EK_BELEG_ALIMENTE
         - EK_BELEG_KINDERZULAGEN
         - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
@@ -4151,20 +4223,38 @@ components:
           type: string
         erhalteneAlimentebeitraege:
           type: integer
-    Auszahlung:
+    FallAuszahlung:
+      type: object
+      required:
+        - isDelegated
+      properties:
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
+        isDelegated:
+          type: boolean
+    AuszahlungUpdate:
       title: Root Type for Auszahlung
+      type: object
+      required:
+        - auszahlungAnSozialdienst
+      properties:
+        auszahlungAnSozialdienst:
+          type: boolean
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
+    Zahlungsverbindung:
+      title: Root Type for Zahlungsverbindung
       type: object
       allOf:
         - type: object
-        - $ref: '#/components/schemas/AuszahlungUpdate'
-    AuszahlungUpdate:
-      title: Root Type for Auszahlung
+        - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
+    ZahlungsverbindungUpdate:
+      title: Root Type for Zahlungsverbindung
       required:
         - adresse
         - iban
         - nachname
         - vorname
-        - kontoinhaber
       type: object
       properties:
         vorname:
@@ -4175,8 +4265,6 @@ components:
           type: string
         nachname:
           type: string
-        kontoinhaber:
-          $ref: '#/components/schemas/Kontoinhaber'
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
@@ -4820,14 +4908,6 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/PartnerUpdate'
-    Kontoinhaber:
-      enum:
-        - GESUCHSTELLER
-        - VATER
-        - MUTTER
-        - SOZIALDIENST_INSTITUTION
-        - ANDERE
-      type: string
     GesuchFormular:
       required:
         - ausbildung
@@ -4841,8 +4921,6 @@ components:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
         elterns:
           type: array
           items:
@@ -4968,8 +5046,6 @@ components:
           $ref: '#/components/schemas/FamiliensituationUpdate'
         partner:
           $ref: '#/components/schemas/PartnerUpdate'
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
         elterns:
           type: array
           items:
@@ -5857,33 +5933,27 @@ components:
     SozialdienstCreate:
       required:
         - name
-        - iban
-        - adresse
+        - zahlungsverbindung
         - sozialdienstAdmin
       properties:
         name:
           type: string
-        iban:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstUpdate:
       required:
         - id
         - name
-        - iban
-        - adresse
+        - zahlungsverbindung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        iban:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
     SozialdienstSlim:
       required:
         - id
@@ -5893,8 +5963,6 @@ components:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'
@@ -5902,16 +5970,13 @@ components:
           required:
             - id
             - name
-            - adresse
-            - iban
             - sozialdienstAdmin
+            - zahlungsverbindung
           properties:
-            adresse:
-              $ref: '#/components/schemas/Adresse'
-            iban:
-              type: string
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
+            zahlungsverbindung:
+              $ref: '#/components/schemas/Zahlungsverbindung'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object

@@ -9,12 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Adresse } from './adresse';
+import { Zahlungsverbindung } from './zahlungsverbindung';
 import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
 export interface SozialdienstAllOf { 
-    adresse: Adresse;
-    iban: string;
     sozialdienstAdmin: SozialdienstBenutzer;
+    zahlungsverbindung: Zahlungsverbindung;
 }
 

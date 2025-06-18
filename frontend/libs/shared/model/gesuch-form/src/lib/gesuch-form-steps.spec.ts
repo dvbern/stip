@@ -6,7 +6,6 @@ import {
 import { type } from '@dv/shared/model/type-util';
 
 import {
-  AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -43,7 +42,6 @@ const validationCases = type<[GesuchFormStep, keyof GesuchFormularUpdate][]>([
   [GESCHWISTER, 'geschwisters'],
   [PARTNER, 'partner'],
   [KINDER, 'kinds'],
-  [AUSZAHLUNG, 'auszahlung'],
   [EINNAHMEN_KOSTEN, 'einnahmenKosten'],
 ]).map(
   ([step, ...rest]) =>

@@ -1,4 +1,4 @@
-<dv-gesuch-app-pattern-main-layout [closeMenu]="navClicked | async">
+<dv-shared-pattern-main-layout [closeMenu]="navClicked | async">
   <div class="d-flex h-100">
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
@@ -59,7 +59,7 @@
     ></dv-shared-pattern-gesuch-step-nav>
   </div>
 
-  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+  <div dvHeaderDesktopLeft class="tw-flex tw-flex-grow tw-items-center tw-gap-4">
     <a
       routerLink="/"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
@@ -107,8 +107,29 @@
           }
         </div>
       </mat-menu>
+    } @else if (tranchen.length === 1) {
+      @let tranche = tranchen[0];
+      <a
+        [routerLink]="tranche.url"
+        class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+        data-testid="gesuch-step-nav-tranche"
+        [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
+      >
+        <i class="material-symbols-rounded text-white me-2">checklist</i>
+        <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+      </a>
     }
+    @let fallId = fallIdSig();
+    <a
+      [routerLink]="['/auszahlung', fallId]"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-auszahlung"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      <span translate>shared.menu.auszahlung</span>
+    </a>
   </div>
 
   <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
-</dv-gesuch-app-pattern-main-layout>
+</dv-shared-pattern-main-layout>

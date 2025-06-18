@@ -74,7 +74,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDeleteAenderung(final UUID gesuchTrancheId) {
-        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
+        assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
         assertGesuchTrancheIsOfTyp(gesuchTrancheId, GesuchTrancheTyp.AENDERUNG);
         assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
     }
@@ -89,12 +89,12 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
+        assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
     }
 
     @Transactional
     public void canFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
-        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
+        assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTrancheId);
         assertGesuchTrancheIsInGesuchTrancheStatus(gesuchTrancheId, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
 
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
@@ -167,7 +167,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT
         );
 
-        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
+        assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
     }
 
     private void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {
@@ -181,7 +181,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
 
         assertGesuchOfTrancheIsInOneOfGesuchstatus(gesuchTranche.getId(), Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
 
-        assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
+        assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
     }
 
     public void assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
@@ -223,12 +223,26 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         }
     }
 
+    public void assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(
+        final UUID gesuchTrancheId
+    ) {
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
+    }
+
     public void assertIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(
         final UUID gesuchTrancheId
     ) {
         if (
-            !AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
-                gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch(),
+            !AuthorizerUtil.isGesuchstellerOf(
+                gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch().getAusbildung().getFall(),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
             )

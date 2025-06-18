@@ -26,6 +26,13 @@ export const appRoutes: Route[] = [
             (m) => m.gesuchAppFeatureGesuchFormRoutes,
           ),
       },
+      {
+        path: 'auszahlung',
+        loadChildren: () =>
+          import('@dv/gesuch-app/feature/auszahlung').then(
+            (m) => m.gesuchAppFeatureAuszahlungRoutes,
+          ),
+      },
     ],
   },
 ];

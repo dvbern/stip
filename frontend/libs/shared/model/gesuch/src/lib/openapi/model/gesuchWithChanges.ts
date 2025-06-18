@@ -33,6 +33,7 @@ export interface GesuchWithChanges {
     nachfristDokumente?: string;
     verfuegt: boolean;
     changes?: Array<GesuchTranche>;
+    isInitial?: boolean;
 }
 
 

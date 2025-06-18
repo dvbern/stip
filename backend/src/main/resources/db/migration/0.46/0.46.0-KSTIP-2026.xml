@@ -1,0 +1,223 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-33">
+    <dropForeignKeyConstraint baseTableName="auszahlung" constraintName="FK_auszahlung_adresse_id"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-34">
+    <dropForeignKeyConstraint baseTableName="auszahlung" constraintName="FK_auszahlung_sapdelivery_id"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-35">
+    <dropForeignKeyConstraint baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_auszahlung_id"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-36">
+    <dropForeignKeyConstraint baseTableName="sozialdienst" constraintName="FK_sozialdienst_adresse_id"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-2">
+    <createTable tableName="zahlungsverbindung">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="zahlungsverbindungPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="iban" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="nachname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="sap_business_partner_id" type="INTEGER"/>
+      <column name="vorname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="adresse_id" type="UUID"/>
+      <column name="sapdelivery_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-3">
+    <createTable tableName="zahlungsverbindung_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="iban" type="VARCHAR(255)"/>
+      <column name="nachname" type="VARCHAR(255)"/>
+      <column name="sap_business_partner_id" type="INTEGER"/>
+      <column name="vorname" type="VARCHAR(255)"/>
+      <column name="adresse_id" type="UUID"/>
+      <column name="sapdelivery_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-4">
+    <addColumn tableName="auszahlung">
+      <column name="auszahlung_an_sozialdienst" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-5">
+    <addColumn tableName="auszahlung_aud">
+      <column name="auszahlung_an_sozialdienst" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-6">
+    <addColumn tableName="fall">
+      <column name="auszahlung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-7">
+    <addColumn tableName="fall_aud">
+      <column name="auszahlung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-8">
+    <addColumn tableName="auszahlung">
+      <column name="zahlungsverbindung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-9">
+    <addColumn tableName="auszahlung_aud">
+      <column name="zahlungsverbindung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-10">
+    <addColumn tableName="sozialdienst">
+      <column name="zahlungsverbindung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-11">
+    <addColumn tableName="sozialdienst_aud">
+      <column name="zahlungsverbindung_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-12">
+    <addPrimaryKey columnNames="rev, id" constraintName="zahlungsverbindung_audPK" tableName="zahlungsverbindung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-13">
+    <addUniqueConstraint columnNames="zahlungsverbindung_id" constraintName="UC_AUSZAHLUNGZAHLUNGSVERBINDUNG_ID_COL" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-14">
+    <addUniqueConstraint columnNames="auszahlung_id" constraintName="UC_FALLAUSZAHLUNG_ID_COL" tableName="fall"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-16">
+    <addUniqueConstraint columnNames="zahlungsverbindung_id" constraintName="UC_SOZIALDIENSTZAHLUNGSVERBINDUNG_ID_COL" tableName="sozialdienst"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-18">
+    <addUniqueConstraint columnNames="adresse_id" constraintName="UC_ZAHLUNGSVERBINDUNGADRESSE_ID_COL" tableName="zahlungsverbindung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-19">
+    <addUniqueConstraint columnNames="sapdelivery_id" constraintName="UC_ZAHLUNGSVERBINDUNGSAPDELIVERY_ID_COL" tableName="zahlungsverbindung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-26">
+    <createIndex indexName="IX_zahlungsverbindung_mandant" tableName="zahlungsverbindung">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-27">
+    <addForeignKeyConstraint baseColumnNames="zahlungsverbindung_id" baseTableName="auszahlung" constraintName="FK_auszahlung_zahlungsverbindung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="zahlungsverbindung" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-28">
+    <addForeignKeyConstraint baseColumnNames="auszahlung_id" baseTableName="fall" constraintName="FK_fall_auszahlung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="auszahlung" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-29">
+    <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="zahlungsverbindung" constraintName="FK_zahlungsverbindung_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-30">
+    <addForeignKeyConstraint baseColumnNames="sapdelivery_id" baseTableName="zahlungsverbindung" constraintName="FK_zahlungsverbindung_sapdelivery_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sapdelivery" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-31">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="zahlungsverbindung_aud" constraintName="FKwa59o01vco06msaue4o0w850" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-32">
+    <addForeignKeyConstraint baseColumnNames="zahlungsverbindung_id" baseTableName="sozialdienst" constraintName="sozialdienst_zahlungsverbindung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="zahlungsverbindung" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-37">
+    <dropUniqueConstraint constraintName="uc_auszahlungadresse_id_col" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-38">
+    <dropUniqueConstraint constraintName="uc_auszahlungsapdelivery_id_col" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-41">
+    <dropColumn columnName="adresse_id" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-42">
+    <dropColumn columnName="adresse_id" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-43">
+    <dropColumn columnName="adresse_id" tableName="sozialdienst"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-44">
+    <dropColumn columnName="adresse_id" tableName="sozialdienst_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-45">
+    <dropColumn columnName="auszahlung_id" tableName="gesuch_formular"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-46">
+    <dropColumn columnName="auszahlung_id" tableName="gesuch_formular_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-47">
+    <dropColumn columnName="iban" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-48">
+    <dropColumn columnName="iban" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-49">
+    <dropColumn columnName="iban" tableName="sozialdienst"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-50">
+    <dropColumn columnName="iban" tableName="sozialdienst_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-51">
+    <dropColumn columnName="kontoinhaber" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-52">
+    <dropColumn columnName="kontoinhaber" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-53">
+    <dropColumn columnName="nachname" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-54">
+    <dropColumn columnName="nachname" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-55">
+    <dropColumn columnName="sap_business_partner_id" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-56">
+    <dropColumn columnName="sap_business_partner_id" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-57">
+    <dropColumn columnName="sapdelivery_id" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-58">
+    <dropColumn columnName="sapdelivery_id" tableName="auszahlung_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-59">
+    <dropColumn columnName="vorname" tableName="auszahlung"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1749630980791-60">
+    <dropColumn columnName="vorname" tableName="auszahlung_aud"/>
+  </changeSet>
+</databaseChangeLog>

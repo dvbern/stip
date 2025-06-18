@@ -84,8 +84,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',
   PARTNER_BELEG_OV_ABONNEMENT_DESCRIPTION:
     'shared.form.partner.file.OV_ABONNEMENT_DESCRIPTION',
-  AUSZAHLUNG_ABTRETUNGSERKLAERUNG:
-    'shared.form.auszahlung.file.ABTRETUNGSERKLAERUNG',
   EK_BELEG_ALIMENTE: 'shared.form.einnahmenkosten.file.ALIMENTE',
   EK_BELEG_ALIMENTE_DESCRIPTION:
     'shared.form.einnahmenkosten.file.ALIMENTE_DESCRIPTION',

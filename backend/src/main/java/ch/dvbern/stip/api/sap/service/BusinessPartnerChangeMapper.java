@@ -44,18 +44,18 @@ public abstract class BusinessPartnerChangeMapper {
         return String.valueOf(Math.abs(auszahlung.getId().getMostSignificantBits()));
     }
 
-    @Mapping(source = "vorname", target = "FIRSTNAME")
-    @Mapping(source = "nachname", target = "LASTNAME")
+    @Mapping(source = "zahlungsverbindung.vorname", target = "FIRSTNAME")
+    @Mapping(source = "zahlungsverbindung.nachname", target = "LASTNAME")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PERSDATA toPersData(Auszahlung auszahlung);
 
     @Mapping(target = "ADRKIND", constant = "XXDEFAULT")
-    @Mapping(source = "adresse.land", target = "COUNTRY", qualifiedByName = "getLandStringFromLand")
-    @Mapping(source = "adresse.ort", target = "CITY")
-    @Mapping(source = "adresse.coAdresse", target = "CONAME")
-    @Mapping(source = "adresse.strasse", target = "STREET")
-    @Mapping(source = "adresse.hausnummer", target = "HOUSENO")
-    @Mapping(source = "adresse.plz", target = "POSTLCOD1")
+    @Mapping(source = "zahlungsverbindung.adresse.land", target = "COUNTRY", qualifiedByName = "getLandStringFromLand")
+    @Mapping(source = "zahlungsverbindung.adresse.ort", target = "CITY")
+    @Mapping(source = "zahlungsverbindung.adresse.coAdresse", target = "CONAME")
+    @Mapping(source = "zahlungsverbindung.adresse.strasse", target = "STREET")
+    @Mapping(source = "zahlungsverbindung.adresse.hausnummer", target = "HOUSENO")
+    @Mapping(source = "zahlungsverbindung.adresse.plz", target = "POSTLCOD1")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.ADDRESS toAddress(Auszahlung auszahlung);
 
     @Named("getLandStringFromLand")
@@ -64,7 +64,7 @@ public abstract class BusinessPartnerChangeMapper {
     }
 
     @Mapping(target = "BANKID", constant = "0001")
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(Auszahlung auszahlung);
 
     @Mapping(source = "auszahlung", target = "IDKEYS")

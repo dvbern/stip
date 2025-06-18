@@ -17,51 +17,38 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.util.AuszahlungDiffUtil;
-import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
-import jakarta.inject.Inject;
-import org.mapstruct.BeforeMapping;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
-public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpdateDto, Auszahlung> {
-    @Inject
-    AdresseRepository adresseRepository;
+@Mapper(config = MappingConfig.class, uses = { ZahlungsverbindungMapper.class })
+public abstract class AuszahlungMapper {
+    public abstract Auszahlung toEntity(AuszahlungUpdateDto auszahlungUpdateDto);
 
-    public abstract Auszahlung toEntity(AuszahlungDto auszahlungDto);
-
-    public abstract AuszahlungDto toDto(Auszahlung auszahlung);
+    @Mapping(
+        source = "auszahlung.auszahlungAnSozialdienst", target = "auszahlung.auszahlungAnSozialdienst",
+        defaultValue = "false"
+    )
+    @Mapping(source = "auszahlung.zahlungsverbindung", target = "auszahlung.zahlungsverbindung")
+    public abstract FallAuszahlungDto toDto(Fall fall);
 
     public abstract Auszahlung partialUpdate(
         AuszahlungUpdateDto auszahlungUpdateDto,
         @MappingTarget Auszahlung auszahlung
     );
 
-    @Override
-    @BeforeMapping
-    protected void resetDependentDataBeforeUpdate(
-        final AuszahlungUpdateDto newAuszahlung,
-        @MappingTarget final Auszahlung targetAuszahlung
-    ) {
-        resetFieldIf(
-            () -> AuszahlungDiffUtil.hasAdresseChanged(newAuszahlung, targetAuszahlung),
-            "Reset Adresse because ID has changed",
-            () -> {
-                final var newAdresseId = newAuszahlung.getAdresse().getId();
-                if (newAdresseId != null) {
-                    targetAuszahlung.setAdresse(adresseRepository.requireById(newAdresseId));
-                } else {
-                    targetAuszahlung.setAdresse(null);
-                }
-            }
-        );
-    }
+    public abstract FallAuszahlungDto toUpdateDto(Auszahlung auszahlung);
 
-    public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
+    @AfterMapping
+    protected void setIsDelegatedFlag(final Fall fall, @MappingTarget FallAuszahlungDto auszahlungDto) {
+        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+    }
 }

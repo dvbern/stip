@@ -36,6 +36,9 @@ export const PERMISSION_ROLE_LIST = [
     'CUSTOM_DOKUMENT_READ',
     'NOTIFICATION_READ',
     'UNTERSCHRIFTENBLATT_READ',
+    'AUSZAHLUNG_CREATE',
+    'AUSZAHLUNG_UPDATE',
+    'AUSZAHLUNG_READ',
   ],
   [
     ['Sachbearbeiter'],
@@ -49,6 +52,7 @@ export const PERMISSION_ROLE_LIST = [
     'DOKUMENT_ABLEHNEN_AKZEPTIEREN',
     'UNTERSCHRIFTENBLATT_CREATE',
     'UNTERSCHRIFTENBLATT_DELETE',
+    'AUSZAHLUNG_READ',
   ],
   [
     ['Jurist'],
@@ -75,6 +79,7 @@ export const PERMISSION_ROLE_LIST = [
     'NOTIZ_DELETE',
     'SEND_EMAIL',
     'BUCHHALTUNG_ENTRY_READ',
+    'AUSZAHLUNG_READ',
   ],
   [
     ['Sozialdienst-Admin', 'Sachbearbeiter-Admin'],

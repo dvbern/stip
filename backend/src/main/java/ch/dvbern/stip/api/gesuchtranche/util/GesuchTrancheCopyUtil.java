@@ -22,7 +22,6 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
-import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -199,6 +198,7 @@ public class GesuchTrancheCopyUtil {
                 original.getGesuchDokuments()
             )
         );
+
         return newTranche;
     }
 
@@ -280,16 +280,6 @@ public class GesuchTrancheCopyUtil {
 
             eltern.setAdresse(adresseCopy);
         }
-
-        // Auszahlung
-        copy.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(other.getAuszahlung()));
-        final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
-            case GESUCHSTELLER -> piaAdresseCopy;
-            case MUTTER -> elternAdressen.getForTyp(ElternTyp.MUTTER);
-            case VATER -> elternAdressen.getForTyp(ElternTyp.VATER);
-            default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
-        };
-        copy.getAuszahlung().setAdresse(auszahlungAdresseCopy);
 
         // Einnahmen Kosten
         copy.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(other.getEinnahmenKosten()));
