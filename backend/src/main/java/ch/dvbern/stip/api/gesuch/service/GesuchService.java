@@ -664,13 +664,13 @@ public class GesuchService {
         verfuegungService
             .createVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
         var kommentarTxt = decision.getTitleDe();
+        var kommentarDto = new KommentarDto(kommentarTxt);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
-            new KommentarDto(kommentarTxt),
+            kommentarDto,
             false
         );
-        var kommentarDto = new KommentarDto(kommentarTxt);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
