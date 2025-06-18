@@ -106,7 +106,8 @@ public class SozialdienstSeeding extends Seeder {
         try {
             sozialdienste = objectMapper.readValue(envSeeding, EnvSozialdienst[].class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Unable to parse sozialdienste seeding values", e);
+            LOG.error("Failed to parse sozialdienst for seeding", e);
+            return;
         }
 
         Arrays.stream(sozialdienste).forEach(sozialdienst -> {
