@@ -60,7 +60,7 @@ public class AdminSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return configService.getSeedTestcasesOnProfile();
+        return configService.getSeedOnProfile();
     }
 
     private Rolle getOrCreateRolle(final String rolle) {
