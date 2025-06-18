@@ -18,7 +18,9 @@
 package ch.dvbern.stip.stipdecision.type;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum Kanton {
     AG("stip.kanton.ag"), AI("stip.kanton.ai"), AR("stip.kanton.ar"), BL("stip.kanton.bl"), BS("stip.kanton.bs"),
@@ -28,5 +30,5 @@ public enum Kanton {
     TG("stip.kanton.tg"), UR("stip.kanton.ur"), VD("stip.kanton.vd"), VS("stip.kanton.vs"), ZG("stip.kanton.zg"),
     ZH("stip.kanton.zh"), AU("stip.kanton.au");
 
-    public String tlKey;
+    private final String tlKey;
 }

@@ -17,6 +17,18 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -61,18 +73,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -494,7 +494,7 @@ public class PdfService {
         final var kanton = Optional.ofNullable(verfuegung.getKanton());
 
         if (kanton.isPresent()) {
-            final var wohnsitzKantonName = translator.translate(kanton.get().tlKey);
+            final var wohnsitzKantonName = translator.translate(kanton.get().getTlKey());
             decision = decision.replace("{WOHNSITZKANTON}", wohnsitzKantonName);
         }
 
