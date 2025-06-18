@@ -162,8 +162,6 @@ public class TestcaseSeeding extends Seeder {
                 )
             );
 
-            correctAuszahlungAdresse(tranche.getGesuchFormular());
-
             // Update values to match database schema
             final var formular = tranche.getGesuchFormular();
             if (GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(formular)) {
@@ -199,6 +197,7 @@ public class TestcaseSeeding extends Seeder {
             gesuch.setAusbildung(ausbildung);
             tranche.setGesuch(gesuch);
             tranche.getGesuchFormular().setTranche(tranche);
+            correctAuszahlungAdresse(tranche.getGesuchFormular());
 
             fallRepository.persist(fall);
             ausbildungRepository.persist(ausbildung);

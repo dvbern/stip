@@ -310,7 +310,7 @@ public class SapService {
             return;
         }
 
-        if (Objects.isNull(zahlungsverbindung.getSapDelivery().getSapBusinessPartnerId())) {
+        if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
             return;
         }
 
