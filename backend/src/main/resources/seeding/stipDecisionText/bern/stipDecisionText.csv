@@ -24,7 +24,7 @@ Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les 
 
 Vous pouvez vous adresser au service des bourses d’études du canton de %s (adresses des ser-vices des bourses d'études).
 "
-KEIN_WOHNSITZ_KANTON_BE;keinen stipendienrechtlichen Wohnsitz im Kanton Bern (%s);"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben. Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden.
+KEIN_WOHNSITZ_KANTON_BE;keinen stipendienrechtlichen Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben. Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden.
 
 Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
 (Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden (Adresse: Stipendienstelle)
