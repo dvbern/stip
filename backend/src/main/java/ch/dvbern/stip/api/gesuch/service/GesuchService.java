@@ -660,20 +660,19 @@ public class GesuchService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var decisionId = ausgewaehlterGrundDto.getDecisionId();
-        final var kanton = ausgewaehlterGrundDto.getKanton(); // todo: how to pass it to statemachine?
         var decision = stipDecisionTextRepository.requireById(decisionId);
-        verfuegungService.createVerfuegung(gesuchId, decisionId, Optional.of(ausgewaehlterGrundDto.getKanton()));
+        verfuegungService
+            .createVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
         var kommentarTxt = decision.getTitleDe();
-        if (Objects.nonNull(ausgewaehlterGrundDto.getKanton().equals(kanton))) { // todo remove
-            kommentarTxt = String.format(kommentarTxt, kanton);
-        }
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             new KommentarDto(kommentarTxt),
             false
         );
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        var kommentarDto = new KommentarDto(kommentarTxt);
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
     @Transactional
