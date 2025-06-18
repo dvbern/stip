@@ -57,7 +57,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
   dialogData = inject<EuEftaLandEditData>(MAT_DIALOG_DATA);
   private formBuilder = inject(NonNullableFormBuilder);
 
-  // Custom mask for BFS code - limit to exactly 4 uppercase letters A-Z, no special chars
+  // Custom mask for BFS code - limit to exactly 4 digits
   maskitoBfsCode: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, /\d/],
   };

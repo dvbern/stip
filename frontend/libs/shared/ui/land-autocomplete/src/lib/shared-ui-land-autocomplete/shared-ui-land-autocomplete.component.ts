@@ -36,6 +36,8 @@ import {
 } from '@dv/shared/ui/form';
 import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
+type LanguageDisplayFields = Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>;
+
 @Component({
   selector: 'dv-shared-ui-land-autocomplete',
   standalone: true,
@@ -291,7 +293,7 @@ export class SharedUiLandAutocompleteComponent
   private handleStringInput(
     inputValue: string,
     laender: Land[],
-    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+    languageDisplayField: LanguageDisplayFields,
   ): Array<Land & { displayValue: string }> {
     const filteredLaender = laender.filter(
       (land) =>
@@ -311,7 +313,7 @@ export class SharedUiLandAutocompleteComponent
   private handleLandSelection(
     selectedLand: Land,
     laender: Land[],
-    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+    languageDisplayField: LanguageDisplayFields,
   ) {
     this.onChange(selectedLand.id);
     return this.getDefaultLandList(laender, languageDisplayField);
@@ -319,7 +321,7 @@ export class SharedUiLandAutocompleteComponent
 
   private handleInitialLandLoad(
     laender: Land[],
-    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+    languageDisplayField: LanguageDisplayFields,
   ) {
     const selectedLand = laender.find((l) => l.id === this.landId);
     if (selectedLand) {
@@ -330,7 +332,7 @@ export class SharedUiLandAutocompleteComponent
 
   private getDefaultLandList(
     laender: Land[],
-    languageDisplayField: Exclude<keyof Land, 'eintragGueltig' | 'isEuEfta'>,
+    languageDisplayField: LanguageDisplayFields,
   ): Array<Land & { displayValue: string }> {
     const validLaender = laender.filter((land) => land.eintragGueltig);
     return this.sortAndMapLaender(validLaender, languageDisplayField, true);
