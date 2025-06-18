@@ -100,6 +100,21 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createAenderungEingereichtNotification(final Gesuch gesuch) {
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.AENDERUNG_EINGEREICHT)
+            .setGesuch(gesuch);
+        final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
+        final var nachname = pia.getNachname();
+
+        final String msg = Templates.getAenderungEingereicht(anrede, nachname, sprache).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
     public void createAenderungAbgelehntNotification(final Gesuch gesuch, final KommentarDto kommentarDto) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_ABGELEHNT)
@@ -285,6 +300,27 @@ public class NotificationService {
             final String nachname,
             final String kommentar
         );
+
+        public static native TemplateInstance aenderungEingereichtDE(
+            final String anrede,
+            final String nachname
+        );
+
+        public static native TemplateInstance aenderungEingereichtFR(
+            final String anrede,
+            final String nachname
+        );
+
+        public static TemplateInstance getAenderungEingereicht(
+            final String anrede,
+            final String nachname,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return aenderungEingereichtFR(anrede, nachname);
+            }
+            return aenderungEingereichtDE(anrede, nachname);
+        }
 
         public static TemplateInstance getAenderungAbgelehnt(
             final String anrede,
