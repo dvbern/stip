@@ -444,7 +444,7 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate(
-                    "stip.pdf.negativeVerfuegung.ausbildungsjahr"
+                    "stip.pdf.verfuegung.ausbildungsjahr"
                 ),
                 ausbildungsjahr,
                 String.format(
@@ -463,8 +463,8 @@ public class PdfService {
         final String translateKey = personInAusbildung
             .getAnrede()
             .equals(Anrede.HERR)
-                ? "stip.pdf.negativeVerfuegung.begruessung.mann"
-                : "stip.pdf.negativeVerfuegung.begruessung.frau";
+                ? "stip.pdf.verfuegung.begruessung.mann"
+                : "stip.pdf.verfuegung.begruessung.frau";
 
         document.add(
             createParagraph(
@@ -485,7 +485,7 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate(
-                    "stip.pdf.negativeVerfuegung.bedankung",
+                    "stip.pdf.verfuegung.bedankung",
                     "DATUM",
                     einreichedatum
                 )
@@ -583,7 +583,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.ausbildungsjahr"),
+                translator.translate("stip.pdf.verfuegung.ausbildungsjahr"),
                 ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
@@ -598,8 +598,8 @@ public class PdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.negativeVerfuegung.begruessung.mann"
-            : "stip.pdf.negativeVerfuegung.begruessung.frau";
+            ? "stip.pdf.verfuegung.begruessung.mann"
+            : "stip.pdf.verfuegung.begruessung.frau";
 
         document.add(
             createParagraph(
@@ -617,7 +617,7 @@ public class PdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.bedankung", "DATUM", einreichedatum)
+                translator.translate("stip.pdf.verfuegung.bedankung", "DATUM", einreichedatum)
             )
         );
 
