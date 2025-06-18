@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.resource;
+package ch.dvbern.stip.api.land.resource;
 
 import java.util.Arrays;
 import java.util.UUID;

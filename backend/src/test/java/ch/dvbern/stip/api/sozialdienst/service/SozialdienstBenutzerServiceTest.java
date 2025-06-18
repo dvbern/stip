@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
@@ -115,6 +116,9 @@ class SozialdienstBenutzerServiceTest {
     @Inject
     KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
 
+    @Inject
+    LandService landService;
+
     SozialdienstBenutzerService sozialdienstBenutzerService;
     SozialdienstBenutzerService sozialdienstBenutzerServiceMock;
     ZahlungsverbindungService zahlungsverbindungServiceMock;
@@ -147,7 +151,7 @@ class SozialdienstBenutzerServiceTest {
         zahlungsverbindung.setNachname("Test");
         zahlungsverbindung.setVorname("Test");
         var adresse = new Adresse();
-        adresse.setLand(Land.CH);
+        adresse.setLand(landService.requireLandById(TestConstants.TEST_LAND_SCHWEIZ_ID));
         adresse.setStrasse("Musterstrasse");
         adresse.setHausnummer("1");
         adresse.setPlz("3000");

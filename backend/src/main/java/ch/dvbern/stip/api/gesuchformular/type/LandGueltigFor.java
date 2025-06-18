@@ -60,6 +60,10 @@ public enum LandGueltigFor {
     AUSZAHLUNG(
     "auszahlung",
     formular -> {
+        if (formular.getTranche() == null) {
+            return null;
+        }
+
         if (formular.getTranche().getGesuch().getAusbildung().getFall().getAuszahlung() == null) {
             return null;
         }

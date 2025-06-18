@@ -677,7 +677,6 @@ class GesuchFormularMapperTest {
             ausbildungMapperImplMock,
             new LebenslaufItemMapperImpl(),
             new PartnerMapperImpl(new MockAdresseMapperImpl()),
-            new AuszahlungMapperImpl(new MockAdresseMapperImpl()),
             new GeschwisterMapperImpl(),
             new ElternMapperImpl(new MockAdresseMapperImpl()),
             new KindMapperImpl(),
