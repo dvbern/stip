@@ -125,7 +125,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
         if (
-            AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+            AuthorizerUtil.isGesuchstellerOf(
                 gesuch.getAusbildung().getFall(),
                 currentBenutzer,
                 sozialdienstService
@@ -145,8 +145,8 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         if (
-            AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                gesuchTranche.getGesuch(),
+            AuthorizerUtil.isGesuchstellerOf(
+                gesuchTranche.getGesuch().getAusbildung().getFall(),
                 currentBenutzer,
                 sozialdienstService
             )

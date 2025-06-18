@@ -21,7 +21,7 @@ import {
 } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { FallAuszahlungUpdate } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiAuszahlungComponent } from '@dv/shared/ui/auszahlung';
@@ -92,11 +92,11 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
     this.store.dispatch(SharedEventGesuchFormAuszahlung.init());
   }
 
-  handleSave(auszahlung: AuszahlungUpdate): void {
+  handleSave(auszahlung: FallAuszahlungUpdate): void {
     const fallId = this.fallIdSig();
 
     if (isDefined(fallId)) {
-      if (this.auszahlungStore.auszahlung().data?.value) {
+      if (this.auszahlungStore.auszahlung().data?.auszahlung) {
         this.auszahlungStore.updateAuszahlung$({
           fallId,
           auszahlung,

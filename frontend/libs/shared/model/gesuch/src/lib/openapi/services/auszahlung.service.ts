@@ -18,8 +18,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { Auszahlung } from '../model/auszahlung';
-import { AuszahlungUpdate } from '../model/auszahlungUpdate';
+import { FallAuszahlung } from '../model/fallAuszahlung';
+import { FallAuszahlungUpdate } from '../model/fallAuszahlungUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 
 export interface AuszahlungServiceCreateAuszahlungForGesuchRequestParams {
     fallId: string;
-    auszahlungUpdate: AuszahlungUpdate;
+    fallAuszahlungUpdate: FallAuszahlungUpdate;
 }
 
 export interface AuszahlungServiceGetAuszahlungForGesuchRequestParams {
@@ -36,7 +36,7 @@ export interface AuszahlungServiceGetAuszahlungForGesuchRequestParams {
 
 export interface AuszahlungServiceUpdateAuszahlungForGesuchRequestParams {
     fallId: string;
-    auszahlungUpdate: AuszahlungUpdate;
+    fallAuszahlungUpdate: FallAuszahlungUpdate;
 }
 
 
@@ -109,17 +109,17 @@ export class AuszahlungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Auszahlung>;
-     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Auszahlung>>;
-     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Auszahlung>>;
+     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FallAuszahlung>;
+     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FallAuszahlung>>;
+     public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FallAuszahlung>>;
      public createAuszahlungForGesuch$(requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
             throw new Error('Required parameter fallId was null or undefined when calling createAuszahlungForGesuch$.');
         }
-        const auszahlungUpdate = requestParameters.auszahlungUpdate;
-        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
-            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling createAuszahlungForGesuch$.');
+        const fallAuszahlungUpdate = requestParameters.fallAuszahlungUpdate;
+        if (fallAuszahlungUpdate === null || fallAuszahlungUpdate === undefined) {
+            throw new Error('Required parameter fallAuszahlungUpdate was null or undefined when calling createAuszahlungForGesuch$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -177,10 +177,10 @@ export class AuszahlungService {
         }
 
         const localVarPath = `/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Auszahlung>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FallAuszahlung>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: auszahlungUpdate,
+                body: fallAuszahlungUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -196,9 +196,9 @@ export class AuszahlungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Auszahlung>;
-     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Auszahlung>>;
-     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Auszahlung>>;
+     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FallAuszahlung>;
+     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FallAuszahlung>>;
+     public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FallAuszahlung>>;
      public getAuszahlungForGesuch$(requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
@@ -251,7 +251,7 @@ export class AuszahlungService {
         }
 
         const localVarPath = `/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Auszahlung>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FallAuszahlung>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -269,17 +269,17 @@ export class AuszahlungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Auszahlung>;
-     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Auszahlung>>;
-     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Auszahlung>>;
+     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FallAuszahlung>;
+     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FallAuszahlung>>;
+     public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FallAuszahlung>>;
      public updateAuszahlungForGesuch$(requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
             throw new Error('Required parameter fallId was null or undefined when calling updateAuszahlungForGesuch$.');
         }
-        const auszahlungUpdate = requestParameters.auszahlungUpdate;
-        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
-            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling updateAuszahlungForGesuch$.');
+        const fallAuszahlungUpdate = requestParameters.fallAuszahlungUpdate;
+        if (fallAuszahlungUpdate === null || fallAuszahlungUpdate === undefined) {
+            throw new Error('Required parameter fallAuszahlungUpdate was null or undefined when calling updateAuszahlungForGesuch$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -337,10 +337,10 @@ export class AuszahlungService {
         }
 
         const localVarPath = `/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Auszahlung>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FallAuszahlung>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: auszahlungUpdate,
+                body: fallAuszahlungUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

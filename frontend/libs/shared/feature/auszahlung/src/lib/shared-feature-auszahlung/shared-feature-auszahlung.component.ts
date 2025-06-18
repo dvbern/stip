@@ -17,8 +17,11 @@ import {
   SharedDataAccessStammdatenApiEvents,
   selectSharedDataAccessStammdatensView,
 } from '@dv/shared/data-access/stammdaten';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { FallAuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { isPending } from '@dv/shared/util/remote-data';
 
@@ -32,9 +35,11 @@ export abstract class SharedFeatureAuszahlungComponent {
   private router = inject(Router);
   private einreichenStore = inject(EinreichenStore);
   private auszahlungStore = inject(AuszahlungStore);
+  private permissionStore = inject(PermissionStore);
   private stammdatenViewSig = this.store.selectSignal(
     selectSharedDataAccessStammdatensView,
   );
+  private config = inject(SharedModelCompileTimeConfig);
 
   hasUnsavedChanges = false;
   fallIdSig = input.required<string>({ alias: 'fallId' });
@@ -48,6 +53,7 @@ export abstract class SharedFeatureAuszahlungComponent {
     const laender = this.stammdatenViewSig()?.laender || [];
     const language = this.languageSig();
     const auszahlung = this.auszahlungStore.auszahlung();
+    const rolesMap = this.permissionStore.rolesMapSig();
     const invalidFormularControls =
       this.einreichenStore.invalidFormularControlsSig();
     const backlink = this.optionalBacklinkSig();
@@ -55,7 +61,11 @@ export abstract class SharedFeatureAuszahlungComponent {
     return {
       auszahlung: auszahlung.data,
       isLoading: isPending(auszahlung),
-      readonly: false,
+      readonly: !canCurrentlyEdit(
+        this.config.appType,
+        rolesMap,
+        auszahlung.data?.isDelegated,
+      ),
       laender,
       language,
       backlink,
@@ -85,11 +95,11 @@ export abstract class SharedFeatureAuszahlungComponent {
     });
   }
 
-  handleSave(auszahlung: AuszahlungUpdate): void {
+  handleSave(auszahlung: FallAuszahlungUpdate): void {
     const fallId = this.fallIdSig();
 
     if (isDefined(fallId)) {
-      if (this.auszahlungStore.auszahlung().data?.value) {
+      if (this.auszahlungStore.auszahlung().data?.auszahlung) {
         this.auszahlungStore.updateAuszahlung$({
           fallId,
           auszahlung,

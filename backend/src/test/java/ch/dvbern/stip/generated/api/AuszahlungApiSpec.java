@@ -13,8 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class AuszahlungApiSpec {
      *
      * @see #fallIdPath  (required)
      * @see #body  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class CreateAuszahlungForGesuchOper implements Oper {
 
@@ -123,10 +123,10 @@ public class AuszahlungApiSpec {
         /**
          * POST /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -175,7 +175,7 @@ public class AuszahlungApiSpec {
      * 
      *
      * @see #fallIdPath  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class GetAuszahlungForGesuchOper implements Oper {
 
@@ -205,10 +205,10 @@ public class AuszahlungApiSpec {
         /**
          * GET /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -249,7 +249,7 @@ public class AuszahlungApiSpec {
      *
      * @see #fallIdPath  (required)
      * @see #body  (required)
-     * return AuszahlungDtoSpec
+     * return FallAuszahlungDtoSpec
      */
     public static class UpdateAuszahlungForGesuchOper implements Oper {
 
@@ -280,10 +280,10 @@ public class AuszahlungApiSpec {
         /**
          * PATCH /auszahlung/{fallId}
          * @param handler handler
-         * @return AuszahlungDtoSpec
+         * @return FallAuszahlungDtoSpec
          */
-        public AuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AuszahlungDtoSpec> type = new TypeRef<AuszahlungDtoSpec>(){};
+        public FallAuszahlungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallAuszahlungDtoSpec> type = new TypeRef<FallAuszahlungDtoSpec>(){};
             return execute(handler).as(type);
         }
 

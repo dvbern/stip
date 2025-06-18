@@ -21,10 +21,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
@@ -134,15 +135,15 @@ public class GesuchTrancheValidatorService {
     }
 
     private void validateAuszahlung(final Gesuch toValidate) {
-        var isAuszahlungExisting = Objects.nonNull(toValidate.getAusbildung().getFall().getAuszahlung());
-        var violations =
-            isAuszahlungExisting
-                ? validator.validate(toValidate.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung())
-                : null;
+        var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
+        var violations = auszahlungOpt
+            .map(Auszahlung::getZahlungsverbindung)
+            .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
+            .orElse(Set.of());
 
-        if (!isAuszahlungExisting || !violations.isEmpty()) {
+        if (auszahlungOpt.isEmpty() || !violations.isEmpty()) {
             throw new CustomValidationsException(
-                "Keine Auszahlung vorhanden",
+                "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
                 new CustomConstraintViolation(
                     VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
                     "auszahlung"

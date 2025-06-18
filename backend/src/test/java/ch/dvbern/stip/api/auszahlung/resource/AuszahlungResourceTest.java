@@ -32,9 +32,9 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
-import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
@@ -67,7 +67,7 @@ class AuszahlungResourceTest {
     private GesuchDtoSpec gesuch;
     private FallDtoSpec fall;
 
-    private AuszahlungDtoSpec auszahlung;
+    private FallAuszahlungDtoSpec auszahlung;
 
     @Test
     @TestAsGesuchsteller
@@ -95,8 +95,8 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void createAuszahlungWithFlagSetToTrueShouldFail() {
-        var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
-        auszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
+        var fallAuszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
+        fallAuszahlungDtoSpec.setAuszahlungAnSozialdienst(true);
         ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
         final var adresse =
             AdresseSpecModel.adresseDtoSpec();
@@ -104,11 +104,11 @@ class AuszahlungResourceTest {
         zahlungsverbindungDtoSpec.setVorname("Max");
         zahlungsverbindungDtoSpec.setNachname("Muster");
         zahlungsverbindungDtoSpec.setAdresse(adresse);
-        auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
+        fallAuszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
 
         auszahlungApiSpec.createAuszahlungForGesuch()
             .fallIdPath(fall.getId())
-            .body(auszahlungDtoSpec)
+            .body(fallAuszahlungDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -139,7 +139,7 @@ class AuszahlungResourceTest {
             .statusCode(HttpStatus.OK_200)
             .extract()
             .body()
-            .as(AuszahlungDto.class);
+            .as(FallAuszahlungDto.class);
     }
 
     @Test
@@ -154,7 +154,7 @@ class AuszahlungResourceTest {
             .statusCode(HttpStatus.OK_200)
             .extract()
             .body()
-            .as(AuszahlungDtoSpec.class);
+            .as(FallAuszahlungDtoSpec.class);
     }
 
     @Test
@@ -162,8 +162,8 @@ class AuszahlungResourceTest {
     @Order(6)
     void updateAuszahlungForGesuch() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
-        auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getValue().getAuszahlungAnSozialdienst());
-        auszahlungUpdate.setZahlungsverbindung(auszahlung.getValue().getZahlungsverbindung());
+        auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlung().getAuszahlungAnSozialdienst());
+        auszahlungUpdate.setZahlungsverbindung(auszahlung.getAuszahlung().getZahlungsverbindung());
         final var adresse =
             AdresseSpecModel.adresseDtoSpec();
         auszahlungUpdate.getZahlungsverbindung().setAdresse(adresse);
@@ -177,7 +177,7 @@ class AuszahlungResourceTest {
             .statusCode(HttpStatus.OK_200)
             .extract()
             .body()
-            .as(AuszahlungDtoSpec.class);
+            .as(FallAuszahlungDtoSpec.class);
     }
 
     /*
@@ -189,7 +189,7 @@ class AuszahlungResourceTest {
     void updateAuszahlungForGesuchShouldFailWithFlagSetToTrue() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);
-        auszahlungUpdate.setZahlungsverbindung(auszahlung.getValue().getZahlungsverbindung());
+        auszahlungUpdate.setZahlungsverbindung(auszahlung.getAuszahlung().getZahlungsverbindung());
 
         auszahlungApiSpec.updateAuszahlungForGesuch()
             .fallIdPath(fall.getId())

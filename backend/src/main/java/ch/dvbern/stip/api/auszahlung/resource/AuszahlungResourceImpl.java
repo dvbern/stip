@@ -24,8 +24,8 @@ import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -37,26 +37,24 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
     private final AuszahlungService auszahlungService;
 
-    @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
-    @Override
-    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
-        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-        auszahlungAuthorizer.canSetFlag(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
-        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-    }
-
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_READ)
     @Override
-    public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
+    public FallAuszahlungDto getAuszahlungForGesuch(UUID fallId) {
         auszahlungAuthorizer.canReadAuszahlungForGesuch(fallId);
         return auszahlungService.getAuszahlungForGesuch(fallId);
     }
 
+    @RolesAllowed(OidcPermissions.AUSZAHLUNG_CREATE)
+    @Override
+    public FallAuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+        auszahlungAuthorizer.canCreateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
+        return auszahlungService.createAuszahlungForGesuch(fallId, auszahlungUpdateDto);
+    }
+
     @RolesAllowed(OidcPermissions.AUSZAHLUNG_UPDATE)
     @Override
-    public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+    public FallAuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         auszahlungAuthorizer.canUpdateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
-        auszahlungAuthorizer.canSetFlag(fallId, auszahlungUpdateDto.getAuszahlungAnSozialdienst());
         return auszahlungService.updateAuszahlungForGesuch(fallId, auszahlungUpdateDto);
     }
 }

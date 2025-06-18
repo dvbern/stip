@@ -52,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: Created Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -76,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: Updated Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -94,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Auszahlung'
+                $ref: '#/components/schemas/FallAuszahlung'
           description: return Auszahlung
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4223,12 +4223,12 @@ components:
           type: string
         erhalteneAlimentebeitraege:
           type: integer
-    Auszahlung:
+    FallAuszahlung:
       type: object
-      required: 
+      required:
         - isDelegated
       properties:
-        value:
+        auszahlung:
           $ref: '#/components/schemas/AuszahlungUpdate'
         isDelegated:
           type: boolean

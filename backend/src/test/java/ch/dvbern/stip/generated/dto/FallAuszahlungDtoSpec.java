@@ -25,51 +25,51 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * AuszahlungDtoSpec
+ * FallAuszahlungDtoSpec
  */
 @JsonPropertyOrder({
-  AuszahlungDtoSpec.JSON_PROPERTY_VALUE,
-  AuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED
+  FallAuszahlungDtoSpec.JSON_PROPERTY_AUSZAHLUNG,
+  FallAuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED
 })
-@JsonTypeName("Auszahlung")
+@JsonTypeName("FallAuszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class AuszahlungDtoSpec {
-  public static final String JSON_PROPERTY_VALUE = "value";
-  private AuszahlungUpdateDtoSpec value;
+public class FallAuszahlungDtoSpec {
+  public static final String JSON_PROPERTY_AUSZAHLUNG = "auszahlung";
+  private AuszahlungUpdateDtoSpec auszahlung;
 
   public static final String JSON_PROPERTY_IS_DELEGATED = "isDelegated";
   private Boolean isDelegated;
 
-  public AuszahlungDtoSpec() {
+  public FallAuszahlungDtoSpec() {
   }
 
-  public AuszahlungDtoSpec value(AuszahlungUpdateDtoSpec value) {
+  public FallAuszahlungDtoSpec auszahlung(AuszahlungUpdateDtoSpec auszahlung) {
     
-    this.value = value;
+    this.auszahlung = auszahlung;
     return this;
   }
 
    /**
-   * Get value
-   * @return value
+   * Get auszahlung
+   * @return auszahlung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public AuszahlungUpdateDtoSpec getValue() {
-    return value;
+  public AuszahlungUpdateDtoSpec getAuszahlung() {
+    return auszahlung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(AuszahlungUpdateDtoSpec value) {
-    this.value = value;
+  public void setAuszahlung(AuszahlungUpdateDtoSpec auszahlung) {
+    this.auszahlung = auszahlung;
   }
 
 
-  public AuszahlungDtoSpec isDelegated(Boolean isDelegated) {
+  public FallAuszahlungDtoSpec isDelegated(Boolean isDelegated) {
     
     this.isDelegated = isDelegated;
     return this;
@@ -102,21 +102,21 @@ public class AuszahlungDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuszahlungDtoSpec auszahlung = (AuszahlungDtoSpec) o;
-    return Objects.equals(this.value, auszahlung.value) &&
-        Objects.equals(this.isDelegated, auszahlung.isDelegated);
+    FallAuszahlungDtoSpec fallAuszahlung = (FallAuszahlungDtoSpec) o;
+    return Objects.equals(this.auszahlung, fallAuszahlung.auszahlung) &&
+        Objects.equals(this.isDelegated, fallAuszahlung.isDelegated);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value, isDelegated);
+    return Objects.hash(auszahlung, isDelegated);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AuszahlungDtoSpec {\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("class FallAuszahlungDtoSpec {\n");
+    sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    isDelegated: ").append(toIndentedString(isDelegated)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -400,34 +400,6 @@ class GesuchFillFormularTest {
         );
     }
 
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(20)
-    // void gesuchEinreichenValidationShouldFailWithoutAuszahlung() {
-    // final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
-    // .gesuchTrancheIdPath(gesuchTrancheId)
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Status.OK.getStatusCode())
-    // .extract()
-    // .body()
-    // .as(ValidationReportDtoSpec.class);
-    //
-    // assertThat(
-    // validationReport.getValidationErrors().toString(),
-    // validationReport.getValidationErrors().size(),
-    // is(1)
-    // );
-    // }
-    //
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(21)
-    // void addAuszahlung() {
-    // TestUtil.fillAuszahlung(patchGesuch().getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
-    // }
-
     @Test
     @TestAsGesuchsteller
     @Order(22)

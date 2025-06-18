@@ -1,7 +1,7 @@
-import { Auszahlung, Land } from '@dv/shared/model/gesuch';
+import { FallAuszahlung, Land } from '@dv/shared/model/gesuch';
 
 export type SharedModelAuszahlung = {
-  auszahlung?: Auszahlung;
+  auszahlung?: FallAuszahlung;
   isLoading: boolean;
   readonly: boolean;
   laender: Land[];

@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
@@ -326,13 +327,7 @@ public class TestcaseSeeding extends Seeder {
             .getAuszahlung()
             .getZahlungsverbindung()
             .setAdresse(
-                formular.getTranche()
-                    .getGesuch()
-                    .getAusbildung()
-                    .getFall()
-                    .getAuszahlung()
-                    .getZahlungsverbindung()
-                    .getAdresse()
+                new Adresse()
             );
     }
 

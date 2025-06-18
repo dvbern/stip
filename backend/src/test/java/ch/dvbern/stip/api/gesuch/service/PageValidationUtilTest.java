@@ -50,7 +50,6 @@ class PageValidationUtilTest {
         gesuchFormular.setPersonInAusbildung(new PersonInAusbildung());
         gesuchFormular.setFamiliensituation(new Familiensituation());
         gesuchFormular.setPartner(new Partner());
-        // gesuchFormular.setAuszahlung(new Auszahlung());
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
         gesuchFormular.setLebenslaufItems(new HashSet<>() {
             {

@@ -304,7 +304,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       const otherElternteil = gesuchFormular.elterns?.find(
         (e) => e.elternTyp !== elternteil.elternTyp,
       );
-      if (otherElternteil?.wohnkosten && !isDefined(elternteil.wohnkosten)) {
+      const elternZusammen =
+        gesuchFormular.familiensituation?.elternVerheiratetZusammen;
+      if (
+        otherElternteil?.wohnkosten &&
+        !isDefined(elternteil.wohnkosten) &&
+        elternZusammen
+      ) {
         this.form.controls.wohnkosten.patchValue(
           otherElternteil.wohnkosten.toString(),
         );

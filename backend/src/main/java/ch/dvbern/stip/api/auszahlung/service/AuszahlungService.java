@@ -22,8 +22,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class AuszahlungService {
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
     @Transactional
-    public AuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+    public FallAuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         var fall = fallRepository.requireById(fallId);
         var auszahlung = auszahlungMapper.toEntity(auszahlungUpdateDto);
         fall.setAuszahlung(auszahlung);
@@ -45,13 +45,13 @@ public class AuszahlungService {
     }
 
     @Transactional
-    public AuszahlungDto getAuszahlungForGesuch(UUID fallId) {
+    public FallAuszahlungDto getAuszahlungForGesuch(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         return auszahlungMapper.toDto(fall);
     }
 
     @Transactional
-    public AuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
+    public FallAuszahlungDto updateAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
         final var fall = fallRepository.requireById(fallId);
         final var zahlungsverbindung = fall.getAuszahlung().getZahlungsverbindung();
 
