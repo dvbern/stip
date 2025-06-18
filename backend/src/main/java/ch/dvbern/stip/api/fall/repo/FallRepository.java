@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.auszahlung.entity.QAuszahlung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.entity.QFall;
@@ -59,20 +58,5 @@ public class FallRepository implements BaseRepository<Fall> {
 
     public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
-    }
-
-    public Fall findByAuszahlungId(final UUID auszahlungId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
-        final var fall = QFall.fall;
-        final var auszahlung = QAuszahlung.auszahlung;
-
-        final var query = queryFactory
-            .select(fall)
-            .from(fall)
-            .where(
-                auszahlung.id.eq(auszahlungId)
-            );
-
-        return query.fetchFirst();
     }
 }
