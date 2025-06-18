@@ -411,6 +411,8 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
+        notificationService.createAenderungEingereichtNotification(aenderung.getGesuch());
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
     }
 
     @Transactional
