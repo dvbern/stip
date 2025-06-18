@@ -73,7 +73,7 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
+    public void createPdfForNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(gesuch, verfuegung.getStipDecision());
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
@@ -89,8 +89,8 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createVerfuegungOhneAnspruch(final Gesuch gesuch, final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruch(gesuch, verfuegung.getStipDecision());
+    public void createPdfForVerfuegungOhneAnspruch(final Gesuch gesuch, final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruch(gesuch);
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),

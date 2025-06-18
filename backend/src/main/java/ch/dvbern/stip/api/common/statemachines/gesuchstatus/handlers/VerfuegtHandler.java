@@ -62,7 +62,7 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
             : stipendien.getBerechnung();
 
         if (berechnungsresultat == 0) {
-            verfuegungService.createVerfuegungOhneAnspruch(
+            verfuegungService.createPdfForVerfuegungOhneAnspruch(
                 gesuch,
                 gesuch.getVerfuegungs()
                     .stream()

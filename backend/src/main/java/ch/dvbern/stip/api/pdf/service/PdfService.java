@@ -107,12 +107,11 @@ public class PdfService {
     }
 
     public ByteArrayOutputStream createVerfuegungOhneAnspruch(
-        final Gesuch gesuch,
-        final StipDecision stipDecision
+        final Gesuch gesuch
     ) {
         final PdfSection negativeVerfuegungSection =
             this::verfuegungOhneAnspruch;
-        return this.createPdf(gesuch, negativeVerfuegungSection, stipDecision);
+        return this.createPdf(gesuch, negativeVerfuegungSection, null);
     }
 
     private ByteArrayOutputStream createPdf(
