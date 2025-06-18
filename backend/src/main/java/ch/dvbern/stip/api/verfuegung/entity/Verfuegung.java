@@ -81,5 +81,4 @@ public class Verfuegung extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "wohnsitz_kanton")
     private Kanton kanton;
-
 }
