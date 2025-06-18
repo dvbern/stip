@@ -121,7 +121,8 @@ public class TestcaseSeeding extends Seeder {
     protected void seed() {
         LOG.info("Starting testcase seeding");
 
-        if (gesuchRepository.count() != 0) {
+        // Disable Testcase seeding until KSTIP-1968 deletes this
+        if (true) {
             return;
         }
 

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import java.util.Optional;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.ConfigProvider;
@@ -55,13 +57,21 @@ public class TenantConfigService {
         + getWelcomeEmailKcScope();
     }
 
-    public String getSozialdienstSeeding() {
-        return forCurrentTenant(SOZIALDIENST_SEEDING);
+    public Optional<String> getSozialdienstSeeding() {
+        return forCurrentTenantOpt(SOZIALDIENST_SEEDING);
     }
 
     private String forCurrentTenant(String path) {
         return ConfigProvider.getConfig()
             .getValue(
+                String.format(path, tenantService.getCurrentTenantIdentifier()),
+                String.class
+            );
+    }
+
+    private Optional<String> forCurrentTenantOpt(final String path) {
+        return ConfigProvider.getConfig()
+            .getOptionalValue(
                 String.format(path, tenantService.getCurrentTenantIdentifier()),
                 String.class
             );
