@@ -22,7 +22,6 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
-import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -110,7 +109,6 @@ public class PdfService {
         final PdfSection section
     ) {
         final Gesuch gesuch = verfuegung.getGesuch();
-        final StipDecision stipDecision = verfuegung.getStipDecision();
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final FontProgram font;
