@@ -216,7 +216,7 @@ public class TestcaseSeeding extends Seeder {
 
             final var benutzer = new Benutzer()
                 .setNachname("Seeding")
-                .setVorname("Admin")
+                .setVorname("EnvSozialdienstAdmin")
                 .setBenutzerStatus(BenutzerStatus.AKTIV)
                 .setRollen(Set.of(adminRolle, sachbearbeiterRolle))
                 .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));

@@ -28,6 +28,7 @@ public class TenantConfigService {
     public static final String WELCOME_MAIL_KC_PATH_PATH = "kstip.%s.welcome-mail.kc-path";
     public static final String WELCOME_MAIL_KC_QUERY_PARAMETER_PATH = "kstip.%s.welcome-mail.kc-query-parameter";
     public static final String WELCOME_MAIL_KC_EMAIL_SCOPE_PATH = "kstip.%s.welcome-mail.kc-scope";
+    public static final String SOZIALDIENST_SEEDING = "kstip.%s.seeding.sozialdienste";
 
     private final TenantService tenantService;
 
@@ -52,6 +53,10 @@ public class TenantConfigService {
         + getWelcomeEmailKcPath().replace("<TENANT>", tenantService.getCurrentTenantIdentifier())
         + getWelcomeEmailKcQueryParameter().replace("<REDIRECT_URI>", redirectURI)
         + getWelcomeEmailKcScope();
+    }
+
+    public String getSozialdienstSeeding() {
+        return forCurrentTenant(SOZIALDIENST_SEEDING);
     }
 
     private String forCurrentTenant(String path) {
