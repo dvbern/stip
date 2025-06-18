@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
-  private @Valid String iban;
-  private @Valid AdresseDto adresse;
+  private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
   /**
    **/
@@ -66,40 +65,21 @@ public class SozialdienstUpdateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstUpdateDto iban(String iban) {
-    this.iban = iban;
+  public SozialdienstUpdateDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
   
-  @JsonProperty("iban")
+  @JsonProperty("zahlungsverbindung")
   @NotNull
-  public String getIban() {
-    return iban;
+  public ZahlungsverbindungDto getZahlungsverbindung() {
+    return zahlungsverbindung;
   }
 
-  @JsonProperty("iban")
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-  /**
-   **/
-  public SozialdienstUpdateDto adresse(AdresseDto adresse) {
-    this.adresse = adresse;
-    return this;
-  }
-
-  
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
-    return adresse;
-  }
-
-  @JsonProperty("adresse")
-  public void setAdresse(AdresseDto adresse) {
-    this.adresse = adresse;
+  @JsonProperty("zahlungsverbindung")
+  public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
   }
 
 
@@ -114,13 +94,12 @@ public class SozialdienstUpdateDto  implements Serializable {
     SozialdienstUpdateDto sozialdienstUpdate = (SozialdienstUpdateDto) o;
     return Objects.equals(this.id, sozialdienstUpdate.id) &&
         Objects.equals(this.name, sozialdienstUpdate.name) &&
-        Objects.equals(this.iban, sozialdienstUpdate.iban) &&
-        Objects.equals(this.adresse, sozialdienstUpdate.adresse);
+        Objects.equals(this.zahlungsverbindung, sozialdienstUpdate.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, iban, adresse);
+    return Objects.hash(id, name, zahlungsverbindung);
   }
 
   @Override
@@ -130,8 +109,7 @@ public class SozialdienstUpdateDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

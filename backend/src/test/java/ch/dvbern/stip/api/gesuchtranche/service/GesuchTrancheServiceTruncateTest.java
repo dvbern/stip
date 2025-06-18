@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -357,7 +355,6 @@ class GesuchTrancheServiceTruncateTest {
             .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
             .setFamiliensituation(new Familiensituation())
             .setPartner(null)
-            .setAuszahlung(new Auszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER))
             .setEinnahmenKosten(new EinnahmenKosten())
             .setDarlehen(new Darlehen());
     }

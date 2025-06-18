@@ -136,11 +136,16 @@ export const bruder: Geschwister = {
 };
 
 export const auszahlung: Auszahlung = {
-  vorname: '',
-  adresse: adressen.person,
-  iban: 'CH9300762011623852957',
-  nachname: '',
-  kontoinhaber: 'GESUCHSTELLER',
+  isDelegated: false,
+  value: {
+    auszahlungAnSozialdienst: false,
+    zahlungsverbindung: {
+      vorname: '',
+      nachname: '',
+      adresse: adressen.person,
+      iban: 'CH9300762011623852957',
+    },
+  },
 };
 
 export const einnahmenKosten: EinnahmenKosten = {

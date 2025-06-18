@@ -84,6 +84,9 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
   fallIdSig = computed(() => {
     const gesuch = this.cacheViewSig().cache.gesuch;
     return gesuch?.fallId;

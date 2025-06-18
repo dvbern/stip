@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
@@ -44,7 +43,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_PERSON_IN_AUSBILDUNG,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_FAMILIENSITUATION,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_PARTNER,
-  GesuchFormularUpdateDtoSpec.JSON_PROPERTY_AUSZAHLUNG,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_ELTERNS,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_GESCHWISTERS,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_LEBENSLAUF_ITEMS,
@@ -64,9 +62,6 @@ public class GesuchFormularUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_PARTNER = "partner";
   private PartnerUpdateDtoSpec partner;
-
-  public static final String JSON_PROPERTY_AUSZAHLUNG = "auszahlung";
-  private AuszahlungUpdateDtoSpec auszahlung;
 
   public static final String JSON_PROPERTY_ELTERNS = "elterns";
   private List<ElternUpdateDtoSpec> elterns;
@@ -167,32 +162,6 @@ public class GesuchFormularUpdateDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPartner(PartnerUpdateDtoSpec partner) {
     this.partner = partner;
-  }
-
-
-  public GesuchFormularUpdateDtoSpec auszahlung(AuszahlungUpdateDtoSpec auszahlung) {
-    
-    this.auszahlung = auszahlung;
-    return this;
-  }
-
-   /**
-   * Get auszahlung
-   * @return auszahlung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public AuszahlungUpdateDtoSpec getAuszahlung() {
-    return auszahlung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAuszahlung(AuszahlungUpdateDtoSpec auszahlung) {
-    this.auszahlung = auszahlung;
   }
 
 
@@ -429,7 +398,6 @@ public class GesuchFormularUpdateDtoSpec {
     return Objects.equals(this.personInAusbildung, gesuchFormularUpdate.personInAusbildung) &&
         Objects.equals(this.familiensituation, gesuchFormularUpdate.familiensituation) &&
         Objects.equals(this.partner, gesuchFormularUpdate.partner) &&
-        Objects.equals(this.auszahlung, gesuchFormularUpdate.auszahlung) &&
         Objects.equals(this.elterns, gesuchFormularUpdate.elterns) &&
         Objects.equals(this.geschwisters, gesuchFormularUpdate.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormularUpdate.lebenslaufItems) &&
@@ -441,7 +409,7 @@ public class GesuchFormularUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuererklaerung);
+    return Objects.hash(personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuererklaerung);
   }
 
   @Override
@@ -451,7 +419,6 @@ public class GesuchFormularUpdateDtoSpec {
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
-    sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    elterns: ").append(toIndentedString(elterns)).append("\n");
     sb.append("    geschwisters: ").append(toIndentedString(geschwisters)).append("\n");
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");

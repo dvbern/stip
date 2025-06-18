@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.sozialdienst.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -43,6 +44,7 @@ public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final ZahlungsverbindungService zahlungsverbindungService;
 
     public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
         final var sozialdienstBenutzer =
@@ -55,6 +57,8 @@ public class SozialdienstService {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
+        final var zahlungsverbindung = zahlungsverbindungService.createZahlungsverbindung(dto.getZahlungsverbindung());
+        sozialdienst.setZahlungsverbindung(zahlungsverbindung);
         sozialdienstRepository.persistAndFlush(sozialdienst);
         return sozialdienstMapper.toDto(sozialdienst);
     }

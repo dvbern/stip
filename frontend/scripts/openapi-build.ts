@@ -30,6 +30,7 @@ const generatedApis = [
   'Ausbildung',
   'Ausbildungsgang',
   'Ausbildungsstaette',
+  'Auszahlung',
   'Benutzer',
   'Bildungskategorie',
   'Buchhaltung',

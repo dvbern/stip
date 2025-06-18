@@ -95,7 +95,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
+        assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
 
@@ -144,12 +144,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
-        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
+        assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
     }
 
     @Transactional
     public void gsCanGesuchEinreichen(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
+        assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.EINGEREICHT);
     }
@@ -164,7 +164,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall =
             fallRepository.findFallForGsOptional(currentBenutzer.getId()).orElseThrow(NotFoundException::new);
-        assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(fall);
+        assertCanWriteAndIsGesuchstellerOfFallOrDelegatedToSozialdienst(fall);
     }
 
     @Transactional
@@ -183,7 +183,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void gsCanCreateAenderung(final UUID gesuchId) {
-        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
+        assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN);
     }
 
@@ -229,19 +229,31 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Set.of(gesuchStatus));
     }
 
-    public void assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(
+    public void assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(final UUID gesuchId) {
+        if (
+            !AuthorizerUtil.isGesuchstellerOf(
+                gesuchRepository.requireById(gesuchId).getAusbildung().getFall(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
+    }
+
+    public void assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(
         final UUID gesuchId
     ) {
-        assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(
+        assertCanWriteAndIsGesuchstellerOfFallOrDelegatedToSozialdienst(
             gesuchRepository.requireById(gesuchId).getAusbildung().getFall()
         );
     }
 
-    public void assertIsGesuchstellerOfFallOrDelegatedToSozialdienst(
+    public void assertCanWriteAndIsGesuchstellerOfFallOrDelegatedToSozialdienst(
         final Fall fall
     ) {
         if (
-            !AuthorizerUtil.isGesuchstellerOfOrDelegatedToSozialdienst(
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 fall,
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService

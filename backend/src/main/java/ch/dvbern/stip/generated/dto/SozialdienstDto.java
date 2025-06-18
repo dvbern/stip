@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -24,9 +24,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
-  private @Valid AdresseDto adresse;
-  private @Valid String iban;
   private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
+  private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
   /**
    **/
@@ -68,44 +67,6 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstDto adresse(AdresseDto adresse) {
-    this.adresse = adresse;
-    return this;
-  }
-
-  
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
-    return adresse;
-  }
-
-  @JsonProperty("adresse")
-  public void setAdresse(AdresseDto adresse) {
-    this.adresse = adresse;
-  }
-
-  /**
-   **/
-  public SozialdienstDto iban(String iban) {
-    this.iban = iban;
-    return this;
-  }
-
-  
-  @JsonProperty("iban")
-  @NotNull
-  public String getIban() {
-    return iban;
-  }
-
-  @JsonProperty("iban")
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-  /**
-   **/
   public SozialdienstDto sozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
@@ -123,6 +84,25 @@ public class SozialdienstDto  implements Serializable {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
+  /**
+   **/
+  public SozialdienstDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+    return this;
+  }
+
+  
+  @JsonProperty("zahlungsverbindung")
+  @NotNull
+  public ZahlungsverbindungDto getZahlungsverbindung() {
+    return zahlungsverbindung;
+  }
+
+  @JsonProperty("zahlungsverbindung")
+  public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -135,14 +115,13 @@ public class SozialdienstDto  implements Serializable {
     SozialdienstDto sozialdienst = (SozialdienstDto) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
-        Objects.equals(this.adresse, sozialdienst.adresse) &&
-        Objects.equals(this.iban, sozialdienst.iban) &&
-        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin);
+        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
+        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, adresse, iban, sozialdienstAdmin);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
   }
 
   @Override
@@ -152,9 +131,8 @@ public class SozialdienstDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

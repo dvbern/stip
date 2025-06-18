@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.generator.api.model.delegieren.DelegierungCreateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -81,8 +80,7 @@ class DelegierenResourceImplTest {
     @TestAsAdmin
     void createSozialdienst() {
         final var sozialdienstCreate = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(
-            SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec(),
-            AdresseSpecModel.adresseDtoSpec()
+            SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec()
         );
 
         sozialdienst = TestUtil.executeAndExtract(

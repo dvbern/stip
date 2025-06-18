@@ -9,16 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Adresse } from './adresse';
-import { Kontoinhaber } from './kontoinhaber';
+import { AuszahlungUpdate } from './auszahlungUpdate';
 
 export interface Auszahlung { 
-    vorname: string;
-    adresse: Adresse;
-    iban: string;
-    nachname: string;
-    kontoinhaber: Kontoinhaber;
+    value?: AuszahlungUpdate;
+    isDelegated: boolean;
 }
-
-
 

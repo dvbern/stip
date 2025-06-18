@@ -19,7 +19,6 @@ import {
 } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
-import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
@@ -39,6 +38,7 @@ import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
+import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
@@ -55,7 +55,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     TranslatePipe,
     MatMenuModule,
     SharedUiIconChipComponent,
-    GesuchAppPatternMainLayoutComponent,
+    SharedPatternMainLayoutComponent,
     SharedPatternAppHeaderPartsDirective,
     RouterLink,
   ],
@@ -90,6 +90,10 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
+  fallIdSig = computed(() => {
+    const { cache } = this.cacheViewSig();
+    return cache.gesuch?.fallId;
+  });
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();

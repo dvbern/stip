@@ -301,6 +301,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     }
 
     @Test
+    @StepwiseExtension.AlwaysRun
     @TestAsSuperUser
     @Order(99)
     void test_delete_gesuch() {

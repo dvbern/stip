@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel;
@@ -43,6 +42,7 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -104,6 +104,8 @@ class GesuchFillFormularTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final NotificationApiSpec notificationApiSpec =
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+
     private UUID gesuchId;
     private UUID gesuchTrancheId;
     private UUID ausbildungId;
@@ -291,15 +293,6 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(14)
-    void addAuszahlung() {
-        final var auszahlung = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
-        currentFormular.setAuszahlung(auszahlung);
-        patchAndValidate();
-    }
-
-    @Test
-    @TestAsGesuchsteller
     @Order(15)
     void addEinnahmenKosten() {
         final var einnahmenKosten = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
@@ -364,7 +357,6 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
-            DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
             DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
@@ -410,7 +402,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(20)
+    @Order(22)
     void gesuchEinreichenValidation() {
         final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -431,7 +423,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(21)
+    @Order(23)
     void gesuchEinreichenAsSBShouldFail() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -443,7 +435,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(22)
+    @Order(24)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -455,7 +447,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(23)
+    @Order(25)
     void gesuchNotificationTest() {
         var notifications = notificationApiSpec.getNotificationsForCurrentUser()
             .execute(TestUtil.PEEK_IF_ENV_SET)

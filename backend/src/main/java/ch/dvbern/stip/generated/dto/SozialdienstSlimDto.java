@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
-  private @Valid AdresseDto adresse;
 
   /**
    **/
@@ -63,24 +61,6 @@ public class SozialdienstSlimDto  implements Serializable {
     this.name = name;
   }
 
-  /**
-   **/
-  public SozialdienstSlimDto adresse(AdresseDto adresse) {
-    this.adresse = adresse;
-    return this;
-  }
-
-  
-  @JsonProperty("adresse")
-  public AdresseDto getAdresse() {
-    return adresse;
-  }
-
-  @JsonProperty("adresse")
-  public void setAdresse(AdresseDto adresse) {
-    this.adresse = adresse;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -92,13 +72,12 @@ public class SozialdienstSlimDto  implements Serializable {
     }
     SozialdienstSlimDto sozialdienstSlim = (SozialdienstSlimDto) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
-        Objects.equals(this.name, sozialdienstSlim.name) &&
-        Objects.equals(this.adresse, sozialdienstSlim.adresse);
+        Objects.equals(this.name, sozialdienstSlim.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, adresse);
+    return Objects.hash(id, name);
   }
 
   @Override
@@ -108,7 +87,6 @@ public class SozialdienstSlimDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }
