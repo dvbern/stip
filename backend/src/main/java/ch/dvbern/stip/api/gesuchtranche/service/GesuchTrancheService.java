@@ -498,7 +498,7 @@ public class GesuchTrancheService {
 
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
 
-        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
+        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
         return gesuchTrancheMapper.toDto(aenderung);
     }
