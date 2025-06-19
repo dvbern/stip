@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import java.util.Optional;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.ConfigProvider;
@@ -28,6 +30,7 @@ public class TenantConfigService {
     public static final String WELCOME_MAIL_KC_PATH_PATH = "kstip.%s.welcome-mail.kc-path";
     public static final String WELCOME_MAIL_KC_QUERY_PARAMETER_PATH = "kstip.%s.welcome-mail.kc-query-parameter";
     public static final String WELCOME_MAIL_KC_EMAIL_SCOPE_PATH = "kstip.%s.welcome-mail.kc-scope";
+    public static final String SOZIALDIENST_SEEDING = "kstip.%s.seeding.sozialdienste";
 
     private final TenantService tenantService;
 
@@ -54,9 +57,21 @@ public class TenantConfigService {
         + getWelcomeEmailKcScope();
     }
 
+    public Optional<String> getSozialdienstSeeding() {
+        return forCurrentTenantOpt(SOZIALDIENST_SEEDING);
+    }
+
     private String forCurrentTenant(String path) {
         return ConfigProvider.getConfig()
             .getValue(
+                String.format(path, tenantService.getCurrentTenantIdentifier()),
+                String.class
+            );
+    }
+
+    private Optional<String> forCurrentTenantOpt(final String path) {
+        return ConfigProvider.getConfig()
+            .getOptionalValue(
                 String.format(path, tenantService.getCurrentTenantIdentifier()),
                 String.class
             );

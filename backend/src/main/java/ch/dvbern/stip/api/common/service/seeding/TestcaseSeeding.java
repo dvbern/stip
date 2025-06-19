@@ -121,7 +121,8 @@ public class TestcaseSeeding extends Seeder {
     protected void seed() {
         LOG.info("Starting testcase seeding");
 
-        if (gesuchRepository.count() != 0) {
+        // Disable Testcase seeding until KSTIP-1968 deletes this
+        if (true) {
             return;
         }
 
@@ -216,7 +217,7 @@ public class TestcaseSeeding extends Seeder {
 
             final var benutzer = new Benutzer()
                 .setNachname("Seeding")
-                .setVorname("Admin")
+                .setVorname("EnvSozialdienstAdmin")
                 .setBenutzerStatus(BenutzerStatus.AKTIV)
                 .setRollen(Set.of(adminRolle, sachbearbeiterRolle))
                 .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));
