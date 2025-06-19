@@ -138,22 +138,31 @@ public class SozialdienstSeeding extends Seeder {
 
         try {
             final var admin = sozialdienstBenutzerRepository
-                .requireById(seedSozialdienstBenutzer(envSozialdienst.getAdmin()));
+                .requireById(
+                    seedSozialdienstBenutzer(envSozialdienst.getAdmin(), OidcConstants.ROLE_SOZIALDIENST_ADMIN)
+                );
             sozialdienst.setSozialdienstAdmin(admin);
+
             for (final var envMitarbeiter : envSozialdienst.getMitarbeiter()) {
-                final var mitarbeiter = sozialdienstBenutzerRepository
-                    .requireById(seedSozialdienstBenutzer(envMitarbeiter));
-                sozialdienst.getSozialdienstBenutzers().add(mitarbeiter);
+                try {
+                    final var mitarbeiter = sozialdienstBenutzerRepository
+                        .requireById(
+                            seedSozialdienstBenutzer(envMitarbeiter, OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
+                        );
+                    sozialdienst.getSozialdienstBenutzers().add(mitarbeiter);
+                } catch (Exception e) {
+                    LOG.error("Unable to seed mitarbeiter for Sozialdienst: {}", envSozialdienst.name);
+                }
             }
         } catch (Exception e) {
-            LOG.error("Unable to seed sozialdienstbenutzer for Sozialdienst: {}", envSozialdienst.name);
+            LOG.error("Unable to seed admin for Sozialdienst: {}", envSozialdienst.name);
         }
 
         sozialdienstRepository.persistAndFlush(sozialdienst);
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    UUID seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer) {
+    UUID seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String role) {
         final var existingUser =
             sozialdienstBenutzerRepository.findByKeycloakId(envSozialdienstBenutzer.getKeycloakId());
 
@@ -161,7 +170,7 @@ public class SozialdienstSeeding extends Seeder {
             return existingUser.get().getId();
         }
 
-        final var rollen = rolleService.mapOrCreateRoles(Set.of(OidcConstants.ROLE_SOZIALDIENST_ADMIN));
+        final var rollen = rolleService.mapOrCreateRoles(Set.of(role));
         final var sozialdienstBenutzer = new SozialdienstBenutzer();
         sozialdienstBenutzer
             .setEmail(envSozialdienstBenutzer.getEmail())
