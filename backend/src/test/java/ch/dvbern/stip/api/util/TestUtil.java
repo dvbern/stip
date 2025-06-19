@@ -412,7 +412,7 @@ public class TestUtil {
         DokumentTypDtoSpec dokTyp,
         File file
     ) {
-        dokumentApiSpec.createDokument()
+        dokumentApiSpec.createDokumentGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
@@ -429,7 +429,7 @@ public class TestUtil {
         UUID customDokumentTypId,
         File file
     ) {
-        dokumentApiSpec.uploadCustomGesuchDokument()
+        dokumentApiSpec.uploadCustomGesuchDokumentGS()
             .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");

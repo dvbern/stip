@@ -40,6 +40,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
+    private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     private void assertCanModifyCustomDokumentTypOfTranche(final UUID gesuchTrancheId) {
         final var tranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -81,33 +82,16 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    public void canUpload(final UUID customDokumentTypId) {
+    public void assertGsCanModifyCustomDokumentOfTranche(final UUID customDokumentTypId) {
         final var customDokumentTyp = customDokumentTypRepository.findById(customDokumentTypId);
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchTranche = customDokumentTyp.getGesuchDokument().getGesuchTranche();
-        final var gesuch = gesuchTranche.getGesuch();
-        if (
-            !AuthorizerUtil
-                .canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(gesuch, currentBenutzer, sozialdienstService)
-        ) {
-            forbidden();
-        }
+        gesuchDokumentAuthorizer
+            .assertGsCanModifyDokumentOfTranche(customDokumentTyp.getGesuchDokument().getGesuchTranche().getId());
+    }
 
-        if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
-        ) {
-            return;
-        }
-
-        if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
-            && Gesuchstatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuch.getGesuchStatus())
-        ) {
-            return;
-        }
-
-        forbidden();
+    public void assertSbCanModifyCustomDokumentOfTranche(final UUID customDokumentTypId) {
+        final var customDokumentTyp = customDokumentTypRepository.findById(customDokumentTypId);
+        gesuchDokumentAuthorizer
+            .assertSbCanModifyDokumentOfTranche(customDokumentTyp.getGesuchDokument().getGesuchTranche().getId());
     }
 
     public void canDeleteTyp(final UUID gesuchDokumentTypId) {

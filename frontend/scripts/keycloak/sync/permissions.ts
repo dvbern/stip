@@ -75,8 +75,8 @@ export const deleteSuperfluousPermissions = async (
       message: 'Are you sure you want to remove the permissions?',
     }))
   ) {
-    console.warn('Aborting role and permission sync...');
-    process.exit(0);
+    console.warn('Aborting role and permission removal...');
+    return false;
   }
   const deleteMissingPermissions = superfluousPermissions.map(
     async (permission) => {
@@ -107,4 +107,5 @@ export const deleteSuperfluousPermissions = async (
     console.info('Deleted permissions:', superfluousPermissions);
   }
   console.info('======================================\n');
+  return true;
 };

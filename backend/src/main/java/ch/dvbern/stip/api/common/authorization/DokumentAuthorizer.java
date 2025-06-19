@@ -22,10 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -53,37 +50,6 @@ public class DokumentAuthorizer extends BaseAuthorizer {
                 currentBenutzer,
                 sozialdienstService
             )
-        ) {
-            return;
-        }
-        forbidden();
-    }
-
-    public void canUpload(final UUID gesuchTrancheId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-
-        if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                gesuchTranche.getGesuch(),
-                currentBenutzer,
-                sozialdienstService
-            )
-        ) {
-            forbidden();
-        }
-
-        final var trancheTyp = gesuchTranche.getTyp();
-
-        if (
-            trancheTyp == GesuchTrancheTyp.TRANCHE
-            && Gesuchstatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getGesuch().getGesuchStatus())
-        ) {
-            return;
-        }
-        if (
-            trancheTyp == GesuchTrancheTyp.AENDERUNG
-            && GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
         ) {
             return;
         }
