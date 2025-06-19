@@ -539,7 +539,7 @@ public class GesuchService {
 
         if (stipendien.getBerechnung() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+            gesuchStatusToVerfuegt(gesuchId);
         } else {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
