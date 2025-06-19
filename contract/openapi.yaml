@@ -2483,6 +2483,12 @@ paths:
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/dokument/gs/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     delete:
       tags:
         - Dokument
@@ -2500,6 +2506,12 @@ paths:
       operationId: deleteDokumentGS
       summary: deletes a Dokument; GS Endpoint
   '/dokument/sb/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     delete:
       tags:
         - Dokument
