@@ -11,7 +11,7 @@
  */
 import { Zahlungsverbindung } from './zahlungsverbindung';
 
-export interface FallAuszahlungUpdate { 
+export interface AuszahlungUpdate { 
     auszahlungAnSozialdienst: boolean;
     zahlungsverbindung?: Zahlungsverbindung;
 }
