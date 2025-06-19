@@ -70,7 +70,7 @@ public class DeleteChangedDocumentsUtil {
         gesuchDokumentService.deleteDokumenteForTranche(oldFormular.getTranche().getId(), documentTypesToDelete);
     }
 
-    private List<DokumentTyp> getDocumentsToDeleteForPersonInAusbildung(
+    List<DokumentTyp> getDocumentsToDeleteForPersonInAusbildung(
         final PersonInAusbildungUpdateDto oldPia,
         final PersonInAusbildung newPia
     ) {
@@ -82,7 +82,7 @@ public class DeleteChangedDocumentsUtil {
         return toDelete;
     }
 
-    private List<DokumentTyp> getDocumentsToDeleteForPartner(
+    List<DokumentTyp> getDocumentsToDeleteForPartner(
         final PartnerUpdateDto newPartner,
         final Partner oldPartner
     ) {
@@ -102,7 +102,7 @@ public class DeleteChangedDocumentsUtil {
         return toDelete;
     }
 
-    private List<DokumentTyp> getDocumentsToDeleteForEinnahmenKosten(
+    List<DokumentTyp> getDocumentsToDeleteForEinnahmenKosten(
         final EinnahmenKostenUpdateDto newEk,
         final EinnahmenKosten oldEk
     ) {
@@ -153,7 +153,7 @@ public class DeleteChangedDocumentsUtil {
         return toDelete;
     }
 
-    private List<DokumentTyp> getDocumentsToDeleteForDarlehen(
+    List<DokumentTyp> getDocumentsToDeleteForDarlehen(
         final DarlehenDto newDarlehen,
         final Darlehen oldDarlehen
     ) {
