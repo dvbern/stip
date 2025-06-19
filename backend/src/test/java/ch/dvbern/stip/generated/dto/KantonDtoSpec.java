@@ -76,9 +76,7 @@ public enum KantonDtoSpec {
   
   ZG("ZG"),
   
-  ZH("ZH"),
-  
-  AUSLAND("AUSLAND");
+  ZH("ZH");
 
   private String value;
 
