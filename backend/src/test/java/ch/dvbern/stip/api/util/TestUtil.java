@@ -219,7 +219,6 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
-
     }
 
     public static AuszahlungUpdateDtoSpec getAuszahlungUpdateDtoSpec() {
