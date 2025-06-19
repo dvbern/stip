@@ -386,8 +386,23 @@ public class GesuchDokumentService {
     }
 
     @Transactional
+    public void deleteDokumenteForTranche(final UUID trancheId, final List<DokumentTyp> dokumentTyps) {
+        final var gesuchDokumente = gesuchDokumentRepository.findByDokumentTyps(trancheId, dokumentTyps).toList();
+        final var dokumente = gesuchDokumente.stream()
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
+            .toList();
+
+        dokumente.forEach(this::removeDokument);
+    }
+
+    @Transactional
     public void removeDokument(final UUID dokumentId) {
-        Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        removeDokument(dokument);
+    }
+
+    @Transactional
+    public void removeDokument(final Dokument dokument) {
         final var dokumentObjectIds = new ArrayList<String>();
 
         if (

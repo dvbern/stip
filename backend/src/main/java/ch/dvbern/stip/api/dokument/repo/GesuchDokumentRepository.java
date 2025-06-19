@@ -134,4 +134,13 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             );
         return query.stream().findAny().isPresent();
     }
+
+    public Stream<GesuchDokument> findByDokumentTyps(final UUID trancheId, final List<DokumentTyp> dokumentTyps) {
+        final var gesuchDokument = QGesuchDokument.gesuchDokument;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchDokument)
+            .where(gesuchDokument.dokumentTyp.in(dokumentTyps).and(gesuchDokument.gesuchTranche.id.eq(trancheId)))
+            .stream();
+    }
 }
