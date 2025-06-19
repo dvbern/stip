@@ -1169,6 +1169,19 @@ class GesuchServiceTest {
         );
     }
 
+    @Test
+    @TestAsSachbearbeiter
+    void makeSureGSGetsNotifiedWhenVerfuegungVersendet() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        gesuchService.gesuchStatusToVersendet(gesuch.getId());
+
+        // assert that notifications are sent to GS
+        Mockito.verify(notificationService).createNeueVerfuegungNotification(gesuch);
+        Mockito.verify(mailService)
+            .sendStandardNotificationEmails(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+    }
+
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {

@@ -1,0 +1,2 @@
+Vous avez reçu une nouvelle décision, qui peut être consultée ici {link}.
+Dans les prochains jours, vous recevrez également cette décision par courrier.

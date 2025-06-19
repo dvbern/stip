@@ -175,6 +175,21 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
     }
 
+    public void createNeueVerfuegungNotification(final Gesuch gesuch) {
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+
+        final var msg = Templates.getNeueVerfuegungText(sprache, "link: todo").render();
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.NEUE_VERFUEGUNG)
+            .setGesuch(gesuch)
+            .setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
     public void createGesuchFehlendeDokumenteNichtEingereichtText(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
@@ -361,5 +376,17 @@ public class NotificationService {
             }
             return nachfristDokumenteChangedDE(nachfristDokumente);
         }
+
+        public static native TemplateInstance neueVerfuegungDE(final String link);
+
+        public static native TemplateInstance neueVerfuegungFR(final String link);
+
+        public static TemplateInstance getNeueVerfuegungText(final Sprache korrespondenzSprache, final String link) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return neueVerfuegungFR(link);
+            }
+            return neueVerfuegungDE(link);
+        }
+
     }
 }
