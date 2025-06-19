@@ -48,8 +48,7 @@ public enum Kanton {
     VD("stip.kanton.vd"),
     VS("stip.kanton.vs"),
     ZG("stip.kanton.zg"),
-    ZH("stip.kanton.zh"),
-    AU("stip.kanton.au");
+    ZH("stip.kanton.zh");
 
     private final String tlKey;
 }

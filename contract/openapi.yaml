@@ -4765,7 +4765,6 @@ components:
         - VS
         - ZG
         - ZH
-        - AUSLAND
       type: string
     WohnsitzKanton:
       enum:
