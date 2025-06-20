@@ -581,7 +581,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.ausbildungsjahr"),
+                translator.translate("stip.pdf.verfuegung.ausbildungsjahr"),
                 ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
@@ -596,8 +596,8 @@ public class PdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.negativeVerfuegung.begruessung.mann"
-            : "stip.pdf.negativeVerfuegung.begruessung.frau";
+            ? "stip.pdf.verfuegung.begruessung.mann"
+            : "stip.pdf.verfuegung.begruessung.frau";
 
         document.add(
             createParagraph(
@@ -615,7 +615,7 @@ public class PdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.bedankung", "DATUM", einreichedatum)
+                translator.translate("stip.pdf.verfuegung.bedankung", "DATUM", einreichedatum)
             )
         );
 
@@ -636,7 +636,7 @@ public class PdfService {
 
         document.add(
             createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
-                .add(translator.translate("stip.pdf.negativeVerfuegung.entschuldigung") + " ")
+                .add(translator.translate("stip.pdf.verfuegung.entschuldigung") + " ")
                 .add(ausbildungsbeitraegeUri)
                 .add(".")
         );
@@ -646,7 +646,7 @@ public class PdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.glueckWunsch")
+                translator.translate("stip.pdf.verfuegung.glueckWunsch")
             ).setPaddingTop(SPACING_SMALL)
         );
 
