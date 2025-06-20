@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -38,6 +39,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -92,6 +94,8 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -206,6 +210,12 @@ class GesuchServiceTest {
 
     @InjectMock
     FallRepository fallRepository;
+
+    @InjectSpy
+    VersendetHandler versendetHandler;
+
+    @InjectMock
+    private VerfuegungRepository verfuegungRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -1173,11 +1183,15 @@ class GesuchServiceTest {
     @TestAsSachbearbeiter
     void makeSureGSGetsNotifiedWhenVerfuegungVersendet() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
+        final var verfuegung = new Verfuegung();
+        verfuegung.setGesuch(gesuch);
+        gesuch.setVerfuegungs(new ArrayList<>());
+        gesuch.getVerfuegungs().add(verfuegung);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         gesuchService.gesuchStatusToVersendet(gesuch.getId());
 
         // assert that notifications are sent to GS
-        Mockito.verify(notificationService).createNeueVerfuegungNotification(gesuch);
+        Mockito.verify(notificationService).createNeueVerfuegungNotification(verfuegung);
         Mockito.verify(mailService)
             .sendStandardNotificationEmails(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
     }

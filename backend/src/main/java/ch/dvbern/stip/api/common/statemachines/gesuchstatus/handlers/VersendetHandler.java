@@ -17,12 +17,15 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import java.util.Comparator;
+
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +45,12 @@ public class VersendetHandler implements GesuchStatusStateChangeHandler {
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        notificationService.createNeueVerfuegungNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        final var latestVerfuegung =
+            gesuch.getVerfuegungs().stream().max(Comparator.comparing(Verfuegung::getTimestampErstellt));
+
+        if (latestVerfuegung.isPresent()) {
+            notificationService.createNeueVerfuegungNotification(latestVerfuegung.get());
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        }
     }
 }
