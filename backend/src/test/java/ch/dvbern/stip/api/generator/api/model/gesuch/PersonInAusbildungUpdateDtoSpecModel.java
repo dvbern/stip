@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import java.time.LocalDate;
 
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AnredeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SpracheDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -36,7 +36,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
         return TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model) -> {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIdentischerZivilrechtlicherWohnsitz(false);
-            model.setNationalitaet(LandDtoSpec.CH);
+            model.setNationalitaetId(TestConstants.TEST_LAND_SCHWEIZ_ID);
             model.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
             model.setNiederlassungsstatus(null);
             model.setEmail("valid@mailbucket.dvbern.ch");

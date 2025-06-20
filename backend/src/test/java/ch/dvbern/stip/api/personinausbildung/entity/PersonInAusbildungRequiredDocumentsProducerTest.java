@@ -25,13 +25,13 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -111,7 +111,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular.setPersonInAusbildung(
             createNewPia()
                 .setSozialhilfebeitraege(false)
-                .setNationalitaet(Land.DE)
+                .setNationalitaet(LandGenerator.initGermany())
                 .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
         );
 
@@ -191,7 +191,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         )
             .setElterns(new HashSet<>() {
                 {
-                    add(new Eltern().setAdresse(new Adresse().setLand(Land.DE)));
+                    add(new Eltern().setAdresse(new Adresse().setLand(LandGenerator.initGermany())));
                 }
             });
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_AUSWEIS);

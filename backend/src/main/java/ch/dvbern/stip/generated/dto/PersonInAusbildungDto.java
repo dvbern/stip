@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid String email;
   private @Valid String telefonnummer;
   private @Valid LocalDate geburtsdatum;
-  private @Valid ch.dvbern.stip.api.stammdaten.type.Land nationalitaet;
+  private @Valid UUID nationalitaetId;
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid Boolean sozialhilfebeitraege;
   private @Valid String nachname;
@@ -201,21 +202,21 @@ public class PersonInAusbildungDto  implements Serializable {
 
   /**
    **/
-  public PersonInAusbildungDto nationalitaet(ch.dvbern.stip.api.stammdaten.type.Land nationalitaet) {
-    this.nationalitaet = nationalitaet;
+  public PersonInAusbildungDto nationalitaetId(UUID nationalitaetId) {
+    this.nationalitaetId = nationalitaetId;
     return this;
   }
 
   
-  @JsonProperty("nationalitaet")
+  @JsonProperty("nationalitaetId")
   @NotNull
-  public ch.dvbern.stip.api.stammdaten.type.Land getNationalitaet() {
-    return nationalitaet;
+  public UUID getNationalitaetId() {
+    return nationalitaetId;
   }
 
-  @JsonProperty("nationalitaet")
-  public void setNationalitaet(ch.dvbern.stip.api.stammdaten.type.Land nationalitaet) {
-    this.nationalitaet = nationalitaet;
+  @JsonProperty("nationalitaetId")
+  public void setNationalitaetId(UUID nationalitaetId) {
+    this.nationalitaetId = nationalitaetId;
   }
 
   /**
@@ -516,7 +517,7 @@ public class PersonInAusbildungDto  implements Serializable {
         Objects.equals(this.email, personInAusbildung.email) &&
         Objects.equals(this.telefonnummer, personInAusbildung.telefonnummer) &&
         Objects.equals(this.geburtsdatum, personInAusbildung.geburtsdatum) &&
-        Objects.equals(this.nationalitaet, personInAusbildung.nationalitaet) &&
+        Objects.equals(this.nationalitaetId, personInAusbildung.nationalitaetId) &&
         Objects.equals(this.wohnsitz, personInAusbildung.wohnsitz) &&
         Objects.equals(this.sozialhilfebeitraege, personInAusbildung.sozialhilfebeitraege) &&
         Objects.equals(this.nachname, personInAusbildung.nachname) &&
@@ -536,7 +537,7 @@ public class PersonInAusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton, zustaendigeKESB);
   }
 
   @Override
@@ -552,7 +553,7 @@ public class PersonInAusbildungDto  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    nationalitaet: ").append(toIndentedString(nationalitaet)).append("\n");
+    sb.append("    nationalitaetId: ").append(toIndentedString(nationalitaetId)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");

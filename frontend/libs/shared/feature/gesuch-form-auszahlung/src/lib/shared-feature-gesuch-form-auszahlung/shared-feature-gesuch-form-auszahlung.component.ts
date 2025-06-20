@@ -14,11 +14,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuszahlungStore } from '@dv/shared/data-access/auszahlung';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  SharedDataAccessStammdatenApiEvents,
-  selectSharedDataAccessStammdatensView,
-} from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
 import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
@@ -43,20 +40,19 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private auszahlungStore = inject(AuszahlungStore);
-  private stammdatenViewSig = this.store.selectSignal(
-    selectSharedDataAccessStammdatensView,
-  );
+
   private languageSig = this.store.selectSignal(selectLanguage);
   private fallIdSig = computed(() => {
     const { gesuch } = this.gesuchsViewSig();
     return gesuch?.fallId;
   });
 
+  laenderStore = inject(LandStore);
   router = inject(Router);
   gesuchsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   hasUnsavedChanges = false;
   auszahlungViewSig = computed<SharedModelAuszahlung>(() => {
-    const laender = this.stammdatenViewSig()?.laender || [];
+    const laender = this.laenderStore.landListViewSig() ?? [];
     const language = this.languageSig();
     const auszahlung = this.auszahlungStore.auszahlung();
     const invalidFormularControls =
@@ -76,6 +72,7 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
   hostClass = 'tw-pt-6';
 
   constructor() {
+    this.laenderStore.loadLaender$();
     effect(() => {
       const fallId = this.fallIdSig();
 
@@ -88,7 +85,6 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
     this.store.dispatch(SharedEventGesuchFormAuszahlung.init());
   }
 

@@ -12,7 +12,6 @@
       [elternteilSig]="editedElternteil"
       [gesuchFormularSig]="gesuchFormular"
       [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp]"
-      [laender]="laenderSig()"
       (saveTriggered)="handleEditorSave($event)"
       (closeTriggered)="handleEditorClose()"
       (deleteTriggered)="handleDeleteElternteil($event)"
