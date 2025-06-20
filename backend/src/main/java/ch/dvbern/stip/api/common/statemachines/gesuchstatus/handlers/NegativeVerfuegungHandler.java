@@ -43,7 +43,7 @@ public class NegativeVerfuegungHandler implements GesuchStatusStateChangeHandler
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        verfuegungService.createNegtativeVerfuegung(
+        verfuegungService.createPdfForNegtativeVerfuegung(
             gesuch,
             gesuch.getVerfuegungs()
                 .stream()

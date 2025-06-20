@@ -57,6 +57,7 @@ public class LandSeeding extends Seeder {
 
         final var laender = getLaenderToSeed();
         landRepository.persist(laender);
+        landRepository.flush();
     }
 
     @Override

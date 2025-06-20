@@ -24,6 +24,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
@@ -95,4 +96,11 @@ public class Fall extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_fall_auszahlung_id"))
     private @Valid Auszahlung auszahlung;
+
+    public Zahlungsverbindung getRelevantZahlungsverbindung() {
+        if (auszahlung.isAuszahlungAnSozialdienst()) {
+            return delegierung.getSozialdienst().getZahlungsverbindung();
+        }
+        return auszahlung.getZahlungsverbindung();
+    }
 }

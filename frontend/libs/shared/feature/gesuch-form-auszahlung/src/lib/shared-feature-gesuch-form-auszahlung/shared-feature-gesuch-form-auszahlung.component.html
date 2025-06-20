@@ -1,14 +1,15 @@
 @let fallId = gesuchsViewSig().gesuch?.fallId;
-<div class="tw-pt-6"></div>
-<a
-  *dvIfGesuchsteller
-  [routerLink]="['/auszahlung', fallId]"
-  [queryParams]="{ backlink: router.url }"
-  class="btn-link tw-pl-3"
-  data-testid="gesuch-form-go-to-auszahlung"
->
-  {{ 'shared.form.auszahlung.goToAuszahlung' | translate }}
-</a>
+<div class="tw-pl-3 tw-pt-6">
+  {{ 'shared.form.auszahlung.goToAuszahlung.pre' | translate }}
+  <a
+    *dvIfGesuchsteller
+    [routerLink]="['/auszahlung', fallId]"
+    [queryParams]="{ backlink: router.url }"
+    class="btn-link"
+    data-testid="gesuch-form-go-to-auszahlung"
+    >{{ 'shared.form.auszahlung.goToAuszahlung.linkText' | translate }}</a
+  >{{ 'shared.form.auszahlung.goToAuszahlung.post' | translate }}
+</div>
 <dv-shared-ui-auszahlung
   class="tw-mt-4 tw-block"
   [auszahlungViewSig]="auszahlungViewSig()"

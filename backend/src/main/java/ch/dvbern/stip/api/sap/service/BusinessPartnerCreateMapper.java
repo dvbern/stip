@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
@@ -40,17 +40,19 @@ public abstract class BusinessPartnerCreateMapper {
     }
 
     @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
-    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(Auszahlung auszahlung);
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(Zahlungsverbindung zahlungsverbindung);
 
     @Named("getExtId")
-    public String getExtId(Auszahlung auszahlung) {
-        return String.valueOf(Math.abs(auszahlung.getId().getMostSignificantBits()));
+    public String getExtId(Zahlungsverbindung zahlungsverbindung) {
+        return String.valueOf(Math.abs(zahlungsverbindung.getId().getMostSignificantBits()));
     }
 
     @Mapping(source = "zahlungsverbindung.vorname", target = "FIRSTNAME")
     @Mapping(source = "zahlungsverbindung.nachname", target = "LASTNAME")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
-    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA toPersData(Auszahlung auszahlung);
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA toPersData(
+        Zahlungsverbindung zahlungsverbindung
+    );
 
     @Mapping(target = "ADRKIND", constant = "XXDEFAULT")
     @Mapping(source = "zahlungsverbindung.adresse.land", target = "COUNTRY", qualifiedByName = "getLandStringFromLand")
@@ -59,7 +61,9 @@ public abstract class BusinessPartnerCreateMapper {
     @Mapping(source = "zahlungsverbindung.adresse.strasse", target = "STREET")
     @Mapping(source = "zahlungsverbindung.adresse.hausnummer", target = "HOUSENO")
     @Mapping(source = "zahlungsverbindung.adresse.plz", target = "POSTLCOD1")
-    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS toAddress(Auszahlung auszahlung);
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS toAddress(
+        Zahlungsverbindung zahlungsverbindung
+    );
 
     @Named("getLandStringFromLand")
     public String getLandStringFromLand(Land land) {
@@ -67,31 +71,35 @@ public abstract class BusinessPartnerCreateMapper {
     }
 
     @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")
-    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(Auszahlung auszahlung);
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
+        Zahlungsverbindung zahlungsverbindung
+    );
 
-    @Mapping(source = "auszahlung", target = "IDKEYS")
-    @Mapping(source = "auszahlung", target = "PERSDATA")
-    @Mapping(source = "auszahlung", target = "ADDRESS", qualifiedByName = "setAdress")
-    @Mapping(source = "auszahlung", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
+    @Mapping(source = "zahlungsverbindung", target = "IDKEYS")
+    @Mapping(source = "zahlungsverbindung", target = "PERSDATA")
+    @Mapping(source = "zahlungsverbindung", target = "ADDRESS", qualifiedByName = "setAdress")
+    @Mapping(source = "zahlungsverbindung", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER toBusinessPartner(
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
     @Named("setAdress")
-    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS> setAdress(Auszahlung auszahlung) {
-        return List.of(toAddress(auszahlung));
+    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS> setAdress(Zahlungsverbindung zahlungsverbindung) {
+        return List.of(toAddress(zahlungsverbindung));
     }
 
     @Named("setPaymentDetail")
-    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(Auszahlung auszahlung) {
-        return List.of(toPaymentDetails(auszahlung));
+    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
+        Zahlungsverbindung zahlungsverbindung
+    ) {
+        return List.of(toPaymentDetails(zahlungsverbindung));
     }
 
     @Named("getSenderParmsDelivery")
     public SenderParmsDelivery getSenderParmsDelivery(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         final SenderParmsDelivery sender = new SenderParmsDelivery();
         sender.setSYSID(sysid);
@@ -104,6 +112,6 @@ public abstract class BusinessPartnerCreateMapper {
     public abstract BusinessPartnerCreateRequest toBusinessPartnerCreateRequest(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 }

@@ -18,7 +18,7 @@ import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { FallAuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiAuszahlungComponent } from '@dv/shared/ui/auszahlung';
@@ -88,7 +88,7 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
     this.store.dispatch(SharedEventGesuchFormAuszahlung.init());
   }
 
-  handleSave(auszahlung: FallAuszahlungUpdate): void {
+  handleSave(auszahlung: AuszahlungUpdate): void {
     const fallId = this.fallIdSig();
 
     if (isDefined(fallId)) {

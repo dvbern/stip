@@ -51,6 +51,8 @@ kstip:
     dv:
       cron: '0 11/2 * * * ? *' # Fires every 2 minutes, starting at XX:11
   bern:
+    seeding:
+      sozialdienste: # Can be set via environment variable using: KSTIP_BERN_SEEDING_SOZIALDIENSTE, KSTIP_DV_SEEDING_SOZIALDIENSTE, etc.
     welcome-mail:
       kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
       kc-path: '${STIP_WELCOME_MAIL_PATH}'
