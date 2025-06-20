@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
@@ -40,8 +39,6 @@ import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -140,38 +137,24 @@ public class SozialdienstSeeding extends Seeder {
             .setName(envSozialdienst.getName())
             .setZahlungsverbindung(zahlungsverbindung);
 
-        try {
-            final var admin = sozialdienstBenutzerRepository
-                .requireById(
-                    seedSozialdienstBenutzer(envSozialdienst.getAdmin(), OidcConstants.ROLE_SOZIALDIENST_ADMIN)
-                );
-            sozialdienst.setSozialdienstAdmin(admin);
+        final var admin = seedSozialdienstBenutzer(envSozialdienst.getAdmin(), OidcConstants.ROLE_SOZIALDIENST_ADMIN);
+        sozialdienst.setSozialdienstAdmin(admin);
 
-            for (final var envMitarbeiter : envSozialdienst.getMitarbeiter()) {
-                try {
-                    final var mitarbeiter = sozialdienstBenutzerRepository
-                        .requireById(
-                            seedSozialdienstBenutzer(envMitarbeiter, OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
-                        );
-                    sozialdienst.getSozialdienstBenutzers().add(mitarbeiter);
-                } catch (Exception e) {
-                    LOG.error("Unable to seed mitarbeiter for Sozialdienst: {}", envSozialdienst.name);
-                }
-            }
-        } catch (Exception e) {
-            LOG.error("Unable to seed admin for Sozialdienst: {}", envSozialdienst.name);
+        for (final var envMitarbeiter : envSozialdienst.getMitarbeiter()) {
+            final var mitarbeiter =
+                seedSozialdienstBenutzer(envMitarbeiter, OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
+            sozialdienst.getSozialdienstBenutzers().add(mitarbeiter);
         }
 
         sozialdienstRepository.persistAndFlush(sozialdienst);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
-    UUID seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String role) {
+    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String role) {
         final var existingUser =
             sozialdienstBenutzerRepository.findByKeycloakId(envSozialdienstBenutzer.getKeycloakId());
 
         if (existingUser.isPresent()) {
-            return existingUser.get().getId();
+            return existingUser.get();
         }
 
         final var rollen = rolleService.mapOrCreateRoles(Set.of(role));
@@ -189,7 +172,7 @@ public class SozialdienstSeeding extends Seeder {
             );
 
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstBenutzer);
-        return sozialdienstBenutzer.getId();
+        return sozialdienstBenutzer;
     }
 
     @Override
