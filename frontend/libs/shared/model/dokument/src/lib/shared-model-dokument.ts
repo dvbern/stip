@@ -65,7 +65,6 @@ export interface SharedModelTableRequiredDokument {
 export interface SharedModelTableCustomDokument {
   dokumentTyp: CustomDokumentTyp;
   canDelete: boolean;
-  showUpload: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
   kommentare: GesuchDokumentKommentar[];
