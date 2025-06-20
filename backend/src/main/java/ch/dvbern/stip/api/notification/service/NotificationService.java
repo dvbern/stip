@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.qute.CheckedTemplate;
@@ -175,18 +176,20 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
     }
 
-    public void createNeueVerfuegungNotification(final Gesuch gesuch) {
-        final var pia = gesuch.getNewestGesuchTranche()
+    public void createNeueVerfuegungNotification(final Verfuegung verfuegung) {
+        final var pia = verfuegung.getGesuch()
+            .getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
             .getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
 
-        final var msg = Templates.getNeueVerfuegungText(sprache, "link: todo").render();
+        final var msg = Templates.getNeueVerfuegungText(sprache).render();
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NEUE_VERFUEGUNG)
-            .setGesuch(gesuch)
-            .setNotificationText(msg);
+            .setGesuch(verfuegung.getGesuch())
+            .setNotificationText(msg)
+            .setContextId(verfuegung.getId());
         notificationRepository.persistAndFlush(notification);
     }
 
@@ -377,15 +380,15 @@ public class NotificationService {
             return nachfristDokumenteChangedDE(nachfristDokumente);
         }
 
-        public static native TemplateInstance neueVerfuegungDE(final String link);
+        public static native TemplateInstance neueVerfuegungDE();
 
-        public static native TemplateInstance neueVerfuegungFR(final String link);
+        public static native TemplateInstance neueVerfuegungFR();
 
-        public static TemplateInstance getNeueVerfuegungText(final Sprache korrespondenzSprache, final String link) {
+        public static TemplateInstance getNeueVerfuegungText(final Sprache korrespondenzSprache) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return neueVerfuegungFR(link);
+                return neueVerfuegungFR();
             }
-            return neueVerfuegungDE(link);
+            return neueVerfuegungDE();
         }
 
     }
