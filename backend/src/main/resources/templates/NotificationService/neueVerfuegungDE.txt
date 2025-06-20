@@ -1,2 +1,3 @@
-Sie haben eine neue Verfügung erhalten, welche hier {link} abgerufen werden kann.
-In den nächsten Tagen, werden Sie die Verfügung auch per Post erhalten
+Sie haben eine neue Verfügung erhalten, welche über den nachfolgenden Link abgerufen werden kann.
+In den nächsten Tagen werden Sie die Verfügung auch per Post erhalten.
+Den Link finden Sie hier:
