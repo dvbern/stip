@@ -6,8 +6,8 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AuszahlungService,
+  AuszahlungUpdate,
   FallAuszahlung,
-  FallAuszahlungUpdate,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -54,7 +54,7 @@ export class AuszahlungStore extends signalStore(
 
   createAuszahlung$ = rxMethod<{
     fallId: string;
-    auszahlung: FallAuszahlungUpdate;
+    auszahlung: AuszahlungUpdate;
   }>(
     pipe(
       tap(() => {
@@ -65,7 +65,7 @@ export class AuszahlungStore extends signalStore(
       switchMap(({ fallId, auszahlung }) =>
         this.auszahlungService
           .createAuszahlungForGesuch$({
-            fallAuszahlungUpdate: auszahlung,
+            auszahlungUpdate: auszahlung,
             fallId,
           })
           .pipe(
@@ -88,7 +88,7 @@ export class AuszahlungStore extends signalStore(
 
   updateAuszahlung$ = rxMethod<{
     fallId: string;
-    auszahlung: FallAuszahlungUpdate;
+    auszahlung: AuszahlungUpdate;
   }>(
     pipe(
       tap(({ auszahlung }) => {
@@ -101,7 +101,7 @@ export class AuszahlungStore extends signalStore(
       switchMap(({ fallId, auszahlung }) =>
         this.auszahlungService
           .updateAuszahlungForGesuch$({
-            fallAuszahlungUpdate: auszahlung,
+            auszahlungUpdate: auszahlung,
             fallId,
           })
           .pipe(

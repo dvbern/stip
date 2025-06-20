@@ -254,6 +254,15 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .orElseThrow(NotFoundException::new);
     }
 
+    public Stream<Gesuch> findGesuchWithPendingSapAction() {
+        final var gesuch = QGesuch.gesuch;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .where(gesuch.pendingSapAction.isNotNull())
+            .stream();
+    }
+
     public List<Gesuch> findGesuchsByGesuchsperiodeId(final UUID gesuchsperiodeId) {
         final var gesuch = QGesuch.gesuch;
 

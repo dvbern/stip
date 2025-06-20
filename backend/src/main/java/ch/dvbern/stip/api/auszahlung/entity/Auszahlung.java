@@ -52,5 +52,4 @@ public class Auszahlung extends AbstractMandantEntity {
 
     @Column(name = "auszahlung_an_sozialdienst", nullable = false)
     private boolean auszahlungAnSozialdienst;
-
 }

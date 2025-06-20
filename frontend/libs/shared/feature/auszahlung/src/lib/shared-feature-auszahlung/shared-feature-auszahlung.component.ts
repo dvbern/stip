@@ -20,7 +20,7 @@ import {
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { FallAuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
 import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { isPending } from '@dv/shared/util/remote-data';
@@ -95,7 +95,7 @@ export abstract class SharedFeatureAuszahlungComponent {
     });
   }
 
-  handleSave(auszahlung: FallAuszahlungUpdate): void {
+  handleSave(auszahlung: AuszahlungUpdate): void {
     const fallId = this.fallIdSig();
 
     if (isDefined(fallId)) {

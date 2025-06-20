@@ -18,21 +18,30 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.notification.repo.NotificationRepository;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
 import jdk.jfr.Description;
@@ -61,15 +70,47 @@ class GesuchTrancheServiceTest {
     @InjectMock
     GesuchTrancheStatusService gesuchTrancheStatusService;
 
+    @InjectSpy
+    NotificationService notificationService;
+
+    @InjectMock
+    NotificationRepository notificationRepository;
+
+    PersonInAusbildung pia;
+
     @BeforeEach
     void setUp() {
-        gesuch = new Gesuch().setGesuchTranchen(
-            List.of(
-                new GesuchTranche()
-                    .setTyp(GesuchTrancheTyp.TRANCHE)
-                    .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX))
-            )
+        pia = new PersonInAusbildung();
+        pia.setVorname("Max");
+        pia.setNachname("Muster");
+        pia.setAnrede(Anrede.HERR);
+        pia.setKorrespondenzSprache(Sprache.FRANZOESISCH);
+
+        var tranchen = new ArrayList<GesuchTranche>();
+        tranchen.add(
+            new GesuchTranche()
+                .setTyp(GesuchTrancheTyp.TRANCHE)
+                .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX))
         );
+        gesuch = new Gesuch().setGesuchTranchen(
+            tranchen
+        );
+
+        // also add latest gesuchtranche, so that there is no exception thrown in MailServiceUtil
+        var latestTranche = new GesuchTranche();
+        latestTranche.setTyp(GesuchTrancheTyp.TRANCHE);
+        latestTranche.setGesuch(gesuch);
+        latestTranche.setGesuchFormular(new GesuchFormular().setPersonInAusbildung(pia));
+        latestTranche.setGueltigkeit(new DateRange(LocalDate.now(), LocalDate.now().plusDays(1)));
+        gesuch.getGesuchTranchen().add(latestTranche);
+
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any());
+
+        var fall = new Fall();
+        var ausbildung = new Ausbildung();
+        ausbildung.setFall(fall);
+        gesuch.setAusbildung(ausbildung);
+
     }
 
     @TestAsGesuchsteller
@@ -151,12 +192,48 @@ class GesuchTrancheServiceTest {
     @Description("Aenderung create should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
     void aenderungEinreichenAllowedStatesTest() {
         // arrange
-        gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
+        var aenderung = gesuch.getGesuchTranchen().get(0);
+        aenderung.setGesuchFormular(new GesuchFormular().setPersonInAusbildung(pia));
+        aenderung.setTyp(GesuchTrancheTyp.AENDERUNG);
+        aenderung.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        aenderung.setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
-        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
-        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        aenderung.setGesuch(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(aenderung);
+        when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(aenderung);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        CreateAenderungsantragRequestDto requestDto = new CreateAenderungsantragRequestDto();
+
+        assertThrows(
+            ForbiddenException.class,
+            () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto)
+        );
+        Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());
+
+        gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(aenderung.getId()));
+
+        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(aenderung.getId()));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Description("Verify that a standard notification has been sent after aenderung einreichen")
+    void verifyMessagesHaveBeenSentWhenAenderungEingereicht() {
+        // arrange
+        var aenderung = gesuch.getGesuchTranchen().get(0);
+        aenderung.setGesuchFormular(new GesuchFormular().setPersonInAusbildung(pia));
+
+        aenderung.setTyp(GesuchTrancheTyp.AENDERUNG);
+        aenderung.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        aenderung.setId(UUID.randomUUID());
+        gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
+        aenderung.setGesuch(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(aenderung);
         when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
@@ -170,10 +247,9 @@ class GesuchTrancheServiceTest {
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
 
-        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGT);
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
+        gesuchTrancheService.aenderungEinreichen(aenderung.getId());
+
+        Mockito.verify(notificationService).createAenderungEingereichtNotification(gesuch);
     }
 }

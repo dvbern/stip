@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -183,6 +184,11 @@ public class Gesuch extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<Verfuegung> verfuegungs = new ArrayList<>();
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pending_sap_action")
+    private BuchhaltungType pendingSapAction;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
