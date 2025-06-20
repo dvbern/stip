@@ -121,7 +121,8 @@ public class TestcaseSeeding extends Seeder {
     protected void seed() {
         LOG.info("Starting testcase seeding");
 
-        if (gesuchRepository.count() != 0) {
+        // Disable Testcase seeding until KSTIP-1968 deletes this
+        if (true) {
             return;
         }
 
@@ -162,8 +163,6 @@ public class TestcaseSeeding extends Seeder {
                 )
             );
 
-            correctAuszahlungAdresse(tranche.getGesuchFormular());
-
             // Update values to match database schema
             final var formular = tranche.getGesuchFormular();
             if (GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(formular)) {
@@ -199,6 +198,7 @@ public class TestcaseSeeding extends Seeder {
             gesuch.setAusbildung(ausbildung);
             tranche.setGesuch(gesuch);
             tranche.getGesuchFormular().setTranche(tranche);
+            correctAuszahlungAdresse(tranche.getGesuchFormular());
 
             fallRepository.persist(fall);
             ausbildungRepository.persist(ausbildung);
@@ -216,7 +216,7 @@ public class TestcaseSeeding extends Seeder {
 
             final var benutzer = new Benutzer()
                 .setNachname("Seeding")
-                .setVorname("Admin")
+                .setVorname("EnvSozialdienstAdmin")
                 .setBenutzerStatus(BenutzerStatus.AKTIV)
                 .setRollen(Set.of(adminRolle, sachbearbeiterRolle))
                 .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));

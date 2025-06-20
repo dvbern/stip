@@ -17,37 +17,12 @@
 
 package ch.dvbern.stip.api.auszahlung.repo;
 
-import java.util.stream.Stream;
-
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.entity.QAuszahlung;
-import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AuszahlungRepository implements BaseRepository<Auszahlung> {
-    private final EntityManager entityManager;
-    static final QAuszahlung AUSZAHLUNG = QAuszahlung.auszahlung;
-
-    public Stream<Auszahlung> findAuszahlungWithPendingSapDelivery() {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(AUSZAHLUNG)
-            .where(AUSZAHLUNG.zahlungsverbindung.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
-            .stream();
-    }
-
-    public Stream<Auszahlung> findAuszahlungWithPendingSapAction() {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(AUSZAHLUNG)
-            .where(
-                AUSZAHLUNG.zahlungsverbindung.sapDelivery.pendingSapAction.isNotNull()
-                    .and(AUSZAHLUNG.zahlungsverbindung.sapDelivery.sapStatus.eq(SapStatus.SUCCESS))
-            )
-            .stream();
-    }
 }

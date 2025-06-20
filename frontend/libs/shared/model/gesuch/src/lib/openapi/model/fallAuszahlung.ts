@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { FallAuszahlungUpdate } from './fallAuszahlungUpdate';
+import { AuszahlungUpdate } from './auszahlungUpdate';
 
 export interface FallAuszahlung { 
-    auszahlung?: FallAuszahlungUpdate;
+    auszahlung?: AuszahlungUpdate;
     isDelegated: boolean;
 }
 
