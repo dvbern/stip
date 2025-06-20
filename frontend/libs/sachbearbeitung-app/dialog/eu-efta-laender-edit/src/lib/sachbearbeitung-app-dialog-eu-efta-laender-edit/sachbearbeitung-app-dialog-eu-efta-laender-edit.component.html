@@ -1,0 +1,111 @@
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="close()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-2xl">
+    @if (dialogData.land) {
+      {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.edit' | translate }}
+    } @else {
+      {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.create' | translate }}
+    }
+  </h1>
+  <form
+    [formGroup]="form"
+    data-testid="form-euEftaLaender-form"
+    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    novalidate
+  >
+    <!-- Ländercode BFS -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label' | translate }}*</mat-label>
+      <input
+        data-testid="form-euEftaLaender-laendercodeBfs"
+        matInput
+        type="text"
+        [maskito]="maskitoBfsCode"
+        [formControlName]="'laendercodeBfs'"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'notUniqueBfs'">
+        {{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.error.notUniqueBfs' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- ISO3 - Code -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.label' | translate }}</mat-label>
+      <input
+        data-testid="form-euEftaLaender-iso3code"
+        matInput
+        type="text"
+        [maskito]="maskitoIso3Code"
+        formControlName="iso3code"
+      />
+      <mat-error *dvSharedUiFormMessageError="'notUniqueIso3'">
+        {{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.error.notUniqueIso3' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- De Kurzform -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-deKurzform" matInput type="text" formControlName="deKurzform" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Fr Kurzform -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-frKurzform" matInput type="text" formControlName="frKurzform" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- It Kurzform -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.itKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-itKurzform" matInput type="text" formControlName="itKurzform" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Eng Kurzform -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.enKurzform.label' | translate }}*</mat-label>
+      <input data-testid="form-euEftaLaender-enKurzform" matInput type="text" formControlName="enKurzform" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Eintrag Gültig -->
+    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="eintragGueltig">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | translate }}</mat-label>
+    </mat-checkbox>
+    <!-- EU/Efta -->
+    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="isEuEfta">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | translate }}</mat-label>
+    </mat-checkbox>
+
+    <div class="d-flex mt-4 justify-content-between tw-col-span-full">
+      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="close()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button
+        type="submit"
+        data-testid="dialog-submit"
+        [disabled]="form.invalid || form.pristine"
+        class="btn btn-primary ms-2"
+        (click)="confirm()"
+      >
+        {{ 'sachbearbeitung-app.admin.euEftaLaender-dialog.submit' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

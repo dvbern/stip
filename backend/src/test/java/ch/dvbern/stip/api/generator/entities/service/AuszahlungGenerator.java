@@ -31,7 +31,7 @@ public final class AuszahlungGenerator {
         // adresse.setStrasse("Bundesstadtstrasse");
         // adresse.setOrt("Hauptstadtort");
         // adresse.setPlz("9299");
-        // adresse.setLand(Land.CH);
+        // adresse.setLand(LandGenerator.initSwitzerland());
         // adresse.setHausnummer("9298");
         // auszahlung.setAdresse(adresse);
         // auszahlung.setSapBusinessPartnerId(1427);

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.partner.service;
 
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.generated.dto.PartnerDto;
@@ -24,7 +25,7 @@ import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 public interface PartnerMapper {
     Partner toEntity(PartnerDto partnerDto);
 

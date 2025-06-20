@@ -94,7 +94,7 @@ public class GesuchStatusService {
 
         StateMachineUtil.addExit(
             config,
-            transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
+            transition -> validationService.validateGesuchForTransition(gesuch, transition),
             Gesuchstatus.values()
         );
 

@@ -27,7 +27,6 @@ import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { selectLaender } from '@dv/shared/data-access/stammdaten';
 import { Anrede, FallWithDelegierung } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
@@ -88,7 +87,6 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   isPending = isPending;
 
   languageSig = this.store.selectSignal(selectLanguage);
-  laenderSig = this.store.selectSignal(selectLaender);
 
   static open(dialog: MatDialog, data: DelegierungDialogData) {
     return dialog.open<

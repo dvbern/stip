@@ -23,9 +23,9 @@ import java.util.List;
 
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -67,7 +67,7 @@ public abstract class BusinessPartnerCreateMapper {
 
     @Named("getLandStringFromLand")
     public String getLandStringFromLand(Land land) {
-        return land.name();
+        return land.getDeKurzform();
     }
 
     @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")

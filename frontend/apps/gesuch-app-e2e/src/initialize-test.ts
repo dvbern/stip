@@ -64,10 +64,10 @@ export const initializeTest = (
         );
       });
 
-      const body: FallDashboardItem[] | undefined = await response.json();
-      gesuchId = body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+      const body: FallDashboardItem | undefined = await response.json();
+      gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
-        body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
+        body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
 
       if (!gesuchId || !trancheId) {
         throw new Error('Failed to create new gesuch');

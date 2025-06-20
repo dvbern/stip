@@ -24,13 +24,14 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -69,14 +70,19 @@ class SozialdienstServiceTest {
     private SozialdienstBenutzer sozialdienstAdminOfSozialdienstB;
 
     @Inject
-    private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
-    @Inject
-    private SozialdienstRepository sozialdienstRepository;
+    SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     @Inject
-    private SozialdienstService sozialdienstService;
+    SozialdienstRepository sozialdienstRepository;
+
+    @Inject
+    SozialdienstService sozialdienstService;
+
+    @Inject
+    LandService landService;
+
     @InjectMock
-    private SozialdienstBenutzerService sozialdienstBenutzerService;
+    SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
     @BeforeEach
@@ -106,16 +112,17 @@ class SozialdienstServiceTest {
         sozialdienstAdminOfSozialdienstB.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdminOfSozialdienstB.setBenutzerStatus(BenutzerStatus.AKTIV);
 
+        final var switzerland = landService.requireLandById(TestConstants.TEST_LAND_SCHWEIZ_ID);
         Adresse adresse1 = new Adresse();
         adresse1.setPlz("3000");
-        adresse1.setLand(Land.CH);
+        adresse1.setLand(switzerland);
         adresse1.setHausnummer("1");
         adresse1.setStrasse("Musterstrasse");
         adresse1.setOrt("Ort");
 
         Adresse adresse2 = new Adresse();
         adresse2.setPlz("3000");
-        adresse2.setLand(Land.CH);
+        adresse2.setLand(switzerland);
         adresse2.setHausnummer("1");
         adresse2.setStrasse("Musterstrasse");
         adresse2.setOrt("Ort");

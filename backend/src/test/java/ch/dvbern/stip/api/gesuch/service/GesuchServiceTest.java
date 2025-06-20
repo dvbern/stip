@@ -84,7 +84,6 @@ import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -256,7 +255,7 @@ class GesuchServiceTest {
         var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
-        pia.setNationalitaet(Land.NA);
+        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
         pia.setHeimatort(null);
         GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
             gesuchUpdateDto,
@@ -1220,7 +1219,7 @@ class GesuchServiceTest {
         Gesuch gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
         var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
+        doNothing().when(gesuchValidatorService).validateGesuchForTransition(any(), any());
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));

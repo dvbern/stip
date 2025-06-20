@@ -28,15 +28,16 @@ import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   ElternTyp,
   ElternUpdate,
   GesuchFormularType,
-  Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
 } from '@dv/shared/model/gesuch';
 import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
+import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -112,13 +113,14 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
   private store = inject(Store);
+  private landStore = inject(LandStore);
 
   gesuchFormularSig = input.required<GesuchFormularType>();
   elternteilSig = input.required<
     Omit<Partial<ElternUpdate>, 'elternTyp'> &
       Required<Pick<ElternUpdate, 'elternTyp'>>
   >();
-  @Input({ required: true }) laender!: Land[];
+
   @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
@@ -265,14 +267,17 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
     });
     const landChangedSig = this.formUtils.signalFromChanges(
-      this.form.controls.adresse.controls.land,
+      this.form.controls.adresse.controls.landId,
       { useDefault: true },
     );
 
-    // make SVN required if CH
+    // sozialversicherungsnummer required if land is CH
     effect(() => {
-      const land = landChangedSig();
-      const svnIsRequired = land === 'CH';
+      const landId = landChangedSig();
+      const laender = this.landStore.landListViewSig();
+      const svnIsRequired =
+        laender?.find((l) => l.id === landId)?.laendercodeBfs ===
+        BFSCODE_SCHWEIZ;
 
       this.formUtils.setRequired(
         this.form.controls.sozialversicherungsnummer,

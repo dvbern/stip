@@ -34,7 +34,7 @@ export const ausbildung: AusbildungValues = {
 
 export const adressen = {
   person: {
-    land: 'CH',
+    landId: 'Schweiz',
     coAdresse: '',
     strasse: 'Kramgasse',
     hausnummer: '1',
@@ -42,7 +42,7 @@ export const adressen = {
     ort: 'Bern',
   },
   mutter: {
-    land: 'CH',
+    landId: 'Schweiz',
     coAdresse: '',
     strasse: 'Aarbergergasse',
     hausnummer: '1',
@@ -61,7 +61,7 @@ export const person = (seed: string): PersonInAusbildung => ({
   email: 'max.muster@dvbern.ch',
   telefonnummer: '0316338555',
   geburtsdatum: `01.01.${specificYearsAgo(20)}`,
-  nationalitaet: 'CH',
+  nationalitaetId: 'Schweiz',
   heimatort: 'Bern',
   zivilstand: 'LEDIG',
   wohnsitz: 'MUTTER_VATER',

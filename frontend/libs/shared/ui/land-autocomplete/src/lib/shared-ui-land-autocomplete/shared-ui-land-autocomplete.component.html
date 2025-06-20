@@ -1,0 +1,46 @@
+<mat-form-field dvSharedUiFormField class="tw-w-full">
+  <mat-label>{{ labelKeySig() | translate }}</mat-label>
+
+  <input
+    matInput
+    [formControl]="autocompleteControl"
+    (blur)="onBlur()"
+    [attr.data-testid]="testIdSig()"
+    [placeholder]="'shared.form.select.empty' | translate"
+    [matAutocomplete]="landAutocomplete"
+  />
+
+  @if (autocompleteControl.value && autocompleteControl.enabled) {
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="resetControl()"
+      data-testid="button-form-education-ausbildungsstaette-clear"
+    >
+      <span class="material-symbols-rounded align-middle">clear</span>
+    </button>
+  }
+  <mat-autocomplete
+    (opened)="toggleOpen()"
+    (closed)="toggleOpen()"
+    [panelWidth]="'320px'"
+    [displayWith]="languageDisplayFieldFNSig()"
+    #landAutocomplete="matAutocomplete"
+  >
+    @for (land of laenderValuesSig(); track $index) {
+      <mat-option [value]="land" [attr.data-testid]="land.deKurzform">
+        {{ land.displayValue }}
+      </mat-option>
+    }
+  </mat-autocomplete>
+
+  <mat-hint *dvZuvorHint="zuvorHintLandNameSig()"></mat-hint>
+  <mat-error *dvSharedUiFormMessageError="'required'">
+    {{ 'shared.form.error.required' | translate }}
+  </mat-error>
+  <mat-error *dvSharedUiFormMessageError="'invalidLand'">
+    {{ 'shared.form.error.land.invalidLand' | translate }}
+  </mat-error>
+</mat-form-field>

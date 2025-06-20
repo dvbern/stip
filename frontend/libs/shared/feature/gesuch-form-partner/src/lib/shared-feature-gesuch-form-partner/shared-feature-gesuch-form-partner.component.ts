@@ -4,11 +4,10 @@ import {
   Component,
   ElementRef,
   OnInit,
-  computed,
   effect,
   inject,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -23,18 +22,15 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
-  Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
@@ -57,7 +53,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
@@ -114,21 +109,14 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private countriesService = inject(SharedUtilCountriesService);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly maskitoNumber = maskitoNumber;
-
-  readonly Land = Land;
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   gotReenabled$ = new Subject<object>();
-  laenderSig = computed(() => this.viewSig().laender);
-  translatedLaender$ = toObservable(this.laenderSig).pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender)),
-  );
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],
@@ -281,7 +269,6 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormPartner.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   handleSaveAndContinue() {
