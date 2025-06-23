@@ -1,84 +1,121 @@
-<form [formGroup]="form" data-testid="form-benutzerverwaltung-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
-  @if (store.benutzer() | rdIsPending) {
+<form
+  [formGroup]="form"
+  data-testid="form-benutzerverwaltung-form"
+  novalidate
+  class="tw-dv-form-grid tw-mt-6"
+  (ngSubmit)="handleSubmit()"
+>
+  @if (store.benutzer() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
-    <div class="row g-4">
-      <!-- Name -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}</mat-label>
-          <input formControlName="name" data-testid="form-benutzerverwaltung-name" matInput dvMaxLength type="text" />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <!-- Vorname -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.vorname.label' | translate }}</mat-label>
-          <input
-            formControlName="vorname"
-            data-testid="form-benutzerverwaltung-vorname"
-            matInput
-            dvMaxLength
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row g-4 mt-1">
-      <!-- E-Mail Adresse -->
-      <div
-        class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
-        [class.readonly]="form.controls.email.disabled"
-      >
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>
-            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
-          </mat-label>
-          <input
-            data-testid="form-benutzerverwaltung-email"
-            formControlName="email"
-            matInput
-            dvMaxLength
-            type="email"
-            (blur)="trimEmail()"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'pattern'">
-            {{ 'shared.form.error.email' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Name -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}</mat-label>
+      <input formControlName="name" data-testid="form-benutzerverwaltung-name" matInput dvMaxLength type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-    <h2 class="pt-3 h4">
+    <!-- Vorname -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.vorname.label' | translate }}</mat-label>
+      <input formControlName="vorname" data-testid="form-benutzerverwaltung-vorname" matInput dvMaxLength type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Telefonnummer -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+      <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="telefonnummer"
+        data-testid="form-benutzerverwaltung-telefonnummer"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
+        {{ 'shared.form.error.telefonnummer' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- E-Mail Adresse -->
+    <mat-form-field dvSharedUiFormField [class.readonly]="form.controls.email.disabled">
+      <mat-label>
+        {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
+      </mat-label>
+      <input
+        data-testid="form-benutzerverwaltung-email"
+        formControlName="email"
+        matInput
+        dvMaxLength
+        type="email"
+        (blur)="trimEmail()"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'pattern'">
+        {{ 'shared.form.error.email' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Funktion DE -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label' | translate }}</mat-label>
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="funktionDe"
+        data-testid="form-benutzerverwaltung-funktionDe"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Funktion FR -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label' | translate }}</mat-label>
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="funktionFr"
+        data-testid="form-benutzerverwaltung-funktionFr"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <h2 class="h4 tw-col-start-1 tw-pt-3">
       {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | translate }}
     </h2>
-    <div class="row g-4 mt-1">
-      <mat-selection-list
-        [compareWith]="compareById"
-        formControlName="roles"
-        class="col-12 col-md-6 col-xl-4"
-        [disableRipple]="true"
-      >
-        @for (role of store.availableRoles.data(); track role.id) {
-          <mat-list-option [value]="role" togglePosition="before">{{ role.name }}</mat-list-option>
-        }
-      </mat-selection-list>
-    </div>
+    <mat-selection-list
+      [compareWith]="compareById"
+      formControlName="roles"
+      class="tw-col-start-1"
+      [disableRipple]="true"
+    >
+      @for (role of store.availableRoles.data(); track role.id) {
+        <mat-list-option [value]="role" togglePosition="before">{{
+          'shared.role.' + role.name | translate
+        }}</mat-list-option>
+      }
+    </mat-selection-list>
 
     @if (!form.disabled) {
       <dv-shared-ui-form-save
-        class="mt-4"
+        class="tw-col-start-1 tw-mt-4"
         [disabled]="form.invalid || form.pristine"
-        [loading]="store.benutzer() | rdIsPending"
+        [loading]="store.benutzer() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>
     }
   }
