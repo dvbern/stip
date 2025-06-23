@@ -140,6 +140,7 @@ public class SozialdienstSeeding extends Seeder {
 
         final var admin = seedSozialdienstBenutzer(envSozialdienst.getAdmin(), OidcConstants.ROLE_SOZIALDIENST_ADMIN);
         sozialdienst.setSozialdienstAdmin(admin);
+        sozialdienst.getSozialdienstBenutzers().add(admin);
 
         for (final var envMitarbeiter : envSozialdienst.getMitarbeiter()) {
             final var mitarbeiter =

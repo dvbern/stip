@@ -103,6 +103,23 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
         }
     }
 
+    @Transactional
+    public void canDeleteSozialdienstBenutzer(final UUID sozialdienstBenutzerId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(sozialdienstBenutzerId);
+        final var sozialdienstBySozialdienstAdmin =
+            sozialdienstRepository.getSozialdienstBySozialdienstAdmin(sozialdienstBenutzer);
+        if (sozialdienstBySozialdienstAdmin != null) {
+            forbidden();
+        }
+
+        canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
+    }
+
     public void canCreateSozialdienstBenutzer() {
         permitAll();
     }

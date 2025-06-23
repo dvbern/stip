@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -40,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestScoped
 public class SozialdienstService {
-    private final BenutzerService benutzerService;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
@@ -57,6 +55,8 @@ public class SozialdienstService {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
+        sozialdienst.getSozialdienstBenutzers().add(admin);
+
         final var zahlungsverbindung = zahlungsverbindungService.createZahlungsverbindung(dto.getZahlungsverbindung());
         sozialdienst.setZahlungsverbindung(zahlungsverbindung);
         sozialdienstRepository.persistAndFlush(sozialdienst);
