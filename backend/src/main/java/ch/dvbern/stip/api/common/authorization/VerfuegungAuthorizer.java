@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class VerfuegungAuthorizer extends BaseAuthorizer {
-
+    private final SozialdienstService sozialdienstService;
     private final BenutzerService benutzerService;
     private final VerfuegungRepository verfuegungRepository;
 
@@ -41,7 +42,7 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         final var gesuch = verfuegung.getGesuch();
         if (
             isSachbearbeiter(currentBenutzer)
-            || AuthorizerUtil.isGesuchstellerOfIgnoreDelegation(gesuch.getAusbildung().getFall(), currentBenutzer)
+            || AuthorizerUtil.isGesuchstellerOf(gesuch.getAusbildung().getFall(), currentBenutzer, sozialdienstService)
         ) {
             return;
         }
