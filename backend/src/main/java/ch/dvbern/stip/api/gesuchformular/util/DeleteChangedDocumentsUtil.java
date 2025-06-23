@@ -71,8 +71,8 @@ public class DeleteChangedDocumentsUtil {
     }
 
     List<DokumentTyp> getDocumentsToDeleteForPersonInAusbildung(
-        final PersonInAusbildungUpdateDto oldPia,
-        final PersonInAusbildung newPia
+        final PersonInAusbildungUpdateDto newPia,
+        final PersonInAusbildung oldPia
     ) {
         final var toDelete = new ArrayList<DokumentTyp>();
         if (hasChanged(newPia.getGeburtsdatum(), oldPia.getGeburtsdatum())) {

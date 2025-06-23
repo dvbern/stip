@@ -724,7 +724,8 @@ class GesuchFormularMapperTest {
         formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
 
         final var mapper = createMapper();
-        var formular = mapper.toEntity(formularDto).setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        var formular = mapper.toEntity(formularDto);
+        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
         GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
         var darlehen = new DarlehenDto();

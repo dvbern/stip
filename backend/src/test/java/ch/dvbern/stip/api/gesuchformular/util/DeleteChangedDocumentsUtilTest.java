@@ -78,7 +78,7 @@ class DeleteChangedDocumentsUtilTest {
     }
 
     @Test
-    void deleteChangedDocumentsUtilIgnoresTranchen() {
+    void deleteChangedDocumentsDoesNothingIfTrancheIsUpdated() {
         // Arrange
         final var gesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
         Mockito.doNothing().when(gesuchDokumentService).deleteDokumenteForTranche(Mockito.any(), Mockito.any());
@@ -95,12 +95,12 @@ class DeleteChangedDocumentsUtilTest {
     @ParameterizedTest
     @ArgumentsSource(GetDocumentsForPersonInAusbildungArgumentsProvider.class)
     void getDocumentsForPersonInAusbildungTest(
-        final PersonInAusbildungUpdateDto oldPia,
-        final PersonInAusbildung newPia,
+        final PersonInAusbildungUpdateDto newPia,
+        final PersonInAusbildung oldPia,
         final DokumentTyp expected
     ) {
         // Act
-        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForPersonInAusbildung(oldPia, newPia);
+        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForPersonInAusbildung(newPia, oldPia);
 
         // Assert
         assertExpectedResult(actual, expected);
