@@ -1,6 +1,8 @@
 @let view = dokumenteViewSig();
 @let expandedRowId = expandedRowSig();
-
+@if (view.loading) {
+  <dv-shared-ui-loading class="opacity-loading-spinner tw-absolute" type="icon"></dv-shared-ui-loading>
+}
 <h3>
   {{ 'shared.dokumente.table.title.customDocuments' | translate }}
 </h3>
