@@ -98,9 +98,20 @@ public class PdfService {
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream createNegativeVerfuegungPdf(final Gesuch gesuch, final StipDecision stipDecision) {
+    public ByteArrayOutputStream createNegativeVerfuegungPdf(
+        final Gesuch gesuch,
+        final StipDecision stipDecision
+    ) {
         final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
         return this.createPdf(gesuch, negativeVerfuegungSection, stipDecision);
+    }
+
+    public ByteArrayOutputStream createVerfuegungOhneAnspruch(
+        final Gesuch gesuch
+    ) {
+        final PdfSection negativeVerfuegungSection =
+            this::verfuegungOhneAnspruch;
+        return this.createPdf(gesuch, negativeVerfuegungSection, null);
     }
 
     private ByteArrayOutputStream createPdf(
@@ -399,12 +410,139 @@ public class PdfService {
         document.add(mainTable);
     }
 
+    private void verfuegungOhneAnspruch(
+        final Gesuch gesuch,
+        final Document document,
+        final float leftMargin,
+        final TL translator,
+        final StipDecision stipDecision
+    ) throws IOException {
+        final LocalDate ausbildungsjahrVon = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .map(GesuchTranche::getGueltigkeit)
+            .min(Comparator.comparing(DateRange::getGueltigAb))
+            .get()
+            .getGueltigAb();
+
+        final LocalDate ausbildungsjahrBis = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .map(GesuchTranche::getGueltigkeit)
+            .max(Comparator.comparing(DateRange::getGueltigBis))
+            .get()
+            .getGueltigBis();
+
+        final String ausbildungsjahr = String.format(
+            " %d/%d",
+            ausbildungsjahrVon.getYear(),
+            ausbildungsjahrBis.getYear()
+        );
+        document.add(
+            createParagraph(
+                pdfFontBold,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegung.ausbildungsjahr"
+                ),
+                ausbildungsjahr,
+                String.format(
+                    " (%s - %s)",
+                    DateUtil.formatDate(ausbildungsjahrVon),
+                    DateUtil.formatDate(ausbildungsjahrBis)
+                )
+            )
+        );
+
+        final PersonInAusbildung personInAusbildung = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+
+        final String translateKey = personInAusbildung
+            .getAnrede()
+            .equals(Anrede.HERR)
+                ? "stip.pdf.verfuegung.begruessung.mann"
+                : "stip.pdf.verfuegung.begruessung.frau";
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(translateKey) + " ",
+                personInAusbildung.getNachname()
+            )
+        );
+
+        final String einreichedatum = DateUtil.formatDate(
+            Objects.requireNonNull(gesuch.getEinreichedatum())
+        );
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegung.bedankung",
+                    "DATUM",
+                    einreichedatum
+                )
+            )
+        );
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegungOhneAnspruch.textBlock.eins"
+                )
+            )
+        );
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegungOhneAnspruch.textBlock.zwei"
+                )
+            )
+        );
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegungOhneAnspruch.textBlock.drei"
+                )
+            )
+        );
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegungOhneAnspruch.textBlock.vier"
+                )
+            ).add(ausbildungsbeitraegeUri)
+        );
+    }
+
     private void negativeVerfuegung(
         final Gesuch gesuch,
         final Document document,
         final float leftMargin,
         final TL translator,
-        StipDecision stipDecision
+        final StipDecision stipDecision
     ) throws IOException {
         final Locale locale = gesuch
             .getLatestGesuchTranche()
@@ -426,6 +564,7 @@ public class PdfService {
             .min(Comparator.comparing(DateRange::getGueltigAb))
             .get()
             .getGueltigAb();
+
         final LocalDate ausbildungsjahrBis = gesuch
             .getGesuchTranchen()
             .stream()
@@ -444,7 +583,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.ausbildungsjahr"),
+                translator.translate("stip.pdf.verfuegung.ausbildungsjahr"),
                 ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
@@ -459,8 +598,8 @@ public class PdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.negativeVerfuegung.begruessung.mann"
-            : "stip.pdf.negativeVerfuegung.begruessung.frau";
+            ? "stip.pdf.verfuegung.begruessung.mann"
+            : "stip.pdf.verfuegung.begruessung.frau";
 
         document.add(
             createParagraph(
@@ -478,7 +617,7 @@ public class PdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.negativeVerfuegung.bedankung", "DATUM", einreichedatum)
+                translator.translate("stip.pdf.verfuegung.bedankung", "DATUM", einreichedatum)
             )
         );
 

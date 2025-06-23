@@ -16,7 +16,6 @@ import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
 import { Zivilstand } from './zivilstand';
 import { Anrede } from './anrede';
-import { Land } from './land';
 import { Wohnsitz } from './wohnsitz';
 
 export interface PersonInAusbildungUpdate { 
@@ -28,7 +27,7 @@ export interface PersonInAusbildungUpdate {
     email: string;
     telefonnummer: string;
     geburtsdatum: string;
-    nationalitaet: Land;
+    nationalitaetId: string;
     /**
      * Required nur wenn Land = CH
      */

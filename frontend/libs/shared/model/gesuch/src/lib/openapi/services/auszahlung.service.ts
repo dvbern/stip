@@ -18,8 +18,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { AuszahlungUpdate } from '../model/auszahlungUpdate';
 import { FallAuszahlung } from '../model/fallAuszahlung';
-import { FallAuszahlungUpdate } from '../model/fallAuszahlungUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 
 export interface AuszahlungServiceCreateAuszahlungForGesuchRequestParams {
     fallId: string;
-    fallAuszahlungUpdate: FallAuszahlungUpdate;
+    auszahlungUpdate: AuszahlungUpdate;
 }
 
 export interface AuszahlungServiceGetAuszahlungForGesuchRequestParams {
@@ -36,7 +36,7 @@ export interface AuszahlungServiceGetAuszahlungForGesuchRequestParams {
 
 export interface AuszahlungServiceUpdateAuszahlungForGesuchRequestParams {
     fallId: string;
-    fallAuszahlungUpdate: FallAuszahlungUpdate;
+    auszahlungUpdate: AuszahlungUpdate;
 }
 
 
@@ -117,9 +117,9 @@ export class AuszahlungService {
         if (fallId === null || fallId === undefined) {
             throw new Error('Required parameter fallId was null or undefined when calling createAuszahlungForGesuch$.');
         }
-        const fallAuszahlungUpdate = requestParameters.fallAuszahlungUpdate;
-        if (fallAuszahlungUpdate === null || fallAuszahlungUpdate === undefined) {
-            throw new Error('Required parameter fallAuszahlungUpdate was null or undefined when calling createAuszahlungForGesuch$.');
+        const auszahlungUpdate = requestParameters.auszahlungUpdate;
+        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
+            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling createAuszahlungForGesuch$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -180,7 +180,7 @@ export class AuszahlungService {
         return this.httpClient.request<FallAuszahlung>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: fallAuszahlungUpdate,
+                body: auszahlungUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -277,9 +277,9 @@ export class AuszahlungService {
         if (fallId === null || fallId === undefined) {
             throw new Error('Required parameter fallId was null or undefined when calling updateAuszahlungForGesuch$.');
         }
-        const fallAuszahlungUpdate = requestParameters.fallAuszahlungUpdate;
-        if (fallAuszahlungUpdate === null || fallAuszahlungUpdate === undefined) {
-            throw new Error('Required parameter fallAuszahlungUpdate was null or undefined when calling updateAuszahlungForGesuch$.');
+        const auszahlungUpdate = requestParameters.auszahlungUpdate;
+        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
+            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling updateAuszahlungForGesuch$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -340,7 +340,7 @@ export class AuszahlungService {
         return this.httpClient.request<FallAuszahlung>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: fallAuszahlungUpdate,
+                body: auszahlungUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

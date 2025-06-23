@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 import {
   getChangesForForm,
   selectChangeForView,
@@ -9,19 +8,17 @@ import {
 
 export const selectSharedFeatureGesuchFormPartnerView = createSelector(
   selectSharedDataAccessGesuchsView,
-  selectSharedDataAccessStammdatensView,
-  (gesuchsView, stammdatenView) => {
+  (gesuchsView) => {
     const { current, previous } = selectChangeForView(gesuchsView, 'partner');
 
     return {
-      loading: gesuchsView.loading || stammdatenView.loading,
+      loading: gesuchsView.loading,
       gesuch: gesuchsView.gesuch,
       gesuchId: gesuchsView.gesuchId,
       trancheId: gesuchsView.trancheId,
       formChanges: getChangesForForm(current, previous),
       allowTypes: gesuchsView.allowTypes,
       gesuchFormular: gesuchsView.gesuchFormular,
-      laender: stammdatenView.laender,
       readonly: gesuchsView.readonly,
       permissions: gesuchsView.permissions,
     };

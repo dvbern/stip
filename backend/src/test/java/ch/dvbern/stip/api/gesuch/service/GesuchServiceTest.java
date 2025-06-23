@@ -17,10 +17,11 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -80,10 +81,10 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -106,6 +107,8 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -217,6 +220,11 @@ class GesuchServiceTest {
     @InjectMock
     private VerfuegungRepository verfuegungRepository;
 
+    @InjectMock
+    PdfService pdfService;
+
+    @InjectMock
+    StipDecisionTextRepository stipDecisionTextRepository;
     static final String TENANT_ID = "bern";
 
     @BeforeAll
@@ -251,7 +259,7 @@ class GesuchServiceTest {
         var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
-        pia.setNationalitaet(Land.NA);
+        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
         pia.setHeimatort(null);
         GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
             gesuchUpdateDto,
@@ -1179,23 +1187,6 @@ class GesuchServiceTest {
         );
     }
 
-    @Test
-    @TestAsSachbearbeiter
-    void makeSureGSGetsNotifiedWhenVerfuegungVersendet() {
-        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
-        final var verfuegung = new Verfuegung();
-        verfuegung.setGesuch(gesuch);
-        gesuch.setVerfuegungs(new ArrayList<>());
-        gesuch.getVerfuegungs().add(verfuegung);
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        gesuchService.gesuchStatusToVersendet(gesuch.getId());
-
-        // assert that notifications are sent to GS
-        Mockito.verify(notificationService).createNeueVerfuegungNotification(verfuegung);
-        Mockito.verify(mailService)
-            .sendStandardNotificationEmails(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
-    }
-
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
@@ -1232,10 +1223,16 @@ class GesuchServiceTest {
         Gesuch gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
         var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
+        doNothing().when(gesuchValidatorService).validateGesuchForTransition(any(), any());
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
+        var verfuegung = new Verfuegung();
+        verfuegung.setTimestampErstellt(LocalDateTime.now());
+        gesuch.getVerfuegungs().add(verfuegung);
+        when(pdfService.createVerfuegungOhneAnspruch(any())).thenReturn(new ByteArrayOutputStream());
+        when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(

@@ -10,7 +10,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormControl,
@@ -28,17 +28,15 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { isAfter, subDays, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Anrede,
   DokumentTyp,
-  Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Niederlassungsstatus,
   PATTERN_EMAIL,
@@ -51,6 +49,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
+import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   SharedPatternDocumentUploadComponent,
@@ -66,6 +65,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
+import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -75,7 +75,6 @@ import {
   addWohnsitzControls,
   prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -128,6 +127,7 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
+    SharedUiLandAutocompleteComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -137,9 +137,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
   private einreichenStore = inject(EinreichenStore);
+  private landStore = inject(LandStore);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
@@ -158,14 +158,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   updateValidity$ = new Subject<unknown>();
-  laenderSig = computed(() => this.viewSig().laender);
-  translatedLaender$ = toObservable(this.laenderSig).pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender)),
-  );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
 
-  nationalitaetCH = 'CH';
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
     const niederlassungsstatusMap = {
@@ -219,15 +214,20 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
       : null;
   });
+
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
-
+    const laender = this.landStore.landListViewSig();
     const kanton = this.plzStore.getKantonByPlz(plz);
+    const elternNichtSchweizer = eltern?.some((e) => {
+      return (
+        laender?.find((l) => l.id === e.adresse.landId)?.laendercodeBfs !==
+        BFSCODE_SCHWEIZ
+      );
+    });
 
-    return kanton &&
-      kanton === WohnsitzKanton.BE &&
-      eltern?.some((e) => e.adresse.land !== 'CH')
+    return kanton && kanton === WohnsitzKanton.BE && elternNichtSchweizer
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
@@ -274,7 +274,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ),
       ],
     ],
-    nationalitaet: this.formBuilder.control(<Land | undefined>undefined, {
+    nationalitaetId: this.formBuilder.control(<string | undefined>undefined, {
       validators: Validators.required,
     }),
     heimatort: [<string | undefined>undefined, [Validators.required]],
@@ -331,6 +331,16 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
+  private nationalitaetIdChangedSig = toSignal(
+    this.form.controls.nationalitaetId.valueChanges,
+  );
+
+  nationalitaetBfsCodeSig = computed(() => {
+    const id = this.nationalitaetIdChangedSig();
+    const laender = this.landStore.landListViewSig();
+    return laender?.find((land) => land.id === id)?.laendercodeBfs;
+  });
+  bfsCodeSchweiz = BFSCODE_SCHWEIZ;
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -437,14 +447,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     });
 
     // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
-    const nationalitaetChangedSig = toSignal(
-      this.form.controls.nationalitaet.valueChanges,
-    );
+
     effect(() => {
       this.gotReenabledSig();
-      const nationalitaetChanged = nationalitaetChangedSig();
-      // If nationality is Switzerland
-      if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
+      // If nationality is Switzerland, show heimatort and vormundschaft
+      const nationalitaetBfsCode = this.nationalitaetBfsCodeSig();
+      if (nationalitaetBfsCode === BFSCODE_SCHWEIZ) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.heimatort,
@@ -466,7 +474,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         });
       }
       // No nationality was selected
-      else if (!isDefined(nationalitaetChanged)) {
+      else if (!isDefined(nationalitaetBfsCode)) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.niederlassungsstatus,
@@ -596,7 +604,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormPerson.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   handleSave() {
@@ -650,7 +657,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
     const values = convertTempFormToRealValues(this.form, [
-      'nationalitaet',
+      'nationalitaetId',
       'sozialhilfebeitraege',
     ]);
     return {

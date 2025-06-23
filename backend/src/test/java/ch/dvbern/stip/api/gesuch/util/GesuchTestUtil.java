@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -41,7 +42,6 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.TestConstants;
 import lombok.experimental.UtilityClass;
 
@@ -113,7 +113,7 @@ public class GesuchTestUtil {
         adresse.setHausnummer("1");
         adresse.setId(UUID.randomUUID());
         adresse.setPlz("3333");
-        adresse.setLand(Land.CH);
+        adresse.setLand(LandGenerator.initSwitzerland());
         adresse.setOrt("b");
         personInAusbildung.setHeimatort("B");
         personInAusbildung.setAdresse(adresse);
@@ -124,6 +124,7 @@ public class GesuchTestUtil {
         personInAusbildung.setAnrede(Anrede.FRAU);
         personInAusbildung.setEmail("test@test.com");
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
 
         return personInAusbildung;
     }
@@ -132,7 +133,10 @@ public class GesuchTestUtil {
         var auszahlung =
             new Auszahlung().setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()).setIban(""));
         var formular = new GesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
+            .setPersonInAusbildung(
+                new PersonInAusbildung().setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()))
+                    .setNationalitaet(LandGenerator.initSwitzerland())
+            )
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setEinnahmenKosten(new EinnahmenKosten())

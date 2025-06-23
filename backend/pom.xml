@@ -39,6 +39,7 @@
       file:**/.mvn/**,
       file:**/.quarkus/**</sonar.exclusions>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+    <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
     <spotless.version>2.44.4</spotless.version>
     <surefire-plugin.version>3.5.3</surefire-plugin.version>
@@ -695,7 +696,6 @@
                     ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
                     Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                    Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
                     Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,

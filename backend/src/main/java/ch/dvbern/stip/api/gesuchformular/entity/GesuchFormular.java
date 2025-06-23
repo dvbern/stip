@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
@@ -42,6 +43,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValid
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.KindPageValidation;
+import ch.dvbern.stip.api.gesuchformular.validation.LandMustBeGueltigValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PersonInAusbildungPageValidation;
@@ -220,6 +222,30 @@ import org.hibernate.envers.Audited;
         SteuerdatenPageValidation.class
     }, property = "steuerdaten"
 )
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.PERSON_IN_AUSBILDUNG_ADRESSE
+)
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.PERSON_IN_AUSBILDUNG_NATIONALITAET
+)
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.ELTERN_MUTTER
+)
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.ELTERN_VATER
+)
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.AUSZAHLUNG
+)
+@LandMustBeGueltigConstraint(
+    groups = LandMustBeGueltigValidationGroup.class,
+    landGueltigFor = LandGueltigFor.PARTNER
+)
 @UniqueSvNumberConstraint
 @Entity
 @Table(
@@ -252,7 +278,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
-
         name = "familiensituation_id",
         foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id")
     )

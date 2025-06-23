@@ -23,7 +23,7 @@
               }
               {{ adresse.strasse }} {{ adresse.hausnummer }}<br />
               {{ adresse.plz }} {{ adresse.ort }}<br />
-              {{ adresse.land }}
+              {{ adresse.landId | translatedLand | async }}
             </small>
           }
           @if (!readonly) {

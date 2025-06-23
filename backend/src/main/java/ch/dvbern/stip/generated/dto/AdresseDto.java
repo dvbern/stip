@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class AdresseDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.stammdaten.type.Land land;
+  private @Valid UUID landId;
   private @Valid String strasse;
   private @Valid String plz;
   private @Valid String ort;
@@ -30,21 +30,21 @@ public class AdresseDto  implements Serializable {
 
   /**
    **/
-  public AdresseDto land(ch.dvbern.stip.api.stammdaten.type.Land land) {
-    this.land = land;
+  public AdresseDto landId(UUID landId) {
+    this.landId = landId;
     return this;
   }
 
   
-  @JsonProperty("land")
+  @JsonProperty("landId")
   @NotNull
-  public ch.dvbern.stip.api.stammdaten.type.Land getLand() {
-    return land;
+  public UUID getLandId() {
+    return landId;
   }
 
-  @JsonProperty("land")
-  public void setLand(ch.dvbern.stip.api.stammdaten.type.Land land) {
-    this.land = land;
+  @JsonProperty("landId")
+  public void setLandId(UUID landId) {
+    this.landId = landId;
   }
 
   /**
@@ -168,7 +168,7 @@ public class AdresseDto  implements Serializable {
       return false;
     }
     AdresseDto adresse = (AdresseDto) o;
-    return Objects.equals(this.land, adresse.land) &&
+    return Objects.equals(this.landId, adresse.landId) &&
         Objects.equals(this.strasse, adresse.strasse) &&
         Objects.equals(this.plz, adresse.plz) &&
         Objects.equals(this.ort, adresse.ort) &&
@@ -179,7 +179,7 @@ public class AdresseDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(land, strasse, plz, ort, id, coAdresse, hausnummer);
+    return Objects.hash(landId, strasse, plz, ort, id, coAdresse, hausnummer);
   }
 
   @Override
@@ -187,7 +187,7 @@ public class AdresseDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AdresseDto {\n");
     
-    sb.append("    land: ").append(toIndentedString(land)).append("\n");
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    strasse: ").append(toIndentedString(strasse)).append("\n");
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");
     sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
