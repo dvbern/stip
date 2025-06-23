@@ -42,7 +42,11 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         final var gesuch = verfuegung.getGesuch();
         if (
             isSachbearbeiter(currentBenutzer)
-            || AuthorizerUtil.isGesuchstellerOf(gesuch.getAusbildung().getFall(), currentBenutzer, sozialdienstService)
+            || AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                gesuch.getAusbildung().getFall(),
+                currentBenutzer,
+                sozialdienstService
+            )
         ) {
             return;
         }

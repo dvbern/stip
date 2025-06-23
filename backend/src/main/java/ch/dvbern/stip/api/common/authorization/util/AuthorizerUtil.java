@@ -87,7 +87,7 @@ public class AuthorizerUtil {
         || isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall);
     }
 
-    public boolean isGesuchstellerOf(
+    public boolean canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
         final Fall fall,
         final Benutzer currentBenutzer,
         final SozialdienstService sozialdienstService

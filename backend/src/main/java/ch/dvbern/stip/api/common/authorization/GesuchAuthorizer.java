@@ -231,7 +231,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     public void assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(final UUID gesuchId) {
         if (
-            !AuthorizerUtil.isGesuchstellerOf(
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuchRepository.requireById(gesuchId).getAusbildung().getFall(),
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
