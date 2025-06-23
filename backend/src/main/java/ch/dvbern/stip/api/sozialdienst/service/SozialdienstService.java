@@ -103,6 +103,7 @@ public class SozialdienstService {
 
         final var newSozialdienstAdmin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto);
         sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
+        sozialdienst.getSozialdienstBenutzers().add(newSozialdienstAdmin);
         return sozialdienstBenutzerService.getSozialdienstBenutzerDtoById(newSozialdienstAdmin.getId());
     }
 
