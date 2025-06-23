@@ -5718,9 +5718,12 @@ components:
       type: object
       required:
         - id
+        - isAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        isAdmin:
+          type: boolean
       allOf:
         - $ref: '#/components/schemas/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:
