@@ -17,12 +17,27 @@
 
 package ch.dvbern.stip.api.auszahlung.repo;
 
+import java.util.stream.Stream;
+
+import ch.dvbern.stip.api.auszahlung.entity.QZahlungsverbindung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class ZahlungsverbindungRepository implements BaseRepository<Zahlungsverbindung> {
+    private final EntityManager entityManager;
+    static final QZahlungsverbindung ZAHLUNGSVERBINDUNG = QZahlungsverbindung.zahlungsverbindung;
+
+    public Stream<Zahlungsverbindung> findZahlungsverbindungsWithPendingSapDelivery() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(ZAHLUNGSVERBINDUNG)
+            .where(ZAHLUNGSVERBINDUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .stream();
+    }
 }

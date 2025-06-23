@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -45,7 +46,6 @@ import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -728,7 +728,7 @@ class BerechnungTest {
             .setSozialhilfebeitraege(true)
             .setZivilstand(Zivilstand.VERHEIRATET)
             .setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING)
-            .setNationalitaet(Land.IR)
+            .setNationalitaet(LandGenerator.initIran())
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.of(1996, 7, 1));
 
@@ -871,7 +871,7 @@ class BerechnungTest {
             .setSozialhilfebeitraege(true)
             .setZivilstand(Zivilstand.LEDIG)
             .setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C)
-            .setNationalitaet(Land.DE)
+            .setNationalitaet(LandGenerator.initGermany())
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.of(1988, 4, 1));
 

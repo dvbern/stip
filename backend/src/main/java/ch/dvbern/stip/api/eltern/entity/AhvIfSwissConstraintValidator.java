@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.common.validation.AhvValidator;
-import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -41,7 +41,7 @@ public class AhvIfSwissConstraintValidator implements ConstraintValidator<AhvIfS
             return true;
         }
 
-        if (adresse.getLand() != Land.CH) {
+        if (!adresse.getLand().is(WellKnownLand.CHE)) {
             return true;
         }
 

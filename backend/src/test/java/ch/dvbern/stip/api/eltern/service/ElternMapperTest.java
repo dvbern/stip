@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.generated.dto.AdresseDto;
@@ -35,7 +36,7 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 
 class ElternMapperTest {
 
-    ElternMapper elternMapper = new ElternMapperImpl();
+    ElternMapper elternMapper = new ElternMapperImpl(new MockAdresseMapperImpl());
 
     @Test
     void testElternMapperMapAddDelete() {

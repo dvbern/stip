@@ -36,7 +36,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Table(
     name = "plz",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_plz_ort_kantonskuerzel", columnNames = { "plz", "ort", "kantonskuerzel" }
+        name = "UC_plz_plz_ort_kantonskuerzel", columnNames = { "plz", "ort", "kantonskuerzel" }
     ),
     indexes = @Index(name = "IX_plz_kantonskuerzel", columnList = "kantonskuerzel")
 )

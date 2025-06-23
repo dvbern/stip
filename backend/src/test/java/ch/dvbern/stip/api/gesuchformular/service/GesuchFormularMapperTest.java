@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
@@ -57,7 +58,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
+import ch.dvbern.stip.api.personinausbildung.service.MockPersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -671,13 +672,13 @@ class GesuchFormularMapperTest {
         }
 
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
-            new PersonInAusbildungMapperImpl(),
+            new MockPersonInAusbildungMapperImpl(new MockAdresseMapperImpl()),
             new FamiliensituationMapperImpl(),
             ausbildungMapperImplMock,
             new LebenslaufItemMapperImpl(),
-            new PartnerMapperImpl(),
+            new PartnerMapperImpl(new MockAdresseMapperImpl()),
             new GeschwisterMapperImpl(),
-            new ElternMapperImpl(),
+            new ElternMapperImpl(new MockAdresseMapperImpl()),
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl(),
             new SteuererklaerungMapperImpl(),

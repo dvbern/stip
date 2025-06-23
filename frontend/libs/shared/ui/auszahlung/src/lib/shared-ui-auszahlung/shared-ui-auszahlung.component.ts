@@ -24,7 +24,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { FallAuszahlungUpdate, MASK_IBAN } from '@dv/shared/model/gesuch';
+import { AuszahlungUpdate, MASK_IBAN } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
@@ -74,7 +74,7 @@ export class SharedUiAuszahlungComponent {
   private formUtils = inject(SharedUtilFormService);
 
   auszahlungViewSig = input.required<SharedModelAuszahlung>();
-  saveTriggered = output<FallAuszahlungUpdate>();
+  saveTriggered = output<AuszahlungUpdate>();
   continueTriggered = output<void>();
   formIsUnsaved = output<boolean>();
 

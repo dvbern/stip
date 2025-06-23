@@ -22,7 +22,7 @@ import java.math.BigInteger;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.general.SenderParmsDelivery;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
@@ -47,40 +47,42 @@ public abstract class VendorPostingCreateMapper {
         XMLGregorianCalendar pstngdate
     );
 
-    @Mapping(source = "auszahlung.zahlungsverbindung.sapBusinessPartnerId", target = "VENDORNO")
+    @Mapping(source = "zahlungsverbindung.sapBusinessPartnerId", target = "VENDORNO")
     @Mapping(source = ".", target = "AMTDOCCUR", qualifiedByName = "getAmtdoccur")
     @Mapping(target = "ZTERM", constant = "ZB04")
     @Mapping(source = ".", target = "ITEMTEXT", qualifiedByName = "getQrIbanAddlInfo")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.VENDOR toVendor(
         @Context Integer amount,
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
     @Named("getAmtdoccur")
     public BigDecimal getAmtdoccur(
         @Context Integer amount,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         return new BigDecimal(amount);
     }
 
-    @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")
-    public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN toIban(Auszahlung auszahlung);
+    @Mapping(source = "iban", target = "IBAN")
+    public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN toIban(
+        Zahlungsverbindung zahlungsverbindung
+    );
 
     @Mapping(target = "QRIBAN", constant = "")
     @Mapping(source = ".", target = "QRIBANADDLINFO", qualifiedByName = "getQrIbanAddlInfo")
     @Mapping(target = "POREFNO", constant = "")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN toQrIban(
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
-    @Mapping(source = "auszahlung", target = "IBAN")
+    @Mapping(source = "zahlungsverbindung", target = "IBAN")
     @Mapping(source = ".", target = "QRIBAN")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL toPaymentDetail(
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
     @Mapping(target = "ITEMNOACC", constant = "1")
@@ -93,13 +95,13 @@ public abstract class VendorPostingCreateMapper {
     @Mapping(target = "REFSETERLK", constant = "false")
     public abstract VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT toGlAccount(
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
     @Named("getQrIbanAddlInfo")
     public String getQrIbanAddlInfo(
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         return qrIbanAddlInfo;
     }
@@ -107,15 +109,15 @@ public abstract class VendorPostingCreateMapper {
     @Named("setGlAccount")
     public List<VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT> setGlAccount(
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
-        return List.of(toGlAccount(qrIbanAddlInfo, auszahlung));
+        return List.of(toGlAccount(qrIbanAddlInfo, zahlungsverbindung));
     }
 
     @Named("setPosition")
     public List<VendorPostingCreateRequest.VENDORPOSTING.POSITION> setPosition(
         @Context Integer amount,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         return List.of(toPosition(amount));
     }
@@ -131,23 +133,23 @@ public abstract class VendorPostingCreateMapper {
     public abstract VendorPostingCreateRequest.VENDORPOSTING toVendorPosting(
         @Context Integer amount,
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
     @Named("setVendorPosting")
     public List<VendorPostingCreateRequest.VENDORPOSTING> setVendorPosting(
         @Context Integer amount,
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
-        return List.of(toVendorPosting(amount, qrIbanAddlInfo, auszahlung));
+        return List.of(toVendorPosting(amount, qrIbanAddlInfo, zahlungsverbindung));
     }
 
     @Named("getSenderParmsDelivery")
     public SenderParmsDelivery getSenderParmsDelivery(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         final SenderParmsDelivery sender = new SenderParmsDelivery();
         sender.setSYSID(sysid);
@@ -162,6 +164,6 @@ public abstract class VendorPostingCreateMapper {
         @Context BigDecimal deliveryid,
         @Context Integer amount,
         @Context String qrIbanAddlInfo,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 }

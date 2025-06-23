@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
@@ -14,7 +14,11 @@ import {
   provideSharedOAuthServiceWithGesuchstellerJWT,
 } from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
-import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
+import {
+  checkMatCheckbox,
+  clickAutocompleteOption,
+  provideLandLookupMock,
+} from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner.component';
 
@@ -43,14 +47,12 @@ async function setup() {
               },
             },
           }),
-          stammdatens: {
-            laender: [],
-          },
           configs: mockConfigsState(),
         },
       }),
       provideSharedOAuthServiceWithGesuchstellerJWT(),
       provideMaterialDefaultOptions(),
+      provideLandLookupMock(),
       provideHttpClient(),
       provideHttpClientTesting(),
       provideCompileTimeConfig(),
@@ -99,6 +101,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is selected', async () => {
     const { getByTestId, container, detectChanges } = await setup();
     const user = await fillBasicForm();
+
     await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
@@ -125,6 +128,7 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
 
   it('should reset jahreseinkommen, verpflegunskosten and fahrkosten if "ausbildungMitEinkommenOderErwerbstaetig" is selected, unselected, and selected again', async () => {
     const { getByTestId, detectChanges } = await setup();
+
     const checkbox = await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
@@ -171,12 +175,7 @@ const fillBasicForm = async () => {
   await user.type(screen.getByTestId('form-address-plz'), '3000');
   await user.type(screen.getByTestId('form-address-ort'), 'Bern');
 
-  // put into utility function
-  screen.getByTestId('form-address-land').click();
-  await waitFor(() =>
-    expect(screen.queryByRole('listbox')).toBeInTheDocument(),
-  );
-  screen.getByTestId('CH').click();
+  await clickAutocompleteOption('form-address-land', 'Sch', 'Schweiz');
 
   fireEvent.input(screen.getByTestId('form-partner-geburtsdatum'), {
     target: { value: '01.01.1990' },
