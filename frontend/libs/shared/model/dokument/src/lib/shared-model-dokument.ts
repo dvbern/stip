@@ -118,10 +118,7 @@ export const isUploadable = (
   switch (dokumentModel.art) {
     case 'GESUCH_DOKUMENT':
     case 'CUSTOM_DOKUMENT': {
-      return (
-        permission.canUploadDocuments &&
-        dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
-      );
+      return permission.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;
