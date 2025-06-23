@@ -27,6 +27,7 @@ public class NotificationDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid String userErstellt;
   private @Valid String notificationText;
+  private @Valid UUID contextId;
   private @Valid LocalDate timestampErstellt;
 
   /**
@@ -36,7 +37,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notificationType")
   @NotNull
   public ch.dvbern.stip.api.notification.type.NotificationType getNotificationType() {
@@ -55,7 +56,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -74,7 +75,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userErstellt")
   @NotNull
   public String getUserErstellt() {
@@ -93,7 +94,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notificationText")
   public String getNotificationText() {
     return notificationText;
@@ -106,12 +107,30 @@ public class NotificationDto  implements Serializable {
 
   /**
    **/
+  public NotificationDto contextId(UUID contextId) {
+    this.contextId = contextId;
+    return this;
+  }
+
+
+  @JsonProperty("contextId")
+  public UUID getContextId() {
+    return contextId;
+  }
+
+  @JsonProperty("contextId")
+  public void setContextId(UUID contextId) {
+    this.contextId = contextId;
+  }
+
+  /**
+   **/
   public NotificationDto timestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -136,23 +155,25 @@ public class NotificationDto  implements Serializable {
         Objects.equals(this.gesuchId, notification.gesuchId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.notificationText, notification.notificationText) &&
+        Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, timestampErstellt);
+    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, contextId, timestampErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDto {\n");
-    
+
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
+    sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
