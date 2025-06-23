@@ -24,7 +24,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -108,9 +107,6 @@ class SozialdienstBenutzerServiceTest {
     MailService mailService;
 
     @Inject
-    BenutzerService benutzerService;
-
-    @Inject
     SozialdienstMapper sozialdienstMapper;
 
     @Inject
@@ -183,7 +179,9 @@ class SozialdienstBenutzerServiceTest {
         when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
         sozialdienstBenutzerServiceMock.setup();
         sozialdienstService = new SozialdienstService(
-            benutzerService, sozialdienstRepository, sozialdienstMapper, sozialdienstBenutzerServiceMock,
+            sozialdienstRepository,
+            sozialdienstMapper,
+            sozialdienstBenutzerServiceMock,
             zahlungsverbindungServiceMock
         );
     }
