@@ -90,11 +90,15 @@ public class GesuchDokumentService {
     public void setGesuchDokumentOfDokumentTypToAusstehend(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-        final var gesuchDokument = gesuchTranche.getGesuchDokuments()
+        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
-            .findFirst()
-            .orElseThrow();
+            .findFirst();
+
+        if (gesuchDokumentOpt.isEmpty()) {
+            return;
+        }
+        final var gesuchDokument = gesuchDokumentOpt.get();
 
         gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
         gesuchDokumentRepository.persist(gesuchDokument);
