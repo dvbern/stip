@@ -22,7 +22,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class DokumentAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
-    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final SozialdienstService sozialdienstService;
 
     public void canGetDokumentDownloadToken(final UUID dokumentId) {
