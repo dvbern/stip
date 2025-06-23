@@ -15,5 +15,6 @@ export interface SozialdienstBenutzer {
     nachname: string;
     email: string;
     id: string;
+    isAdmin?: boolean;
 }
 
