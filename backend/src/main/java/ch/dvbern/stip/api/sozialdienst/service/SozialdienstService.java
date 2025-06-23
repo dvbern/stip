@@ -84,6 +84,7 @@ public class SozialdienstService {
     @Transactional
     public SozialdienstDto deleteSozialdienst(UUID id) {
         final var entity = sozialdienstRepository.requireById(id);
+        entity.getSozialdienstBenutzers().clear();
         sozialdienstRepository.delete(entity);
         return sozialdienstMapper.toDto(entity);
     }
