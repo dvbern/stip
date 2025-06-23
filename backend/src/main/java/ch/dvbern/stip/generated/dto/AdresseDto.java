@@ -20,13 +20,32 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class AdresseDto  implements Serializable {
+  private @Valid UUID landId;
   private @Valid String strasse;
   private @Valid String plz;
   private @Valid String ort;
   private @Valid UUID id;
-  private @Valid UUID landId;
   private @Valid String coAdresse;
   private @Valid String hausnummer;
+
+  /**
+   **/
+  public AdresseDto landId(UUID landId) {
+    this.landId = landId;
+    return this;
+  }
+
+  
+  @JsonProperty("landId")
+  @NotNull
+  public UUID getLandId() {
+    return landId;
+  }
+
+  @JsonProperty("landId")
+  public void setLandId(UUID landId) {
+    this.landId = landId;
+  }
 
   /**
    **/
@@ -105,24 +124,6 @@ public class AdresseDto  implements Serializable {
 
   /**
    **/
-  public AdresseDto landId(UUID landId) {
-    this.landId = landId;
-    return this;
-  }
-
-  
-  @JsonProperty("landId")
-  public UUID getLandId() {
-    return landId;
-  }
-
-  @JsonProperty("landId")
-  public void setLandId(UUID landId) {
-    this.landId = landId;
-  }
-
-  /**
-   **/
   public AdresseDto coAdresse(String coAdresse) {
     this.coAdresse = coAdresse;
     return this;
@@ -167,18 +168,18 @@ public class AdresseDto  implements Serializable {
       return false;
     }
     AdresseDto adresse = (AdresseDto) o;
-    return Objects.equals(this.strasse, adresse.strasse) &&
+    return Objects.equals(this.landId, adresse.landId) &&
+        Objects.equals(this.strasse, adresse.strasse) &&
         Objects.equals(this.plz, adresse.plz) &&
         Objects.equals(this.ort, adresse.ort) &&
         Objects.equals(this.id, adresse.id) &&
-        Objects.equals(this.landId, adresse.landId) &&
         Objects.equals(this.coAdresse, adresse.coAdresse) &&
         Objects.equals(this.hausnummer, adresse.hausnummer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(strasse, plz, ort, id, landId, coAdresse, hausnummer);
+    return Objects.hash(landId, strasse, plz, ort, id, coAdresse, hausnummer);
   }
 
   @Override
@@ -186,11 +187,11 @@ public class AdresseDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AdresseDto {\n");
     
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    strasse: ").append(toIndentedString(strasse)).append("\n");
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");
     sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    coAdresse: ").append(toIndentedString(coAdresse)).append("\n");
     sb.append("    hausnummer: ").append(toIndentedString(hausnummer)).append("\n");
     sb.append("}");
