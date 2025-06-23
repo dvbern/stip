@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
@@ -83,8 +85,16 @@ public class DokumentUploadUtil {
     ) {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         final var key = dokumentPathPrefix + objectId;
+
+        final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
+            s3,
+            fileUpload,
+            configService.getBucketName(),
+            key
+        );
+
         return Uni.createFrom()
-            .completionStage(() -> getUploadDokumentFuture(s3, fileUpload, configService.getBucketName(), key))
+            .completionStage(stageSupplier)
             .onItem()
             .invoke(() -> serviceCallback.accept(objectId))
             .onItem()
@@ -133,7 +143,8 @@ public class DokumentUploadUtil {
     public void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
         try (
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(
-                IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
+                IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile()))
+                    .readAllBytes()
             )
         ) {
             // scan the file and check the results
