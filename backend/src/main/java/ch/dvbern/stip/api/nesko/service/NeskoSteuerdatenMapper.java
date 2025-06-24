@@ -36,7 +36,13 @@ public class NeskoSteuerdatenMapper {
         var steuerdatenNesko = getSteuerdatenResponse.getSteuerdaten();
 
         steuerdaten.setTotalEinkuenfte(
-            Objects.requireNonNullElse(steuerdatenNesko.getTotalEinkuenfte().getEffektiv().intValue(), 0)
+            Objects.requireNonNullElse(
+                Integer.max(
+                    steuerdatenNesko.getTotalEinkuenfte().getEffektiv().intValue(),
+                    steuerdatenNesko.getTotalEinkuenfte().getSatzbestimmend().intValue()
+                ),
+                0
+            )
         );
         steuerdaten.setEigenmietwert(
             Objects.requireNonNullElse(steuerdatenNesko.getMietwertKanton(), BigDecimal.ZERO).intValue()
