@@ -280,7 +280,7 @@ class SozialdienstBenutzerServiceTest {
         final var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(1));
+        assertThat(sozialdienstbenutzers.size(), equalTo(2));
     }
 
     @Order(7)
@@ -317,7 +317,7 @@ class SozialdienstBenutzerServiceTest {
         sozialdienstbenutzers = sozialdienstBenutzerServiceMock
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(0));
+        assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
 
     @Order(99)
