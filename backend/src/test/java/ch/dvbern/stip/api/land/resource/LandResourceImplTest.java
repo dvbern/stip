@@ -75,6 +75,7 @@ class LandResourceImplTest {
     @TestAsAdmin
     void createLandWitDuplicateIso3codeFails() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
+        landToCreate.setIso2code("ZZ");
         TestUtil.executeAndAssert(
             landApiSpec.createLand().body(landToCreate),
             Response.Status.BAD_REQUEST.getStatusCode()
@@ -83,6 +84,18 @@ class LandResourceImplTest {
 
     @Test
     @Order(3)
+    @TestAsAdmin
+    void createLandWitDuplicateIso2codeFails() {
+        final var landToCreate = LandDtoSpecModel.landDtoSpec();
+        landToCreate.setIso3code("ZZZ");
+        TestUtil.executeAndAssert(
+            landApiSpec.createLand().body(landToCreate),
+            Response.Status.BAD_REQUEST.getStatusCode()
+        );
+    }
+
+    @Test
+    @Order(4)
     @TestAsAdmin
     void getLaenderContainsNewLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
@@ -97,7 +110,7 @@ class LandResourceImplTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @TestAsAdmin
     void landInaktivSchalten() {
         final var update = LandDtoSpecModel.landDtoSpec();
@@ -113,7 +126,7 @@ class LandResourceImplTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @TestAsAdmin
     void getLaenderContainsInaktivesLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
@@ -131,14 +144,14 @@ class LandResourceImplTest {
     // Just run these next tests after creating a Land to ensure we're not dependent on seeding
 
     @Test
-    @Order(6)
+    @Order(7)
     @TestAsGesuchsteller
     void getLaenderAsGS() {
         doGetLaender();
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @TestAsSachbearbeiter
     void getLaenderAsSB() {
         doGetLaender();
