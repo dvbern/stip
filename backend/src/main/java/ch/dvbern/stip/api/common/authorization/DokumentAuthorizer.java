@@ -17,10 +17,13 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,6 +36,8 @@ public class DokumentAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
+    private final DokumentRepository dokumentRepository;
+    private final DokumentHistoryRepository dokumentHistoryRepository;
 
     public void canGetDokumentDownloadToken(final UUID dokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
@@ -40,7 +45,11 @@ public class DokumentAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        final var fall = gesuchRepository.requireGesuchForDokument(dokumentId).getAusbildung().getFall();
+        var dokument = dokumentRepository.findById(dokumentId);
+        if (Objects.isNull(dokument)) {
+            dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
+        }
+        final var fall = dokument.getGesuchDokument().getGesuchTranche().getGesuch().getAusbildung().getFall();
 
         if (
             AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(

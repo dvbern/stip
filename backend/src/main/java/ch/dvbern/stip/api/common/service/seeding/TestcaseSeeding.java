@@ -344,7 +344,7 @@ public class TestcaseSeeding extends Seeder {
                 .setStatus(Dokumentstatus.AKZEPTIERT)
                 .setGesuchTranche(tranche);
 
-            newDok.setGesuchDokumente(List.of(newGesuchDok));
+            newDok.setGesuchDokument(newGesuchDok);
             newGesuchDok.setDokumente(List.of(newDok));
 
             gesuchDokumentRepository.persist(newGesuchDok);

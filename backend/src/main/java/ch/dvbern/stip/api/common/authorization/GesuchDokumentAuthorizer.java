@@ -103,7 +103,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     public void assertGsCanDeleteDokumentOfTranche(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuchDokument = dokument.getGesuchDokumente().getFirst();
+        final var gesuchDokument = dokument.getGesuchDokument();
         final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertGsCanModifyDokumentOfTranche(gesuchTranche.getId());
@@ -116,7 +116,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     public void assertSbCanDeleteDokumentOfTranche(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuchDokument = dokument.getGesuchDokumente().getFirst();
+        final var gesuchDokument = dokument.getGesuchDokument();
         final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertSbCanModifyDokumentOfTranche(gesuchTranche.getId());

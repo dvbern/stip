@@ -185,6 +185,16 @@ public class TestUtil {
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
+    public static void fillGesuchWithAuszahlung(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final AuszahlungApiSpec auszahlungApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, getAuszahlungUpdateDtoSpec());
+    }
+
     public static void fillGesuch(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,
