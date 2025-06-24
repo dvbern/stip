@@ -249,4 +249,12 @@ public class SozialdienstBenutzerService {
             sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
         }
     }
+
+    @Transactional
+    public void deleteSozialdienstMitarbeiterOfSozialdienst(
+        final Sozialdienst sozialdienst
+    ) {
+        sozialdienst.getSozialdienstBenutzers().forEach(sozialdienstBenutzerRepository::delete);
+        sozialdienst.getSozialdienstBenutzers().clear();
+    }
 }
