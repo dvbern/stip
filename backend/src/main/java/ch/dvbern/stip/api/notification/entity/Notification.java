@@ -17,9 +17,12 @@
 
 package ch.dvbern.stip.api.notification.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.type.NotificationType;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,4 +68,8 @@ public class Notification extends AbstractMandantEntity {
         foreignKey = @ForeignKey(name = "FK_notification_gesuch")
     )
     private Gesuch gesuch;
+
+    @Nullable
+    @Column(name = "context_id")
+    private UUID contextId;
 }

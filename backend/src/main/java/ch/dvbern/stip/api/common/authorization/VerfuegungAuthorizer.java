@@ -17,7 +17,12 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +31,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class VerfuegungAuthorizer extends BaseAuthorizer {
-
+    private final SozialdienstService sozialdienstService;
     private final BenutzerService benutzerService;
+    private final VerfuegungRepository verfuegungRepository;
 
     @Transactional
-    public void canGetVerfuegungDownloadToken() {
+    public void canGetVerfuegungDownloadToken(final UUID verfuegungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSachbearbeiter(currentBenutzer)) {
+        final var verfuegung = verfuegungRepository.requireById(verfuegungId);
+        final var gesuch = verfuegung.getGesuch();
+        if (
+            isSachbearbeiter(currentBenutzer)
+            || AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                gesuch.getAusbildung().getFall(),
+                currentBenutzer,
+                sozialdienstService
+            )
+        ) {
             return;
         }
         forbidden();
