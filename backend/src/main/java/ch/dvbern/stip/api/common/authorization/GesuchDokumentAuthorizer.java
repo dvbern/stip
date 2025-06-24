@@ -120,11 +120,6 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertSbCanModifyDokumentOfTranche(gesuchTranche.getId());
-        if (gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND) {
-            return;
-        }
-
-        forbidden();
     }
 
     public void canUpdateGesuchDokument(UUID gesuchDokumentId) {

@@ -87,6 +87,34 @@ public class GesuchDokumentService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
+    public void setGesuchDokumentOfDokumentTypToAusstehend(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+
+        final var gesuchDokument = gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+            .findFirst()
+            .orElseThrow();
+
+        gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentRepository.persist(gesuchDokument);
+    }
+
+    @Transactional
+    public void setGesuchDokumentOfCustomDokumentTypToAusstehend(final UUID customDokumentTypId) {
+        customDocumentTypRepository.requireById(customDokumentTypId)
+            .getGesuchDokument()
+            .setStatus(Dokumentstatus.AUSSTEHEND);
+    }
+
+    @Transactional
+    public void setGesuchDokumentOfDokumentToAusstehend(final UUID dokumentId) {
+        dokumentRepository.requireById(dokumentId)
+            .getGesuchDokumente()
+            .forEach(gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND));
+    }
+
+    @Transactional
     public Uni<Response> getUploadCustomDokumentUni(
         final UUID customDokumentTypId,
         final FileUpload fileUpload
@@ -229,11 +257,11 @@ public class GesuchDokumentService {
     ) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
-        final var gesuchDokument = gesuchTranche.getGesuchDokuments()
+        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
             .findFirst();
-        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        final var dto = gesuchDokumentOpt.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
 

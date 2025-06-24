@@ -111,6 +111,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
     public Uni<Response> createDokumentSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
+        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
@@ -146,6 +147,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
     public Uni<Response> uploadCustomGesuchDokumentSB(UUID customDokumentTypId, FileUpload fileUpload) {
         customGesuchDokumentTypAuthorizer.assertSbCanModifyCustomDokumentOfTranche(customDokumentTypId);
+        gesuchDokumentService.setGesuchDokumentOfCustomDokumentTypToAusstehend(customDokumentTypId);
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
     }
 
@@ -178,6 +180,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_DELETE_SB)
     public void deleteDokumentSB(UUID dokumentId) {
         gesuchDokumentAuthorizer.assertSbCanDeleteDokumentOfTranche(dokumentId);
+        gesuchDokumentService.setGesuchDokumentOfDokumentToAusstehend(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 
