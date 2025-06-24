@@ -243,11 +243,11 @@ class SozialdienstBenutzerServiceTest {
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
-    void getSozialdienstBenutzerEmptyTest() {
+    void getSozialdienstBenutzerIncludesAdmin() {
         final var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(0));
+        assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
 
     @Order(5)
