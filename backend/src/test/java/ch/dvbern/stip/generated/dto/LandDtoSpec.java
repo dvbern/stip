@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LandDtoSpec.JSON_PROPERTY_ID,
   LandDtoSpec.JSON_PROPERTY_LAENDERCODE_BFS,
   LandDtoSpec.JSON_PROPERTY_IS_EU_EFTA,
+  LandDtoSpec.JSON_PROPERTY_ISO2CODE,
   LandDtoSpec.JSON_PROPERTY_ISO3CODE,
   LandDtoSpec.JSON_PROPERTY_EINTRAG_GUELTIG,
   LandDtoSpec.JSON_PROPERTY_DE_KURZFORM,
@@ -49,6 +50,9 @@ public class LandDtoSpec {
 
   public static final String JSON_PROPERTY_IS_EU_EFTA = "isEuEfta";
   private Boolean isEuEfta;
+
+  public static final String JSON_PROPERTY_ISO2CODE = "iso2code";
+  private String iso2code;
 
   public static final String JSON_PROPERTY_ISO3CODE = "iso3code";
   private String iso3code;
@@ -146,6 +150,32 @@ public class LandDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setIsEuEfta(Boolean isEuEfta) {
     this.isEuEfta = isEuEfta;
+  }
+
+
+  public LandDtoSpec iso2code(String iso2code) {
+    
+    this.iso2code = iso2code;
+    return this;
+  }
+
+   /**
+   * Get iso2code
+   * @return iso2code
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getIso2code() {
+    return iso2code;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIso2code(String iso2code) {
+    this.iso2code = iso2code;
   }
 
 
@@ -316,6 +346,7 @@ public class LandDtoSpec {
     return Objects.equals(this.id, land.id) &&
         Objects.equals(this.laendercodeBfs, land.laendercodeBfs) &&
         Objects.equals(this.isEuEfta, land.isEuEfta) &&
+        Objects.equals(this.iso2code, land.iso2code) &&
         Objects.equals(this.iso3code, land.iso3code) &&
         Objects.equals(this.eintragGueltig, land.eintragGueltig) &&
         Objects.equals(this.deKurzform, land.deKurzform) &&
@@ -326,7 +357,7 @@ public class LandDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, laendercodeBfs, isEuEfta, iso3code, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform);
+    return Objects.hash(id, laendercodeBfs, isEuEfta, iso2code, iso3code, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform);
   }
 
   @Override
@@ -336,6 +367,7 @@ public class LandDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    laendercodeBfs: ").append(toIndentedString(laendercodeBfs)).append("\n");
     sb.append("    isEuEfta: ").append(toIndentedString(isEuEfta)).append("\n");
+    sb.append("    iso2code: ").append(toIndentedString(iso2code)).append("\n");
     sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
     sb.append("    eintragGueltig: ").append(toIndentedString(eintragGueltig)).append("\n");
     sb.append("    deKurzform: ").append(toIndentedString(deKurzform)).append("\n");
