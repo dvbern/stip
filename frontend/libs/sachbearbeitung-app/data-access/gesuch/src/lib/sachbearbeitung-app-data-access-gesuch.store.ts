@@ -9,9 +9,9 @@ import {
   GesuchInfo,
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
+  Kanton,
   PaginatedSbDashboard,
   SharedModelGesuch,
-  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import {
@@ -182,7 +182,7 @@ export class GesuchStore extends signalStore(
     NEGATIVE_VERFUEGUNG_ERSTELLEN: rxMethod<{
       gesuchTrancheId: string;
       grundId: string;
-      kanton: WohnsitzKanton | undefined;
+      kanton: Kanton | undefined;
     }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId, grundId, kanton }) =>

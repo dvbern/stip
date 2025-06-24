@@ -23,9 +23,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { AblehnungGrundStore } from '@dv/shared/global/ablehnung-grund';
 import {
+  Kanton,
   StipDecision,
   StipDecisionText,
-  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedUiFormMessageErrorDirective } from '@dv/shared/ui/form';
 import {
@@ -42,7 +42,7 @@ export interface GrundAuswahlDialogData {
 
 export interface GrundAuswahlDialogResult {
   entityId: string;
-  kanton?: WohnsitzKanton;
+  kanton?: Kanton;
 }
 
 @Component({
@@ -70,11 +70,11 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   private formUtils = inject(SharedUtilFormService);
   dialogData = inject<GrundAuswahlDialogData>(MAT_DIALOG_DATA);
   store = inject(AblehnungGrundStore);
-  readonly kantone = Object.values(WohnsitzKanton);
+  readonly kantone = Object.values(Kanton);
 
   form = this.formBuilder.group({
     grund: [<StipDecisionText | undefined>undefined, [Validators.required]],
-    kanton: [<WohnsitzKanton | undefined>undefined, [Validators.required]],
+    kanton: [<Kanton | undefined>undefined, [Validators.required]],
   });
 
   static open(dialog: MatDialog, data: GrundAuswahlDialogData) {
