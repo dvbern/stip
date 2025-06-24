@@ -138,7 +138,11 @@ public class SozialdienstSeeding extends Seeder {
             .setName(envSozialdienst.getName())
             .setZahlungsverbindung(zahlungsverbindung);
 
-        final var admin = seedSozialdienstBenutzer(envSozialdienst.getAdmin(), OidcConstants.ROLE_SOZIALDIENST_ADMIN);
+        final var admin = seedSozialdienstBenutzer(
+            envSozialdienst.getAdmin(),
+            OidcConstants.ROLE_SOZIALDIENST_ADMIN,
+            OidcConstants.ROLE_SOZIALDIENST_MITARBEITER
+        );
         sozialdienst.setSozialdienstAdmin(admin);
         sozialdienst.getSozialdienstBenutzers().add(admin);
 
@@ -151,7 +155,7 @@ public class SozialdienstSeeding extends Seeder {
         sozialdienstRepository.persistAndFlush(sozialdienst);
     }
 
-    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String role) {
+    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String... role) {
         final var existingUser =
             sozialdienstBenutzerRepository.findByKeycloakId(envSozialdienstBenutzer.getKeycloakId());
 
