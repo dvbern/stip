@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import lombok.experimental.UtilityClass;
@@ -29,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class NeskoSteuerdatenMapper {
+    private static SteuerdatenType steuerdatenNesko;
+
     public Steuerdaten updateFromNeskoSteuerdaten(
         Steuerdaten steuerdaten,
         GetSteuerdatenResponse getSteuerdatenResponse
