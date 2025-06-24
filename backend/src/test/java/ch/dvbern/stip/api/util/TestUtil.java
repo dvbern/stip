@@ -56,6 +56,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -72,7 +73,6 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
@@ -583,10 +583,15 @@ public class TestUtil {
 
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
+            .setNationalitaet(LandGenerator.initSwitzerland())
             .setZivilstand(Zivilstand.VERHEIRATET)
             .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
             .setAdresse(
-                new Adresse().setPlz("1321").setLand(Land.CH).setStrasse("asd").setHausnummer("1").setOrt("asd")
+                new Adresse().setPlz("1321")
+                    .setLand(LandGenerator.initSwitzerland())
+                    .setStrasse("asd")
+                    .setHausnummer("1")
+                    .setOrt("asd")
             )
             .setHeimatort("Bern")
             .setAnrede(Anrede.HERR)
@@ -620,7 +625,11 @@ public class TestUtil {
                 .setFahrkosten(null)
                 .setVerpflegungskosten(null)
                 .setAdresse(
-                    new Adresse().setPlz("1321").setLand(Land.CH).setStrasse("asd").setHausnummer("1").setOrt("asd")
+                    new Adresse().setPlz("1321")
+                        .setLand(LandGenerator.initSwitzerland())
+                        .setStrasse("asd")
+                        .setHausnummer("1")
+                        .setOrt("asd")
                 )
                 .setNachname("a")
                 .setVorname("a")
@@ -675,7 +684,11 @@ public class TestUtil {
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
-                        new Adresse().setLand(Land.CH).setPlz("3000").setStrasse("asd").setHausnummer("1").setOrt("asd")
+                        new Adresse().setLand(LandGenerator.initSwitzerland())
+                            .setPlz("3000")
+                            .setStrasse("asd")
+                            .setHausnummer("1")
+                            .setOrt("asd")
                     )
                     .setNachname("a")
                     .setVorname("a")
@@ -688,7 +701,11 @@ public class TestUtil {
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
-                        new Adresse().setLand(Land.CH).setPlz("3000").setStrasse("asd").setHausnummer("1").setOrt("asd")
+                        new Adresse().setLand(LandGenerator.initSwitzerland())
+                            .setPlz("3000")
+                            .setStrasse("asd")
+                            .setHausnummer("1")
+                            .setOrt("asd")
                     )
                     .setNachname("a")
                     .setVorname("a")

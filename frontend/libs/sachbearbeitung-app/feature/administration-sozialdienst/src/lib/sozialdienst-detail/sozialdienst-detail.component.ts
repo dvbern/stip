@@ -7,7 +7,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -23,9 +22,11 @@ import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import { Land, MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import { MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -67,11 +68,12 @@ export class SozialdienstDetailComponent implements OnDestroy {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
   private globalStore = inject(Store);
+  private landStore = inject(LandStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   store = inject(SozialdienstStore);
-  laenderSig = signal<Land[]>(['CH']);
+
   languageSig = this.globalStore.selectSignal(selectLanguage);
 
   MASK_IBAN = MASK_IBAN;
@@ -103,21 +105,27 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
       if (id) {
         this.store.loadSozialdienst$({ sozialdienstId: id });
-        // disable email field
+        // disable email field since it cannot be updated
         this.form.controls.sozialdienstAdmin.controls.email.disable({
           emitEvent: false,
         });
       } else {
         // set country to CH, since all sozialdienst are in CH
-        this.form.controls.zahlungsverbindung.controls.adresse.controls.land.setValue(
-          'CH',
-          {
-            emitEvent: false,
-          },
-        );
+        const laender = this.landStore.landListViewSig();
+        const chLandId = laender?.find(
+          (l) => l.laendercodeBfs === BFSCODE_SCHWEIZ,
+        )?.id;
+
+        if (chLandId) {
+          this.form.controls.zahlungsverbindung.controls.adresse.controls.landId.setValue(
+            chLandId,
+          );
+        }
       }
-      this.form.controls.zahlungsverbindung.controls.adresse.controls.land.disable(
-        { emitEvent: false },
+      this.form.controls.zahlungsverbindung.controls.adresse.controls.landId.disable(
+        {
+          emitEvent: false,
+        },
       );
     });
 

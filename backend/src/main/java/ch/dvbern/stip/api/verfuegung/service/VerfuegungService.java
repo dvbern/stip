@@ -56,6 +56,13 @@ public class VerfuegungService {
     private final VerfuegungMapper verfuegungMapper;
 
     @Transactional
+    public void createVerfuegung(final UUID gesuchId) {
+        final Verfuegung verfuegung = new Verfuegung();
+        verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
+        verfuegungRepository.persistAndFlush(verfuegung);
+    }
+
+    @Transactional
     public void createVerfuegung(final UUID gesuchId, final UUID stipDecisionId) {
         final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
 
@@ -66,8 +73,24 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
+    public void createPdfForNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(gesuch, verfuegung.getStipDecision());
+
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
+        );
+        verfuegung.setObjectId(objectId);
+        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+    }
+
+    @Transactional
+    public void createPdfForVerfuegungOhneAnspruch(final Gesuch gesuch, final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruch(gesuch);
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),

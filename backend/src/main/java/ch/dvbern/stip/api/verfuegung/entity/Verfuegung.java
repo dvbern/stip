@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.verfuegung.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,8 +41,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Entity
 @Table(
-    name = "verfuegung",
-    indexes = {
+    name = "verfuegung", indexes = {
         @Index(name = "IX_verfuegung_mandant", columnList = "mandant")
     }
 )
@@ -65,9 +65,9 @@ public class Verfuegung extends AbstractMandantEntity {
     @Column(name = "object_id")
     private String objectId;
 
-    @NotNull
+    @Nullable
     @Enumerated(EnumType.STRING)
-    @Column(name = "stip_decision", nullable = false)
+    @Column(name = "stip_decision")
     private StipDecision stipDecision;
 
     @NotNull

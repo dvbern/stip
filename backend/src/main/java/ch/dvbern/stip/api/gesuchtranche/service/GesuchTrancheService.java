@@ -406,6 +406,8 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
+        notificationService.createAenderungEingereichtNotification(aenderung.getGesuch());
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
     }
 
     @Transactional
@@ -491,7 +493,7 @@ public class GesuchTrancheService {
 
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
 
-        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
+        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
         return gesuchTrancheMapper.toDto(aenderung);
     }

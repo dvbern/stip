@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   calculateElternSituationGesuch,
@@ -11,8 +10,7 @@ import {
 
 export const selectSharedFeatureGesuchFormElternView = createSelector(
   selectSharedDataAccessGesuchsView,
-  selectSharedDataAccessStammdatensView,
-  (gesuchsView, stammdatenView) => {
+  (gesuchsView) => {
     const elternSituation = calculateElternSituationGesuch(
       gesuchsView.gesuchFormular,
     );
@@ -27,7 +25,6 @@ export const selectSharedFeatureGesuchFormElternView = createSelector(
       expectMutter: elternSituation.expectMutter,
       vater: elternSituation.vater,
       mutter: elternSituation.mutter,
-      laender: stammdatenView.laender,
     };
   },
 );

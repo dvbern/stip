@@ -94,9 +94,9 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     steuernKantonGemeinde: [<string | null>null, [Validators.required]],
     steuernBund: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
-    fahrkostenPartner: [<string | null>null, [Validators.required]],
+    fahrkostenPartner: [<string | undefined>undefined],
     verpflegung: [<string | null>null, [Validators.required]],
-    verpflegungPartner: [<string | null>null, [Validators.required]],
+    verpflegungPartner: [<string | undefined>undefined],
     steuerjahr: [
       <number | null>null,
       [
@@ -266,9 +266,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       'steuernKantonGemeinde',
       'steuernBund',
       'fahrkosten',
-      'fahrkostenPartner',
       'verpflegung',
-      'verpflegungPartner',
       'steuerjahr',
       'veranlagungsCode',
     ]);

@@ -1969,19 +1969,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getDelegierungsOfSozialdienst
       summary: Returns a list of Faelle with Delegierung
-  /stammdaten/land:
+  /land:
     get:
       tags:
-        - Stammdaten
+        - Land
       responses:
         '200':
+          description: Returns all countries and whether they're part of eu/efta or not
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Land'
-          description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1989,47 +1989,52 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getLaender
-      summary: Returns a List of LandCode
-  /stammdaten/land/euefta:
-    get:
+    post:
       tags:
-        - Stammdaten
+        - Land
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: Returns all countries and whether they're part of eu/efta or not
           content:
             application/json:
               schema:
-                type: Array
-                items:
-                  $ref: '#/components/schemas/LandEuEfta'
+                $ref: '#/components/schemas/Land'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getLaenderEuEfta
+      operationId: createLand
+  /land/{landId}:
+    parameters:
+      - name: landId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
     patch:
       tags:
-        - Stammdaten
+        - Land
       requestBody:
         required: true
         content:
             application/json:
               schema:
-                type: Array
-                items:
-                  $ref: '#/components/schemas/LandEuEfta'
+                $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: 'EU/EFTA Länder wurden erflogreich gesetzt'
           content:
             application/json:
               schema:
-                type: Array
-                items:
-                  $ref: '#/components/schemas/LandEuEfta'
+                $ref: '#/components/schemas/Land'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2038,7 +2043,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: setLaenderEuEfta
+      operationId: updateLand
   /ausbildungsstaette:
     get:
       tags:
@@ -3973,7 +3978,7 @@ components:
       type: string
     Adresse:
       required:
-        - land
+        - landId
         - strasse
         - plz
         - ort
@@ -3981,8 +3986,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        land:
-          $ref: '#/components/schemas/Land'
+        landId:
+          $ref: '#/components/schemas/UUID'
         coAdresse:
           type: string
         strasse:
@@ -4608,217 +4613,36 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTrancheUpdate'
-    LandEuEfta:
+    Land:
       title: Is the country part of eu/efta
       type: object
       required:
-        - land
+        - laendercodeBfs
         - isEuEfta
+        - eintragGueltig
+        - deKurzform
+        - frKurzform
+        - itKurzform
+        - enKurzform
       properties:
-        land:
-          $ref: '#/components/schemas/Land'
+        id:
+          $ref: '#/components/schemas/UUID'
+        laendercodeBfs:
+          type: string
         isEuEfta:
           type: boolean
-    Land:
-      enum:
-        - 'CH'
-        - 'AF'
-        - 'EG'
-        - 'AL'
-        - 'DZ'
-        - 'AD'
-        - 'AO'
-        - 'AG'
-        - 'GQ'
-        - 'AR'
-        - 'AM'
-        - 'AZ'
-        - 'ET'
-        - 'AU'
-        - 'BS'
-        - 'BH'
-        - 'BD'
-        - 'BB'
-        - 'BY'
-        - 'BE'
-        - 'BZ'
-        - 'BJ'
-        - 'BT'
-        - 'BO'
-        - 'BA'
-        - 'BR'
-        - 'BN'
-        - 'BG'
-        - 'BF'
-        - 'BI'
-        - 'CV'
-        - 'CL'
-        - 'CN'
-        - 'CK'
-        - 'CR'
-        - 'CI'
-        - 'DK'
-        - 'DE'
-        - 'DM'
-        - 'DO'
-        - 'DJ'
-        - 'EC'
-        - 'SV'
-        - 'ER'
-        - 'EE'
-        - 'SZ'
-        - 'FJ'
-        - 'FI'
-        - 'FR'
-        - 'GA'
-        - 'GM'
-        - 'GE'
-        - 'GH'
-        - 'GD'
-        - 'GR'
-        - 'GT'
-        - 'GN'
-        - 'GW'
-        - 'GF'
-        - 'HT'
-        - 'VA'
-        - 'HN'
-        - 'IN'
-        - 'ID'
-        - 'IQ'
-        - 'IR'
-        - 'IE'
-        - 'IS'
-        - 'IL'
-        - 'IT'
-        - 'JM'
-        - 'JP'
-        - 'YE'
-        - 'JO'
-        - 'KH'
-        - 'CM'
-        - 'CA'
-        - 'KZ'
-        - 'QA'
-        - 'KE'
-        - 'KG'
-        - 'KI'
-        - 'CO'
-        - 'KM'
-        - 'CG'
-        - 'CD'
-        - 'KR'
-        - 'KP'
-        - 'XK'
-        - 'HR'
-        - 'CU'
-        - 'KW'
-        - 'LA'
-        - 'LS'
-        - 'LV'
-        - 'LB'
-        - 'LR'
-        - 'LY'
-        - 'LI'
-        - 'LT'
-        - 'LU'
-        - 'MG'
-        - 'MW'
-        - 'MY'
-        - 'MV'
-        - 'ML'
-        - 'MT'
-        - 'MA'
-        - 'MH'
-        - 'MR'
-        - 'MU'
-        - 'MX'
-        - 'FM'
-        - 'MO'
-        - 'MC'
-        - 'MN'
-        - 'ME'
-        - 'MZ'
-        - 'MM'
-        - 'NA'
-        - 'NR'
-        - 'NP'
-        - 'NZ'
-        - 'NI'
-        - 'NL'
-        - 'NE'
-        - 'NG'
-        - 'NU'
-        - 'MK'
-        - 'NO'
-        - 'OM'
-        - 'AT'
-        - 'PK'
-        - 'PW'
-        - 'PA'
-        - 'PG'
-        - 'PY'
-        - 'PE'
-        - 'PH'
-        - 'PL'
-        - 'PT'
-        - 'RW'
-        - 'RO'
-        - 'RU'
-        - 'SB'
-        - 'ZM'
-        - 'WS'
-        - 'SM'
-        - 'ST'
-        - 'SA'
-        - 'SE'
-        - 'SN'
-        - 'RS'
-        - 'SC'
-        - 'SL'
-        - 'ZW'
-        - 'SG'
-        - 'SK'
-        - 'SI'
-        - 'SO'
-        - 'ES'
-        - 'LK'
-        - 'KN'
-        - 'LC'
-        - 'VC'
-        - 'ZA'
-        - 'SD'
-        - 'SS'
-        - 'SR'
-        - 'SY'
-        - 'TJ'
-        - 'TZ'
-        - 'TH'
-        - 'TL'
-        - 'TG'
-        - 'TO'
-        - 'TT'
-        - 'TD'
-        - 'CZ'
-        - 'TN'
-        - 'TR'
-        - 'TM'
-        - 'TV'
-        - 'UG'
-        - 'UA'
-        - 'HU'
-        - 'UY'
-        - 'UZ'
-        - 'VU'
-        - 'VE'
-        - 'AE'
-        - 'US'
-        - 'GB'
-        - 'VN'
-        - 'CF'
-        - 'CY'
-        - 'STATELESS'
-      type: string
+        iso3code:
+            type: string
+        eintragGueltig:
+          type: boolean
+        deKurzform:
+          type: string
+        frKurzform:
+          type: string
+        itKurzform:
+          type: string
+        enKurzform:
+          type: string
     Sprache:
       enum:
         - DEUTSCH
@@ -5047,7 +4871,7 @@ components:
         - email
         - telefonnummer
         - geburtsdatum
-        - nationalitaet
+        - nationalitaetId
         - wohnsitz
         - sozialhilfebeitraege
         - korrespondenzSprache
@@ -5069,8 +4893,8 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
-        nationalitaet:
-          $ref: '#/components/schemas/Land'
+        nationalitaetId:
+          $ref: '#/components/schemas/UUID'
         heimatort:
           description: Required nur wenn Land = CH
           type: string
@@ -6130,6 +5954,8 @@ components:
           $ref: '#/components/schemas/NotificationType'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        contextId:
+          $ref: '#/components/schemas/UUID'
         userErstellt:
           type: string
         timestampErstellt:
@@ -6146,6 +5972,7 @@ components:
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
+        - NEUE_VERFUEGUNG
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

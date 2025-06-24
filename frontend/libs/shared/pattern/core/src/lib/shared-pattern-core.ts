@@ -48,10 +48,6 @@ import {
   sharedDataAccessLanguageFeature,
 } from '@dv/shared/data-access/language';
 import {
-  sharedDataAccessStammdatenEffects,
-  sharedDataAccessStammdatensFeature,
-} from '@dv/shared/data-access/stammdaten';
-import {
   CompileTimeConfig,
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
@@ -127,12 +123,10 @@ export function provideSharedPatternCore(
     provideState(sharedDataAccessBenutzersFeature),
     provideState(sharedDataAccessConfigsFeature),
     provideState(sharedDataAccessLanguageFeature),
-    provideState(sharedDataAccessStammdatensFeature),
     provideEffects(
       sharedDataAccessBenutzerEffects,
       sharedDataAccessConfigEffects,
       sharedDataAccessLanguageEffects,
-      sharedDataAccessStammdatenEffects,
     ),
     provideTranslateService({
       missingTranslationHandler: {

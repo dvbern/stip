@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AdresseDtoSpec.JSON_PROPERTY_ID,
-  AdresseDtoSpec.JSON_PROPERTY_LAND,
+  AdresseDtoSpec.JSON_PROPERTY_LAND_ID,
   AdresseDtoSpec.JSON_PROPERTY_CO_ADRESSE,
   AdresseDtoSpec.JSON_PROPERTY_STRASSE,
   AdresseDtoSpec.JSON_PROPERTY_HAUSNUMMER,
@@ -43,8 +42,8 @@ public class AdresseDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
-  public static final String JSON_PROPERTY_LAND = "land";
-  private LandDtoSpec land;
+  public static final String JSON_PROPERTY_LAND_ID = "landId";
+  private UUID landId;
 
   public static final String JSON_PROPERTY_CO_ADRESSE = "coAdresse";
   private String coAdresse;
@@ -90,29 +89,29 @@ public class AdresseDtoSpec {
   }
 
 
-  public AdresseDtoSpec land(LandDtoSpec land) {
+  public AdresseDtoSpec landId(UUID landId) {
     
-    this.land = land;
+    this.landId = landId;
     return this;
   }
 
    /**
-   * Get land
-   * @return land
+   * Get landId
+   * @return landId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LAND)
+  @JsonProperty(JSON_PROPERTY_LAND_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LandDtoSpec getLand() {
-    return land;
+  public UUID getLandId() {
+    return landId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAND)
+  @JsonProperty(JSON_PROPERTY_LAND_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLand(LandDtoSpec land) {
-    this.land = land;
+  public void setLandId(UUID landId) {
+    this.landId = landId;
   }
 
 
@@ -255,7 +254,7 @@ public class AdresseDtoSpec {
     }
     AdresseDtoSpec adresse = (AdresseDtoSpec) o;
     return Objects.equals(this.id, adresse.id) &&
-        Objects.equals(this.land, adresse.land) &&
+        Objects.equals(this.landId, adresse.landId) &&
         Objects.equals(this.coAdresse, adresse.coAdresse) &&
         Objects.equals(this.strasse, adresse.strasse) &&
         Objects.equals(this.hausnummer, adresse.hausnummer) &&
@@ -265,7 +264,7 @@ public class AdresseDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, land, coAdresse, strasse, hausnummer, plz, ort);
+    return Objects.hash(id, landId, coAdresse, strasse, hausnummer, plz, ort);
   }
 
   @Override
@@ -273,7 +272,7 @@ public class AdresseDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AdresseDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    land: ").append(toIndentedString(land)).append("\n");
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    coAdresse: ").append(toIndentedString(coAdresse)).append("\n");
     sb.append("    strasse: ").append(toIndentedString(strasse)).append("\n");
     sb.append("    hausnummer: ").append(toIndentedString(hausnummer)).append("\n");

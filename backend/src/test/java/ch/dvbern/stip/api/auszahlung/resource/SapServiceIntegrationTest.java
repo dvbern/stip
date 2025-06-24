@@ -77,7 +77,7 @@ class SapServiceIntegrationTest {
         deliveryid = SapEndpointService.generateDeliveryId();
 
         final var businessPartnerCreateResponse =
-            sapEndpointService.createBusinessPartner(auszahlung, deliveryid);
+            sapEndpointService.createBusinessPartner(auszahlung.getZahlungsverbindung(), deliveryid);
 
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerCreateResponse.getRETURNCODE().get(0).getTYPE()),
@@ -92,7 +92,8 @@ class SapServiceIntegrationTest {
         auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         deliveryid = SapEndpointService.generateDeliveryId();
 
-        final var businessPartnerChangeResponse = sapEndpointService.changeBusinessPartner(auszahlung, deliveryid);
+        final var businessPartnerChangeResponse =
+            sapEndpointService.changeBusinessPartner(auszahlung.getZahlungsverbindung(), deliveryid);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerChangeResponse.getRETURNCODE().get(0).getTYPE()),
             is(true)
@@ -106,7 +107,8 @@ class SapServiceIntegrationTest {
         final var auszahlung = createAuszahlung();
         auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
 
-        final var businessPartnerReadResponse = sapEndpointService.readBusinessPartner(auszahlung);
+        final var businessPartnerReadResponse =
+            sapEndpointService.readBusinessPartner(auszahlung.getZahlungsverbindung());
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
             is(false)
@@ -132,7 +134,7 @@ class SapServiceIntegrationTest {
         deliveryid = SapEndpointService.generateDeliveryId();
 
         final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(
-            auszahlung,
+            auszahlung.getZahlungsverbindung(),
             5,
             deliveryid,
             "",

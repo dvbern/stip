@@ -539,7 +539,7 @@ public class GesuchService {
 
         if (stipendien.getBerechnung() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+            gesuchStatusToVerfuegt(gesuchId);
         } else {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
@@ -602,6 +602,7 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        verfuegungService.createVerfuegung(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 

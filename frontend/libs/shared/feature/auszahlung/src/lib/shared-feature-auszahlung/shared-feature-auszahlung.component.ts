@@ -12,15 +12,12 @@ import { Store } from '@ngrx/store';
 
 import { AuszahlungStore } from '@dv/shared/data-access/auszahlung';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  SharedDataAccessStammdatenApiEvents,
-  selectSharedDataAccessStammdatensView,
-} from '@dv/shared/data-access/stammdaten';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { FallAuszahlungUpdate } from '@dv/shared/model/gesuch';
+import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
 import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { isPending } from '@dv/shared/util/remote-data';
@@ -36,21 +33,17 @@ export abstract class SharedFeatureAuszahlungComponent {
   private einreichenStore = inject(EinreichenStore);
   private auszahlungStore = inject(AuszahlungStore);
   private permissionStore = inject(PermissionStore);
-  private stammdatenViewSig = this.store.selectSignal(
-    selectSharedDataAccessStammdatensView,
-  );
+
   private config = inject(SharedModelCompileTimeConfig);
 
   hasUnsavedChanges = false;
   fallIdSig = input.required<string>({ alias: 'fallId' });
   backlinkSig = input<string | null>(null, { alias: 'backlink' });
   optionalBacklinkSig = signal<string | null>(null);
-  laenderSig = computed(() => {
-    return this.stammdatenViewSig().laender;
-  });
+  laenderStore = inject(LandStore);
   languageSig = this.store.selectSignal(selectLanguage);
   auszahlungViewSig = computed<SharedModelAuszahlung>(() => {
-    const laender = this.stammdatenViewSig()?.laender || [];
+    const laender = this.laenderStore.landListViewSig() ?? [];
     const language = this.languageSig();
     const auszahlung = this.auszahlungStore.auszahlung();
     const rolesMap = this.permissionStore.rolesMapSig();
@@ -74,7 +67,7 @@ export abstract class SharedFeatureAuszahlungComponent {
   });
 
   constructor() {
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
+    this.laenderStore.loadLaender$();
 
     effect(() => {
       const fallId = this.fallIdSig();
@@ -95,7 +88,7 @@ export abstract class SharedFeatureAuszahlungComponent {
     });
   }
 
-  handleSave(auszahlung: FallAuszahlungUpdate): void {
+  handleSave(auszahlung: AuszahlungUpdate): void {
     const fallId = this.fallIdSig();
 
     if (isDefined(fallId)) {

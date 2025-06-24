@@ -1,12 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { provideTranslateService } from '@ngx-translate/core';
-import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
@@ -36,9 +33,6 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
       providers: [
         provideRouter([]),
         provideHttpClient(),
-        provideHttpClientTesting(),
-        provideOAuthClient(),
-        provideTranslateService(),
         provideMockStore({
           initialState: {
             gesuchs: {

@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.sap.entity;
 
 import java.math.BigDecimal;
 
-import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
@@ -56,9 +55,4 @@ public class SapDelivery extends AbstractMandantEntity {
     @Nullable
     @Column(name = "sap_business_partner_id")
     private Integer sapBusinessPartnerId;
-
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pending_sap_action")
-    private BuchhaltungType pendingSapAction;
 }
