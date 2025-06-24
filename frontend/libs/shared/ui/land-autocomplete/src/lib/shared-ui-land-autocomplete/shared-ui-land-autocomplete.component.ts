@@ -267,6 +267,7 @@ export class SharedUiLandAutocompleteComponent
         );
         if (land) {
           this.landId = land.id;
+          this.onChange(land.id);
           this.setAutocomplete(land);
         } else {
           this.landId = undefined;
