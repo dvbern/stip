@@ -73,7 +73,7 @@ class LandResourceImplTest {
     @Test
     @Order(2)
     @TestAsAdmin
-    void createLandWitDuplicateIso3codeFails() {
+    void createLandWitDuplicateIso2codeFails() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
         landToCreate.setIso2code("ZZ");
         TestUtil.executeAndAssert(
@@ -85,7 +85,7 @@ class LandResourceImplTest {
     @Test
     @Order(3)
     @TestAsAdmin
-    void createLandWitDuplicateIso2codeFails() {
+    void createLandWitDuplicateIso3codeFails() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
         landToCreate.setIso3code("ZZZ");
         TestUtil.executeAndAssert(

@@ -31,6 +31,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_ISO2CODE_NOT_UNIQUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_ISO3CODE_NOT_UNIQUE;
 
 @RequestScoped
@@ -55,30 +56,11 @@ public class LandService {
 
         final var land = landMapper.toEntity(landDto);
 
-        if (landDto.getIso3code() != null) {
-            final var duplicate = landRepository.getByIso3code(land.getIso3code());
-            throwIfDuplicate(duplicate);
-        }
-
-        if (landDto.getIso2code() != null) {
-            final var duplicate = landRepository.getByIso2code(land.getIso2code());
-            throwIfDuplicate(duplicate);
-        }
+        validateIso3CodeUniqueness(landDto.getIso3code(), null);
+        validateIso2CodeUniqueness(landDto.getIso2code(), null);
 
         landRepository.persist(land);
         return landMapper.toDto(land);
-    }
-
-    private void throwIfDuplicate(final Optional<Land> duplicate) {
-        if (duplicate.isPresent()) {
-            throw new CustomValidationsException(
-                "iso3code must be unique or null",
-                new CustomConstraintViolation(
-                    VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
-                    "iso3code"
-                )
-            );
-        }
     }
 
     @Transactional
@@ -86,9 +68,16 @@ public class LandService {
         final var land = landRepository.requireById(landId);
         landMapper.partialUpdate(landDto, land);
 
-        if (landDto.getIso3code() != null) {
-            var duplicate = landRepository.getByIso3code(land.getIso3code());
-            if (duplicate.isPresent() && !duplicate.get().getId().equals(land.getId())) {
+        validateIso2CodeUniqueness(landDto.getIso2code(), land.getId());
+        validateIso3CodeUniqueness(landDto.getIso3code(), land.getId());
+
+        return landMapper.toDto(land);
+    }
+
+    private void validateIso3CodeUniqueness(final String iso3code, final UUID excludeId) {
+        if (iso3code != null) {
+            final var duplicate = landRepository.getByIso3code(iso3code);
+            if (duplicate.isPresent() && (excludeId == null || !duplicate.get().getId().equals(excludeId))) {
                 throw new CustomValidationsException(
                     "iso3code must be unique or null",
                     new CustomConstraintViolation(
@@ -98,8 +87,21 @@ public class LandService {
                 );
             }
         }
+    }
 
-        return landMapper.toDto(land);
+    private void validateIso2CodeUniqueness(final String iso2code, final UUID excludeId) {
+        if (iso2code != null) {
+            final var duplicate = landRepository.getByIso2code(iso2code);
+            if (duplicate.isPresent() && (excludeId == null || !duplicate.get().getId().equals(excludeId))) {
+                throw new CustomValidationsException(
+                    "iso2code must be unique or null",
+                    new CustomConstraintViolation(
+                        VALIDATION_LAND_ISO2CODE_NOT_UNIQUE,
+                        "iso2code"
+                    )
+                );
+            }
+        }
     }
 
     public Optional<Land> getLandByBfsCode(final String bfsCode) {

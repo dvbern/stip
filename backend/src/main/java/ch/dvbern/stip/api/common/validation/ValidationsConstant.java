@@ -209,6 +209,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.adresse.land.no.stateless}";
     public static final String VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT =
         "{jakarta.validation.constraints.unterschriftenblaetter.not.present}";
+    public static final String VALIDATION_LAND_ISO2CODE_NOT_UNIQUE =
+        "{jakarta.validation.constraints.land.iso2code.notunique}";
     public static final String VALIDATION_LAND_ISO3CODE_NOT_UNIQUE =
         "{jakarta.validation.constraints.land.iso3code.notunique}";
     public static final String VALIDATION_GESUCH_FORMULAR_LAND_UNGUELTIG =
