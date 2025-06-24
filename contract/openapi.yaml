@@ -5896,6 +5896,8 @@ components:
           $ref: '#/components/schemas/NotificationType'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        contextId:
+          $ref: '#/components/schemas/UUID'
         userErstellt:
           type: string
         timestampErstellt:
@@ -5912,6 +5914,7 @@ components:
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
+        - NEUE_VERFUEGUNG
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

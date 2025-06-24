@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TEXT,
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TYPE,
   NotificationDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  NotificationDtoSpec.JSON_PROPERTY_CONTEXT_ID,
   NotificationDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   NotificationDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
@@ -47,6 +48,9 @@ public class NotificationDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
   private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_CONTEXT_ID = "contextId";
+  private UUID contextId;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
@@ -135,6 +139,32 @@ public class NotificationDtoSpec {
   }
 
 
+  public NotificationDtoSpec contextId(UUID contextId) {
+    
+    this.contextId = contextId;
+    return this;
+  }
+
+   /**
+   * Get contextId
+   * @return contextId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CONTEXT_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getContextId() {
+    return contextId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CONTEXT_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setContextId(UUID contextId) {
+    this.contextId = contextId;
+  }
+
+
   public NotificationDtoSpec userErstellt(String userErstellt) {
     
     this.userErstellt = userErstellt;
@@ -198,13 +228,14 @@ public class NotificationDtoSpec {
     return Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.gesuchId, notification.gesuchId) &&
+        Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationText, notificationType, gesuchId, userErstellt, timestampErstellt);
+    return Objects.hash(notificationText, notificationType, gesuchId, contextId, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -214,6 +245,7 @@ public class NotificationDtoSpec {
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");

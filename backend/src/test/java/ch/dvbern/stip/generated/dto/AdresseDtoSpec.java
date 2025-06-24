@@ -99,9 +99,9 @@ public class AdresseDtoSpec {
    * Get landId
    * @return landId
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_LAND_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getLandId() {
     return landId;
@@ -109,7 +109,7 @@ public class AdresseDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_LAND_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLandId(UUID landId) {
     this.landId = landId;
   }
