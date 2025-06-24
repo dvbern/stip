@@ -393,6 +393,12 @@ public class GesuchDokumentService {
             .toList();
 
         dokumente.forEach(this::removeDokument);
+
+        for (final var gesuchDokument : gesuchDokumente) {
+            if (gesuchDokument.getStatus() != Dokumentstatus.AUSSTEHEND) {
+                dokumentstatusService.triggerStatusChange(gesuchDokument, DokumentstatusChangeEvent.AUSSTEHEND);
+            }
+        }
     }
 
     @Transactional

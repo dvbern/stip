@@ -43,7 +43,8 @@ public class DokumentstatusConfigProducer {
 
         config.configure(Dokumentstatus.ABGELEHNT)
             .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
-        config.configure(Dokumentstatus.AKZEPTIERT);
+        config.configure(Dokumentstatus.AKZEPTIERT)
+            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
 
         for (final var status : Dokumentstatus.values()) {
             var state = config.getRepresentation(status);
