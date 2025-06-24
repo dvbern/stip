@@ -87,13 +87,14 @@ public class LandSeeding extends Seeder {
                     .map(
                         plzLine -> new Land()
                             .setLaendercodeBfs(plzLine[0])
-                            .setIso3code(plzLine[1].isEmpty() ? null : plzLine[1])
-                            .setDeKurzform(plzLine[2])
-                            .setFrKurzform(plzLine[3])
-                            .setItKurzform(plzLine[4])
-                            .setEnKurzform(plzLine[5])
-                            .setGueltig(parseJaNein(plzLine[6]))
-                            .setIsEuEfta(parseJaNein(plzLine[7]))
+                            .setIso2code(plzLine[1].isEmpty() ? null : plzLine[1])
+                            .setIso3code(plzLine[2].isEmpty() ? null : plzLine[2])
+                            .setDeKurzform(plzLine[3])
+                            .setFrKurzform(plzLine[4])
+                            .setItKurzform(plzLine[5])
+                            .setEnKurzform(plzLine[6])
+                            .setGueltig(parseJaNein(plzLine[7]))
+                            .setIsEuEfta(parseJaNein(plzLine[8]))
                     )
                     .toList();
             }
