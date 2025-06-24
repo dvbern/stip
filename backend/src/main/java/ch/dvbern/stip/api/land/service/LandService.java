@@ -56,20 +56,29 @@ public class LandService {
         final var land = landMapper.toEntity(landDto);
 
         if (landDto.getIso3code() != null) {
-            var duplicate = landRepository.getByIso3code(land.getIso3code());
-            if (duplicate.isPresent()) {
-                throw new CustomValidationsException(
-                    "iso3code must be unique or null",
-                    new CustomConstraintViolation(
-                        VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
-                        "iso3code"
-                    )
-                );
-            }
+            final var duplicate = landRepository.getByIso3code(land.getIso3code());
+            throwIfDuplicate(duplicate);
+        }
+
+        if (landDto.getIso2code() != null) {
+            final var duplicate = landRepository.getByIso2code(land.getIso2code());
+            throwIfDuplicate(duplicate);
         }
 
         landRepository.persist(land);
         return landMapper.toDto(land);
+    }
+
+    private void throwIfDuplicate(final Optional<Land> duplicate) {
+        if (duplicate.isPresent()) {
+            throw new CustomValidationsException(
+                "iso3code must be unique or null",
+                new CustomConstraintViolation(
+                    VALIDATION_LAND_ISO3CODE_NOT_UNIQUE,
+                    "iso3code"
+                )
+            );
+        }
     }
 
     @Transactional
