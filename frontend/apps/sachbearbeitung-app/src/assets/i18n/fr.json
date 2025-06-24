@@ -120,6 +120,8 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Nom",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label": "Fonction (Allemand)",
+  "sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label": "Fonction (Français)",
   "sachbearbeitung-app.admin.benutzerverwaltung.rollen.title": "Rôles",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.sachbearbeiter.label": "Agent",

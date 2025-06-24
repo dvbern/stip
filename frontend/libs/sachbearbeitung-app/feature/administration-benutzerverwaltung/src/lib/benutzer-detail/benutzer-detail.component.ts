@@ -31,6 +31,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 
 @Component({
   imports: [
@@ -65,6 +66,12 @@ export class BenutzeDetailComponent implements OnDestroy {
       <string | null>null,
       [Validators.required, Validators.pattern(PATTERN_EMAIL)],
     ],
+    telefonnummer: [
+      <string | null>null,
+      [Validators.required, sharedUtilValidatorTelefonNummer()],
+    ],
+    funktionDe: [<string | null>null, [Validators.required]],
+    funktionFr: [<string | null>null, [Validators.required]],
     roles: [<SharedModelRoleList>[], [Validators.required]],
   });
 
@@ -95,6 +102,10 @@ export class BenutzeDetailComponent implements OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.store.resetBenutzer();
+  }
+
   compareById = compareById;
 
   handleSubmit() {
@@ -105,14 +116,14 @@ export class BenutzeDetailComponent implements OnDestroy {
     }
   }
 
-  update() {
+  private update() {
     const id = this.idSig();
 
     if (!id || this.form.invalid) {
       return;
     }
 
-    const values = convertTempFormToRealValues(this.form, ['name', 'vorname']);
+    const values = convertTempFormToRealValues(this.form);
     this.store.updateBenutzer$({
       user: {
         lastName: values.name,
@@ -124,15 +135,11 @@ export class BenutzeDetailComponent implements OnDestroy {
     });
   }
 
-  save() {
+  private save() {
     if (this.form.invalid) {
       return;
     }
-    const values = convertTempFormToRealValues(this.form, [
-      'email',
-      'name',
-      'vorname',
-    ]);
+    const values = convertTempFormToRealValues(this.form);
     this.store.registerUser$({
       ...values,
       onAfterSave: (userId) => {
@@ -147,9 +154,5 @@ export class BenutzeDetailComponent implements OnDestroy {
   trimEmail() {
     const email = this.form.controls.email;
     email.setValue(email.value?.trim() ?? null);
-  }
-
-  ngOnDestroy() {
-    this.store.resetBenutzer();
   }
 }
