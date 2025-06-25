@@ -38,7 +38,9 @@
             [aria-label]="dialogData.labelKey | translate"
           >
             @for (kanton of kantone; track $index) {
-              <mat-option [value]="kanton">{{ kanton }}</mat-option>
+              <mat-option [value]="kanton" [attr.data-testid]="kanton">
+                {{ 'shared.kanton.' + kanton | translate }}
+              </mat-option>
             }
           </mat-select>
           <mat-error *dvSharedUiFormMessageError="'required'">
