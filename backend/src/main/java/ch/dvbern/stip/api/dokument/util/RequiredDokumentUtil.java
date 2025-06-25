@@ -40,11 +40,8 @@ public class RequiredDokumentUtil {
             .getTranche()
             .getGesuchDokuments()
             .stream()
-            .filter(
-                dokument -> !dokument.getDokumente().isEmpty()
-                && Objects.nonNull(dokument.getDokumentTyp())
-            )
             .map(GesuchDokument::getDokumentTyp)
+            .filter(Objects::nonNull)
             .toList();
     }
 
@@ -55,7 +52,7 @@ public class RequiredDokumentUtil {
             .stream()
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
-                && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
+                && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
             )
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
