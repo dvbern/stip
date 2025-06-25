@@ -75,7 +75,7 @@ public class DeleteChangedDocumentsUtil {
         final PersonInAusbildung oldPia
     ) {
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChanged(newPia.getGeburtsdatum(), oldPia.getGeburtsdatum())) {
+        if (!Objects.equals(newPia.getGeburtsdatum(), oldPia.getGeburtsdatum())) {
             toDelete.add(DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN);
         }
 
@@ -91,11 +91,11 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChanged(newPartner.getJahreseinkommen(), oldPartner.getJahreseinkommen())) {
+        if (hasChangedAndNewIsNotNull(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
             toDelete.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
         }
 
-        if (hasChanged(newPartner.getFahrkosten(), oldPartner.getFahrkosten())) {
+        if (hasChangedAndNewIsNotNull(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
             toDelete.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
         }
 
@@ -107,46 +107,46 @@ public class DeleteChangedDocumentsUtil {
         final EinnahmenKosten oldEk
     ) {
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChanged(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
             toDelete.add(DokumentTyp.EK_LOHNABRECHNUNG);
         }
 
-        if (hasChanged(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
             toDelete.add(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
         }
 
-        if (hasChanged(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
             toDelete.add(DokumentTyp.EK_MIETVERTRAG);
         }
 
-        if (hasChanged(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
             toDelete.add(DokumentTyp.EK_BELEG_OV_ABONNEMENT);
         }
 
-        if (hasChanged(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
             toDelete.add(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
         }
 
-        if (hasChanged(oldEk.getRenten(), newEk.getRenten())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getRenten(), newEk.getRenten())) {
             toDelete.add(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN);
         }
 
-        if (hasChanged(oldEk.getBeitraege(), newEk.getBeitraege())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getBeitraege(), newEk.getBeitraege())) {
             toDelete.add(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION);
         }
 
-        if (hasChanged(oldEk.getZulagen(), newEk.getZulagen())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getZulagen(), newEk.getZulagen())) {
             toDelete.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
         }
 
-        if (hasChanged(oldEk.getAlimente(), newEk.getAlimente())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getAlimente(), newEk.getAlimente())) {
             toDelete.add(DokumentTyp.EK_BELEG_ALIMENTE);
         }
 
-        if (hasChanged(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
             toDelete.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
         }
-        if (hasChanged(oldEk.getVermoegen(), newEk.getVermoegen())) {
+        if (hasChangedAndNewIsNotNull(oldEk.getVermoegen(), newEk.getVermoegen())) {
             toDelete.add(DokumentTyp.EK_VERMOEGEN);
         }
 
@@ -162,14 +162,14 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChanged(newDarlehen.getAnzahlBetreibungen(), oldDarlehen.getAnzahlBetreibungen())) {
+        if (hasChangedAndNewIsNotNull(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())) {
             toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
         }
 
         return toDelete;
     }
 
-    private <T> boolean hasChanged(final T left, final T right) {
-        return !Objects.equals(left, right);
+    private boolean hasChangedAndNewIsNotNull(final Integer oldVal, final Integer newVal) {
+        return !Objects.equals(oldVal, newVal) && newVal != null && newVal > 0;
     }
 }
