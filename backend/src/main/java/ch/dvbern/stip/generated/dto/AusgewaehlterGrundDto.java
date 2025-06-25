@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusgewaehlterGrundDto  implements Serializable {
   private @Valid UUID decisionId;
+  private @Valid ch.dvbern.stip.stipdecision.type.Kanton kanton;
 
   /**
    **/
@@ -41,6 +42,24 @@ public class AusgewaehlterGrundDto  implements Serializable {
     this.decisionId = decisionId;
   }
 
+  /**
+   **/
+  public AusgewaehlterGrundDto kanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+    this.kanton = kanton;
+    return this;
+  }
+
+  
+  @JsonProperty("kanton")
+  public ch.dvbern.stip.stipdecision.type.Kanton getKanton() {
+    return kanton;
+  }
+
+  @JsonProperty("kanton")
+  public void setKanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+    this.kanton = kanton;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -51,12 +70,13 @@ public class AusgewaehlterGrundDto  implements Serializable {
       return false;
     }
     AusgewaehlterGrundDto ausgewaehlterGrund = (AusgewaehlterGrundDto) o;
-    return Objects.equals(this.decisionId, ausgewaehlterGrund.decisionId);
+    return Objects.equals(this.decisionId, ausgewaehlterGrund.decisionId) &&
+        Objects.equals(this.kanton, ausgewaehlterGrund.kanton);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(decisionId);
+    return Objects.hash(decisionId, kanton);
   }
 
   @Override
@@ -65,6 +85,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
     sb.append("class AusgewaehlterGrundDto {\n");
     
     sb.append("    decisionId: ").append(toIndentedString(decisionId)).append("\n");
+    sb.append("    kanton: ").append(toIndentedString(kanton)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -35,6 +35,7 @@ public class StipDecisionTextDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -53,6 +54,7 @@ public class StipDecisionTextDto  implements Serializable {
 
   
   @JsonProperty("stipDecision")
+  @NotNull
   public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
     return stipDecision;
   }
@@ -71,6 +73,7 @@ public class StipDecisionTextDto  implements Serializable {
 
   
   @JsonProperty("titleDe")
+  @NotNull
   public String getTitleDe() {
     return titleDe;
   }
@@ -89,6 +92,7 @@ public class StipDecisionTextDto  implements Serializable {
 
   
   @JsonProperty("textDe")
+  @NotNull
   public String getTextDe() {
     return textDe;
   }
@@ -107,6 +111,7 @@ public class StipDecisionTextDto  implements Serializable {
 
   
   @JsonProperty("textFr")
+  @NotNull
   public String getTextFr() {
     return textFr;
   }

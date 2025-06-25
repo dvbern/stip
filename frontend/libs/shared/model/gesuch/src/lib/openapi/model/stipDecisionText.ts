@@ -12,11 +12,11 @@
 import { StipDecision } from './stipDecision';
 
 export interface StipDecisionText { 
-    id?: string;
-    stipDecision?: StipDecision;
-    titleDe?: string;
-    textDe?: string;
-    textFr?: string;
+    id: string;
+    stipDecision: StipDecision;
+    titleDe: string;
+    textDe: string;
+    textFr: string;
 }
 
 

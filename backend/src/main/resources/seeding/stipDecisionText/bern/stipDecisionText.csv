@@ -24,16 +24,16 @@ Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les 
 
 Vous pouvez vous adresser au service des bourses d’études du canton de %s (adresses des ser-vices des bourses d'études).
 "
-KEIN_WOHNSITZ_KANTON_BE;keinen stipendienrechtlichen Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben.
+KEIN_WOHNSITZ_KANTON_BE;keinen stipendienrechtlichen Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben. Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden.
 
 Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
-(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons %s wenden (Adresse: Stipendienstelle)
+(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden (Adresse: Stipendienstelle)
 
-";"Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne.
+";"Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne. Vous pouvez vous adresser au service des bourses du canton {WOHNSITZKANTON}.
 
 Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les critères permettant de détermi-ner le domicile légal en matière de subsides de formation (art. 12 et 13 de la loi sur l’octroi de subsides de formation [LSF]).
 
-Vous pouvez vous adresser au service des bourses d’études du canton de %s (adresses des services des bourses d'études)..
+Vous pouvez vous adresser au service des bourses d’études du canton de {WOHNSITZKANTON} (adresses des services des bourses d'études)..
 "
 AUSBILDUNG_NICHT_ANERKANNT;keine anerkannte Ausbildung;"Stipendien und Darlehen können gewährt werden für den Besuch von anerkannten Ausbildungen, die zu einem anerkannten Abschluss führen. Ausbildungsstätten sind nur anerkannt, soweit sie zu einem Abschluss führen, der vom Kanton, von der Eidgenossenschaft oder von einem ausländischen Staat anerkannt ist (Art. 6 Abs. 1 und Art. 8 Abs. 2 des Gesetzes über die Ausbildungsbeiträge [ABG]).
 
