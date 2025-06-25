@@ -9,9 +9,11 @@ import {
   inject,
   input,
   runInInjectionContext,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormsModule,
@@ -78,6 +80,7 @@ export class SharedUiLandAutocompleteComponent
   private isOpen = false;
   private disabled = false;
   private touched = false;
+  private latestValue = signal<string | undefined>(undefined);
   landId: string | undefined;
   // Internal autocomplete control - works with Land objects and searchstrings
   autocompleteControl = this.fb.nonNullable.control<Land | string | undefined>(
@@ -98,6 +101,25 @@ export class SharedUiLandAutocompleteComponent
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+
+    effect(() => {
+      const landId = this.latestValue();
+      const laender = this.laenderSig();
+      if (landId) {
+        this.landId = landId;
+        const land = laender?.find((l) => l.id === landId);
+        if (land) {
+          this.setAutocomplete(land);
+          this.ngControl?.control?.updateValueAndValidity();
+        }
+      } else {
+        this.landId = undefined;
+        this.autocompleteControl.setValue(undefined, {
+          emitEvent: false,
+        });
+        this.ngControl?.control?.updateValueAndValidity();
+      }
+    });
   }
 
   ngOnInit() {
@@ -108,6 +130,8 @@ export class SharedUiLandAutocompleteComponent
       if (hasRequiredValidator) {
         this.autocompleteControl.setValidators(Validators.required);
       }
+      control.addValidators(validateLand(this.autocompleteControl));
+      control.updateValueAndValidity();
 
       runInInjectionContext(this.injector, () => {
         effect(() => {
@@ -198,18 +222,7 @@ export class SharedUiLandAutocompleteComponent
 
   // ControlValueAccessor implementation
   writeValue(landId: string | undefined): void {
-    if (landId) {
-      this.landId = landId;
-      const land = this.laenderSig()?.find((l) => l.id === landId);
-      if (land) {
-        this.setAutocomplete(land);
-      }
-    } else {
-      this.landId = undefined;
-      this.autocompleteControl.setValue(undefined, {
-        emitEvent: false,
-      });
-    }
+    this.latestValue.set(landId);
   }
 
   registerOnChange(fn: (value: string | undefined) => void): void {
@@ -363,3 +376,19 @@ export class SharedUiLandAutocompleteComponent
 
 const isLand = (value: Land | string | undefined): value is Land =>
   typeof value === 'object' && value !== null && 'id' in value;
+
+const validateLand =
+  (autocompleteControl: AbstractControl) => (control: AbstractControl) => {
+    if (control.invalid || autocompleteControl.invalid) {
+      const errors = { ...control.errors, ...autocompleteControl.errors };
+      const land = autocompleteControl.value;
+      if (isLand(land) && !land.eintragGueltig) {
+        return {
+          ...errors,
+          invalidLand: true,
+        };
+      }
+      return errors;
+    }
+    return null;
+  };
