@@ -30,7 +30,6 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -115,7 +114,7 @@ public class SteuerdatenService {
             neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
-        updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular, getSteuerdatenResponse);
+        updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
         steuerdatenRepository.persistAndFlush(steuerdaten);
@@ -124,8 +123,7 @@ public class SteuerdatenService {
 
     private void updateDependentDataInSteuerdaten(
         Steuerdaten steuerdaten,
-        GesuchFormular gesuchFormular,
-        GetSteuerdatenResponse getSteuerdatenResponse
+        GesuchFormular gesuchFormular
     ) {
         steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(
             evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
