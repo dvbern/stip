@@ -35,7 +35,20 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class RequiredDokumentUtil {
-    public List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
+    public List<DokumentTyp> getExistingGesuchDokumentTypesWithoutAttachedDokumente(final GesuchFormular formular) {
+        return formular
+            .getTranche()
+            .getGesuchDokuments()
+            .stream()
+            .filter(
+                dokument -> !dokument.getDokumente().isEmpty()
+                && Objects.nonNull(dokument.getDokumentTyp())
+            )
+            .map(GesuchDokument::getDokumentTyp)
+            .toList();
+    }
+
+    public List<DokumentTyp> getExistingGesuchDokumentTypes(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments()
