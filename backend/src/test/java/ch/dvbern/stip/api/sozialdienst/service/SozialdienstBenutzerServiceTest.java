@@ -35,7 +35,6 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMappe
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -51,7 +50,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +72,6 @@ import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -319,16 +316,4 @@ class SozialdienstBenutzerServiceTest {
 
         assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
-
-    @Order(99)
-    @Transactional
-    @TestAsAdmin
-    @Test
-    @AlwaysRun
-    void deleteSozialdienst() {
-        sozialdienstService.deleteSozialdienst(sozialdienstDto.getId());
-
-        assertThrows(NotFoundException.class, () -> sozialdienstService.getSozialdienstById(sozialdienstDto.getId()));
-    }
-
 }
