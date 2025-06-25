@@ -11,7 +11,7 @@
   </h4>
 
   @let notification = data.notification;
-  <dl class="d-flex flex-column mt-4">
+  <dl class="d-flex flex-column mt-4 tw-mb-0">
     <div class="d-flex gap-4">
       <div class="d-flex flex-column">
         <dt>{{ 'shared.nachrichten.sender' | translate }}:</dt>
@@ -29,7 +29,22 @@
     <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</dd>
     @if (notification.notificationText) {
       <dt>{{ 'shared.nachrichten.text' | translate }}:</dt>
-      <dd class="text-pre-wrap">{{ notification.notificationText }}</dd>
+      <dd class="text-pre-wrap">
+        {{ notification.notificationText }}
+        @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
+          <button
+            type="button"
+            class="btn btn-outline-primary tw-mt-11"
+            [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | translate"
+            [dvDownloadButton]="{
+              type: 'verfuegung',
+              id: notification.contextId,
+            }"
+          >
+            Download
+          </button>
+        }
+      </dd>
     }
   </dl>
 </div>

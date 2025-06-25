@@ -82,10 +82,6 @@ public class SozialdienstSeeding extends Seeder {
 
     @Override
     protected void seed() {
-        if (sozialdienstRepository.count() != 0) {
-            return;
-        }
-
         LOG.info("Seeding Sozialdienste");
         var envSeeding = tenantConfigService.getSozialdienstSeeding().orElse(null);
         if (envSeeding == null) {
@@ -122,6 +118,11 @@ public class SozialdienstSeeding extends Seeder {
     }
 
     void seedSozialdienst(final EnvSozialdienst envSozialdienst, final Land land) {
+        if (sozialdienstRepository.find("name", envSozialdienst.getName()).singleResultOptional().isPresent()) {
+            LOG.error("Already present: {}", envSozialdienst.name);
+            return;
+        }
+
         final var adresse = new Adresse()
             .setStrasse("Nussbaumstrasse")
             .setHausnummer("21")
