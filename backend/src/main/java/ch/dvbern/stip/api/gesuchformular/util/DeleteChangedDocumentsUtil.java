@@ -172,6 +172,6 @@ public class DeleteChangedDocumentsUtil {
     }
 
     private boolean hasChangedAndNewIsGreaterThanZero(final Integer oldVal, final Integer newVal) {
-        return !Objects.equals(oldVal, newVal) && (newVal == null || newVal > 0);
+        return !Objects.equals(oldVal, newVal) && newVal != null && newVal > 0;
     }
 }
