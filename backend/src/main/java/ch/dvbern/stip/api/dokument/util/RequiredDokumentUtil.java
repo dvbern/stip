@@ -65,7 +65,7 @@ public class RequiredDokumentUtil {
             .stream()
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
-                && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
+                && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
             )
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
