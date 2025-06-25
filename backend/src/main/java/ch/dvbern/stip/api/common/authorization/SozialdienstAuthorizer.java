@@ -105,8 +105,6 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDeleteSozialdienstBenutzer(final UUID sozialdienstBenutzerId) {
-        // Check if current user is admin of the Sozialdienst that the passed user is,
-        // isn't needed here as it's done in canUpdateSozialdienstBenutzer(sozialdienstBenutzerId)
         final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(sozialdienstBenutzerId);
         final var sozialdienstBySozialdienstAdmin =
             sozialdienstRepository.getSozialdienstBySozialdienstAdmin(sozialdienstBenutzer);

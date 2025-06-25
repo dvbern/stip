@@ -155,7 +155,7 @@ public class SozialdienstSeeding extends Seeder {
         sozialdienstRepository.persistAndFlush(sozialdienst);
     }
 
-    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String... role) {
+    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String... roles) {
         final var existingUser =
             sozialdienstBenutzerRepository.findByKeycloakId(envSozialdienstBenutzer.getKeycloakId());
 
@@ -163,7 +163,7 @@ public class SozialdienstSeeding extends Seeder {
             return existingUser.get();
         }
 
-        final var rollen = rolleService.mapOrCreateRoles(Set.of(role));
+        final var rollen = rolleService.mapOrCreateRoles(Set.of(roles));
         final var sozialdienstBenutzer = new SozialdienstBenutzer();
         sozialdienstBenutzer
             .setEmail(envSozialdienstBenutzer.getEmail())
