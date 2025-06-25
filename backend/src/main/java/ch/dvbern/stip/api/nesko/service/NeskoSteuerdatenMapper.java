@@ -22,7 +22,6 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import lombok.experimental.UtilityClass;
@@ -31,8 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class NeskoSteuerdatenMapper {
-    private static SteuerdatenType steuerdatenNesko;
-
     private Integer getMaxOrZeroFromEffSatzType(EffSatzType effSatzType) {
         var effektiv = Objects.requireNonNullElse(effSatzType.getEffektiv(), BigDecimal.ZERO);
         var satzbestimmend = Objects.requireNonNullElse(effSatzType.getSatzbestimmend(), BigDecimal.ZERO);

@@ -115,7 +115,6 @@ public class SteuerdatenService {
             neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
-        // todo: reset daten
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular, getSteuerdatenResponse);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
@@ -132,8 +131,7 @@ public class SteuerdatenService {
             evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
                 steuerdaten,
                 gesuchFormular.getSteuerdaten(),
-                gesuchFormular.getFamiliensituation(),
-                getSteuerdatenResponse
+                gesuchFormular.getFamiliensituation()
             )
         );
 
@@ -142,8 +140,7 @@ public class SteuerdatenService {
     public boolean evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
         Steuerdaten actualSteuerdaten,
         Set<Steuerdaten> allSteuerdatenTabs,
-        Familiensituation familiensituation,
-        GetSteuerdatenResponse getSteuerdatenResponse
+        Familiensituation familiensituation
     ) {
         if (
             Objects.nonNull(familiensituation.getVaterWiederverheiratet()) &&
