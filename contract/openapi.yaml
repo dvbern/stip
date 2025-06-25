@@ -4544,8 +4544,10 @@ components:
           type: string
         isEuEfta:
           type: boolean
+        iso2code:
+          type: string
         iso3code:
-            type: string
+          type: string
         eintragGueltig:
           type: boolean
         deKurzform:

@@ -26,6 +26,7 @@ public final class LandDtoSpecModel {
             model.setIsEuEfta(true);
             model.setLaendercodeBfs("7900");
             model.setIso3code("YYY");
+            model.setIso2code("YY");
             model.setDeKurzform("Testing Land");
             model.setFrKurzform("Testing Land");
             model.setItKurzform("Testing Land");
