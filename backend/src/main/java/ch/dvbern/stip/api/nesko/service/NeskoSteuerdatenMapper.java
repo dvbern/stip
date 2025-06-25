@@ -131,19 +131,24 @@ public class NeskoSteuerdatenMapper {
                     getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
             }
         } else if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER) {
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
-                fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
+            if (Objects.nonNull(steuerdatenNesko.getFahrkosten())) {
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
+                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
+                    fahrkostenPartner += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
-                fahrkostenPartner += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
-                verpflegung +=
-                    getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
-                verpflegungPartner +=
-                    getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
+
+            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung())) {
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
+                    verpflegung +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
+                    verpflegungPartner +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
+                }
             }
         }
 
