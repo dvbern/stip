@@ -1733,7 +1733,7 @@ paths:
           description: Returns the created SozialdienstBenutzer
       operationId: createSozialdienstBenutzer
     patch:
-      description: update an exisitng SozialdienstBenutzer
+      description: update an existing SozialdienstBenutzer
       tags:
         - Sozialdienst
       requestBody:
@@ -1809,7 +1809,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienstBenutzer
     delete:
-      description: update an exisitng SozialdienstBenutzer
+      description: update an existing SozialdienstBenutzer
       tags:
         - Sozialdienst
       responses:
@@ -3109,6 +3109,99 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createAusbildungsgang
       summary: Creates a new Ausbildungsgang
+  /benutzer/sachbearbeiter:
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Sachbearbeiter'
+          description: returns all Sachbearbeiters (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSachbearbeitersForManagement
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterUpdate'
+        required: true
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: New Sachbearbeiter is created (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createSachbearbeiter
+      summary: Creates a new Sachbearbeiter (Sb/Jurist/Sb-Admin)
+  /benutzer/sachbearbeiter/{sachbearbeiterId}:
+    parameters:
+      - name: sachbearbeiterId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterUpdate'
+        required: true
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: Existing Sachbearbeiter is updated (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSachbearbeiter
+      summary: Updates an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+    delete:
+      tags:
+        - Benutzer
+      responses:
+        '204':
+          description: Existing Sachbearbeiter is deleted (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSachbearbeiter
+      summary: Deletes an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
   /benutzer/stammdaten/sachbearbeiter:
     get:
       tags:
@@ -4846,6 +4939,38 @@ components:
           $ref: '#/components/schemas/ZustaendigerKanton'
         zustaendigeKESB:
           $ref: '#/components/schemas/ZustaendigeKESB'
+    Sachbearbeiter:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+      allOf:
+        - $ref: '#/components/schemas/SachbearbeiterUpdate'
+    SachbearbeiterUpdate:
+      type: object
+      required:
+        - telefonnummer
+        - email
+        - funktionDe
+        - funktionFr
+        - sachbearbeiterRollen
+      properties:
+        telefonnummer:
+          type: string
+        email:
+          type: string
+        funktionDe:
+          type: string
+        funktionFr:
+          type: string
+        sachbearbeiterRollen:
+          type: array
+          items:
+            type: string
+      allOf: 
+        - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzer:
       type: object
       allOf:
@@ -4858,6 +4983,18 @@ components:
             sachbearbeiterZuordnungStammdaten:
               $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
         - $ref: '#/components/schemas/BenutzerUpdate'
+    BenutzerUpdate:
+      required:
+        - nachname
+        - vorname
+      type: object
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        benutzereinstellungen:
+          $ref: '#/components/schemas/BenutzereinstellungenUpdate'
     GesuchFormularUpdate:
       required: []
       type: object
@@ -4950,18 +5087,6 @@ components:
           type: string
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
-    BenutzerUpdate:
-      required:
-        - nachname
-        - vorname
-      type: object
-      properties:
-        vorname:
-          type: string
-        nachname:
-          type: string
-        benutzereinstellungen:
-          $ref: '#/components/schemas/BenutzereinstellungenUpdate'
     TenantAuthConfig:
       title: Root Type for TenantAuthConfig
       required:
