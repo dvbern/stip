@@ -91,11 +91,11 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChangedAndNewIsNotNull(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
             toDelete.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
         }
 
-        if (hasChangedAndNewIsNotNull(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
             toDelete.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
         }
 
@@ -107,46 +107,46 @@ public class DeleteChangedDocumentsUtil {
         final EinnahmenKosten oldEk
     ) {
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChangedAndNewIsNotNull(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
             toDelete.add(DokumentTyp.EK_LOHNABRECHNUNG);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
             toDelete.add(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
             toDelete.add(DokumentTyp.EK_MIETVERTRAG);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
             toDelete.add(DokumentTyp.EK_BELEG_OV_ABONNEMENT);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
             toDelete.add(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getRenten(), newEk.getRenten())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getRenten(), newEk.getRenten())) {
             toDelete.add(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getBeitraege(), newEk.getBeitraege())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getBeitraege(), newEk.getBeitraege())) {
             toDelete.add(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getZulagen(), newEk.getZulagen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getZulagen(), newEk.getZulagen())) {
             toDelete.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getAlimente(), newEk.getAlimente())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getAlimente(), newEk.getAlimente())) {
             toDelete.add(DokumentTyp.EK_BELEG_ALIMENTE);
         }
 
-        if (hasChangedAndNewIsNotNull(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
             toDelete.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
         }
-        if (hasChangedAndNewIsNotNull(oldEk.getVermoegen(), newEk.getVermoegen())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getVermoegen(), newEk.getVermoegen())) {
             toDelete.add(DokumentTyp.EK_VERMOEGEN);
         }
 
@@ -162,14 +162,16 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChangedAndNewIsNotNull(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())) {
+        if (
+            hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
+        ) {
             toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
         }
 
         return toDelete;
     }
 
-    private boolean hasChangedAndNewIsNotNull(final Integer oldVal, final Integer newVal) {
-        return !Objects.equals(oldVal, newVal) && newVal != null && newVal > 0;
+    private boolean hasChangedAndNewIsGreaterThanZero(final Integer oldVal, final Integer newVal) {
+        return !Objects.equals(oldVal, newVal) && (newVal == null || newVal > 0);
     }
 }

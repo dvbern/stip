@@ -57,6 +57,26 @@ public class CreatePermutationUtil {
                 applyNew.apply(10),
                 applyOld.apply(12),
                 expected
+            ),
+            Arguments.of(
+                applyNew.apply(null),
+                applyOld.apply(0),
+                expected
+            ),
+            Arguments.of(
+                applyNew.apply(10),
+                applyOld.apply(0),
+                expected
+            ),
+            Arguments.of(
+                applyNew.apply(0),
+                applyOld.apply(null),
+                null
+            ),
+            Arguments.of(
+                applyNew.apply(0),
+                applyOld.apply(10),
+                null
             )
         );
     }
