@@ -49,4 +49,13 @@ public class LandRepository implements BaseRepository<Land> {
             .stream()
             .findFirst();
     }
+
+    public Optional<Land> getByIso2code(final String iso2code) {
+        final var land = QLand.land;
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(land)
+            .where(land.iso2code.eq(iso2code))
+            .stream()
+            .findFirst();
+    }
 }

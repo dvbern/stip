@@ -97,6 +97,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
@@ -654,17 +655,25 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
+    public void changeGesuchStatusToNegativeVerfuegung(
+        final UUID gesuchId,
+        final AusgewaehlterGrundDto ausgewaehlterGrundDto
+    ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var decision = stipDecisionTextRepository.requireById(decisionId);
-        verfuegungService.createVerfuegung(gesuchId, decisionId);
+        final var decisionId = ausgewaehlterGrundDto.getDecisionId();
+        var decision = stipDecisionTextRepository.requireById(decisionId);
+        verfuegungService
+            .createNegativeVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
+        var kommentarTxt = decision.getTitleDe();
+        var kommentarDto = new KommentarDto(kommentarTxt);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
-            new KommentarDto(decision.getTitleDe()),
+            kommentarDto,
             false
         );
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
     @Transactional

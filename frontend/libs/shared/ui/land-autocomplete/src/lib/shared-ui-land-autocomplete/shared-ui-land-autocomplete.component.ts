@@ -270,7 +270,7 @@ export class SharedUiLandAutocompleteComponent
       this.onTouched();
     }
     const value = this.autocompleteControl.value;
-    if (!isLand(value)) {
+    if (!isLand(value) && !this.isOpen) {
       // find the landId from the current value
       if (typeof value === 'string' && value.length > 0) {
         const land = this.laenderSig()?.find(
@@ -280,6 +280,7 @@ export class SharedUiLandAutocompleteComponent
         );
         if (land) {
           this.landId = land.id;
+          this.onChange(land.id);
           this.setAutocomplete(land);
         } else {
           this.landId = undefined;
