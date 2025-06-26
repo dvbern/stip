@@ -1,6 +1,5 @@
 import {
   Adresse,
-  Auszahlung,
   Darlehen,
   EinnahmenKosten,
   Eltern,
@@ -135,18 +134,19 @@ export const bruder: Geschwister = {
   id: '',
 };
 
-export const auszahlung: Auszahlung = {
-  isDelegated: false,
-  value: {
-    auszahlungAnSozialdienst: false,
-    zahlungsverbindung: {
-      vorname: '',
-      nachname: '',
-      adresse: adressen.person,
-      iban: 'CH9300762011623852957',
-    },
-  },
-};
+// todo => Zahlungsverbindung
+// export const auszahlung: Auszahlung = {
+//   isDelegated: false,
+//   value: {
+//     auszahlungAnSozialdienst: false,
+//     zahlungsverbindung: {
+//       vorname: '',
+//       nachname: '',
+//       adresse: adressen.person,
+//       iban: 'CH9300762011623852957',
+//     },
+//   },
+// };
 
 export const einnahmenKosten: EinnahmenKosten = {
   nettoerwerbseinkommen: 10000,

@@ -21,6 +21,7 @@ export const ausbildungValues: AusbildungValues = {
   pensum: 'VOLLZEIT',
 };
 
+// todo: we have to get a valid landId from the backend for all tests!
 export const gesuchFormularUpdateFn = (
   seed: string,
 ): DeepNullable<GesuchFormularUpdate> => ({

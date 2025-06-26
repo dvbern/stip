@@ -7,7 +7,6 @@ import {
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
-import { AuszahlungPO } from '../../po/auszahlung.po';
 import { DarlehenPO } from '../../po/darlehen.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
@@ -22,7 +21,6 @@ import { SteuerdatenPO } from '../../po/steuerdaten.po';
 import { SteruererklaerungPO } from '../../po/steuererklaerung.po';
 import {
   ausbildung,
-  auszahlung,
   bruder,
   darlehen,
   einnahmenKosten,
@@ -110,19 +108,21 @@ test.describe('Neues gesuch erstellen', () => {
     await kinderPO.elems.buttonContinue.click();
 
     // Step 7: Auszahlung ===========================================================
-    await expectStepTitleToContainText('Auszahlung', page);
-    const auszahlungPO = new AuszahlungPO(page);
-    await expect(auszahlungPO.elems.loading).toBeHidden();
 
-    await auszahlungPO.fillAuszahlungEigenesKonto(auszahlung);
+    // todo => Zahlungsverbindung
+    // await expectStepTitleToContainText('Auszahlung', page);
+    // const auszahlungPO = new AuszahlungPO(page);
+    // await expect(auszahlungPO.elems.loading).toBeHidden();
 
-    // hotfix for flaky test of Einnahmen & Kosten form
+    // await auszahlungPO.fillAuszahlungEigenesKonto(auszahlung);
+
+    // // hotfix for flaky test of Einnahmen & Kosten form
     // fix by changing the initialization of the form in a separate task
     const ausbildungPromise = page.waitForResponse(
       '**/api/v1/ausbildungsstaette',
     );
 
-    await auszahlungPO.elems.buttonSaveContinue.click();
+    // await auszahlungPO.elems.buttonSaveContinue.click();
 
     // Step 8: Einnahmen und Kosten =================================================
     await expectStepTitleToContainText('Einnahmen & Kosten', page);

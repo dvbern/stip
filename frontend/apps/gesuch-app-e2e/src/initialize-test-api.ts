@@ -20,6 +20,10 @@ export const setGesuchApi = async (
     data: requestBody,
   });
 
+  const body = await response.json();
+
+  console.log(body);
+
   expect(response.ok()).toBeTruthy();
   return response;
 };

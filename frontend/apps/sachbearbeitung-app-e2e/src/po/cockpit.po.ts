@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export class CockpitPO {
+export class SbCockpitPO {
   public elems: {
     page: Page;
     adminLink: Locator;

@@ -8,7 +8,7 @@ import {
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeMultiUserTest, initializeTest } from '../../initialize-test';
+import { initializeMultiUserTest } from '../../initialize-test';
 import { setupGesuchWithApi } from '../../initialize-test-api';
 import { FreigabePO } from '../../po/freigabe.po';
 import { GeschwisterPO } from '../../po/geschwister.po';
@@ -22,17 +22,14 @@ import {
   gesuchFormularUpdateFn,
 } from '../../test-data/tranchen-test-data';
 
-const { test, getGesuchId, getTrancheId, getContexts } =
-  initializeMultiUserTest(
-    ausbildungValues,
-    setupGesuchWithApi(gesuchFormularUpdateFn),
-  );
+const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
+  ausbildungValues,
+  setupGesuchWithApi(gesuchFormularUpdateFn),
+);
 
 test('Aenderung erstellen', async ({ page, gsCockpit, sbPage }) => {
   test.slow();
   const urls = getE2eUrls();
-
-  const contexts = getContexts();
 
   // Get GS page from cockpit
   const gsPage = gsCockpit.elems.page;
@@ -42,8 +39,6 @@ test('Aenderung erstellen', async ({ page, gsCockpit, sbPage }) => {
   );
 
   // Upload all GS-Dokumente =================================================
-
-  // DO AS GS USER
 
   await gsPage.goto(
     `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
@@ -63,8 +58,6 @@ test('Aenderung erstellen', async ({ page, gsCockpit, sbPage }) => {
   await freigabeResponse;
 
   // Go to Info (SB-App) ===============================================
-
-  // DO AS SB USER
 
   // SB User Actions - Switch to SB page
   await sbPage.goto(
@@ -139,7 +132,7 @@ test('Aenderung erstellen', async ({ page, gsCockpit, sbPage }) => {
 
   // // Go to GS App ===============================================================
   await gsPage.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
-  await cockpit.elems.cereateAaederung.click();
+  await gsCockpit.elems.createAenderung.click();
 
   await gsPage.getByTestId('form-aenderung-melden-dialog-gueltig-ab').fill(
     // today

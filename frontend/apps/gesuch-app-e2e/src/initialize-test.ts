@@ -2,6 +2,7 @@ import { FallDashboardItem } from '@dv/shared/model/gesuch';
 import {
   E2eUser,
   MultiUserTestContexts,
+  Page,
   SetupFn,
   TestContexts,
   createMultiUserTest,
@@ -115,13 +116,13 @@ export const initializeMultiUserTest = (
   ausbildung: AusbildungValues,
   setupFn?: SetupFn,
 ) => {
-  let contexts: MultiUserTestContexts;
+  let multiContexts: MultiUserTestContexts;
   let gesuchId: string | undefined;
   let trancheId: string | undefined;
 
   const test = createMultiUserTest().extend<{
     gsCockpit: CockpitPO;
-    sbPage: any; // You can create a SB-specific PO here
+    sbPage: Page; // You can create a SB-specific PO here
   }>({
     gsCockpit: async ({ browser, gsContext }, use, testInfo) => {
       // Create GS page with GS context
@@ -144,7 +145,7 @@ export const initializeMultiUserTest = (
           .currentTrancheId;
 
       if (gesuchId) {
-        const response = await deleteGesuch(contexts.gs.api, gesuchId);
+        const response = await deleteGesuch(multiContexts.gs.api, gesuchId);
         if (response.status() >= 400) {
           throw new Error(
             `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
@@ -175,6 +176,19 @@ export const initializeMultiUserTest = (
 
       if (setupFn) {
         const seed = `${testInfo.title}-${testInfo.workerIndex}`;
+        const contexts: TestContexts = {
+          browser: multiContexts.gs.browser,
+          api: multiContexts.gs.api,
+          dispose: async () => {
+            try {
+              await multiContexts.gs.api.dispose();
+              await multiContexts.gs.browser.close();
+            } catch (e) {
+              console.warn('Failed to dispose GS contexts', e);
+            }
+          },
+        };
+
         await setupFn({ contexts, gesuchId, trancheId, seed });
       }
 
@@ -191,7 +205,7 @@ export const initializeMultiUserTest = (
 
   test.beforeAll(
     async ({ playwright, baseURL, browser, gsContext, sbContext }) => {
-      contexts = await createMultiUserTestContexts({
+      multiContexts = await createMultiUserTestContexts({
         browser,
         playwright,
         gsStorageState: gsContext,
@@ -202,18 +216,18 @@ export const initializeMultiUserTest = (
   );
 
   test.afterAll(async () => {
-    if (contexts) {
+    if (multiContexts) {
       if (gesuchId) {
-        await deleteGesuch(contexts.gs.api, gesuchId);
+        await deleteGesuch(multiContexts.gs.api, gesuchId);
       }
-      await contexts.dispose();
+      await multiContexts.dispose();
     }
   });
 
   return {
     getGesuchId: () => gesuchId,
     getTrancheId: () => trancheId,
-    getContexts: () => contexts,
+    getContexts: (): MultiUserTestContexts => multiContexts,
     test,
   };
 };
