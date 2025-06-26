@@ -63,7 +63,6 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
 
         if (berechnungsresultat == 0) {
             verfuegungService.createPdfForVerfuegungOhneAnspruch(
-                gesuch,
                 gesuch.getVerfuegungs()
                     .stream()
                     .max(Comparator.comparing(Verfuegung::getTimestampErstellt))

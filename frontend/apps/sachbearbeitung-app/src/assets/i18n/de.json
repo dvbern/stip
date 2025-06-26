@@ -89,6 +89,8 @@
   "sachbearbeitung-app.admin.euEftaLaender.editdialog.title.create": "Land Erstellen",
   "sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label": "Ländercode BFS ",
   "sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.error.notUniqueBfs": "Ländercode existiert bereits",
+  "sachbearbeitung-app.admin.euEftaLaender.iso2code.label": "ISO 2 Code",
+  "sachbearbeitung-app.admin.euEftaLaender.iso2code.error.notUniqueIso2": "ISO2 Code existiert bereits",
   "sachbearbeitung-app.admin.euEftaLaender.iso3code.label": "ISO 3 Code",
   "sachbearbeitung-app.admin.euEftaLaender.iso3code.error.notUniqueIso3": "ISO3 Code existiert bereits",
   "sachbearbeitung-app.admin.euEftaLaender.itKurzform.label": "It Kurzform",

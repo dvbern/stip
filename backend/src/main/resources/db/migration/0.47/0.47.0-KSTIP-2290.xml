@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1750171555475-2">
+        <addColumn tableName="verfuegung">
+            <column name="wohnsitz_kanton" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1750171555475-3">
+        <addColumn tableName="verfuegung_aud">
+            <column name="wohnsitz_kanton" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -155,7 +155,7 @@ public class RequiredDokumentService {
 
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
         final var uploadedDocumentTypes = new HashSet<>(
-            RequiredDokumentUtil.getExistingDokumentTypesForGesuch(formular)
+            RequiredDokumentUtil.getExistingGesuchDokumentTypesWithoutAttachedDokumente(formular)
         );
 
         final var requiredByProducers =
@@ -200,7 +200,7 @@ public class RequiredDokumentService {
     }
 
     public List<GesuchDokument> getSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
-        final var existingDokumentTypes = RequiredDokumentUtil.getExistingDokumentTypesForGesuch(formular);
+        final var existingDokumentTypes = RequiredDokumentUtil.getExistingGesuchDokumentTypes(formular);
 
         final var requiredDokumentTypesHashSet = new HashSet<>(
             RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDocumentProducers)

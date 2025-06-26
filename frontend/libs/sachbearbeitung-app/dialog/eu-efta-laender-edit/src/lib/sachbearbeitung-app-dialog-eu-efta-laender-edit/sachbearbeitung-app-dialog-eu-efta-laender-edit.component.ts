@@ -82,6 +82,19 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
     return duplicateExists ? { notUniqueBfs: true } : null;
   };
 
+  // Custom mask for ISO2 code - limit to exactly 2 uppercase letters
+  maskitoIso2Code: MaskitoOptions = {
+    mask: [/[a-zA-Z]/, /[a-zA-Z]/],
+    postprocessors: [
+      ({ selection, value }) => {
+        return {
+          selection,
+          value: value.toUpperCase(),
+        };
+      },
+    ],
+  };
+
   // Custom mask for ISO3 code - limit to exactly 3 uppercase letters
   maskitoIso3Code: MaskitoOptions = {
     mask: [/[a-zA-Z]/, /[a-zA-Z]/, /[a-zA-Z]/],
@@ -93,6 +106,23 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
         };
       },
     ],
+  };
+
+  uniqueIso2CodeValidator = (): ValidatorFn => (control) => {
+    const laender = this.dialogData.laender;
+    const currentValue = control.value;
+    if (!currentValue) {
+      return null;
+    }
+    const currentEditLand = this.dialogData.land;
+    const duplicateExists = laender.some((entry) => {
+      const isSameAsCurrent =
+        currentEditLand && entry.iso2code === currentEditLand.iso2code;
+
+      return entry.iso2code === currentValue && !isSameAsCurrent;
+    });
+
+    return duplicateExists ? { notUniqueIso2: true } : null;
   };
 
   // validator for ISO3 code to ensure it's unique
@@ -130,6 +160,7 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
       <string | undefined>undefined,
       [Validators.required, this.uniqueBfsNumberValidator()],
     ],
+    iso2code: [<string | undefined>undefined, [this.uniqueIso2CodeValidator()]],
     iso3code: [<string | undefined>undefined, [this.uniqueIso3CodeValidator()]],
     deKurzform: [<string | undefined>undefined, [Validators.required]],
     frKurzform: [<string | undefined>undefined, [Validators.required]],
@@ -162,6 +193,10 @@ export class SachbearbeitungAppDialogEuEftaLaenderEditComponent {
       'enKurzform',
     ]);
 
+    // if iso2code is an empty string, set it to undefined
+    if (values.iso2code === '') {
+      values.iso2code = undefined;
+    }
     // if iso3code is an empty string, set it to undefined
     if (values.iso3code === '') {
       values.iso3code = undefined;

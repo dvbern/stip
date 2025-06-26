@@ -28,6 +28,7 @@ public class LandDto  implements Serializable {
   private @Valid String itKurzform;
   private @Valid String enKurzform;
   private @Valid UUID id;
+  private @Valid String iso2code;
   private @Valid String iso3code;
 
   /**
@@ -183,6 +184,24 @@ public class LandDto  implements Serializable {
 
   /**
    **/
+  public LandDto iso2code(String iso2code) {
+    this.iso2code = iso2code;
+    return this;
+  }
+
+  
+  @JsonProperty("iso2code")
+  public String getIso2code() {
+    return iso2code;
+  }
+
+  @JsonProperty("iso2code")
+  public void setIso2code(String iso2code) {
+    this.iso2code = iso2code;
+  }
+
+  /**
+   **/
   public LandDto iso3code(String iso3code) {
     this.iso3code = iso3code;
     return this;
@@ -217,12 +236,13 @@ public class LandDto  implements Serializable {
         Objects.equals(this.itKurzform, land.itKurzform) &&
         Objects.equals(this.enKurzform, land.enKurzform) &&
         Objects.equals(this.id, land.id) &&
+        Objects.equals(this.iso2code, land.iso2code) &&
         Objects.equals(this.iso3code, land.iso3code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(laendercodeBfs, isEuEfta, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform, id, iso3code);
+    return Objects.hash(laendercodeBfs, isEuEfta, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform, id, iso2code, iso3code);
   }
 
   @Override
@@ -238,6 +258,7 @@ public class LandDto  implements Serializable {
     sb.append("    itKurzform: ").append(toIndentedString(itKurzform)).append("\n");
     sb.append("    enKurzform: ").append(toIndentedString(enKurzform)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    iso2code: ").append(toIndentedString(iso2code)).append("\n");
     sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
     sb.append("}");
     return sb.toString();

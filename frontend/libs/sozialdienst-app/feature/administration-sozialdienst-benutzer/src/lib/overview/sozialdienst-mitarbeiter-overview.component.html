@@ -105,6 +105,7 @@
                   [attr.aria-label]="'sozialdienst-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
                   (click)="deleteBenutzer(benutzer)"
                   data-testid="sozialdienst-mitarbeiter-delete"
+                  [disabled]="benutzer.isAdmin"
                 >
                   <i class="material-symbols-rounded fs-5">delete</i>
                 </button>
