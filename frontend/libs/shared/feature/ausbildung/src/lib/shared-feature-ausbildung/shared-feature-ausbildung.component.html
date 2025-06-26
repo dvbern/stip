@@ -276,7 +276,7 @@
               : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
         }}
       </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="tw-whitespace-nowrap">
+      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="">
         {{
           'shared.form.ausbildung.form.error.periodeIsDraft'
             | translate
@@ -325,7 +325,7 @@
     </mat-form-field>
 
     <!-- PENSUM -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-mt-9">
       <mat-label>
         {{ 'shared.form.ausbildung.pensum.label' | translate }}
       </mat-label>
