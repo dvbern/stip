@@ -22,7 +22,7 @@ import {
   SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
-  bySozialdienstAdminRole,
+  bySozialdienstRole,
 } from '@dv/shared/model/benutzer';
 import { MailService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
@@ -205,19 +205,13 @@ export class KeycloakHttpService {
       switchMap((response) =>
         this.loadUserByUrl$(response.headers.get('Location')),
       ),
-      combineLatestWith(this.getRoles$(bySozialdienstAdminRole)),
+      combineLatestWith(this.getRoles$(bySozialdienstRole)),
       switchMap(([user, roles]) => {
-        const adminRole = roles.find(
-          (role) => role.name === 'V0_Sozialdienst-Admin',
-        );
-
-        if (!adminRole) {
-          throw new Error('Admin Role not found');
+        if (roles.length === 0) {
+          throw new Error('Sozialdienst Rollen not found');
         }
 
-        return this.assignRoles$(user, [
-          { id: adminRole.id, name: 'V0_Sozialdienst-Admin' },
-        ]);
+        return this.assignRoles$(user, roles);
       }),
     );
   }

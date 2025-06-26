@@ -52,8 +52,10 @@ export const byBenutzertVerwaltungRoles = (role: SharedModelRole) => {
   return BENUTZER_ROLES.some((r) => r === role.name);
 };
 
-export const bySozialdienstAdminRole = (role: SharedModelRole) => {
-  return role.name === SOZIALDIENST_ADMIN_ROLE;
+export const bySozialdienstRole = (role: SharedModelRole) => {
+  return SOZIALDIENST_BENUTZER_ROLES.includes(
+    role.name as SozialdienstBenutzerRole,
+  );
 };
 
 export const SharedModelBenutzerList = z.array(SharedModelBenutzerApi);

@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -213,8 +214,11 @@ class GesuchServiceTest {
     @InjectMock
     FallRepository fallRepository;
 
+    @InjectSpy
+    VersendetHandler versendetHandler;
+
     @InjectMock
-    VerfuegungRepository verfuegungRepository;
+    private VerfuegungRepository verfuegungRepository;
 
     @InjectMock
     PdfService pdfService;
@@ -1227,7 +1231,7 @@ class GesuchServiceTest {
         var verfuegung = new Verfuegung();
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         gesuch.getVerfuegungs().add(verfuegung);
-        when(pdfService.createVerfuegungOhneAnspruch(any())).thenReturn(new ByteArrayOutputStream());
+        when(pdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));

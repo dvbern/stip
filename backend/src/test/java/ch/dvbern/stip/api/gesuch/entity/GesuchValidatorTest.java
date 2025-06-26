@@ -27,6 +27,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -46,6 +47,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -484,6 +486,10 @@ class GesuchValidatorTest {
         Set<Eltern> elternSet = new HashSet<>();
         elternSet.add(eltern);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        eltern.setAdresse(adresse);
 
         assertOneMessage(
             VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE,
@@ -508,6 +514,10 @@ class GesuchValidatorTest {
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         gesuch.getAusbildung().setAusbildungBegin(LocalDate.of(2024, 01, 01));
 
         assertOneMessage(
@@ -528,6 +538,10 @@ class GesuchValidatorTest {
         Gesuch gesuch = prepareDummyGesuch();
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
@@ -545,6 +559,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -556,6 +574,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         assertOneMessage(
@@ -571,6 +593,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(16));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -589,6 +615,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
@@ -625,6 +655,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(18));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -643,6 +677,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);

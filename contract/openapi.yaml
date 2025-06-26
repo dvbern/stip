@@ -4544,8 +4544,10 @@ components:
           type: string
         isEuEfta:
           type: boolean
+        iso2code:
+          type: string
         iso3code:
-            type: string
+          type: string
         eintragGueltig:
           type: boolean
         deKurzform:
@@ -4560,6 +4562,35 @@ components:
       enum:
         - DEUTSCH
         - FRANZOESISCH
+      type: string
+    Kanton:
+      enum:
+        - AG
+        - AI
+        - AR
+        - BL
+        - BS
+        - BE
+        - FR
+        - GE
+        - GL
+        - GR
+        - JU
+        - LU
+        - NE
+        - NW
+        - OW
+        - SG
+        - SH
+        - SZ
+        - SO
+        - TI
+        - TG
+        - UR
+        - VD
+        - VS
+        - ZG
+        - ZH
       type: string
     WohnsitzKanton:
       enum:
@@ -5721,6 +5752,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        isAdmin:
+          type: boolean
       allOf:
         - $ref: '#/components/schemas/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:
@@ -5867,6 +5900,8 @@ components:
           $ref: '#/components/schemas/NotificationType'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        contextId:
+          $ref: '#/components/schemas/UUID'
         userErstellt:
           type: string
         timestampErstellt:
@@ -5883,6 +5918,7 @@ components:
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
+        - NEUE_VERFUEGUNG
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
@@ -6367,6 +6403,12 @@ components:
         - ANSPRUCH_UNKLAR
     StipDecisionText:
       type: object
+      required:
+        - id
+        - stipDecision
+        - titleDe
+        - textDe
+        - textFr
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -6385,6 +6427,8 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
+        kanton:
+          $ref: '#/components/schemas/Kanton'
     DokumenteToUpload:
       type: object
       properties:

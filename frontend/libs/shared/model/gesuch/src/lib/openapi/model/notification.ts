@@ -18,6 +18,7 @@ export interface Notification {
     notificationText?: string;
     notificationType: NotificationType;
     gesuchId: string;
+    contextId?: string;
     userErstellt: string;
     timestampErstellt?: string;
 }

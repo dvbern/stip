@@ -78,6 +78,9 @@ nbproject/
 ## Visual Studio Code
 .vscode/
 
+## Helix
+.helix/
+
 
 ### Misc ###
 
