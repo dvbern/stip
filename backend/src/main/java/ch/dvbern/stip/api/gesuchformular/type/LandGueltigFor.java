@@ -78,8 +78,7 @@ public enum LandGueltigFor {
             .getGesuch()
             .getAusbildung()
             .getFall()
-            .getAuszahlung()
-            .getZahlungsverbindung()
+            .getRelevantZahlungsverbindung()
             .getAdresse()
             .getLand();
     }
