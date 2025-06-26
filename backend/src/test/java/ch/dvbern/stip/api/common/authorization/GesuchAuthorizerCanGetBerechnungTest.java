@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -46,6 +48,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
         when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+        when(gesuchStatusService.canGetBerechnung(any())).thenCallRealMethod();
         gesuch = new Gesuch()
             .setAusbildung(
                 new Ausbildung()
@@ -69,6 +72,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     @Test
     @TestAsGesuchsteller
     void testGesuchStatusCorrectForBerechnung() {
+        gesuch.setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {
