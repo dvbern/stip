@@ -369,10 +369,25 @@ class DokumentHistoryResourceTest {
     @TestAsGesuchsteller
     @Order(11)
     void dokumenteHochladen() {
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
+        final var gesuchDokumenteToUpload = TestUtil.executeAndExtract(
+            DokumenteToUploadDtoSpec.class,
+            gesuchTrancheApiSpec.getDocumentsToUploadGS().gesuchTrancheIdPath(gesuchTrancheId)
+        );
+
+        if (gesuchDokumenteToUpload.getRequired() == null) {
+            assertThat("API returned null required documents", false);
         }
+
+        final var file = TestUtil.getTestPng();
+        for (final var dokType : gesuchDokumenteToUpload.getRequired()) {
+            TestUtil.uploadFile(
+                dokumentApiSpec,
+                gesuch.getGesuchTrancheToWorkWith().getId(),
+                dokType,
+                file
+            );
+        }
+
         gesuchTrancheApiSpec.getGesuchDokumenteGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
