@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.ZahlungsverbindungDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -40,6 +41,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -118,6 +120,23 @@ class AuszahlungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(5)
+    void createAuszahlungForLandWithoutIso2codeShouldFail() {
+        final var zahlungsverbindung = ZahlungsverbindungDtoSpecModel.zahlungsverbindungDtoSpec()
+            .adresse(AdresseSpecModel.adresseWithoutIso2codeDtoSpec());
+
+        final var auszahlung = new AuszahlungUpdateDtoSpec()
+            .auszahlungAnSozialdienst(false)
+            .zahlungsverbindung(zahlungsverbindung);
+
+        TestUtil.executeAndAssert(
+            auszahlungApiSpec.createAuszahlungForGesuch().fallIdPath(fall.getId()).body(auszahlung),
+            Response.Status.BAD_REQUEST.getStatusCode()
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
     void createAuszahlung() {
         var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
         auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
@@ -144,7 +163,7 @@ class AuszahlungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(7)
     void getAuszahlungForGesuch() {
         auszahlung = auszahlungApiSpec.getAuszahlungForGesuch()
             .fallIdPath(fall.getId())
@@ -159,7 +178,7 @@ class AuszahlungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(8)
     void updateAuszahlungForGesuch() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(auszahlung.getAuszahlung().getAuszahlungAnSozialdienst());
@@ -185,7 +204,7 @@ class AuszahlungResourceTest {
      */
     @Test
     @TestAsSozialdienstMitarbeiter
-    @Order(7)
+    @Order(9)
     void updateAuszahlungForGesuchShouldFailWithFlagSetToTrue() {
         var auszahlungUpdate = new AuszahlungUpdateDtoSpec();
         auszahlungUpdate.setAuszahlungAnSozialdienst(true);

@@ -155,7 +155,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @Override
     @RolesAllowed(SOZIALDIENSTBENUTZER_DELETE)
     public void deleteSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
-        sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
+        sozialdienstAuthorizer.canDeleteSozialdienstBenutzer(sozialdienstBenutzerId);
         sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstBenutzerId);
     }
 }

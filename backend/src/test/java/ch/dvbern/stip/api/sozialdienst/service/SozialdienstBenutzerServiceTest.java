@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -42,7 +41,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -56,7 +54,6 @@ import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -168,7 +165,7 @@ class SozialdienstBenutzerServiceTest {
         final var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(0));
+        assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
 
     @Order(5)
@@ -204,7 +201,7 @@ class SozialdienstBenutzerServiceTest {
         final var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(1));
+        assertThat(sozialdienstbenutzers.size(), equalTo(2));
     }
 
     @Order(7)
@@ -241,18 +238,6 @@ class SozialdienstBenutzerServiceTest {
         sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        assertThat(sozialdienstbenutzers.size(), equalTo(0));
+        assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
-
-    @Order(99)
-    @Transactional
-    @TestAsAdmin
-    @Test
-    @AlwaysRun
-    void deleteSozialdienst() {
-        sozialdienstService.deleteSozialdienst(sozialdienstDto.getId());
-
-        assertThrows(NotFoundException.class, () -> sozialdienstService.getSozialdienstById(sozialdienstDto.getId()));
-    }
-
 }

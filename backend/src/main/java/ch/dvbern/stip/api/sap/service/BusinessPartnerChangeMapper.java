@@ -64,7 +64,7 @@ public abstract class BusinessPartnerChangeMapper {
 
     @Named("getLandStringFromLand")
     public String getLandStringFromLand(Land land) {
-        return land.getDeKurzform();
+        return land.getIso2code();
     }
 
     @Mapping(target = "BANKID", constant = "0001")

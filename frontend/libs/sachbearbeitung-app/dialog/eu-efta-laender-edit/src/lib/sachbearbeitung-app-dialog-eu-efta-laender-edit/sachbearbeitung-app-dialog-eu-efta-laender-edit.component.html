@@ -38,7 +38,22 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- ISO3 - Code -->
+    <!-- iso2code -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso2code.label' | translate }}</mat-label>
+      <input
+        data-testid="form-euEftaLaender-iso2code"
+        matInput
+        type="text"
+        [maskito]="maskitoIso2Code"
+        formControlName="iso2code"
+      />
+      <mat-error *dvSharedUiFormMessageError="'notUniqueIso2'">
+        {{ 'sachbearbeitung-app.admin.euEftaLaender.iso2code.error.notUniqueIso2' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- iso3code -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.label' | translate }}</mat-label>
       <input

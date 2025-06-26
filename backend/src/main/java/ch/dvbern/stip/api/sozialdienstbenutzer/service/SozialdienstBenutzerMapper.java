@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
@@ -32,7 +33,11 @@ public interface SozialdienstBenutzerMapper {
 
     SozialdienstBenutzer toEntity(SozialdienstBenutzerUpdateDto updateDto);
 
-    SozialdienstBenutzerDto toDto(SozialdienstBenutzer sozialdienstBenutzer);
+    @Mapping(target = "isAdmin", source = "isAdmin")
+    SozialdienstBenutzerDto toDto(
+        SozialdienstBenutzer sozialdienstBenutzer,
+        boolean isAdmin
+    );
 
     SozialdienstBenutzer partialUpdate(
         SozialdienstBenutzerUpdateDto updateDto,

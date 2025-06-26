@@ -1232,7 +1232,7 @@ class GesuchServiceTest {
         var verfuegung = new Verfuegung();
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         gesuch.getVerfuegungs().add(verfuegung);
-        when(pdfService.createVerfuegungOhneAnspruch(any())).thenReturn(new ByteArrayOutputStream());
+        when(pdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));

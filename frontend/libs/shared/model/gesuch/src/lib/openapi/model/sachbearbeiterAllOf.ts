@@ -12,5 +12,6 @@
 
 export interface SachbearbeiterAllOf { 
     id: string;
+    isAdmin?: boolean;
 }
 

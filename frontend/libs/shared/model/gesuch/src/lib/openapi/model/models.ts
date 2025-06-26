@@ -114,6 +114,7 @@ export * from './getDelegierungSozQueryType';
 export * from './getGesucheSBQueryType';
 export * from './gueltigkeitStatus';
 export * from './juristischeAbklaerungNotizAntwort';
+export * from './kanton';
 export * from './kind';
 export * from './kindUpdate';
 export * from './kommentar';

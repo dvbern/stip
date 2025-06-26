@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
+import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
@@ -223,27 +224,33 @@ import org.hibernate.envers.Audited;
     }, property = "steuerdaten"
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        PersonInAusbildungPageValidation.class },
     landGueltigFor = LandGueltigFor.PERSON_IN_AUSBILDUNG_ADRESSE
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        PersonInAusbildungPageValidation.class },
     landGueltigFor = LandGueltigFor.PERSON_IN_AUSBILDUNG_NATIONALITAET
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        ElternPageValidation.class },
     landGueltigFor = LandGueltigFor.ELTERN_MUTTER
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        ElternPageValidation.class },
     landGueltigFor = LandGueltigFor.ELTERN_VATER
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        AuszahlungPageValidation.class },
     landGueltigFor = LandGueltigFor.AUSZAHLUNG
 )
 @LandMustBeGueltigConstraint(
-    groups = LandMustBeGueltigValidationGroup.class,
+    groups = { LandMustBeGueltigValidationGroup.class, GesuchEinreichenValidationGroup.class,
+        PartnerPageValidation.class },
     landGueltigFor = LandGueltigFor.PARTNER
 )
 @UniqueSvNumberConstraint

@@ -72,7 +72,11 @@ public class SozialdienstBenutzerService {
 
     @Transactional
     public SozialdienstBenutzerDto getSozialdienstBenutzerDtoById(UUID id) {
-        return sozialdienstBenutzerMapper.toDto(getSozialdienstBenutzerById(id));
+        final var sozialdienstBenutzer = getSozialdienstBenutzerById(id);
+        final var sozialdienst = sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
+
+        return sozialdienstBenutzerMapper
+            .toDto(sozialdienstBenutzer, sozialdienst.isBenutzerAdmin(sozialdienstBenutzer));
     }
 
     @Transactional
@@ -80,7 +84,6 @@ public class SozialdienstBenutzerService {
         final var sozialdienstAdmin = sozialdienstAdminMapper.toEntity(dto);
         sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
-
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdmin);
         final var keycloakId = keycloakBenutzerService.createKeycloakBenutzer(
             sozialdienstAdmin.getVorname(),
@@ -97,7 +100,8 @@ public class SozialdienstBenutzerService {
         return sozialdienst.getSozialdienstBenutzers()
             .stream()
             .map(
-                sozialdienstBenutzerMapper::toDto
+                sozialdienstBenutzer -> sozialdienstBenutzerMapper
+                    .toDto(sozialdienstBenutzer, sozialdienst.isBenutzerAdmin(sozialdienstBenutzer))
             )
             .toList();
     }
@@ -133,7 +137,8 @@ public class SozialdienstBenutzerService {
 
         sozialdienstBenutzer.setKeycloakId(keycloakId);
 
-        return sozialdienstBenutzerMapper.toDto(sozialdienstBenutzer);
+        return sozialdienstBenutzerMapper
+            .toDto(sozialdienstBenutzer, sozialdienst.isBenutzerAdmin(sozialdienstBenutzer));
     }
 
     @Transactional
@@ -150,8 +155,12 @@ public class SozialdienstBenutzerService {
             null
         );
 
-        return sozialdienstBenutzerMapper
-            .toDto(sozialdienstBenutzerMapper.partialUpdate(sozialdienstBenutzerUpdateDto, sozialdienstBenutzer));
+        final var sozialdienst = sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
+
+        return sozialdienstBenutzerMapper.toDto(
+            sozialdienstBenutzerMapper.partialUpdate(sozialdienstBenutzerUpdateDto, sozialdienstBenutzer),
+            sozialdienst.isBenutzerAdmin(sozialdienstBenutzer)
+        );
     }
 
     @Transactional
@@ -176,5 +185,14 @@ public class SozialdienstBenutzerService {
         sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
 
         keycloakBenutzerService.deleteKeycloakBenutzer(sozialdienstBenutzer.getKeycloakId());
+    }
+
+    @Transactional
+    public void deleteSozialdienstMitarbeiterOfSozialdienst(
+        final Sozialdienst sozialdienst
+    ) {
+        sozialdienst.getSozialdienstBenutzers()
+            .forEach(sozialdienstBenutzer -> deleteSozialdienstBenutzer(sozialdienstBenutzer.getId()));
+        sozialdienst.getSozialdienstBenutzers().clear();
     }
 }

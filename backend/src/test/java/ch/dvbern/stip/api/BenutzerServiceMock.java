@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenMapper;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.test.Mock;
@@ -51,6 +52,7 @@ public class BenutzerServiceMock extends BenutzerService {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -64,6 +66,7 @@ public class BenutzerServiceMock extends BenutzerService {
     SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper,
     BenutzerRepository benutzerRepository,
     SachbearbeiterRepository sachbearbeiterRepository,
+    SozialdienstBenutzerRepository sozialdienstBenutzerRepository,
     RolleService rolleService,
     SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
     SecurityIdentity identity,
@@ -75,6 +78,7 @@ public class BenutzerServiceMock extends BenutzerService {
             sachbearbeiterZuordnungStammdatenMapper,
             benutzerRepository,
             sachbearbeiterRepository,
+            sozialdienstBenutzerRepository,
             rolleService,
             sachbearbeiterZuordnungStammdatenRepository,
             identity,

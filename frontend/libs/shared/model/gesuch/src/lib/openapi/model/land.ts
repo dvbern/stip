@@ -14,6 +14,7 @@ export interface Land {
     id?: string;
     laendercodeBfs: string;
     isEuEfta: boolean;
+    iso2code?: string;
     iso3code?: string;
     eintragGueltig: boolean;
     deKurzform: string;
