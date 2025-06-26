@@ -63,7 +63,8 @@ class GesuchAuthorizerCanUpdatenachfristTest {
 
     @Test
     void canUpdateNachfristShouldFailAsSB() {
-        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
+        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(
+				OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var id = UUID.randomUUID();
         assertThrows(ForbiddenException.class, () -> {
@@ -73,7 +74,8 @@ class GesuchAuthorizerCanUpdatenachfristTest {
 
     @Test
     void canUpdateNachfristShouldSuccess() {
-        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
+        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(
+				OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         final var id = UUID.randomUUID();
         assertDoesNotThrow(() -> {

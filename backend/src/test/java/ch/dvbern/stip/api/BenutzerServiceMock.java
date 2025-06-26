@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.service.BenutzerMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -49,6 +50,7 @@ public class BenutzerServiceMock extends BenutzerService {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -61,6 +63,7 @@ public class BenutzerServiceMock extends BenutzerService {
     BenutzerMapper benutzerMapper,
     SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper,
     BenutzerRepository benutzerRepository,
+    SachbearbeiterRepository sachbearbeiterRepository,
     RolleService rolleService,
     SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
     SecurityIdentity identity,
@@ -71,6 +74,7 @@ public class BenutzerServiceMock extends BenutzerService {
             benutzerMapper,
             sachbearbeiterZuordnungStammdatenMapper,
             benutzerRepository,
+            sachbearbeiterRepository,
             rolleService,
             sachbearbeiterZuordnungStammdatenRepository,
             identity,

@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
@@ -1275,7 +1276,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1305,7 +1310,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1371,7 +1380,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1436,7 +1449,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1471,7 +1488,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1502,7 +1523,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1532,7 +1557,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1569,7 +1598,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1618,7 +1651,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1702,7 +1739,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1773,7 +1814,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );
@@ -1813,7 +1858,11 @@ class GesuchServiceTest {
         // arrange
         Zuordnung zuordnung = new Zuordnung();
         zuordnung.setSachbearbeiter(
-            new Benutzer()
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
                 .setVorname("test")
                 .setNachname("test")
         );

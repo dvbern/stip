@@ -15,38 +15,70 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BenutzereinstellungenUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * SozialdienstAdminDtoSpec
+ * SachbearbeiterDtoSpec
  */
 @JsonPropertyOrder({
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_VORNAME,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_EMAIL
+  SachbearbeiterDtoSpec.JSON_PROPERTY_ID,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_VORNAME,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_NACHNAME,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN
 })
-@JsonTypeName("SozialdienstAdmin")
+@JsonTypeName("Sachbearbeiter")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class SozialdienstAdminDtoSpec {
+public class SachbearbeiterDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
 
-  public static final String JSON_PROPERTY_EMAIL = "email";
-  private String email;
+  public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
+  private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
 
-  public SozialdienstAdminDtoSpec() {
+  public SachbearbeiterDtoSpec() {
   }
 
-  public SozialdienstAdminDtoSpec vorname(String vorname) {
+  public SachbearbeiterDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+
+  public SachbearbeiterDtoSpec vorname(String vorname) {
     
     this.vorname = vorname;
     return this;
@@ -72,7 +104,7 @@ public class SozialdienstAdminDtoSpec {
   }
 
 
-  public SozialdienstAdminDtoSpec nachname(String nachname) {
+  public SachbearbeiterDtoSpec nachname(String nachname) {
     
     this.nachname = nachname;
     return this;
@@ -98,29 +130,29 @@ public class SozialdienstAdminDtoSpec {
   }
 
 
-  public SozialdienstAdminDtoSpec email(String email) {
+  public SachbearbeiterDtoSpec benutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
     
-    this.email = email;
+    this.benutzereinstellungen = benutzereinstellungen;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get benutzereinstellungen
+   * @return benutzereinstellungen
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EMAIL)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getEmail() {
-    return email;
+  public BenutzereinstellungenUpdateDtoSpec getBenutzereinstellungen() {
+    return benutzereinstellungen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EMAIL)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEmail(String email) {
-    this.email = email;
+  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBenutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
+    this.benutzereinstellungen = benutzereinstellungen;
   }
 
   @Override
@@ -131,24 +163,26 @@ public class SozialdienstAdminDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SozialdienstAdminDtoSpec sozialdienstAdmin = (SozialdienstAdminDtoSpec) o;
-    return Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
-        Objects.equals(this.email, sozialdienstAdmin.email);
+    SachbearbeiterDtoSpec sachbearbeiter = (SachbearbeiterDtoSpec) o;
+    return Objects.equals(this.id, sachbearbeiter.id) &&
+        Objects.equals(this.vorname, sachbearbeiter.vorname) &&
+        Objects.equals(this.nachname, sachbearbeiter.nachname) &&
+        Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, email);
+    return Objects.hash(id, vorname, nachname, benutzereinstellungen);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SozialdienstAdminDtoSpec {\n");
+    sb.append("class SachbearbeiterDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

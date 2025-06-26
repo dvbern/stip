@@ -23,8 +23,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
@@ -54,6 +56,7 @@ public class BenutzerService {
 
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
     private final BenutzerRepository benutzerRepository;
+    private final SachbearbeiterRepository sachbearbeiterRepository;
     private final RolleService rolleService;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
@@ -112,12 +115,12 @@ public class BenutzerService {
     }
 
     public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
-        final var benutzers = benutzerRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
+        final var sachbearbeiters = sachbearbeiterRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
         final var sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository
-            .findForBenutzers(benutzers.stream().map(AbstractEntity::getId).toList())
+            .findForBenutzers(sachbearbeiters.stream().map(AbstractEntity::getId).toList())
             .collect(Collectors.toMap(stammdaten -> stammdaten.getBenutzer().getId(), stammdaten -> stammdaten));
 
-        return benutzers
+        return sachbearbeiters
             .stream()
             .map(benutzer -> {
                 var szs = sachbearbeiterZuordnungStammdaten.get(benutzer.getId());
@@ -139,14 +142,14 @@ public class BenutzerService {
 
     @Transactional
     public void createOrUpdateSachbearbeiterStammdaten(
-        UUID benutzerId,
+        UUID sachbearbeiterId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto
     ) {
-        Benutzer benutzer = benutzerRepository.requireById(benutzerId);
+        Sachbearbeiter sachbearbeiter = sachbearbeiterRepository.requireById(sachbearbeiterId);
         SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten =
-            sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId)
+            sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(sachbearbeiterId)
                 .orElse(new SachbearbeiterZuordnungStammdaten());
-        sachbearbeiterZuordnungStammdaten.setBenutzer(benutzer);
+        sachbearbeiterZuordnungStammdaten.setBenutzer(sachbearbeiter);
         sachbearbeiterZuordnungStammdatenMapper.partialUpdate(
             sachbearbeiterZuordnungStammdatenDto,
             sachbearbeiterZuordnungStammdaten

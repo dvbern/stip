@@ -39,4 +39,20 @@ public class BenutzerAuthorizer extends BaseAuthorizer {
     public void canPrepare() {
         permitAll();
     }
+
+    public void canGetSachbearbeiters() {
+        permitAll();
+    }
+
+    public void canCreateSachbearbeiter() {
+        permitAll();
+    }
+
+    public void canUpdateSachbearbeiter() {
+        permitAll();
+    }
+
+    public void canDeleteSachbearbeiter() {
+        permitAll();
+    }
 }

@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -37,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DelegierenAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final FallRepository fallRepository;
     private final DelegierungRepository delegierungRepository;
     private final SozialdienstService sozialdienstService;

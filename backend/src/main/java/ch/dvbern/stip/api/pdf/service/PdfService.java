@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -173,7 +173,7 @@ public class PdfService {
 
         final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
 
-        final Benutzer sachbearbeiterBenutzer = gesuch
+        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
             .getFall()
             .getSachbearbeiterZuordnung()
@@ -225,8 +225,8 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        // TODO KSTIP-2021: implement sb email
-        final Link email = new Link("TBD: peter.muster@be.ch", PdfAction.createURI("mailto:peter.muster@be.ch"));
+        final Link email =
+            new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
@@ -235,8 +235,7 @@ public class PdfService {
             1,
             1,
             String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-            // TODO KSTIP-2021: implement sb phone number
-            "TBD: 031 300 30 30"
+            sachbearbeiterBenutzer.getTelefonnummer()
         )
             .setPaddingBottom(SPACING_BIG)
             .setPaddingTop(SPACING_MEDIUM)
@@ -551,7 +550,7 @@ public class PdfService {
             .getKorrespondenzSprache()
             .getLocale();
 
-        final Benutzer sachbearbeiterBenutzer = gesuch
+        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
             .getFall()
             .getSachbearbeiterZuordnung()
@@ -661,6 +660,7 @@ public class PdfService {
             )
         );
         signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+
         signatureTable.addCell(
             createCell(
                 pdfFont,
@@ -668,8 +668,7 @@ public class PdfService {
                 1,
                 1,
                 String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                // TODO KSTIP-2021: implement sb job title
-                "TBD: Sachbearbeiter"
+                sachbearbeiterBenutzer.getFunktion(locale)
             )
         );
         signatureTable.setMarginBottom(SPACING_MEDIUM);
