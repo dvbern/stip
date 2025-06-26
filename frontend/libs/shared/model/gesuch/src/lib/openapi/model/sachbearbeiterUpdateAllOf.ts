@@ -9,11 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchsperiodeCreate } from './gesuchsperiodeCreate';
 
-/**
- * @type CreateGesuchsperiodeRequest
- * @export
- */
-export type CreateGesuchsperiodeRequest = GesuchsperiodeCreate | Null;
+export interface SachbearbeiterUpdateAllOf { 
+    telefonnummer: string;
+    email: string;
+    funktionDe: string;
+    funktionFr: string;
+    sachbearbeiterRollen: Array<string>;
+}
 

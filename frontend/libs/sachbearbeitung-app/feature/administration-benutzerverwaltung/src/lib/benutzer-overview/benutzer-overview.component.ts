@@ -22,7 +22,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, map, startWith } from 'rxjs';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { SharedModelBenutzer } from '@dv/shared/model/benutzer';
+import { Sachbearbeiter } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
@@ -153,7 +153,7 @@ export class BenutzerOverviewComponent {
     this.showFullListForBenutzer[benutzerId] = true;
   }
 
-  deleteBenutzer(benutzer: SharedModelBenutzer) {
+  deleteBenutzer(benutzer: Sachbearbeiter) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title:
         'sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title',

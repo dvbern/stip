@@ -19,7 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { SharedModelRoleList } from '@dv/shared/model/benutzer';
+import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import { compareById } from '@dv/shared/model/type-util';
 import {
@@ -58,9 +58,10 @@ export class BenutzeDetailComponent implements OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
+  availableRoles = BENUTZER_ROLES;
   store = inject(BenutzerverwaltungStore);
   form = this.formBuilder.group({
-    name: [<string | null>null, [Validators.required]],
+    nachname: [<string | null>null, [Validators.required]],
     vorname: [<string | null>null, [Validators.required]],
     email: [
       <string | null>null,
@@ -72,12 +73,10 @@ export class BenutzeDetailComponent implements OnDestroy {
     ],
     funktionDe: [<string | null>null, [Validators.required]],
     funktionFr: [<string | null>null, [Validators.required]],
-    roles: [<SharedModelRoleList>[], [Validators.required]],
+    sachbearbeiterRollen: [<BenutzerRole[]>[], [Validators.required]],
   });
 
   constructor() {
-    this.store.loadAvailableRoles$();
-
     effect(() => {
       const id = this.idSig();
 
@@ -90,13 +89,11 @@ export class BenutzeDetailComponent implements OnDestroy {
     });
 
     effect(() => {
-      const benutzer = this.store.benutzer().data;
+      const { roles, ...benutzer } = this.store.benutzer().data ?? {};
       if (benutzer) {
         this.form.patchValue({
-          name: benutzer.lastName,
-          vorname: benutzer.firstName,
-          email: benutzer.email,
-          roles: benutzer.roles,
+          ...benutzer,
+          sachbearbeiterRollen: roles?.raw,
         });
       }
     });
@@ -125,13 +122,11 @@ export class BenutzeDetailComponent implements OnDestroy {
 
     const values = convertTempFormToRealValues(this.form);
     this.store.updateBenutzer$({
+      userId: id,
       user: {
-        lastName: values.name,
-        firstName: values.vorname,
-        username: this.store.benutzer().data?.username,
-        id,
+        ...values,
+        sachbearbeiterRollen: values.sachbearbeiterRollen,
       },
-      roles: values.roles,
     });
   }
 
@@ -141,7 +136,10 @@ export class BenutzeDetailComponent implements OnDestroy {
     }
     const values = convertTempFormToRealValues(this.form);
     this.store.registerUser$({
-      ...values,
+      user: {
+        ...values,
+        sachbearbeiterRollen: values.sachbearbeiterRollen,
+      },
       onAfterSave: (userId) => {
         this.router.navigate(['..', 'edit', userId], {
           relativeTo: this.route,

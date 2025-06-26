@@ -9,11 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 
-export interface SozialdienstAdminCreate { 
-    keycloakId: string;
+export interface SachbearbeiterUpdate { 
     vorname: string;
     nachname: string;
+    benutzereinstellungen?: BenutzereinstellungenUpdate;
+    telefonnummer: string;
     email: string;
+    funktionDe: string;
+    funktionFr: string;
+    sachbearbeiterRollen: Array<string>;
 }
 

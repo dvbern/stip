@@ -21,6 +21,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import { getCurrentUrl } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormMessageErrorDirective,
@@ -33,7 +34,6 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
-import { getCurrentUrl } from '@dv/shared/util-fn/keycloak-helper';
 
 @Component({
   imports: [

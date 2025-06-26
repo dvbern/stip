@@ -10,15 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface AusgabenUpdate { 
-    id?: string;
-    steuernStaat: number;
-    steuernBund: number;
-    fahrkosten: number;
-    fahrkostenPartner?: number;
-    verpflegung: number;
-    verpflegungPartner?: number;
-    steuerjahr: number;
-    veranlagungscode: number;
+export interface SachbearbeiterAllOf { 
+    id: string;
 }
 

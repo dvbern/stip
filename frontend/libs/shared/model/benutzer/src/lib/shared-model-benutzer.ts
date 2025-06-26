@@ -1,5 +1,6 @@
 import * as z from 'zod';
 
+import { Sachbearbeiter } from '@dv/shared/model/gesuch';
 import { SharedModelState } from '@dv/shared/model/state-colors';
 
 export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
@@ -27,20 +28,16 @@ export type AvailableBenutzerRole =
   | GesuchstellerRole;
 export type RolesMap = Partial<Record<AvailableBenutzerRole, true>>;
 
-export const SharedModelRoleList = z.array(
-  z.object({ id: z.string(), name: z.string() }),
-);
-export type SharedModelRoleList = z.infer<typeof SharedModelRoleList>;
-export type SharedModelRole = SharedModelRoleList[number];
-
-export const SharedModelBenutzerApi = z.object({
+export const SharedModelBenutzerKeycloak = z.object({
   id: z.string(),
   username: z.string().optional(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().optional(),
 });
-export type SharedModelBenutzerApi = z.infer<typeof SharedModelBenutzerApi>;
+export type SharedModelBenutzerKeycloak = z.infer<
+  typeof SharedModelBenutzerKeycloak
+>;
 
 export interface KeycloakUserCreate {
   vorname: string;
@@ -48,29 +45,18 @@ export interface KeycloakUserCreate {
   email: string;
 }
 
-export const byBenutzertVerwaltungRoles = (role: SharedModelRole) => {
-  return BENUTZER_ROLES.some((r) => r === role.name);
-};
-
-export const bySozialdienstAdminRole = (role: SharedModelRole) => {
-  return role.name === SOZIALDIENST_ADMIN_ROLE;
-};
-
-export const SharedModelBenutzerList = z.array(SharedModelBenutzerApi);
+export const SharedModelBenutzerList = z.array(SharedModelBenutzerKeycloak);
 export type SharedModelBenutzerList = z.infer<typeof SharedModelBenutzerList>;
-
-export type SharedModelBenutzerWithRoles = SharedModelBenutzerApi & {
-  roles: SharedModelRoleList;
-};
 
 export type SharedModelBenutzerRole = {
   name: BenutzerRole;
   color: SharedModelState;
 };
 
-export type SharedModelBenutzer = SharedModelBenutzerApi & {
+export type SharedModelSachbearbeiter = Sachbearbeiter & {
   name: string;
   roles: {
+    raw: BenutzerRole[];
     extraAmount?: number;
     compact: SharedModelBenutzerRole[];
     full: SharedModelBenutzerRole[];
@@ -98,21 +84,52 @@ export type SharedModelUserAdminError = z.infer<
   typeof SharedModelUserAdminError
 >;
 
-export const SharedModelClientMappingsRepresentation = z.object({
-  id: z.string().optional(),
-  client: z.string().optional(),
-  mappings: SharedModelRoleList.optional(),
-});
-export type SharedModelClientMappingsRepresentation = z.infer<
-  typeof SharedModelClientMappingsRepresentation
->;
+export const toKnownUserErrorType = (error: unknown, fallbackType: string) => {
+  const parsed = SharedModelUserAdminError.parse(error);
+  return parsed.type ?? fallbackType;
+};
 
-export const SharedModelModelMappingsRepresentation = z.object({
-  clientMappings: z
-    .record(z.string(), SharedModelClientMappingsRepresentation)
-    .optional(),
-  realmMappings: SharedModelRoleList.optional(),
-});
-export type SharedModelModelMappingsRepresentation = z.infer<
-  typeof SharedModelModelMappingsRepresentation
->;
+export const getCurrentUrl = (document: Document) => {
+  return document.location.origin;
+};
+
+export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
+  switch (role) {
+    case 'V0_Sachbearbeiter':
+      return 'info';
+    case 'V0_Sachbearbeiter-Admin':
+      return 'success';
+    case 'V0_Jurist':
+      return 'warning';
+    default:
+      return 'danger';
+  }
+};
+
+const MAX_ROLES_SHOWN = 2;
+
+export const mapToSachbearbeiterWithKnownRoles = (
+  sachbearbeiter: Sachbearbeiter,
+): SharedModelSachbearbeiter => {
+  const roles = sachbearbeiter.sachbearbeiterRollen.filter(
+    isKnownSachbearbeiterRole,
+  );
+  const colorMatchedRoles = roles.map((role) => ({
+    name: role,
+    color: roleToStateColor(role),
+  }));
+  return {
+    ...sachbearbeiter,
+    name: `${sachbearbeiter.vorname} ${sachbearbeiter.nachname}`,
+    roles: {
+      raw: roles,
+      extraAmount:
+        roles.length > MAX_ROLES_SHOWN ? roles.length - 2 : undefined,
+      compact: colorMatchedRoles.slice(0, 2),
+      full: colorMatchedRoles,
+    },
+  };
+};
+
+export const isKnownSachbearbeiterRole = (role: string): role is BenutzerRole =>
+  BENUTZER_ROLES.includes(role as BenutzerRole);

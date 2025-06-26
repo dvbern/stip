@@ -1,10 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'shared-util-keycloak-http',
+  displayName: 'shared-model-benutzer',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/util/keycloak-http',
+  coverageDirectory: '../../../../coverage/libs/shared/util-fn/keycloak-helper',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

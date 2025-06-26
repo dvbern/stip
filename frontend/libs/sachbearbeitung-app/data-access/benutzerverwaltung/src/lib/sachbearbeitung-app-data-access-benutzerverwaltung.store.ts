@@ -1,36 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import {
-  EMPTY,
-  catchError,
-  exhaustMap,
-  filter,
-  forkJoin,
-  map,
-  of,
-  pipe,
-  switchMap,
-  tap,
-  throwIfEmpty,
-} from 'rxjs';
+import { EMPTY, catchError, map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  BENUTZER_ROLES,
-  SharedModelBenutzer,
-  SharedModelBenutzerApi,
-  SharedModelBenutzerWithRoles,
-  SharedModelRoleList,
-  byBenutzertVerwaltungRoles,
+  SharedModelSachbearbeiter,
+  mapToSachbearbeiterWithKnownRoles,
 } from '@dv/shared/model/benutzer';
 import { SharedModelError } from '@dv/shared/model/error';
-import { BenutzerService } from '@dv/shared/model/gesuch';
-import {
-  noGlobalErrorsIf,
-  shouldIgnoreNotFoundErrorsIf,
-} from '@dv/shared/util/http';
-import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
+import { BenutzerService, SachbearbeiterUpdate } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   RemoteData,
@@ -41,24 +20,16 @@ import {
   pending,
   success,
 } from '@dv/shared/util/remote-data';
-import {
-  createBenutzerListFromRoleLookup,
-  hasLocationHeader,
-} from '@dv/shared/util-fn/keycloak-helper';
 
 type BenutzerverwaltungState = {
-  benutzers: CachedRemoteData<SharedModelBenutzer[]>;
-  benutzer: RemoteData<SharedModelBenutzerWithRoles>;
-  availableRoles: CachedRemoteData<SharedModelRoleList>;
+  benutzers: CachedRemoteData<SharedModelSachbearbeiter[]>;
+  benutzer: RemoteData<SharedModelSachbearbeiter>;
 };
 
 const initialState: BenutzerverwaltungState = {
   benutzers: initial(),
   benutzer: initial(),
-  availableRoles: initial(),
 };
-
-const DEFAULT_ROLE = 'default-roles-bern';
 
 @Injectable()
 export class BenutzerverwaltungStore extends signalStore(
@@ -66,7 +37,6 @@ export class BenutzerverwaltungStore extends signalStore(
   withState(initialState),
 ) {
   private benutzerService = inject(BenutzerService);
-  private keycloak = inject(KeycloakHttpService);
 
   private globalNotificationStore = inject(GlobalNotificationStore);
 
@@ -77,28 +47,22 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzers: cachedPending(state.benutzers),
         }));
       }),
-      exhaustMap(() =>
-        // Load all users for each role that we currently use in the SB app
-        // sadly Keycloak does not support loading all users and their roles in one request
-        // so we load the user list for every known role and merge them afterwards
-        forkJoin(
-          Object.values(BENUTZER_ROLES).map((role) => {
-            return this.keycloak.loadBenutzersWithRole$(role);
+      switchMap(() =>
+        this.benutzerService.getSachbearbeitersForManagement$().pipe(
+          map((benutzers) => benutzers.map(mapToSachbearbeiterWithKnownRoles)),
+          handleApiResponse((benutzers) => patchState(this, { benutzers }), {
+            onFailure: (error) => {
+              const parsedError = SharedModelError.parse(error);
+              if (parsedError.type === 'zodError') {
+                console.error(parsedError.message, parsedError.errors);
+              }
+              this.globalNotificationStore.handleHttpRequestFailed([
+                parsedError,
+              ]);
+            },
           }),
         ),
       ),
-      map((benutzersByRole) =>
-        createBenutzerListFromRoleLookup(benutzersByRole),
-      ),
-      handleApiResponse((benutzers) => patchState(this, { benutzers }), {
-        onFailure: (error) => {
-          const parsedError = SharedModelError.parse(error);
-          if (parsedError.type === 'zodError') {
-            console.error(parsedError.message, parsedError.errors);
-          }
-          this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
-        },
-      }),
     ),
   );
 
@@ -109,59 +73,50 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzer: pending(),
         }));
       }),
-      switchMap((userId) => this.keycloak.getUserWithRoleMappings$(userId)),
-      handleApiResponse((benutzer) => patchState(this, { benutzer })),
+      switchMap((sachbearbeiterId) =>
+        this.benutzerService
+          .getSachbearbeiterForManagement$({
+            sachbearbeiterId,
+          })
+          .pipe(
+            map(mapToSachbearbeiterWithKnownRoles),
+            handleApiResponse((benutzer) => patchState(this, { benutzer })),
+          ),
+      ),
     ),
   );
 
   updateBenutzer$ = rxMethod<{
-    user: SharedModelBenutzerApi;
-    roles: SharedModelRoleList;
+    userId: string;
+    user: SachbearbeiterUpdate;
   }>(
     pipe(
-      map(({ user, roles }) => {
-        const rolesToRemove = this.benutzer().data?.roles.filter(
-          (r) =>
-            !roles.some((role) => role.name === r.name) &&
-            r.name !== DEFAULT_ROLE,
-        );
-
-        return { user, roles, rolesToRemove };
-      }),
       tap(() => {
         patchState(this, {
           benutzer: pending(),
         });
       }),
-      exhaustMap(({ user, roles, rolesToRemove }) =>
-        this.keycloak.updateUser$(user).pipe(
-          switchMap(() => this.keycloak.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
-          switchMap(() => {
-            if (!rolesToRemove || rolesToRemove.length === 0) {
-              return of(user);
-            }
-
-            return this.keycloak.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
-          }),
-          switchMap(() =>
-            this.keycloak.getUserWithRoleMappings$(
-              user.id,
-              byBenutzertVerwaltungRoles,
-            ),
+      switchMap(({ userId, user }) =>
+        this.benutzerService
+          .updateSachbearbeiter$({
+            sachbearbeiterId: userId,
+            sachbearbeiterUpdate: user,
+          })
+          .pipe(
+            map(mapToSachbearbeiterWithKnownRoles),
+            handleApiResponse((benutzer) => patchState(this, { benutzer }), {
+              onSuccess: (benutzer) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
+                });
+                patchState(this, { benutzer: success(benutzer) });
+              },
+              onFailure: () => {
+                this.loadBenutzerWithRoles$(userId);
+              },
+            }),
           ),
-          handleApiResponse(() => undefined, {
-            onSuccess: (benutzer) => {
-              this.globalNotificationStore.createSuccessNotification({
-                messageKey:
-                  'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
-              });
-              patchState(this, { benutzer: success(benutzer) });
-            },
-            onFailure: () => {
-              this.loadBenutzerWithRoles$(user.id);
-            },
-          }),
-        ),
       ),
     ),
   );
@@ -178,42 +133,25 @@ export class BenutzerverwaltungStore extends signalStore(
         }));
       }),
       switchMap(({ benutzerId }) =>
-        this.deleteBenutzerFromBothApis$(benutzerId).pipe(
-          handleApiResponse(
-            () => {
-              patchState(this, { benutzer: initial() });
-            },
-            {
-              onSuccess: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
-                });
-                this.loadAllSbAppBenutzers$();
-              },
-              onFailure: () => {
-                this.loadAllSbAppBenutzers$();
-              },
-            },
-          ),
-        ),
-      ),
-    ),
-  );
-
-  loadAvailableRoles$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          availableRoles: cachedPending(state.availableRoles),
-        }));
-      }),
-      switchMap(() =>
-        this.keycloak
-          .getRoles$(byBenutzertVerwaltungRoles)
+        this.benutzerService
+          .deleteSachbearbeiter$({ sachbearbeiterId: benutzerId })
           .pipe(
-            handleApiResponse((availableRoles) =>
-              patchState(this, { availableRoles }),
+            handleApiResponse(
+              () => {
+                patchState(this, { benutzer: initial() });
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+                  });
+                  this.loadAllSbAppBenutzers$();
+                },
+                onFailure: () => {
+                  this.loadAllSbAppBenutzers$();
+                },
+              },
             ),
           ),
       ),
@@ -221,10 +159,7 @@ export class BenutzerverwaltungStore extends signalStore(
   );
 
   registerUser$ = rxMethod<{
-    name: string;
-    vorname: string;
-    email: string;
-    roles: SharedModelRoleList;
+    user: SachbearbeiterUpdate;
     onAfterSave?: (userId: string) => void;
   }>(
     pipe(
@@ -233,55 +168,28 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzer: pending(),
         });
       }),
-      exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
-        this.keycloak.createUser$({ vorname, name, email }).pipe(
-          filter(hasLocationHeader),
-          throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) =>
-            this.keycloak.loadUserByUrl$(response.headers.get('Location')),
+      switchMap(({ onAfterSave, user }) =>
+        this.benutzerService
+          .createSachbearbeiter$({
+            sachbearbeiterUpdate: user,
+          })
+          .pipe(
+            map(mapToSachbearbeiterWithKnownRoles),
+            handleApiResponse((benutzer) => patchState(this, { benutzer }), {
+              onSuccess: (newUser) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+                });
+                onAfterSave?.(newUser.id);
+              },
+            }),
+            catchError((error) => {
+              patchState(this, { benutzer: failure(error) });
+              return EMPTY;
+            }),
           ),
-          switchMap((user) => this.keycloak.assignRoles$(user, roles)),
-          switchMap((user) =>
-            this.keycloak
-              .notifyUser$({
-                name: user.lastName,
-                vorname: user.firstName,
-                email: user.email,
-              })
-              .pipe(
-                handleApiResponse(
-                  () => {
-                    // roles are set optimistically on the user object
-                    patchState(this, { benutzer: success({ ...user, roles }) });
-                  },
-                  {
-                    onSuccess: (wasSuccessfull) => {
-                      if (wasSuccessfull) {
-                        this.globalNotificationStore.createSuccessNotification({
-                          messageKey:
-                            'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-                        });
-                        onAfterSave?.(user.id);
-                      }
-                    },
-                  },
-                ),
-              ),
-          ),
-          catchError((error) => {
-            patchState(this, { benutzer: failure(error) });
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
-
-  private deleteBenutzerFromBothApis$(benutzerId: string) {
-    return this.benutzerService
-      .deleteBenutzer$({ benutzerId }, undefined, undefined, {
-        context: noGlobalErrorsIf(true, shouldIgnoreNotFoundErrorsIf(true)),
-      })
-      .pipe(switchMap(() => this.keycloak.deleteUser$(benutzerId)));
-  }
 }

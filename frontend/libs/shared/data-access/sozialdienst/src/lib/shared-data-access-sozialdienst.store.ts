@@ -2,15 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import {
-  catchError,
-  exhaustMap,
-  map,
-  pipe,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, exhaustMap, pipe, switchMap, tap, throwError } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
@@ -27,12 +19,10 @@ import {
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
 import { handleUnauthorized } from '@dv/shared/util/http';
-import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
-  failure,
   handleApiResponse,
   initial,
   mapCachedData,
@@ -71,7 +61,6 @@ export class SozialdienstStore extends signalStore(
   private router = inject(Router);
   private sozialdienstService = inject(SozialdienstService);
   private delegierenService = inject(DelegierenService);
-  private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   sozialdienstBenutzersView = computed(() => {
@@ -150,9 +139,7 @@ export class SozialdienstStore extends signalStore(
   );
 
   createSozialdienst$ = rxMethod<{
-    sozialdienstCreate: Omit<SozialdienstCreate, 'sozialdienstAdmin'> & {
-      sozialdienstAdmin: Omit<SozialdienstAdmin, 'keycloakId' | 'id'>;
-    };
+    sozialdienstCreate: SozialdienstCreate;
     onAfterSave?: (sozialdienstId: string) => void;
   }>(
     pipe(
@@ -161,85 +148,28 @@ export class SozialdienstStore extends signalStore(
           sozialdienst: pending(),
         });
       }),
-      exhaustMap(({ sozialdienstCreate, onAfterSave }) => {
-        const newUser = {
-          ...sozialdienstCreate.sozialdienstAdmin,
-        };
-
-        return this.keycloak
-          .createUserWithSozialDienstAdminRole$({
-            name: newUser.nachname,
-            vorname: newUser.vorname,
-            email: newUser.email,
+      exhaustMap(({ sozialdienstCreate, onAfterSave }) =>
+        this.sozialdienstService
+          .createSozialdienst$({
+            sozialdienstCreate,
           })
           .pipe(
-            switchMap((user) => {
-              if (!user.email) {
-                throw new Error('User email not defined');
-              }
-
-              const newDienst: SozialdienstCreate = {
-                ...sozialdienstCreate,
-                sozialdienstAdmin: {
-                  nachname: user.lastName,
-                  vorname: user.firstName,
-                  keycloakId: user.id,
-                  email: user.email,
+            handleApiResponse(
+              (sozialdienst) => {
+                patchState(this, { sozialdienst });
+              },
+              {
+                onSuccess: (newSozialdienst) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'shared.admin.sozialdienst.sozialdienstErstellt',
+                  });
+                  onAfterSave?.(newSozialdienst.id);
                 },
-              };
-
-              return this.sozialdienstService
-                .createSozialdienst$({
-                  sozialdienstCreate: newDienst,
-                })
-                .pipe(
-                  map((sozialdienst) => ({
-                    user,
-                    sozialdienst,
-                  })),
-                  // delete the user if the creation of the sozialdienst fails
-                  catchError((error) => {
-                    return this.keycloak
-                      .deleteUser$(user.id)
-                      .pipe(switchMap(() => throwError(() => error)));
-                  }),
-                );
-            }),
-            switchMap(({ sozialdienst, user }) =>
-              this.keycloak
-                .notifyUser$({
-                  name: user.lastName,
-                  vorname: user.firstName,
-                  email: user.email,
-                })
-                .pipe(
-                  handleApiResponse(
-                    () => {
-                      patchState(this, { sozialdienst: success(sozialdienst) });
-                    },
-                    {
-                      onSuccess: (wasSuccessfull) => {
-                        if (wasSuccessfull) {
-                          this.globalNotificationStore.createSuccessNotification(
-                            {
-                              messageKey:
-                                'shared.admin.sozialdienst.sozialdienstErstellt',
-                            },
-                          );
-                          onAfterSave?.(sozialdienst.id);
-                        }
-                      },
-                    },
-                  ),
-                ),
+              },
             ),
-            catchError((error) => {
-              patchState(this, { sozialdienst: failure(error) });
-
-              return throwError(() => error);
-            }),
-          );
-      }),
+          ),
+      ),
     ),
   );
 
@@ -308,7 +238,7 @@ export class SozialdienstStore extends signalStore(
 
   replaceSozialdienstAdmin$ = rxMethod<{
     sozialdienstId: string;
-    newUser: Omit<SozialdienstAdmin, 'keycloakId'>;
+    sozialdienstAdmin: SozialdienstAdmin;
   }>(
     pipe(
       tap(() => {
@@ -316,57 +246,24 @@ export class SozialdienstStore extends signalStore(
           sozialdienst: pending(),
         });
       }),
-      exhaustMap(({ sozialdienstId, newUser }) => {
-        return this.keycloak
-          .createUserWithSozialDienstAdminRole$({
-            name: newUser.nachname,
-            vorname: newUser.vorname,
-            email: newUser.email,
+      exhaustMap(({ sozialdienstId, sozialdienstAdmin }) =>
+        this.sozialdienstService
+          .replaceSozialdienstAdmin$({
+            sozialdienstId,
+            sozialdienstAdmin,
           })
           .pipe(
-            switchMap((user) => {
-              if (!user.email) {
-                throw new Error('User email not defined');
-              }
-
-              return this.sozialdienstService.replaceSozialdienstAdmin$({
-                sozialdienstId,
-                sozialdienstAdmin: {
-                  nachname: user.lastName,
-                  vorname: user.firstName,
-                  email: user.email,
-                  keycloakId: user.id,
-                },
-              });
+            handleApiResponse(() => undefined, {
+              onSuccess: () => {
+                this.loadSozialdienst$({ sozialdienstId });
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'shared.admin.sozialdienst.sozialdienstAdminErsetzt',
+                });
+              },
             }),
-            switchMap((sozialdienstAdmin) =>
-              this.keycloak
-                .notifyUser$({
-                  vorname: sozialdienstAdmin.vorname,
-                  name: sozialdienstAdmin.nachname,
-                  email: sozialdienstAdmin.email,
-                })
-                .pipe(
-                  handleApiResponse(() => undefined, {
-                    onSuccess: (wasSuccessfull) => {
-                      this.loadSozialdienst$({ sozialdienstId });
-                      if (wasSuccessfull) {
-                        this.globalNotificationStore.createSuccessNotification({
-                          messageKey:
-                            'shared.admin.sozialdienst.sozialdienstAdminErsetzt',
-                        });
-                      }
-                    },
-                  }),
-                ),
-            ),
-            catchError((error) => {
-              this.loadSozialdienst$({ sozialdienstId });
-
-              return throwError(() => error);
-            }),
-          );
-      }),
+          ),
+      ),
     ),
   );
 

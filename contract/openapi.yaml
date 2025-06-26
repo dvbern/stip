@@ -3129,6 +3129,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getSachbearbeitersForManagement
+      summary: Get all existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
     post:
       requestBody:
         content:
@@ -3160,6 +3161,24 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: returns Sachbearbeiter by given id (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSachbearbeiterForManagement
+      summary: Get an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
     patch:
       requestBody:
         content:
@@ -5862,13 +5881,10 @@ components:
           type: string
     SozialdienstAdmin:
       required:
-        - keycloakId
         - vorname
         - nachname
         - email
       properties:
-        keycloakId:
-          type: string
         vorname:
           type: string
         nachname:

@@ -9,9 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 
-export interface SozialdienstAdminUpdate { 
+export interface Sachbearbeiter { 
     vorname: string;
     nachname: string;
+    benutzereinstellungen?: BenutzereinstellungenUpdate;
+    telefonnummer: string;
+    email: string;
+    funktionDe: string;
+    funktionFr: string;
+    sachbearbeiterRollen: Array<string>;
+    id: string;
 }
 

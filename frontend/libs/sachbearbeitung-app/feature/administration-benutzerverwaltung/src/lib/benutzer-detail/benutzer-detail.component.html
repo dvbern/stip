@@ -5,13 +5,20 @@
   class="tw-dv-form-grid tw-mt-6"
   (ngSubmit)="handleSubmit()"
 >
+  @let controls = form.controls;
   @if (store.benutzer() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <!-- Name -->
     <mat-form-field dvSharedUiFormField>
       <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}</mat-label>
-      <input formControlName="name" data-testid="form-benutzerverwaltung-name" matInput dvMaxLength type="text" />
+      <input
+        [formControl]="controls.nachname"
+        data-testid="form-benutzerverwaltung-name"
+        matInput
+        dvMaxLength
+        type="text"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -20,7 +27,13 @@
     <!-- Vorname -->
     <mat-form-field dvSharedUiFormField>
       <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.vorname.label' | translate }}</mat-label>
-      <input formControlName="vorname" data-testid="form-benutzerverwaltung-vorname" matInput dvMaxLength type="text" />
+      <input
+        [formControl]="controls.vorname"
+        data-testid="form-benutzerverwaltung-vorname"
+        matInput
+        dvMaxLength
+        type="text"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -33,7 +46,7 @@
         type="text"
         matInput
         dvMaxLength
-        formControlName="telefonnummer"
+        [formControl]="controls.telefonnummer"
         data-testid="form-benutzerverwaltung-telefonnummer"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -51,7 +64,7 @@
       </mat-label>
       <input
         data-testid="form-benutzerverwaltung-email"
-        formControlName="email"
+        [formControl]="controls.email"
         matInput
         dvMaxLength
         type="email"
@@ -72,7 +85,7 @@
         type="text"
         matInput
         dvMaxLength
-        formControlName="funktionDe"
+        [formControl]="controls.funktionDe"
         data-testid="form-benutzerverwaltung-funktionDe"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -87,7 +100,7 @@
         type="text"
         matInput
         dvMaxLength
-        formControlName="funktionFr"
+        [formControl]="controls.funktionFr"
         data-testid="form-benutzerverwaltung-funktionFr"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -100,13 +113,13 @@
     </h2>
     <mat-selection-list
       [compareWith]="compareById"
-      formControlName="roles"
+      [formControl]="controls.sachbearbeiterRollen"
       class="tw-col-start-1"
       [disableRipple]="true"
     >
-      @for (role of store.availableRoles.data(); track role.id) {
+      @for (role of availableRoles; track role) {
         <mat-list-option [value]="role" togglePosition="before">{{
-          'shared.role.' + role.name | translate
+          'shared.role.' + role | translate
         }}</mat-list-option>
       }
     </mat-selection-list>
