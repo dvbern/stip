@@ -31,6 +31,13 @@ public final class OidcConstants {
     public static final String ROLE_SUPER_USER = "V0_Super-User";
 
     public static final String REQUIRED_ACTION_UPDATE_PASSWORD = "UPDATE_PASSWORD";
+    public static final Set<String> POSSIBLE_SB_ROLES = Collections.unmodifiableSet(
+        Set.of(
+            ROLE_SACHBEARBEITER,
+            ROLE_ADMIN,
+            ROLE_JURIST
+        )
+    );
 
     public static final Set<String> POSSIBLE_USER_ROLES = Collections.unmodifiableSet(
         Set.of(

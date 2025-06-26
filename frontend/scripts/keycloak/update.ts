@@ -223,14 +223,14 @@ async function syncRoles(realm: string) {
     );
   }
 
-  // let deleted = false;
-  // if (superfluousPermissions.length > 0) {
-  //   deleted = await deleteSuperfluousPermissions(
-  //     kcAdminClient,
-  //     realm,
-  //     superfluousPermissions,
-  //   );
-  // }
+  let deleted = false;
+  if (superfluousPermissions.length > 0) {
+    deleted = await deleteSuperfluousPermissions(
+      kcAdminClient,
+      realm,
+      superfluousPermissions,
+    );
+  }
 
   // Add missing roles
   if (missingRoles.length > 0) {
@@ -263,7 +263,7 @@ async function syncRoles(realm: string) {
   return {
     addedMissingCompositeRoles: missingCompositeRoles,
     addedMissingRoles: missingRoles,
-    // removedSuperfluousPermissions: deleted ? superfluousPermissions : [],
+    removedSuperfluousPermissions: deleted ? superfluousPermissions : [],
     addedMissingPermissions: missingPermissions,
     repairedCompositeRoles,
   };

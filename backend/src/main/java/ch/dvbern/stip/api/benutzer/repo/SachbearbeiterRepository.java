@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.benutzer.repo;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.QRolle;
@@ -42,5 +43,15 @@ public class SachbearbeiterRepository implements BaseRepository<Sachbearbeiter> 
             .join(sachbearbeiter.rollen, rolle)
             .where(rolle.keycloakIdentifier.eq(stringRolle))
             .stream();
+    }
+
+    public Optional<Sachbearbeiter> findByKeycloakId(String keycloakId) {
+        final var sachbearbeiter = QSachbearbeiter.sachbearbeiter;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(sachbearbeiter)
+            .where(sachbearbeiter.keycloakId.eq(keycloakId))
+            .stream()
+            .findFirst();
     }
 }

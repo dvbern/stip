@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.benutzer.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
@@ -57,12 +59,28 @@ public class BenutzerService {
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
     private final BenutzerRepository benutzerRepository;
     private final SachbearbeiterRepository sachbearbeiterRepository;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final RolleService rolleService;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
 
     private final ZuordnungRepository zuordnungRepository;
+
+    private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
+        final var benutzerOpt = benutzerRepository.findByKeycloakId(keycloakId);
+        if (benutzerOpt.isEmpty()) {
+            final var sozBenutzerOpt = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
+            if (sozBenutzerOpt.isEmpty()) {
+                return sachbearbeiterRepository.findByKeycloakId(keycloakId)
+                    .orElseThrow(
+                        () -> new NotFoundException("Benutzer not found")
+                    );
+            }
+            return sozBenutzerOpt.orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        }
+        return benutzerOpt.orElseThrow(() -> new NotFoundException("Benutzer not found"));
+    }
 
     @Transactional
     public Benutzer getCurrentBenutzer() {
@@ -72,9 +90,7 @@ public class BenutzerService {
             throw AppFailureMessage.missingSubject().create();
         }
 
-        return benutzerRepository
-            .findByKeycloakId(keycloakId)
-            .orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        return getBenutzerByKeycloakId(keycloakId);
     }
 
     @Transactional
@@ -84,10 +100,13 @@ public class BenutzerService {
         if (keycloakId == null) {
             throw AppFailureMessage.missingSubject().create();
         }
+        Benutzer benutzer = null;
+        try {
+            benutzer = getBenutzerByKeycloakId(keycloakId);
+        } catch (NotFoundException e) {
+            benutzer = createBenutzerFromJWT();
+        }
 
-        Benutzer benutzer = benutzerRepository
-            .findByKeycloakId(keycloakId)
-            .orElseGet(this::createBenutzerFromJWT);
         benutzer = updateBenutzerTypFromJWT(benutzer);
         benutzerRepository.persistAndFlush(benutzer);
 
@@ -103,14 +122,31 @@ public class BenutzerService {
 
     @Transactional
     public Benutzer createBenutzerFromJWT() {
-        Benutzer newBenutzer = new Benutzer();
-        newBenutzer.setKeycloakId(jsonWebToken.getSubject());
-        newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
-        newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
-        newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
-        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
+        Benutzer newBenutzer;
+        if (!Collections.disjoint(identity.getRoles(), OidcConstants.POSSIBLE_SB_ROLES)) {
+            Sachbearbeiter newSachbearbeiter = new Sachbearbeiter();
+            newSachbearbeiter.setKeycloakId(jsonWebToken.getSubject());
+            newSachbearbeiter.setVorname(jsonWebToken.getClaim(Claims.given_name));
+            newSachbearbeiter.setNachname(jsonWebToken.getClaim(Claims.family_name));
+            newSachbearbeiter.setBenutzerStatus(BenutzerStatus.AKTIV);
+            newSachbearbeiter.setBenutzereinstellungen(new Benutzereinstellungen());
+            newSachbearbeiter.setFunktionDe("Sachbearbeiter");
+            newSachbearbeiter.setFunktionFr("Sachbearbeiter");
+            newSachbearbeiter.setTelefonnummer("0000000000");
 
-        benutzerRepository.persistAndFlush(newBenutzer);
+            sachbearbeiterRepository.persistAndFlush(newSachbearbeiter);
+            newBenutzer = newSachbearbeiter;
+        } else {
+            newBenutzer = new Benutzer();
+            newBenutzer.setKeycloakId(jsonWebToken.getSubject());
+            newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
+            newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
+            newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
+            newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
+
+            benutzerRepository.persistAndFlush(newBenutzer);
+        }
+
         return newBenutzer;
     }
 
