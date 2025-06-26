@@ -219,7 +219,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     public void assertGesuchIsInOneOfGesuchStatus(final UUID gesuchId, final Set<Gesuchstatus> gesuchStatusSet) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusSet.contains(gesuch.getGesuchStatus())) {
+        if (gesuchStatusService.gesuchIsInOneOfGesuchStatus(gesuch, gesuchStatusSet)) {
             return;
         }
         forbidden();

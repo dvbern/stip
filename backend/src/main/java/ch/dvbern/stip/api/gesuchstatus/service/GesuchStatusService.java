@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchstatus.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
@@ -84,6 +85,10 @@ public class GesuchStatusService {
     public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {
         final var sm = createStateMachine(gesuch, null);
         return sm.canFire(target);
+    }
+
+    public boolean gesuchIsInOneOfGesuchStatus(final Gesuch gesuch, final Set<Gesuchstatus> gesuchStatusSet) {
+        return (gesuchStatusSet.contains(gesuch.getGesuchStatus()));
     }
 
     private StateMachine<Gesuchstatus, GesuchStatusChangeEvent> createStateMachine(

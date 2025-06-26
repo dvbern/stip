@@ -30,6 +30,8 @@ import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
@@ -54,6 +56,9 @@ import org.mapstruct.Named;
 public abstract class GesuchMapper {
     @Inject
     Validator validator;
+
+    @Inject
+    GesuchStatusService gesuchStatusService;
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
@@ -102,11 +107,12 @@ public abstract class GesuchMapper {
 
     @Named("getCanGetBerechnung")
     boolean getCanGetBerechnung(Gesuch gesuch) {
-        boolean canGetBerechnung = true;
+        boolean canGetBerechnung =
+            gesuchStatusService.gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
 
-        if (gesuch.getAusbildung().isAusbildungNichtGefunden()) {
-            canGetBerechnung = false;
-        }
+        // if (gesuch.getAusbildung().isAusbildungNichtGefunden()) {
+        // canGetBerechnung = false;
+        // }
 
         for (var gesuchTranche : gesuch.getGesuchTranchen()) {
             try {
