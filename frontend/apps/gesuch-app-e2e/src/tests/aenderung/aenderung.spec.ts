@@ -8,7 +8,7 @@ import {
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeTest } from '../../initialize-test';
+import { initializeMultiUserTest, initializeTest } from '../../initialize-test';
 import { setupGesuchWithApi } from '../../initialize-test-api';
 import { FreigabePO } from '../../po/freigabe.po';
 import { GeschwisterPO } from '../../po/geschwister.po';
@@ -22,52 +22,66 @@ import {
   gesuchFormularUpdateFn,
 } from '../../test-data/tranchen-test-data';
 
-const { test, getGesuchId, getTrancheId } = initializeTest(
-  'GESUCHSTELLER',
-  ausbildungValues,
-  setupGesuchWithApi(gesuchFormularUpdateFn),
-);
+const { test, getGesuchId, getTrancheId, getContexts } =
+  initializeMultiUserTest(
+    ausbildungValues,
+    setupGesuchWithApi(gesuchFormularUpdateFn),
+  );
 
-test('Aenderung erstellen', async ({ page, cockpit }) => {
+test('Aenderung erstellen', async ({ page, gsCockpit, sbPage }) => {
   test.slow();
   const urls = getE2eUrls();
-  const requiredDokumenteResponse = page.waitForResponse(
+
+  const contexts = getContexts();
+
+  // Get GS page from cockpit
+  const gsPage = gsCockpit.elems.page;
+
+  const requiredDokumenteResponse = gsPage.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
   );
 
   // Upload all GS-Dokumente =================================================
-  await page.goto(
+
+  // DO AS GS USER
+
+  await gsPage.goto(
     `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
-  await expectStepTitleToContainText('Dokumente', page);
+  await expectStepTitleToContainText('Dokumente', gsPage);
   await requiredDokumenteResponse;
-  await uploadFiles(page);
-  await page.getByTestId('button-continue').click();
+  await uploadFiles(gsPage);
+  await gsPage.getByTestId('button-continue').click();
 
   // Freigabe ===========================================================
-  await expectStepTitleToContainText('Freigabe', page);
-  await page.getByTestId('button-abschluss').click();
-  const freigabeResponse = page.waitForResponse(
+  await expectStepTitleToContainText('Freigabe', gsPage);
+  await gsPage.getByTestId('button-abschluss').click();
+  const freigabeResponse = gsPage.waitForResponse(
     '**/api/v1/gesuch/*/einreichen',
   );
-  await page.getByTestId('dialog-confirm').click();
+  await gsPage.getByTestId('dialog-confirm').click();
   await freigabeResponse;
 
   // Go to Info (SB-App) ===============================================
-  await page.goto(
+
+  // DO AS SB USER
+
+  // SB User Actions - Switch to SB page
+  await sbPage.goto(
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
-  const headerNav = new SachbearbeiterGesuchHeaderPO(page);
+
+  const headerNav = new SachbearbeiterGesuchHeaderPO(sbPage);
   await headerNav.elems.trancheMenu.click();
   await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
-  await page.locator('.cdk-overlay-backdrop').click();
+  await sbPage.locator('.cdk-overlay-backdrop').click();
 
   // set tranche to bearbeitung ===============================================
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems
     .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
     .click();
-  await page.getByTestId('dialog-confirm').click();
+  await sbPage.getByTestId('dialog-confirm').click();
 
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems
@@ -75,32 +89,34 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     .click();
 
   // accept all documents =================================================
-  const stepsNavPO = new StepsNavPO(page);
-  const requiredDokumenteResp = page.waitForResponse(
+  const stepsNavPO = new StepsNavPO(sbPage);
+  const requiredDokumenteResp = sbPage.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
   );
   await stepsNavPO.elems.dokumente.first().click();
-  await expectStepTitleToContainText('Dokumente', page);
+  await expectStepTitleToContainText('Dokumente', sbPage);
   await requiredDokumenteResp;
 
-  await expect(page.getByTestId('dokument-akzeptieren').first()).toBeVisible();
-  const acceptDocumentsButtons = await page
+  await expect(
+    sbPage.getByTestId('dokument-akzeptieren').first(),
+  ).toBeVisible();
+  const acceptDocumentsButtons = await sbPage
     .getByTestId('dokument-akzeptieren')
     .count();
   expect(acceptDocumentsButtons).toBeGreaterThan(0);
   for (let i = 0; i < acceptDocumentsButtons; i++) {
-    const documentsToUploadReq = page.waitForResponse(
+    const documentsToUploadReq = sbPage.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
-    const dokumenteReq = page.waitForResponse(
+    const dokumenteReq = sbPage.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumente/*',
     );
-    await page.getByTestId('dokument-akzeptieren').first().click();
+    await sbPage.getByTestId('dokument-akzeptieren').first().click();
     await Promise.all([documentsToUploadReq, dokumenteReq]);
   }
 
   // bearbeitung abschliessen ===============================================
-  const abschliesenPromise = page.waitForResponse(
+  const abschliesenPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/*/bearbeitungAbschliessen',
   );
   await headerNav.elems.aktionMenu.click();
@@ -108,13 +124,13 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
     .getAktionStatusUebergangItem('BEARBEITUNG_ABSCHLIESSEN')
     .click();
   await abschliesenPromise;
-  const verfuegtPromise = page.waitForResponse(
+  const verfuegtPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/status/verfuegt/*',
   );
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems.getAktionStatusUebergangItem('VERFUEGT').click();
   await verfuegtPromise;
-  const versendetPromise = page.waitForResponse(
+  const versendetPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/status/versendet/*',
   );
   await headerNav.elems.aktionMenu.click();
@@ -122,10 +138,10 @@ test('Aenderung erstellen', async ({ page, cockpit }) => {
   await versendetPromise;
 
   // // Go to GS App ===============================================================
-  await page.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
+  await gsPage.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
   await cockpit.elems.cereateAaederung.click();
 
-  await page.getByTestId('form-aenderung-melden-dialog-gueltig-ab').fill(
+  await gsPage.getByTestId('form-aenderung-melden-dialog-gueltig-ab').fill(
     // today
     today(),
   );

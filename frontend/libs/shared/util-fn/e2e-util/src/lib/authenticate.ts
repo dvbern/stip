@@ -121,3 +121,139 @@ export const createTest = (
   });
   return test;
 };
+
+export interface MultiUserContext {
+  gesuchsteller: string;
+  sachbearbeiter: string;
+}
+
+/**
+ * Create authentication for multiple user types in a single test
+ */
+export const createMultiUserTest = () => {
+  const test = baseTest.extend<
+    {
+      gsContext: string;
+      sbContext: string;
+    },
+    {
+      workerStorageStates: MultiUserContext;
+    }
+  >({
+    // Worker-scoped fixture for both user types
+    workerStorageStates: [
+      async ({ browser }, use, workerInfo) => {
+        const id = test.info().parallelIndex + 1;
+        const gsFileName = path.resolve(
+          test.info().project.outputDir,
+          `.auth/gs_${id}.json`,
+        );
+        const sbFileName = path.resolve(
+          test.info().project.outputDir,
+          `.auth/sb_shared.json`, // Shared SB context
+        );
+
+        // Authenticate Gesuchsteller
+        if (!fs.existsSync(gsFileName)) {
+          await authenticateUser(
+            browser,
+            'GESUCHSTELLER',
+            id,
+            gsFileName,
+            workerInfo,
+          );
+        }
+
+        // Authenticate Sachbearbeiter (shared across workers)
+        if (!fs.existsSync(sbFileName)) {
+          await authenticateUser(
+            browser,
+            'SACHBEARBEITER',
+            1,
+            sbFileName,
+            workerInfo,
+          );
+        }
+
+        await use({
+          gesuchsteller: gsFileName,
+          sachbearbeiter: sbFileName,
+        });
+      },
+      { scope: 'worker' },
+    ],
+
+    // Test-scoped fixtures
+    gsContext: ({ workerStorageStates }, use) =>
+      use(workerStorageStates.gesuchsteller),
+    sbContext: ({ workerStorageStates }, use) =>
+      use(workerStorageStates.sachbearbeiter),
+  });
+
+  return test;
+};
+
+async function authenticateUser(
+  browser: any,
+  authType: E2eUser,
+  id: number,
+  fileName: string,
+  workerInfo: any,
+) {
+  const page = await browser.newPage({
+    storageState: undefined,
+    baseURL: workerInfo.project.use.baseURL,
+    ignoreHTTPSErrors: true,
+  });
+
+  const username = process.env[`E2E_${authType}_${id}_USERNAME`];
+  const password = process.env[`E2E_${authType}_${id}_PASSWORD`];
+
+  if (!username || !password) {
+    throw new Error(
+      `E2E_${authType}_${id}_USERNAME and E2E_${authType}_${id}_PASSWORD environment variables are required`,
+    );
+  }
+
+  await page.goto('/');
+  await page.getByLabel('Username or email').fill(username);
+  await page.getByLabel('Password', { exact: true }).fill(password);
+
+  const responsePromise = page.waitForResponse(
+    '**/realms/bern/protocol/openid-connect/token',
+  );
+
+  await page.getByRole('button', { name: 'Sign In' }).click();
+
+  const response = await responsePromise;
+  const url = new URL(response.url());
+  const body: KeycloakResponse = await response.json();
+
+  const unixTime = addSeconds(Date.now(), body.expires_in).getTime() / 1000;
+
+  await page.context().addCookies([
+    {
+      name: BEARER_COOKIE,
+      value: body.access_token,
+      domain: url.host,
+      path: '/realms/bern/',
+      expires: unixTime,
+      httpOnly: false,
+      secure: true,
+      sameSite: 'Lax',
+    },
+    {
+      name: REFRESH_COOKIE,
+      value: body.refresh_token,
+      domain: url.host,
+      path: '/realms/bern/',
+      expires: -1,
+      httpOnly: false,
+      secure: true,
+      sameSite: 'Lax',
+    },
+  ]);
+
+  await page.context().storageState({ path: fileName });
+  await page.close();
+}

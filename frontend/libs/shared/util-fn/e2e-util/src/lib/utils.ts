@@ -238,3 +238,70 @@ export type SetupFn = (args: {
   gesuchId: string;
   trancheId: string;
 }) => Promise<void>;
+
+/**
+ * Create test contexts for multiple user types
+ */
+export const createMultiUserTestContexts = async (options: {
+  playwright: PlaywrightWorkerArgs['playwright'];
+  browser: Browser;
+  gsStorageState: string;
+  sbStorageState: string;
+  baseURL?: string;
+}) => {
+  const { playwright, browser, gsStorageState, sbStorageState, baseURL } =
+    options;
+
+  // Create GS context
+  const gsBrowserContext = await browser.newContext({
+    storageState: gsStorageState,
+  });
+  const gsCookies = await gsBrowserContext.cookies();
+  const gsBearer = gsCookies.find((c) => c.name === BEARER_COOKIE);
+  const gsApiContext = await playwright.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${gsBearer?.value}`,
+    },
+  });
+
+  // Create SB context
+  const sbBrowserContext = await browser.newContext({
+    storageState: sbStorageState,
+  });
+  const sbCookies = await sbBrowserContext.cookies();
+  const sbBearer = sbCookies.find((c) => c.name === BEARER_COOKIE);
+  const sbApiContext = await playwright.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${sbBearer?.value}`,
+    },
+  });
+
+  return {
+    gs: {
+      browser: gsBrowserContext,
+      api: gsApiContext,
+    },
+    sb: {
+      browser: sbBrowserContext,
+      api: sbApiContext,
+    },
+    dispose: async () => {
+      try {
+        await Promise.all([
+          gsApiContext.dispose(),
+          sbApiContext.dispose(),
+          gsBrowserContext.close(),
+          sbBrowserContext.close(),
+        ]);
+      } catch (e) {
+        console.warn('Failed to dispose multi-user e2e contexts', e);
+      }
+    },
+  };
+};
+
+export type MultiUserTestContexts = Awaited<
+  ReturnType<typeof createMultiUserTestContexts>
+>;
