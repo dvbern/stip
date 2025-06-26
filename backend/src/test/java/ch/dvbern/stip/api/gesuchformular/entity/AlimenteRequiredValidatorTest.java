@@ -19,6 +19,8 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import io.quarkus.test.junit.QuarkusTest;
@@ -38,7 +40,7 @@ class AlimenteRequiredValidatorTest {
     @Test
     void noAlimenteRegelungNoAlimente() {
         GesuchFormular gesuchFormular =
-            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
@@ -48,7 +50,7 @@ class AlimenteRequiredValidatorTest {
     @Test
     void alimenteRegelungNoAlimenteViolation() {
         GesuchFormular gesuchFormular =
-            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
@@ -58,7 +60,7 @@ class AlimenteRequiredValidatorTest {
     @Test
     void alimenteRegelungAlimenteNoViolation() {
         GesuchFormular gesuchFormular =
-            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
@@ -68,11 +70,15 @@ class AlimenteRequiredValidatorTest {
     @Test
     void noAlimenteRegelungAlimenteViolation() {
         GesuchFormular gesuchFormular =
-            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
         assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext())).isFalse();
+    }
+
+    private GesuchFormular createGesuchFormular() {
+        return new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
     }
 
     private GesuchFormularUpdateDto createGesuchFormularUpdateDto() {
