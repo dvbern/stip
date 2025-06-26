@@ -46,14 +46,13 @@ class NeskoSteuerdatenMapperTest {
 
         steuerdaten = new Steuerdaten();
         steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
-
     }
 
     @Test
     void shouldTakeMaximumValueOfEinkommenTest() {
         var effSatzType = new EffSatzType();
-        final var value1 = 1000l;
-        final var value2 = 2000l;
+        final var value1 = 1000L;
+        final var value2 = 2000L;
         effSatzType.setEffektiv(BigDecimal.valueOf(value1));
         effSatzType.setSatzbestimmend(BigDecimal.valueOf(value2));
         getSteuerdatenResponse.getSteuerdaten().setTotalEinkuenfte(effSatzType);
@@ -65,5 +64,4 @@ class NeskoSteuerdatenMapperTest {
             value2
         );
     }
-
 }

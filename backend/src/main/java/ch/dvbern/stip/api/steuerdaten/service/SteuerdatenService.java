@@ -132,7 +132,6 @@ public class SteuerdatenService {
                 gesuchFormular.getFamiliensituation()
             )
         );
-
     }
 
     public boolean evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
@@ -148,12 +147,11 @@ public class SteuerdatenService {
         ) {
             return allSteuerdatenTabs.stream()
                 .anyMatch(
-                    steuerdaten1 -> Objects.nonNull(Objects.nonNull(steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig()))
+                    steuerdaten1 -> Objects.nonNull(steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig())
                     && steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig()
                 );
         }
 
         return actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig();
-
     }
 }

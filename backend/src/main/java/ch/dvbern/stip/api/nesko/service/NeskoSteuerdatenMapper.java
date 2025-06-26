@@ -63,29 +63,24 @@ public class NeskoSteuerdatenMapper {
                     saeule3a += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getBeitraegeSaeule3A().getMann());
                 }
                 if (Objects.nonNull(steuerdatenNesko.getBeitraegeSaeule3A().getFrau())) {
-                    saeule3a +=
-                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getBeitraegeSaeule3A().getFrau());
+                    saeule3a += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getBeitraegeSaeule3A().getFrau());
                 }
             }
             if (Objects.nonNull(steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson())) {
                 saeule2 += getMaxOrZeroFromEffSatzType(
-                    steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson()
-                        .getPersoenlicheBeitraegeSaeule2()
+                    steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson().getPersoenlicheBeitraegeSaeule2()
                 );
             }
             if (Objects.nonNull(steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn())) {
                 saeule2 += getMaxOrZeroFromEffSatzType(
-                    steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn()
-                        .getPersoenlicheBeitraegeSaeule2()
+                    steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn().getPersoenlicheBeitraegeSaeule2()
                 );
             }
         }
         steuerdaten.setSaeule3a(saeule3a);
         steuerdaten.setSaeule2(saeule2);
         steuerdaten.setKinderalimente(0); // TODO: Fix
-        steuerdaten.setVermoegen(
-            getMaxOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton())
-        );
+        steuerdaten.setVermoegen(getMaxOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton()));
         steuerdaten.setSteuernKantonGemeinde(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragKanton(), BigDecimal.ZERO).intValue()
         );
