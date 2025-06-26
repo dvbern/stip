@@ -21,7 +21,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
-import { compareById } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -102,8 +101,6 @@ export class BenutzeDetailComponent implements OnDestroy {
   ngOnDestroy() {
     this.store.resetBenutzer();
   }
-
-  compareById = compareById;
 
   handleSubmit() {
     if (this.idSig()) {

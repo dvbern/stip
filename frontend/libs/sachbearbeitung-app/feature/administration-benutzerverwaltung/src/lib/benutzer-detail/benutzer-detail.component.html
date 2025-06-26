@@ -111,12 +111,7 @@
     <h2 class="h4 tw-col-start-1 tw-pt-3">
       {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | translate }}
     </h2>
-    <mat-selection-list
-      [compareWith]="compareById"
-      [formControl]="controls.sachbearbeiterRollen"
-      class="tw-col-start-1"
-      [disableRipple]="true"
-    >
+    <mat-selection-list [formControl]="controls.sachbearbeiterRollen" class="tw-col-start-1" [disableRipple]="true">
       @for (role of availableRoles; track role) {
         <mat-list-option [value]="role" togglePosition="before">{{
           'shared.role.' + role | translate
