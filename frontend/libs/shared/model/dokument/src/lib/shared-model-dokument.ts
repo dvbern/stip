@@ -114,10 +114,15 @@ export interface UploadView {
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
   permission: PermissionMap,
+  isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
     case 'GESUCH_DOKUMENT':
     case 'CUSTOM_DOKUMENT': {
+      if (!isSachbearbeitungApp) {
+        const status = dokumentModel.gesuchDokument?.status;
+        return status !== 'AKZEPTIERT' && permission.canUploadDocuments;
+      }
       return permission.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
