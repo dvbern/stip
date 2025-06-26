@@ -12,5 +12,6 @@
 
 export interface SozialdienstBenutzerAllOf { 
     id: string;
+    isAdmin?: boolean;
 }
 

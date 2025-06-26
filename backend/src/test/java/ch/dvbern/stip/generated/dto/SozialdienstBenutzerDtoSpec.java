@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_ID,
+  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_IS_ADMIN,
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_VORNAME,
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_NACHNAME,
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_EMAIL
@@ -38,6 +39,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstBenutzerDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_IS_ADMIN = "isAdmin";
+  private Boolean isAdmin;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
@@ -74,6 +78,32 @@ public class SozialdienstBenutzerDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public SozialdienstBenutzerDtoSpec isAdmin(Boolean isAdmin) {
+    
+    this.isAdmin = isAdmin;
+    return this;
+  }
+
+   /**
+   * Get isAdmin
+   * @return isAdmin
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IS_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IS_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
   }
 
 
@@ -164,6 +194,7 @@ public class SozialdienstBenutzerDtoSpec {
     }
     SozialdienstBenutzerDtoSpec sozialdienstBenutzer = (SozialdienstBenutzerDtoSpec) o;
     return Objects.equals(this.id, sozialdienstBenutzer.id) &&
+        Objects.equals(this.isAdmin, sozialdienstBenutzer.isAdmin) &&
         Objects.equals(this.vorname, sozialdienstBenutzer.vorname) &&
         Objects.equals(this.nachname, sozialdienstBenutzer.nachname) &&
         Objects.equals(this.email, sozialdienstBenutzer.email);
@@ -171,7 +202,7 @@ public class SozialdienstBenutzerDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, vorname, nachname, email);
+    return Objects.hash(id, isAdmin, vorname, nachname, email);
   }
 
   @Override
@@ -179,6 +210,7 @@ public class SozialdienstBenutzerDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstBenutzerDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    isAdmin: ").append(toIndentedString(isAdmin)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");

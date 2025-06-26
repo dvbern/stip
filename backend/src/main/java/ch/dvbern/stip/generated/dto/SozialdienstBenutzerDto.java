@@ -24,6 +24,7 @@ public class SozialdienstBenutzerDto  implements Serializable {
   private @Valid String nachname;
   private @Valid String email;
   private @Valid UUID id;
+  private @Valid Boolean isAdmin;
 
   /**
    **/
@@ -101,6 +102,24 @@ public class SozialdienstBenutzerDto  implements Serializable {
     this.id = id;
   }
 
+  /**
+   **/
+  public SozialdienstBenutzerDto isAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+    return this;
+  }
+
+  
+  @JsonProperty("isAdmin")
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+  @JsonProperty("isAdmin")
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -114,12 +133,13 @@ public class SozialdienstBenutzerDto  implements Serializable {
     return Objects.equals(this.vorname, sozialdienstBenutzer.vorname) &&
         Objects.equals(this.nachname, sozialdienstBenutzer.nachname) &&
         Objects.equals(this.email, sozialdienstBenutzer.email) &&
-        Objects.equals(this.id, sozialdienstBenutzer.id);
+        Objects.equals(this.id, sozialdienstBenutzer.id) &&
+        Objects.equals(this.isAdmin, sozialdienstBenutzer.isAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, email, id);
+    return Objects.hash(vorname, nachname, email, id, isAdmin);
   }
 
   @Override
@@ -131,6 +151,7 @@ public class SozialdienstBenutzerDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    isAdmin: ").append(toIndentedString(isAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }
