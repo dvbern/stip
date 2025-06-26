@@ -135,11 +135,6 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Voulez-vous vraiment supprimer l'utilisateur \"{{ name }}\" ?",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists": "Un utilisateur avec cette adresse e-mail existe déjà.",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.erstellen": "L'utilisateur n'a pas pu être créé, veuillez réessayer.",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.loeschen": "L'utilisateur n'a pas pu être supprimé, veuillez contacter le support.",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.laden": "Une erreur s'est produite lors de la création de l'utilisateur, veuillez contacter le support.",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.roleMapping": "Une erreur s'est produite lors de l'attribution des rôles de l'utilisateur, veuillez contacter le support.",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.benachrichtigen": "Impossible d'envoyer une notification à l'utilisateur, soit l'adresse e-mail est invalide, soit une erreur s'est produite.<br><br>Veuillez informer l'utilisateur manuellement.",
 
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Centre de formation Allemand",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Centre de formation Français",

@@ -183,6 +183,16 @@ export class BenutzerverwaltungStore extends signalStore(
                 });
                 onAfterSave?.(newUser.id);
               },
+              onFailure: (error) => {
+                const parsedError = SharedModelError.parse(error);
+                if (parsedError.status === 409) {
+                  this.globalNotificationStore.createNotification({
+                    type: 'ERROR',
+                    messageKey:
+                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists',
+                  });
+                }
+              },
             }),
             catchError((error) => {
               patchState(this, { benutzer: failure(error) });
