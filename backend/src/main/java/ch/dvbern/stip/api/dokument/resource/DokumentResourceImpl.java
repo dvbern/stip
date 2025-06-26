@@ -102,7 +102,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_GS)
     public Uni<Response> createDokumentGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
-        gesuchDokumentAuthorizer.assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
+        gesuchDokumentAuthorizer.canGsUploadDokument(gesuchTrancheId, dokumentTyp);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 

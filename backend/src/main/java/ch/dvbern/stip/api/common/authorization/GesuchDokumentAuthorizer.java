@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -66,6 +67,23 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
             gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
             && GesuchTrancheStatus.SACHBEARBEITER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
         ) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    public void canGsUploadDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
+
+        final var dokumentOpt =
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
+        if (dokumentOpt.isEmpty()) {
+            return;
+        }
+
+        final var dokument = dokumentOpt.get();
+        if (Dokumentstatus.GESUCHSTELLER_CAN_UPLOAD_DOKUMENT.contains(dokument.getStatus())) {
             return;
         }
 
