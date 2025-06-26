@@ -11,7 +11,7 @@ import { addYears, format } from 'date-fns';
 import seedRandom from 'seedrandom';
 
 import { SmallImageFile } from './files';
-import { BEARER_COOKIE } from './playwright.config.base';
+import { BEARER_COOKIE, decompress } from './playwright.config.base';
 
 /**
  * works for all steptitles exept for "info" route (tranche component)
@@ -131,6 +131,50 @@ export const deleteGesuch = async (
 };
 
 /**
+ * Create test contexts for browser and API requests.
+ *
+ * @see https://playwright.dev/docs/api-testing#sending-api-requests-from-ui-tests
+ */
+export const createTestContexts = async (options: {
+  playwright: PlaywrightWorkerArgs['playwright'];
+  browser: Browser;
+  storageState?: BrowserContextOptions['storageState'];
+  baseURL?: string;
+}) => {
+  const { storageState, playwright, browser, baseURL } = options;
+  const browserContext = await browser.newContext({
+    storageState,
+  });
+
+  const cookies = await browserContext.cookies();
+  const bearerCookie = cookies.find((c) => c.name === BEARER_COOKIE);
+  const bearer = bearerCookie?.value
+    ? await decompress(bearerCookie.value)
+    : undefined;
+
+  const apiContext = await playwright.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${bearer}`,
+    },
+  });
+
+  return {
+    browser: browserContext,
+    api: apiContext,
+    dispose: async () => {
+      try {
+        await apiContext.dispose();
+        await browserContext.close();
+      } catch (e) {
+        console.warn('Failed to dispose e2e contexts', e);
+      }
+    },
+  };
+};
+export type TestContexts = Awaited<ReturnType<typeof createTestContexts>>;
+
+/**
  * Generates a random SVN number in the format 756.4849.0227.44
  */
 export const generateSVN = (seed: string) => {
@@ -197,47 +241,6 @@ export type SetupFn = (args: {
   gesuchId: string;
   trancheId: string;
 }) => Promise<void>;
-
-/**
- * Create test contexts for browser and API requests.
- *
- * @see https://playwright.dev/docs/api-testing#sending-api-requests-from-ui-tests
- */
-export const createTestContexts = async (options: {
-  playwright: PlaywrightWorkerArgs['playwright'];
-  browser: Browser;
-  storageState?: BrowserContextOptions['storageState'];
-  baseURL?: string;
-}) => {
-  const { storageState, playwright, browser, baseURL } = options;
-  const browserContext = await browser.newContext({
-    storageState,
-  });
-
-  const cookies = await browserContext.cookies();
-  const bearer = cookies.find((c) => c.name === BEARER_COOKIE);
-
-  const apiContext = await playwright.request.newContext({
-    baseURL,
-    extraHTTPHeaders: {
-      Authorization: `Bearer ${bearer?.value}`,
-    },
-  });
-
-  return {
-    browser: browserContext,
-    api: apiContext,
-    dispose: async () => {
-      try {
-        await apiContext.dispose();
-        await browserContext.close();
-      } catch (e) {
-        console.warn('Failed to dispose e2e contexts', e);
-      }
-    },
-  };
-};
-export type TestContexts = Awaited<ReturnType<typeof createTestContexts>>;
 
 /**
  * Create test contexts for multiple user types

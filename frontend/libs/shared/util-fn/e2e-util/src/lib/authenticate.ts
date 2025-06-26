@@ -9,6 +9,7 @@ import {
   E2eUser,
   KeycloakResponse,
   REFRESH_COOKIE,
+  compress,
 } from './playwright.config.base';
 
 export * from '@playwright/test';
@@ -83,6 +84,8 @@ export const createTest = (
         const response = await responsePromise;
         const url = new URL(response.url());
         const body: KeycloakResponse = await response.json();
+        const accessToken = await compress(body.access_token);
+        const refreshToken = await compress(body.refresh_token);
 
         const unixTime =
           addSeconds(Date.now(), body.expires_in).getTime() / 1000;
@@ -90,7 +93,7 @@ export const createTest = (
         await page.context().addCookies([
           {
             name: BEARER_COOKIE,
-            value: body.access_token,
+            value: accessToken,
             domain: url.host,
             path: '/realms/bern/',
             expires: unixTime,
@@ -100,7 +103,7 @@ export const createTest = (
           },
           {
             name: REFRESH_COOKIE,
-            value: body.refresh_token,
+            value: refreshToken,
             domain: url.host,
             path: '/realms/bern/',
             expires: -1,
