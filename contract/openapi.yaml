@@ -11,26 +11,6 @@ servers:
       port:
         default: '8080'
 paths:
-  /mail/welcome:
-    post:
-      tags:
-        - Mail
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WelcomeMail'
-      responses:
-        '200':
-          description: Mail was successfully sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: sendWelcomeEmail
-      summary: Sends an e-mail for a newly created user
   /auszahlung/{fallId}:
     parameters:
       - name: fallId
@@ -5019,6 +4999,8 @@ components:
           type: array
           items:
             type: string
+        redirectUri:
+          type: string
       allOf: 
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzer:
