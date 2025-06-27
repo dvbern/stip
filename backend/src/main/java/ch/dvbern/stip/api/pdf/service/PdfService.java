@@ -535,6 +535,45 @@ public class PdfService {
         );
     }
 
+    private void addCopieAnParagraph(
+        final Gesuch gesuch,
+        final TL translator,
+        final float leftMargin,
+        Document document
+    ) {
+        final List<String> kopieAn = new ArrayList<>();
+
+        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
+            final var sozialdienstAdresse = gesuch.getAusbildung()
+                .getFall()
+                .getDelegierung()
+                .getSozialdienst()
+                .getZahlungsverbindung()
+                .getAdresse();
+
+            kopieAn.add(sozialdienstName);
+            if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+                kopieAn.add(sozialdienstAdresse.getCoAdresse());
+            }
+            kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+            kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+        }
+
+        if (!kopieAn.isEmpty()) {
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "- ",
+                    translator.translate("stip.pdf.footer.kopieAn") + " ",
+                    String.join(", ", kopieAn)
+                )
+            );
+        }
+    }
+
     private void negativeVerfuegung(
         final Verfuegung verfuegung,
         final Document document,
@@ -688,35 +727,7 @@ public class PdfService {
                 translator.translate("stip.pdf.rechtsmittelbelehrung.title")
             )
         );
-
-        final List<String> kopieAn = new ArrayList<>();
-
-        steuerdatenTabBerechnungsService
-            .calculateTabs(gesuch.getLatestGesuchTranche().getGesuchFormular().getFamiliensituation())
-            .forEach(steuerdatenTyp -> {
-                switch (steuerdatenTyp) {
-                    case FAMILIE -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.eltern"));
-                    case MUTTER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.mutter"));
-                    case VATER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.vater"));
-                }
-            });
-
-        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-            kopieAn.add(gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName());
-        }
-
-        if (!kopieAn.isEmpty()) {
-            document.add(
-                createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.pdf.footer.kopieAn") + " ",
-                    String.join(", ", kopieAn)
-                )
-            );
-        }
+        addCopieAnParagraph(gesuch, translator, leftMargin, document);
     }
 
     private Image getLogo(PdfDocument pdfDocument, String pathToSvg) throws IOException {
