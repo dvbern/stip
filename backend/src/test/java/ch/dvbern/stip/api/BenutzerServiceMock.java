@@ -27,6 +27,8 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenMapper;
+import ch.dvbern.stip.api.notification.repo.NotificationRepository;
+import ch.dvbern.stip.api.notification.service.NotificationMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -53,6 +55,8 @@ public class BenutzerServiceMock extends BenutzerService {
             null,
             null,
             null,
+            null,
+            null,
             null
         );
 
@@ -63,10 +67,12 @@ public class BenutzerServiceMock extends BenutzerService {
     public BenutzerServiceMock(
     JsonWebToken jsonWebToken,
     BenutzerMapper benutzerMapper,
+    NotificationMapper notificationMapper,
     SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper,
     BenutzerRepository benutzerRepository,
     SachbearbeiterRepository sachbearbeiterRepository,
     SozialdienstBenutzerRepository sozialdienstBenutzerRepository,
+    NotificationRepository notificationRepository,
     RolleService rolleService,
     SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
     SecurityIdentity identity,
@@ -75,10 +81,12 @@ public class BenutzerServiceMock extends BenutzerService {
         super(
             jsonWebToken,
             benutzerMapper,
+            notificationMapper,
             sachbearbeiterZuordnungStammdatenMapper,
             benutzerRepository,
             sachbearbeiterRepository,
             sozialdienstBenutzerRepository,
+            notificationRepository,
             rolleService,
             sachbearbeiterZuordnungStammdatenRepository,
             identity,
