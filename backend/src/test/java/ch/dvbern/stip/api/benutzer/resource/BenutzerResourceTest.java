@@ -145,7 +145,6 @@ class BenutzerResourceTest {
         Thread.sleep(5000);
         final var updateDtos =
             SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecs(1);
-        // updateDtos.get(0).setSachbearbeiter(me.getId());
         updateDtos.get(0).setSachbearbeiter(sachbearbeiterUUID);
 
         api.createOrUpdateSachbearbeiterStammdatenList()

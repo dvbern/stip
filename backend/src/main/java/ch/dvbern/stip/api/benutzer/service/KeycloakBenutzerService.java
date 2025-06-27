@@ -60,20 +60,29 @@ public class KeycloakBenutzerService {
     public Keycloak initKeycloak() throws NoSuchAlgorithmException {
         final KeycloakAdminClientConfig config = keycloakAdminClientConfigRuntimeValue;
         if (config == null) {
-            return null;
+            throw new IllegalStateException("Could not inject KC Admin client config");
         }
 
         // TODO: When we upgrade to a quarkus version using hibernate 7 we will be able to use the newer keycloak
         // admin client which will allow us to easily configure the truststore and secure the connection
         return KeycloakBuilder.builder()
             .clientId(config.clientId())
-            .clientSecret(config.clientSecret().orElse(null))
+            .clientSecret(
+                config.clientSecret()
+                    .orElseThrow(() -> new IllegalStateException("Failed to get clientSecret for KC client"))
+            )
             .grantType(config.grantType().asString())
-            .username(config.username().orElse(null))
-            .password(config.password().orElse(null))
+            .username(
+                config.username().orElseThrow(() -> new IllegalStateException("Failed to get username for KC client"))
+            )
+            .password(
+                config.password().orElseThrow(() -> new IllegalStateException("Failed to get password for KC client"))
+            )
             .realm(config.realm())
-            .serverUrl(config.serverUrl().orElse(null))
-            .scope(config.scope().orElse(null))
+            .serverUrl(
+                config.serverUrl().orElseThrow(() -> new IllegalStateException("Failed to get serverUrl for KC client"))
+            )
+            .scope(config.scope().orElseThrow(() -> new IllegalStateException("Failed to get scope for KC client")))
             .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
             .build();
     }
@@ -127,9 +136,6 @@ public class KeycloakBenutzerService {
                     "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
                 );
             }
-
-            // todo KSTIP-????:
-            // keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
 
             return keycloakUserId;
         }
