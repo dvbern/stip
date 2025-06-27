@@ -192,7 +192,7 @@
     <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id" baseTableName="sachbearbeiter" constraintName="FKa33fsy4lkjkc6vqaltjja11yx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzereinstellungen" validate="true"/>
   </changeSet>
   <changeSet author="jafa (generated)" id="1750857876323-27">
-    <addForeignKeyConstraint baseColumnNames="sozialdienst_id" baseTableName="sozialdienstbenutzer" constraintName="FKljesqkjqxx6xgibsnnj0o18pg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="sozialdienst_id" baseTableName="sozialdienstbenutzer" constraintName="FK_sozialdienst_benutzer_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst" validate="true"/>
   </changeSet>
   <changeSet author="jafa (generated)" id="1750857876323-28">
     <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sozialdienstbenutzer_aud" constraintName="FKs4olrgdk5084govqdgy33barb" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
