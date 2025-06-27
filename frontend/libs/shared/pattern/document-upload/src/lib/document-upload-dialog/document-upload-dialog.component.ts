@@ -59,10 +59,10 @@ export class SharedPatternDocumentUploadDialogComponent {
   }));
 
   showUplaodSig = computed(() => {
-    const { options } = this.data;
+    const { options, dokumentModel } = this.data;
 
     return isUploadable(
-      options.dokument,
+      dokumentModel,
       options.permissions,
       this.config.appType === 'sachbearbeitung-app',
     );
