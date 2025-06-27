@@ -9,6 +9,7 @@ import {
   PersonInAusbildung,
   Steuerdaten,
   SteuererklaerungUpdate,
+  Zahlungsverbindung,
 } from '@dv/shared/model/gesuch';
 import {
   generateSVN,
@@ -29,6 +30,19 @@ export const ausbildung: AusbildungValues = {
   ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
+};
+
+export const zahlungsverbindung: Zahlungsverbindung = {
+  vorname: 'Spoerri',
+  adresse: {
+    landId: 'Schweiz',
+    strasse: 'Huberstrasse',
+    hausnummer: '5a',
+    plz: '3008',
+    ort: 'Bern',
+  },
+  iban: '1809000000150664878',
+  nachname: 'Spoerri',
 };
 
 export const adressen = {

@@ -39,12 +39,11 @@ export const initializeTest = (
       await cockpit.goToDashBoard();
       const dashboardResponse = await dashboardPromise;
 
-      const dashboardBody: FallDashboardItem[] | undefined =
+      const dashboardBody: FallDashboardItem | undefined =
         await dashboardResponse.json();
-      gesuchId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+      gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
+        dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
           .currentTrancheId;
 
       if (gesuchId) {
@@ -136,12 +135,11 @@ export const initializeMultiUserTest = (
       await cockpit.goToDashBoard();
       const dashboardResponse = await dashboardPromise;
 
-      const dashboardBody: FallDashboardItem[] | undefined =
+      const dashboardBody: FallDashboardItem | undefined =
         await dashboardResponse.json();
-      gesuchId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+      gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
+        dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
           .currentTrancheId;
 
       if (gesuchId) {
