@@ -260,11 +260,15 @@ export const createMultiUserTestContexts = async (options: {
     storageState: gsStorageState,
   });
   const gsCookies = await gsBrowserContext.cookies();
-  const gsBearer = gsCookies.find((c) => c.name === BEARER_COOKIE);
+  const gsBearerCookie = gsCookies.find((c) => c.name === BEARER_COOKIE);
+  const gsBearer = gsBearerCookie?.value
+    ? await decompress(gsBearerCookie.value)
+    : undefined;
+
   const gsApiContext = await playwright.request.newContext({
     baseURL,
     extraHTTPHeaders: {
-      Authorization: `Bearer ${gsBearer?.value}`,
+      Authorization: `Bearer ${gsBearer}`,
     },
   });
 
@@ -273,11 +277,14 @@ export const createMultiUserTestContexts = async (options: {
     storageState: sbStorageState,
   });
   const sbCookies = await sbBrowserContext.cookies();
-  const sbBearer = sbCookies.find((c) => c.name === BEARER_COOKIE);
+  const sbBearerCookie = sbCookies.find((c) => c.name === BEARER_COOKIE);
+  const sbBearer = sbBearerCookie?.value
+    ? await decompress(sbBearerCookie.value)
+    : undefined;
   const sbApiContext = await playwright.request.newContext({
     baseURL,
     extraHTTPHeaders: {
-      Authorization: `Bearer ${sbBearer?.value}`,
+      Authorization: `Bearer ${sbBearer}`,
     },
   });
 

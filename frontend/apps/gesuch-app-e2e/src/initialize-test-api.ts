@@ -21,7 +21,7 @@ export const setGesuchApi = async (
   });
 
   const body = await response.json();
-
+  //  todo: add function for setting the landId!
   console.log(body);
 
   expect(response.ok()).toBeTruthy();

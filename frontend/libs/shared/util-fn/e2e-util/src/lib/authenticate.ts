@@ -232,17 +232,15 @@ async function authenticateUser(
   const url = new URL(response.url());
   const body: KeycloakResponse = await response.json();
 
-  // compress the access token base64 to reduce size
-  const compAccessToken = Buffer.from(body.access_token, 'base64').toString(
-    'base64url',
-  );
+  const accessToken = await compress(body.access_token);
+  const refreshToken = await compress(body.refresh_token);
 
   const unixTime = addSeconds(Date.now(), body.expires_in).getTime() / 1000;
 
   await page.context().addCookies([
     {
       name: BEARER_COOKIE,
-      value: compAccessToken,
+      value: accessToken,
       domain: url.host,
       path: '/realms/bern/',
       expires: unixTime,
@@ -252,7 +250,7 @@ async function authenticateUser(
     },
     {
       name: REFRESH_COOKIE,
-      value: body.refresh_token,
+      value: refreshToken,
       domain: url.host,
       path: '/realms/bern/',
       expires: -1,
