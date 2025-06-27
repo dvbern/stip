@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.verfuegung.service;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,6 +72,7 @@ public class VerfuegungService {
         verfuegung.setStipDecision(stipDecision.getStipDecision());
         verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
         verfuegung.setKanton(kanton.orElse(null));
+        verfuegung.setNegativeVerfuegung(true);
         verfuegungRepository.persistAndFlush(verfuegung);
     }
 
@@ -110,6 +112,15 @@ public class VerfuegungService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         return gesuch.getVerfuegungs().stream().map(verfuegungMapper::toDto).toList();
+    }
+
+    public Verfuegung getLatestVerfuegung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return gesuch.getVerfuegungs()
+            .stream()
+            .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
+            .findFirst()
+            .orElseThrow();
     }
 
     public RestMulti<Buffer> getVerfuegung(final UUID verfuegungId) {
