@@ -110,7 +110,7 @@ public class GesuchStatusService {
     }
 
     public boolean gesuchIsInOneOfGesuchStatus(final Gesuch gesuch, final Set<Gesuchstatus> gesuchStatusSet) {
-        return (gesuchStatusSet.contains(gesuch.getGesuchStatus()));
+        return gesuchStatusSet.contains(gesuch.getGesuchStatus());
     }
 
     private StateMachine<Gesuchstatus, GesuchStatusChangeEvent> createStateMachine(
