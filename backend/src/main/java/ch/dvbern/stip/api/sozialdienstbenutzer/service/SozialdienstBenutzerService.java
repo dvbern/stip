@@ -89,7 +89,7 @@ public class SozialdienstBenutzerService {
             sozialdienstAdmin.getVorname(),
             sozialdienstAdmin.getNachname(),
             sozialdienstAdmin.getEmail(),
-            List.of(OidcConstants.ROLE_SOZIALDIENST_ADMIN)
+            List.of(OidcConstants.ROLE_SOZIALDIENST_ADMIN, OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
         );
 
         sozialdienstAdmin.setKeycloakId(keycloakId);
