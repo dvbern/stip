@@ -67,22 +67,13 @@ public class KeycloakBenutzerService {
         // admin client which will allow us to easily configure the truststore and secure the connection
         return KeycloakBuilder.builder()
             .clientId(config.clientId())
-            .clientSecret(
-                config.clientSecret()
-                    .orElseThrow(() -> new IllegalStateException("Failed to get clientSecret for KC client"))
-            )
+            .clientSecret(config.clientSecret().orElse(null))
             .grantType(config.grantType().asString())
-            .username(
-                config.username().orElseThrow(() -> new IllegalStateException("Failed to get username for KC client"))
-            )
-            .password(
-                config.password().orElseThrow(() -> new IllegalStateException("Failed to get password for KC client"))
-            )
+            .username(config.username().orElse(null))
+            .password(config.password().orElse(null))
             .realm(config.realm())
-            .serverUrl(
-                config.serverUrl().orElseThrow(() -> new IllegalStateException("Failed to get serverUrl for KC client"))
-            )
-            .scope(config.scope().orElseThrow(() -> new IllegalStateException("Failed to get scope for KC client")))
+            .serverUrl(config.serverUrl().orElse(null))
+            .scope(config.scope().orElse(null))
             .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
             .build();
     }
