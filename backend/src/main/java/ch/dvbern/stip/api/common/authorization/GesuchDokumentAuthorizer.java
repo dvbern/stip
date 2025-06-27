@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -45,6 +46,49 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final SozialdienstService sozialdienstService;
     private final DokumentRepository dokumentRepository;
+
+    public void assertSbCanModifyDokumentOfTranche(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSachbearbeiter(currentBenutzer)) {
+            forbidden();
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            && Gesuchstatus.SACHBEARBEITER_CAN_MODIFY_DOKUMENT.contains(gesuch.getGesuchStatus())
+        ) {
+            return;
+        }
+
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && GesuchTrancheStatus.SACHBEARBEITER_CAN_MODIFY_DOKUMENT.contains(gesuchTranche.getStatus())
+        ) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    public void canGsUploadDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
+
+        final var dokumentOpt =
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
+        if (dokumentOpt.isEmpty()) {
+            return;
+        }
+
+        final var dokument = dokumentOpt.get();
+        if (Dokumentstatus.GESUCHSTELLER_CAN_UPLOAD_DOKUMENT.contains(dokument.getStatus())) {
+            return;
+        }
+
+        forbidden();
+    }
 
     public void assertGsCanModifyDokumentOfTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -75,13 +119,9 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    public void canCreateGesuchDokument(final UUID gesuchTrancheId) {
-        assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
-    }
-
-    public void canDeleteDokument(final UUID dokumentId) {
+    public void assertGsCanDeleteDokumentOfTranche(final UUID dokumentId) {
         final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        final var gesuchDokument = dokument.getGesuchDokumente().getFirst();
+        final var gesuchDokument = dokument.getGesuchDokument();
         final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertGsCanModifyDokumentOfTranche(gesuchTranche.getId());
@@ -90,6 +130,14 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
+    }
+
+    public void assertSbCanDeleteDokumentOfTranche(final UUID dokumentId) {
+        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var gesuchDokument = dokument.getGesuchDokument();
+        final var gesuchTranche = gesuchDokument.getGesuchTranche();
+
+        assertSbCanModifyDokumentOfTranche(gesuchTranche.getId());
     }
 
     public void canUpdateGesuchDokument(UUID gesuchDokumentId) {

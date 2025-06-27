@@ -37,7 +37,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
     roles = {
         OidcConstants.ROLE_SOZIALDIENST_ADMIN,
         OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
-        OidcPermissions.DOKUMENT_UPLOAD,
+        OidcPermissions.DOKUMENT_UPLOAD_GS,
         OidcPermissions.AUSZAHLUNG_READ,
         OidcPermissions.UNTERSCHRIFTENBLATT_READ,
         OidcPermissions.AUSBILDUNG_READ,
@@ -58,7 +58,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
         OidcPermissions.AUSZAHLUNG_UPDATE,
         OidcPermissions.AENDERUNG_EINREICHEN,
         OidcPermissions.DELEGIERUNG_UPDATE,
-        OidcPermissions.DOKUMENT_DELETE,
+        OidcPermissions.DOKUMENT_DELETE_GS,
         OidcPermissions.NOTIFICATION_READ,
         OidcPermissions.DOKUMENT_READ,
         OidcPermissions.SOZIALDIENST_READ,

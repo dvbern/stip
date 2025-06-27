@@ -57,4 +57,10 @@ public enum GesuchTrancheStatus {
             FEHLENDE_DOKUMENTE
         )
     );
+
+    public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_MODIFY_DOKUMENT = Collections.unmodifiableSet(
+        EnumSet.of(
+            UEBERPRUEFEN
+        )
+    );
 }

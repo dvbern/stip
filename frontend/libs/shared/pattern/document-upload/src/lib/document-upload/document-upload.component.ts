@@ -17,7 +17,11 @@ import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
-import { DokumentOptions } from '@dv/shared/model/dokument';
+import {
+  DokumentOptions,
+  SharedModelGesuchDokument,
+} from '@dv/shared/model/dokument';
+import { Dokument } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
@@ -79,30 +83,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       .subscribe(() => {
         const { initialDokumente, dokument } = this.optionsSig();
 
-        switch (dokument.art) {
-          case 'GESUCH_DOKUMENT':
-          case 'CUSTOM_DOKUMENT':
-            this.einreichStore.validateSteps$({
-              gesuchTrancheId: dokument.trancheId,
-            });
-
-            if (initialDokumente) {
-              this.dokumentsStore.getDokumenteAndRequired$({
-                gesuchTrancheId: dokument.trancheId,
-              });
-            }
-            break;
-
-          case 'UNTERSCHRIFTENBLATT':
-            this.dokumentsStore.getAdditionalDokumente$({
-              gesuchId: dokument.gesuchId,
-            });
-
-            this.dokumentsStore.getDokumenteAndRequired$({
-              gesuchTrancheId: dokument.trancheId,
-            });
-            break;
-        }
+        this.handleDokumentChange(initialDokumente, dokument);
       });
   }
 
@@ -128,5 +109,38 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
         },
       },
     );
+  }
+
+  private handleDokumentChange(
+    initialDokumente: Dokument[] | undefined,
+    dokument: SharedModelGesuchDokument,
+  ): void {
+    this.einreichStore.validateSteps$({
+      gesuchTrancheId: dokument.trancheId,
+    });
+
+    if (initialDokumente) {
+      this.dokumentsStore.getDokumenteAndRequired$({
+        gesuchTrancheId: dokument.trancheId,
+      });
+    }
+
+    switch (dokument.art) {
+      case 'GESUCH_DOKUMENT':
+        this.dokumentsStore.getRequiredGesuchDokument$({
+          trancheId: dokument.trancheId,
+          dokumentTyp: dokument.dokumentTyp,
+        });
+        break;
+
+      case 'CUSTOM_DOKUMENT':
+        break;
+
+      case 'UNTERSCHRIFTENBLATT':
+        this.dokumentsStore.getAdditionalDokumente$({
+          gesuchId: dokument.gesuchId,
+        });
+        break;
+    }
   }
 }
