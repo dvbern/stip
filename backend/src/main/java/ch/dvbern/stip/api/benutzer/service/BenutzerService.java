@@ -69,17 +69,21 @@ public class BenutzerService {
 
     private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
         final var benutzerOpt = benutzerRepository.findByKeycloakId(keycloakId);
-        if (benutzerOpt.isEmpty()) {
-            final var sozBenutzerOpt = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
-            if (sozBenutzerOpt.isEmpty()) {
-                return sachbearbeiterRepository.findByKeycloakId(keycloakId)
-                    .orElseThrow(
-                        () -> new NotFoundException("Benutzer not found")
-                    );
-            }
-            return sozBenutzerOpt.orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        if (benutzerOpt.isPresent()) {
+            return benutzerOpt.get();
         }
-        return benutzerOpt.orElseThrow(() -> new NotFoundException("Benutzer not found"));
+
+        final var sozBenutzerOpt = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
+        if (sozBenutzerOpt.isPresent()) {
+            return sozBenutzerOpt.get();
+        }
+
+        final var sachbearbeiterBenutzerOpt = sachbearbeiterRepository.findByKeycloakId(keycloakId);
+        if (sachbearbeiterBenutzerOpt.isPresent()) {
+            return sachbearbeiterBenutzerOpt.get();
+        }
+
+        throw new NotFoundException("Benutzer not found");
     }
 
     @Transactional
