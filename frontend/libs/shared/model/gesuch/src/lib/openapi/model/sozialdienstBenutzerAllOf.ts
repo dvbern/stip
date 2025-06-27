@@ -10,12 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface SachbearbeiterUpdateAllOf { 
-    telefonnummer: string;
-    email: string;
-    funktionDe: string;
-    funktionFr: string;
-    sachbearbeiterRollen: Array<string>;
-    redirectUri?: string;
+export interface SozialdienstBenutzerAllOf { 
+    id: string;
+    isAdmin?: boolean;
 }
 

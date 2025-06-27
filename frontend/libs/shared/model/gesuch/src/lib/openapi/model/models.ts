@@ -156,6 +156,7 @@ export * from './sozialdienst';
 export * from './sozialdienstAdmin';
 export * from './sozialdienstAllOf';
 export * from './sozialdienstBenutzer';
+export * from './sozialdienstBenutzerAllOf';
 export * from './sozialdienstBenutzerBase';
 export * from './sozialdienstBenutzerCreate';
 export * from './sozialdienstBenutzerCreateAllOf';

@@ -89,10 +89,6 @@ export const toKnownUserErrorType = (error: unknown, fallbackType: string) => {
   return parsed.type ?? fallbackType;
 };
 
-export const getCurrentUrl = (document: Document) => {
-  return document.location.origin;
-};
-
 export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
   switch (role) {
     case 'V0_Sachbearbeiter':

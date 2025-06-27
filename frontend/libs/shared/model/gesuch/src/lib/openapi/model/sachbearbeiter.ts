@@ -20,6 +20,7 @@ export interface Sachbearbeiter {
     funktionDe: string;
     funktionFr: string;
     sachbearbeiterRollen: Array<string>;
+    redirectUri?: string;
     id: string;
 }
 

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,6 +21,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
+import { getCurrentUrl } from '@dv/shared/model/router';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -55,6 +56,7 @@ export class BenutzeDetailComponent implements OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
+  private document = inject(DOCUMENT);
   private route = inject(ActivatedRoute);
 
   availableRoles = BENUTZER_ROLES;
@@ -106,7 +108,7 @@ export class BenutzeDetailComponent implements OnDestroy {
     if (this.idSig()) {
       this.update();
     } else {
-      this.save();
+      this.create();
     }
   }
 
@@ -120,14 +122,11 @@ export class BenutzeDetailComponent implements OnDestroy {
     const values = convertTempFormToRealValues(this.form);
     this.store.updateBenutzer$({
       userId: id,
-      user: {
-        ...values,
-        sachbearbeiterRollen: values.sachbearbeiterRollen,
-      },
+      user: values,
     });
   }
 
-  private save() {
+  private create() {
     if (this.form.invalid) {
       return;
     }
@@ -135,7 +134,7 @@ export class BenutzeDetailComponent implements OnDestroy {
     this.store.registerUser$({
       user: {
         ...values,
-        sachbearbeiterRollen: values.sachbearbeiterRollen,
+        redirectUri: getCurrentUrl(this.document),
       },
       onAfterSave: (userId) => {
         this.router.navigate(['..', 'edit', userId], {
