@@ -26,8 +26,10 @@ import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
+import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,7 @@ public class SachbearbeiterService {
     private final SachbearbeiterMapper sachbearbeiterMapper;
     private final RolleService rolleService;
     private final KeycloakBenutzerService keycloakBenutzerService;
+    private final MailService mailService;
 
     public SachbearbeiterDto getSachbearbeiterDto(final UUID sachbearbeiterId) {
         return sachbearbeiterMapper.toDto(sachbearbeiterRepository.requireById(sachbearbeiterId));
@@ -70,6 +73,15 @@ public class SachbearbeiterService {
             sachbearbeiterUpdateDto.getSachbearbeiterRollen()
         );
         sachbearbeiter.setKeycloakId(keycloakId);
+
+        mailService.sendBenutzerWelcomeEmail(
+            new WelcomeMailDto(
+                sachbearbeiter.getNachname(),
+                sachbearbeiter.getVorname(),
+                sachbearbeiter.getEmail(),
+                sachbearbeiterUpdateDto.getRedirectUri()
+            )
+        );
 
         return sachbearbeiterMapper.toDto(sachbearbeiter);
     }

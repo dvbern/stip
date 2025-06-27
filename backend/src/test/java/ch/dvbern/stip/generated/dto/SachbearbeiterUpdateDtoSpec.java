@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_FUNKTION_DE,
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_FUNKTION_FR,
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_SACHBEARBEITER_ROLLEN,
+  SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_REDIRECT_URI,
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_VORNAME,
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
   SachbearbeiterUpdateDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN
@@ -57,6 +58,9 @@ public class SachbearbeiterUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_SACHBEARBEITER_ROLLEN = "sachbearbeiterRollen";
   private List<String> sachbearbeiterRollen;
+
+  public static final String JSON_PROPERTY_REDIRECT_URI = "redirectUri";
+  private String redirectUri;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
@@ -208,6 +212,32 @@ public class SachbearbeiterUpdateDtoSpec {
   }
 
 
+  public SachbearbeiterUpdateDtoSpec redirectUri(String redirectUri) {
+    
+    this.redirectUri = redirectUri;
+    return this;
+  }
+
+   /**
+   * Get redirectUri
+   * @return redirectUri
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REDIRECT_URI)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_REDIRECT_URI)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+  }
+
+
   public SachbearbeiterUpdateDtoSpec vorname(String vorname) {
     
     this.vorname = vorname;
@@ -299,6 +329,7 @@ public class SachbearbeiterUpdateDtoSpec {
         Objects.equals(this.funktionDe, sachbearbeiterUpdate.funktionDe) &&
         Objects.equals(this.funktionFr, sachbearbeiterUpdate.funktionFr) &&
         Objects.equals(this.sachbearbeiterRollen, sachbearbeiterUpdate.sachbearbeiterRollen) &&
+        Objects.equals(this.redirectUri, sachbearbeiterUpdate.redirectUri) &&
         Objects.equals(this.vorname, sachbearbeiterUpdate.vorname) &&
         Objects.equals(this.nachname, sachbearbeiterUpdate.nachname) &&
         Objects.equals(this.benutzereinstellungen, sachbearbeiterUpdate.benutzereinstellungen);
@@ -306,7 +337,7 @@ public class SachbearbeiterUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, vorname, nachname, benutzereinstellungen);
+    return Objects.hash(telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, redirectUri, vorname, nachname, benutzereinstellungen);
   }
 
   @Override
@@ -318,6 +349,7 @@ public class SachbearbeiterUpdateDtoSpec {
     sb.append("    funktionDe: ").append(toIndentedString(funktionDe)).append("\n");
     sb.append("    funktionFr: ").append(toIndentedString(funktionFr)).append("\n");
     sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
+    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");

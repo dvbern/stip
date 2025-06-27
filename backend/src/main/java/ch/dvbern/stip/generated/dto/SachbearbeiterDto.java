@@ -33,6 +33,7 @@ public class SachbearbeiterDto  implements Serializable {
   private @Valid List<String> sachbearbeiterRollen = new ArrayList<>();
   private @Valid UUID id;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private @Valid String redirectUri;
 
   /**
    **/
@@ -220,6 +221,24 @@ public class SachbearbeiterDto  implements Serializable {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
+  /**
+   **/
+  public SachbearbeiterDto redirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+    return this;
+  }
+
+  
+  @JsonProperty("redirectUri")
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  @JsonProperty("redirectUri")
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -238,12 +257,13 @@ public class SachbearbeiterDto  implements Serializable {
         Objects.equals(this.funktionFr, sachbearbeiter.funktionFr) &&
         Objects.equals(this.sachbearbeiterRollen, sachbearbeiter.sachbearbeiterRollen) &&
         Objects.equals(this.id, sachbearbeiter.id) &&
-        Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen);
+        Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen) &&
+        Objects.equals(this.redirectUri, sachbearbeiter.redirectUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, id, benutzereinstellungen);
+    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, id, benutzereinstellungen, redirectUri);
   }
 
   @Override
@@ -260,6 +280,7 @@ public class SachbearbeiterDto  implements Serializable {
     sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }
