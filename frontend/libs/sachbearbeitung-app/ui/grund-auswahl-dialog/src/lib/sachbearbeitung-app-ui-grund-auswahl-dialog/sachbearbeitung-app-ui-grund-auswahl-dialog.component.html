@@ -14,20 +14,41 @@
   <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
 
   <form [formGroup]="form" class="tw-mt-5" novalidate>
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-select
-        formControlName="grundId"
-        [placeholder]="'shared.form.select.empty' | translate"
-        [aria-label]="dialogData.labelKey | translate"
-      >
-        @for (grund of store.ablehnungsGruende(); track grund.id) {
-          <mat-option [value]="grund.id">{{ grund.titleDe }}</mat-option>
-        }
-      </mat-select>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
+    <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
+      <mat-form-field dvSharedUiFormField [ngClass]="{ 'tw-w-4/5': showKantonFieldSig() }" class="tw-w-full">
+        <mat-select
+          formControlName="grund"
+          [placeholder]="'shared.form.select.empty' | translate"
+          [aria-label]="dialogData.labelKey | translate"
+        >
+          @for (grund of store.ablehnungsGruende(); track grund) {
+            <mat-option [value]="grund">{{ grund.titleDe }}</mat-option>
+          }
+        </mat-select>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      @if (showKantonFieldSig()) {
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
+          <mat-select
+            formControlName="kanton"
+            [placeholder]="'shared.form.select.empty' | translate"
+            [aria-label]="dialogData.labelKey | translate"
+          >
+            @for (kanton of kantone; track $index) {
+              <mat-option [value]="kanton" [attr.data-testid]="kanton">
+                {{ 'shared.kanton.' + kanton | translate }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      }
+    </div>
 
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">

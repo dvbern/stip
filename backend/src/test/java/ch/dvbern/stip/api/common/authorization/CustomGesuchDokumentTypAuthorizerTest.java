@@ -58,6 +58,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     private CustomDokumentTypRepository customDokumentTypRepository;
     private BenutzerService benutzerService;
     private SozialdienstService sozialdienstService;
+    private GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private Benutzer currentBenutzer;
     private GesuchDokument currentGesuchDokument;
     private Gesuch gesuch;
@@ -83,9 +84,13 @@ class CustomGesuchDokumentTypAuthorizerTest {
         customDokumentTypRepository = Mockito.mock(CustomDokumentTypRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
 
+        gesuchDokumentAuthorizer = new GesuchDokumentAuthorizer(
+            gesuchTrancheRepository, benutzerService, gesuchDokumentRepository, null, sozialdienstService, null
+        );
+
         customGesuchDokumentTypAuthorizer = new CustomGesuchDokumentTypAuthorizer(
             customDokumentTypRepository, gesuchDokumentRepository, gesuchTrancheRepository,
-            benutzerService, sozialdienstService
+            benutzerService, sozialdienstService, gesuchDokumentAuthorizer
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);

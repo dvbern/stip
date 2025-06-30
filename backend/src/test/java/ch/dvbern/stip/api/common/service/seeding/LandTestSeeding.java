@@ -42,6 +42,9 @@ public class LandTestSeeding extends Seeder {
 
         final var iran = landService.getLandByBfsCode(WellKnownLand.IRN.getLaendercodeBfs()).orElseThrow();
         TestConstants.TEST_LAND_NON_EU_EFTA_ID = iran.getId();
+
+        final var stateless = landService.getLandByBfsCode(WellKnownLand.STATELESS.getLaendercodeBfs()).orElseThrow();
+        TestConstants.TEST_LAND_STATELESS_ID = stateless.getId();
     }
 
     protected List<String> getProfiles() {

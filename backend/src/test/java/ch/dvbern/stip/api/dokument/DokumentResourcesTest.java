@@ -35,7 +35,6 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -68,8 +67,6 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
-        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
 
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
@@ -78,7 +75,6 @@ class DokumentResourcesTest {
     private GesuchDtoSpec gesuch;
     private UUID gesuchTrancheId;
     private UUID dokumentId;
-    private UUID customDokumentId;
 
     @Test
     @TestAsGesuchsteller
@@ -111,14 +107,14 @@ class DokumentResourcesTest {
     @Order(2)
     void test_create_dokument_with_wrong_mime_type() {
         File file = new File(TEST_XML_FILE_LOCATION);
-        dokumentApiSpec.createDokument();
+        dokumentApiSpec.createDokumentGS();
         given()
             .pathParam("gesuchTrancheId", gesuchTrancheId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
-            .post("/api/v1" + DokumentApiSpec.CreateDokumentOper.REQ_URI)
+            .post("/api/v1" + DokumentApiSpec.CreateDokumentGSOper.REQ_URI)
             .then()
             .statusCode(Status.BAD_REQUEST.getStatusCode());
     }
@@ -128,14 +124,14 @@ class DokumentResourcesTest {
     @Order(3)
     void test_create_dokument_for_gesuch() {
         File file = new File(TEST_FILE_LOCATION);
-        dokumentApiSpec.createDokument();
+        dokumentApiSpec.createDokumentGS();
         given()
             .pathParam("gesuchTrancheId", gesuchTrancheId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
-            .post("/api/v1" + DokumentApiSpec.CreateDokumentOper.REQ_URI)
+            .post("/api/v1" + DokumentApiSpec.CreateDokumentGSOper.REQ_URI)
             .then()
             .statusCode(Status.CREATED.getStatusCode());
     }
@@ -183,7 +179,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(5)
     void test_delete_dokument() {
-        dokumentApiSpec.deleteDokument()
+        dokumentApiSpec.deleteDokumentGS()
             .dokumentIdPath(dokumentId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

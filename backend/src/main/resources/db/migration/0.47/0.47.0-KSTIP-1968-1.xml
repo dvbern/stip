@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1750750140188-1" author="Juri Furer">
+        <addColumn tableName="land">
+            <column name="iso2code" type="VARCHAR(2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1750750140188-2" author="Juri Furer">
+        <addColumn tableName="land_aud">
+            <column name="iso2code" type="VARCHAR(2)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sozialdienst.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
@@ -35,6 +36,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -77,4 +79,9 @@ public class Sozialdienst extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "sozialdienst_zahlungsverbindung_id"))
     private Zahlungsverbindung zahlungsverbindung;
+
+    @Transient
+    public boolean isBenutzerAdmin(final SozialdienstBenutzer sozialdienstBenutzer) {
+        return Objects.equals(getSozialdienstAdmin().getId(), sozialdienstBenutzer.getId());
+    }
 }

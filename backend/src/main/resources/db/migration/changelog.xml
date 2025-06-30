@@ -144,7 +144,7 @@
   <!-- <editor-fold desc="v0.43" defaultstate="collapsed"> -->
   <include file="/db/migration/0.43/0.43.0-KSTIP-1987.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.44" defaultstate="collapsed"> -->
   <include file="/db/migration/0.44/0.44.0-KSTIP-1994.xml" />
   <include file="/db/migration/0.44/0.44.0-KSTIP-2264.xml" />
@@ -155,7 +155,7 @@
   <!-- <editor-fold desc="v0.45" defaultstate="collapsed" -->
   <include file="/db/migration/0.45/0.45.0-KSTIP-1624.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.46" defaultstate="collapsed" -->
   <include file="/db/migration/0.46/0.46.0-KSTIP-2026.xml" />
   <include file="/db/migration/0.46/0.46.0-KSTIP-1968.xml" />
@@ -166,5 +166,10 @@
   <include file="/db/migration/0.47/0.47.0-KSTIP-2356.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-2239.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-1895.xml" />
+  <include file="/db/migration/0.47/0.47.0-KSTIP-2290.xml" />
+  <include file="/db/migration/0.47/0.47.0-KSTIP-1968-1.xml" />
+  <include file="/db/migration/0.47/0.47.0-KSTIP-2280.xml" />
+  <include file="/db/migration/0.47/0.47.0-KSTIP-2284.xml" />
   <!--  </editor-fold> -->
+
 </databaseChangeLog>

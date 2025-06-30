@@ -117,6 +117,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
         gesuchTrancheId: dokumentModel.trancheId,
       });
     }
+
     this.dokumentsStore.getRequiredGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,

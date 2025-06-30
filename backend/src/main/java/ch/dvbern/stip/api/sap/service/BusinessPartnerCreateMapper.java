@@ -67,7 +67,7 @@ public abstract class BusinessPartnerCreateMapper {
 
     @Named("getLandStringFromLand")
     public String getLandStringFromLand(Land land) {
-        return land.getDeKurzform();
+        return land.getIso2code();
     }
 
     @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")

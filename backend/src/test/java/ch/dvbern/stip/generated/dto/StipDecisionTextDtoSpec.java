@@ -66,9 +66,9 @@ public class StipDecisionTextDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -76,7 +76,7 @@ public class StipDecisionTextDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -92,9 +92,9 @@ public class StipDecisionTextDtoSpec {
    * Get stipDecision
    * @return stipDecision
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public StipDecisionDtoSpec getStipDecision() {
     return stipDecision;
@@ -102,7 +102,7 @@ public class StipDecisionTextDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStipDecision(StipDecisionDtoSpec stipDecision) {
     this.stipDecision = stipDecision;
   }
@@ -118,9 +118,9 @@ public class StipDecisionTextDtoSpec {
    * Get titleDe
    * @return titleDe
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TITLE_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTitleDe() {
     return titleDe;
@@ -128,7 +128,7 @@ public class StipDecisionTextDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TITLE_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTitleDe(String titleDe) {
     this.titleDe = titleDe;
   }
@@ -144,9 +144,9 @@ public class StipDecisionTextDtoSpec {
    * Get textDe
    * @return textDe
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TEXT_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTextDe() {
     return textDe;
@@ -154,7 +154,7 @@ public class StipDecisionTextDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TEXT_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTextDe(String textDe) {
     this.textDe = textDe;
   }
@@ -170,9 +170,9 @@ public class StipDecisionTextDtoSpec {
    * Get textFr
    * @return textFr
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TEXT_FR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTextFr() {
     return textFr;
@@ -180,7 +180,7 @@ public class StipDecisionTextDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TEXT_FR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTextFr(String textFr) {
     this.textFr = textFr;
   }

@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.KantonDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,13 +29,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AusgewaehlterGrundDtoSpec
  */
 @JsonPropertyOrder({
-  AusgewaehlterGrundDtoSpec.JSON_PROPERTY_DECISION_ID
+  AusgewaehlterGrundDtoSpec.JSON_PROPERTY_DECISION_ID,
+  AusgewaehlterGrundDtoSpec.JSON_PROPERTY_KANTON
 })
 @JsonTypeName("AusgewaehlterGrund")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AusgewaehlterGrundDtoSpec {
   public static final String JSON_PROPERTY_DECISION_ID = "decisionId";
   private UUID decisionId;
+
+  public static final String JSON_PROPERTY_KANTON = "kanton";
+  private KantonDtoSpec kanton;
 
   public AusgewaehlterGrundDtoSpec() {
   }
@@ -64,6 +69,32 @@ public class AusgewaehlterGrundDtoSpec {
     this.decisionId = decisionId;
   }
 
+
+  public AusgewaehlterGrundDtoSpec kanton(KantonDtoSpec kanton) {
+    
+    this.kanton = kanton;
+    return this;
+  }
+
+   /**
+   * Get kanton
+   * @return kanton
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KANTON)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public KantonDtoSpec getKanton() {
+    return kanton;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KANTON)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKanton(KantonDtoSpec kanton) {
+    this.kanton = kanton;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -73,12 +104,13 @@ public class AusgewaehlterGrundDtoSpec {
       return false;
     }
     AusgewaehlterGrundDtoSpec ausgewaehlterGrund = (AusgewaehlterGrundDtoSpec) o;
-    return Objects.equals(this.decisionId, ausgewaehlterGrund.decisionId);
+    return Objects.equals(this.decisionId, ausgewaehlterGrund.decisionId) &&
+        Objects.equals(this.kanton, ausgewaehlterGrund.kanton);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(decisionId);
+    return Objects.hash(decisionId, kanton);
   }
 
   @Override
@@ -86,6 +118,7 @@ public class AusgewaehlterGrundDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusgewaehlterGrundDtoSpec {\n");
     sb.append("    decisionId: ").append(toIndentedString(decisionId)).append("\n");
+    sb.append("    kanton: ").append(toIndentedString(kanton)).append("\n");
     sb.append("}");
     return sb.toString();
   }

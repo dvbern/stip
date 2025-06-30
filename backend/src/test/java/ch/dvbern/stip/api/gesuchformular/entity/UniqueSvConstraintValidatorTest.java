@@ -19,6 +19,8 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.util.TestConstants;
 import io.quarkus.test.junit.QuarkusTest;
@@ -35,7 +37,8 @@ class UniqueSvConstraintValidatorTest {
     UniqueSvNumberConstraintValidator validator =
         new UniqueSvNumberConstraintValidator();
 
-    GesuchFormular gesuchFormular = new GesuchFormular();
+    GesuchFormular gesuchFormular = new GesuchFormular()
+        .setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
     @Inject
     GesuchFormularMapper gesuchFormularMapper;
