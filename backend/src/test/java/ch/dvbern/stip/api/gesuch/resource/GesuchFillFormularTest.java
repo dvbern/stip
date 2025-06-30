@@ -293,6 +293,15 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
+    @Order(14)
+    void addAuszahlung() {
+        final var auszahlung = TestUtil.getAuszahlungUpdateDtoSpec();
+        final var fall = TestUtil.getFall(fallApiSpec).orElseThrow();
+        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, auszahlung);
+    }
+
+    @Test
+    @TestAsGesuchsteller
     @Order(15)
     void addEinnahmenKosten() {
         final var einnahmenKosten = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
