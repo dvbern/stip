@@ -59,6 +59,10 @@ export const getRelativeTrancheRoute = (
     },
   );
 
+export const getCurrentUrl = (document: Document) => {
+  return document.location.origin;
+};
+
 const isTrancheRoute = (
   routeEvent: ActivationEnd,
 ): routeEvent is ActivationEnd & {

@@ -65,5 +65,5 @@ public class SachbearbeiterZuordnungStammdaten extends AbstractMandantEntity {
         name = "benutzer_id", foreignKey = @ForeignKey(name = "FK_sachbearbeiter_zuordnung_stammdaten_benutzer_id"),
         nullable = false
     )
-    private Benutzer benutzer;
+    private Sachbearbeiter benutzer;
 }

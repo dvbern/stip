@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.zuordnung.entity;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.zuordnung.type.ZuordnungType;
@@ -62,7 +62,7 @@ public class Zuordnung extends AbstractMandantEntity {
         foreignKey = @ForeignKey(name = "FK_zuordnung_sachbearbeiter_id"),
         nullable = false
     )
-    private Benutzer sachbearbeiter;
+    private Sachbearbeiter sachbearbeiter;
 
     @NotNull
     @Column(nullable = false, name = "zuordnung_type")

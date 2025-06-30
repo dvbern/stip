@@ -24,9 +24,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
-import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.util.TestRollen;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -62,7 +62,11 @@ class ZuordnungServiceTest {
     void setup() {
         final var query = Mockito.mock(PanacheQuery.class);
         Mockito.when(query.page(Mockito.any())).thenReturn(query);
-        final var sb = (Benutzer) new Benutzer()
+        final var sb = (Sachbearbeiter) new Sachbearbeiter()
+            .setTelefonnummer("")
+            .setFunktionFr("")
+            .setFunktionDe("")
+            .setEmail("")
             .setVorname("John")
             .setNachname("Doe")
             .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
@@ -94,10 +98,10 @@ class ZuordnungServiceTest {
         }
         ).when(zuordnungRepo).persist(Mockito.anyIterable());
 
-        final var benutzerRepo = Mockito.mock(BenutzerRepository.class);
-        Mockito.when(benutzerRepo.findByRolle(Mockito.any()))
+        final var sachbearbeiterRepository = Mockito.mock(SachbearbeiterRepository.class);
+        Mockito.when(sachbearbeiterRepository.findByRolle(Mockito.any()))
             .thenReturn(
-                Stream.of(new Benutzer().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
+                Stream.of((Sachbearbeiter) new Sachbearbeiter().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
             );
 
         final var pia = (PersonInAusbildung) new PersonInAusbildung()
@@ -124,7 +128,7 @@ class ZuordnungServiceTest {
         final var gesuchsRepo = Mockito.mock(GesuchRepository.class);
         Mockito.when(gesuchsRepo.findAllNewestWithPia()).thenReturn(Stream.of(gesuch));
 
-        zuordnungService = new ZuordnungService(szsRepo, zuordnungRepo, gesuchsRepo, benutzerRepo);
+        zuordnungService = new ZuordnungService(szsRepo, zuordnungRepo, gesuchsRepo, sachbearbeiterRepository);
     }
 
     @Test
@@ -143,7 +147,7 @@ class ZuordnungServiceTest {
                 .setZuordnungType(ZuordnungType.AUTOMATIC)
                 .setFall(fall)
                 .setSachbearbeiter(
-                    (Benutzer) new Benutzer()
+                    (Sachbearbeiter) new Sachbearbeiter()
                         .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
                         .setId(oldSbId)
                 )

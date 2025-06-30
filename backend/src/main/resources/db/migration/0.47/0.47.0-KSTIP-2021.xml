@@ -1,0 +1,215 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1750857876323-29">
+    <dropForeignKeyConstraint baseTableName="benutzer_rollen" constraintName="FK_benutzer_rollen"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-30">
+    <dropForeignKeyConstraint baseTableName="delegierung" constraintName="FK_delegierung_sozialdienst_benutzer_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-31">
+    <dropForeignKeyConstraint baseTableName="fall" constraintName="FK_fall_gesuchsteller_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-32">
+    <dropForeignKeyConstraint baseTableName="sachbearbeiter_zuordnung_stammdaten" constraintName="FK_sachbearbeiter_zuordnung_stammdaten_benutzer_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-33">
+    <dropForeignKeyConstraint baseTableName="sozialdienst" constraintName="FK_sozialdienst_sozialdienst_admin_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-34">
+    <dropForeignKeyConstraint baseTableName="zuordnung" constraintName="FK_zuordnung_sachbearbeiter_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-35">
+    <dropForeignKeyConstraint baseTableName="benutzer" constraintName="FKgmemj42e66ujjkv2fq4np9cfw"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-2">
+    <createTable tableName="sachbearbeiter">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="sachbearbeiterPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="benutzer_status" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="keycloak_id" type="VARCHAR(255)"/>
+      <column name="nachname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="vorname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="benutzereinstellungen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="VARCHAR(255)"/>
+      <column name="funktion_de" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="funktion_fr" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="telefonnummer" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-3">
+    <createTable tableName="sachbearbeiter_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="benutzer_status" type="VARCHAR(255)"/>
+      <column name="keycloak_id" type="VARCHAR(255)"/>
+      <column name="nachname" type="VARCHAR(255)"/>
+      <column name="vorname" type="VARCHAR(255)"/>
+      <column name="benutzereinstellungen_id" type="UUID"/>
+      <column name="email" type="VARCHAR(255)"/>
+      <column name="funktion_de" type="VARCHAR(255)"/>
+      <column name="funktion_fr" type="VARCHAR(255)"/>
+      <column name="telefonnummer" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-4">
+    <createTable tableName="sozialdienstbenutzer">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienstbenutzerPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="benutzer_status" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="keycloak_id" type="VARCHAR(255)"/>
+      <column name="nachname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="vorname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="benutzereinstellungen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="VARCHAR(255)"/>
+      <column name="sozialdienst_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-5">
+    <createTable tableName="sozialdienstbenutzer_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="benutzer_status" type="VARCHAR(255)"/>
+      <column name="keycloak_id" type="VARCHAR(255)"/>
+      <column name="nachname" type="VARCHAR(255)"/>
+      <column name="vorname" type="VARCHAR(255)"/>
+      <column name="benutzereinstellungen_id" type="UUID"/>
+      <column name="email" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-6">
+    <addPrimaryKey columnNames="rev, id" constraintName="sachbearbeiter_audPK" tableName="sachbearbeiter_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-7">
+    <addPrimaryKey columnNames="rev, id" constraintName="sozialdienstbenutzer_audPK" tableName="sozialdienstbenutzer_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-9">
+    <addUniqueConstraint columnNames="benutzereinstellungen_id" constraintName="UC_SACHBEARBEITERBENUTZEREINSTELLUNGEN_ID_COL" tableName="sachbearbeiter"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-10">
+    <addUniqueConstraint columnNames="keycloak_id" constraintName="UC_SACHBEARBEITERKEYCLOAK_ID_COL" tableName="sachbearbeiter"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-11">
+    <addUniqueConstraint columnNames="benutzereinstellungen_id" constraintName="UC_SOZIALDIENSTBENUTZERBENUTZEREINSTELLUNGEN_ID_COL" tableName="sozialdienstbenutzer"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-12">
+    <addUniqueConstraint columnNames="keycloak_id" constraintName="UC_SOZIALDIENSTBENUTZERKEYCLOAK_ID_COL" tableName="sozialdienstbenutzer"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-20">
+    <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id" baseTableName="sozialdienstbenutzer" constraintName="FK4hmn7mgbcucrjr9fjmj0q1hh6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzereinstellungen" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-21">
+    <addForeignKeyConstraint baseColumnNames="delegierter_mitarbeiter_id" baseTableName="delegierung" constraintName="FK_delegierung_sozialdienst_benutzer_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienstbenutzer" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-22">
+    <addForeignKeyConstraint baseColumnNames="benutzer_id" baseTableName="sachbearbeiter_zuordnung_stammdaten" constraintName="FK_sachbearbeiter_zuordnung_stammdaten_benutzer_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sachbearbeiter" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-23">
+    <addForeignKeyConstraint baseColumnNames="sozialdienst_admin_id" baseTableName="sozialdienst" constraintName="FK_sozialdienst_sozialdienst_admin_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienstbenutzer" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-24">
+    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_id" baseTableName="zuordnung" constraintName="FK_zuordnung_sachbearbeiter_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sachbearbeiter" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-25">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sachbearbeiter_aud" constraintName="FKa2pkb8g0tnxw8naiaitjtlea3" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-26">
+    <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id" baseTableName="sachbearbeiter" constraintName="FKa33fsy4lkjkc6vqaltjja11yx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzereinstellungen" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-27">
+    <addForeignKeyConstraint baseColumnNames="sozialdienst_id" baseTableName="sozialdienstbenutzer" constraintName="FK_sozialdienst_benutzer_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-28">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sozialdienstbenutzer_aud" constraintName="FKs4olrgdk5084govqdgy33barb" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-36">
+    <dropColumn columnName="dtype" tableName="benutzer"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-37">
+    <dropColumn columnName="dtype" tableName="benutzer_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-38">
+    <dropColumn columnName="email" tableName="benutzer"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-39">
+    <dropColumn columnName="email" tableName="benutzer_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1750857876323-40">
+    <dropColumn columnName="sozialdienst_id" tableName="benutzer"/>
+  </changeSet>
+</databaseChangeLog>

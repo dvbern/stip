@@ -19,29 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SozialdienstAdminDto  implements Serializable {
-  private @Valid String keycloakId;
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
-
-  /**
-   **/
-  public SozialdienstAdminDto keycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
-    return this;
-  }
-
-  
-  @JsonProperty("keycloakId")
-  @NotNull
-  public String getKeycloakId() {
-    return keycloakId;
-  }
-
-  @JsonProperty("keycloakId")
-  public void setKeycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
-  }
 
   /**
    **/
@@ -110,15 +90,14 @@ public class SozialdienstAdminDto  implements Serializable {
       return false;
     }
     SozialdienstAdminDto sozialdienstAdmin = (SozialdienstAdminDto) o;
-    return Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
-        Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
+    return Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
         Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
         Objects.equals(this.email, sozialdienstAdmin.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keycloakId, vorname, nachname, email);
+    return Objects.hash(vorname, nachname, email);
   }
 
   @Override
@@ -126,7 +105,6 @@ public class SozialdienstAdminDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminDto {\n");
     
-    sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
