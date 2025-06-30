@@ -1,4 +1,7 @@
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
+import {
+  AuszahlungUpdate,
+  GesuchFormularUpdate,
+} from '@dv/shared/model/gesuch';
 import {
   DeepNullable,
   generateSVN,
@@ -21,9 +24,27 @@ export const ausbildungValues: AusbildungValues = {
   pensum: 'VOLLZEIT',
 };
 
-// todo: we have to get a valid landId from the backend for all tests!
+export const createZahlungsverbindungUpdateFn = (
+  landId: string,
+): AuszahlungUpdate => ({
+  auszahlungAnSozialdienst: false,
+  zahlungsverbindung: {
+    vorname: 'Severin',
+    nachname: 'Spoerri',
+    iban: 'CH1809000000150664878',
+    adresse: {
+      landId: landId,
+      strasse: 'Huberstrasse',
+      hausnummer: '5a',
+      plz: '3008',
+      ort: 'Bern',
+    },
+  },
+});
+
 export const gesuchFormularUpdateFn = (
   seed: string,
+  landId: string,
 ): DeepNullable<GesuchFormularUpdate> => ({
   personInAusbildung: {
     sozialversicherungsnummer: generateSVN(seed + '_person'),
@@ -34,7 +55,7 @@ export const gesuchFormularUpdateFn = (
       coAdresse: null,
       strasse: 'Hausmatte',
       hausnummer: '42B',
-      landId: 'Schweiz',
+      landId: landId,
       plz: '3032',
       ort: 'Hinterkappelen',
     },
@@ -44,7 +65,7 @@ export const gesuchFormularUpdateFn = (
     email: 'stip-laura-sanchez@mailbucket.dvbern.ch',
     telefonnummer: '0791231212',
     geburtsdatum: `${specificYearsAgo(20)}-01-01`,
-    nationalitaetId: 'Schweiz',
+    nationalitaetId: landId,
     heimatort: 'Bern',
     niederlassungsstatus: null,
     vormundschaft: false,

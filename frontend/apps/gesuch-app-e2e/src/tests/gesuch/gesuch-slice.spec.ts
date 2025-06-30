@@ -6,7 +6,7 @@ import {
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeTest } from '../../initialize-test';
+import { initializeMultiUserTest } from '../../initialize-test';
 import { AuszahlungPO } from '../../po/auszahlung.po';
 import { DarlehenPO } from '../../po/darlehen.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
@@ -34,25 +34,23 @@ import {
   zahlungsverbindung,
 } from '../../test-data/slice-test-data';
 
-const { test, getGesuchId, getTrancheId } = initializeTest(
-  'GESUCHSTELLER',
-  ausbildung,
-);
+const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
-  test('Neues gesuch erstellen', async ({ page, cockpit }, testInfo) => {
+  test('Neues gesuch erstellen', async ({ gsPage, sbPage }, testInfo) => {
     test.slow();
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
-    await cockpit.elems.gesuchEdit.click();
+    await gsPage.bringToFront();
+    await gsPage.getByTestId('cockpit-gesuch-edit').click();
 
     // Step 1: Person ============================================================
-    await expect(page.getByTestId('step-title')).toBeAttached({
+    await expect(gsPage.getByTestId('step-title')).toBeAttached({
       timeout: 10000,
     });
-    await page.getByTestId('step-nav-person').first().click();
-    await expectStepTitleToContainText('Person in Ausbildung', page);
-    const personPO = new PersonPO(page);
+    await gsPage.getByTestId('step-nav-person').first().click();
+    await expectStepTitleToContainText('Person in Ausbildung', gsPage);
+    const personPO = new PersonPO(gsPage);
     await expect(personPO.elems.loading).toBeHidden();
 
     await personPO.fillPersonForm(person(seed));
@@ -60,8 +58,8 @@ test.describe('Neues gesuch erstellen', () => {
     await personPO.elems.buttonSaveContinue.click();
 
     // Step 2: Lebenslauf ========================================================
-    await expectStepTitleToContainText('Lebenslauf', page);
-    const lebenslaufPO = new LebenslaufPO(page);
+    await expectStepTitleToContainText('Lebenslauf', gsPage);
+    const lebenslaufPO = new LebenslaufPO(gsPage);
     await expect(lebenslaufPO.elems.loading).toBeHidden();
 
     await lebenslaufPO.addTaetigkeit(taetigkeit);
@@ -69,8 +67,8 @@ test.describe('Neues gesuch erstellen', () => {
     await lebenslaufPO.elems.buttonContinue.click();
 
     // Step 3: Familiensituation ===================================================
-    await expectStepTitleToContainText('Familiensituation', page);
-    const familiyPO = new FamilyPO(page);
+    await expectStepTitleToContainText('Familiensituation', gsPage);
+    const familiyPO = new FamilyPO(gsPage);
     await expect(familiyPO.elems.loading).toBeHidden();
 
     await familiyPO.fillUnbekanntOderVerstorben(familienlsituation);
@@ -78,8 +76,8 @@ test.describe('Neues gesuch erstellen', () => {
     await familiyPO.elems.buttonSaveContinue.click();
 
     // Step 4.1: Eltern =============================================================
-    await expectStepTitleToContainText('Eltern', page);
-    const elternPO = new ElternPO(page);
+    await expectStepTitleToContainText('Eltern', gsPage);
+    const elternPO = new ElternPO(gsPage);
     await expect(elternPO.elems.loading).toBeHidden();
 
     await elternPO.addMutter(mutter(seed));
@@ -87,8 +85,8 @@ test.describe('Neues gesuch erstellen', () => {
     await elternPO.elems.buttonContinue.click();
 
     // Step 4.2: Steuererklaerung Mutter  ==========================================
-    await expectStepTitleToContainText('Steuererklärung Mutter', page);
-    const steuererklaerungPO = new SteruererklaerungPO(page);
+    await expectStepTitleToContainText('Steuererklärung Mutter', gsPage);
+    const steuererklaerungPO = new SteruererklaerungPO(gsPage);
     await expect(steuererklaerungPO.elems.loading).toBeHidden();
 
     await steuererklaerungPO.fillSteuererklaerung(steuererklaerung);
@@ -96,8 +94,8 @@ test.describe('Neues gesuch erstellen', () => {
     await steuererklaerungPO.elems.buttonSaveContinue.click();
 
     // Step 5: Geschwister  ========================================================
-    await expectStepTitleToContainText('Geschwister', page);
-    const geschwisterPO = new GeschwisterPO(page);
+    await expectStepTitleToContainText('Geschwister', gsPage);
+    const geschwisterPO = new GeschwisterPO(gsPage);
     await expect(geschwisterPO.elems.loading).toBeHidden();
 
     await geschwisterPO.addGeschwister(bruder);
@@ -105,15 +103,14 @@ test.describe('Neues gesuch erstellen', () => {
     await geschwisterPO.elems.buttonContinue.click();
 
     // Step 6: Kinder =============================================================
-    await expectStepTitleToContainText('Kinder', page);
-    const kinderPO = new KinderPO(page);
+    await expectStepTitleToContainText('Kinder', gsPage);
+    const kinderPO = new KinderPO(gsPage);
     await kinderPO.elems.buttonContinue.click();
 
     // Step 7: Auszahlung ===========================================================
 
-    // todo => Zahlungsverbindung
-    await expectStepTitleToContainText('Auszahlung', page);
-    const auszahlungPO = new AuszahlungPO(page);
+    await expectStepTitleToContainText('Auszahlung', gsPage);
+    const auszahlungPO = new AuszahlungPO(gsPage);
     await expect(auszahlungPO.elems.loading).toBeHidden();
 
     // go to Auszahlung edit
@@ -122,7 +119,7 @@ test.describe('Neues gesuch erstellen', () => {
     await auszahlungPO.fillAuszahlungEigenesKonto(zahlungsverbindung);
 
     // // hotfix for flaky test of Einnahmen & Kosten form
-    const ausbildungPromise = page.waitForResponse(
+    const ausbildungPromise = gsPage.waitForResponse(
       '**/api/v1/ausbildungsstaette',
     );
 
@@ -131,8 +128,8 @@ test.describe('Neues gesuch erstellen', () => {
     await auszahlungPO.elems.buttonNext.click();
 
     // Step 8: Einnahmen und Kosten =================================================
-    await expectStepTitleToContainText('Einnahmen & Kosten', page);
-    const einnahmenKostenPO = new EinnahmenKostenPO(page);
+    await expectStepTitleToContainText('Einnahmen & Kosten', gsPage);
+    const einnahmenKostenPO = new EinnahmenKostenPO(gsPage);
     await expect(einnahmenKostenPO.elems.loading).toBeHidden();
 
     await ausbildungPromise;
@@ -142,60 +139,64 @@ test.describe('Neues gesuch erstellen', () => {
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
     // Step 9: Darlehen =============================================================
-    await expectStepTitleToContainText('Darlehen', page);
-    const darlehenPO = new DarlehenPO(page);
+    await expectStepTitleToContainText('Darlehen', gsPage);
+    const darlehenPO = new DarlehenPO(gsPage);
     await expect(darlehenPO.elems.loading).toBeHidden();
 
     await darlehenPO.fillDarlehenForm(darlehen);
 
-    const requiredDokumenteResponse = page.waitForResponse(
+    const requiredDokumenteResponse = gsPage.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
     await darlehenPO.elems.buttonSaveContinue.click();
 
     // Step 10: Dokumente ===========================================================
-    await expectStepTitleToContainText('Dokumente', page);
+    await expectStepTitleToContainText('Dokumente', gsPage);
     await requiredDokumenteResponse;
-    await uploadFiles(page);
-    await page.getByTestId('button-continue').click();
+    await uploadFiles(gsPage);
+    await gsPage.getByTestId('button-continue').click();
 
     // Step 11: Freigabe ===========================================================
-    await expectStepTitleToContainText('Freigabe', page);
-    await page.getByTestId('button-abschluss').click();
-    const freigabeResponse = page.waitForResponse(
+    await expectStepTitleToContainText('Freigabe', gsPage);
+    await gsPage.getByTestId('button-abschluss').click();
+    const freigabeResponse = gsPage.waitForResponse(
       '**/api/v1/gesuch/*/einreichen/gs',
     );
-    await page.getByTestId('dialog-confirm').click();
+    await gsPage.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
     const urls = getE2eUrls();
 
     // Go to SB App ===============================================================
-    await page.goto(
+    await sbPage.bringToFront();
+    await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
 
     // add testid to dynamic title later
-    await expect(page.getByRole('heading').nth(1)).toContainText('Tranche 1', {
-      ignoreCase: true,
-      timeout: 10000,
-    });
+    await expect(sbPage.getByRole('heading').nth(1)).toContainText(
+      'Tranche 1',
+      {
+        ignoreCase: true,
+        timeout: 10000,
+      },
+    );
 
     // check if the i element in steuerdaten steps has the correct icon
-    const stepsNavPO = new StepsNavPO(page);
+    const stepsNavPO = new StepsNavPO(sbPage);
     const icon = stepsNavPO.elems.steuerdatenMutter
       .locator('.text-danger')
       .first();
     await expect(icon).toContainText('error');
 
     // set to bearbeiten
-    const headerNavPO = new SachbearbeiterGesuchHeaderPO(page);
+    const headerNavPO = new SachbearbeiterGesuchHeaderPO(sbPage);
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
       .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
       .click();
-    await page.getByTestId('dialog-confirm').click();
+    await sbPage.getByTestId('dialog-confirm').click();
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
@@ -203,44 +204,51 @@ test.describe('Neues gesuch erstellen', () => {
       .click();
 
     // create trancheInfoPO later
-    const status = page.getByTestId('form-tranche-status');
+    const status = sbPage.getByTestId('form-tranche-status');
     await expect(status).toHaveValue('In Bearbeitung');
 
     // fill steuerdaten ===========================================================
     await stepsNavPO.elems.steuerdatenMutter.first().click();
-    await expectStepTitleToContainText('Steuerdaten Mutter', page);
-    const steuerDatenPO = new SteuerdatenPO(page);
+    await expectStepTitleToContainText('Steuerdaten Mutter', sbPage);
+    const steuerDatenPO = new SteuerdatenPO(sbPage);
     await steuerDatenPO.fillSteuerdaten(steuerdaten);
-    const steuerdatenResponse = page.waitForResponse('**/api/v1/steuerdaten/*');
+    const steuerdatenResponse = sbPage.waitForResponse(
+      '**/api/v1/steuerdaten/*',
+    );
     await steuerDatenPO.elems.buttonSaveContinue.click();
     await steuerdatenResponse;
 
     // Go to Berechnung ===========================================================
     // will log the user out if verfuegung is not available yet!
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
-    await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
+    await sbPage.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
+    await expect(sbPage.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
       { timeout: 10000 },
     );
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+    await sbPage.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
     await expect(
-      page.getByTestId('berechnung-persoenlich-total'),
+      sbPage.getByTestId('berechnung-persoenlich-total'),
     ).toContainText("- 14'974");
-    await expect(page.getByTestId('berechnung-familien-total')).toContainText(
+    await expect(sbPage.getByTestId('berechnung-familien-total')).toContainText(
       "- 55'492",
     );
 
     // Go to Gesuch infos =========================================================
-    await page.getByTestId('sb-gesuch-header-infos-link').click();
-    await expect(page.getByTestId('step-title')).toContainText(
+    await sbPage.getByTestId('sb-gesuch-header-infos-link').click();
+    await expect(sbPage.getByTestId('step-title')).toContainText(
       'Gesuchsverlauf',
     );
     await expect(
-      page.getByRole('cell', { name: 'Bereit für Bearbeitung' }),
+      sbPage.getByRole('cell', { name: 'Bereit für Bearbeitung' }),
     ).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Eingereicht' })).toBeVisible();
     await expect(
-      page.getByRole('cell', { name: 'Bearbeitung durch Gesuchsteller' }),
+      sbPage.getByRole('cell', { name: 'Eingereicht' }),
     ).toBeVisible();
+    await expect(
+      sbPage.getByRole('cell', { name: 'Bearbeitung durch Gesuchsteller' }),
+    ).toBeVisible();
+
+    sbPage.close();
+    gsPage.close();
   });
 });

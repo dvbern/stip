@@ -34,6 +34,8 @@ export const ausbildung: AusbildungValues = {
 
 export const zahlungsverbindung: Zahlungsverbindung = {
   vorname: 'Spoerri',
+  nachname: 'Spoerri',
+  iban: '1809000000150664878',
   adresse: {
     landId: 'Schweiz',
     strasse: 'Huberstrasse',
@@ -41,8 +43,6 @@ export const zahlungsverbindung: Zahlungsverbindung = {
     plz: '3008',
     ort: 'Bern',
   },
-  iban: '1809000000150664878',
-  nachname: 'Spoerri',
 };
 
 export const adressen = {
@@ -147,20 +147,6 @@ export const bruder: Geschwister = {
   ausbildungssituation: 'IN_AUSBILDUNG',
   id: '',
 };
-
-// todo => Zahlungsverbindung
-// export const auszahlung: Auszahlung = {
-//   isDelegated: false,
-//   value: {
-//     auszahlungAnSozialdienst: false,
-//     zahlungsverbindung: {
-//       vorname: '',
-//       nachname: '',
-//       adresse: adressen.person,
-//       iban: 'CH9300762011623852957',
-//     },
-//   },
-// };
 
 export const einnahmenKosten: EinnahmenKosten = {
   nettoerwerbseinkommen: 10000,

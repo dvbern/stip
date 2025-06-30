@@ -68,17 +68,18 @@ export const initializeTest = (
       });
 
       const body: FallDashboardItem | undefined = await response.json();
+      const fallId = body?.fall.id;
       gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
         body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
 
-      if (!gesuchId || !trancheId) {
+      if (!gesuchId || !trancheId || !fallId) {
         throw new Error('Failed to create new gesuch');
       }
 
       if (setupFn) {
         const seed = `${testInfo.title}-${testInfo.workerIndex}`;
-        await setupFn({ contexts, gesuchId, trancheId, seed });
+        await setupFn({ contexts, gesuchId, trancheId, fallId, seed });
       }
 
       await use(cockpit);
@@ -120,10 +121,10 @@ export const initializeMultiUserTest = (
   let trancheId: string | undefined;
 
   const test = createMultiUserTest().extend<{
-    gsCockpit: CockpitPO;
+    gsPage: Page;
     sbPage: Page; // You can create a SB-specific PO here
   }>({
-    gsCockpit: async ({ browser, gsContext }, use, testInfo) => {
+    gsPage: async ({ browser, gsContext }, use, testInfo) => {
       // Create GS page with GS context
       const gsPage = await browser.newPage({ storageState: gsContext });
       const cockpit = new CockpitPO(gsPage);
@@ -164,11 +165,12 @@ export const initializeMultiUserTest = (
       });
 
       const body: FallDashboardItem | undefined = await response.json();
+      const fallId = body?.fall.id;
       gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
         body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
 
-      if (!gesuchId || !trancheId) {
+      if (!gesuchId || !trancheId || !fallId) {
         throw new Error('Failed to create new gesuch');
       }
 
@@ -187,17 +189,15 @@ export const initializeMultiUserTest = (
           },
         };
 
-        await setupFn({ contexts, gesuchId, trancheId, seed });
+        await setupFn({ contexts, gesuchId, trancheId, fallId, seed });
       }
 
-      await use(cockpit);
-      await gsPage.close();
+      await use(gsPage);
     },
 
     sbPage: async ({ browser, sbContext }, use) => {
       const sbPage = await browser.newPage({ storageState: sbContext });
       await use(sbPage);
-      await sbPage.close();
     },
   });
 

@@ -240,6 +240,7 @@ export type SetupFn = (args: {
   seed: string;
   gesuchId: string;
   trancheId: string;
+  fallId: string;
 }) => Promise<void>;
 
 /**
