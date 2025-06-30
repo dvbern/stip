@@ -539,39 +539,38 @@ public class PdfService {
         final Gesuch gesuch,
         final TL translator,
         final float leftMargin,
-        Document document
+        final Document document
     ) {
+        if (gesuch.getAusbildung().getFall().getDelegierung() == null) {
+            return;
+        }
+
         final List<String> kopieAn = new ArrayList<>();
+        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
+        final var sozialdienstAdresse = gesuch.getAusbildung()
+            .getFall()
+            .getDelegierung()
+            .getSozialdienst()
+            .getZahlungsverbindung()
+            .getAdresse();
 
-        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-            final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
-            final var sozialdienstAdresse = gesuch.getAusbildung()
-                .getFall()
-                .getDelegierung()
-                .getSozialdienst()
-                .getZahlungsverbindung()
-                .getAdresse();
-
-            kopieAn.add(sozialdienstName);
-            if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
-                kopieAn.add(sozialdienstAdresse.getCoAdresse());
-            }
-            kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
-            kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+        kopieAn.add(sozialdienstName);
+        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+            kopieAn.add(sozialdienstAdresse.getCoAdresse());
         }
+        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
 
-        if (!kopieAn.isEmpty()) {
-            document.add(
-                createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.pdf.footer.kopieAn") + " ",
-                    String.join(", ", kopieAn)
-                )
-            );
-        }
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.pdf.footer.kopieAn") + " ",
+                String.join(", ", kopieAn)
+            )
+        );
     }
 
     private void negativeVerfuegung(
