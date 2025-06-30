@@ -47,6 +47,7 @@ public class VerfuegungService {
 
     private static final String VERFUEGUNG_DOKUMENT_PATH = "verfuegung/";
     private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_NAME = "Negative_Verfuegung.pdf";
+    private static final String VERFUEGUNG_DOKUMENT_NAME = "Verfuegung.pdf";
 
     private final PdfService pdfService;
     private final ConfigService configService;
@@ -96,13 +97,13 @@ public class VerfuegungService {
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),
-            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
+            VERFUEGUNG_DOKUMENT_NAME,
             s3,
             configService,
             VERFUEGUNG_DOKUMENT_PATH
         );
         verfuegung.setObjectId(objectId);
-        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilename(VERFUEGUNG_DOKUMENT_NAME);
         verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
