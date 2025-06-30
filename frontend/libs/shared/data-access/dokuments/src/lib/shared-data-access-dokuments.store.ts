@@ -106,12 +106,10 @@ export class DokumentsStore extends signalStore(
   });
 
   dokumenteViewSig = computed(() => {
-    // // only show standard documents
-    // const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
-    //   (d) => d.dokumentTyp,
-    // );
-
-    const dokuments = this.dokuments().data ?? [];
+    // only show standard documents
+    const dokuments = (this.dokuments().data ?? []).filter(
+      (d) => d.dokumentTyp,
+    );
 
     return {
       dokuments,
@@ -128,10 +126,6 @@ export class DokumentsStore extends signalStore(
 
   customDokumenteViewSig = computed(() => {
     // only show custom documents
-    // const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
-    //   (d) => d.customDokumentTyp,
-    // );
-
     const dokuments = (this.dokuments().data ?? []).filter(
       (d) => d.customDokumentTyp,
     );
