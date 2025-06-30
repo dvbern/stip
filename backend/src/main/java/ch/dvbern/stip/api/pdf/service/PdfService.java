@@ -151,23 +151,37 @@ public class PdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            final Image logo = getLogo(pdfDocument, "/images/bern_logo.svg");
-            logo.setMarginLeft(-25);
-            logo.setMarginTop(-35);
-            document.add(logo);
+            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+                final Image deckblattLogo = getLogo(pdfDocument, "/images/bern_logo.svg");
+                deckblattLogo.setMarginLeft(-25);
+                deckblattLogo.setMarginTop(-35);
+                document.add(deckblattLogo);
+                header(gesuch, document, leftMargin, translator, true); // This method adds page breaks
+            }
 
-            header(gesuch, document, leftMargin, translator);
+            final Image mainDocumentLogo = getLogo(pdfDocument, "/images/bern_logo.svg");
+            mainDocumentLogo.setMarginLeft(-25);
+            mainDocumentLogo.setMarginTop(-35);
+            document.add(mainDocumentLogo);
+            header(gesuch, document, leftMargin, translator, false);
+
+            // Add the main content and footer sections.
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
-
         return out;
     }
 
-    private void header(final Gesuch gesuch, final Document document, float leftMargin, TL translator) {
+    private void header(
+        final Gesuch gesuch,
+        final Document document,
+        float leftMargin,
+        TL translator,
+        boolean isDeckblatt
+    ) {
         final float[] columnWidths = { 50, 50 };
         final Table headerTable = createTable(columnWidths, leftMargin);
 
@@ -188,19 +202,7 @@ public class PdfService {
             translator.translate("stip.pdf.header.amt"),
             translator.translate("stip.pdf.header.abteilung")
         );
-
-        final Cell address = createCell(
-            pdfFont,
-            FONT_SIZE_MEDIUM,
-            1,
-            1,
-            translator.translate("stip.pdf.header.strasse"),
-            translator.translate("stip.pdf.header.plz")
-        );
-
-        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
-
-        final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
+        headerTable.addCell(sender);
 
         final Paragraph recieverHeaderParagraph = new Paragraph()
             .add(translator.translate("stip.pdf.header.bkd") + ", ")
@@ -212,18 +214,22 @@ public class PdfService {
             .setBorderBottom(new SolidBorder(1))
             .setPaddingBottom(0);
         recieverHeader.add(recieverHeaderParagraph);
+        headerTable.addCell(recieverHeader);
 
-        final Cell receiver = createCell(
+        final Cell address = createCell(
             pdfFont,
             FONT_SIZE_MEDIUM,
             1,
             1,
-            gesuchFormular.getPersonInAusbildung().getFullName(),
-            gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
-            gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() +
-            " " +
-            gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
-        ).setPaddingTop(SPACING_MEDIUM);
+            translator.translate("stip.pdf.header.strasse"),
+            translator.translate("stip.pdf.header.plz")
+        );
+        headerTable.addCell(address);
+
+        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
+
+        final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
+        headerTable.addCell(url);
 
         final Link email =
             new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
@@ -240,6 +246,40 @@ public class PdfService {
             .setPaddingBottom(SPACING_BIG)
             .setPaddingTop(SPACING_MEDIUM)
             .add(emailParagraph);
+        headerTable.addCell(sachbearbeiter);
+
+        if (!isDeckblatt) {
+            final Cell receiver = createCell(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                1,
+                1,
+                gesuchFormular.getPersonInAusbildung().getFullName(),
+                gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
+                gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() +
+                " " +
+                gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
+            ).setPaddingTop(SPACING_MEDIUM);
+            headerTable.addCell(receiver);
+        }
+
+        if (isDeckblatt) {
+            final var sozialdienst = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst();
+            final Cell receiver = createCell(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                1,
+                1,
+                sozialdienst.getName(),
+                sozialdienst.getZahlungsverbindung().getVorname(),
+                sozialdienst.getZahlungsverbindung().getNachname(),
+                sozialdienst.getZahlungsverbindung().getAdresse().getStrasse(),
+                sozialdienst.getZahlungsverbindung().getAdresse().getPlz() +
+                " " +
+                sozialdienst.getZahlungsverbindung().getAdresse().getOrt()
+            ).setPaddingTop(SPACING_MEDIUM);
+            headerTable.addCell(receiver);
+        }
 
         final Paragraph dossierNr = new Paragraph()
             .add(translator.translate("stip.pdf.header.dossier.nr") + " ")
@@ -252,33 +292,35 @@ public class PdfService {
         final Cell fallInformations = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1);
         fallInformations.add(dossierNr);
         fallInformations.add(svNr);
+        headerTable.addCell(fallInformations);
 
         final Cell date = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, DateUtil.formatDate(LocalDate.now()));
-
-        final Locale locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
-
-        final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
-        final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
-
-        final Cell ausbildungsgang = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, ausbildungsStaette, ausbildungsGang);
-
-        headerTable.addCell(sender);
-        headerTable.addCell(recieverHeader);
-        headerTable.addCell(address);
-        headerTable.addCell(url);
-        headerTable.addCell(sachbearbeiter);
-        headerTable.addCell(receiver);
-        headerTable.addCell(fallInformations);
         headerTable.addCell(date);
-        headerTable.addCell(ausbildungsgang);
+
+        if (!isDeckblatt) {
+            final Locale locale = gesuch
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale();
+
+            final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
+            final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
+
+            final Cell ausbildung = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, ausbildungsStaette, ausbildungsGang);
+
+            headerTable.addCell(ausbildung);
+        }
+
         headerTable.setMarginBottom(SPACING_MEDIUM);
 
         document.add(headerTable);
+
+        if (isDeckblatt) {
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+        }
     }
 
     private void footer(final Gesuch gesuch, final Document document, float leftMargin, TL translator) {
@@ -629,12 +671,6 @@ public class PdfService {
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
-
-        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
-            .getAusbildung()
-            .getFall()
-            .getSachbearbeiterZuordnung()
-            .getSachbearbeiter();
 
         final LocalDate ausbildungsjahrVon = gesuch
             .getGesuchTranchen()
