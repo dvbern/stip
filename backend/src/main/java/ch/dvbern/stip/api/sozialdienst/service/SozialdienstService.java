@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -40,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestScoped
 public class SozialdienstService {
-    private final BenutzerService benutzerService;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
@@ -57,6 +55,8 @@ public class SozialdienstService {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
+        sozialdienst.getSozialdienstBenutzers().add(admin);
+
         final var zahlungsverbindung = zahlungsverbindungService.createZahlungsverbindung(dto.getZahlungsverbindung());
         sozialdienst.setZahlungsverbindung(zahlungsverbindung);
         sozialdienstRepository.persistAndFlush(sozialdienst);
@@ -83,9 +83,11 @@ public class SozialdienstService {
 
     @Transactional
     public SozialdienstDto deleteSozialdienst(UUID id) {
-        final var entity = sozialdienstRepository.requireById(id);
-        sozialdienstRepository.delete(entity);
-        return sozialdienstMapper.toDto(entity);
+        final var sozialdienst = sozialdienstRepository.requireById(id);
+        sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienst.getSozialdienstAdmin().getId());
+        sozialdienstBenutzerService.deleteSozialdienstMitarbeiterOfSozialdienst(sozialdienst);
+        sozialdienstRepository.delete(sozialdienst);
+        return sozialdienstMapper.toDto(sozialdienst);
     }
 
     @Transactional
@@ -99,10 +101,11 @@ public class SozialdienstService {
     public SozialdienstBenutzerDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var benutzerToDelete = sozialdienst.getSozialdienstAdmin();
-        sozialdienstBenutzerService.deleteSozialdienstBenutzer(benutzerToDelete.getId());
-
         final var newSozialdienstAdmin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto);
         sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
+        sozialdienst.getSozialdienstBenutzers().add(newSozialdienstAdmin);
+
+        sozialdienstBenutzerService.deleteSozialdienstBenutzer(benutzerToDelete.getId());
         return sozialdienstBenutzerService.getSozialdienstBenutzerDtoById(newSozialdienstAdmin.getId());
     }
 

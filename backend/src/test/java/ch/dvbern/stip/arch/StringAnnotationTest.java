@@ -29,6 +29,8 @@ import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO2CODE_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO3CODE_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -133,7 +135,9 @@ class StringAnnotationTest {
             DB_DEFAULT_STRING_SMALL_LENGTH,
             DB_DEFAULT_STRING_MEDIUM_LENGTH,
             DB_DEFAULT_STRING_INPUT_MAX_LENGTH,
-            DB_DEFAULT_STRING_MAX_LENGTH
+            DB_DEFAULT_STRING_MAX_LENGTH,
+            DB_DEFAULT_STRING_ISO3CODE_LENGTH,
+            DB_DEFAULT_STRING_ISO2CODE_LENGTH
         );
 
         public SizeColumnFieldDefinedLengthCondition() {

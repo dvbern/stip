@@ -25,44 +25,6 @@ kstip:
       - 'dev'
       - 'prod'
       - 'test'
-    testcases:
-      seed-on:
-        - 'dev'
-        - 'prod'
-      to-seed:
-        - 'UATTestcase1'
-        - 'UATTestcase2'
-        - 'UATTestcase3'
-        - 'UATTestcase4'
-        - 'UATTestcase5'
-        - 'UATTestcase6'
-        - 'UATTestcase8'
-        - 'UATTestcase9'
-        - 'UATTestcase11'
-        - 'SBTest/SBTest1'
-        - 'SBTest/SBTest2'
-        - 'SBTest/SBTest3'
-        - 'SBTest/SBTest4'
-        - 'SBTest/SBTest5'
-        - 'SBTest/SBTest6'
-        - 'SBTest/SBTest7'
-        - 'SBTest/SBTest8'
-        - 'SBTest/SBTest9'
-        - 'SBTest/SBTest10'
-        - 'SBTest/SBTest11'
-        - 'SBTest/SBTest12'
-        - 'SBTest/SBTest13'
-        - 'SBTest/SBTest14'
-        - 'SBTest/SBTest15'
-        - 'SBTest/SBTest16'
-        - 'SBTest/SBTest17'
-        - 'SBTest/SBTest18'
-        - 'SBTest/SBTest19'
-        - 'SBTest/SBTest22'
-        - 'SBTest/SBTest23'
-        - 'SBTest/SBTest25'
-        - 'SBTest/SBTest26'
-        - 'SBTest/SBTest27'
   plzdata:
     cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
@@ -89,6 +51,8 @@ kstip:
     dv:
       cron: '0 11/2 * * * ? *' # Fires every 2 minutes, starting at XX:11
   bern:
+    seeding:
+      sozialdienste: # Can be set via environment variable using: KSTIP_BERN_SEEDING_SOZIALDIENSTE, KSTIP_DV_SEEDING_SOZIALDIENSTE, etc.
     welcome-mail:
       kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
       kc-path: '${STIP_WELCOME_MAIL_PATH}'

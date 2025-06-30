@@ -97,6 +97,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
@@ -539,7 +540,7 @@ public class GesuchService {
 
         if (stipendien.getBerechnung() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+            gesuchStatusToVerfuegt(gesuchId);
         } else {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
@@ -602,6 +603,7 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        verfuegungService.createVerfuegung(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 
@@ -653,17 +655,25 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
+    public void changeGesuchStatusToNegativeVerfuegung(
+        final UUID gesuchId,
+        final AusgewaehlterGrundDto ausgewaehlterGrundDto
+    ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var decision = stipDecisionTextRepository.requireById(decisionId);
-        verfuegungService.createVerfuegung(gesuchId, decisionId);
+        final var decisionId = ausgewaehlterGrundDto.getDecisionId();
+        var decision = stipDecisionTextRepository.requireById(decisionId);
+        verfuegungService
+            .createNegativeVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
+        var kommentarTxt = decision.getTitleDe();
+        var kommentarDto = new KommentarDto(kommentarTxt);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
-            new KommentarDto(decision.getTitleDe()),
+            kommentarDto,
             false
         );
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
     @Transactional
@@ -965,7 +975,7 @@ public class GesuchService {
 
         final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
 
-        dokumentIdsNowButNotThen.forEach(uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId()));
+        dokumentIdsNowButNotThen.forEach(gesuchDokumentService::deleteDokument);
 
         // Remove doks that existed then (i.e. past) but not now
         toTranche

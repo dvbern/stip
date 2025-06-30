@@ -91,7 +91,7 @@ export const permissionTableByAppType = {
   IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF   ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
   EINGEREICHT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
   BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('W  UAN', ['sb']) },
+  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('WD UAN', ['sb']) },
   IN_FREIGABE                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('W  U N', ['ju']) },
   ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U N', ['sb']) },
@@ -117,7 +117,7 @@ export const permissionTableByAppType = {
 // prettier-ignore
 export const trancheReadWritestatusByAppType = {
   IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF   ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  UEBERPRUEFEN:       { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('W   A ', ['sb']) },
+  UEBERPRUEFEN:       { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('WD  A ', ['sb']) },
   FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D    ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   AKZEPTIERT:         { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   ABGELEHNT:          { [GS_APP]: perm('WD    ', ['gs']), [SB_APP]: perm('      ', ['sb']) },

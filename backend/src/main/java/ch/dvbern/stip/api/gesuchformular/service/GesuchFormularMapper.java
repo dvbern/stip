@@ -42,9 +42,11 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.util.DeleteChangedDocumentsUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
@@ -95,6 +97,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Inject
     UnterschriftenblattService unterschriftenblattService;
+
+    @Inject
+    LandService landService;
 
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
@@ -195,6 +200,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
+        DeleteChangedDocumentsUtil.deleteChangedDocuments(gesuchDokumentService, newFormular, targetFormular);
+
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);

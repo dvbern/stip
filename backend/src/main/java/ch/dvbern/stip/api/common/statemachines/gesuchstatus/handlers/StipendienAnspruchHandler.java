@@ -41,7 +41,7 @@ public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         sapService.createInitialAuszahlungOrGetStatus(
-            gesuch.getAusbildung().getFall().getAuszahlung().getId()
+            gesuch.getId()
         );
     }
 }

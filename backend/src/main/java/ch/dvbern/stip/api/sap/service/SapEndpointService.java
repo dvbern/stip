@@ -29,7 +29,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
@@ -107,40 +107,45 @@ public class SapEndpointService {
         return BigDecimal.valueOf(Math.abs(secureRandom.nextLong() & Long.MAX_VALUE)).setScale(0);
     }
 
-    public BusinessPartnerCreateResponse createBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
+    public BusinessPartnerCreateResponse createBusinessPartner(
+        Zahlungsverbindung zahlungsverbindung,
+        BigDecimal sapDeliveryId
+    ) {
         final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
         final var port = businessPartnerCreateService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
-            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
+            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, zahlungsverbindung);
         businessPartnerCreateRequest.getBUSINESSPARTNER().setHEADER(businessPartnerCreateMapper.getHeader());
         return port.osBusinessPartnerCreate(businessPartnerCreateRequest);
     }
 
-    public BusinessPartnerChangeResponse changeBusinessPartner(Auszahlung auszahlung, BigDecimal sapDeliveryId) {
-        final var zahlungsverbindung = auszahlung.getZahlungsverbindung();
+    public BusinessPartnerChangeResponse changeBusinessPartner(
+        Zahlungsverbindung zahlungsverbindung,
+        BigDecimal sapDeliveryId
+    ) {
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
-            businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, auszahlung);
+            businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, zahlungsverbindung);
         businessPartnerChangeRequest.getBUSINESSPARTNER()
             .setHEADER(businessPartnerChangeMapper.getHeader(zahlungsverbindung.getSapBusinessPartnerId()));
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 
-    public BusinessPartnerReadResponse readBusinessPartner(Auszahlung auszahlung) {
+    public BusinessPartnerReadResponse readBusinessPartner(Zahlungsverbindung zahlungsverbindung) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
-            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, auszahlung);
+            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, zahlungsverbindung);
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
     }
 
@@ -159,7 +164,7 @@ public class SapEndpointService {
     }
 
     public VendorPostingCreateResponse createVendorPosting(
-        Auszahlung auszahlung,
+        Zahlungsverbindung zahlungsverbindung,
         Integer amount,
         BigDecimal sapDeliveryId,
         String qrIbanAddlInfo,
@@ -172,7 +177,7 @@ public class SapEndpointService {
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper
-                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, auszahlung);
+                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, zahlungsverbindung);
 
         XMLGregorianCalendar docDate;
         XMLGregorianCalendar pstngDate;

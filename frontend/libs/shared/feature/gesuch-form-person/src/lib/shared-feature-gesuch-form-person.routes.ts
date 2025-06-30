@@ -1,11 +1,5 @@
 import { Route } from '@angular/router';
-import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
 
-import {
-  sharedDataAccessStammdatenEffects,
-  sharedDataAccessStammdatensFeature,
-} from '@dv/shared/data-access/stammdaten';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -15,11 +9,7 @@ export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // ausbildungsstaette needed for the planned ausbildung at the bottom of lebenslauf
-      provideState(sharedDataAccessStammdatensFeature),
-      provideEffects(sharedDataAccessStammdatenEffects),
-    ],
+    providers: [],
     data: {
       shouldReuseRoute: false,
     },

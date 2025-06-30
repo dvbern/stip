@@ -33,9 +33,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -82,29 +81,12 @@ public class GesuchDokument extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private Dokumentstatus status = Dokumentstatus.AUSSTEHEND;
 
-    @ManyToMany
-    @JoinTable(
-        name = "gesuch_dokument_dokument",
-        joinColumns = @JoinColumn(
-            name = "gesuch_dokument_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_gesuch_dokument_dokumente")
-        ),
-        inverseJoinColumns = @JoinColumn(
-            name = "dokument_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokumente")
-        ),
-        indexes = {
-            @Index(name = "gesuch_dokument_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id"),
-            @Index(name = "gesuch_dokument_dokument_dokument_id", columnList = "dokument_id")
-        }
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
     private List<Dokument> dokumente = new ArrayList<>();
 
     public void addDokument(final Dokument dokument) {
         // Bi-Directional associations must set both sides of the relation
         dokumente.add(dokument);
-        dokument.getGesuchDokumente().add(this);
+        dokument.setGesuchDokument(this);
     }
 }

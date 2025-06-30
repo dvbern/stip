@@ -21,6 +21,7 @@ describe('SharedUiFormAddressComponent', () => {
     component.group = SharedUiFormAddressComponent.buildAddressFormGroup(
       TestBed.inject(NonNullableFormBuilder),
     );
+    fixture.componentRef.setInput('languageSig', 'de');
     fixture.detectChanges();
   });
 

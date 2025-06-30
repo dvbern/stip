@@ -27,6 +27,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -38,6 +39,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
@@ -45,6 +47,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -53,7 +56,6 @@ import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.stammdaten.type.Land;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -114,13 +116,13 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setAdresse(new Adresse());
         // Beim Land CH muss der Heimatort nicht leer sein
-        personInAusbildung.getAdresse().setLand(Land.CH);
+        personInAusbildung.getAdresse().setLand(LandGenerator.initSwitzerland());
         // Bei PLZ != 3xxx, muss das vermoegenVorjahr nicht leer sein
         personInAusbildung.getAdresse().setPlz("7000");
         // Beim nicht IZV muessen die IZV PLZ und Ort nicht leer sein
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(false);
         // Beim Nationalitaet CH muesst die Niederlassungsstatus nicht gegeben werden
-        personInAusbildung.setNationalitaet(Land.CH);
+        personInAusbildung.setNationalitaet(LandGenerator.initSwitzerland());
         personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
         // Beim Wohnsitz MUTTER_VATER muessen die Anteile Feldern nicht null sein
         personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
@@ -164,7 +166,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(Land.FR);
+        personInAusbildung.setNationalitaet(LandGenerator.initGermany());
         personInAusbildung.setHeimatort("");
 
         Gesuch gesuch = prepareDummyGesuch();
@@ -197,7 +199,7 @@ class GesuchValidatorTest {
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
-        personInAusbildung.setNationalitaet(Land.FR);
+        personInAusbildung.setNationalitaet(LandGenerator.initGermany());
         personInAusbildung.setHeimatort("");
         // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
         personInAusbildung.setNiederlassungsstatus(niederlassungsstatus);
@@ -484,6 +486,10 @@ class GesuchValidatorTest {
         Set<Eltern> elternSet = new HashSet<>();
         elternSet.add(eltern);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        eltern.setAdresse(adresse);
 
         assertOneMessage(
             VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE,
@@ -508,6 +514,10 @@ class GesuchValidatorTest {
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         gesuch.getAusbildung().setAusbildungBegin(LocalDate.of(2024, 01, 01));
 
         assertOneMessage(
@@ -528,6 +538,10 @@ class GesuchValidatorTest {
         Gesuch gesuch = prepareDummyGesuch();
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
@@ -545,6 +559,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -556,6 +574,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         assertOneMessage(
@@ -571,6 +593,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(16));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -589,6 +615,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
@@ -625,6 +655,10 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(18));
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        Adresse adresse = new Adresse();
+        Land land = new Land();
+        adresse.setLand(land);
+        personInAusbildung.setAdresse(adresse);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
@@ -643,6 +677,10 @@ class GesuchValidatorTest {
         gesuch.setGesuchsperiode(null);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
+        Fall fall = new Fall();
+        Auszahlung auszahlung = new Auszahlung();
+        fall.setAuszahlung(auszahlung);
+        ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);

@@ -1,0 +1,298 @@
+﻿laendercodeBfs;iso2code;iso3code;deKurzform;frKurzform;itKurzform;enKurzform;gueltig;isEuEfta
+8100;CH;CHE;Schweiz;Suisse;Svizzera;Switzerland;J;J
+8201;AL;ALB;Albanien;Albanie;Albania;Albania;J;N
+8202;AD;AND;Andorra;Andorre;Andorra;Andorra;J;N
+8204;BE;BEL;Belgien;Belgique;Belgio;Belgium;J;J
+8205;BG;BGR;Bulgarien;Bulgarie;Bulgaria;Bulgaria;J;J
+8206;DK;DNK;Dänemark;Danemark;Danimarca;Denmark;J;J
+8207;DE;DEU;Deutschland;Allemagne;Germania;Germany;J;J
+8208;;;Deutsche Demokratische Republik;République démocratique allemande;Repubblica Democratica Tedesca;German Democratic Republic;N;N
+8209;;;Westberlin;Berlin ouest;Berlino Ovest;West Berlin;N;N
+8210;FO;FRO;Färöer;Îles Féroé;Isole Faer Oer;Faeroe Islands;J;N
+8211;FI;FIN;Finnland;Finlande;Finlandia;Finland;J;J
+8212;FR;FRA;Frankreich;France;Francia;France;J;J
+8213;GI;GIB;Gibraltar;Gibraltar;Gibilterra;Gibraltar;J;N
+8214;GR;GRC;Griechenland;Grèce;Grecia;Greece;J;J
+8215;GB;GBR;Vereinigtes Königreich;Royaume-Uni;Regno Unito;United Kingdom;J;N
+8216;IE;IRL;Irland;Irlande;Irlanda;Ireland;J;J
+8217;IS;ISL;Island;Islande;Islanda;Iceland;J;J
+8218;IT;ITA;Italien;Italie;Italia;Italy;J;J
+8220;;;Jugoslawien;Yougoslavie;Jugoslavia;Yugoslavia;N;N
+8222;LI;LIE;Liechtenstein;Liechtenstein;Liechtenstein;Liechtenstein;J;J
+8223;LU;LUX;Luxemburg;Luxembourg;Lussemburgo;Luxembourg;J;J
+8224;MT;MLT;Malta;Malte;Malta;Malta;J;J
+8225;IM;IMN;Insel Man;Île de Man;Isola di Man;Isle of Man;J;N
+8226;MC;MCO;Monaco;Monaco;Monaco;Monaco;J;N
+8227;NL;NLD;Niederlande;Pays-Bas;Paesi Bassi;Netherlands;J;J
+8228;NO;NOR;Norwegen;Norvège;Norvegia;Norway;J;J
+8229;AT;AUT;Österreich;Autriche;Austria;Austria;J;J
+8230;PL;POL;Polen;Pologne;Polonia;Poland;J;J
+8231;PT;PRT;Portugal;Portugal;Portogallo;Portugal;J;J
+8232;RO;ROU;Rumänien;Roumanie;Romania;Romania;J;J
+8233;SM;SMR;San Marino;Saint-Marin;San Marino;San Marino;J;N
+8234;SE;SWE;Schweden;Suède;Svezia;Sweden;J;N
+8235;;;Union der Sozialistischen Sowjetrepubliken;Union des Républiques Socialistes Soviétiques;Unione delle Repubbliche Socialiste Sovietiche;Union of Soviet Socialist Republics;N;J
+8236;ES;ESP;Spanien;Espagne;Spagna;Spain;J;J
+8237;;;Azoren;Açores;Azzorre;Azores;J;N
+8238;;;Tschechoslowakei;Tchécoslovaquie;Cecoslovacchia;Czechoslovakia;N;N
+8239;TR;TUR;Türkiye;Türkiye;Türkiye;Türkiye;J;N
+8240;HU;HUN;Ungarn;Hongrie;Ungheria;Hungary;J;N
+8241;VA;VAT;Vatikanstadt;Cité du Vatican;Città del Vaticano;Vatican City;J;N
+8242;CY;CYP;Zypern;Chypre;Cipro;Cyprus;J;J
+8243;SK;SVK;Slowakei;Slovaquie;Slovacchia;Slovakia;J;J
+8244;CZ;CZE;Tschechien;Tchéquie;Cechia;Czechia;J;J
+8248;RS;SRB;Serbien;Serbie;Serbia;Serbia;J;N
+8249;;;Serbien und Montenegro;Serbie-et-Monténégro;Serbia e Montenegro;Serbia and Montenegro;N;N
+8250;HR;HRV;Kroatien;Croatie;Croazia;Croatia;J;J
+8251;SI;SVN;Slowenien;Slovénie;Slovenia;Slovenia;J;J
+8252;BA;BIH;Bosnien und Herzegowina;Bosnie et Herzégovine;Bosnia e Erzegovina;Bosnia and Herzegovina;J;N
+8253;;;Zentralserbien;Serbie centrale;Serbia centrale;Central Serbia;J;N
+8254;ME;MNE;Montenegro;Monténégro;Montenegro;Montenegro;J;N
+8255;MK;MKD;Nordmazedonien;Macédoine du Nord;Macedonia del Nord;North Macedonia;J;N
+8256;XK;;Kosovo;Kosovo;Kosovo;Kosovo;J;N
+8257;;;Provinz Wojwodina;Province de Voïvodine;Provincia di Vojvodina;Province of Vojvodina;J;N
+8260;EE;EST;Estland;Estonie;Estonia;Estonia;J;J
+8261;LV;LVA;Lettland;Lettonie;Lettonia;Latvia;J;J
+8262;LT;LTU;Litauen;Lituanie;Lituania;Lithuania;J;J
+8263;MD;MDA;Moldau;Moldova;Moldova;Moldova;J;N
+8264;RU;RUS;Russland;Russie;Russia;Russia;J;N
+8265;UA;UKR;Ukraine;Ukraine;Ucraina;Ukraine;J;N
+8266;BY;BLR;Belarus;Bélarus;Belarus;Belarus;J;N
+8270;;;Alderney;Alderney;Alderney;Alderney;J;N
+8271;JE;JEY;Jersey;Jersey;Jersey;Jersey;J;N
+8272;GG;GGY;Guernsey;Guernesey;Guernsey;Guernsey;J;N
+8273;SJ;SJM;Svalbard und Jan Mayen;Svalbard et Île Jan Mayen;Svalbard e Jan Mayen;Svalbard and Jan Mayen;J;N
+8274;AX;ALA;Alandinseln;Îles d'Aland;Isole di Aland;Aland Islands;J;N
+8275;;;Sark;Sercq;Sark;Sark;J;N
+8280;;;Triest;Trieste;Trieste;Trieste;N;N
+8301;GQ;GNQ;Äquatorialguinea;Guinée équatoriale;Guinea equatoriale;Equatorial Guinea;J;N
+8302;ET;ETH;Äthiopien;Éthiopie;Etiopia;Ethiopia;J;N
+8303;DJ;DJI;Dschibuti;Djibouti;Gibuti;Djibouti;J;N
+8304;DZ;DZA;Algerien;Algérie;Algeria;Algeria;J;N
+8305;AO;AGO;Angola;Angola;Angola;Angola;J;N
+8306;;;Biafra;Biafra;Biafra;Biafra;N;N
+8307;BW;BWA;Botsuana;Botswana;Botswana;Botswana;J;N
+8308;BI;BDI;Burundi;Burundi;Burundi;Burundi;J;N
+8309;BJ;BEN;Benin;Bénin;Benin;Benin;J;N
+8310;CI;CIV;Côte d'Ivoire;Côte d'Ivoire;Côte d'Ivoire;Côte d'Ivoire;J;N
+8311;GA;GAB;Gabun;Gabon;Gabon;Gabon;J;N
+8312;GM;GMB;Gambia;Gambie;Gambia;Gambia;J;N
+8313;GH;GHA;Ghana;Ghana;Ghana;Ghana;J;N
+8314;GW;GNB;Guinea-Bissau;Guinée-Bissau;Guinea-Bissau;Guinea-Bissau;J;N
+8315;GN;GIN;Guinea;Guinée;Guinea;Guinea;J;N
+8317;CM;CMR;Kamerun;Cameroun;Camerun;Cameroon;J;N
+8318;;;Kanarische Inseln;Îles Canaries;Isole Canarie;Canary Islands;J;N
+8319;CV;CPV;Cabo Verde;Cabo Verde;Cabo Verde;Cabo Verde;J;N
+8320;KE;KEN;Kenia;Kenya;Kenia;Kenya;J;N
+8321;KM;COM;Komoren;Comores;Comore;Comoros;J;N
+8322;CG;COG;Kongo (Brazzaville);Congo (Brazzaville);Congo (Brazzaville);Congo (Brazzaville);J;N
+8323;CD;COD;Kongo (Kinshasa);Congo (Kinshasa);Congo (Kinshasa);Congo (Kinshasa);J;N
+8324;LS;LSO;Lesotho;Lesotho;Lesotho;Lesotho;J;N
+8325;LR;LBR;Liberia;Libéria;Liberia;Liberia;J;N
+8326;LY;LBY;Libyen;Libye;Libia;Libya;J;N
+8327;MG;MDG;Madagaskar;Madagascar;Madagascar;Madagascar;J;N
+8328;;;Madeira;Madère;Madera;Madeira;J;N
+8329;MW;MWI;Malawi;Malawi;Malawi;Malawi;J;N
+8330;ML;MLI;Mali;Mali;Mali;Mali;J;N
+8331;MA;MAR;Marokko;Maroc;Marocco;Morocco;J;N
+8332;MR;MRT;Mauretanien;Mauritanie;Mauritania;Mauritania;J;N
+8333;MU;MUS;Mauritius;Maurice;Maurizio;Mauritius;J;N
+8334;MZ;MOZ;Mosambik;Mozambique;Mozambico;Mozambique;J;N
+8335;NE;NER;Niger;Niger;Niger;Niger;J;N
+8336;NG;NGA;Nigeria;Nigéria;Nigeria;Nigeria;J;N
+8337;BF;BFA;Burkina Faso;Burkina Faso;Burkina Faso;Burkina Faso;J;N
+8339;RE;REU;Reunion;Réunion;Riunione;Réunion;J;N
+8340;ZW;ZWE;Simbabwe;Zimbabwe;Zimbabwe;Zimbabwe;J;N
+8341;RW;RWA;Ruanda;Rwanda;Ruanda;Rwanda;J;N
+8343;ZM;ZMB;Sambia;Zambie;Zambia;Zambia;J;N
+8344;ST;STP;São Tomé und Príncipe;Sao Tomé-et-Principe;São Tomé e Príncipe;São Tomé and Príncipe;J;N
+8345;SN;SEN;Senegal;Sénégal;Senegal;Senegal;J;N
+8346;SC;SYC;Seychellen;Seychelles;Seicelle;Seychelles;J;N
+8347;SL;SLE;Sierra Leone;Sierra Leone;Sierra Leone;Sierra Leone;J;N
+8348;SO;SOM;Somalia;Somalie;Somalia;Somalia;J;N
+8349;ZA;ZAF;Südafrika;Afrique du Sud;Sudafrica;South Africa;J;N
+8350;SD;SDN;Sudan;Soudan;Sudan;Sudan;J;N
+8351;NA;NAM;Namibia;Namibie;Namibia;Namibia;J;N
+8352;SZ;SWZ;Eswatini;Eswatini;Eswatini;Eswatini;J;N
+8353;TZ;TZA;Tansania;Tanzanie;Tanzania;Tanzania;J;N
+8354;TG;TGO;Togo;Togo;Togo;Togo;J;N
+8356;TD;TCD;Tschad;Tchad;Ciad;Chad;J;N
+8357;TN;TUN;Tunesien;Tunisie;Tunisia;Tunisia;J;N
+8358;UG;UGA;Uganda;Ouganda;Uganda;Uganda;J;N
+8359;EG;EGY;Ägypten;Égypte;Egitto;Egypt;J;N
+8360;CF;CAF;Zentralafrikanische Republik;République centrafricaine;Repubblica centrafricana;Central African Republic;J;N
+8361;YT;MYT;Mayotte;Mayotte;Mayotte;Mayotte;J;N
+8362;ER;ERI;Eritrea;Érythrée;Eritrea;Eritrea;J;N
+8363;SS;SSD;Südsudan;Soudan du Sud;Sudan del Sud;South Sudan;J;N
+8371;IO;IOT;Britische Territorien im Indischen Ozean;Territoires britanniques dans l'océan indien;Territori britannici nell'oceano indiano;British Territories in the Indian Ocean;J;N
+8372;EH;ESH;Westsahara;Sahara Occidental;Sahara Occidentale;Western Sahara;J;N
+8373;SH;SHN;St. Helena;Sainte-Hélène;Sant'Elena;Saint Helena;J;N
+8374;SH;SHN;Ascension;Ascension;Ascensione;Ascension;J;N
+8375;SH;SHN;Tristan da Cunha;Tristan da Cunha;Tristan da Cunha;Tristan da Cunha;J;N
+8381;;;Spanisch-Nordafrika;Afrique du Nord Espagnole;Africa settentrionale Spagnola;Spanish North Africa;J;N
+8382;;;Tanganjika;Tanganyika;Tanganika;Tanganyika;N;N
+8383;;;Sansibar;Zanzibar;Zanzibar;Zanzibar;N;N
+8384;;;Azawad;Azawad;Azawad;Azawad;J;N
+8401;AR;ARG;Argentinien;Argentine;Argentina;Argentina;J;N
+8402;BS;BHS;Bahamas;Bahamas;Bahamas;Bahamas;J;N
+8403;BB;BRB;Barbados;Barbade;Barbados;Barbados;J;N
+8404;BM;BMU;Bermuda;Bermudes;Bermuda;Bermuda;J;N
+8405;BO;BOL;Bolivien;Bolivie;Bolivia;Bolivia;J;N
+8406;BR;BRA;Brasilien;Brésil;Brasile;Brazil;J;N
+8407;CL;CHL;Chile;Chili;Cile;Chile;J;N
+8408;CR;CRI;Costa Rica;Costa Rica;Costa Rica;Costa Rica;J;N
+8409;DO;DOM;Dominikanische Republik;République dominicaine;Repubblica dominicana;Dominican Republic;J;N
+8410;EC;ECU;Ecuador;Équateur;Ecuador;Ecuador;J;N
+8411;SV;SLV;El Salvador;El Salvador;El Salvador;El Salvador;J;N
+8412;FK;FLK;Falklandinseln;Îles Falkland;Isole Falkland;Falkland Islands;J;N
+8413;GL;GRL;Grönland;Groenland;Groenlandia;Greenland;J;N
+8414;GP;GLP;Guadeloupe;Guadeloupe;Guadalupa;Guadeloupe;J;N
+8415;GT;GTM;Guatemala;Guatemala;Guatemala;Guatemala;J;N
+8416;GF;GUF;Französisch-Guayana;Guyane Française;Guiana Francese;French Guyana;J;N
+8417;GY;GUY;Guyana;Guyana;Guyana;Guyana;J;N
+8418;HT;HTI;Haiti;Haïti;Haiti;Haiti;J;N
+8419;BZ;BLZ;Belize;Belize;Belize;Belize;J;N
+8420;HN;HND;Honduras;Honduras;Honduras;Honduras;J;N
+8421;JM;JAM;Jamaika;Jamaïque;Giamaica;Jamaica;J;N
+8423;CA;CAN;Kanada;Canada;Canada;Canada;J;N
+8424;CO;COL;Kolumbien;Colombie;Colombia;Colombia;J;N
+8425;CU;CUB;Kuba;Cuba;Cuba;Cuba;J;N
+8426;MQ;MTQ;Martinique;Martinique;Martinica;Martinique;J;N
+8427;MX;MEX;Mexiko;Mexique;Messico;Mexico;J;N
+8429;NI;NIC;Nicaragua;Nicaragua;Nicaragua;Nicaragua;J;N
+8430;PA;PAN;Panama;Panama;Panama;Panama;J;N
+8431;PY;PRY;Paraguay;Paraguay;Paraguay;Paraguay;J;N
+8432;PE;PER;Peru;Pérou;Perù;Peru;J;N
+8433;PR;PRI;Puerto Rico;Porto Rico;Portorico;Puerto Rico;J;N
+8434;PM;SPM;St. Pierre und Miquelon;Saint-Pierre-et-Miquelon;Saint-Pierre e Miquelon;Saint Pierre and Miquelon;J;N
+8435;SR;SUR;Suriname;Suriname;Suriname;Suriname;J;N
+8436;TT;TTO;Trinidad und Tobago;Trinité-et-Tobago;Trinidad e Tobago;Trinidad and Tobago;J;N
+8437;UY;URY;Uruguay;Uruguay;Uruguay;Uruguay;J;N
+8438;VE;VEN;Venezuela;Venezuela;Venezuela;Venezuela;J;N
+8439;US;USA;Vereinigte Staaten;États-Unis;Stati Uniti;United States;J;N
+8440;DM;DMA;Dominica;Dominique;Dominica;Dominica;J;N
+8441;GD;GRD;Grenada;Grenade;Grenada;Grenada;J;N
+8442;AG;ATG;Antigua und Barbuda;Antigua-et-Barbuda;Antigua e Barbuda;Antigua and Barbuda;J;N
+8443;LC;LCA;St. Lucia;Sainte-Lucie;Saint Lucia;Saint Lucia;J;N
+8444;VC;VCT;St. Vincent und die Grenadinen;Saint-Vincent-et-les Grenadines;Saint Vincent e Grenadine;Saint Vincent and the Grenadines;J;N
+8445;KN;KNA;St. Kitts und Nevis;Saint-Kitts-et-Nevis;Saint Kitts e Nevis;Saint Kitts and Nevis;J;N
+8446;AI;AIA;Anguilla;Anguilla;Anguilla;Anguilla;J;N
+8447;;;Hawaii;Hawaii;Hawaii;Hawaii;N;N
+8448;MF;MAF;Saint-Martin (Frankreich);Saint-Martin (France);Saint-Martin (Francia);Saint Martin (France);J;N
+8449;BL;BLM;Saint-Barthélemy;Saint-Barthélemy;Saint-Barthélemy;Saint Barthélemy;J;N
+8472;VI;VIR;Jungferninseln (USA);Îles Vierges américaines;Isole Vergini americane;US Virgin Islands;J;N
+8473;KY;CYM;Kaimaninseln;Îles Cayman;Isole Cayman;Cayman Islands;J;N
+8474;TC;TCA;Turks- und Caicosinseln;Îles Turques et Caïques;Isole Turks e Caicos;Turks and Caicos Islands;J;N
+8475;MS;MSR;Montserrat;Montserrat;Monserrat;Montserrat;J;N
+8476;VG;VGB;Jungferninseln (UK);Îles Vierges britanniques;Isole Vergini britanniche;British Virgin Islands;J;N
+8481;;;Niederländische Antillen;Antilles néerlandaises;Antille olandesi;Netherlands Antilles;N;N
+8482;AW;ABW;Aruba;Aruba;Aruba;Aruba;J;N
+8483;GS;SGS;Südgeorgien und Südliche Sandwichinseln;Géorgie du Sud et Îles Sandwich du Sud;Isole Georgia del Sud e Sandwich del Sud;South Georgia and the South Sandwich Islands;J;N
+8484;CW;CUW;Curaçao;Curaçao;Curaçao;Curaçao;J;N
+8485;SX;SXM;Sint Maarten (Niederlande);Sint Maarten (Pays-Bas);Sint Maarten (Paesi Bassi);Sint Maarten (Netherlands);J;N
+8486;BQ;BES;Bonaire, Saint Eustatius und Saba;Bonaire, Saint Eustatius et Saba;Bonaire, Saint Eustatius e Saba;Bonaire, Saint Eustatius and Saba;J;N
+8501;AF;AFG;Afghanistan;Afghanistan;Afghanistan;Afghanistan;J;N
+8502;BH;BHR;Bahrain;Bahreïn;Bahrein;Bahrain;J;N
+8503;BT;BTN;Bhutan;Bhoutan;Bhutan;Bhutan;J;N
+8504;BN;BRN;Brunei Darussalam;Brunéi Darussalam;Brunei Darussalam;Brunei;J;N
+8505;MM;MMR;Myanmar;Myanmar;Myanmar;Myanmar;J;N
+8506;LK;LKA;Sri Lanka;Sri Lanka;Sri Lanka;Sri Lanka;J;N
+8507;TW;TWN;Taiwan (Chinesisches Taipei);Taïwan (Taipei chinois);Taiwan (Taipei cinese);Taiwan (Chinese Taipei);J;N
+8508;CN;CHN;China;Chine;Cina;China;J;N
+8509;HK;HKG;Hongkong;Hong Kong;Hong Kong;Hong Kong;J;N
+8510;IN;IND;Indien;Inde;India;India;J;N
+8511;ID;IDN;Indonesien;Indonésie;Indonesia;Indonesia;J;N
+8512;IQ;IRQ;Irak;Irak;Iraq;Iraq;J;N
+8513;IR;IRN;Iran;Iran;Iran;Iran;J;N
+8514;IL;ISR;Israel;Israël;Israele;Israel;J;N
+8515;JP;JPN;Japan;Japon;Giappone;Japan;J;N
+8516;YE;YEM;Jemen;Yémen;Yemen;Yemen;J;N
+8517;JO;JOR;Jordanien;Jordanie;Giordania;Jordan;J;N
+8518;KH;KHM;Kambodscha;Cambodge;Cambogia;Cambodia;J;N
+8519;QA;QAT;Katar;Qatar;Qatar;Qatar;J;N
+8521;KW;KWT;Kuwait;Koweït;Kuwait;Kuwait;J;N
+8522;LA;LAO;Laos;Laos;Laos;Laos;J;N
+8523;LB;LBN;Libanon;Liban;Libano;Lebanon;J;N
+8524;MO;MAC;Macao;Macao;Macao;Macao;J;N
+8525;MY;MYS;Malaysia;Malaisie;Malaysia;Malaysia;J;N
+8526;MV;MDV;Malediven;Maldives;Maldive;Maldives;J;N
+8527;OM;OMN;Oman;Oman;Oman;Oman;J;N
+8528;MN;MNG;Mongolei;Mongolie;Mongolia;Mongolia;J;N
+8529;NP;NPL;Nepal;Népal;Nepal;Nepal;J;N
+8530;KP;PRK;Korea (Nord-);Corée (Nord);Corea (Nord);North Korea;J;N
+8531;;;Nordvietnam;Viet-Nam du Nord;Vietnam del Nord;North Vietnam;N;N
+8532;AE;ARE;Vereinigte Arabische Emirate;Émirats arabes unis;Emirati arabi uniti;United Arab Emirates;J;N
+8533;PK;PAK;Pakistan;Pakistan;Pakistan;Pakistan;J;N
+8534;PH;PHL;Philippinen;Philippines;Filippine;Philippines;J;N
+8535;SA;SAU;Saudi-Arabien;Arabie saoudite;Arabia Saudita;Saudi Arabia;J;N
+8536;;;Sikkim;Sikkim;Sikkim;Sikkim;N;N
+8537;SG;SGP;Singapur;Singapour;Singapore;Singapore;J;N
+8538;;;Südjemen;Yémen du Sud;Yemen del Sud;South Yemen;N;N
+8539;KR;KOR;Korea (Süd-);Corée (Sud);Corea (Sud);South Korea;J;N
+8540;;;Südvietnam;Viêt-Nam du Sud;Vietnam del Sud;South Vietnam;N;N
+8541;SY;SYR;Syrien;Syrie;Siria;Syria;J;N
+8542;TH;THA;Thailand;Thaïlande;Thailandia;Thailand;J;N
+8543;;;Tibet;Tibet;Tibet;Tibet;J;N
+8544;;;Timor (Portugal);Timor (Portugal);Timor (Portogallo);Timor (Portugal);N;N
+8545;VN;VNM;Vietnam;Vietnam;Vietnam;Vietnam;J;N
+8546;BD;BGD;Bangladesch;Bangladesh;Bangladesh;Bangladesh;J;N
+8547;TL;TLS;Timor-Leste;Timor-Leste;Timor-Leste;Timor-Leste;J;N
+8548;;;Französisch-Indochina;Indochine française;Indocina francese;French Indochina;N;N
+8549;;;Nordjemen;Yémen du nord;Yemen del Nord;North Yemen;N;N
+8550;PS;PSE;Palästina;Palestine;Palestina;Palestine;J;N
+8551;;;Vereinigte Arabische Republik;République arabe unie;Repubblica Araba Unita;United Arab Republic;N;N
+8552;;;Sarawak;Sarawak;Sarawak;Sarawak;N;N
+8560;AM;ARM;Armenien;Arménie;Armenia;Armenia;J;N
+8561;AZ;AZE;Aserbaidschan;Azerbaïdjan;Azerbaigian;Azerbaijan;J;N
+8562;GE;GEO;Georgien;Géorgie;Georgia;Georgia;J;N
+8563;KZ;KAZ;Kasachstan;Kazakhstan;Kazakstan;Kazakhstan;J;N
+8564;KG;KGZ;Kirgisistan;Kirghizistan;Kirghizistan;Kyrgyzstan;J;N
+8565;TJ;TJK;Tadschikistan;Tadjikistan;Tagikistan;Tajikistan;J;N
+8566;TM;TKM;Turkmenistan;Turkménistan;Turkmenistan;Turkmenistan;J;N
+8567;UZ;UZB;Usbekistan;Ouzbékistan;Uzbekistan;Uzbekistan;J;N
+8571;;;Abchasien;Abkhazie;Abcasia;Abkhazia;J;N
+8572;;;Karatschai-Tscherkessien;Karatchaïévo-Tcherkessie;Caracievo-Circassia;Karachay-Cherkessia;J;N
+8573;;;Kabardino-Balkarien;Kabardino-Balkarie;Cabardino-Balcaria;Kabardino-Balkaria;J;N
+8574;;;Nordossetien-Alanien;Ossétie-du-Nord-Alanie;Ossezia Settentrionale-Alania;North Ossetia-Alania;J;N
+8575;;;Südossetien;Ossétie du Sud;Ossezia del Sud;South Ossetia;J;N
+8576;;;Inguschetien;Ingouchie;Inguscezia;Ingushetia;J;N
+8577;;;Tschetschenien;Tchétchénie;Cecenia;Chechnya;J;N
+8578;;;Dagestan;Daghestan;Daghestan;Dagestan;J;N
+8579;;;Adscharien;Adjarie;Agiaria;Adjara;J;N
+8601;AU;AUS;Australien;Australie;Australia;Australia;J;N
+8602;FJ;FJI;Fidschi;Fidji;Figi;Fiji;J;N
+8604;NR;NRU;Nauru;Nauru;Nauru;Nauru;J;N
+8605;VU;VUT;Vanuatu;Vanuatu;Vanuatu;Vanuatu;J;N
+8606;NC;NCL;Neukaledonien;Nouvelle-Calédonie;Nuova Caledonia;New Caledonia;J;N
+8607;NZ;NZL;Neuseeland;Nouvelle-Zélande;Nuova Zelanda;New Zealand;J;N
+8608;PG;PNG;Papua-Neuguinea;Papouasie-Nouvelle-Guinée;Papua Nuova Guinea;Papua New Guinea;J;N
+8610;TO;TON;Tonga;Tonga;Tonga;Tonga;J;N
+8611;WF;WLF;Wallis und Futuna;Wallis-et-Futuna;Wallis e Futuna;Wallis and Futuna;J;N
+8612;WS;WSM;Samoa;Samoa;Samoa;Samoa;J;N
+8614;SB;SLB;Salomoninseln;Îles Salomon;Isole Salomone;Solomon Islands;J;N
+8615;TV;TUV;Tuvalu;Tuvalu;Tuvalu;Tuvalu;J;N
+8616;KI;KIR;Kiribati;Kiribati;Kiribati;Kiribati;J;N
+8617;MH;MHL;Marshallinseln;Îles Marshall;Isole Marshall;Marshall Islands;J;N
+8618;FM;FSM;Mikronesien;Micronésie;Micronesia;Micronesia;J;N
+8619;PW;PLW;Palau;Palaos;Palau;Palau;J;N
+8621;AS;ASM;Amerikanisch-Samoa;Samoa américaines;Samoa americane;American Samoa;J;N
+8630;MP;MNP;Nördliche Marianen;Mariannes du Nord;Marianne del Nord;Northern Marianas;J;N
+8632;GU;GUM;Guam;Guam;Guam;Guam;J;N
+8633;UM;UMI;Johnstoninsel;Île Johnston;Isola Johnston;Johnston Island;J;N
+8635;UM;UMI;Midwayinseln;Îles Midway;Isole Midway;Midway Island;J;N
+8636;UM;UMI;Wakeinsel;Île Wake;Isola Wake;Wake Island;J;N
+8637;;;Kleinere amerikanische Überseeinseln;Îles mineures éloignées des États-Unis;Isole minori lontane dagli Stati Uniti;United States Minor Outlying Islands;J;N
+8652;CC;CCK;Kokosinseln;Îles Cocos (Keeling);Isole Cocos;Cocos (Keeling) Islands;J;N
+8653;HM;HMD;Heard und McDonaldinseln;Îles-Heard-et-McDonald;Isole Heard e McDonald;Heard Island and McDonald Islands;J;N
+8654;NF;NFK;Norfolkinsel;Île Norfolk;Isola Norfolk;Norfolk Island;J;N
+8655;CX;CXR;Weihnachtsinsel;Île Christmas (Australie);Isola Christmas;Christmas Island;J;N
+8671;PF;PYF;Französisch-Polynesien;Polynésie française;Polinesia francese;French Polynesia;J;N
+8682;CK;COK;Cookinseln;Îles Cook;Isole Cook;Cook Islands;J;N
+8683;NU;NIU;Niue;Nioué;Niue;Niue;J;N
+8684;TK;TKL;Tokelau;Tokélau;Tokelau;Tokelau;J;N
+8685;PN;PCN;Pitcairninseln;Îles Pitcairn;Isole Pitcairn;Pitcairn Islands;J;N
+8701;AQ;ATA;Antarktis;Antarctique;Antartide;Antarctica;J;N
+8702;BV;BVT;Bouvetinsel;Île Bouvet;Isola Bouvet;Bouvet Island;J;N
+8703;TF;ATF;Französische Süd- und Antarktisgebiete;Terres australes et antarctiques françaises;Territori delle terre australi e antartiche francesi;French Southern and Antarctic Lands;J;N
+8998;;;Staatenlos;Apatride;Senza Stato;Stateless;J;N
+8999;;;Staat unbekannt;État inconnu;Stato sconosciuto;State unknown;J;N

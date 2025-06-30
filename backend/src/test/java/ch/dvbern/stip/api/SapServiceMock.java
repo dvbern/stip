@@ -19,8 +19,8 @@ package ch.dvbern.stip.api;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
+import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -47,6 +47,7 @@ public class SapServiceMock extends SapService {
             null,
             null,
             null,
+            null,
             null
         );
     }
@@ -57,6 +58,7 @@ public class SapServiceMock extends SapService {
     BuchhaltungService buchhaltungService,
     SapDeliveryRepository sapDeliveryRepository,
     AuszahlungRepository auszahlungRepository,
+    ZahlungsverbindungRepository zahlungsverbindungRepository,
     BuchhaltungRepository buchhaltungRepository,
     GesuchRepository gesuchRepository,
     GesuchsperiodeRepository gesuchsperiodeRepository
@@ -66,15 +68,11 @@ public class SapServiceMock extends SapService {
             buchhaltungService,
             sapDeliveryRepository,
             auszahlungRepository,
+            zahlungsverbindungRepository,
             buchhaltungRepository,
             gesuchRepository,
             gesuchsperiodeRepository
         );
-    }
-
-    @Override
-    public SapStatus getOrCreateBusinessPartner(final Auszahlung auszahlung) {
-        return SapStatus.SUCCESS;
     }
 
     @Override

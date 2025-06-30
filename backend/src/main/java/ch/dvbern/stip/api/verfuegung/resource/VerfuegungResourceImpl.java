@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 
@@ -67,9 +68,9 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     }
 
     @Override
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getVerfuegungsDownloadToken(UUID verfuegungsId) {
-        verfuegungAuthorizer.canGetVerfuegungDownloadToken();
+        verfuegungAuthorizer.canGetVerfuegungDownloadToken(verfuegungsId);
 
         return DokumentDownloadUtil.getFileDownloadToken(
             verfuegungsId,

@@ -87,6 +87,36 @@ public class GesuchDokumentService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
+    public void setGesuchDokumentOfDokumentTypToAusstehend(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+
+        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
+            .stream()
+            .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+            .findFirst();
+
+        if (gesuchDokumentOpt.isEmpty()) {
+            return;
+        }
+        final var gesuchDokument = gesuchDokumentOpt.get();
+
+        gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentRepository.persist(gesuchDokument);
+    }
+
+    @Transactional
+    public void setGesuchDokumentOfCustomDokumentTypToAusstehend(final UUID customDokumentTypId) {
+        customDocumentTypRepository.requireById(customDokumentTypId)
+            .getGesuchDokument()
+            .setStatus(Dokumentstatus.AUSSTEHEND);
+    }
+
+    @Transactional
+    public void setGesuchDokumentOfDokumentToAusstehend(final UUID dokumentId) {
+        dokumentRepository.requireById(dokumentId).getGesuchDokument().setStatus(Dokumentstatus.AUSSTEHEND);
+    }
+
+    @Transactional
     public Uni<Response> getUploadCustomDokumentUni(
         final UUID customDokumentTypId,
         final FileUpload fileUpload
@@ -151,7 +181,7 @@ public class GesuchDokumentService {
             .setFilepath(GESUCH_DOKUMENT_PATH)
             .setObjectId(objectId);
 
-        dokument.getGesuchDokumente().add(gesuchDokument);
+        dokument.setGesuchDokument(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
 
         dokumentRepository.persist(dokument);
@@ -168,7 +198,7 @@ public class GesuchDokumentService {
                 .findByCustomDokumentTyp(customDokumentTypId)
                 .orElseThrow(NotFoundException::new);
         final var dokument = new Dokument();
-        dokument.getGesuchDokumente().add(gesuchDokument);
+        dokument.setGesuchDokument(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
         dokument.setFilename(fileUpload.fileName());
         dokument.setObjectId(objectId);
@@ -229,11 +259,11 @@ public class GesuchDokumentService {
     ) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
-        final var gesuchDokument = gesuchTranche.getGesuchDokuments()
+        final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
             .findFirst();
-        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        final var dto = gesuchDokumentOpt.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
 
@@ -330,11 +360,8 @@ public class GesuchDokumentService {
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
         final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
-        if (historicalDokument.getGesuchDokumente().size() > 1) {
-            return false;
-        }
 
-        final var historicalTranche = historicalDokument.getGesuchDokumente().get(0).getGesuchTranche();
+        final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
         if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
             return false;
         }
@@ -370,40 +397,52 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public String deleteDokument(final UUID dokumentId, final UUID trancheId) {
+    public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        dokument.getGesuchDokument().getDokumente().remove(dokument);
+        dokument.setGesuchDokument(null);
         final var dokumentObjectId = dokument.getObjectId();
-        for (
-            final var gesuchDokument : dokument.getGesuchDokumente()
-                .stream()
-                .filter(dok -> dok.getGesuchTranche().getId().equals(trancheId))
-                .toList()
-        ) {
-            gesuchDokument.getDokumente().remove(dokument);
-        }
+        dokumentRepository.delete(dokument);
 
         return dokumentObjectId;
     }
 
     @Transactional
+    public void deleteDokumenteForTranche(final UUID trancheId, final List<DokumentTyp> dokumentTyps) {
+        final var gesuchDokumente = gesuchDokumentRepository.findByDokumentTyps(trancheId, dokumentTyps).toList();
+        final var dokumente = gesuchDokumente.stream()
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
+            .toList();
+
+        dokumente.forEach(this::removeDokument);
+
+        for (final var gesuchDokument : gesuchDokumente) {
+            if (gesuchDokument.getStatus() != Dokumentstatus.AUSSTEHEND) {
+                dokumentstatusService.triggerStatusChange(gesuchDokument, DokumentstatusChangeEvent.AUSSTEHEND);
+            }
+        }
+    }
+
+    @Transactional
     public void removeDokument(final UUID dokumentId) {
-        Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        removeDokument(dokument);
+    }
+
+    @Transactional
+    public void removeDokument(final Dokument dokument) {
         final var dokumentObjectIds = new ArrayList<String>();
 
         if (
-            dokument.getGesuchDokumente().size() == 1
-            && (canDeleteDokumentFromS3(dokument, dokument.getGesuchDokumente().get(0).getGesuchTranche()))
+            canDeleteDokumentFromS3(dokument, dokument.getGesuchDokument().getGesuchTranche())
         ) {
             dokumentObjectIds.add(dokument.getObjectId());
         }
+        dokumentRepository.delete(dokument);
 
-        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
-            gesuchDokument.getDokumente().remove(dokument);
-            dropGesuchDokumentIfNotRequredAnymore(gesuchDokument);
-        }
-        if (dokument.getGesuchDokumente().isEmpty()) {
-            executeDeleteDokumentsFromS3(dokumentObjectIds);
-        }
+        dokument.getGesuchDokument().getDokumente().remove(dokument);
+        dropGesuchDokumentIfNotRequredAnymore(dokument.getGesuchDokument());
+        executeDeleteDokumentsFromS3(dokumentObjectIds);
     }
 
     @Transactional
@@ -422,13 +461,11 @@ public class GesuchDokumentService {
         for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext();) {
             final var dokument = iterator.next();
             iterator.remove();
-            if (dokument.getGesuchDokumente().isEmpty()) {
-                dokumentRepository.delete(dokument);
-                if (
-                    canDeleteDokumentFromS3(dokument, gesuchDokument.getGesuchTranche())
-                ) {
-                    dokumentObjectIds.add(dokument.getObjectId());
-                }
+            dokumentRepository.delete(dokument);
+            if (
+                canDeleteDokumentFromS3(dokument, gesuchDokument.getGesuchTranche())
+            ) {
+                dokumentObjectIds.add(dokument.getObjectId());
             }
         }
         if (gesuchDokument.getDokumente().isEmpty()) {
@@ -460,16 +497,12 @@ public class GesuchDokumentService {
         for (var gesuchdokument : abgelehnteGesuchDokumente) {
             final var dokumentList = gesuchdokument.getDokumente().stream().toList();
             for (var dokument : dokumentList) {
-                dokument.getGesuchDokumente().remove(gesuchdokument);
                 gesuchdokument.getDokumente().remove(dokument);
 
                 // If no other references to this physical document exist, delete it as well
-                if (dokument.getGesuchDokumente().isEmpty()) {
-
-                    dokumentRepository.delete(dokument);
-                    if (canDeleteDokumentFromS3(dokument, gesuchdokument.getGesuchTranche())) {
-                        dokumenteToDeleteFromS3.add(dokument.getObjectId());
-                    }
+                dokumentRepository.delete(dokument);
+                if (canDeleteDokumentFromS3(dokument, gesuchdokument.getGesuchTranche())) {
+                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
                 }
             }
         }

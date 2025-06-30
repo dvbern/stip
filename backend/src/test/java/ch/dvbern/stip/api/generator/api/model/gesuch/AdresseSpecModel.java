@@ -17,14 +17,24 @@
 
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
 
 public final class AdresseSpecModel {
     public static AdresseDtoSpec adresseDtoSpec() {
+        return adresseDtoSpecForLand(TestConstants.TEST_LAND_SCHWEIZ_ID);
+    }
+
+    public static AdresseDtoSpec adresseWithoutIso2codeDtoSpec() {
+        return adresseDtoSpecForLand(TestConstants.TEST_LAND_STATELESS_ID);
+    }
+
+    private static AdresseDtoSpec adresseDtoSpecForLand(final UUID landId) {
         return TestUtil.createUpdateDtoSpec(AdresseDtoSpec::new, (model) -> {
-            model.setLand(LandDtoSpec.CH);
+            model.setLandId(landId);
             model.setCoAdresse("");
             model.setStrasse("Nussbaumstrasse");
             model.setHausnummer("22");

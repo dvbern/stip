@@ -1,0 +1,149 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1748359304231-22">
+        <dropUniqueConstraint constraintName="UC_land_eu_efta_land_mandant" tableName="land_eu_efta"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-23">
+        <dropTable tableName="land_eu_efta"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-21">
+        <dropForeignKeyConstraint baseTableName="land_eu_efta_aud" constraintName="FK4ccpycrg5v08xx5yx3ml8bspr"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-24">
+        <dropTable tableName="land_eu_efta_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-1">
+        <createTable tableName="land">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="landPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="de_kurzform" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="en_kurzform" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fr_kurzform" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gueltig" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_eu_efta" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="iso3code" type="VARCHAR(3)"/>
+            <column name="it_kurzform" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="laendercode_bfs" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-2">
+        <createTable tableName="land_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="de_kurzform" type="VARCHAR(255)"/>
+            <column name="en_kurzform" type="VARCHAR(255)"/>
+            <column name="fr_kurzform" type="VARCHAR(255)"/>
+            <column name="gueltig" type="BOOLEAN"/>
+            <column name="is_eu_efta" type="BOOLEAN"/>
+            <column name="iso3code" type="VARCHAR(255)"/>
+            <column name="it_kurzform" type="VARCHAR(255)"/>
+            <column name="laendercode_bfs" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1748361379767-1" author="Juri Furer">
+        <dropColumn tableName="adresse" columnName="land" />
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-3">
+        <addColumn tableName="adresse">
+            <column name="land_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-4">
+        <addColumn tableName="adresse_aud">
+            <column name="land_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-5">
+        <addColumn tableName="person_in_ausbildung">
+            <column name="nationalitaet_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1748435927755-1" author="Juri Furer">
+        <dropColumn tableName="person_in_ausbildung" columnName="nationalitaet" />
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-6">
+        <addColumn tableName="person_in_ausbildung_aud">
+            <column name="nationalitaet_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-7">
+        <addPrimaryKey columnNames="rev, id" constraintName="land_audPK" tableName="land_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-10">
+        <addUniqueConstraint columnNames="laendercode_bfs, mandant" constraintName="UC_land_laendercode_bfs_mandant" tableName="land"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-11">
+        <createIndex indexName="IX_land_laendercode_bfs_mandant" tableName="land">
+            <column name="laendercode_bfs"/>
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-18">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="land_aud" constraintName="FK7qi321aw31yudw3w7uwgbtxpa" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-19">
+        <addForeignKeyConstraint baseColumnNames="land_id" baseTableName="adresse" constraintName="FK_adresse_land_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="land" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-20">
+        <addForeignKeyConstraint baseColumnNames="nationalitaet_id" baseTableName="person_in_ausbildung" constraintName="FK_person_in_ausbildung_land_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="land" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-25">
+        <dropColumn columnName="land" tableName="adresse_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1748359304231-26">
+        <dropColumn columnName="nationalitaet" tableName="person_in_ausbildung_aud"/>
+    </changeSet>
+    <changeSet id="1749023977057-1" author="Juri Furer">
+        <dropUniqueConstraint tableName="plz" constraintName="UC_plz_ort_kantonskuerzel" />
+    </changeSet>
+    <changeSet id="1749024012283-1" author="Juri Furer">
+        <addUniqueConstraint columnNames="plz, ort, kantonskuerzel" constraintName="UC_plz_plz_ort_kantonskuerzel" tableName="plz"/>
+    </changeSet>
+</databaseChangeLog>

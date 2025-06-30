@@ -39,6 +39,7 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
+@Iso2OnZahlungsverbindungMustBeSet(property = "adresse.land")
 @Audited
 @Entity
 @Table(

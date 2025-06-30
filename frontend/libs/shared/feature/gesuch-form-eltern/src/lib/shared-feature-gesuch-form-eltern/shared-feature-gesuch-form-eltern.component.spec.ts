@@ -4,7 +4,7 @@ import { setupElternTeil } from './shared-feature-gesuch-form-eltern.component';
 
 describe('SharedFeatureGesuchFormElternComponent', () => {
   const adresse = {
-    land: 'CH',
+    landId: 'asdf',
     ort: 'Bern',
     plz: '3011',
     strasse: 'Postgasse',

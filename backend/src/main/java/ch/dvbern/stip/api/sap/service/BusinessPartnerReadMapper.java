@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigInteger;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParms;
@@ -32,17 +32,17 @@ import org.mapstruct.Named;
 public abstract class BusinessPartnerReadMapper {
     @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     // @Mapping(source = "sapBusinessPartnerId", target = "BPARTNER")
-    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(Auszahlung auszahlung);
+    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(Zahlungsverbindung zahlungsverbindung);
 
     @Named("getExtId")
-    public String getExtId(Auszahlung auszahlung) {
-        return String.valueOf(Math.abs(auszahlung.getId().getMostSignificantBits()));
+    public String getExtId(Zahlungsverbindung zahlungsverbindung) {
+        return String.valueOf(Math.abs(zahlungsverbindung.getId().getMostSignificantBits()));
     }
 
     @Named("getSenderParms")
     public SenderParms getSenderParms(
         @Context BigInteger sysid,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     ) {
         final SenderParms sender = new SenderParms();
         sender.setSYSID(sysid);
@@ -53,7 +53,7 @@ public abstract class BusinessPartnerReadMapper {
     @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParms")
     public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequest(
         @Context BigInteger sysid,
-        Auszahlung auszahlung
+        Zahlungsverbindung zahlungsverbindung
     );
 
 }

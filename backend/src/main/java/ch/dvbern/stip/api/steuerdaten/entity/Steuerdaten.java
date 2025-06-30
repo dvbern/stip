@@ -38,7 +38,7 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "steuerdaten",
     indexes = {
-        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+        @Index(name = "IX_steuerdaten_mandant", columnList = "mandant")
     }
 )
 @Getter
@@ -89,6 +89,7 @@ public class Steuerdaten extends AbstractMandantEntity {
     @Column(name = "fahrkosten", nullable = false)
     private Integer fahrkosten;
 
+    @Nullable
     @Column(name = "fahrkostenPartner", nullable = true)
     private Integer fahrkostenPartner;
 
@@ -96,6 +97,7 @@ public class Steuerdaten extends AbstractMandantEntity {
     @Column(name = "verpflegung", nullable = false)
     private Integer verpflegung;
 
+    @Nullable
     @Column(name = "verpflegungPartner", nullable = true)
     private Integer verpflegungPartner;
 

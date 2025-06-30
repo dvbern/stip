@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
@@ -51,13 +52,14 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
+import ch.dvbern.stip.api.personinausbildung.service.MockPersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -114,7 +116,7 @@ class GesuchFormularMapperTest {
         updateFormular.setElterns(elterns);
         updateFormular.setFamiliensituation(familiensituation);
 
-        var target = new GesuchFormular()
+        var target = initTarget()
             .setFamiliensituation(null);
 
         // Act & Assert
@@ -138,7 +140,7 @@ class GesuchFormularMapperTest {
     void resetEinnahmenKostenRemovesWohnkostenTest() {
         final var targetPia = new PersonInAusbildung();
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-        final var target = new GesuchFormular()
+        final var target = initTarget()
             .setPersonInAusbildung(targetPia)
             .setEinnahmenKosten(new EinnahmenKosten().setWohnkosten(1));
 
@@ -173,7 +175,7 @@ class GesuchFormularMapperTest {
         update.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        final var target = new GesuchFormular();
+        final var target = initTarget();
 
         // Initialise target
         mapper.partialUpdate(update, target);
@@ -201,7 +203,7 @@ class GesuchFormularMapperTest {
         update.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        final var target = new GesuchFormular();
+        final var target = initTarget();
 
         // Initialise target
         mapper.partialUpdate(update, target);
@@ -218,7 +220,7 @@ class GesuchFormularMapperTest {
     @Test
     void resetEinnahmenKostenClearsBetreuungskostenKinderTest() {
         // Arrange
-        final var target = new GesuchFormular()
+        final var target = initTarget()
             .setKinds(new HashSet<>() {
                 {
                     add(new Kind());
@@ -245,7 +247,7 @@ class GesuchFormularMapperTest {
     void resetDependentDataRemovesWgWohnendTest() {
         final var targetPia = new PersonInAusbildung();
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-        final var target = new GesuchFormular()
+        final var target = initTarget()
             .setPersonInAusbildung(targetPia)
             .setEinnahmenKosten(new EinnahmenKosten().setWgWohnend(true));
 
@@ -286,7 +288,7 @@ class GesuchFormularMapperTest {
         update.setLebenslaufItems(updateLebenslaufItems);
 
         final var mapper = createMapper();
-        final var target = new GesuchFormular();
+        final var target = initTarget();
 
         // Initialise target
         mapper.partialUpdate(update, target);
@@ -313,7 +315,7 @@ class GesuchFormularMapperTest {
         update.setPartner(updatePartner);
 
         final var mapper = createMapper();
-        final var target = new GesuchFormular();
+        final var target = initTarget();
 
         // Initialise target
         mapper.partialUpdate(update, target);
@@ -613,7 +615,7 @@ class GesuchFormularMapperTest {
         final var gesuchDokumente = new ArrayList<GesuchDokument>();
         gesuchDokumente.add(gesuchDokument);
 
-        final var target = new GesuchFormular();
+        final var target = initTarget();
         target.setTranche(new GesuchTranche().setGesuchDokuments(gesuchDokumente));
 
         final var calledWithCorrectType = new AtomicBoolean(false);
@@ -671,13 +673,13 @@ class GesuchFormularMapperTest {
         }
 
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
-            new PersonInAusbildungMapperImpl(),
+            new MockPersonInAusbildungMapperImpl(new MockAdresseMapperImpl()),
             new FamiliensituationMapperImpl(),
             ausbildungMapperImplMock,
             new LebenslaufItemMapperImpl(),
-            new PartnerMapperImpl(),
+            new PartnerMapperImpl(new MockAdresseMapperImpl()),
             new GeschwisterMapperImpl(),
-            new ElternMapperImpl(),
+            new ElternMapperImpl(new MockAdresseMapperImpl()),
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl(),
             new SteuererklaerungMapperImpl(),
@@ -704,6 +706,7 @@ class GesuchFormularMapperTest {
         final var mapper = createMapper();
         var formular = mapper.toEntity(formularDto);
         formular.setDarlehen(new Darlehen());
+        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
         GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
         updateDto.setDarlehen(new DarlehenDto());
@@ -723,6 +726,7 @@ class GesuchFormularMapperTest {
 
         final var mapper = createMapper();
         var formular = mapper.toEntity(formularDto);
+        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
         GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
         var darlehen = new DarlehenDto();
@@ -756,4 +760,7 @@ class GesuchFormularMapperTest {
         assertThat(resetedDarlehen.getGrundAusbildungZwoelfJahre(), is(nullValue()));
     }
 
+    private GesuchFormular initTarget() {
+        return new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+    }
 }

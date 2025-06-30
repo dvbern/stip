@@ -15,435 +15,379 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 /**
- * Gets or Sets Land
+ * LandDtoSpec
  */
-public enum LandDtoSpec {
-  
-  CH("CH"),
-  
-  AF("AF"),
-  
-  EG("EG"),
-  
-  AL("AL"),
-  
-  DZ("DZ"),
-  
-  AD("AD"),
-  
-  AO("AO"),
-  
-  AG("AG"),
-  
-  GQ("GQ"),
-  
-  AR("AR"),
-  
-  AM("AM"),
-  
-  AZ("AZ"),
-  
-  ET("ET"),
-  
-  AU("AU"),
-  
-  BS("BS"),
-  
-  BH("BH"),
-  
-  BD("BD"),
-  
-  BB("BB"),
-  
-  BY("BY"),
-  
-  BE("BE"),
-  
-  BZ("BZ"),
-  
-  BJ("BJ"),
-  
-  BT("BT"),
-  
-  BO("BO"),
-  
-  BA("BA"),
-  
-  BR("BR"),
-  
-  BN("BN"),
-  
-  BG("BG"),
-  
-  BF("BF"),
-  
-  BI("BI"),
-  
-  CV("CV"),
-  
-  CL("CL"),
-  
-  CN("CN"),
-  
-  CK("CK"),
-  
-  CR("CR"),
-  
-  CI("CI"),
-  
-  DK("DK"),
-  
-  DE("DE"),
-  
-  DM("DM"),
-  
-  DO("DO"),
-  
-  DJ("DJ"),
-  
-  EC("EC"),
-  
-  SV("SV"),
-  
-  ER("ER"),
-  
-  EE("EE"),
-  
-  SZ("SZ"),
-  
-  FJ("FJ"),
-  
-  FI("FI"),
-  
-  FR("FR"),
-  
-  GA("GA"),
-  
-  GM("GM"),
-  
-  GE("GE"),
-  
-  GH("GH"),
-  
-  GD("GD"),
-  
-  GR("GR"),
-  
-  GT("GT"),
-  
-  GN("GN"),
-  
-  GW("GW"),
-  
-  GF("GF"),
-  
-  HT("HT"),
-  
-  VA("VA"),
-  
-  HN("HN"),
-  
-  IN("IN"),
-  
-  ID("ID"),
-  
-  IQ("IQ"),
-  
-  IR("IR"),
-  
-  IE("IE"),
-  
-  IS("IS"),
-  
-  IL("IL"),
-  
-  IT("IT"),
-  
-  JM("JM"),
-  
-  JP("JP"),
-  
-  YE("YE"),
-  
-  JO("JO"),
-  
-  KH("KH"),
-  
-  CM("CM"),
-  
-  CA("CA"),
-  
-  KZ("KZ"),
-  
-  QA("QA"),
-  
-  KE("KE"),
-  
-  KG("KG"),
-  
-  KI("KI"),
-  
-  CO("CO"),
-  
-  KM("KM"),
-  
-  CG("CG"),
-  
-  CD("CD"),
-  
-  KR("KR"),
-  
-  KP("KP"),
-  
-  XK("XK"),
-  
-  HR("HR"),
-  
-  CU("CU"),
-  
-  KW("KW"),
-  
-  LA("LA"),
-  
-  LS("LS"),
-  
-  LV("LV"),
-  
-  LB("LB"),
-  
-  LR("LR"),
-  
-  LY("LY"),
-  
-  LI("LI"),
-  
-  LT("LT"),
-  
-  LU("LU"),
-  
-  MG("MG"),
-  
-  MW("MW"),
-  
-  MY("MY"),
-  
-  MV("MV"),
-  
-  ML("ML"),
-  
-  MT("MT"),
-  
-  MA("MA"),
-  
-  MH("MH"),
-  
-  MR("MR"),
-  
-  MU("MU"),
-  
-  MX("MX"),
-  
-  FM("FM"),
-  
-  MO("MO"),
-  
-  MC("MC"),
-  
-  MN("MN"),
-  
-  ME("ME"),
-  
-  MZ("MZ"),
-  
-  MM("MM"),
-  
-  NA("NA"),
-  
-  NR("NR"),
-  
-  NP("NP"),
-  
-  NZ("NZ"),
-  
-  NI("NI"),
-  
-  NL("NL"),
-  
-  NE("NE"),
-  
-  NG("NG"),
-  
-  NU("NU"),
-  
-  MK("MK"),
-  
-  NO("NO"),
-  
-  OM("OM"),
-  
-  AT("AT"),
-  
-  PK("PK"),
-  
-  PW("PW"),
-  
-  PA("PA"),
-  
-  PG("PG"),
-  
-  PY("PY"),
-  
-  PE("PE"),
-  
-  PH("PH"),
-  
-  PL("PL"),
-  
-  PT("PT"),
-  
-  RW("RW"),
-  
-  RO("RO"),
-  
-  RU("RU"),
-  
-  SB("SB"),
-  
-  ZM("ZM"),
-  
-  WS("WS"),
-  
-  SM("SM"),
-  
-  ST("ST"),
-  
-  SA("SA"),
-  
-  SE("SE"),
-  
-  SN("SN"),
-  
-  RS("RS"),
-  
-  SC("SC"),
-  
-  SL("SL"),
-  
-  ZW("ZW"),
-  
-  SG("SG"),
-  
-  SK("SK"),
-  
-  SI("SI"),
-  
-  SO("SO"),
-  
-  ES("ES"),
-  
-  LK("LK"),
-  
-  KN("KN"),
-  
-  LC("LC"),
-  
-  VC("VC"),
-  
-  ZA("ZA"),
-  
-  SD("SD"),
-  
-  SS("SS"),
-  
-  SR("SR"),
-  
-  SY("SY"),
-  
-  TJ("TJ"),
-  
-  TZ("TZ"),
-  
-  TH("TH"),
-  
-  TL("TL"),
-  
-  TG("TG"),
-  
-  TO("TO"),
-  
-  TT("TT"),
-  
-  TD("TD"),
-  
-  CZ("CZ"),
-  
-  TN("TN"),
-  
-  TR("TR"),
-  
-  TM("TM"),
-  
-  TV("TV"),
-  
-  UG("UG"),
-  
-  UA("UA"),
-  
-  HU("HU"),
-  
-  UY("UY"),
-  
-  UZ("UZ"),
-  
-  VU("VU"),
-  
-  VE("VE"),
-  
-  AE("AE"),
-  
-  US("US"),
-  
-  GB("GB"),
-  
-  VN("VN"),
-  
-  CF("CF"),
-  
-  CY("CY"),
-  
-  STATELESS("STATELESS");
+@JsonPropertyOrder({
+  LandDtoSpec.JSON_PROPERTY_ID,
+  LandDtoSpec.JSON_PROPERTY_LAENDERCODE_BFS,
+  LandDtoSpec.JSON_PROPERTY_IS_EU_EFTA,
+  LandDtoSpec.JSON_PROPERTY_ISO2CODE,
+  LandDtoSpec.JSON_PROPERTY_ISO3CODE,
+  LandDtoSpec.JSON_PROPERTY_EINTRAG_GUELTIG,
+  LandDtoSpec.JSON_PROPERTY_DE_KURZFORM,
+  LandDtoSpec.JSON_PROPERTY_FR_KURZFORM,
+  LandDtoSpec.JSON_PROPERTY_IT_KURZFORM,
+  LandDtoSpec.JSON_PROPERTY_EN_KURZFORM
+})
+@JsonTypeName("Land")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+public class LandDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
 
-  private String value;
+  public static final String JSON_PROPERTY_LAENDERCODE_BFS = "laendercodeBfs";
+  private String laendercodeBfs;
 
-  LandDtoSpec(String value) {
-    this.value = value;
+  public static final String JSON_PROPERTY_IS_EU_EFTA = "isEuEfta";
+  private Boolean isEuEfta;
+
+  public static final String JSON_PROPERTY_ISO2CODE = "iso2code";
+  private String iso2code;
+
+  public static final String JSON_PROPERTY_ISO3CODE = "iso3code";
+  private String iso3code;
+
+  public static final String JSON_PROPERTY_EINTRAG_GUELTIG = "eintragGueltig";
+  private Boolean eintragGueltig;
+
+  public static final String JSON_PROPERTY_DE_KURZFORM = "deKurzform";
+  private String deKurzform;
+
+  public static final String JSON_PROPERTY_FR_KURZFORM = "frKurzform";
+  private String frKurzform;
+
+  public static final String JSON_PROPERTY_IT_KURZFORM = "itKurzform";
+  private String itKurzform;
+
+  public static final String JSON_PROPERTY_EN_KURZFORM = "enKurzform";
+  private String enKurzform;
+
+  public LandDtoSpec() {
   }
 
-  @JsonValue
-  public String getValue() {
-    return value;
+  public LandDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+
+  public LandDtoSpec laendercodeBfs(String laendercodeBfs) {
+    
+    this.laendercodeBfs = laendercodeBfs;
+    return this;
+  }
+
+   /**
+   * Get laendercodeBfs
+   * @return laendercodeBfs
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getLaendercodeBfs() {
+    return laendercodeBfs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setLaendercodeBfs(String laendercodeBfs) {
+    this.laendercodeBfs = laendercodeBfs;
+  }
+
+
+  public LandDtoSpec isEuEfta(Boolean isEuEfta) {
+    
+    this.isEuEfta = isEuEfta;
+    return this;
+  }
+
+   /**
+   * Get isEuEfta
+   * @return isEuEfta
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_IS_EU_EFTA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getIsEuEfta() {
+    return isEuEfta;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IS_EU_EFTA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIsEuEfta(Boolean isEuEfta) {
+    this.isEuEfta = isEuEfta;
+  }
+
+
+  public LandDtoSpec iso2code(String iso2code) {
+    
+    this.iso2code = iso2code;
+    return this;
+  }
+
+   /**
+   * Get iso2code
+   * @return iso2code
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getIso2code() {
+    return iso2code;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIso2code(String iso2code) {
+    this.iso2code = iso2code;
+  }
+
+
+  public LandDtoSpec iso3code(String iso3code) {
+    
+    this.iso3code = iso3code;
+    return this;
+  }
+
+   /**
+   * Get iso3code
+   * @return iso3code
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ISO3CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getIso3code() {
+    return iso3code;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ISO3CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIso3code(String iso3code) {
+    this.iso3code = iso3code;
+  }
+
+
+  public LandDtoSpec eintragGueltig(Boolean eintragGueltig) {
+    
+    this.eintragGueltig = eintragGueltig;
+    return this;
+  }
+
+   /**
+   * Get eintragGueltig
+   * @return eintragGueltig
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getEintragGueltig() {
+    return eintragGueltig;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEintragGueltig(Boolean eintragGueltig) {
+    this.eintragGueltig = eintragGueltig;
+  }
+
+
+  public LandDtoSpec deKurzform(String deKurzform) {
+    
+    this.deKurzform = deKurzform;
+    return this;
+  }
+
+   /**
+   * Get deKurzform
+   * @return deKurzform
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_DE_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getDeKurzform() {
+    return deKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DE_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setDeKurzform(String deKurzform) {
+    this.deKurzform = deKurzform;
+  }
+
+
+  public LandDtoSpec frKurzform(String frKurzform) {
+    
+    this.frKurzform = frKurzform;
+    return this;
+  }
+
+   /**
+   * Get frKurzform
+   * @return frKurzform
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FR_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFrKurzform() {
+    return frKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FR_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFrKurzform(String frKurzform) {
+    this.frKurzform = frKurzform;
+  }
+
+
+  public LandDtoSpec itKurzform(String itKurzform) {
+    
+    this.itKurzform = itKurzform;
+    return this;
+  }
+
+   /**
+   * Get itKurzform
+   * @return itKurzform
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getItKurzform() {
+    return itKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setItKurzform(String itKurzform) {
+    this.itKurzform = itKurzform;
+  }
+
+
+  public LandDtoSpec enKurzform(String enKurzform) {
+    
+    this.enKurzform = enKurzform;
+    return this;
+  }
+
+   /**
+   * Get enKurzform
+   * @return enKurzform
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getEnKurzform() {
+    return enKurzform;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEnKurzform(String enKurzform) {
+    this.enKurzform = enKurzform;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    LandDtoSpec land = (LandDtoSpec) o;
+    return Objects.equals(this.id, land.id) &&
+        Objects.equals(this.laendercodeBfs, land.laendercodeBfs) &&
+        Objects.equals(this.isEuEfta, land.isEuEfta) &&
+        Objects.equals(this.iso2code, land.iso2code) &&
+        Objects.equals(this.iso3code, land.iso3code) &&
+        Objects.equals(this.eintragGueltig, land.eintragGueltig) &&
+        Objects.equals(this.deKurzform, land.deKurzform) &&
+        Objects.equals(this.frKurzform, land.frKurzform) &&
+        Objects.equals(this.itKurzform, land.itKurzform) &&
+        Objects.equals(this.enKurzform, land.enKurzform);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, laendercodeBfs, isEuEfta, iso2code, iso3code, eintragGueltig, deKurzform, frKurzform, itKurzform, enKurzform);
   }
 
   @Override
   public String toString() {
-    return String.valueOf(value);
+    StringBuilder sb = new StringBuilder();
+    sb.append("class LandDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    laendercodeBfs: ").append(toIndentedString(laendercodeBfs)).append("\n");
+    sb.append("    isEuEfta: ").append(toIndentedString(isEuEfta)).append("\n");
+    sb.append("    iso2code: ").append(toIndentedString(iso2code)).append("\n");
+    sb.append("    iso3code: ").append(toIndentedString(iso3code)).append("\n");
+    sb.append("    eintragGueltig: ").append(toIndentedString(eintragGueltig)).append("\n");
+    sb.append("    deKurzform: ").append(toIndentedString(deKurzform)).append("\n");
+    sb.append("    frKurzform: ").append(toIndentedString(frKurzform)).append("\n");
+    sb.append("    itKurzform: ").append(toIndentedString(itKurzform)).append("\n");
+    sb.append("    enKurzform: ").append(toIndentedString(enKurzform)).append("\n");
+    sb.append("}");
+    return sb.toString();
   }
 
-  @JsonCreator
-  public static LandDtoSpec fromValue(String value) {
-    for (LandDtoSpec b : LandDtoSpec.values()) {
-      if (b.value.equals(value)) {
-        return b;
-      }
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
     }
-    throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    return o.toString().replace("\n", "\n    ");
   }
+
 }
 

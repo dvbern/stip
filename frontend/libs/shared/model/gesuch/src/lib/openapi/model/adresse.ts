@@ -9,17 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Land } from './land';
 
 export interface Adresse { 
     id?: string;
-    land: Land;
+    landId: string;
     coAdresse?: string;
     strasse: string;
     hausnummer?: string;
     plz: string;
     ort: string;
 }
-
-
 

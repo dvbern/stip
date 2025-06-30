@@ -19,18 +19,19 @@ package ch.dvbern.stip.api.verfuegung.service;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.type.Kanton;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -56,18 +57,42 @@ public class VerfuegungService {
     private final VerfuegungMapper verfuegungMapper;
 
     @Transactional
-    public void createVerfuegung(final UUID gesuchId, final UUID stipDecisionId) {
-        final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
-
+    public void createVerfuegung(final UUID gesuchId) {
         final Verfuegung verfuegung = new Verfuegung();
-        verfuegung.setStipDecision(stipDecision.getStipDecision());
         verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
         verfuegungRepository.persistAndFlush(verfuegung);
     }
 
     @Transactional
-    public void createNegtativeVerfuegung(final Gesuch gesuch, final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(gesuch, verfuegung.getStipDecision());
+    public void createNegativeVerfuegung(final UUID gesuchId, final UUID stipDecisionId, Optional<Kanton> kanton) {
+        final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
+
+        final Verfuegung verfuegung = new Verfuegung();
+        verfuegung.setStipDecision(stipDecision.getStipDecision());
+        verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
+        verfuegung.setKanton(kanton.orElse(null));
+        verfuegungRepository.persistAndFlush(verfuegung);
+    }
+
+    @Transactional
+    public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(verfuegung);
+
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
+        );
+        verfuegung.setObjectId(objectId);
+        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+    }
+
+    @Transactional
+    public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),

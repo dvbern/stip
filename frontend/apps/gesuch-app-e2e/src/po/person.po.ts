@@ -3,6 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
+  fillLandAutoComplete,
   selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -21,7 +22,7 @@ export class PersonPO {
     email: Locator;
     telefonnummer: Locator;
     geburtsdatum: Locator;
-    nationalitaetSelect: Locator;
+    nationalitaetAutocomplete: Locator;
     heimatort: Locator;
     vorumundschaftCheckbox: Locator;
     zivilstandSelect: Locator;
@@ -60,7 +61,7 @@ export class PersonPO {
       email: page.getByTestId('form-person-email'),
       telefonnummer: page.getByTestId('form-person-telefonnummer'),
       geburtsdatum: page.getByTestId('form-person-geburtsdatum'),
-      nationalitaetSelect: page.getByTestId('form-person-nationalitaet'),
+      nationalitaetAutocomplete: page.getByTestId('form-person-nationalitaet'),
       heimatort: page.getByTestId('form-person-heimatort'),
       vorumundschaftCheckbox: page.getByTestId('form-person-vorumundschaft'),
       zivilstandSelect: page.getByTestId('form-person-zivilstand'),
@@ -110,8 +111,12 @@ export class PersonPO {
 
     // Scroll a bit down to prevent flaky tests
     await this.elems.sozialhilfeBeitraegeRadio.scrollIntoViewIfNeeded();
-    await this.elems.nationalitaetSelect.click();
-    await this.elems.page.getByTestId(person.nationalitaet).first().click();
+
+    await fillLandAutoComplete(
+      this.elems.nationalitaetAutocomplete,
+      person.nationalitaetId,
+      this.elems.page,
+    );
 
     await this.elems.heimatort.fill(person.heimatort ?? 'Bern');
 

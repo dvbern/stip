@@ -17,8 +17,8 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -26,17 +26,23 @@ import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.service.LandService;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
 
 @Singleton
@@ -44,64 +50,135 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SozialdienstSeeding extends Seeder {
     private final RolleService rolleService;
+    private final ObjectMapper objectMapper;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final ConfigService configService;
-    private final TenantService tenantService;
+    private final LandService landService;
+    private final TenantConfigService tenantConfigService;
 
-    private static final Map<String, String> KEYCLOAK_IDS = Map.of(
-        MandantIdentifier.BERN.getIdentifier(),
-        "7d115bec-5ccd-4643-8bb3-da8999017369",
-        MandantIdentifier.DV.getIdentifier(),
-        "8297d66c-eb83-47e7-bdf6-e494eac6aa67"
-    );
+    @Builder
+    @Jacksonized
+    @Data
+    static class EnvSozialdienstBenutzer {
+        private String email;
+        private String keycloakId;
+    }
+
+    @Data
+    @Jacksonized
+    @Builder
+    static class EnvSozialdienst {
+        String name;
+        EnvSozialdienstBenutzer admin;
+        List<EnvSozialdienstBenutzer> mitarbeiter;
+    }
 
     @Override
     public int getPriority() {
+        // Ensure this number is smaller than dependent data (i.e. Land)
         return 300;
     }
 
     @Override
     protected void seed() {
         LOG.info("Seeding Sozialdienste");
-        final var keycloakId = KEYCLOAK_IDS.get(tenantService.getCurrentTenantIdentifier());
-        final var existingAdmin = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
-
-        if (existingAdmin.isPresent()) {
+        var envSeeding = tenantConfigService.getSozialdienstSeeding().orElse(null);
+        if (envSeeding == null) {
             return;
         }
 
-        final var rollen = rolleService.mapOrCreateRoles(Set.of(OidcConstants.ROLE_SOZIALDIENST_ADMIN));
-        final var sozialdienstAdmin = new SozialdienstBenutzer();
-        sozialdienstAdmin
-            .setEmail("sozialdienst-mitarbeiter-admin@mailbucket.dvbern.ch")
-            .setVorname("soz-admin")
-            .setNachname("e2e")
-            .setKeycloakId(keycloakId)
-            .setRollen(rollen)
-            .setBenutzerStatus(BenutzerStatus.AKTIV)
-            .setBenutzereinstellungen(
-                new Benutzereinstellungen()
-                    .setDigitaleKommunikation(true)
-            );
+        // Ensure that the JSON string does not start or end with quotation marks
+        // Else Jackson interprets it as one long string and fails to deserialize to an array
+        if (envSeeding.charAt(0) == '"') {
+            envSeeding = envSeeding.substring(1);
+        }
+
+        if (envSeeding.charAt(envSeeding.length() - 1) == '"') {
+            envSeeding = envSeeding.substring(0, envSeeding.length() - 1);
+        }
+
+        final EnvSozialdienst[] sozialdienste;
+
+        try {
+            sozialdienste = objectMapper.readValue(envSeeding, EnvSozialdienst[].class);
+        } catch (JsonProcessingException e) {
+            LOG.error("Failed to parse sozialdienst for seeding", e);
+            return;
+        }
+
+        final var switzerland = landService.getLandByBfsCode(WellKnownLand.CHE.getLaendercodeBfs()).orElseThrow();
+        Arrays.stream(sozialdienste).forEach(sozialdienst -> {
+            try {
+                seedSozialdienst(sozialdienst, switzerland);
+            } catch (Exception e) {
+                LOG.error("Unable to seed Sozialdienst: {}", sozialdienst.name);
+            }
+        });
+    }
+
+    void seedSozialdienst(final EnvSozialdienst envSozialdienst, final Land land) {
+        if (sozialdienstRepository.find("name", envSozialdienst.getName()).singleResultOptional().isPresent()) {
+            LOG.error("Already present: {}", envSozialdienst.name);
+            return;
+        }
+
         final var adresse = new Adresse()
             .setStrasse("Nussbaumstrasse")
             .setHausnummer("21")
             .setOrt("Bern")
             .setPlz("3000")
-            .setLand(Land.CH);
+            .setLand(land);
         var zahlungsverbindung = new Zahlungsverbindung()
             .setAdresse(adresse)
             .setIban("CH3908704016075473007")
             .setVorname("Max")
             .setNachname("Muster");
         final var sozialdienst = new Sozialdienst()
-            .setName("[E2E] Sozialdienst")
-            .setZahlungsverbindung(zahlungsverbindung)
-            .setSozialdienstAdmin(sozialdienstAdmin);
+            .setName(envSozialdienst.getName())
+            .setZahlungsverbindung(zahlungsverbindung);
 
-        sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdmin);
+        final var admin = seedSozialdienstBenutzer(
+            envSozialdienst.getAdmin(),
+            OidcConstants.ROLE_SOZIALDIENST_ADMIN,
+            OidcConstants.ROLE_SOZIALDIENST_MITARBEITER
+        );
+        sozialdienst.setSozialdienstAdmin(admin);
+        sozialdienst.getSozialdienstBenutzers().add(admin);
+
+        for (final var envMitarbeiter : envSozialdienst.getMitarbeiter()) {
+            final var mitarbeiter =
+                seedSozialdienstBenutzer(envMitarbeiter, OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
+            sozialdienst.getSozialdienstBenutzers().add(mitarbeiter);
+        }
+
         sozialdienstRepository.persistAndFlush(sozialdienst);
+    }
+
+    SozialdienstBenutzer seedSozialdienstBenutzer(EnvSozialdienstBenutzer envSozialdienstBenutzer, String... roles) {
+        final var existingUser =
+            sozialdienstBenutzerRepository.findByKeycloakId(envSozialdienstBenutzer.getKeycloakId());
+
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        }
+
+        final var rollen = rolleService.mapOrCreateRoles(Set.of(roles));
+        final var sozialdienstBenutzer = new SozialdienstBenutzer();
+        sozialdienstBenutzer
+            .setEmail(envSozialdienstBenutzer.getEmail())
+            .setVorname("Vorname")
+            .setNachname("Nachname")
+            .setKeycloakId(envSozialdienstBenutzer.getKeycloakId())
+            .setRollen(rollen)
+            .setBenutzerStatus(BenutzerStatus.AKTIV)
+            .setBenutzereinstellungen(
+                new Benutzereinstellungen()
+                    .setDigitaleKommunikation(true)
+            );
+
+        sozialdienstBenutzerRepository.persistAndFlush(sozialdienstBenutzer);
+        return sozialdienstBenutzer;
     }
 
     @Override

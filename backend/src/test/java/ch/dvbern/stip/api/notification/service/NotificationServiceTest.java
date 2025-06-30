@@ -72,12 +72,7 @@ class NotificationServiceTest {
         GesuchValidatorService gesuchValidatorServiceMock = Mockito.mock(GesuchValidatorService.class);
         Mockito.doNothing()
             .when(gesuchValidatorServiceMock)
-            .validateGesuchForStatus(
-                any(Gesuch.class),
-                any(
-                    Gesuchstatus.class
-                )
-            );
+            .validateGesuchForTransition(any(), any());
         QuarkusMock.installMockForType(gesuchValidatorServiceMock, GesuchValidatorService.class);
 
         notificationRepositoryMock = Mockito.mock(NotificationRepository.class);

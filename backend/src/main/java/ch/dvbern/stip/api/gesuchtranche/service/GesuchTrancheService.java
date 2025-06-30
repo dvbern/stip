@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
@@ -34,6 +33,7 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -67,7 +67,6 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -83,7 +82,6 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -99,6 +97,7 @@ public class GesuchTrancheService {
     private final RequiredDokumentService requiredDokumentService;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final DokumentRepository dokumentRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
@@ -108,7 +107,6 @@ public class GesuchTrancheService {
     private final FamiliensituationMapper familiensituationMapper;
     private final PartnerMapper partnerMapper;
     private final ElternMapper elternMapper;
-    private final AuszahlungMapper auszahlungMapper;
     private final EinnahmenKostenMapper einnahmenKostenMapper;
     private final LebenslaufItemMapper lebenslaufItemMapper;
     private final GeschwisterMapper geschwisterMapper;
@@ -122,9 +120,7 @@ public class GesuchTrancheService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
-    private final Validator validator;
     private final BenutzerService benutzerService;
-    private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -292,10 +288,9 @@ public class GesuchTrancheService {
                 dokumente.forEach(
                     dokument -> {
                         final var dokumentObjectId =
-                            gesuchDokumentService.deleteDokument(dokument.getId(), formular.getTranche().getId());
+                            gesuchDokumentService.deleteDokument(dokument.getId());
                         if (
-                            dokument.getGesuchDokumente().isEmpty()
-                            && (gesuchDokumentService.canDeleteDokumentFromS3(dokument, formular.getTranche()))
+                            gesuchDokumentService.canDeleteDokumentFromS3(dokument, formular.getTranche())
                         ) {
                             dokumentObjectIds.add(dokumentObjectId);
                         }
@@ -411,6 +406,8 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
+        notificationService.createAenderungEingereichtNotification(aenderung.getGesuch());
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
     }
 
     @Transactional
@@ -496,7 +493,7 @@ public class GesuchTrancheService {
 
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
 
-        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
+        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
         return gesuchTrancheMapper.toDto(aenderung);
     }
@@ -509,7 +506,7 @@ public class GesuchTrancheService {
             .forEach(
                 gesuchDokument -> {
                     gesuchDokument.getDokumente()
-                        .forEach(dokument -> dokument.getGesuchDokumente().remove(gesuchDokument));
+                        .forEach(dokumentRepository::delete);
                     gesuchDokumentRepository.deleteById(gesuchDokument.getId());
                 }
             );
@@ -587,7 +584,7 @@ public class GesuchTrancheService {
             .forEach(
                 gesuchDokument -> {
                     gesuchDokument.getDokumente()
-                        .forEach(dokument -> dokument.getGesuchDokumente().remove(gesuchDokument));
+                        .forEach(dokumentRepository::delete);
                     gesuchDokumentRepository.deleteById(gesuchDokument.getId());
                 }
             );
