@@ -46,7 +46,11 @@ export class SharedPatternDocumentUploadEntryComponent {
 
   isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();
-    return isUploadable(dokumentModel, permissions);
+    return isUploadable(
+      dokumentModel,
+      permissions,
+      this.uploadViewSig().isSachbearbeitungApp,
+    );
   });
   checkForRemove$ = new EventEmitter<void>();
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();

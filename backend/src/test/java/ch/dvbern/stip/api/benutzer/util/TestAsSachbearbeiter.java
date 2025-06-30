@@ -57,6 +57,8 @@ import io.quarkus.test.security.oidc.OidcSecurity;
         OidcPermissions.SB_GESUCH_UPDATE,
         OidcPermissions.CUSTOM_DOKUMENT_DELETE,
         OidcPermissions.BUCHSTABENZUWEISUNG_READ,
+        OidcPermissions.DOKUMENT_UPLOAD_SB,
+        OidcPermissions.DOKUMENT_DELETE_SB,
         "default-roles-bern"
     }
 )

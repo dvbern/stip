@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -44,6 +45,7 @@ public class GesuchTrancheTruncateService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final GesuchDokumentService gesuchDokumentService;
+    private final DokumentRepository dokumentRepository;
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
