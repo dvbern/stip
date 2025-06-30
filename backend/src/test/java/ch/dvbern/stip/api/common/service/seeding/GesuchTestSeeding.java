@@ -22,6 +22,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -131,7 +132,7 @@ public class GesuchTestSeeding extends Seeder {
 
     private static LocalDate getGesuchsperiodeStart() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isBefore(LocalDate.of(jahr, 7, 1))) {
+        if (DateUtil.beforeOrEqual(LocalDate.now(), LocalDate.of(jahr, 7, 1))) {
             jahr -= 1;
         }
 
@@ -140,7 +141,7 @@ public class GesuchTestSeeding extends Seeder {
 
     private static LocalDate getGesuchsperiodeStopp() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isAfter(LocalDate.of(jahr, 6, 30))) {
+        if (DateUtil.beforeOrEqual(LocalDate.now(), LocalDate.of(jahr, 6, 30))) {
             jahr += 1;
         }
 
