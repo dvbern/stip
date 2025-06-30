@@ -24,6 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -330,6 +331,7 @@ class GesuchTrancheServiceTruncateTest {
             .when(mockGesuchDokumentKommentarService)
             .copyKommentareFromTrancheToTranche(Mockito.any(), Mockito.any());
         final var mockGesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
+        final var mockDokumentRepository = Mockito.mock(DokumentRepository.class);
         Mockito.doNothing()
             .when(mockGesuchDokumentService)
             .removeGesuchDokument(Mockito.any(UUID.class));
@@ -337,7 +339,8 @@ class GesuchTrancheServiceTruncateTest {
         return new GesuchTrancheTruncateService(
             mockTrancheRepo,
             mockGesuchDokumentKommentarService,
-            mockGesuchDokumentService
+            mockGesuchDokumentService,
+            mockDokumentRepository
         );
     }
 

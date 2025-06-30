@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -56,9 +57,13 @@ class GesuchAuthorizerCanDeleteTest {
     private GesuchTrancheAuthorizer trancheAuthorizer;
     private BenutzerService benutzerService;
     private GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private GesuchStatusService gesuchStatusService;
 
     @BeforeEach
     void setUp() {
+        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+
         UUID currentBenutzerId = UUID.randomUUID();
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
@@ -104,7 +109,7 @@ class GesuchAuthorizerCanDeleteTest {
         authorizer = new GesuchAuthorizer(
             benutzerService,
             gesuchRepository,
-            null,
+            gesuchStatusService,
             fallRepository,
             sozialdienstService,
             null,

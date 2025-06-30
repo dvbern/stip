@@ -982,7 +982,7 @@ public class GesuchService {
 
         final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
 
-        dokumentIdsNowButNotThen.forEach(uuid -> gesuchDokumentService.deleteDokument(uuid, toTranche.getId()));
+        dokumentIdsNowButNotThen.forEach(gesuchDokumentService::deleteDokument);
 
         // Remove doks that existed then (i.e. past) but not now
         toTranche

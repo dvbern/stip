@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -74,10 +75,11 @@ class DokumentHistoryResourceTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec returnedGesuch;
@@ -101,6 +103,8 @@ class DokumentHistoryResourceTest {
     @Order(2)
     void fillGesuch() {
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
+
         fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setWohnkosten(0);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setWohnkosten(0);
@@ -365,9 +369,23 @@ class DokumentHistoryResourceTest {
     @TestAsGesuchsteller
     @Order(11)
     void dokumenteHochladen() {
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
+        final var gesuchDokumenteToUpload = TestUtil.executeAndExtract(
+            DokumenteToUploadDtoSpec.class,
+            gesuchTrancheApiSpec.getDocumentsToUploadGS().gesuchTrancheIdPath(gesuchTrancheId)
+        );
+
+        if (gesuchDokumenteToUpload.getRequired() == null) {
+            assertThat("API returned null required documents", false);
+        }
+
+        final var file = TestUtil.getTestPng();
+        for (final var dokType : gesuchDokumenteToUpload.getRequired()) {
+            TestUtil.uploadFile(
+                dokumentApiSpec,
+                gesuch.getGesuchTrancheToWorkWith().getId(),
+                dokType,
+                file
+            );
         }
 
         gesuchTrancheApiSpec.getGesuchDokumenteGS()

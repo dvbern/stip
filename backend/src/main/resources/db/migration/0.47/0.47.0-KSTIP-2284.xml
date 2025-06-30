@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1750750925255-13">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument_dokument_aud" constraintName="FK4lnknbjgs1b72lprdn73redne"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-14">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument_dokument" constraintName="FK_dokument_gesuch_dokumente"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-15">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument_dokument" constraintName="FK_gesuch_dokument_dokumente"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-2">
+        <addColumn tableName="dokument">
+            <column name="gesuch_dokument_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-3">
+        <addColumn tableName="dokument_aud">
+            <column name="gesuch_dokument_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-12">
+        <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="dokument" constraintName="FK_dokument_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-16">
+        <dropTable tableName="gesuch_dokument_dokument"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1750750925255-17">
+        <dropTable tableName="gesuch_dokument_dokument_aud"/>
+    </changeSet>
+</databaseChangeLog>
