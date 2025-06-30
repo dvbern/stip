@@ -1,6 +1,6 @@
 @let view = dokumenteViewSig();
 @if (view.loading) {
-  <dv-shared-ui-loading class="opacity-loading-spinner tw-absolute" type="icon"></dv-shared-ui-loading>
+  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
 
 <h3>
