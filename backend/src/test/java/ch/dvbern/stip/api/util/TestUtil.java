@@ -185,6 +185,16 @@ public class TestUtil {
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
+    public static void fillGesuchWithAuszahlung(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final AuszahlungApiSpec auszahlungApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, getAuszahlungUpdateDtoSpec());
+    }
+
     public static void fillGesuch(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,
@@ -219,7 +229,6 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
-
     }
 
     public static AuszahlungUpdateDtoSpec getAuszahlungUpdateDtoSpec() {
@@ -412,7 +421,7 @@ public class TestUtil {
         DokumentTypDtoSpec dokTyp,
         File file
     ) {
-        dokumentApiSpec.createDokument()
+        dokumentApiSpec.createDokumentGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
@@ -429,7 +438,7 @@ public class TestUtil {
         UUID customDokumentTypId,
         File file
     ) {
-        dokumentApiSpec.uploadCustomGesuchDokument()
+        dokumentApiSpec.uploadCustomGesuchDokumentGS()
             .customDokumentTypIdPath(customDokumentTypId)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");

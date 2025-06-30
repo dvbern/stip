@@ -193,7 +193,7 @@ public class GesuchTrancheCopyUtil {
     ) {
         final var newTranche = copyTrancheExceptGesuchDokuments(original, createDateRange, comment);
         newTranche.setGesuchDokuments(
-            GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
+            GesuchDokumentCopyUtil.copyGesuchDokumenteDokuments(
                 newTranche,
                 original.getGesuchDokuments()
             )

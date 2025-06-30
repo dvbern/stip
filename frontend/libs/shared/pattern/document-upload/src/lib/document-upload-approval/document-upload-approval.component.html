@@ -4,7 +4,7 @@
   @if (dokumentRd | rdIsPendingWithoutCache: { ignoreInitial: true }) {
     <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
   } @else {
-    @if (dokumentRd.data?.id) {
+    @if (dokumentRd.data?.id && dokumentRd.data?.dokumente?.length) {
       <div class="d-flex justify-content-between">
         @switch (dokumentRd.data?.status) {
           @case ('AUSSTEHEND') {

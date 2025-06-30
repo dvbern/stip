@@ -52,18 +52,23 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_MODIFY_DOKUMENT = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB
+        )
+    );
+
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS
         )
     );
 
-    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
-        Collections.unmodifiableSet(
-            EnumSet.of(
-                IN_BEARBEITUNG_SB
-            )
-        );
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB
+        )
+    );
 
     public static final Set<Gesuchstatus> JURIST_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(

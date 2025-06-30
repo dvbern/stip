@@ -29,10 +29,10 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -72,8 +72,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
-        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
@@ -91,7 +90,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @TestAsGesuchsteller
     @Order(2)
     void setupFillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test

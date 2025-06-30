@@ -140,7 +140,7 @@ public class GesuchTestSeeding extends Seeder {
 
     private static LocalDate getGesuchsperiodeStopp() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isAfter(LocalDate.of(jahr, 6, 30))) {
+        if (LocalDate.now().isBefore(LocalDate.of(jahr, 6, 30))) {
             jahr += 1;
         }
 

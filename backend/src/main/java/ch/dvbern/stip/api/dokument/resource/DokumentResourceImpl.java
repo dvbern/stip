@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
@@ -63,9 +62,11 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_CRE
 import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.CUSTOM_DOKUMENT_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_ABLEHNEN_AKZEPTIEREN;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_DELETE_GS;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_DELETE_SB;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_UPLOAD;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_UPLOAD_GS;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DOKUMENT_UPLOAD_SB;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT_UPLOAD;
@@ -88,7 +89,6 @@ public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
-    private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
@@ -100,18 +100,18 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Blocking
     @Override
-    @RolesAllowed(DOKUMENT_UPLOAD)
-    public Uni<Response> uploadCustomGesuchDokument(UUID customDokumentTypId, FileUpload fileUpload) {
-        customGesuchDokumentTypAuthorizer.canUpload(customDokumentTypId);
-        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
+    @RolesAllowed(DOKUMENT_UPLOAD_GS)
+    public Uni<Response> createDokumentGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+        gesuchDokumentAuthorizer.canGsUploadDokument(gesuchTrancheId, dokumentTyp);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
     @Blocking
     @Override
-    @RolesAllowed(DOKUMENT_UPLOAD)
-    public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
-        dokumentAuthorizer.canUpload(gesuchTrancheId);
-        gesuchDokumentAuthorizer.canCreateGesuchDokument(gesuchTrancheId);
+    @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    public Uni<Response> createDokumentSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+        gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
+        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
@@ -136,6 +136,23 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Blocking
     @Override
+    @RolesAllowed(DOKUMENT_UPLOAD_GS)
+    public Uni<Response> uploadCustomGesuchDokumentGS(UUID customDokumentTypId, FileUpload fileUpload) {
+        customGesuchDokumentTypAuthorizer.assertGsCanModifyCustomDokumentOfTranche(customDokumentTypId);
+        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
+    }
+
+    @Blocking
+    @Override
+    @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    public Uni<Response> uploadCustomGesuchDokumentSB(UUID customDokumentTypId, FileUpload fileUpload) {
+        customGesuchDokumentTypAuthorizer.assertSbCanModifyCustomDokumentOfTranche(customDokumentTypId);
+        gesuchDokumentService.setGesuchDokumentOfCustomDokumentTypToAusstehend(customDokumentTypId);
+        return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, fileUpload);
+    }
+
+    @Blocking
+    @Override
     @RolesAllowed(UNTERSCHRIFTENBLATT_DELETE)
     public void deleteUnterschriftenblattDokument(UUID dokumentId) {
         unterschriftenblattAuthorizer.canDeleteUnterschriftenblattDokument(dokumentId);
@@ -152,9 +169,18 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Blocking
     @Override
-    @RolesAllowed(DOKUMENT_DELETE)
-    public void deleteDokument(UUID dokumentId) {
-        gesuchDokumentAuthorizer.canDeleteDokument(dokumentId);
+    @RolesAllowed(DOKUMENT_DELETE_GS)
+    public void deleteDokumentGS(UUID dokumentId) {
+        gesuchDokumentAuthorizer.assertGsCanDeleteDokumentOfTranche(dokumentId);
+        gesuchDokumentService.removeDokument(dokumentId);
+    }
+
+    @Blocking
+    @Override
+    @RolesAllowed(DOKUMENT_DELETE_SB)
+    public void deleteDokumentSB(UUID dokumentId) {
+        gesuchDokumentAuthorizer.assertSbCanDeleteDokumentOfTranche(dokumentId);
+        gesuchDokumentService.setGesuchDokumentOfDokumentToAusstehend(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 

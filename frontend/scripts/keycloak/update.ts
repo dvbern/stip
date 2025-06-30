@@ -223,8 +223,9 @@ async function syncRoles(realm: string) {
     );
   }
 
+  let deleted = false;
   if (superfluousPermissions.length > 0) {
-    await deleteSuperfluousPermissions(
+    deleted = await deleteSuperfluousPermissions(
       kcAdminClient,
       realm,
       superfluousPermissions,
@@ -262,7 +263,7 @@ async function syncRoles(realm: string) {
   return {
     addedMissingCompositeRoles: missingCompositeRoles,
     addedMissingRoles: missingRoles,
-    removedSuperfluousPermissions: superfluousPermissions,
+    removedSuperfluousPermissions: deleted ? superfluousPermissions : [],
     addedMissingPermissions: missingPermissions,
     repairedCompositeRoles,
   };

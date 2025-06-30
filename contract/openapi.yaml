@@ -850,6 +850,38 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumentForTypGS
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Historisiert für den GS
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createDokumentGS
+      summary: Upload a file for the given Typ to the Tranche; GS Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -882,7 +914,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumentForTypSB
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
-  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     post:
       requestBody:
         content:
@@ -912,8 +943,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createDokument
-      summary: Upload a file for the given Typ to the Tranche
+      operationId: createDokumentSB
+      summary: Upload a file for the given Typ to the Tranche; SB Endpoint
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/customGesuchDokument/sb/{customDokumentTypId}':
     get:
@@ -942,6 +973,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getCustomGesuchDokumentForTypSB
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: uploadCustomGesuchDokumentSB
+      summary: Upload a file for the given customDokumentTyp to the Tranche; SB Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/customGesuchDokument/gs/{customDokumentTypId}':
     get:
       tags:
@@ -969,7 +1027,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getCustomGesuchDokumentForTypGS
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den GS
-  '/customGesuchDokument/{customDokumentTypId}':
     post:
       requestBody:
         content:
@@ -994,8 +1051,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: uploadCustomGesuchDokument
-      summary: Upload a file for the given customDokumentTyp to the Tranche
+      operationId: uploadCustomGesuchDokumentGS
+      summary: Upload a file for the given customDokumentTyp to the Tranche; GS Endpoint
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchDokument/{gesuchDokumentId}/kommentare/gs':
     get:
@@ -2430,6 +2487,52 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/dokument/gs/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteDokumentGS
+      summary: deletes a Dokument; GS Endpoint
+  '/dokument/sb/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteDokumentSB
+      summary: deletes a Dokument; SB Endpoint
   '/dokument/{dokumentId}':
     parameters:
       - name: dokumentId
@@ -2460,22 +2563,6 @@ paths:
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
-    delete:
-      tags:
-        - Dokument
-      responses:
-        '200':
-          description: Dokument deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteDokument
-      summary: deletes a Dokument
   '/gesuch/{gesuchTrancheId}/einreichen/gs':
     patch:
       tags:
