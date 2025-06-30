@@ -158,6 +158,7 @@ public class PdfService {
 
             header(gesuch, document, leftMargin, translator);
             section.render(verfuegung, document, leftMargin, translator);
+            footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -278,6 +279,86 @@ public class PdfService {
         headerTable.setMarginBottom(SPACING_MEDIUM);
 
         document.add(headerTable);
+    }
+
+    private void footer(final Gesuch gesuch, final Document document, float leftMargin, TL translator) {
+        final float[] columnWidths = { 50, 50 };
+        final Table signatureTable = createTable(columnWidths, leftMargin);
+        signatureTable.setMarginTop(SPACING_MEDIUM);
+        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+        signatureTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.footer.gruesse"),
+                translator.translate("stip.pdf.header.abteilung")
+            )
+        );
+        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+
+        final var sachbearbeiterBenutzer =
+            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
+
+        final var locale = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+
+        signatureTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
+                sachbearbeiterBenutzer.getFunktion(locale)
+            )
+        );
+        signatureTable.setMarginBottom(SPACING_MEDIUM);
+        document.add(signatureTable);
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
+            )
+        );
+
+        final List<String> kopieAn = new ArrayList<>();
+
+        steuerdatenTabBerechnungsService
+            .calculateTabs(gesuch.getLatestGesuchTranche().getGesuchFormular().getFamiliensituation())
+            .forEach(steuerdatenTyp -> {
+                switch (steuerdatenTyp) {
+                    case FAMILIE -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.eltern"));
+                    case MUTTER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.mutter"));
+                    case VATER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.vater"));
+                }
+            });
+
+        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            kopieAn.add(gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName());
+        }
+
+        if (!kopieAn.isEmpty()) {
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "- ",
+                    translator.translate("stip.pdf.footer.kopieAn") + " ",
+                    String.join(", ", kopieAn)
+                )
+            );
+        }
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
@@ -648,74 +729,6 @@ public class PdfService {
                 translator.translate("stip.pdf.verfuegung.glueckWunsch")
             ).setPaddingTop(SPACING_SMALL)
         );
-
-        final float[] columnWidths = { 50, 50 };
-        final Table signatureTable = createTable(columnWidths, leftMargin);
-        signatureTable.setMarginTop(SPACING_MEDIUM);
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.footer.gruesse"),
-                translator.translate("stip.pdf.header.abteilung")
-            )
-        );
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                sachbearbeiterBenutzer.getFunktion(locale)
-            )
-        );
-        signatureTable.setMarginBottom(SPACING_MEDIUM);
-        document.add(signatureTable);
-
-        document.add(
-            createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
-            )
-        );
-
-        final List<String> kopieAn = new ArrayList<>();
-
-        steuerdatenTabBerechnungsService
-            .calculateTabs(gesuch.getLatestGesuchTranche().getGesuchFormular().getFamiliensituation())
-            .forEach(steuerdatenTyp -> {
-                switch (steuerdatenTyp) {
-                    case FAMILIE -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.eltern"));
-                    case MUTTER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.mutter"));
-                    case VATER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.vater"));
-                }
-            });
-
-        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-            kopieAn.add(gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName());
-        }
-
-        if (!kopieAn.isEmpty()) {
-            document.add(
-                createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.pdf.footer.kopieAn") + " ",
-                    String.join(", ", kopieAn)
-                )
-            );
-        }
     }
 
     private Image getLogo(PdfDocument pdfDocument, String pathToSvg) throws IOException {

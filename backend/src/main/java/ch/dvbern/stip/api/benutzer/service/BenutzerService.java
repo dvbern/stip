@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.benutzer.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -147,11 +148,14 @@ public class BenutzerService {
             newSachbearbeiter.setKeycloakId(jsonWebToken.getSubject());
             newSachbearbeiter.setVorname(jsonWebToken.getClaim(Claims.given_name));
             newSachbearbeiter.setNachname(jsonWebToken.getClaim(Claims.family_name));
+            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? "aab@be.ch"
+                : jsonWebToken.getClaim(Claims.email);
+            newSachbearbeiter.setEmail(email);
             newSachbearbeiter.setBenutzerStatus(BenutzerStatus.AKTIV);
             newSachbearbeiter.setBenutzereinstellungen(new Benutzereinstellungen());
             newSachbearbeiter.setFunktionDe("Sachbearbeiter");
             newSachbearbeiter.setFunktionFr("Sachbearbeiter");
-            newSachbearbeiter.setTelefonnummer("0000000000");
+            newSachbearbeiter.setTelefonnummer("+41 31 633 83 40");
 
             sachbearbeiterRepository.persistAndFlush(newSachbearbeiter);
             newBenutzer = newSachbearbeiter;
