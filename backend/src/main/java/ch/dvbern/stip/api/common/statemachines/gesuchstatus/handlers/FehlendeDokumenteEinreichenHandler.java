@@ -22,7 +22,8 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.StateMachineConfig;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,18 +35,17 @@ public class FehlendeDokumenteEinreichenHandler implements GesuchStatusStateChan
     private final NotificationService notificationService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getTrigger() == GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG
-        && transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
-        && transition.getDestination() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
         notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuch);
+    }
+
+    public static TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> trigger(
+        StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config
+    ) {
+        return config.setTriggerParameters(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuch.class);
     }
 }

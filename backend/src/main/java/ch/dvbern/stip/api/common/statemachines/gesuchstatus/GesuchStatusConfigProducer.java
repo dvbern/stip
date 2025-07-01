@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -79,6 +80,11 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
+            .onEntryFrom(
+                FehlendeDokumenteEinreichenHandler.trigger(config),
+                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            )
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH
@@ -145,24 +151,20 @@ public class GesuchStatusConfigProducer {
             }
 
             state.addEntryAction(GesuchStatusConfigProducer::logTransition);
-            state.addEntryAction(
-                (transition, args) -> {
-                    final var gesuch = extractGesuchFromStateMachineArgs(args);
-                    final var handler = getHandlerFor(handlers, transition);
-                    if (handler.isPresent()) {
-                        handler.get().handle(transition, gesuch);
-                    } else {
-                        LOG.info(
-                            "No handler exists for Gesuchstatus transition {} -> {}",
-                            transition.getSource(),
-                            transition.getDestination()
-                        );
-                    }
-                }
-            );
         }
 
         return config;
+    }
+
+    @SuppressWarnings("unchecked")
+	private <T extends GesuchStatusStateChangeHandler> Optional<T> selectHandlerForClass(
+        final Instance<GesuchStatusStateChangeHandler> handlers,
+        final Class<T> forClass
+    ) {
+        return handlers.stream()
+            .filter(handler -> handler.getClass().equals(forClass))
+            .map(handler -> (T) handler)
+            .findFirst();
     }
 
     private void logTransition(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
@@ -185,12 +187,5 @@ public class GesuchStatusConfigProducer {
             );
         }
         return (Gesuch) args[0];
-    }
-
-    private Optional<GesuchStatusStateChangeHandler> getHandlerFor(
-        Instance<GesuchStatusStateChangeHandler> handlers,
-        final Transition<Gesuchstatus, GesuchStatusChangeEvent> transition
-    ) {
-        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
     }
 }
