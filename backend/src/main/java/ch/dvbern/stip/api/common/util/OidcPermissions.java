@@ -40,6 +40,9 @@ public final class OidcPermissions {
     public static final String AUSBILDUNG_UPDATE = "V0_AUSBILDUNG_UPDATE";
     public static final String AUSBILDUNG_DELETE = "V0_AUSBILDUNG_DELETE";
 
+    public static final String BENUTZER_GET = "V0_BENUTZER_GET";
+    public static final String BENUTZER_CREATE = "V0_BENUTZER_CREATE";
+    public static final String BENUTZER_UPDATE = "V0_BENUTZER_UPDATE";
     public static final String BENUTZER_DELETE = "V0_BENUTZER_DELETE";
 
     public static final String BUCHHALTUNG_ENTRY_CREATE = "V0_BUCHHALTUNG_ENTRY_CREATE";

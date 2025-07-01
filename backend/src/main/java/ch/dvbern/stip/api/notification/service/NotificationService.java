@@ -18,11 +18,9 @@
 package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -32,7 +30,6 @@ import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,23 +40,11 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class NotificationService {
-    private final BenutzerService benutzerService;
     private final NotificationRepository notificationRepository;
-    private final NotificationMapper notificationMapper;
 
     @Transactional
     public void deleteNotificationsForGesuch(final UUID gesuchId) {
         notificationRepository.deleteAllForGesuch(gesuchId);
-    }
-
-    @Transactional
-    public List<NotificationDto> getNotificationsForCurrentUser() {
-        return getNotificationsForUser(benutzerService.getCurrentBenutzer().getId());
-    }
-
-    @Transactional
-    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
-        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
     }
 
     @Transactional
