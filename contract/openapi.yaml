@@ -3186,7 +3186,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Sachbearbeiter'
           description: returns all Sachbearbeiters (Sb/Jurist/Sb-Admin)
         '401':
@@ -4048,9 +4048,21 @@ components:
       example: '2022-03-10'
     Niederlassungsstatus:
       enum:
-        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - SAISONARBEITEND_A
         - AUFENTHALTSBEWILLIGUNG_B
-        - FLUECHTLING
+        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - GRENZGAENGIG_G
+        - KURZAUFENTHALT_L
+        - ASYLSUCHEND_N
+        - SCHUTZBEDUERFTIG_S
+        - MELDEPFLICHTIG
+        - DIPLOMATISCHE_FUNKTION
+        - INTERNATIONALE_FUNKTION
+        - NICHT_ZUGETEILT
       type: string
     Zivilstand:
       enum:
@@ -5088,7 +5100,7 @@ components:
             type: string
         redirectUri:
           type: string
-      allOf: 
+      allOf:
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzer:
       type: object
