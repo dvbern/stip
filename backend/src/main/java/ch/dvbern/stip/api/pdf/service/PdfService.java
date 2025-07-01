@@ -82,6 +82,8 @@ public class PdfService {
     private static final String FONT_PATH = "/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
 
+    private static final String LOGO_PATH = "/images/bern_logo.svg";
+
     private static final int SPACING_BIG = 30;
     private static final int SPACING_MEDIUM = 20;
     private static final int SPACING_SMALL = 10;
@@ -151,18 +153,16 @@ public class PdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
+            final Image logo = getLogo(pdfDocument, LOGO_PATH);
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-                final Image deckblattLogo = getLogo(pdfDocument, "/images/bern_logo.svg");
-                deckblattLogo.setMarginLeft(-25);
-                deckblattLogo.setMarginTop(-35);
-                document.add(deckblattLogo);
-                header(gesuch, document, leftMargin, translator, true); // This method adds page breaks
+                document.add(logo);
+                header(gesuch, document, leftMargin, translator, true);
             }
 
-            final Image mainDocumentLogo = getLogo(pdfDocument, "/images/bern_logo.svg");
-            mainDocumentLogo.setMarginLeft(-25);
-            mainDocumentLogo.setMarginTop(-35);
-            document.add(mainDocumentLogo);
+            document.add(logo);
             header(gesuch, document, leftMargin, translator, false);
 
             // Add the main content and footer sections.
