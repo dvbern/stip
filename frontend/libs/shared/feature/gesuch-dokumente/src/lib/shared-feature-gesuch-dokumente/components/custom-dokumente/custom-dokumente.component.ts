@@ -69,6 +69,7 @@ export class CustomDokumenteComponent {
     isSachbearbeitungApp: boolean;
     requiredDocumentTypes: CustomDokumentTyp[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
+    loading: boolean;
     readonly: boolean;
   }>();
   canCreateCustomDokumentTypSig = input.required<boolean>();
@@ -120,7 +121,6 @@ export class CustomDokumenteComponent {
         canDelete,
         kommentare: [],
         kommentarePending: false,
-        showUpload: hasFiles || !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -137,7 +137,6 @@ export class CustomDokumenteComponent {
       ...requiredDocumentTypes.map((dokumentTyp) => ({
         dokumentTyp: dokumentTyp,
         canDelete: false,
-        showUpload: !isSachbearbeitungApp,
         gesuchDokument: undefined,
         kommentare: [],
         kommentarePending: false,

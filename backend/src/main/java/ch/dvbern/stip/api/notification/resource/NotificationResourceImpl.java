@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.notification.resource;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.NotificationAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -37,12 +37,12 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIFICATION_READ;
 @Validated
 public class NotificationResourceImpl implements NotificationResource {
     private final NotificationAuthorizer notificationAuthorizer;
-    private final NotificationService notificationService;
+    private final BenutzerService benutzerService;
 
     @Override
     @RolesAllowed(NOTIFICATION_READ)
     public List<NotificationDto> getNotificationsForCurrentUser() {
         notificationAuthorizer.canGetForCurrentUser();
-        return notificationService.getNotificationsForCurrentUser();
+        return benutzerService.getNotificationsForCurrentUser();
     }
 }

@@ -1,6 +1,8 @@
 @let view = dokumenteViewSig();
 @let expandedRowId = expandedRowSig();
-
+@if (view.loading) {
+  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+}
 <div class="tw-flex tw-items-center tw-justify-between">
   <h3>
     {{ 'shared.dokumente.table.title.requiredDocuments' | translate }}
@@ -71,7 +73,7 @@
       </th>
       <td class="tw-text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         @if (dokument.formStep.routes; as routes) {
-          <a [routerLink]="routes">
+          <a [routerLink]="routes" (click)="$event.stopPropagation()">
             {{ dokument.formStep.translationKey | translate }}
           </a>
         }

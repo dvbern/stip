@@ -481,21 +481,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           formControl: this.form.controls.niederlassungsstatus,
           visible: false,
           disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
+          resetOnInvisible: false,
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.heimatort,
           visible: false,
           disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
+          resetOnInvisible: false,
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.vormundschaft,
           visible: false,
           disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
+          resetOnInvisible: false,
         });
       }
       // Any other nationality was selected

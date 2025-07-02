@@ -158,25 +158,6 @@ class SozialdienstResourceImplTest {
         checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
 
-    @Order(99)
-    @TestAsAdmin
-    @Test
-    void deleteSozialdienst() {
-        apiSpec.deleteSozialdienst()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
-        apiSpec.getSozialdienst()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.NOT_FOUND.getStatusCode());
-    }
-
     private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getId());
         assertNotNull(dtoSpec.getName());

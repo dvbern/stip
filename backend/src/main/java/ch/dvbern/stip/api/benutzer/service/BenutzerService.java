@@ -17,22 +17,30 @@
 
 package ch.dvbern.stip.api.benutzer.service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.notification.repo.NotificationRepository;
+import ch.dvbern.stip.api.notification.service.NotificationMapper;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
+import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -51,15 +59,48 @@ public class BenutzerService {
     private final JsonWebToken jsonWebToken;
 
     private final BenutzerMapper benutzerMapper;
+    private final NotificationMapper notificationMapper;
 
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
     private final BenutzerRepository benutzerRepository;
+    private final SachbearbeiterRepository sachbearbeiterRepository;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private final NotificationRepository notificationRepository;
     private final RolleService rolleService;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
 
     private final ZuordnungRepository zuordnungRepository;
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForCurrentUser() {
+        return getNotificationsForUser(getCurrentBenutzer().getId());
+    }
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
+        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
+    }
+
+    private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
+        final var benutzerOpt = benutzerRepository.findByKeycloakId(keycloakId);
+        if (benutzerOpt.isPresent()) {
+            return benutzerOpt.get();
+        }
+
+        final var sozBenutzerOpt = sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
+        if (sozBenutzerOpt.isPresent()) {
+            return sozBenutzerOpt.get();
+        }
+
+        final var sachbearbeiterBenutzerOpt = sachbearbeiterRepository.findByKeycloakId(keycloakId);
+        if (sachbearbeiterBenutzerOpt.isPresent()) {
+            return sachbearbeiterBenutzerOpt.get();
+        }
+
+        throw new NotFoundException("Benutzer not found");
+    }
 
     @Transactional
     public Benutzer getCurrentBenutzer() {
@@ -69,9 +110,7 @@ public class BenutzerService {
             throw AppFailureMessage.missingSubject().create();
         }
 
-        return benutzerRepository
-            .findByKeycloakId(keycloakId)
-            .orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        return getBenutzerByKeycloakId(keycloakId);
     }
 
     @Transactional
@@ -81,10 +120,13 @@ public class BenutzerService {
         if (keycloakId == null) {
             throw AppFailureMessage.missingSubject().create();
         }
+        Benutzer benutzer = null;
+        try {
+            benutzer = getBenutzerByKeycloakId(keycloakId);
+        } catch (NotFoundException e) {
+            benutzer = createBenutzerFromJWT();
+        }
 
-        Benutzer benutzer = benutzerRepository
-            .findByKeycloakId(keycloakId)
-            .orElseGet(this::createBenutzerFromJWT);
         benutzer = updateBenutzerTypFromJWT(benutzer);
         benutzerRepository.persistAndFlush(benutzer);
 
@@ -100,24 +142,44 @@ public class BenutzerService {
 
     @Transactional
     public Benutzer createBenutzerFromJWT() {
-        Benutzer newBenutzer = new Benutzer();
-        newBenutzer.setKeycloakId(jsonWebToken.getSubject());
-        newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
-        newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
-        newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
-        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
+        Benutzer newBenutzer;
+        if (!Collections.disjoint(identity.getRoles(), OidcConstants.POSSIBLE_SB_ROLES)) {
+            Sachbearbeiter newSachbearbeiter = new Sachbearbeiter();
+            newSachbearbeiter.setKeycloakId(jsonWebToken.getSubject());
+            newSachbearbeiter.setVorname(jsonWebToken.getClaim(Claims.given_name));
+            newSachbearbeiter.setNachname(jsonWebToken.getClaim(Claims.family_name));
+            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? "aab@be.ch"
+                : jsonWebToken.getClaim(Claims.email);
+            newSachbearbeiter.setEmail(email);
+            newSachbearbeiter.setBenutzerStatus(BenutzerStatus.AKTIV);
+            newSachbearbeiter.setBenutzereinstellungen(new Benutzereinstellungen());
+            newSachbearbeiter.setFunktionDe("Sachbearbeiter");
+            newSachbearbeiter.setFunktionFr("Sachbearbeiter");
+            newSachbearbeiter.setTelefonnummer("+41 31 633 83 40");
 
-        benutzerRepository.persistAndFlush(newBenutzer);
+            sachbearbeiterRepository.persistAndFlush(newSachbearbeiter);
+            newBenutzer = newSachbearbeiter;
+        } else {
+            newBenutzer = new Benutzer();
+            newBenutzer.setKeycloakId(jsonWebToken.getSubject());
+            newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
+            newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
+            newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
+            newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
+
+            benutzerRepository.persistAndFlush(newBenutzer);
+        }
+
         return newBenutzer;
     }
 
     public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
-        final var benutzers = benutzerRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
+        final var sachbearbeiters = sachbearbeiterRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
         final var sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository
-            .findForBenutzers(benutzers.stream().map(AbstractEntity::getId).toList())
+            .findForBenutzers(sachbearbeiters.stream().map(AbstractEntity::getId).toList())
             .collect(Collectors.toMap(stammdaten -> stammdaten.getBenutzer().getId(), stammdaten -> stammdaten));
 
-        return benutzers
+        return sachbearbeiters
             .stream()
             .map(benutzer -> {
                 var szs = sachbearbeiterZuordnungStammdaten.get(benutzer.getId());
@@ -139,14 +201,14 @@ public class BenutzerService {
 
     @Transactional
     public void createOrUpdateSachbearbeiterStammdaten(
-        UUID benutzerId,
+        UUID sachbearbeiterId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto
     ) {
-        Benutzer benutzer = benutzerRepository.requireById(benutzerId);
+        Sachbearbeiter sachbearbeiter = sachbearbeiterRepository.requireById(sachbearbeiterId);
         SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten =
-            sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId)
+            sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(sachbearbeiterId)
                 .orElse(new SachbearbeiterZuordnungStammdaten());
-        sachbearbeiterZuordnungStammdaten.setBenutzer(benutzer);
+        sachbearbeiterZuordnungStammdaten.setBenutzer(sachbearbeiter);
         sachbearbeiterZuordnungStammdatenMapper.partialUpdate(
             sachbearbeiterZuordnungStammdatenDto,
             sachbearbeiterZuordnungStammdaten

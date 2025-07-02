@@ -31,7 +31,7 @@ public class GesuchDokumentCopyUtil {
      * Copies the given {@link GesuchDokument}e and sets the {@link GesuchDokument#dokumente} to the same reference
      * as the dokumente in the respective entry in the source
      */
-    public List<GesuchDokument> copyGesuchDokumenteWithDokumentReferences(
+    public List<GesuchDokument> copyGesuchDokumenteDokuments(
         final GesuchTranche targetTranche,
         final List<GesuchDokument> toCopy
     ) {
@@ -44,8 +44,7 @@ public class GesuchDokumentCopyUtil {
                 copy.setCustomDokumentTyp(copyCustomDokumentTyp(original.getCustomDokumentTyp(), copy));
             }
             copy.setStatus(original.getStatus());
-            original.getDokumente().forEach(copy::addDokument);
-
+            copyDokumente(copy, original.getDokumente());
             return copy;
         }).toList();
     }
@@ -67,13 +66,6 @@ public class GesuchDokumentCopyUtil {
         return copy;
     }
 
-    public void copyValues(final Dokument source, final Dokument target) {
-        target.setFilepath(source.getFilepath());
-        target.setFilename(source.getFilename());
-        target.setFilesize(source.getFilesize());
-        target.setObjectId(source.getObjectId());
-    }
-
     public void copyValues(
         final GesuchDokument source,
         final GesuchDokument target,
@@ -86,5 +78,25 @@ public class GesuchDokumentCopyUtil {
         if (source.getCustomDokumentTyp() != null) {
             target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp(), target));
         }
+    }
+
+    public List<Dokument> copyDokumente(final GesuchDokument targetGesuchDokument, List<Dokument> toCopy) {
+        return toCopy.stream()
+            .map(
+                dokument -> {
+                    final var copy = new Dokument();
+                    targetGesuchDokument.addDokument(copy);
+                    copyValues(dokument, copy);
+                    return copy;
+                }
+            )
+            .toList();
+    }
+
+    public void copyValues(final Dokument source, final Dokument target) {
+        target.setFilepath(source.getFilepath());
+        target.setFilename(source.getFilename());
+        target.setFilesize(source.getFilesize());
+        target.setObjectId(source.getObjectId());
     }
 }

@@ -18,6 +18,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createAdditionalDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
@@ -27,6 +28,7 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     TranslatePipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
+    SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './additional-dokumente.component.html',
@@ -40,6 +42,7 @@ export class AdditionalDokumenteComponent {
     unterschriftenblaetter: UnterschriftenblattDokument[];
     permissions: PermissionMap;
     readonly: boolean;
+    loading: boolean;
     requiredDocumentTypes: UnterschriftenblattDokumentTyp[];
   }>();
 

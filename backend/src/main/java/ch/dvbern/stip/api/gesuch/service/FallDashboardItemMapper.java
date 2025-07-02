@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
@@ -30,7 +30,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class, uses = AusbildungDashboardItemMapper.class)
 public abstract class FallDashboardItemMapper {
     @Inject
-    NotificationService notificationService;
+    BenutzerService benutzerService;
 
     @Mapping(source = "ausbildungs", target = "ausbildungDashboardItems")
     @Mapping(source = ".", target = "fall")
@@ -41,7 +41,7 @@ public abstract class FallDashboardItemMapper {
         final Fall entity,
         @MappingTarget final FallDashboardItemDto dto
     ) {
-        dto.setNotifications(notificationService.getNotificationsForUser(entity.getGesuchsteller().getId()));
+        dto.setNotifications(benutzerService.getNotificationsForUser(entity.getGesuchsteller().getId()));
     }
 
 }

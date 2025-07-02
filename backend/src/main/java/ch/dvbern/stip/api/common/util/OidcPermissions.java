@@ -40,6 +40,9 @@ public final class OidcPermissions {
     public static final String AUSBILDUNG_UPDATE = "V0_AUSBILDUNG_UPDATE";
     public static final String AUSBILDUNG_DELETE = "V0_AUSBILDUNG_DELETE";
 
+    public static final String BENUTZER_GET = "V0_BENUTZER_GET";
+    public static final String BENUTZER_CREATE = "V0_BENUTZER_CREATE";
+    public static final String BENUTZER_UPDATE = "V0_BENUTZER_UPDATE";
     public static final String BENUTZER_DELETE = "V0_BENUTZER_DELETE";
 
     public static final String BUCHHALTUNG_ENTRY_CREATE = "V0_BUCHHALTUNG_ENTRY_CREATE";
@@ -55,8 +58,10 @@ public final class OidcPermissions {
 
     public static final String DOKUMENT_ABLEHNEN_AKZEPTIEREN = "V0_DOKUMENT_ABLEHNEN_AKZEPTIEREN";
     public static final String DOKUMENT_READ = "V0_DOKUMENT_READ";
-    public static final String DOKUMENT_UPLOAD = "V0_DOKUMENT_UPLOAD";
-    public static final String DOKUMENT_DELETE = "V0_DOKUMENT_DELETE";
+    public static final String DOKUMENT_UPLOAD_GS = "V0_DOKUMENT_UPLOAD_GS";
+    public static final String DOKUMENT_DELETE_GS = "V0_DOKUMENT_DELETE_GS";
+    public static final String DOKUMENT_UPLOAD_SB = "V0_DOKUMENT_UPLOAD_SB";
+    public static final String DOKUMENT_DELETE_SB = "V0_DOKUMENT_DELETE_SB";
 
     public static final String FALL_CREATE = "V0_FALL_CREATE";
     public static final String FALL_READ = "V0_FALL_READ";

@@ -73,7 +73,7 @@ public class GesuchTestSeeding extends Seeder {
         final var jahr = LocalDate.now().getYear();
         final var start = getGesuchsperiodeStart();
         final var stopp = getGesuchsperiodeStopp();
-        TestConstants.GUELTIGKEIT_PERIODE_23_24 = new DateRange(start, stopp);
+        TestConstants.GUELTIGKEIT_PERIODE_CURRENT = new DateRange(start, stopp);
 
         return new Gesuchsperiode()
             .setGesuchsjahr(gesuchsjahr)
@@ -140,7 +140,7 @@ public class GesuchTestSeeding extends Seeder {
 
     private static LocalDate getGesuchsperiodeStopp() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isAfter(LocalDate.of(jahr, 6, 30))) {
+        if (!LocalDate.now().isBefore(LocalDate.of(jahr, 7, 1))) {
             jahr += 1;
         }
 

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,9 +19,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { SharedModelRoleList } from '@dv/shared/model/benutzer';
+import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
-import { compareById } from '@dv/shared/model/type-util';
+import { getCurrentUrl } from '@dv/shared/model/router';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -31,6 +31,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 
 @Component({
   imports: [
@@ -55,22 +56,28 @@ export class BenutzeDetailComponent implements OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
+  private document = inject(DOCUMENT);
   private route = inject(ActivatedRoute);
 
+  availableRoles = BENUTZER_ROLES;
   store = inject(BenutzerverwaltungStore);
   form = this.formBuilder.group({
-    name: [<string | null>null, [Validators.required]],
+    nachname: [<string | null>null, [Validators.required]],
     vorname: [<string | null>null, [Validators.required]],
     email: [
       <string | null>null,
       [Validators.required, Validators.pattern(PATTERN_EMAIL)],
     ],
-    roles: [<SharedModelRoleList>[], [Validators.required]],
+    telefonnummer: [
+      <string | null>null,
+      [Validators.required, sharedUtilValidatorTelefonNummer()],
+    ],
+    funktionDe: [<string | null>null, [Validators.required]],
+    funktionFr: [<string | null>null, [Validators.required]],
+    sachbearbeiterRollen: [<BenutzerRole[]>[], [Validators.required]],
   });
 
   constructor() {
-    this.store.loadAvailableRoles$();
-
     effect(() => {
       const id = this.idSig();
 
@@ -83,58 +90,52 @@ export class BenutzeDetailComponent implements OnDestroy {
     });
 
     effect(() => {
-      const benutzer = this.store.benutzer().data;
+      const { roles, ...benutzer } = this.store.benutzer().data ?? {};
       if (benutzer) {
         this.form.patchValue({
-          name: benutzer.lastName,
-          vorname: benutzer.firstName,
-          email: benutzer.email,
-          roles: benutzer.roles,
+          ...benutzer,
+          sachbearbeiterRollen: roles?.raw,
         });
       }
     });
   }
 
-  compareById = compareById;
+  ngOnDestroy() {
+    this.store.resetBenutzer();
+  }
 
   handleSubmit() {
     if (this.idSig()) {
       this.update();
     } else {
-      this.save();
+      this.create();
     }
   }
 
-  update() {
+  private update() {
     const id = this.idSig();
 
     if (!id || this.form.invalid) {
       return;
     }
 
-    const values = convertTempFormToRealValues(this.form, ['name', 'vorname']);
+    const values = convertTempFormToRealValues(this.form);
     this.store.updateBenutzer$({
-      user: {
-        lastName: values.name,
-        firstName: values.vorname,
-        username: this.store.benutzer().data?.username,
-        id,
-      },
-      roles: values.roles,
+      userId: id,
+      user: values,
     });
   }
 
-  save() {
+  private create() {
     if (this.form.invalid) {
       return;
     }
-    const values = convertTempFormToRealValues(this.form, [
-      'email',
-      'name',
-      'vorname',
-    ]);
+    const values = convertTempFormToRealValues(this.form);
     this.store.registerUser$({
-      ...values,
+      user: {
+        ...values,
+        redirectUri: getCurrentUrl(this.document),
+      },
       onAfterSave: (userId) => {
         this.router.navigate(['..', 'edit', userId], {
           relativeTo: this.route,
@@ -147,9 +148,5 @@ export class BenutzeDetailComponent implements OnDestroy {
   trimEmail() {
     const email = this.form.controls.email;
     email.setValue(email.value?.trim() ?? null);
-  }
-
-  ngOnDestroy() {
-    this.store.resetBenutzer();
   }
 }

@@ -21,12 +21,15 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.authorization.BenutzerAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import jakarta.annotation.security.PermitAll;
@@ -35,7 +38,10 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BENUTZER_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.BENUTZER_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BENUTZER_GET;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BENUTZER_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG_UPDATE;
@@ -46,6 +52,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG
 public class BenutzerResourceImpl implements BenutzerResource {
     private final BenutzerAuthorizer benutzerAuthorizer;
     private final BenutzerService benutzerService;
+    private final SachbearbeiterService sachbearbeiterService;
     private final SachbearbeiterZuordnungStammdatenWorker worker;
     private final TenantService tenantService;
 
@@ -98,5 +105,43 @@ public class BenutzerResourceImpl implements BenutzerResource {
     public BenutzerDto prepareCurrentBenutzer() {
         benutzerAuthorizer.canPrepare();
         return benutzerService.getOrCreateAndUpdateCurrentBenutzer();
+    }
+
+    @Override
+    @RolesAllowed(BENUTZER_GET)
+    public SachbearbeiterDto getSachbearbeiterForManagement(UUID sachbearbeiterId) {
+        benutzerAuthorizer.canGetSachbearbeiters();
+        return sachbearbeiterService.getSachbearbeiterDto(sachbearbeiterId);
+    }
+
+    @Override
+    @RolesAllowed(BENUTZER_GET)
+    public List<SachbearbeiterDto> getSachbearbeitersForManagement() {
+        benutzerAuthorizer.canGetSachbearbeiters();
+        return sachbearbeiterService.getSachbearbeiterDtoList();
+    }
+
+    @Override
+    @RolesAllowed(BENUTZER_CREATE)
+    public SachbearbeiterDto createSachbearbeiter(SachbearbeiterUpdateDto sachbearbeiterUpdateDto) {
+        benutzerAuthorizer.canCreateSachbearbeiter();
+        return sachbearbeiterService.createSachbearbeiter(sachbearbeiterUpdateDto);
+    }
+
+    @Override
+    @RolesAllowed(BENUTZER_UPDATE)
+    public SachbearbeiterDto updateSachbearbeiter(
+        UUID sachbearbeiterId,
+        SachbearbeiterUpdateDto sachbearbeiterUpdateDto
+    ) {
+        benutzerAuthorizer.canUpdateSachbearbeiter();
+        return sachbearbeiterService.updateSachbearbeiter(sachbearbeiterId, sachbearbeiterUpdateDto);
+    }
+
+    @Override
+    @RolesAllowed(BENUTZER_DELETE)
+    public void deleteSachbearbeiter(UUID sachbearbeiterId) {
+        benutzerAuthorizer.canDeleteSachbearbeiter();
+        sachbearbeiterService.deleteSachbearbeiter(sachbearbeiterId);
     }
 }

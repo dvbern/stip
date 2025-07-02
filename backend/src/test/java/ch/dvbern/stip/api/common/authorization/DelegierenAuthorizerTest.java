@@ -68,7 +68,7 @@ class DelegierenAuthorizerTest {
         sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
 
         delegierenAuthorizer = new DelegierenAuthorizer(
-            benutzerService, sozialdienstBenutzerService, fallRepository, delegierungRepository, sozialdienstService,
+            benutzerService, fallRepository, delegierungRepository, sozialdienstService,
             sozialdienstBenutzerRepository
         );
 

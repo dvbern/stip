@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,7 @@ import org.mockito.Mockito;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class GesuchAuthorizerCanUpdatenachfristTest {
@@ -42,18 +44,21 @@ class GesuchAuthorizerCanUpdatenachfristTest {
 
     private BenutzerService benutzerService;
     private GesuchRepository gesuchRepository;
+    private GesuchStatusService gesuchStatusService;
 
     @BeforeEach
     void setUp() {
         gesuch = new Gesuch();
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         benutzerService = Mockito.mock(BenutzerService.class);
+        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         when(gesuchRepository.requireById(Mockito.any())).thenReturn(gesuch);
         authorizer =
             new GesuchAuthorizer(
                 benutzerService,
                 gesuchRepository,
-                null,
+                gesuchStatusService,
                 null,
                 null,
                 null,
@@ -63,7 +68,8 @@ class GesuchAuthorizerCanUpdatenachfristTest {
 
     @Test
     void canUpdateNachfristShouldFailAsSB() {
-        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
+        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(
+				OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var id = UUID.randomUUID();
         assertThrows(ForbiddenException.class, () -> {
@@ -73,7 +79,8 @@ class GesuchAuthorizerCanUpdatenachfristTest {
 
     @Test
     void canUpdateNachfristShouldSuccess() {
-        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER))));
+        when(benutzerService.getCurrentBenutzer()).thenReturn(new Benutzer().setRollen(Set.of(new Rolle().setKeycloakIdentifier(
+				OidcConstants.ROLE_SACHBEARBEITER))));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         final var id = UUID.randomUUID();
         assertDoesNotThrow(() -> {
