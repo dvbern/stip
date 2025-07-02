@@ -351,6 +351,9 @@ public class SapService {
         final var gesuchsWithPendingSapActions = gesuchRepository.findGesuchWithPendingSapAction().toList();
         for (var gesuch : gesuchsWithPendingSapActions) {
             try {
+                LOG.info(
+                    String.format("processPendingCreateBusinessPartnerActions: for gesuchId: %s", gesuch.getId())
+                );
                 processPendingSapAction(gesuch.getId());
             } catch (Exception e) {
                 LOG.error(
