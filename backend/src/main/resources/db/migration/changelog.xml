@@ -169,9 +169,11 @@
   <include file="/db/migration/0.47/0.47.0-KSTIP-2290.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-1968-1.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-2280.xml" />
-  <include file="/db/migration/0.47/0.47.0-KSTIP-2416.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-2284.xml" />
   <include file="/db/migration/0.47/0.47.0-KSTIP-2021.xml" />
   <!--  </editor-fold> -->
-
+  
+  <!-- <editor-fold desc="v0.48" defaultstate="collapsed" -->
+  <include file="/db/migration/0.48/0.48.0-KSTIP-2416.xml" />
+  <!--  </editor-fold> -->
 </databaseChangeLog>
