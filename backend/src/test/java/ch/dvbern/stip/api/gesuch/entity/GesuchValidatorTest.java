@@ -178,7 +178,7 @@ class GesuchValidatorTest {
     @CsvSource(
         {
             // niederlassungsstatus | zustaendigerKanton
-            "FLUECHTLING,",
+            "VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,",
             "NIEDERLASSUNGSBEWILLIGUNG_C,BERN"
         }
     )

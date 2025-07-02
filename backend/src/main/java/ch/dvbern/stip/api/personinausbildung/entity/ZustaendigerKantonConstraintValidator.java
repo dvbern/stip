@@ -27,7 +27,10 @@ public class ZustaendigerKantonConstraintValidator
     implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
     @Override
     public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() != Niederlassungsstatus.FLUECHTLING)
+        if (
+            !Niederlassungsstatus.ALL_VORLAEUFIG_AUFGENOMMEN_MIT_FLUECHTLINGSSTATUS
+                .contains(pia.getNiederlassungsstatus())
+        )
             return Objects.isNull(pia.getZustaendigerKanton());
         return Objects.nonNull(pia.getZustaendigerKanton());
     }

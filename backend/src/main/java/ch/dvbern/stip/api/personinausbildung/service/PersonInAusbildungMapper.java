@@ -74,7 +74,18 @@ extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
 
         resetFieldIf(
             () -> Objects.nonNull(newFormular.getNiederlassungsstatus()) &&
-            Boolean.FALSE.equals(newFormular.getNiederlassungsstatus().equals(Niederlassungsstatus.FLUECHTLING)),
+            (Boolean.FALSE.equals(
+                newFormular.getNiederlassungsstatus()
+                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
+            ) ||
+            Boolean.FALSE.equals(
+                newFormular.getNiederlassungsstatus()
+                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON)
+            ) ||
+            Boolean.FALSE.equals(
+                newFormular.getNiederlassungsstatus()
+                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
+            )),
             "Reset zustaendigerKanton because niederlassungsstatus has changed",
             () -> newFormular.setZustaendigerKanton(null)
         );
