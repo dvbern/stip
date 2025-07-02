@@ -33,15 +33,7 @@ public class GesuchTrancheFehlendeDokumenteEinreichenHandler implements GesuchTr
     private final NotificationService notificationService;
 
     @Override
-    public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
-        return transition.getTrigger() == GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
-        && transition.getSource() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
-        && transition.getDestination() == GesuchTrancheStatus.UEBERPRUEFEN;
-    }
-
-    @Override
     public void handle(
-        Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         GesuchTranche gesuchTranche
     ) {
         notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuchTranche.getGesuch());

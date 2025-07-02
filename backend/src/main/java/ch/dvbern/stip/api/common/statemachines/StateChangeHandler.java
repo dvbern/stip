@@ -17,6 +17,13 @@
 
 package ch.dvbern.stip.api.common.statemachines;
 
+import jakarta.ws.rs.BadRequestException;
+
 public interface StateChangeHandler<T> {
     void handle(final T parameter);
+
+    default void illegalHandleCall() {
+        throw new BadRequestException();
+    }
+
 }

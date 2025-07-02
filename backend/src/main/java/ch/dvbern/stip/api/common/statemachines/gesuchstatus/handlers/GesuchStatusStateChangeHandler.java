@@ -17,19 +17,15 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import com.github.oxo42.stateless4j.StateMachineConfig;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+
 import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import com.github.oxo42.stateless4j.StateMachineConfig;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import jakarta.ws.rs.BadRequestException;
 
 public interface GesuchStatusStateChangeHandler extends StateChangeHandler<Gesuch> {
-    default void illegalHandleCall() {
-        throw new BadRequestException();
-    }
-
     default TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> trigger(
         StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config,
         GesuchStatusChangeEvent changeEvent

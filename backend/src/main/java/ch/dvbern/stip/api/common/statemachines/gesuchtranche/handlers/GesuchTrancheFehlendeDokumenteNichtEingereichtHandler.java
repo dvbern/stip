@@ -34,14 +34,7 @@ public class GesuchTrancheFehlendeDokumenteNichtEingereichtHandler implements Ge
     private final MailService mailService;
 
     @Override
-    public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
-        return transition.getSource() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
-        && transition.getDestination() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
-    }
-
-    @Override
     public void handle(
-        Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         GesuchTranche gesuchTranche
     ) {
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuchTranche.getGesuch());
