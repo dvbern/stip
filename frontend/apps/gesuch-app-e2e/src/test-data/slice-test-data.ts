@@ -12,6 +12,7 @@ import {
   Zahlungsverbindung,
 } from '@dv/shared/model/gesuch';
 import {
+  fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
@@ -27,7 +28,7 @@ export const ausbildung: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
+  ausbildungBegin: `${fruehlingOrHerbst()}.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };

@@ -4,6 +4,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   DeepNullable,
+  fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
@@ -19,7 +20,7 @@ export const ausbildungValues: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
+  ausbildungBegin: `${fruehlingOrHerbst()}.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };

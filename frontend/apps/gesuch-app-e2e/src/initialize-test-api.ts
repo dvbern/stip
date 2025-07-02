@@ -46,7 +46,7 @@ const setGesuchApi = async (
   zahlungsverbindungUpdate: AuszahlungUpdate,
   gesuchFormularUpdate: DeepNullable<GesuchFormularUpdate>,
 ) => {
-  const setZahlungsverbindungResponse = await apiContext.patch(
+  const setZahlungsverbindungResponse = await apiContext.post(
     `/api/v1/auszahlung/${fallId}`,
     {
       data: zahlungsverbindungUpdate,
@@ -54,6 +54,10 @@ const setGesuchApi = async (
   );
 
   if (!setZahlungsverbindungResponse.ok()) {
+    console.error(
+      `Failed to set zahlungsverbindung for fallId ${fallId}:`,
+      await setZahlungsverbindungResponse.text(),
+    );
     throw new Error('Failed to set zahlungsverbindung');
   }
 
@@ -68,6 +72,8 @@ const setGesuchApi = async (
     data: requestBody,
   });
 
-  expect(response.ok()).toBeTruthy();
+  expect(response.ok(), {
+    message: `Failed to update gesuch with id ${gesuchId}: ${await response.text()}`,
+  }).toBeTruthy();
   return response;
 };

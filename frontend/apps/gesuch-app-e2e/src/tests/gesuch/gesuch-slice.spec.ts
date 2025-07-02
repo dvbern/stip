@@ -194,12 +194,6 @@ test.describe('Neues gesuch erstellen', () => {
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
-      .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
-      .click();
-    await sbPage.getByTestId('dialog-confirm').click();
-
-    await headerNavPO.elems.aktionMenu.click();
-    await headerNavPO.elems
       .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
       .click();
 

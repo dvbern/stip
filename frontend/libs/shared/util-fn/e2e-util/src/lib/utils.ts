@@ -7,7 +7,7 @@ import {
   PlaywrightWorkerArgs,
   expect,
 } from '@playwright/test';
-import { addYears, format } from 'date-fns';
+import { addYears, format, getMonth } from 'date-fns';
 import seedRandom from 'seedrandom';
 
 import { SmallImageFile } from './files';
@@ -227,13 +227,18 @@ const ssnFormatter = (ssn: number[]) => {
 };
 
 export const thisYear = format(new Date(), 'yyyy');
-export const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
+export const fruehlingOrHerbst = () => {
+  if (getMonth(new Date()) < 6) {
+    return 1;
+  }
+  return 9;
+};
 export const specificMonthPlusYears = (month: number, years: number) =>
   `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
 export const specificYearsAgo = (years: number) =>
   format(addYears(new Date(), -years), 'yyyy');
-export const today = () => format(new Date(), 'dd.MM.yyyy');
+export const secondTrancheStart = () =>
+  `1.${fruehlingOrHerbst() + 2}.${thisYear}`;
 
 export type SetupFn = (args: {
   contexts: TestContexts;

@@ -4,7 +4,7 @@ import {
   expectInfoTitleToContainText,
   expectStepTitleToContainText,
   getE2eUrls,
-  specificMonth,
+  secondTrancheStart,
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -86,7 +86,7 @@ test.describe('Tranche erstellen', () => {
     // Tranche erfassen dialog
     await sbPage
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
-      .fill(`1.${specificMonth(1)}`);
+      .fill(secondTrancheStart());
     await sbPage
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');

@@ -5,7 +5,7 @@ import {
   expectInfoTitleToContainText,
   expectStepTitleToContainText,
   getE2eUrls,
-  today,
+  secondTrancheStart,
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -136,10 +136,9 @@ test('Aenderung erstellen', async ({ gsPage, sbPage }) => {
   await gsPage.goto(`${urls.gs}/gesuch-app-feature-cockpit`);
   await gsPage.getByTestId('cockpit-gesuch-aenderung-create').click();
 
-  await gsPage.getByTestId('form-aenderung-melden-dialog-gueltig-ab').fill(
-    // today
-    today(),
-  );
+  await gsPage
+    .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
+    .fill(secondTrancheStart());
   await gsPage
     .getByTestId('form-aenderung-melden-dialog-kommentar')
     .fill('E2E Testkommentar');
