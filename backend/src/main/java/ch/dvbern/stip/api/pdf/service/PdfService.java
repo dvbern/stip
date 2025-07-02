@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -158,6 +158,7 @@ public class PdfService {
 
             header(gesuch, document, leftMargin, translator);
             section.render(verfuegung, document, leftMargin, translator);
+            footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -172,7 +173,7 @@ public class PdfService {
 
         final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
 
-        final Benutzer sachbearbeiterBenutzer = gesuch
+        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
             .getFall()
             .getSachbearbeiterZuordnung()
@@ -224,8 +225,8 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        // TODO KSTIP-2021: implement sb email
-        final Link email = new Link("TBD: peter.muster@be.ch", PdfAction.createURI("mailto:peter.muster@be.ch"));
+        final Link email =
+            new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
@@ -234,8 +235,7 @@ public class PdfService {
             1,
             1,
             String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-            // TODO KSTIP-2021: implement sb phone number
-            "TBD: 031 300 30 30"
+            sachbearbeiterBenutzer.getTelefonnummer()
         )
             .setPaddingBottom(SPACING_BIG)
             .setPaddingTop(SPACING_MEDIUM)
@@ -279,6 +279,59 @@ public class PdfService {
         headerTable.setMarginBottom(SPACING_MEDIUM);
 
         document.add(headerTable);
+    }
+
+    private void footer(final Gesuch gesuch, final Document document, float leftMargin, TL translator) {
+        final float[] columnWidths = { 50, 50 };
+        final Table signatureTable = createTable(columnWidths, leftMargin);
+        signatureTable.setMarginTop(SPACING_MEDIUM);
+        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+        signatureTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.footer.gruesse"),
+                translator.translate("stip.pdf.header.abteilung")
+            )
+        );
+        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+
+        final var sachbearbeiterBenutzer =
+            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
+
+        final var locale = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+
+        signatureTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
+                sachbearbeiterBenutzer.getFunktion(locale)
+            )
+        );
+        signatureTable.setMarginBottom(SPACING_MEDIUM);
+        document.add(signatureTable);
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
+            )
+        );
+
+        addCopieAnParagraph(gesuch, translator, leftMargin, document);
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
@@ -588,7 +641,7 @@ public class PdfService {
             .getKorrespondenzSprache()
             .getLocale();
 
-        final Benutzer sachbearbeiterBenutzer = gesuch
+        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
             .getFall()
             .getSachbearbeiterZuordnung()
@@ -687,46 +740,6 @@ public class PdfService {
                 translator.translate("stip.pdf.verfuegung.glueckWunsch")
             ).setPaddingTop(SPACING_SMALL)
         );
-
-        final float[] columnWidths = { 50, 50 };
-        final Table signatureTable = createTable(columnWidths, leftMargin);
-        signatureTable.setMarginTop(SPACING_MEDIUM);
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.footer.gruesse"),
-                translator.translate("stip.pdf.header.abteilung")
-            )
-        );
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                // TODO KSTIP-2021: implement sb job title
-                "TBD: Sachbearbeiter"
-            )
-        );
-        signatureTable.setMarginBottom(SPACING_MEDIUM);
-        document.add(signatureTable);
-
-        document.add(
-            createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
-            )
-        );
-        addCopieAnParagraph(gesuch, translator, leftMargin, document);
     }
 
     private Image getLogo(PdfDocument pdfDocument, String pathToSvg) throws IOException {

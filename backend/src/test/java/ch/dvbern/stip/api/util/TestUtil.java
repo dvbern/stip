@@ -95,6 +95,7 @@ import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.hamcrest.Matchers;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
@@ -248,7 +249,7 @@ public class TestUtil {
             .execute(PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Matchers.oneOf(Status.OK.getStatusCode(), Status.NO_CONTENT.getStatusCode()));
 
         var stringBody = response.extract().body().asString();
         if (stringBody == null || stringBody.isEmpty()) {

@@ -61,7 +61,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Benutzer extends AbstractMandantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

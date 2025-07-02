@@ -121,7 +121,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         sozialdienstAuthorizer.canCreateSozialdienstBenutzer();
-        return sozialdienstBenutzerService.createSozialdienstBenutzer(
+        return sozialdienstBenutzerService.createSozialdienstMitarbeiterBenutzer(
             sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer(),
             sozialdienstBenutzerCreateDto
         );

@@ -94,6 +94,9 @@ export const PERMISSION_ROLE_LIST = [
   [
     ['Sachbearbeiter-Admin'],
     'Sachbearbeiter',
+    'BENUTZER_GET',
+    'BENUTZER_CREATE',
+    'BENUTZER_UPDATE',
     'BENUTZER_DELETE',
     'AUSBILDUNGSSTAETTE_READ',
     'AUSBILDUNGSSTAETTE_CREATE',

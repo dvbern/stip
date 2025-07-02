@@ -68,7 +68,11 @@ public class Sozialdienst extends AbstractMandantEntity {
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "sozialdienst_id", referencedColumnName = "id")
+    @JoinColumn(
+        name = "sozialdienst_id",
+        referencedColumnName = "id",
+        foreignKey = @ForeignKey(name = "FK_sozialdienst_benutzer_id")
+    )
     private List<SozialdienstBenutzer> sozialdienstBenutzers = new ArrayList<>();
 
     @NotNull
