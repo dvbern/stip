@@ -91,6 +91,7 @@ export class RequiredDokumenteComponent {
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
     readonly: boolean;
+    loading: boolean;
     gesuchStatus?: Gesuchstatus;
   }>();
   getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
