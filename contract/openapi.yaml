@@ -4077,13 +4077,6 @@ components:
         - INTERNATIONALE_FUNKTION
         - NICHT_ZUGETEILT
       type: string
-    NiederlassungsstatusKeinStipendienanspruch:
-      oneOf:
-        - $ref: '#/components/schemas/Niederlassungsstatus'
-      enum:
-        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
-        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
     Zivilstand:
       enum:
         - LEDIG
