@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -76,8 +76,11 @@ class GesuchResourceEinnahmenKostenTest {
             .as(GesuchWithChangesDtoSpec.class);
 
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigAb()));
+        assertThat(
+            gesuch.getGesuchTrancheToWorkWith().getGueltigBis(),
+            is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigBis())
+        );
     }
 
     @Test
