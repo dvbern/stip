@@ -17,6 +17,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class SharedUiLoadingComponent {
   @Input() type: 'spinner' | 'compact' | 'icon' = 'spinner';
+  @Input() overlay = false;
   @Input() loadingTextKey = 'shared.ui.loading.text';
 
   @HostBinding('class') class = 'd-flex';
