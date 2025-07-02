@@ -22,13 +22,9 @@ import java.util.Comparator;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -41,16 +37,10 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
     private final ConfigService configService;
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
-    private final GesuchService gesuchService;
     private final VerfuegungService verfuegungService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.VERFUEGT;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch,
             configService.getCurrentDmnMajorVersion(),

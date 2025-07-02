@@ -19,9 +19,6 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,19 +31,8 @@ public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandle
     private final GesuchService gesuchService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        final var source = transition.getSource();
-        final var handlesSource = switch (source) {
-            case IN_BEARBEITUNG_SB, FEHLENDE_DOKUMENTE -> true;
-            default -> false;
-        };
-
-        return handlesSource && transition.getDestination() == Gesuchstatus.IN_BEARBEITUNG_GS;
-    }
-
     @Transactional
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         if (gesuch.isVerfuegt()) {
             illegalHandleCall();
         }

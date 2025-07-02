@@ -17,16 +17,11 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import java.util.Set;
-
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,23 +33,9 @@ public class AenderungFehlendeDokumenteNichtEingereichtHandler implements Gesuch
     private final MailService mailService;
     private final GesuchService gesuchService;
 
-    private static final Set<GesuchStatusChangeEvent> POSSIBLE_TRIGGERS = Set.of(
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
-    );
-    private static final Set<Gesuchstatus> POSSIBLE_DESTINATIONS =
-        Set.of(Gesuchstatus.STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
-
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
-        && POSSIBLE_TRIGGERS.contains(transition.getTrigger())
-        && POSSIBLE_DESTINATIONS.contains(transition.getDestination());
-    }
-
     @Transactional
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         if (!gesuch.isVerfuegt()) {
             illegalHandleCall();
         }

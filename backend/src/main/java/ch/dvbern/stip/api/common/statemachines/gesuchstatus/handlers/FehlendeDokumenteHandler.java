@@ -20,10 +20,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -34,12 +31,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
     private final GesuchService gesuchService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.FEHLENDE_DOKUMENTE;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         gesuchService.setDefaultNachfristDokumente(gesuch);
         gesuch.getGesuchTranchen()
             .stream()

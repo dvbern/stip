@@ -18,10 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.sap.service.SapService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +30,7 @@ public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler
     private final SapService sapService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.VERSENDET
-        && transition.getDestination() == Gesuchstatus.STIPENDIENANSPRUCH;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         sapService.createInitialAuszahlungOrGetStatus(
             gesuch.getId()
         );

@@ -20,11 +20,8 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 import java.util.Comparator;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +34,7 @@ public class NegativeVerfuegungHandler implements GesuchStatusStateChangeHandler
     private final VerfuegungService verfuegungService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.NEGATIVE_VERFUEGUNG;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
         verfuegungService.createPdfForNegtativeVerfuegung(
             gesuch.getVerfuegungs()
                 .stream()
