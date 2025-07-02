@@ -81,7 +81,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   additionalDokumenteViewSig = computed(() => {
     const { allowTypes, gesuchId, permissions, trancheId, readonly } =
       this.gesuchViewSig();
-    const { dokuments, requiredDocumentTypes } =
+    const { dokuments, requiredDocumentTypes, loading } =
       this.dokumentsStore.additionalDokumenteViewSig();
 
     return {
@@ -91,6 +91,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       unterschriftenblaetter: dokuments,
       permissions,
       readonly,
+      loading,
       showList: dokuments.length > 0 || requiredDocumentTypes.length > 0,
       requiredDocumentTypes,
     };
@@ -107,7 +108,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       config: { isSachbearbeitungApp },
       gesuch,
     } = this.gesuchViewSig();
-    const { dokuments, requiredDocumentTypes } =
+    const { dokuments, requiredDocumentTypes, loading } =
       this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
 
@@ -127,6 +128,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
+      loading,
       gesuchStatus: gesuch?.gesuchStatus,
     };
   });
@@ -143,7 +145,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       config: { isSachbearbeitungApp },
     } = this.gesuchViewSig();
 
-    const { dokuments, requiredDocumentTypes } =
+    const { dokuments, requiredDocumentTypes, loading } =
       this.dokumentsStore.customDokumenteViewSig();
 
     const kommentare = this.dokumentsStore.kommentareViewSig();
@@ -160,6 +162,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
+      loading,
       gesuchStatus: gesuch?.gesuchStatus,
       showList:
         dokuments.length > 0 ||
