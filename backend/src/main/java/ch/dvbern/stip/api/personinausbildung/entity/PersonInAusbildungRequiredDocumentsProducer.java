@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -43,50 +42,52 @@ import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
 public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentsProducer {
     private final PlzService plzService;
 
-    private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap;
+    private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap1 = Map.of(
+        Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+        Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+        Niederlassungsstatus.SAISONARBEITEND_A,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
+        Niederlassungsstatus.ASYLSUCHEND_N,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N,
+        Niederlassungsstatus.GRENZGAENGIG_G,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G,
+        Niederlassungsstatus.KURZAUFENTHALT_L,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L,
+        Niederlassungsstatus.PARTNER_ERWERBSTAETIG_UND_KIND_CI,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
+    );
 
-    public PersonInAusbildungRequiredDocumentsProducer(PlzService plzService) {
-        this.plzService = plzService;
-
-        niederlassungsstatusMap = new HashMap<>();
-        niederlassungsstatusMap.putAll(
-            Map.of(
-                Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
-                Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
-                Niederlassungsstatus.SAISONARBEITEND_A,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A,
-                Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
-                Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
-                Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
-                Niederlassungsstatus.ASYLSUCHEND_N,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N,
-                Niederlassungsstatus.GRENZGAENGIG_G,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G,
-                Niederlassungsstatus.KURZAUFENTHALT_L,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L,
-                Niederlassungsstatus.PARTNER_ERWERBSTAETIG_UND_KIND_CI,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
-            )
-        );
-        niederlassungsstatusMap.putAll(
-            Map.of(
-                Niederlassungsstatus.SCHUTZBEDUERFTIG_S,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_SCHUTZBEDUERFTIG_S,
-                Niederlassungsstatus.DIPLOMATISCHE_FUNKTION,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_DIPLOMATISCHE_FUNKTION,
-                Niederlassungsstatus.INTERNATIONALE_FUNKTION,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_INTERNATIONALE_FUNKTION,
-                Niederlassungsstatus.MELDEPFLICHTIG,
-                DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_MELDEPFLICHTIG
-            )
-        );
-
-    }
+    // all combinations are too large for just 1 map
+    private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap2 = Map.of(
+        Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+        Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+        Niederlassungsstatus.SAISONARBEITEND_A,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
+        Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
+        Niederlassungsstatus.ASYLSUCHEND_N,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N,
+        Niederlassungsstatus.GRENZGAENGIG_G,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G,
+        Niederlassungsstatus.KURZAUFENTHALT_L,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L,
+        Niederlassungsstatus.PARTNER_ERWERBSTAETIG_UND_KIND_CI,
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
+    );
 
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
@@ -97,8 +98,11 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
 
         final var requiredDocs = new HashSet<DokumentTyp>();
         final var niederlassungsstatus = pia.getNiederlassungsstatus();
-        if (niederlassungsstatus != null && niederlassungsstatusMap.containsKey(niederlassungsstatus)) {
-            requiredDocs.add(niederlassungsstatusMap.get(niederlassungsstatus));
+        if (niederlassungsstatus != null && niederlassungsstatusMap1.containsKey(niederlassungsstatus)) {
+            requiredDocs.add(niederlassungsstatusMap1.get(niederlassungsstatus));
+        }
+        if (niederlassungsstatus != null && niederlassungsstatusMap2.containsKey(niederlassungsstatus)) {
+            requiredDocs.add(niederlassungsstatusMap2.get(niederlassungsstatus));
         }
 
         if (pia.isVormundschaft()) {
