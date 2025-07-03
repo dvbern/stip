@@ -264,7 +264,7 @@ class GesuchServiceTest {
         pia.setHeimatort(null);
         GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
             gesuchUpdateDto,
-            Niederlassungsstatus.ALL_VORLAEUFIG_AUFGENOMMEN_MIT_FLUECHTLINGSSTATUS.stream().findFirst().orElse(null),
+            Niederlassungsstatus.ALL_WITH_FLUECHTLINGSSTATUS.stream().findFirst().orElse(null),
             Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C
         );
 

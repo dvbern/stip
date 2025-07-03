@@ -150,11 +150,19 @@ class BernStipDeciderTest {
     void testStipendienrechtlicherWohnsitzKantonBernCheckFluechtlingBern() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
+
+        pia.setNationalitaet(LandGenerator.initIran());
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
+            .setZustaendigerKanton(ZustaendigerKanton.BERN);
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON);
+
         pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
             .setZustaendigerKanton(ZustaendigerKanton.BERN);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
 
-        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
