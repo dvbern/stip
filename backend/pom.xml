@@ -703,7 +703,7 @@
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
                     LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
-                    Bildungsstufe=ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe,
+                    Bildungsstufe=ch.dvbern.stip.api.bildungskategorieOld.type.Bildungsstufe,
                     SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
                     GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
                     NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
@@ -722,7 +722,15 @@
                     ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
                     Kanton=ch.dvbern.stip.stipdecision.type.Kanton,
                     ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
-                    GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType
+                    GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType,
+                    Ausbildungskategorie=ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie,
+                    Bildungskategorie=ch.dvbern.stip.api.ausbildung.type.Bildungskategorie,
+                    Bildungsrichtung=ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung,
+                    FerienTyp=ch.dvbern.stip.api.ausbildung.type.FerienTyp,
+                    AbschlussZusatzfrage=ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage,
+                    AbschlussSortColumn=ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn,
+                    AusbildungsstaetteSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn,
+                    AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
