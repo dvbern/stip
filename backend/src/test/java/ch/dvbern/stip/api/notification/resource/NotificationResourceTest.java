@@ -50,6 +50,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -98,6 +99,10 @@ class NotificationResourceTest {
         assertThat(
             Arrays.stream(notifications).toList().get(0).getNotificationType(),
             is(NotificationType.GESUCH_EINGEREICHT)
+        );
+        assertThat(
+            Arrays.stream(notifications).toList().get(0).getAbsender(),
+            is(notNullValue())
         );
     }
 

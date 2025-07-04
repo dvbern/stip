@@ -22,9 +22,21 @@ import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
-public interface NotificationMapper {
+public abstract class NotificationMapper {
+    @Mapping(source = ".", target = "absender", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(source = "gesuch.id", target = "gesuchId")
-    NotificationDto toDto(Notification notification);
+    public abstract NotificationDto toDto(Notification notification);
+
+    @Named("getFullNameOfSachbearbeiter")
+    String getFullNameOfSachbearbeiter(Notification notification) {
+        return notification.getGesuch()
+            .getAusbildung()
+            .getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter()
+            .getFullName();
+    }
 }

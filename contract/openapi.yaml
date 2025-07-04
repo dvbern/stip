@@ -3186,7 +3186,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Sachbearbeiter'
           description: returns all Sachbearbeiters (Sb/Jurist/Sb-Admin)
         '401':
@@ -5088,7 +5088,7 @@ components:
             type: string
         redirectUri:
           type: string
-      allOf: 
+      allOf:
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzer:
       type: object
@@ -6116,6 +6116,8 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+        absender:
+          type: string
     GesuchNotizTyp:
       enum:
         - GESUCH_NOTIZ

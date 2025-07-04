@@ -29,6 +29,7 @@ public class NotificationDto  implements Serializable {
   private @Valid String notificationText;
   private @Valid UUID contextId;
   private @Valid LocalDate timestampErstellt;
+  private @Valid String absender;
 
   /**
    **/
@@ -141,6 +142,24 @@ public class NotificationDto  implements Serializable {
     this.timestampErstellt = timestampErstellt;
   }
 
+  /**
+   **/
+  public NotificationDto absender(String absender) {
+    this.absender = absender;
+    return this;
+  }
+
+  
+  @JsonProperty("absender")
+  public String getAbsender() {
+    return absender;
+  }
+
+  @JsonProperty("absender")
+  public void setAbsender(String absender) {
+    this.absender = absender;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -156,12 +175,13 @@ public class NotificationDto  implements Serializable {
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.contextId, notification.contextId) &&
-        Objects.equals(this.timestampErstellt, notification.timestampErstellt);
+        Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
+        Objects.equals(this.absender, notification.absender);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, contextId, timestampErstellt);
+    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, contextId, timestampErstellt, absender);
   }
 
   @Override
@@ -175,6 +195,7 @@ public class NotificationDto  implements Serializable {
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
     sb.append("}");
     return sb.toString();
   }
