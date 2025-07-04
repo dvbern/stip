@@ -4,66 +4,67 @@ import {
   expectInfoTitleToContainText,
   expectStepTitleToContainText,
   getE2eUrls,
-  specificMonth,
+  secondTrancheStart,
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeTest } from '../../initialize-test';
+import { initializeMultiUserTest } from '../../initialize-test';
 import { setupGesuchWithApi } from '../../initialize-test-api';
 import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
 import {
   ausbildungValues,
+  createZahlungsverbindungUpdateFn,
   gesuchFormularUpdateFn,
 } from '../../test-data/tranchen-test-data';
 
 // initialize the test with the user type and the gesuch-data to be used
-const { test, getGesuchId, getTrancheId } = initializeTest(
-  'GESUCHSTELLER',
+const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   ausbildungValues,
-  setupGesuchWithApi(gesuchFormularUpdateFn),
+  setupGesuchWithApi(gesuchFormularUpdateFn, createZahlungsverbindungUpdateFn),
 );
 
 test.describe('Tranche erstellen', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Tranche erstellen', async ({ page, cockpit: _ }) => {
+  test('Tranche erstellen', async ({ gsPage, sbPage }) => {
     test.slow();
 
     const urls = getE2eUrls();
 
-    const requiredDokumenteResponse = page.waitForResponse(
+    const requiredDokumenteResponse = gsPage.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
     );
 
     // Upload all GS-Dokumente =================================================
-    await page.goto(
+    await gsPage.bringToFront();
+    await gsPage.goto(
       `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
-    await expectStepTitleToContainText('Dokumente', page);
+    await expectStepTitleToContainText('Dokumente', gsPage);
     await requiredDokumenteResponse;
 
-    await uploadFiles(page);
-    await page.getByTestId('button-continue').click();
+    await uploadFiles(gsPage);
+    await gsPage.getByTestId('button-continue').click();
 
     // Freigabe ===========================================================
-    await expectStepTitleToContainText('Freigabe', page);
-    await page.getByTestId('button-abschluss').click();
-    const freigabeResponse = page.waitForResponse(
-      '**/api/v1/gesuch/*/einreichen',
+    await expectStepTitleToContainText('Freigabe', gsPage);
+    await gsPage.getByTestId('button-abschluss').click();
+    const freigabeResponse = gsPage.waitForResponse(
+      '**/api/v1/gesuch/*/einreichen/gs',
     );
-    await page.getByTestId('dialog-confirm').click();
+    await gsPage.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
     // Go to Info (SB-App) ===============================================
-    await page.goto(
+    await sbPage.bringToFront();
+    await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
-    await expectInfoTitleToContainText('Tranche 1', page);
+    await expectInfoTitleToContainText('Tranche 1', sbPage);
 
-    const headerNav = new SachbearbeiterGesuchHeaderPO(page);
+    const headerNav = new SachbearbeiterGesuchHeaderPO(sbPage);
 
     await headerNav.elems.trancheMenu.click();
     await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
-    await page.locator('.cdk-overlay-backdrop').click();
+    await sbPage.locator('.cdk-overlay-backdrop').click();
 
     // set tranche to bearbeitung ===============================================
     await headerNav.elems.aktionMenu.click();
@@ -71,7 +72,7 @@ test.describe('Tranche erstellen', () => {
       .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
       .click();
     // kommentar dialog
-    await page.getByTestId('dialog-confirm').click();
+    await sbPage.getByTestId('dialog-confirm').click();
 
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems
@@ -83,22 +84,25 @@ test.describe('Tranche erstellen', () => {
     await headerNav.elems.aktionTrancheErstellen.click();
 
     // Tranche erfassen dialog
-    await page
+    await sbPage
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
-      .fill(`1.${specificMonth(1)}`);
-    await page
+      .fill(secondTrancheStart());
+    await sbPage
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');
-    await page.getByTestId('dialog-confirm').click();
-    await expect(page.locator('.mdc-snackbar')).toContainText(
+    await sbPage.getByTestId('dialog-confirm').click();
+    await expect(sbPage.locator('.mdc-snackbar')).toContainText(
       'Die Tranche wurde erfolgreich erstellt',
     );
     await headerNav.elems.trancheMenu.click();
     await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
 
     // tranche oeffnen ============================================================
-    await page.getByTestId('tranche-nav-menu-item').nth(1).click();
-    await expectInfoTitleToContainText('Tranche 2', page);
+    await sbPage.getByTestId('tranche-nav-menu-item').nth(1).click();
+    await expectInfoTitleToContainText('Tranche 2', sbPage);
+
+    sbPage.close();
+    gsPage.close();
 
     // end of test
   });

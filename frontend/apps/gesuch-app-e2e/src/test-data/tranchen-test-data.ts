@@ -1,6 +1,10 @@
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
+import {
+  AuszahlungUpdate,
+  GesuchFormularUpdate,
+} from '@dv/shared/model/gesuch';
 import {
   DeepNullable,
+  fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
@@ -16,13 +20,32 @@ export const ausbildungValues: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
+  ausbildungBegin: `${fruehlingOrHerbst()}.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };
 
+export const createZahlungsverbindungUpdateFn = (
+  landId: string,
+): AuszahlungUpdate => ({
+  auszahlungAnSozialdienst: false,
+  zahlungsverbindung: {
+    vorname: 'Severin',
+    nachname: 'Spoerri',
+    iban: 'CH1809000000150664878',
+    adresse: {
+      landId: landId,
+      strasse: 'Huberstrasse',
+      hausnummer: '5a',
+      plz: '3008',
+      ort: 'Bern',
+    },
+  },
+});
+
 export const gesuchFormularUpdateFn = (
   seed: string,
+  landId: string,
 ): DeepNullable<GesuchFormularUpdate> => ({
   personInAusbildung: {
     sozialversicherungsnummer: generateSVN(seed + '_person'),
@@ -33,7 +56,7 @@ export const gesuchFormularUpdateFn = (
       coAdresse: null,
       strasse: 'Hausmatte',
       hausnummer: '42B',
-      landId: 'Schweiz',
+      landId: landId,
       plz: '3032',
       ort: 'Hinterkappelen',
     },
@@ -43,7 +66,7 @@ export const gesuchFormularUpdateFn = (
     email: 'stip-laura-sanchez@mailbucket.dvbern.ch',
     telefonnummer: '0791231212',
     geburtsdatum: `${specificYearsAgo(20)}-01-01`,
-    nationalitaetId: 'Schweiz',
+    nationalitaetId: landId,
     heimatort: 'Bern',
     niederlassungsstatus: null,
     vormundschaft: false,

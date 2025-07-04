@@ -112,7 +112,7 @@ public class SozialdienstSeeding extends Seeder {
             try {
                 seedSozialdienst(sozialdienst, switzerland);
             } catch (Exception e) {
-                LOG.error("Unable to seed Sozialdienst: {}", sozialdienst.name);
+                LOG.error("Unable to seed Sozialdienst: {}", sozialdienst.name, e);
             }
         });
     }
