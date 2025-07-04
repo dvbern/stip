@@ -23,15 +23,15 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 
 public final class AusbildungUpdateDtoSpecModel {
     public static AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec() {
         final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_23_24 != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
         } else {
             gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
         }
@@ -49,8 +49,8 @@ public final class AusbildungUpdateDtoSpecModel {
 
     public static AusbildungUpdateDtoSpec customAusbildungUpdateDtoSpec() {
         final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_23_24 != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
         } else {
             gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
         }

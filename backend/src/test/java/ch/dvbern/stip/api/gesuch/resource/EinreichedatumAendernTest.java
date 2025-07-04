@@ -23,6 +23,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -68,6 +70,7 @@ class EinreichedatumAendernTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private LocalDate oldEinreichedatum;
     private GesuchDtoSpec gesuch;
@@ -76,8 +79,14 @@ class EinreichedatumAendernTest {
     @TestAsGesuchsteller
     @Order(1)
     void fillGesuch() {
-        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFallWithAusbildung(
+            fallApiSpec,
+            ausbildungApiSpec,
+            AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec(),
+            gesuchApiSpec
+        );
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
 
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -134,6 +143,10 @@ class EinreichedatumAendernTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET);
+
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -168,7 +181,7 @@ class EinreichedatumAendernTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(LocalDate.of(2025, 1, 31))
+                    .newEinreichedatum(gesuch.getGesuchsperiode().getGesuchsperiodeStart().plusMonths(2))
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )

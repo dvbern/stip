@@ -7,11 +7,11 @@ import {
   PlaywrightWorkerArgs,
   expect,
 } from '@playwright/test';
-import { addYears, format } from 'date-fns';
+import { addYears, format, getMonth } from 'date-fns';
 import seedRandom from 'seedrandom';
 
 import { SmallImageFile } from './files';
-import { BEARER_COOKIE } from './playwright.config.base';
+import { BEARER_COOKIE, decompress } from './playwright.config.base';
 
 /**
  * works for all steptitles exept for "info" route (tranche component)
@@ -147,12 +147,15 @@ export const createTestContexts = async (options: {
   });
 
   const cookies = await browserContext.cookies();
-  const bearer = cookies.find((c) => c.name === BEARER_COOKIE);
+  const bearerCookie = cookies.find((c) => c.name === BEARER_COOKIE);
+  const bearer = bearerCookie?.value
+    ? await decompress(bearerCookie.value)
+    : undefined;
 
   const apiContext = await playwright.request.newContext({
     baseURL,
     extraHTTPHeaders: {
-      Authorization: `Bearer ${bearer?.value}`,
+      Authorization: `Bearer ${bearer}`,
     },
   });
 
@@ -224,17 +227,97 @@ const ssnFormatter = (ssn: number[]) => {
 };
 
 export const thisYear = format(new Date(), 'yyyy');
-export const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
+export const fruehlingOrHerbst = () => {
+  if (getMonth(new Date()) < 6) {
+    return 1;
+  }
+  return 9;
+};
 export const specificMonthPlusYears = (month: number, years: number) =>
   `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
 export const specificYearsAgo = (years: number) =>
   format(addYears(new Date(), -years), 'yyyy');
-export const today = () => format(new Date(), 'dd.MM.yyyy');
+export const secondTrancheStart = () =>
+  `1.${fruehlingOrHerbst() + 2}.${thisYear}`;
 
 export type SetupFn = (args: {
   contexts: TestContexts;
   seed: string;
   gesuchId: string;
   trancheId: string;
+  fallId: string;
 }) => Promise<void>;
+
+/**
+ * Create test contexts for multiple user types
+ */
+export const createMultiUserTestContexts = async (options: {
+  playwright: PlaywrightWorkerArgs['playwright'];
+  browser: Browser;
+  gsStorageState: string;
+  sbStorageState: string;
+  baseURL?: string;
+}) => {
+  const { playwright, browser, gsStorageState, sbStorageState, baseURL } =
+    options;
+
+  // Create GS context
+  const gsBrowserContext = await browser.newContext({
+    storageState: gsStorageState,
+  });
+  const gsCookies = await gsBrowserContext.cookies();
+  const gsBearerCookie = gsCookies.find((c) => c.name === BEARER_COOKIE);
+  const gsBearer = gsBearerCookie?.value
+    ? await decompress(gsBearerCookie.value)
+    : undefined;
+
+  const gsApiContext = await playwright.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${gsBearer}`,
+    },
+  });
+
+  // Create SB context
+  const sbBrowserContext = await browser.newContext({
+    storageState: sbStorageState,
+  });
+  const sbCookies = await sbBrowserContext.cookies();
+  const sbBearerCookie = sbCookies.find((c) => c.name === BEARER_COOKIE);
+  const sbBearer = sbBearerCookie?.value
+    ? await decompress(sbBearerCookie.value)
+    : undefined;
+  const sbApiContext = await playwright.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${sbBearer}`,
+    },
+  });
+
+  return {
+    gs: {
+      browser: gsBrowserContext,
+      api: gsApiContext,
+    },
+    sb: {
+      browser: sbBrowserContext,
+      api: sbApiContext,
+    },
+    dispose: async () => {
+      try {
+        await Promise.all([
+          gsApiContext.dispose(),
+          sbApiContext.dispose(),
+          gsBrowserContext.close(),
+          sbBrowserContext.close(),
+        ]);
+      } catch (e) {
+        console.warn('Failed to dispose multi-user e2e contexts', e);
+      }
+    },
+  };
+};
+
+export type MultiUserTestContexts = Awaited<
+  ReturnType<typeof createMultiUserTestContexts>
+>;

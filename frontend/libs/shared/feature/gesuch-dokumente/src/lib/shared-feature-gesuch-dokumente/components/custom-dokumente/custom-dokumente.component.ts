@@ -69,6 +69,7 @@ export class CustomDokumenteComponent {
     isSachbearbeitungApp: boolean;
     requiredDocumentTypes: CustomDokumentTyp[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
+    loading: boolean;
     readonly: boolean;
   }>();
   canCreateCustomDokumentTypSig = input.required<boolean>();

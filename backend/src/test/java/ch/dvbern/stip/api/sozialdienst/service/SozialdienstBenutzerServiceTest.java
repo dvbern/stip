@@ -17,23 +17,14 @@
 
 package ch.dvbern.stip.api.sozialdienst.service;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
@@ -45,13 +36,11 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
-import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -60,13 +49,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleMappingResource;
-import org.keycloak.admin.client.resource.RoleScopeResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -83,37 +65,19 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class SozialdienstBenutzerServiceTest {
-    SozialdienstService sozialdienstService;
-
     @Inject
-    SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    SozialdienstService sozialdienstService;
 
     @Inject
     SozialdienstRepository sozialdienstRepository;
 
     @Inject
-    SozialdienstAdminMapper sozialdienstAdminMapper;
-
-    @Inject
-    SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
-
-    @Inject
-    TenantService tenantService;
-
-    @Inject
-    MailService mailService;
-
-    @Inject
-    SozialdienstMapper sozialdienstMapper;
-
-    @Inject
-    KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
-
-    @Inject
     LandService landService;
 
+    @Inject
     SozialdienstBenutzerService sozialdienstBenutzerService;
-    SozialdienstBenutzerService sozialdienstBenutzerServiceMock;
+
+    @InjectMock
     ZahlungsverbindungService zahlungsverbindungServiceMock;
 
     SozialdienstDto sozialdienstDto;
@@ -124,20 +88,7 @@ class SozialdienstBenutzerServiceTest {
     @Order(1)
     @TestAsSozialdienstAdmin
     @Test
-    void init() throws NoSuchAlgorithmException {
-        sozialdienstBenutzerService = new SozialdienstBenutzerService(
-            null, sozialdienstBenutzerRepository, sozialdienstRepository, sozialdienstAdminMapper,
-            sozialdienstBenutzerMapper,
-            mailService, tenantService, keycloakAdminClientConfigRuntimeValue
-        );
-
-        sozialdienstBenutzerServiceMock = Mockito.spy(sozialdienstBenutzerService);
-        final var mockKecloakAdminClient = Mockito.mock(Keycloak.class);
-        final var mockKcRealmResource = Mockito.mock(RealmResource.class);
-        final var mockKcUsersResource = Mockito.mock(UsersResource.class);
-        final var mockKcUserResource = Mockito.mock(UserResource.class);
-        final var mockKcRoleMappingResource = Mockito.mock(RoleMappingResource.class);
-        final var mockKcRoleScopeResource = Mockito.mock(RoleScopeResource.class);
+    void init() {
 
         zahlungsverbindung = new Zahlungsverbindung();
         zahlungsverbindung.setIban(VALID_IBAN_1);
@@ -153,34 +104,6 @@ class SozialdienstBenutzerServiceTest {
 
         zahlungsverbindungServiceMock = Mockito.mock(ZahlungsverbindungService.class);
         when(zahlungsverbindungServiceMock.createZahlungsverbindung(Mockito.any())).thenReturn(zahlungsverbindung);
-
-        when(mockKecloakAdminClient.realm(ArgumentMatchers.any())).thenReturn(mockKcRealmResource);
-        when(mockKcRealmResource.users()).thenReturn(mockKcUsersResource);
-
-        var mockCreatedResponse = Mockito.mock(Response.class);
-        when(mockCreatedResponse.getStatus()).thenReturn(Status.CREATED.getStatusCode());
-        when(mockCreatedResponse.getHeaderString("location"))
-            .thenReturn("https://localhost:8080/sozialdienst/" + UUID.randomUUID().toString());
-
-        when(mockKcUsersResource.create(ArgumentMatchers.any())).thenReturn(mockCreatedResponse);
-        when(mockKcUsersResource.get(ArgumentMatchers.any())).thenReturn(mockKcUserResource);
-
-        when(mockKcUserResource.roles()).thenReturn(mockKcRoleMappingResource);
-        when(mockKcRoleMappingResource.realmLevel()).thenReturn(mockKcRoleScopeResource);
-        when(mockKcRoleScopeResource.listAvailable()).thenReturn(List.of());
-
-        var mockDeletedResource = Mockito.mock(Response.class);
-        when(mockDeletedResource.getStatus()).thenReturn(Status.NO_CONTENT.getStatusCode());
-        when(mockKcUsersResource.delete(ArgumentMatchers.any())).thenReturn(mockDeletedResource);
-
-        when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
-        sozialdienstBenutzerServiceMock.setup();
-        sozialdienstService = new SozialdienstService(
-            sozialdienstRepository,
-            sozialdienstMapper,
-            sozialdienstBenutzerServiceMock,
-            zahlungsverbindungServiceMock
-        );
     }
 
     @Order(2)
@@ -207,7 +130,6 @@ class SozialdienstBenutzerServiceTest {
         sozialdienstCreateDto.setZahlungsverbindung(zahlungsverbindungDto);
 
         var sozialdienstAdminDto = new SozialdienstAdminDto();
-        sozialdienstAdminDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminDto.setVorname("a");
         sozialdienstAdminDto.setNachname("b");
         sozialdienstAdminDto.setEmail("a@b.ch");
@@ -224,7 +146,6 @@ class SozialdienstBenutzerServiceTest {
     @Test
     void replaceSozialdienstAdmin() {
         SozialdienstAdminDto sozialdienstAdminDto = new SozialdienstAdminDto();
-        sozialdienstAdminDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminDto.setVorname("c");
         sozialdienstAdminDto.setNachname("d");
         sozialdienstAdminDto.setEmail("c@d.ch");
@@ -240,8 +161,8 @@ class SozialdienstBenutzerServiceTest {
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
-    void getSozialdienstBenutzerIncludesAdmin() {
-        final var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
+    void getSozialdienstBenutzerEmptyTest() {
+        final var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
         assertThat(sozialdienstbenutzers.size(), equalTo(1));
@@ -261,8 +182,11 @@ class SozialdienstBenutzerServiceTest {
         createDto.setEmail(email);
         createDto.setRedirectUri("");
 
-        var sozialdienstbenutzer = sozialdienstBenutzerServiceMock
-            .createSozialdienstBenutzer(sozialdienstRepository.requireById(sozialdienstDto.getId()), createDto);
+        var sozialdienstbenutzer = sozialdienstBenutzerService
+            .createSozialdienstMitarbeiterBenutzer(
+                sozialdienstRepository.requireById(sozialdienstDto.getId()),
+                createDto
+            );
 
         assertThat(sozialdienstbenutzer.getVorname(), equalTo(name));
         assertThat(sozialdienstbenutzer.getNachname(), equalTo(name));
@@ -274,7 +198,7 @@ class SozialdienstBenutzerServiceTest {
     @TestAsSozialdienstAdmin
     @Test
     void getSozialdienstBenutzerTest() {
-        final var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
+        final var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
         assertThat(sozialdienstbenutzers.size(), equalTo(2));
@@ -285,7 +209,7 @@ class SozialdienstBenutzerServiceTest {
     @TestAsSozialdienstAdmin
     @Test
     void updateSozialdienstBenutzerTest() {
-        final var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
+        final var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
         SozialdienstBenutzerUpdateDto updateDto = new SozialdienstBenutzerUpdateDto();
@@ -295,7 +219,7 @@ class SozialdienstBenutzerServiceTest {
         updateDto.setVorname(newname);
         updateDto.setNachname(newname);
 
-        final var sozialdienstbenutzer = sozialdienstBenutzerServiceMock.updateSozialdienstBenutzer(updateDto);
+        final var sozialdienstbenutzer = sozialdienstBenutzerService.updateSozialdienstBenutzer(updateDto);
 
         assertThat(sozialdienstbenutzer.getVorname(), equalTo(newname));
         assertThat(sozialdienstbenutzer.getNachname(), equalTo(newname));
@@ -306,12 +230,12 @@ class SozialdienstBenutzerServiceTest {
     @TestAsSozialdienstAdmin
     @Test
     void deleteSozialdienstBenutzerTest() {
-        var sozialdienstbenutzers = sozialdienstBenutzerServiceMock
+        var sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
-        sozialdienstBenutzerServiceMock.deleteSozialdienstBenutzer(sozialdienstbenutzers.get(0).getId());
+        sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstbenutzers.get(0).getId());
 
-        sozialdienstbenutzers = sozialdienstBenutzerServiceMock
+        sozialdienstbenutzers = sozialdienstBenutzerService
             .getSozialdienstBenutzers(sozialdienstRepository.requireById(sozialdienstDto.getId()));
 
         assertThat(sozialdienstbenutzers.size(), equalTo(1));

@@ -77,7 +77,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR;
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
+import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
@@ -168,11 +169,11 @@ class GesuchFillFormularTest {
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
         assertThat(
             gesuch.getGesuchTrancheToWorkWith().getGueltigAb(),
-            is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
+            is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigAb())
         );
         assertThat(
             gesuch.getGesuchTrancheToWorkWith().getGueltigBis(),
-            is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+            is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigBis())
         );
     }
 
@@ -225,6 +226,14 @@ class GesuchFillFormularTest {
     @Order(6)
     void addLebenslauf() {
         final var lebenslaufItems = LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
+        lebenslaufItems.get(0)
+            .setVon(
+                currentFormular.getPersonInAusbildung()
+                    .getGeburtsdatum()
+                    .plusYears(16)
+                    .withMonth(8)
+                    .format(DATE_TIME_FORMATTER)
+            );
         currentFormular.setLebenslaufItems(lebenslaufItems);
         patchAndValidate();
     }
@@ -320,8 +329,21 @@ class GesuchFillFormularTest {
         currentFormular.getPersonInAusbildung().setGeburtsdatum(volljaehrigBirthDate);
         currentFormular.getEinnahmenKosten().setVermoegen(100);
         patchGesuch();
+
         // reset pia to minderjaehrig again
         currentFormular.getPersonInAusbildung().setGeburtsdatum(minderjaehrigBirthDate);
+        patchGesuch();
+
+        final var lebenslaufItems = LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
+        lebenslaufItems.get(0)
+            .setVon(
+                currentFormular.getPersonInAusbildung()
+                    .getGeburtsdatum()
+                    .plusYears(16)
+                    .withMonth(8)
+                    .format(DATE_TIME_FORMATTER)
+            );
+        currentFormular.setLebenslaufItems(lebenslaufItems);
         patchAndValidate();
     }
 

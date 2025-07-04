@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.util.Collections;
+import java.util.Set;
+
 public final class OidcConstants {
     public static final String ROLE_GESUCHSTELLER = "V0_Gesuchsteller";
     public static final String ROLE_SACHBEARBEITER = "V0_Sachbearbeiter";
@@ -28,6 +31,23 @@ public final class OidcConstants {
     public static final String ROLE_SUPER_USER = "V0_Super-User";
 
     public static final String REQUIRED_ACTION_UPDATE_PASSWORD = "UPDATE_PASSWORD";
+    public static final Set<String> POSSIBLE_SB_ROLES = Collections.unmodifiableSet(
+        Set.of(
+            ROLE_SACHBEARBEITER,
+            ROLE_ADMIN,
+            ROLE_JURIST
+        )
+    );
+
+    public static final Set<String> POSSIBLE_USER_ROLES = Collections.unmodifiableSet(
+        Set.of(
+            ROLE_SACHBEARBEITER,
+            ROLE_ADMIN,
+            ROLE_JURIST,
+            ROLE_SOZIALDIENST_MITARBEITER,
+            ROLE_SOZIALDIENST_ADMIN
+        )
+    );
 
     private OidcConstants() {}
 }
