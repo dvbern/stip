@@ -122,7 +122,7 @@ export const initializeMultiUserTest = (
 
   const test = createMultiUserTest().extend<{
     gsPage: Page;
-    sbPage: Page; // You can create a SB-specific PO here
+    sbPage: Page;
   }>({
     gsPage: async ({ browser, gsContext }, use, testInfo) => {
       // Create GS page with GS context

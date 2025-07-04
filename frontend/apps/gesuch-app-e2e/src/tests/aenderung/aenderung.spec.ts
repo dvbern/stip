@@ -129,7 +129,11 @@ test('Aenderung erstellen', async ({ gsPage, sbPage }) => {
   );
   await headerNav.elems.aktionMenu.click();
   await headerNav.elems.getAktionStatusUebergangItem('VERSENDET').click();
-  await versendetPromise;
+  const versendetResponse = await versendetPromise;
+
+  expect(versendetResponse.ok(), {
+    message: `Versendet response failed with status ${await versendetResponse.text()}`,
+  }).toBeTruthy();
 
   // // Go to GS App ===============================================================
   await gsPage.bringToFront();
