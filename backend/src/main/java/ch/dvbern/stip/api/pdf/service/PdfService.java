@@ -160,7 +160,7 @@ public class PdfService {
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
-            makePageNumberEven(document);
+            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -333,14 +333,6 @@ public class PdfService {
         );
 
         addCopieAnParagraph(gesuch, translator, leftMargin, document);
-    }
-
-    private void makePageNumberEven(Document document) {
-        if (document.getPdfDocument().getNumberOfPages() % 2 == 0) {
-            return;
-        }
-        document.getPdfDocument().addNewPage();
-
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
