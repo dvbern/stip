@@ -622,12 +622,15 @@ public class GesuchTrancheService {
         final PatchAenderungsInfoRequestDto patchAenderungsInfoRequestDto
     ) {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
+
         // validate (modified) guetligkeit start of aenderung
         aenderungsTranche.getGesuch()
             .getEingereichteGesuchTrancheValidOnDate(patchAenderungsInfoRequestDto.getStart())
             .orElseThrow(NotFoundException::new);
         var gueltigkeit =
             new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
+        GesuchTrancheCopyUtil.validateAndCreateClampedDateRange(gueltigkeit, aenderungsTranche.getGesuch());
+
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
         return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
