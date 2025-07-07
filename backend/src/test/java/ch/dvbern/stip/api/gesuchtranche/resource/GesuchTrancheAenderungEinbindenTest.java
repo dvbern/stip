@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -51,6 +52,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -250,6 +252,41 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     @TestAsSachbearbeiter
     @Order(8)
+    void patchGueltigkeitOfAenderung_InvalidValues() {
+        var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
+        aenderungPatch.setComment("change gueltigkeit");
+        aenderungPatch.setStart(LocalDate.now().minusDays(365));
+
+        gesuchTrancheApiSpec.patchAenderungInfo()
+            .aenderungIdPath(aenderungId)
+            .body(aenderungPatch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(9)
+    void patchGueltigkeitOfAenderung() {
+        var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
+        aenderungPatch.setComment("change gueltigkeit");
+        aenderungPatch.setStart(LocalDate.now());
+        aenderungPatch.setEnd(LocalDate.now().plusMonths(1));
+
+        gesuchTrancheApiSpec.patchAenderungInfo()
+            .aenderungIdPath(aenderungId)
+            .body(aenderungPatch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
     void aenderungAddCustomDokument() {
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");
@@ -269,7 +306,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(11)
     void aenderungFehlendeDokumenteUebermitteln() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteUebermitteln()
             .gesuchTrancheIdPath(aenderungId)
@@ -281,7 +318,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(12)
     void test_upload_custom_gesuchdokuments() {
         File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
@@ -289,7 +326,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(11)
+    @Order(13)
     void aenderungFehlendeDokumenteEinreichen() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteEinreichen()
             .gesuchTrancheIdPath(aenderungId)
@@ -301,7 +338,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(14)
     void aenderungAkzeptieren() {
         var nullableGesuchDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(customDokumentId)
@@ -341,7 +378,25 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(15)
+    void patchGueltigkeitOfAenderung_InvalidGesuchTrancheStatus() {
+        var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
+        aenderungPatch.setComment("change gueltigkeit");
+        aenderungPatch.setStart(LocalDate.now());
+        aenderungPatch.setEnd(LocalDate.now().plusMonths(1));
+
+        gesuchTrancheApiSpec.patchAenderungInfo()
+            .aenderungIdPath(aenderungId)
+            .body(aenderungPatch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(16)
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
             .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
@@ -366,7 +421,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(17)
     void aenderungEinreichenAgain() {
         final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -397,7 +452,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(18)
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -421,7 +476,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(19)
     @Test
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
@@ -433,7 +488,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @Test
-    @Order(17)
+    @Order(20)
     @TestAsSachbearbeiter
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
