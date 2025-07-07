@@ -6450,12 +6450,12 @@ components:
             - start
             - comment
     PatchAenderungsInfoRequest:
-        type: object
-        properties:
-          gueltigVon:
-            $ref: '#/components/schemas/LocalDate'
-          gueltigBis:
-            $ref: '#/components/schemas/LocalDate'
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
     CreateGesuchTrancheRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
