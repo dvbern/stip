@@ -1,14 +1,66 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
+import {
+  AuszahlungUpdate,
+  GesuchFormularUpdate,
+  Land,
+} from '@dv/shared/model/gesuch';
 import { DeepNullable, SetupFn } from '@dv/shared/util-fn/e2e-util';
 
-export const setGesuchApi = async (
+export const setupGesuchWithApi: (
+  createFomularUpdateFn: (
+    seed: string,
+    landId: string,
+  ) => DeepNullable<GesuchFormularUpdate>,
+  createZahlungsverbindungUpdate: (landId: string) => AuszahlungUpdate,
+) => SetupFn =
+  (createFomularUpdateFn, createZahlungsverbindungUpdateFn) =>
+  async ({ contexts, gesuchId, trancheId, fallId, seed }) => {
+    const { api } = contexts;
+
+    const response: APIResponse = await api.get('/api/v1/land');
+    const res: Land[] = await response.json();
+
+    const schweizId = res.find((land) => land.laendercodeBfs === '8100')
+      ?.id as string;
+
+    if (!schweizId) {
+      throw new Error('Schweiz landId not found');
+    }
+
+    await setGesuchApi(
+      contexts.api,
+      gesuchId,
+      trancheId,
+      fallId,
+      createZahlungsverbindungUpdateFn(schweizId),
+      createFomularUpdateFn(seed, schweizId),
+    );
+  };
+
+const setGesuchApi = async (
   apiContext: APIRequestContext,
   gesuchId: string,
   trancheId: string,
+  fallId: string,
+  zahlungsverbindungUpdate: AuszahlungUpdate,
   gesuchFormularUpdate: DeepNullable<GesuchFormularUpdate>,
 ) => {
+  const setZahlungsverbindungResponse = await apiContext.post(
+    `/api/v1/auszahlung/${fallId}`,
+    {
+      data: zahlungsverbindungUpdate,
+    },
+  );
+
+  if (!setZahlungsverbindungResponse.ok()) {
+    console.error(
+      `Failed to set zahlungsverbindung for fallId ${fallId}:`,
+      await setZahlungsverbindungResponse.text(),
+    );
+    throw new Error('Failed to set zahlungsverbindung');
+  }
+
   const requestBody = {
     gesuchTrancheToWorkWith: {
       gesuchFormular: gesuchFormularUpdate,
@@ -20,14 +72,8 @@ export const setGesuchApi = async (
     data: requestBody,
   });
 
-  expect(response.ok()).toBeTruthy();
+  expect(response.ok(), {
+    message: `Failed to update gesuch with id ${gesuchId}: ${await response.text()}`,
+  }).toBeTruthy();
   return response;
 };
-
-export const setupGesuchWithApi: (
-  updateFn: (seed: string) => DeepNullable<GesuchFormularUpdate>,
-) => SetupFn =
-  (update) =>
-  async ({ contexts, gesuchId, trancheId, seed }) => {
-    await setGesuchApi(contexts.api, gesuchId, trancheId, update(seed));
-  };

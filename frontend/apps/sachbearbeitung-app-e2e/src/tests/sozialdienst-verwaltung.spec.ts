@@ -3,13 +3,13 @@ import { expect } from '@playwright/test';
 import { createTest } from '@dv/shared/util-fn/e2e-util';
 
 import { AdminPO } from '../po/admin.po';
-import { CockpitPO } from '../po/cockpit.po';
+import { SbCockpitPO } from '../po/cockpit.po';
 
 const E2E_TEST_SOZIALDIENST = 'e2e-test-sozialdienst';
 
-const test = createTest('SACHBEARBEITER').extend<{ cockpit: CockpitPO }>({
+const test = createTest('SACHBEARBEITER').extend<{ cockpit: SbCockpitPO }>({
   cockpit: async ({ page }, use) => {
-    const cockpit = new CockpitPO(page);
+    const cockpit = new SbCockpitPO(page);
 
     await cockpit.goToDashBoard();
 
