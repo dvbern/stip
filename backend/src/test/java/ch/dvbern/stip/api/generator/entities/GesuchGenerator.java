@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -130,7 +130,7 @@ public final class GesuchGenerator {
         var ausbildung = new Ausbildung()
             .setFall(new Fall())
             .setAusbildungsgang(
-                (Ausbildungsgang) new Ausbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(9))
+                (AusbildungsgangOld) new AusbildungsgangOld().setBildungskategorie(new Bildungskategorie().setBfs(9))
                     .setId(ausbildungDtoSpec.getAusbildungsgangId())
             )
             .setAlternativeAusbildungsgang(ausbildungDtoSpec.getAlternativeAusbildungsgang())

@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -108,7 +108,7 @@ public class AusbildungSeeding extends Seeder {
             .setBfs(bfs);
     }
 
-    private static List<Ausbildungsstaette> getAusbildungsstaetten() {
+    private static List<AusbildungsstaetteOld> getAusbildungsstaetten() {
         return List.of(
             // Keep this order, or update dependencies as well
             createAusbildungsstaette("Berner Fachhochschule", "Haute école spécialisée bernoise"),
@@ -120,14 +120,14 @@ public class AusbildungSeeding extends Seeder {
         );
     }
 
-    private static Ausbildungsstaette createAusbildungsstaette(final String nameDe, final String nameFr) {
-        return new Ausbildungsstaette()
+    private static AusbildungsstaetteOld createAusbildungsstaette(final String nameDe, final String nameFr) {
+        return new AusbildungsstaetteOld()
             .setNameDe(nameDe)
             .setNameFr(nameFr);
     }
 
-    private static List<Ausbildungsgang> getAusbildungsgaenge(
-        final List<Ausbildungsstaette> ausbildungsstaetten,
+    private static List<AusbildungsgangOld> getAusbildungsgaenge(
+        final List<AusbildungsstaetteOld> ausbildungsstaetten,
         final List<Bildungskategorie> bildungskategorien
     ) {
         return List.of(
@@ -162,13 +162,13 @@ public class AusbildungSeeding extends Seeder {
         );
     }
 
-    private static Ausbildungsgang createAusbildungsgang(
+    private static AusbildungsgangOld createAusbildungsgang(
         final String bezeichnungDe,
         final String bezeichnungFr,
-        final Ausbildungsstaette ausbildungsstaette,
+        final AusbildungsstaetteOld ausbildungsstaette,
         final Bildungskategorie bildungskategorie
     ) {
-        return new Ausbildungsgang()
+        return new AusbildungsgangOld()
             .setBezeichnungDe(bezeichnungDe)
             .setBezeichnungFr(bezeichnungFr)
             .setAusbildungsstaette(ausbildungsstaette)

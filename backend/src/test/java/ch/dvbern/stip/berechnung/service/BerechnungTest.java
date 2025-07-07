@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -130,7 +130,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(10)
@@ -191,7 +191,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(5)
@@ -289,7 +289,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(5)
@@ -401,7 +401,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(6)
@@ -564,7 +564,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(9)
@@ -708,7 +708,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(5)
@@ -849,7 +849,7 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(8)

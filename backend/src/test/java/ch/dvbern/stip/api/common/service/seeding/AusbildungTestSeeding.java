@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -69,20 +69,20 @@ public class AusbildungTestSeeding extends Seeder {
     }
 
     private void seedUni() {
-        final var uniBern = new Ausbildungsstaette()
+        final var uniBern = new AusbildungsstaetteOld()
             .setNameDe("Uni Bern")
             .setNameFr("Uni Berne");
 
         ausbildungsstaetteRepository.persistAndFlush(uniBern);
         TestConstants.TEST_AUSBILDUNGSSTAETTE_ID = uniBern.getId();
 
-        final var uniBeGang1 = (Ausbildungsgang) new Ausbildungsgang()
+        final var uniBeGang1 = (AusbildungsgangOld) new AusbildungsgangOld()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
             .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(uniBern);
 
-        final var uniBeGang2 = new Ausbildungsgang()
+        final var uniBeGang2 = new AusbildungsgangOld()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
             .setBildungskategorie(bildungskategorie)
@@ -93,19 +93,19 @@ public class AusbildungTestSeeding extends Seeder {
     }
 
     private void seedFh() {
-        final var bfh = new Ausbildungsstaette()
+        final var bfh = new AusbildungsstaetteOld()
             .setNameDe("Berner Fachhochschule")
             .setNameFr("Haute école spécialisée bernoise");
 
         ausbildungsstaetteRepository.persistAndFlush(bfh);
 
-        final var bfhGang1 = new Ausbildungsgang()
+        final var bfhGang1 = new AusbildungsgangOld()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
             .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(bfh);
 
-        final var bfhGang2 = new Ausbildungsgang()
+        final var bfhGang2 = new AusbildungsgangOld()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
             .setBildungskategorie(bildungskategorie)

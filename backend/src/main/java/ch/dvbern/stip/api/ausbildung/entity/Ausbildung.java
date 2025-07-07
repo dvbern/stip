@@ -148,8 +148,8 @@ public class Ausbildung extends AbstractMandantEntity {
             return getAlternativeAusbildungsgang();
         } else {
             return locale.getLanguage().equals("de")
-                ? getAusbildungsgang().getBezeichnungDe()
-                : getAusbildungsgang().getBezeichnungFr();
+                ? getAusbildungsgang().getAbschluss().getBezeichnungDe()
+                : getAusbildungsgang().getAbschluss().getBezeichnungFr();
         }
     }
 }

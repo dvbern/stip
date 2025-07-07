@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -46,7 +46,7 @@ public class AusbildungsgangService {
 
     @Transactional
     public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangDto) {
-        Ausbildungsgang ausbildungsgang = persistsAusbildungsgang(ausbildungsgangDto);
+        AusbildungsgangOld ausbildungsgang = persistsAusbildungsgang(ausbildungsgangDto);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
 
@@ -68,7 +68,7 @@ public class AusbildungsgangService {
 
     private void persistsAusbildungsgang(
         AusbildungsgangUpdateDto ausbildungsgangUpdate,
-        Ausbildungsgang ausbildungsgangToUpdate
+        AusbildungsgangOld ausbildungsgangToUpdate
     ) {
         ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangToUpdate
@@ -77,10 +77,10 @@ public class AusbildungsgangService {
         ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
     }
 
-    private Ausbildungsgang persistsAusbildungsgang(
+    private AusbildungsgangOld persistsAusbildungsgang(
         AusbildungsgangCreateDto ausbildungsgangCreateDto
     ) {
-        Ausbildungsgang ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
+        AusbildungsgangOld ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
         ausbildungsgang
             .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangCreateDto.getAusbildungsstaetteId()));
         ausbildungsgang.setBildungskategorie(loadBildungsart(ausbildungsgangCreateDto.getBildungskategorieId()));
@@ -88,9 +88,9 @@ public class AusbildungsgangService {
         return ausbildungsgang;
     }
 
-    private Ausbildungsstaette loadAusbildungsstaetteIfExists(UUID ausbildungsstaetteId) {
+    private AusbildungsstaetteOld loadAusbildungsstaetteIfExists(UUID ausbildungsstaetteId) {
         return ausbildungsstaetteId != null ? ausbildungsstaetteRepository.requireById(ausbildungsstaetteId)
-            : new Ausbildungsstaette();
+            : new AusbildungsstaetteOld();
     }
 
     private Bildungskategorie loadBildungsart(UUID bildungsartId) {

@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -572,7 +572,7 @@ public class TestUtil {
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new Ausbildungsgang()
+                    new AusbildungsgangOld()
                         .setBildungskategorie(
                             new Bildungskategorie()
                                 .setBfs(10)

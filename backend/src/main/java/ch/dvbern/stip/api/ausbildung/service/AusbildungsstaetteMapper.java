@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
@@ -32,13 +32,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
     uses = AusbildungsgangMapper.class
 )
 public interface AusbildungsstaetteMapper {
-    Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
+    AusbildungsstaetteOld toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
 
-    AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
+    AusbildungsstaetteDto toDto(AusbildungsstaetteOld ausbildungsstaette);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Ausbildungsstaette partialUpdate(
+    AusbildungsstaetteOld partialUpdate(
         AusbildungsstaetteUpdateDto ausbildungsstaetteDto,
-        @MappingTarget Ausbildungsstaette ausbildungsstaette
+        @MappingTarget AusbildungsstaetteOld ausbildungsstaette
     );
 }

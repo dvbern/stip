@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -88,7 +88,7 @@ class EinnahmenKostenValidatorTest {
             new AusbildungskostenStufeRequiredConstraintValidator();
         Gesuch gesuch = new Gesuch();
         gesuch.setAusbildung(new Ausbildung());
-        gesuch.getAusbildung().setAusbildungsgang(new Ausbildungsgang());
+        gesuch.getAusbildung().setAusbildungsgang(new AusbildungsgangOld());
         gesuch.getAusbildung().getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(1));
         GesuchTranche gesuchTranche = new GesuchTranche();
         gesuchTranche.setGesuch(gesuch);

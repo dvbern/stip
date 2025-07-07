@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.ausbildung.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
@@ -51,7 +51,7 @@ public class AusbildungsstaetteService {
 
     @Transactional
     public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaetteDto) {
-        Ausbildungsstaette ausbildungsstaette = persistAusbildungsstaette(ausbildungsstaetteDto);
+        AusbildungsstaetteOld ausbildungsstaette = persistAusbildungsstaette(ausbildungsstaetteDto);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }
 
@@ -60,29 +60,29 @@ public class AusbildungsstaetteService {
         UUID ausbildungsstaetteId,
         AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto
     ) {
-        Ausbildungsstaette ausbildungsstaetteToUpdate = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        AusbildungsstaetteOld ausbildungsstaetteToUpdate = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
         persistAusbildungsstaette(ausbildungsstaetteUpdateDto, ausbildungsstaetteToUpdate);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaetteToUpdate);
     }
 
     @Transactional
     public void deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
-        Ausbildungsstaette ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        AusbildungsstaetteOld ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
         ausbildungsstaetteRepository.delete(ausbildungsstaette);
     }
 
     private void persistAusbildungsstaette(
         AusbildungsstaetteUpdateDto ausbildungsstaetteUpdate,
-        Ausbildungsstaette ausbildungsstaetteToUpdate
+        AusbildungsstaetteOld ausbildungsstaetteToUpdate
     ) {
         ausbildungsstaetteMapper.partialUpdate(ausbildungsstaetteUpdate, ausbildungsstaetteToUpdate);
         ausbildungsstaetteRepository.persist(ausbildungsstaetteToUpdate);
     }
 
-    private Ausbildungsstaette persistAusbildungsstaette(
+    private AusbildungsstaetteOld persistAusbildungsstaette(
         AusbildungsstaetteCreateDto ausbildungsstaetteCreate
     ) {
-        Ausbildungsstaette ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreate);
+        AusbildungsstaetteOld ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreate);
         ausbildungsstaetteRepository.persist(ausbildungsstaette);
         return ausbildungsstaette;
     }

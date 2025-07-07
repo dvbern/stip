@@ -17,15 +17,18 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.util.Constants;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -33,37 +36,24 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(
-    name = "ausbildungsgang",
+    name = "ausbildungsstaette",
     indexes = {
-        @Index(name = "IX_ausbildungsgang_mandant", columnList = "mandant"),
-        @Index(name = "IX_ausbildungsgang_ausbildungsstaette_id", columnList = "ausbildungsstaette_id"),
-        @Index(name = "IX_ausbildungsgang_abschluss_id", columnList = "abschluss_id")
+        @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant")
     }
 )
 @Getter
 @Setter
-public class Ausbildungsgang extends AbstractMandantEntity {
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "ausbildungsstaette_id",
-        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"),
-        nullable = false
-
-    )
-    private Ausbildungsstaette ausbildungsstaette;
+public class AusbildungsstaetteOld extends AbstractMandantEntity {
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
+    private List<AusbildungsgangOld> ausbildungsgaenge;
 
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "abschluss_id",
-        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_abschluss_id"),
-        nullable = false
-
-    )
-    private Abschluss abschluss;
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String nameDe;
 
     @NotNull
-    @Column(name = "aktiv", nullable = false)
-    private boolean aktiv = true;
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name_fr", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String nameFr;
 }
