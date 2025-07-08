@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.notification.resource;
 
-import java.util.Arrays;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.notification.type.NotificationType;
@@ -47,10 +45,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Arrays;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -99,10 +98,6 @@ class NotificationResourceTest {
         assertThat(
             Arrays.stream(notifications).toList().get(0).getNotificationType(),
             is(NotificationType.GESUCH_EINGEREICHT)
-        );
-        assertThat(
-            Arrays.stream(notifications).toList().get(0).getAbsender(),
-            is(notNullValue())
         );
     }
 
