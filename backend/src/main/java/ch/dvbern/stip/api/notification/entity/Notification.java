@@ -39,6 +39,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -73,4 +74,7 @@ public class Notification extends AbstractMandantEntity {
     @Column(name = "context_id")
     private UUID contextId;
 
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "absender")
+    private String absender;
 }
