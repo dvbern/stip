@@ -6103,6 +6103,7 @@ components:
         - gesuchId
         - timestamp
         - userErstellt
+        - absender
       properties:
         notificationText:
           type: string

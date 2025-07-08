@@ -231,9 +231,9 @@ public class NotificationDtoSpec {
    * Get absender
    * @return absender
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ABSENDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAbsender() {
     return absender;
@@ -241,7 +241,7 @@ public class NotificationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ABSENDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAbsender(String absender) {
     this.absender = absender;
   }

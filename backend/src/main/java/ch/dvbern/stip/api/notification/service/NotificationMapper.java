@@ -25,13 +25,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
-public abstract class NotificationMapper {
+public interface NotificationMapper {
     @Mapping(source = ".", target = "absender", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(source = "gesuch.id", target = "gesuchId")
-    public abstract NotificationDto toDto(Notification notification);
+    NotificationDto toDto(Notification notification);
 
     @Named("getFullNameOfSachbearbeiter")
-    String getFullNameOfSachbearbeiter(Notification notification) {
+    default String getFullNameOfSachbearbeiter(Notification notification) {
         return notification.getGesuch()
             .getAusbildung()
             .getFall()
