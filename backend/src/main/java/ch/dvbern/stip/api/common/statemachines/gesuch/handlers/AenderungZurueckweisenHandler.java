@@ -15,31 +15,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
-
-import java.util.Comparator;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-@Slf4j
-public class NegativeVerfuegungHandler implements GesuchStatusStateChangeHandler {
-    private final VerfuegungService verfuegungService;
+public class AenderungZurueckweisenHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
 
     @Override
+    @Transactional
     public void handle(Gesuch gesuch) {
-        verfuegungService.createPdfForNegtativeVerfuegung(
-            gesuch.getVerfuegungs()
-                .stream()
-                .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-                .orElseThrow(NotFoundException::new)
-        );
+        if (!gesuch.isVerfuegt()) {
+            illegalHandleCall();
+        }
+        gesuchService.resetGesuchZurueckweisen(gesuch);
     }
 }

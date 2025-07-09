@@ -24,11 +24,11 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class AkzeptiertHandler implements GesuchTrancheStatusStateChangeHandler {
+public class AkzeptiertHandler implements GesuchTrancheStatusChangeHandler {
     private final GesuchTrancheService gesuchTrancheService;
 
-	@Override
-	public void handle(GesuchTranche gesuchTranche) {
+    @Override
+    public void handle(GesuchTranche gesuchTranche) {
         gesuchTranche.getGesuch().setNachfristDokumente(null);
         gesuchTrancheService.aenderungEinbinden(gesuchTranche);
     }

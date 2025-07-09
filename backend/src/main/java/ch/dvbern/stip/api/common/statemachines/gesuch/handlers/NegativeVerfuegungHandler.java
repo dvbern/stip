@@ -15,29 +15,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import java.util.Comparator;
+
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler {
-    private final GesuchDokumentService gesuchDokumentService;
-    private final GesuchService gesuchService;
+@Slf4j
+public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {
+    private final VerfuegungService verfuegungService;
 
     @Override
     public void handle(Gesuch gesuch) {
-        gesuchService.setDefaultNachfristDokumente(gesuch);
-        gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
-            .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
-        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
-        gesuchService.sendFehlendeDokumenteNotifications(gesuch);
+        verfuegungService.createPdfForNegtativeVerfuegung(
+            gesuch.getVerfuegungs()
+                .stream()
+                .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+                .orElseThrow(NotFoundException::new)
+        );
     }
 }

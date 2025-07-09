@@ -15,12 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.dokument;
+package ch.dvbern.stip.api.common.statemachines.gesuchdokument;
 
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers.DokumentstatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentAbgelehntToAusstehendStatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentStatusChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
@@ -32,9 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
 @Slf4j
-public class DokumentstatusConfigProducer {
+public class GesuchDokumentStatusConfigProducer {
     public StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> createStateMachineConfig(
-        Instance<DokumentstatusChangeHandler> handlers
+        Instance<GesuchDokumentStatusChangeHandler> handlers
     ) {
         final StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config = new StateMachineConfig<>();
         config.configure(Dokumentstatus.AUSSTEHEND)
@@ -42,7 +43,15 @@ public class DokumentstatusConfigProducer {
             .permit(DokumentstatusChangeEvent.AKZEPTIERT, Dokumentstatus.AKZEPTIERT);
 
         config.configure(Dokumentstatus.ABGELEHNT)
-            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
+            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND)
+            .onEntryFrom(
+                selectHandlerForClass(handlers, GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class).get()
+                    .trigger(config, DokumentstatusChangeEvent.AUSSTEHEND),
+                (
+                    gesuchTranche
+                ) -> selectHandlerForClass(handlers, GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuchTranche))
+            );
         config.configure(Dokumentstatus.AKZEPTIERT)
             .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
 
@@ -53,25 +62,21 @@ public class DokumentstatusConfigProducer {
                 continue;
             }
 
-            state.addEntryAction(DokumentstatusConfigProducer::logTransition);
-            state.addEntryAction(
-                (transition, args) -> {
-                    final var gesuch = extractGesuchFromStateMachineArgs(args);
-                    final var handler = getHandlerFor(handlers, transition);
-                    if (handler.isPresent()) {
-                        handler.get().handle(transition, gesuch);
-                    } else {
-                        LOG.info(
-                            "No handler exists for Gesuchstatus transition {} -> {}",
-                            transition.getSource(),
-                            transition.getDestination()
-                        );
-                    }
-                }
-            );
+            state.addEntryAction(GesuchDokumentStatusConfigProducer::logTransition);
         }
 
         return config;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends GesuchDokumentStatusChangeHandler> Optional<T> selectHandlerForClass(
+        final Instance<GesuchDokumentStatusChangeHandler> handlers,
+        final Class<T> forClass
+    ) {
+        return handlers.stream()
+            .filter(handler -> handler.getClass().equals(forClass))
+            .map(handler -> (T) handler)
+            .findFirst();
     }
 
     private void logTransition(Transition<Dokumentstatus, DokumentstatusChangeEvent> transition, Object[] args) {
@@ -94,12 +99,5 @@ public class DokumentstatusConfigProducer {
             );
         }
         return (GesuchDokument) args[0];
-    }
-
-    private Optional<DokumentstatusChangeHandler> getHandlerFor(
-        Instance<DokumentstatusChangeHandler> handlers,
-        final Transition<Dokumentstatus, DokumentstatusChangeEvent> transition
-    ) {
-        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
     }
 }

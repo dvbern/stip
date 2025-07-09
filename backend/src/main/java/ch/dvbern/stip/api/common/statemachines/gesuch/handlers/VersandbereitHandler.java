@@ -15,29 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class GesuchZurueckweisenHandler implements GesuchStatusStateChangeHandler {
-    private final GesuchService gesuchService;
-
+public class VersandbereitHandler implements GesuchStatusChangeHandler {
     @Override
-    @Transactional
     public void handle(Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
-            illegalHandleCall();
-        }
-        gesuch.setEinreichedatum(null);
-        gesuch.setNachfristDokumente(null);
-        gesuchService.resetGesuchZurueckweisen(gesuch);
+        gesuch.setVerfuegt(true);
     }
 }

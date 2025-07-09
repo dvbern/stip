@@ -23,8 +23,8 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchStatusChangeHandler;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -51,7 +51,7 @@ public class GesuchStatusService {
     private final NotificationService notificationService;
     private final Validator validator;
 
-    private final Instance<GesuchStatusStateChangeHandler> handlers;
+    private final Instance<GesuchStatusChangeHandler> handlers;
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {

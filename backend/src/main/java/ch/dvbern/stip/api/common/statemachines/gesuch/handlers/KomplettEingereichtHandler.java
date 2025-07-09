@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.time.ZonedDateTime;
 
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandler {
+public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
     private final MailService mailService;
     private final NotificationService notificationService;
 

@@ -15,13 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers;
 
 import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import com.github.oxo42.stateless4j.StateMachineConfig;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public interface DokumentstatusChangeHandler
-    extends StateChangeHandler<Dokumentstatus, DokumentstatusChangeEvent, GesuchDokument> {
+public interface GesuchDokumentStatusChangeHandler
+    extends StateChangeHandler<GesuchDokument> {
+
+    default TriggerWithParameters1<GesuchDokument, DokumentstatusChangeEvent> trigger(
+        StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config,
+        DokumentstatusChangeEvent changeEvent
+    ) {
+        return config.setTriggerParameters(changeEvent, GesuchDokument.class);
+    }
 }

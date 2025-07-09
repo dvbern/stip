@@ -15,9 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import java.util.List;
+
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +28,14 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class VersandbereitHandler implements GesuchStatusStateChangeHandler {
+public class GesuchDokumentAbgelehntToAusstehendStatusChangeHandler implements GesuchDokumentStatusChangeHandler {
+    private final GesuchDokumentService gesuchDokumentService;
+
     @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
+    public void handle(
+        GesuchDokument gesuchdokument
+    ) {
+        gesuchDokumentService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List.of(gesuchdokument));
+
     }
 }

@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchStatusChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -124,7 +124,7 @@ class GesuchStatusStateMachineTest {
     }
 
     @Getter
-    static class StateChangeDoesNotHandleMock implements GesuchStatusStateChangeHandler {
+    static class StateChangeDoesNotHandleMock implements GesuchStatusChangeHandler {
         private boolean handled = false;
 
         @Override
@@ -139,7 +139,7 @@ class GesuchStatusStateMachineTest {
     }
 
     @Getter
-    static class StateChangeHandlerMock implements GesuchStatusStateChangeHandler {
+    static class StateChangeHandlerMock implements GesuchStatusChangeHandler {
         private boolean handled = false;
 
         @Override
@@ -153,25 +153,25 @@ class GesuchStatusStateMachineTest {
         }
     }
 
-    static class InstanceMock implements Instance<GesuchStatusStateChangeHandler> {
-        private final List<GesuchStatusStateChangeHandler> handlers;
+    static class InstanceMock implements Instance<GesuchStatusChangeHandler> {
+        private final List<GesuchStatusChangeHandler> handlers;
 
-        public InstanceMock(List<GesuchStatusStateChangeHandler> handlers) {
+        public InstanceMock(List<GesuchStatusChangeHandler> handlers) {
             this.handlers = handlers;
         }
 
         @Override
-        public Stream<GesuchStatusStateChangeHandler> stream() {
+        public Stream<GesuchStatusChangeHandler> stream() {
             return handlers.stream();
         }
 
         @Override
-        public Instance<GesuchStatusStateChangeHandler> select(Annotation... qualifiers) {
+        public Instance<GesuchStatusChangeHandler> select(Annotation... qualifiers) {
             return null;
         }
 
         @Override
-        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(
+        public <U extends GesuchStatusChangeHandler> Instance<U> select(
             Class<U> subtype,
             Annotation... qualifiers
         ) {
@@ -179,7 +179,7 @@ class GesuchStatusStateMachineTest {
         }
 
         @Override
-        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(
+        public <U extends GesuchStatusChangeHandler> Instance<U> select(
             TypeLiteral<U> subtype,
             Annotation... qualifiers
         ) {
@@ -197,28 +197,28 @@ class GesuchStatusStateMachineTest {
         }
 
         @Override
-        public void destroy(GesuchStatusStateChangeHandler instance) {
+        public void destroy(GesuchStatusChangeHandler instance) {
 
         }
 
         @Override
-        public Handle<GesuchStatusStateChangeHandler> getHandle() {
+        public Handle<GesuchStatusChangeHandler> getHandle() {
             return null;
         }
 
         @Override
-        public Iterable<? extends Handle<GesuchStatusStateChangeHandler>> handles() {
+        public Iterable<? extends Handle<GesuchStatusChangeHandler>> handles() {
             return null;
         }
 
         @Override
-        public GesuchStatusStateChangeHandler get() {
+        public GesuchStatusChangeHandler get() {
             return null;
         }
 
         @NotNull
         @Override
-        public Iterator<GesuchStatusStateChangeHandler> iterator() {
+        public Iterator<GesuchStatusChangeHandler> iterator() {
             return handlers.iterator();
         }
     }

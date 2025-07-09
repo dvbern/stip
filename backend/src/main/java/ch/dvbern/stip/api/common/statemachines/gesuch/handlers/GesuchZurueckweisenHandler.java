@@ -15,34 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import java.util.Comparator;
-
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class VersendetHandler implements GesuchStatusStateChangeHandler {
-    private final NotificationService notificationService;
-    private final MailService mailService;
+public class GesuchZurueckweisenHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
 
     @Override
+    @Transactional
     public void handle(Gesuch gesuch) {
-        final var latestVerfuegung =
-            gesuch.getVerfuegungs().stream().max(Comparator.comparing(Verfuegung::getTimestampErstellt));
-
-        if (latestVerfuegung.isPresent()) {
-            notificationService.createNeueVerfuegungNotification(latestVerfuegung.get());
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        if (gesuch.isVerfuegt()) {
+            illegalHandleCall();
         }
+        gesuch.setEinreichedatum(null);
+        gesuch.setNachfristDokumente(null);
+        gesuchService.resetGesuchZurueckweisen(gesuch);
     }
 }

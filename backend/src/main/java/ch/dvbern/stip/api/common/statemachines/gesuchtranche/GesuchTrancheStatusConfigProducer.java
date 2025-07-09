@@ -20,13 +20,11 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusStateChangeHandler;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusChangeHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
@@ -41,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GesuchTrancheStatusConfigProducer {
 
     public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig(
-        Instance<GesuchTrancheStatusStateChangeHandler> handlers
+        Instance<GesuchTrancheStatusChangeHandler> handlers
     ) {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
@@ -65,8 +63,7 @@ public class GesuchTrancheStatusConfigProducer {
                     .trigger(config, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
                 (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
-            )
-            ;
+            );
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
             .permit(GesuchTrancheStatusChangeEvent.AKZEPTIERT, GesuchTrancheStatus.AKZEPTIERT);
@@ -80,16 +77,19 @@ public class GesuchTrancheStatusConfigProducer {
             .onEntryFrom(
                 selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class).get()
                     .trigger(config, GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class)
+                (
+                    gesuchTranche
+                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             )
             .onEntryFrom(
                 selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class).get()
                     .trigger(config, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
-                (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
+                (
+                    gesuchTranche
+                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
-            )
-            ;
+            );
 
         for (final var status : GesuchTrancheStatus.values()) {
             var state = config.getRepresentation(status);
@@ -105,8 +105,8 @@ public class GesuchTrancheStatusConfigProducer {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends GesuchTrancheStatusStateChangeHandler> Optional<T> selectHandlerForClass(
-        final Instance<GesuchTrancheStatusStateChangeHandler> handlers,
+    private <T extends GesuchTrancheStatusChangeHandler> Optional<T> selectHandlerForClass(
+        final Instance<GesuchTrancheStatusChangeHandler> handlers,
         final Class<T> forClass
     ) {
         return handlers.stream()
@@ -115,7 +115,10 @@ public class GesuchTrancheStatusConfigProducer {
             .findFirst();
     }
 
-    private void logTransition(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition, Object[] args) {
+    private void logTransition(
+        Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
+        Object[] args
+    ) {
         GesuchTranche gesuchTranche = extractGesuchFromStateMachineArgs(args);
 
         LOG.info(

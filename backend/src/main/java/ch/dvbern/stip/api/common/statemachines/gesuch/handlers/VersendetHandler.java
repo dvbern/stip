@@ -15,10 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import java.util.Comparator;
+
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +31,18 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler {
-    private final SapService sapService;
+public class VersendetHandler implements GesuchStatusChangeHandler {
+    private final NotificationService notificationService;
+    private final MailService mailService;
 
     @Override
     public void handle(Gesuch gesuch) {
-        sapService.createInitialAuszahlungOrGetStatus(
-            gesuch.getId()
-        );
+        final var latestVerfuegung =
+            gesuch.getVerfuegungs().stream().max(Comparator.comparing(Verfuegung::getTimestampErstellt));
+
+        if (latestVerfuegung.isPresent()) {
+            notificationService.createNeueVerfuegungNotification(latestVerfuegung.get());
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        }
     }
 }

@@ -15,24 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
+package ch.dvbern.stip.api.common.statemachines.gesuch;
 
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.AenderungZurueckweisenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.FehlendeDokumenteEinreichenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.FehlendeDokumenteHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchZurueckweisenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.KomplettEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.NegativeVerfuegungHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VerfuegtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersandbereitHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchStatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -47,7 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GesuchStatusConfigProducer {
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig(
-        Instance<GesuchStatusStateChangeHandler> handlers
+        Instance<GesuchStatusChangeHandler> handlers
     ) {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
 
@@ -58,8 +58,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.EINGEREICHT),
                 (gesuch) -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.EINGEREICHT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
@@ -86,8 +85,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
@@ -99,8 +97,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
@@ -112,8 +109,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
@@ -147,13 +143,19 @@ public class GesuchStatusConfigProducer {
             )
             .onEntryFrom(
                 selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH),
+                    .trigger(
+                        config,
+                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                    ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH),
+                    .trigger(
+                        config,
+                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                    ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
@@ -168,8 +170,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERFUEGT),
                 (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
@@ -196,13 +197,19 @@ public class GesuchStatusConfigProducer {
             )
             .onEntryFrom(
                 selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH),
+                    .trigger(
+                        config,
+                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                    ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH),
+                    .trigger(
+                        config,
+                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                    ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
@@ -217,8 +224,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS),
                 (gesuch) -> selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
@@ -231,8 +237,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
                 (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
@@ -242,8 +247,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERFUEGT),
                 (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
@@ -252,8 +256,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
                 (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.VERSANDBEREIT)
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET)
@@ -262,8 +265,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERSENDET),
                 (gesuch) -> selectHandlerForClass(handlers, VersendetHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.VERSENDET)
             .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
@@ -273,8 +275,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
                 (gesuch) -> selectHandlerForClass(handlers, StipendienAnspruchHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
@@ -283,8 +284,7 @@ public class GesuchStatusConfigProducer {
                     .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
                 (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
-            )
-            ;
+            );
 
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
@@ -313,8 +313,8 @@ public class GesuchStatusConfigProducer {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends GesuchStatusStateChangeHandler> Optional<T> selectHandlerForClass(
-        final Instance<GesuchStatusStateChangeHandler> handlers,
+    private <T extends GesuchStatusChangeHandler> Optional<T> selectHandlerForClass(
+        final Instance<GesuchStatusChangeHandler> handlers,
         final Class<T> forClass
     ) {
         return handlers.stream()

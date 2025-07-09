@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
-import ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers.DokumentstatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers.DokumentStatusChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
-    private final Instance<DokumentstatusChangeHandler> handlers;
+    private final Instance<DokumentStatusChangeHandler> handlers;
 
     public void triggerStatusChangeNoComment(
         final GesuchDokument gesuchDokument,

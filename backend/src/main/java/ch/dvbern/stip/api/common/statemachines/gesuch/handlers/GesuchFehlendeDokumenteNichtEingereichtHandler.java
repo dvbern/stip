@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -28,19 +28,20 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class AenderungFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusStateChangeHandler {
+public class GesuchFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;
     private final MailService mailService;
     private final GesuchService gesuchService;
 
-    @Override
     @Transactional
+    @Override
     public void handle(Gesuch gesuch) {
-        if (!gesuch.isVerfuegt()) {
+        if (gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
         gesuch.setNachfristDokumente(null);
+        gesuch.setEinreichedatum(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
