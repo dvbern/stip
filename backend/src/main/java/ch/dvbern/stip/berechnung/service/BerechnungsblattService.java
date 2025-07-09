@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Map;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -31,6 +32,9 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
@@ -59,6 +63,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BerechnungsblattService {
     private final BerechnungService berechnungService;
+    private final UnterschriftenblattService unterschriftenblattService;
 
     private static final String FONT = StandardFonts.HELVETICA;
     private static final String FONT_BOLD = StandardFonts.HELVETICA_BOLD;
@@ -74,6 +79,16 @@ public class BerechnungsblattService {
 
     PdfFont pdfFont = null;
     PdfFont pdfFontBold = null;
+
+    private static final Map<SteuerdatenTyp, UnterschriftenblattDokumentTyp> UNTERSCHRIFTENBLATT_DOKUMENT_TYP_STEUERDATEN_TYP_MAP =
+        Map.of(
+            SteuerdatenTyp.FAMILIE,
+            UnterschriftenblattDokumentTyp.GEMEINSAM,
+            SteuerdatenTyp.VATER,
+            UnterschriftenblattDokumentTyp.VATER,
+            SteuerdatenTyp.MUTTER,
+            UnterschriftenblattDokumentTyp.MUTTER
+        );
 
     public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
     throws IOException {
@@ -91,6 +106,7 @@ public class BerechnungsblattService {
         PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
 
         var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+
         boolean firstTranche = true;
         for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
             if (!firstTranche) {
@@ -165,13 +181,23 @@ public class BerechnungsblattService {
             addFooterParagraph1(document, 40, translator);
             addFooterParagraph2(document, 15, translator);
 
+            var existingUnterschriftenblaetterTyps =
+                unterschriftenblattService.getExistingUnterschriftenblattTypsForGesuch(gesuch.getId());
+
             for (var fammilienBudgetResultat : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
+                var steuerdatentyp = fammilienBudgetResultat.getFamilienBudgetTyp();
+                var requiredUnterschriftenblatttyp =
+                    UNTERSCHRIFTENBLATT_DOKUMENT_TYP_STEUERDATEN_TYP_MAP.get(steuerdatentyp);
+
+                if (!existingUnterschriftenblaetterTyps.contains(requiredUnterschriftenblatttyp)) {
+                    continue;
+                }
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                 var budgetTypText = switch (fammilienBudgetResultat.getFamilienBudgetTyp()) {
                     case FAMILIE -> translator.translate("stip.berechnung.familien.typ.FAMILIE");
-                    case VATER -> translator.translate("stip.berechnung.familien.typ.MUTTER");
-                    case MUTTER -> translator.translate("stip.berechnung.familien.typ.VATER");
+                    case VATER -> translator.translate("stip.berechnung.familien.typ.VATER");
+                    case MUTTER -> translator.translate("stip.berechnung.familien.typ.MUTTER");
                 };
 
                 addHeaderParagraph(
