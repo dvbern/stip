@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachine;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.util.TypeLiteral;
 import lombok.Getter;
@@ -128,12 +127,7 @@ class GesuchStatusStateMachineTest {
         private boolean handled = false;
 
         @Override
-        public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-            return false;
-        }
-
-        @Override
-        public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+        public void handle(Gesuch gesuch) {
             handled = true;
         }
     }
@@ -143,12 +137,7 @@ class GesuchStatusStateMachineTest {
         private boolean handled = false;
 
         @Override
-        public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-            return true;
-        }
-
-        @Override
-        public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+        public void handle(Gesuch gesuch) {
             handled = true;
         }
     }
