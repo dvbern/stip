@@ -78,14 +78,14 @@ public class ElternteilV1 {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
 
         builder.essenskostenPerson1(steuerdaten.getVerpflegung());
-        builder.essenskostenPerson2(steuerdaten.getVerpflegungPartner());
+        builder.essenskostenPerson2(Objects.requireNonNullElse(steuerdaten.getVerpflegungPartner(), 0));
 
         builder.grundbedarf(
             BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
         );
 
         builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
-        builder.fahrkostenPerson2(steuerdaten.getFahrkostenPartner());
+        builder.fahrkostenPerson2(Objects.requireNonNullElse(steuerdaten.getFahrkostenPartner(), 0));
 
         builder.steuernBund(steuerdaten.getSteuernBund());
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
