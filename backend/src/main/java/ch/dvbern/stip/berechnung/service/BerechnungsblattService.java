@@ -90,7 +90,7 @@ public class BerechnungsblattService {
             UnterschriftenblattDokumentTyp.MUTTER
         );
 
-    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
+    public void addBerechnungsblattToDocument(final Gesuch gesuch, final Locale locale, Document document)
     throws IOException {
         pdfFont = PdfFontFactory.createFont(FONT);
         pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
@@ -99,10 +99,6 @@ public class BerechnungsblattService {
             .forAppLanguage(
                 AppLanguages.fromLocale(locale)
             );
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(out);
-        PdfDocument pdfDocument = new PdfDocument(writer);
-        Document document = new Document(pdfDocument, PAGE_SIZE);
         PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
 
         var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
@@ -233,6 +229,17 @@ public class BerechnungsblattService {
                 addFooterParagraph1(document, 15, translator);
             }
         }
+    }
+
+    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
+    throws IOException {
+        pdfFont = PdfFontFactory.createFont(FONT);
+        pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(out);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument, PAGE_SIZE);
+        addBerechnungsblattToDocument(gesuch, locale, document);
         PdfUtils.makePageNumberEven(document);
         document.close();
         pdfDocument.close();

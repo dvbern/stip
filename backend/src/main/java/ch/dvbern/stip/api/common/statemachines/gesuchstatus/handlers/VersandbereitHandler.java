@@ -37,5 +37,6 @@ public class VersandbereitHandler implements GesuchStatusStateChangeHandler {
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         gesuch.setVerfuegt(true);
+
     }
 }

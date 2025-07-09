@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.verfuegung.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
+import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.Kanton;
@@ -57,6 +59,7 @@ public class VerfuegungService {
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
+    private final BerechnungsblattService berechnungsblattService;
 
     @Transactional
     public void createVerfuegung(final UUID gesuchId) {
@@ -94,11 +97,10 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = pdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
-
+    public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) throws IOException {
+        final ByteArrayOutputStream verfuegungOut = pdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
         final String objectId = DokumentUploadUtil.executeUploadDocument(
-            out.toByteArray(),
+            verfuegungOut.toByteArray(),
             VERFUEGUNG_DOKUMENT_NAME,
             s3,
             configService,

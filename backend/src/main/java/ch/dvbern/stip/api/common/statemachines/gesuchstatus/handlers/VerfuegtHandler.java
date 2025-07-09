@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import java.io.IOException;
 import java.util.Comparator;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,12 +64,16 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
             : stipendien.getBerechnung();
 
         if (berechnungsresultat == 0) {
-            verfuegungService.createPdfForVerfuegungOhneAnspruch(
-                gesuch.getVerfuegungs()
-                    .stream()
-                    .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-                    .orElseThrow(NotFoundException::new)
-            );
+            try {
+                verfuegungService.createPdfForVerfuegungOhneAnspruch(
+                    gesuch.getVerfuegungs()
+                        .stream()
+                        .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+                        .orElseThrow(NotFoundException::new)
+                );
+            } catch (IOException e) {
+                throw new InternalServerErrorException(e);
+            }
         }
 
         if (berechnungsresultat > 0) {
