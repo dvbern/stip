@@ -28,6 +28,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -52,23 +53,28 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "ch_shis", nullable = false, length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "ch_shis", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String chShis;
 
     @Nullable
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "bur_no", nullable = false, length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "bur_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String burNo;
 
     @Nullable
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "ct_no", nullable = false, length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "ct_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String ctNo;
 
     @NotNull
     @Column(name = "aktiv", nullable = false)
     private boolean aktiv = true;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsgang")
-    private List<Ausbildungsgang> ausbildungsgang;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
+    private List<Ausbildungsgang> ausbildungsgaenge;
+
+    @Transient
+    public List<Ausbildungsgang> getAktiveAusbildungsgaenge() {
+        return ausbildungsgaenge.stream().filter(Ausbildungsgang::isAktiv).toList();
+    }
 }

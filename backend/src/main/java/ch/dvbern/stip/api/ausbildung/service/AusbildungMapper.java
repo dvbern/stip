@@ -17,9 +17,11 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungDiffUtil;
-import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
@@ -37,11 +39,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import static ch.dvbern.stip.api.ausbildung.entity.AusbildungBesuchtBMSValidationConstraintValidator.VALID_BFS_VALUES_FOR_BMS_FLAG;
-
 @Mapper(
     config = MappingConfig.class,
-    uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class }
+    uses = { FallMapper.class, AusbildungsgangMapper.class }
 )
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Inject
@@ -127,8 +127,10 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
             () -> newAusbildung != null
             && ausbildung.getAusbildungsgang() != null
             && (AusbildungDiffUtil.hasAusbildungsgangChanged(ausbildung, newAusbildung))
-            && (!VALID_BFS_VALUES_FOR_BMS_FLAG
-                .contains(ausbildung.getAusbildungsgang().getBildungskategorie().getBfs())),
+            && !Objects.equals(
+                ausbildung.getAusbildungsgang().getAbschluss().getZusatzfrage(),
+                AbschlussZusatzfrage.BERUFSMATURITAET
+            ),
             "Reset BMS-Flag if it has changed and Ausbildung is not valid",
             () -> {
                 // reset invalid data

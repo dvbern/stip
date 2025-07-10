@@ -18,8 +18,10 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -44,7 +46,7 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Ausbildungsgang extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(
         name = "ausbildungsstaette_id",
         foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"),
@@ -54,7 +56,7 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(
         name = "abschluss_id",
         foreignKey = @ForeignKey(name = "FK_ausbildungsgang_abschluss_id"),

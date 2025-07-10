@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -179,6 +180,7 @@ public class GesuchService {
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
+    private final AusbildungsgangRepository ausbildungsgangRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -338,6 +340,13 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
+        if (Objects.nonNull(gesuch.getAusbildung().getAusbildungsgang())) {
+            gesuch.getAusbildung()
+                .setAusbildungsgang(
+                    ausbildungsgangRepository.requireById(gesuch.getAusbildung().getAusbildungsgang().getId())
+                );
+        }
+
         return Pair.of(
             gesuchMapperUtil.mapWithTranche(
                 gesuch,

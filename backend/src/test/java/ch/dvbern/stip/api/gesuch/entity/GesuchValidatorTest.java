@@ -25,10 +25,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -266,7 +268,7 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new AusbildungsgangOld());
+            .setAusbildungsgang(new Ausbildungsgang());
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
         assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
 
@@ -277,24 +279,14 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .setBildungskategorie(new Bildungskategorie());
+            .setAbschluss(new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSMATURITAET));
         // Test Ausbildung Validation for BFS value = 4: both true/false valid
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(4);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
-        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
-        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
-
-        // Test Ausbildung Validation for BFS value = 5: both true/false valid
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
-            .getAusbildung()
-            .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(5);
+            .getAbschluss()
+            .setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II)
+            .setBfsKategorie(4);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
         assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
@@ -304,8 +296,9 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(0);
+            .getAbschluss()
+            .setBfsKategorie(0)
+            .setZusatzfrage(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
         assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);

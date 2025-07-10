@@ -1,10 +1,16 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
+import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
+import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -19,32 +25,60 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/ausbildungsstaette")
+@Path("")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface AusbildungsstaetteResource {
 
     @POST
+    @Path("/abschluss")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    AusbildungsstaetteDto createAusbildungsstaette(@Valid AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
+    AbschlussDto createAbschlussBrueckenangebot(@Valid @NotNull BrueckenangebotCreateDto brueckenangebotCreateDto);
 
-    @DELETE
-    @Path("/{ausbildungsstaetteId}")
-    @Produces({ "text/plain" })
-    void deleteAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
+    @POST
+    @Path("/ausbildungsgang")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsgangDto createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
+
+    @POST
+    @Path("/ausbildungsstaette")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsstaetteDto createAusbildungsstaette(@Valid @NotNull AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
 
     @GET
-    @Path("/{ausbildungsstaetteId}")
+    @Path("/abschluss")
     @Produces({ "application/json", "text/plain" })
-    AusbildungsstaetteDto getAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
+    PaginatedAbschlussDto getAllAbschlussForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("ausbildungskategorie")   ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie,@QueryParam("bildungskategorie")   ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie,@QueryParam("bildungsrichtung")   ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung,@QueryParam("bfsKategorie")   Integer bfsKategorie,@QueryParam("berufsbefaehigenderAbschluss")   Boolean berufsbefaehigenderAbschluss,@QueryParam("ferien")   ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien,@QueryParam("bezeichnungDe")   String bezeichnungDe,@QueryParam("bezeichnungFr")   String bezeichnungFr,@QueryParam("zusatzfrage")   ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage,@QueryParam("aktiv")   Boolean aktiv);
 
     @GET
+    @Path("/ausbildungsgang")
     @Produces({ "application/json", "text/plain" })
-    List<AusbildungsstaetteDto> getAusbildungsstaetten();
+    PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("abschlussBezeichnungDe")   String abschlussBezeichnungDe,@QueryParam("abschlussBezeichnungFr")   String abschlussBezeichnungFr,@QueryParam("ausbildungsstaetteNameDe")   String ausbildungsstaetteNameDe,@QueryParam("ausbildungsstaetteNameFr")   String ausbildungsstaetteNameFr,@QueryParam("aktiv")   Boolean aktiv);
+
+    @GET
+    @Path("/ausbildungsstaette/slim")
+    @Produces({ "application/json", "text/plain" })
+    List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl();
+
+    @GET
+    @Path("/ausbildungsstaette")
+    @Produces({ "application/json", "text/plain" })
+    PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("nameDe")   String nameDe,@QueryParam("nameFr")   String nameFr,@QueryParam("chShis")   String chShis,@QueryParam("burNo")   String burNo,@QueryParam("ctNo")   String ctNo,@QueryParam("aktiv")   Boolean aktiv);
 
     @PATCH
-    @Path("/{ausbildungsstaetteId}")
-    @Consumes({ "application/json" })
+    @Path("/abschluss/inaktiv/{abschlussId}")
     @Produces({ "application/json", "text/plain" })
-    AusbildungsstaetteDto updateAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId,@Valid AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto);
+    AbschlussDto setAbschlussInaktiv(@PathParam("abschlussId") UUID abschlussId);
+
+    @PATCH
+    @Path("/ausbildungsgang/inaktiv/{ausbildungsgangId}")
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsgangDto setAusbildungsgangInaktiv(@PathParam("ausbildungsgangId") UUID ausbildungsgangId);
+
+    @PATCH
+    @Path("/ausbildungsstaette/inaktiv/{ausbildungsstaetteId}")
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsstaetteDto setAusbildungsstaetteInaktiv(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
 }

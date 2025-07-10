@@ -17,10 +17,92 @@
 
 package ch.dvbern.stip.api.ausbildung.repo;
 
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
+import java.util.stream.Stream;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-public class AusbildungsstaetteRepository implements BaseRepository<AusbildungsstaetteOld> {
+@RequiredArgsConstructor
+public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungsstaette> {
+    private final EntityManager entityManager;
+
+    private static final QAusbildungsstaette Q_AUSBILDUNGSSTAETTE = QAusbildungsstaette.ausbildungsstaette;
+
+    public Stream<Ausbildungsstaette> findAllAktiv() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_AUSBILDUNGSSTAETTE)
+            .where(Q_AUSBILDUNGSSTAETTE.aktiv.isTrue())
+            .stream();
+    }
+
+    public JPAQuery<Ausbildungsstaette> baseQuery() {
+        return new JPAQueryFactory(entityManager).selectFrom(Q_AUSBILDUNGSSTAETTE);
+    }
+
+    public void nameDeFilter(final JPAQuery<Ausbildungsstaette> query, final String nameDe) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nameDe.containsIgnoreCase(nameDe));
+    }
+
+    public void nameFrFilter(final JPAQuery<Ausbildungsstaette> query, final String nameFr) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nameFr.containsIgnoreCase(nameFr));
+    }
+
+    public void chShisFilter(final JPAQuery<Ausbildungsstaette> query, final String chShis) {
+        query.where(Q_AUSBILDUNGSSTAETTE.chShis.containsIgnoreCase(chShis));
+    }
+
+    public void burNoFilter(final JPAQuery<Ausbildungsstaette> query, final String burNo) {
+        query.where(Q_AUSBILDUNGSSTAETTE.burNo.containsIgnoreCase(burNo));
+    }
+
+    public void ctNoFilter(final JPAQuery<Ausbildungsstaette> query, final String ctNo) {
+        query.where(Q_AUSBILDUNGSSTAETTE.ctNo.containsIgnoreCase(ctNo));
+    }
+
+    public void aktivFilter(final JPAQuery<Ausbildungsstaette> query, final Boolean aktiv) {
+        query.where(Q_AUSBILDUNGSSTAETTE.aktiv.eq(aktiv));
+    }
+
+    public void orderBy(
+        final JPAQuery<Ausbildungsstaette> query,
+        final AusbildungsstaetteSortColumn column,
+        final SortOrder sortOrder
+    ) {
+        final var fieldSpecified = switch (column) {
+            case NAME_DE -> null;
+            case NAME_FR -> null;
+            case CH_SHIS -> null;
+            case BUR_NO -> null;
+            case CT_NO -> null;
+            case AKTIV -> Q_AUSBILDUNGSSTAETTE.aktiv;
+        };
+
+        final var orderSpecifier = switch (sortOrder) {
+            case ASCENDING -> fieldSpecified.asc();
+            case DESCENDING -> fieldSpecified.desc();
+        };
+
+        query.orderBy(orderSpecifier);
+    }
+
+    public void defaultOrder(final JPAQuery<Ausbildungsstaette> query) {
+        query.orderBy(Q_AUSBILDUNGSSTAETTE.nameDe.desc());
+    }
+
+    public JPAQuery<Long> getCountQuery(final JPAQuery<Ausbildungsstaette> query) {
+        return query.clone().select(Q_AUSBILDUNGSSTAETTE.count());
+    }
+
+    public void paginate(final JPAQuery<Ausbildungsstaette> query, final int page, final int pageSize) {
+        query.offset((long) pageSize * page).limit(pageSize);
+    }
 }

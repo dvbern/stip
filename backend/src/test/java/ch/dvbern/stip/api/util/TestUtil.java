@@ -36,11 +36,14 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -572,15 +575,26 @@ public class TestUtil {
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
-                        )
+                    new Ausbildungsgang()
                 )
                 .setAusbildungBegin(LocalDate.now().minusYears(1))
                 .setAusbildungEnd(LocalDate.now().plusYears(5))
         );
+        baseGesuch.getAusbildung()
+            .getAusbildungsgang()
+            .setAbschluss(
+                new Abschluss().setBfsKategorie(9)
+                    .setBildungskategorie(
+                        Bildungskategorie.TERTIAERSTUFE_B
+                    )
+                    .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
+                    .setAusbildungsgaenge(List.of(baseGesuch.getAusbildung().getAusbildungsgang()))
+            );
+        baseGesuch.getAusbildung()
+            .getAusbildungsgang()
+            .setAusbildungsstaette(
+                new Ausbildungsstaette().setAusbildungsgaenge(List.of(baseGesuch.getAusbildung().getAusbildungsgang()))
+            );
 
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()

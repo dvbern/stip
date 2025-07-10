@@ -3659,7 +3659,9 @@ paths:
             $ref: '#/components/schemas/AbschlussSortColumn'
           in: query
           required: false
-        - $ref: '#/components/parameters/abschluss'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/ausbildungskategorie'
         - $ref: '#/components/parameters/bildungskategorie'
         - $ref: '#/components/parameters/bildungsrichtung'
@@ -3675,9 +3677,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Abschluss'
+                $ref: '#/components/schemas/PaginatedAbschluss'
           description: Returns all Abschluesse
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3746,6 +3746,9 @@ paths:
             $ref: '#/components/schemas/AusbildungsstaetteSortColumn'
           in: query
           required: false
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/nameDe'
         - $ref: '#/components/parameters/nameFr'
         - $ref: '#/components/parameters/chShis'
@@ -3757,9 +3760,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ausbildungsstaette'
+                $ref: '#/components/schemas/PaginatedAusbildungsstaette'
           description: Returns all Ausbildungsstaette
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3849,19 +3850,20 @@ paths:
             $ref: '#/components/schemas/AusbildungsgangSortColumn'
           in: query
           required: false
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/abschlussBezeichnungDe'
         - $ref: '#/components/parameters/abschlussBezeichnungFr'
-        - $ref: '#/components/parameters/ausbildungsstaetteBezeichnungDe'
-        - $ref: '#/components/parameters/ausbildungsstaetteBezeichnungFr'
+        - $ref: '#/components/parameters/ausbildungsstaetteNameDe'
+        - $ref: '#/components/parameters/ausbildungsstaetteNameFr'
         - $ref: '#/components/parameters/aktiv'
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ausbildungsgang'
+                $ref: '#/components/schemas/PaginatedAusbildungsgang'
           description: Returns allAusbildungsgang
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -5477,7 +5479,6 @@ components:
         - BERUFSMATURITAET
     AbschlussSortColumn:
       enum:
-        - ABSCHLUSS
         - AUSBILDUNGSKATEGORIE
         - BILDUNGSKATEGORIE
         - BILDUNGSRICHTUNG
@@ -5526,6 +5527,14 @@ components:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
           type: boolean
+    PaginatedAbschluss:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Abschluss'
     BrueckenangebotCreate:
       type: object
       required:
@@ -5562,13 +5571,21 @@ components:
         nameFr:
           type: string
         chShis:
-          type: integer
+          type: string
         burNo:
           type: string
         ctNo:
           type: string
         aktiv:
           type: boolean
+    PaginatedAusbildungsstaette:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ausbildungsstaette'
     AusbildungsstaetteCreate:
       type: object
       required:
@@ -5583,12 +5600,10 @@ components:
           type: string
     AusbildungsgangSortColumn:
       enum:
-        - BEZEICHNUNG_DE
-        - BEZEICHNUNG_FR
         - ABSCHLUSS_BEZEICHNUNG_DE
         - ABSCHLUSS_BEZEICHNUNG_FR
-        - AUSBILDUNGSSTAETTE_BEZEICHNUNG_DE
-        - AUSBILDUNGSSTAETTE_BEZEICHNUNG_FR
+        - AUSBILDUNGSSTAETTE_NAME_DE
+        - AUSBILDUNGSSTAETTE_NAME_FR
         - AKTIV
     Ausbildungsgang:
       type: object
@@ -5600,8 +5615,8 @@ components:
         - abschlussBezeichnungDe
         - abschlussBezeichnungFr
         - ausbildungsstaetteId
-        - ausbildungsstaetteBezeichnungDe
-        - ausbildungsstaetteBezeichnungFr
+        - ausbildungsstaetteNameDe
+        - ausbildungsstaetteNameFr
         - aktiv
       properties:
         id:
@@ -5618,12 +5633,20 @@ components:
           type: string
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsstaetteBezeichnungDe:
+        ausbildungsstaetteNameDe:
           type: string
-        ausbildungsstaetteBezeichnungFr:
+        ausbildungsstaetteNameFr:
           type: string
         aktiv:
           type: boolean
+    PaginatedAusbildungsgang:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ausbildungsgang'
     AusbildungsgangCreate:
       type: object
       required:
@@ -5651,15 +5674,15 @@ components:
       type: object
       required:
         - id
-        - bezeichnungDe
-        - bezeichnungFr
+        - nameDe
+        - nameFr
         - ausbildungsgaenge
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        bezeichnungDe:
+        nameDe:
           type: string
-        bezeichnungFr:
+        nameFr:
           type: string
         ausbildungsgaenge:
           type: array
@@ -7199,7 +7222,7 @@ components:
     chShis:
       name: chShis
       schema:
-        type: integer
+        type: string
       in: query
     burNo:
       name: burNo
@@ -7221,13 +7244,13 @@ components:
       schema:
         type: string
       in: query
-    ausbildungsstaetteBezeichnungDe:
-      name: ausbildungsstaetteBezeichnungDe
+    ausbildungsstaetteNameDe:
+      name: ausbildungsstaetteNameDe
       schema:
         type: string
       in: query
-    ausbildungsstaetteBezeichnungFr:
-      name: ausbildungsstaetteBezeichnungFr
+    ausbildungsstaetteNameFr:
+      name: ausbildungsstaetteNameFr
       schema:
         type: string
       in: query

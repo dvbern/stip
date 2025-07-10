@@ -25,11 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
@@ -130,7 +132,7 @@ public final class GesuchGenerator {
         var ausbildung = new Ausbildung()
             .setFall(new Fall())
             .setAusbildungsgang(
-                (AusbildungsgangOld) new AusbildungsgangOld().setBildungskategorie(new Bildungskategorie().setBfs(9))
+                (Ausbildungsgang) new Ausbildungsgang()
                     .setId(ausbildungDtoSpec.getAusbildungsgangId())
             )
             .setAlternativeAusbildungsgang(ausbildungDtoSpec.getAlternativeAusbildungsgang())
@@ -142,6 +144,18 @@ public final class GesuchGenerator {
             .setPensum(AusbildungsPensum.VOLLZEIT)
             .setAusbildungsort(ausbildungDtoSpec.getAusbildungsort())
             .setIsAusbildungAusland(ausbildungDtoSpec.getIsAusbildungAusland());
+        ausbildung.getAusbildungsgang()
+            .setAbschluss(
+                new Abschluss().setBfsKategorie(9)
+                    .setBildungskategorie(
+                        Bildungskategorie.TERTIAERSTUFE_B
+                    )
+                    .setAusbildungsgaenge(List.of(ausbildung.getAusbildungsgang()))
+            );
+        ausbildung.getAusbildungsgang()
+            .setAusbildungsstaette(
+                new Ausbildungsstaette().setAusbildungsgaenge(List.of(ausbildung.getAusbildungsgang()))
+            );
         var gesuch = new Gesuch()
             .setAusbildung(ausbildung)
             .setGesuchsperiode(

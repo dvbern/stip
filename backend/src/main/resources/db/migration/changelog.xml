@@ -173,4 +173,9 @@
   <include file="/db/migration/0.47/0.47.0-KSTIP-2021.xml" />
   <!--  </editor-fold> -->
 
+
+  <!-- <editor-fold desc="v0.48" defaultstate="collapsed" -->
+  <include file="/db/migration/0.48/0.48.0-KSTIP-2381.xml" />
+  <!--  </editor-fold> -->
+
 </databaseChangeLog>

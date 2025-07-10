@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.ausbildung.type;
 
 public enum AbschlussSortColumn {
-    ABSCHLUSS,
     AUSBILDUNGSKATEGORIE,
     BILDUNGSKATEGORIE,
     BILDUNGSRICHTUNG,

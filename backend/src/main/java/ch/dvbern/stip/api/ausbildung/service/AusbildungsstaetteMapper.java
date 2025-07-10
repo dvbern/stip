@@ -17,28 +17,35 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
+import java.util.Objects;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
-import org.mapstruct.BeanMapping;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(
     config = MappingConfig.class,
     uses = AusbildungsgangMapper.class
 )
-public interface AusbildungsstaetteMapper {
-    AusbildungsstaetteOld toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
+public abstract class AusbildungsstaetteMapper {
+    @Mapping(target = "ctNo", source = ".", qualifiedByName = "getCtNo")
+    abstract Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
 
-    AusbildungsstaetteDto toDto(AusbildungsstaetteOld ausbildungsstaette);
+    @Named("getCtNo")
+    String getCtNo(AusbildungsstaetteCreateDto ausbildungsstaetteDto) {
+        if (Objects.isNull(ausbildungsstaetteDto.getBurNo())) {
+            return "CT.BE";
+        }
+        return null;
+    }
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    AusbildungsstaetteOld partialUpdate(
-        AusbildungsstaetteUpdateDto ausbildungsstaetteDto,
-        @MappingTarget AusbildungsstaetteOld ausbildungsstaette
-    );
+    abstract AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
+
+    @Mapping(source = "aktiveAusbildungsgaenge", target = "ausbildungsgaenge")
+    abstract AusbildungsstaetteSlimDto toSlimDto(Ausbildungsstaette ausbildungsstaette);
 }

@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,8 +31,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangDtoSpec.JSON_PROPERTY_ID,
   AusbildungsgangDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  AusbildungsgangDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE,
-  AusbildungsgangDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID
+  AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_ID,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_DE,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_FR,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_DE,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_FR,
+  AusbildungsgangDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Ausbildungsgang")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -47,11 +51,26 @@ public class AusbildungsgangDtoSpec {
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
 
-  public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
-  private BildungskategorieDtoSpec bildungskategorie;
+  public static final String JSON_PROPERTY_ABSCHLUSS_ID = "abschlussId";
+  private UUID abschlussId;
+
+  public static final String JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_DE = "abschlussBezeichnungDe";
+  private String abschlussBezeichnungDe;
+
+  public static final String JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_FR = "abschlussBezeichnungFr";
+  private String abschlussBezeichnungFr;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
   private UUID ausbildungsstaetteId;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_DE = "ausbildungsstaetteNameDe";
+  private String ausbildungsstaetteNameDe;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_FR = "ausbildungsstaetteNameFr";
+  private String ausbildungsstaetteNameFr;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public AusbildungsgangDtoSpec() {
   }
@@ -92,9 +111,9 @@ public class AusbildungsgangDtoSpec {
    * Get bezeichnungDe
    * @return bezeichnungDe
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
     return bezeichnungDe;
@@ -102,7 +121,7 @@ public class AusbildungsgangDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -118,9 +137,9 @@ public class AusbildungsgangDtoSpec {
    * Get bezeichnungFr
    * @return bezeichnungFr
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
     return bezeichnungFr;
@@ -128,35 +147,87 @@ public class AusbildungsgangDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
 
-  public AusbildungsgangDtoSpec bildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+  public AusbildungsgangDtoSpec abschlussId(UUID abschlussId) {
     
-    this.bildungskategorie = bildungskategorie;
+    this.abschlussId = abschlussId;
     return this;
   }
 
    /**
-   * Get bildungskategorie
-   * @return bildungskategorie
+   * Get abschlussId
+   * @return abschlussId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BildungskategorieDtoSpec getBildungskategorie() {
-    return bildungskategorie;
+  public UUID getAbschlussId() {
+    return abschlussId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
-    this.bildungskategorie = bildungskategorie;
+  public void setAbschlussId(UUID abschlussId) {
+    this.abschlussId = abschlussId;
+  }
+
+
+  public AusbildungsgangDtoSpec abschlussBezeichnungDe(String abschlussBezeichnungDe) {
+    
+    this.abschlussBezeichnungDe = abschlussBezeichnungDe;
+    return this;
+  }
+
+   /**
+   * Get abschlussBezeichnungDe
+   * @return abschlussBezeichnungDe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAbschlussBezeichnungDe() {
+    return abschlussBezeichnungDe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAbschlussBezeichnungDe(String abschlussBezeichnungDe) {
+    this.abschlussBezeichnungDe = abschlussBezeichnungDe;
+  }
+
+
+  public AusbildungsgangDtoSpec abschlussBezeichnungFr(String abschlussBezeichnungFr) {
+    
+    this.abschlussBezeichnungFr = abschlussBezeichnungFr;
+    return this;
+  }
+
+   /**
+   * Get abschlussBezeichnungFr
+   * @return abschlussBezeichnungFr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAbschlussBezeichnungFr() {
+    return abschlussBezeichnungFr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAbschlussBezeichnungFr(String abschlussBezeichnungFr) {
+    this.abschlussBezeichnungFr = abschlussBezeichnungFr;
   }
 
 
@@ -170,9 +241,9 @@ public class AusbildungsgangDtoSpec {
    * Get ausbildungsstaetteId
    * @return ausbildungsstaetteId
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getAusbildungsstaetteId() {
     return ausbildungsstaetteId;
@@ -180,9 +251,87 @@ public class AusbildungsgangDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
+  }
+
+
+  public AusbildungsgangDtoSpec ausbildungsstaetteNameDe(String ausbildungsstaetteNameDe) {
+    
+    this.ausbildungsstaetteNameDe = ausbildungsstaetteNameDe;
+    return this;
+  }
+
+   /**
+   * Get ausbildungsstaetteNameDe
+   * @return ausbildungsstaetteNameDe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungsstaetteNameDe() {
+    return ausbildungsstaetteNameDe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungsstaetteNameDe(String ausbildungsstaetteNameDe) {
+    this.ausbildungsstaetteNameDe = ausbildungsstaetteNameDe;
+  }
+
+
+  public AusbildungsgangDtoSpec ausbildungsstaetteNameFr(String ausbildungsstaetteNameFr) {
+    
+    this.ausbildungsstaetteNameFr = ausbildungsstaetteNameFr;
+    return this;
+  }
+
+   /**
+   * Get ausbildungsstaetteNameFr
+   * @return ausbildungsstaetteNameFr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungsstaetteNameFr() {
+    return ausbildungsstaetteNameFr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_NAME_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungsstaetteNameFr(String ausbildungsstaetteNameFr) {
+    this.ausbildungsstaetteNameFr = ausbildungsstaetteNameFr;
+  }
+
+
+  public AusbildungsgangDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
   @Override
@@ -197,13 +346,18 @@ public class AusbildungsgangDtoSpec {
     return Objects.equals(this.id, ausbildungsgang.id) &&
         Objects.equals(this.bezeichnungDe, ausbildungsgang.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgang.bezeichnungFr) &&
-        Objects.equals(this.bildungskategorie, ausbildungsgang.bildungskategorie) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgang.ausbildungsstaetteId);
+        Objects.equals(this.abschlussId, ausbildungsgang.abschlussId) &&
+        Objects.equals(this.abschlussBezeichnungDe, ausbildungsgang.abschlussBezeichnungDe) &&
+        Objects.equals(this.abschlussBezeichnungFr, ausbildungsgang.abschlussBezeichnungFr) &&
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgang.ausbildungsstaetteId) &&
+        Objects.equals(this.ausbildungsstaetteNameDe, ausbildungsgang.ausbildungsstaetteNameDe) &&
+        Objects.equals(this.ausbildungsstaetteNameFr, ausbildungsgang.ausbildungsstaetteNameFr) &&
+        Objects.equals(this.aktiv, ausbildungsgang.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, ausbildungsstaetteId);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv);
   }
 
   @Override
@@ -213,8 +367,13 @@ public class AusbildungsgangDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
+    sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
+    sb.append("    abschlussBezeichnungDe: ").append(toIndentedString(abschlussBezeichnungDe)).append("\n");
+    sb.append("    abschlussBezeichnungFr: ").append(toIndentedString(abschlussBezeichnungFr)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
+    sb.append("    ausbildungsstaetteNameDe: ").append(toIndentedString(ausbildungsstaetteNameDe)).append("\n");
+    sb.append("    ausbildungsstaetteNameFr: ").append(toIndentedString(ausbildungsstaetteNameFr)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

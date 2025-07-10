@@ -97,6 +97,6 @@ public class Abschluss extends AbstractMandantEntity {
     @Column(name = "aktiv", nullable = false)
     private boolean aktiv = true;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsgang")
-    private List<Ausbildungsgang> ausbildungsgang;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "abschluss")
+    private List<Ausbildungsgang> ausbildungsgaenge;
 }

@@ -17,43 +17,50 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
-import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
-import ch.dvbern.stip.api.common.service.EntityIdReference;
-import ch.dvbern.stip.api.common.service.EntityReferenceMapper;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
-import org.mapstruct.BeanMapping;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class, uses = BildungskategorieMapper.class)
-public interface AusbildungsgangMapper {
-    @Mapping(
-        target = "bildungskategorie",
-        source = "bildungskategorieId",
-        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
-    )
-    AusbildungsgangOld toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
+@Mapper(config = MappingConfig.class)
+public abstract class AusbildungsgangMapper {
+    @Mapping(target = "ausbildungsstaette.id", source = "ausbildungsstaetteId")
+    @Mapping(target = "abschluss.id", source = "abschlussId")
+    public abstract Ausbildungsgang toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
 
-    @Mapping(
-        target = "ausbildungsstaetteId",
-        source = "ausbildungsstaette.id"
-    )
-    AusbildungsgangDto toDto(AusbildungsgangOld ausbildungsgang);
+    @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")
+    @Mapping(target = "bezeichnungFr", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungFr")
+    @Mapping(target = "abschlussId", source = "abschluss.id")
+    @Mapping(target = "abschlussBezeichnungDe", source = "abschluss.bezeichnungDe")
+    @Mapping(target = "abschlussBezeichnungFr", source = "abschluss.bezeichnungFr")
+    @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
+    @Mapping(target = "ausbildungsstaetteNameDe", source = "ausbildungsstaette.nameDe")
+    @Mapping(target = "ausbildungsstaetteNameFr", source = "ausbildungsstaette.nameFr")
+    public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(
-        target = "bildungskategorie",
-        source = "bildungskategorieId",
-        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
-    )
-    AusbildungsgangOld partialUpdate(
-        AusbildungsgangUpdateDto ausbildungsgangDto,
-        @MappingTarget AusbildungsgangOld ausbildungsgang
-    );
+    @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")
+    @Mapping(target = "bezeichnungFr", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungFr")
+    public abstract AusbildungsgangSlimDto toSlimDto(Ausbildungsgang ausbildungsgang);
+
+    @Named("getAusbildungsgangBezeichnungDe")
+    public String getAusbildungsgangBezeichnungDe(Ausbildungsgang ausbildungsgang) {
+        return String.format(
+            "%s - %s",
+            ausbildungsgang.getAusbildungsstaette().getNameDe(),
+            ausbildungsgang.getAbschluss().getBezeichnungDe()
+        );
+    }
+
+    @Named("getAusbildungsgangBezeichnungFr")
+    public String getAusbildungsgangBezeichnungFr(Ausbildungsgang ausbildungsgang) {
+        return String.format(
+            "%s - %s",
+            ausbildungsgang.getAusbildungsstaette().getNameFr(),
+            ausbildungsgang.getAbschluss().getBezeichnungFr()
+        );
+    }
 }

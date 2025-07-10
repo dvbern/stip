@@ -18,13 +18,17 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsstaetteOld;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,59 +36,93 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungsstaetteService {
-
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
+    private final ConfigService configService;
 
-    public AusbildungsstaetteDto findById(UUID ausbildungsstetteId) {
-        var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstetteId);
+    @Transactional
+    public AusbildungsstaetteDto createAusbildungsstaette(
+        final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
+    ) {
+        final var ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreateDto);
+        ausbildungsstaetteRepository.persist(ausbildungsstaette);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }
 
     @Transactional
-    public List<AusbildungsstaetteDto> getAusbildungsstaetten() {
-        return ausbildungsstaetteRepository.findAll()
-            .stream()
-            .map(ausbildungsstaetteMapper::toDto)
+    public List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl() {
+        return ausbildungsstaetteRepository.findAllAktiv()
+            .map(ausbildungsstaetteMapper::toSlimDto)
+            .filter(ausbildungsstaetteSlimDto -> !ausbildungsstaetteSlimDto.getAusbildungsgaenge().isEmpty())
             .toList();
     }
 
+    public PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(
+        final Integer page,
+        final Integer pageSize,
+        final AusbildungsstaetteSortColumn sortColumn,
+        final SortOrder sortOrder,
+        final String nameDe,
+        final String nameFr,
+        final String chShis,
+        final String burNo,
+        final String ctNo,
+        final Boolean aktiv
+    ) {
+        if (pageSize > configService.getMaxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+
+        final var baseQuery = ausbildungsstaetteRepository.baseQuery();
+
+        if (Objects.nonNull(nameDe)) {
+            ausbildungsstaetteRepository.nameDeFilter(baseQuery, nameDe);
+        }
+        if (Objects.nonNull(nameFr)) {
+            ausbildungsstaetteRepository.nameFrFilter(baseQuery, nameFr);
+        }
+        if (Objects.nonNull(chShis)) {
+            ausbildungsstaetteRepository.chShisFilter(baseQuery, chShis);
+        }
+        if (Objects.nonNull(burNo)) {
+            ausbildungsstaetteRepository.burNoFilter(baseQuery, burNo);
+        }
+        if (Objects.nonNull(ctNo)) {
+            ausbildungsstaetteRepository.ctNoFilter(baseQuery, ctNo);
+        }
+        if (Objects.nonNull(aktiv)) {
+            ausbildungsstaetteRepository.aktivFilter(baseQuery, aktiv);
+        }
+
+        // Creating the count query must happen before ordering,
+        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
+        final var countQuery = ausbildungsstaetteRepository.getCountQuery(baseQuery);
+
+        if (sortColumn != null && sortOrder != null) {
+            ausbildungsstaetteRepository.orderBy(baseQuery, sortColumn, sortOrder);
+        } else {
+            ausbildungsstaetteRepository.defaultOrder(baseQuery);
+        }
+
+        ausbildungsstaetteRepository.paginate(baseQuery, page, pageSize);
+
+        final var results = baseQuery.stream()
+            .map(ausbildungsstaetteMapper::toDto)
+            .toList();
+
+        return new PaginatedAusbildungsstaetteDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
+        );
+    }
+
     @Transactional
-    public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaetteDto) {
-        AusbildungsstaetteOld ausbildungsstaette = persistAusbildungsstaette(ausbildungsstaetteDto);
+    public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(final UUID ausbildungsstaetteId) {
+        final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        ausbildungsstaette.setAktiv(false);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
-    }
-
-    @Transactional
-    public AusbildungsstaetteDto updateAusbildungsstaette(
-        UUID ausbildungsstaetteId,
-        AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto
-    ) {
-        AusbildungsstaetteOld ausbildungsstaetteToUpdate = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
-        persistAusbildungsstaette(ausbildungsstaetteUpdateDto, ausbildungsstaetteToUpdate);
-        return ausbildungsstaetteMapper.toDto(ausbildungsstaetteToUpdate);
-    }
-
-    @Transactional
-    public void deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
-        AusbildungsstaetteOld ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
-        ausbildungsstaetteRepository.delete(ausbildungsstaette);
-    }
-
-    private void persistAusbildungsstaette(
-        AusbildungsstaetteUpdateDto ausbildungsstaetteUpdate,
-        AusbildungsstaetteOld ausbildungsstaetteToUpdate
-    ) {
-        ausbildungsstaetteMapper.partialUpdate(ausbildungsstaetteUpdate, ausbildungsstaetteToUpdate);
-        ausbildungsstaetteRepository.persist(ausbildungsstaetteToUpdate);
-    }
-
-    private AusbildungsstaetteOld persistAusbildungsstaette(
-        AusbildungsstaetteCreateDto ausbildungsstaetteCreate
-    ) {
-        AusbildungsstaetteOld ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreate);
-        ausbildungsstaetteRepository.persist(ausbildungsstaette);
-        return ausbildungsstaette;
     }
 
 }

@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -130,10 +132,13 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(10)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(
+                                    Bildungsrichtung.HOCHSCHULE
+                                )
                         )
                 )
         );
@@ -191,10 +196,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II)
+                                .setBildungsrichtung(Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG)
                         )
                 )
         );
@@ -289,10 +295,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
         );
@@ -401,10 +408,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(6)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(6)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
         );
@@ -564,10 +572,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(9)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(9)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
         );
@@ -708,10 +717,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
         );
@@ -849,10 +859,11 @@ class BerechnungTest {
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
-                    new AusbildungsgangOld()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(8)
+                    new Ausbildungsgang()
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(10)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setPensum(AusbildungsPensum.TEILZEIT)

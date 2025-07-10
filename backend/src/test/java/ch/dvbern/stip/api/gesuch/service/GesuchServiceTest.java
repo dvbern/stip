@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungsgangOld;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -38,7 +38,6 @@ import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
@@ -964,7 +963,7 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new AusbildungsgangOld().setBildungskategorie(new Bildungskategorie()));
+            .setAusbildungsgang(new Ausbildungsgang());
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(
@@ -1015,7 +1014,7 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new AusbildungsgangOld().setBildungskategorie(new Bildungskategorie()));
+            .setAusbildungsgang(new Ausbildungsgang());
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(

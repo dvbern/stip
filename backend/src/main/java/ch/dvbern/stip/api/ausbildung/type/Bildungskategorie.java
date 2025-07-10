@@ -17,9 +17,31 @@
 
 package ch.dvbern.stip.api.ausbildung.type;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum Bildungskategorie {
     TERTIAERSTUFE_A,
     TERTIAERSTUFE_B,
     SEKUNDARSTUFE_I,
-    SEKUNDARSTUFE_II
+    SEKUNDARSTUFE_II;
+
+    public boolean isTertiaerstufe() {
+        return TERTIAERSTUFEN.contains(this);
+    }
+
+    public static final Set<Bildungskategorie> TERTIAERSTUFEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            TERTIAERSTUFE_A,
+            TERTIAERSTUFE_B
+        )
+    );
+
+    public static final Set<Bildungskategorie> SEKUNDARSTUFEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            SEKUNDARSTUFE_I,
+            SEKUNDARSTUFE_II
+        )
+    );
 }
