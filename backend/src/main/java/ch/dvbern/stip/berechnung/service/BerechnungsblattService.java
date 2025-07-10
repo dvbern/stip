@@ -90,7 +90,12 @@ public class BerechnungsblattService {
             UnterschriftenblattDokumentTyp.MUTTER
         );
 
-    public void addBerechnungsblattToDocument(final Gesuch gesuch, final Locale locale, Document document)
+    public void addBerechnungsblattToDocument(
+        final Gesuch gesuch,
+        final Locale locale,
+        Document document,
+        final boolean addAll
+    )
     throws IOException {
         pdfFont = PdfFontFactory.createFont(FONT);
         pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
@@ -185,7 +190,7 @@ public class BerechnungsblattService {
                 var requiredUnterschriftenblatttyp =
                     UNTERSCHRIFTENBLATT_DOKUMENT_TYP_STEUERDATEN_TYP_MAP.get(steuerdatentyp);
 
-                if (!existingUnterschriftenblaetterTyps.contains(requiredUnterschriftenblatttyp)) {
+                if (!addAll && !existingUnterschriftenblaetterTyps.contains(requiredUnterschriftenblatttyp)) {
                     continue;
                 }
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
@@ -239,7 +244,7 @@ public class BerechnungsblattService {
         PdfWriter writer = new PdfWriter(out);
         PdfDocument pdfDocument = new PdfDocument(writer);
         Document document = new Document(pdfDocument, PAGE_SIZE);
-        addBerechnungsblattToDocument(gesuch, locale, document);
+        addBerechnungsblattToDocument(gesuch, locale, document, true);
         PdfUtils.makePageNumberEven(document);
         document.close();
         pdfDocument.close();

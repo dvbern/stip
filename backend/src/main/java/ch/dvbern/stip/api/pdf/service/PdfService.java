@@ -340,7 +340,8 @@ public class PdfService {
 
     private void berechnungsblaetter(Document document, final Gesuch gesuch) throws IOException {
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        berechnungsblattService.addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document);
+        berechnungsblattService
+            .addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document, false);
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
