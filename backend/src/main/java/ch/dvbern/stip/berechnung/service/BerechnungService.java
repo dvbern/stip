@@ -529,7 +529,7 @@ public class BerechnungService {
         for (var modelName : BERECHNUNG_MODEL_NAMES) {
             models.add(
                 dmnService.loadModelsForTenantAndVersionByName(
-                    tenantService.getCurrentTenant().getIdentifier(),
+                    tenantService.getCurrentTenantIdentifier(),
                     request.getVersion(),
                     modelName
                 ).get(0)
