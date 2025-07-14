@@ -91,6 +91,8 @@ class JpaTest {
             .areNotAssignableTo(SozialdienstBenutzer.class)
             .and()
             .areAnnotatedWith(Entity.class)
+            .and()
+            .areAnnotatedWith(Table.class)
             .should((new ArchCondition<>("have an index") {
                 @Override
                 public void check(JavaClass javaClass, ConditionEvents conditionEvents) {

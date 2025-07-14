@@ -19,20 +19,16 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
-import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -54,6 +50,9 @@ import org.mapstruct.Named;
 public abstract class GesuchMapper {
     @Inject
     Validator validator;
+
+    @Inject
+    GesuchStatusService gesuchStatusService;
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
@@ -102,26 +101,7 @@ public abstract class GesuchMapper {
 
     @Named("getCanGetBerechnung")
     boolean getCanGetBerechnung(Gesuch gesuch) {
-        boolean canGetBerechnung = true;
-
-        if (gesuch.getAusbildung().isAusbildungNichtGefunden()) {
-            canGetBerechnung = false;
-        }
-
-        for (var gesuchTranche : gesuch.getGesuchTranchen()) {
-            try {
-                ValidatorUtil.validate(
-                    validator,
-                    gesuchTranche.getGesuchFormular(),
-                    List.of(SteuerdatenPageValidation.class, GesuchNachInBearbeitungSBValidationGroup.class)
-                );
-            } catch (ValidationsException e) {
-                canGetBerechnung = false;
-                break;
-            }
-        }
-
-        return canGetBerechnung;
+        return gesuchStatusService.canGetBerechnung(gesuch);
     }
 
     static DateRange getGesuchDateRange(Gesuch gesuch) {

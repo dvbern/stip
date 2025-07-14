@@ -63,7 +63,7 @@ import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 
 public final class GesuchGenerator {
@@ -103,8 +103,8 @@ public final class GesuchGenerator {
     /* return a new instance of Gesuch with a valid GesuchPeriode */
     public static Gesuch initGesuch() {
         final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_23_24 != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
         } else {
             gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
         }

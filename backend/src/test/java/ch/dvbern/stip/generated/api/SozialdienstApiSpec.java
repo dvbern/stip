@@ -361,7 +361,7 @@ public class SozialdienstApiSpec {
     }
     /**
      * 
-     * update an exisitng SozialdienstBenutzer
+     * update an existing SozialdienstBenutzer
      *
      * @see #sozialdienstBenutzerIdPath  (required)
      */
@@ -980,7 +980,7 @@ public class SozialdienstApiSpec {
     }
     /**
      * 
-     * update an exisitng SozialdienstBenutzer
+     * update an existing SozialdienstBenutzer
      *
      * @see #body  (optional)
      * return SozialdienstBenutzerDtoSpec

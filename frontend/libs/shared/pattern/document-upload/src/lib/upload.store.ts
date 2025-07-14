@@ -46,6 +46,14 @@ import {
   updateProgressFor,
 } from './helpers/upload';
 
+type ServiceDefaultParams = readonly [
+  'events',
+  undefined,
+  {
+    readonly context: ReturnType<typeof noGlobalErrorsIf>;
+  },
+];
+
 @Injectable()
 export class UploadStore {
   readonly state = signalState<DokumentState>({
@@ -128,6 +136,76 @@ export class UploadStore {
         this.documentService.getCustomGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
         this.documentService.getCustomGesuchDokumentForTypSB$(params),
+    });
+  }
+
+  private deleteDokumentByAppType$(dokumentId: string, ignoreErrors?: boolean) {
+    const deleteCallParams = [
+      { dokumentId },
+      undefined,
+      undefined,
+      {
+        context: shouldIgnoreErrorsIf(!!ignoreErrors),
+      },
+    ] as const;
+
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.documentService.deleteDokumentGS$(...deleteCallParams),
+      'sachbearbeitung-app': () =>
+        this.documentService.deleteDokumentSB$(...deleteCallParams),
+    });
+  }
+
+  private createDokumentByAppType$(
+    fileUpload: File,
+    dokument: SharedModelStandardGesuchDokument,
+    serviceDefaultParams: ServiceDefaultParams,
+  ) {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.documentService.createDokumentGS$(
+          {
+            fileUpload,
+            gesuchTrancheId: dokument.trancheId,
+            dokumentTyp: dokument.dokumentTyp,
+          },
+          ...serviceDefaultParams,
+        ),
+      'sachbearbeitung-app': () =>
+        this.documentService.createDokumentSB$(
+          {
+            fileUpload,
+            gesuchTrancheId: dokument.trancheId,
+            dokumentTyp: dokument.dokumentTyp,
+          },
+          ...serviceDefaultParams,
+        ),
+    });
+  }
+
+  private createCustomDokumentByAppType$(
+    fileUpload: File,
+    dokument: SharedModelCustomGesuchDokument,
+    serviceDefaultParams: ServiceDefaultParams,
+  ) {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.documentService.uploadCustomGesuchDokumentGS$(
+          {
+            fileUpload,
+            customDokumentTypId: dokument.dokumentTyp.id,
+          },
+          ...serviceDefaultParams,
+        ),
+      'sachbearbeitung-app': () =>
+        this.documentService.uploadCustomGesuchDokumentSB$(
+          {
+            fileUpload,
+            customDokumentTypId: dokument.dokumentTyp.id,
+          },
+          ...serviceDefaultParams,
+        ),
     });
   }
 
@@ -238,8 +316,9 @@ export class UploadStore {
             switch (action.dokument.art) {
               case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
-                return this.documentService.deleteDokument$(
-                  ...deleteCallParams,
+                return this.deleteDokumentByAppType$(
+                  action.dokumentId,
+                  !!dokumentToDelete?.error,
                 );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService.deleteUnterschriftenblattDokument$(
@@ -403,7 +482,9 @@ export class UploadStore {
       take(1),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
-    const dokument = action.dokument;
+
+    const { fileUpload, dokument } = action;
+
     const serviceDefaultParams = [
       'events',
       undefined,
@@ -415,21 +496,16 @@ export class UploadStore {
     const uploadByType = () => {
       switch (dokument.art) {
         case 'GESUCH_DOKUMENT':
-          return this.documentService.createDokument$(
-            {
-              ...action,
-              gesuchTrancheId: dokument.trancheId,
-              dokumentTyp: dokument.dokumentTyp,
-            },
-            ...serviceDefaultParams,
+          return this.createDokumentByAppType$(
+            fileUpload,
+            dokument,
+            serviceDefaultParams,
           );
         case 'CUSTOM_DOKUMENT':
-          return this.documentService.uploadCustomGesuchDokument$(
-            {
-              ...action,
-              customDokumentTypId: dokument.dokumentTyp.id,
-            },
-            ...serviceDefaultParams,
+          return this.createCustomDokumentByAppType$(
+            fileUpload,
+            dokument,
+            serviceDefaultParams,
           );
         case 'UNTERSCHRIFTENBLATT':
           return this.documentService.createUnterschriftenblatt$(

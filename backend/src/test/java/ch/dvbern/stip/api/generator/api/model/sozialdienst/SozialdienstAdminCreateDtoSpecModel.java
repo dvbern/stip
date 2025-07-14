@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.generator.api.model.sozialdienst;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import lombok.experimental.UtilityClass;
@@ -27,7 +25,6 @@ import lombok.experimental.UtilityClass;
 public class SozialdienstAdminCreateDtoSpecModel {
     public SozialdienstAdminDtoSpec sozialdienstAdminCreateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(SozialdienstAdminDtoSpec::new, model -> {
-            model.setKeycloakId(UUID.randomUUID().toString());
             model.setNachname("Muster");
             model.setVorname("Max");
             model.setEmail("test@test.com");

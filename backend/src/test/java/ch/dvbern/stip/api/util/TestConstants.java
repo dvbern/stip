@@ -63,7 +63,7 @@ public final class TestConstants {
     public static UUID TEST_LAND_NON_EU_EFTA_ID;
     public static UUID TEST_LAND_STATELESS_ID;
 
-    public static DateRange GUELTIGKEIT_PERIODE_23_24;
+    public static DateRange GUELTIGKEIT_PERIODE_CURRENT;
 
     public static DateRange GUELTIGKEIT_PERIODE_FIXED =
         new DateRange(LocalDate.of(2023, 8, 1), LocalDate.of(2024, 7, 31));

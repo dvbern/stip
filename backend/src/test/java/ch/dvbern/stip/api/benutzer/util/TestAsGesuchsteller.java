@@ -36,7 +36,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
     user = "gesuchsteller",
     roles = {
         OidcConstants.ROLE_GESUCHSTELLER,
-        OidcPermissions.DOKUMENT_UPLOAD,
+        OidcPermissions.DOKUMENT_UPLOAD_GS,
         OidcPermissions.AENDERUNG_CREATE,
         OidcPermissions.UNTERSCHRIFTENBLATT_READ,
         OidcPermissions.GS_GESUCH_READ,
@@ -53,7 +53,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
         OidcPermissions.AENDERUNG_EINREICHEN,
         OidcPermissions.STAMMDATEN_READ,
         OidcPermissions.AUSBILDUNGSSTAETTE_READ,
-        OidcPermissions.DOKUMENT_DELETE,
+        OidcPermissions.DOKUMENT_DELETE_GS,
         OidcPermissions.FALL_CREATE,
         OidcPermissions.CUSTOM_DOKUMENT_READ,
         OidcPermissions.AENDERUNG_DELETE,

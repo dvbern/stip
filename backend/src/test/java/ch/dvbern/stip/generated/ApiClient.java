@@ -87,9 +87,6 @@ public class ApiClient {
     public LandApiSpec land() {
         return LandApiSpec.land(config.reqSpecSupplier);
     }
-    public MailApiSpec mail() {
-        return MailApiSpec.mail(config.reqSpecSupplier);
-    }
     public NotificationApiSpec notification() {
         return NotificationApiSpec.notification(config.reqSpecSupplier);
     }

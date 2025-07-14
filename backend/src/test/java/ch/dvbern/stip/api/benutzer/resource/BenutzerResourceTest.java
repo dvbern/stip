@@ -75,8 +75,8 @@ class BenutzerResourceTest {
 
         me = benutzerDto;
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Frédéric");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Nell");
+        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test
@@ -144,9 +144,8 @@ class BenutzerResourceTest {
         // Previous test.
         Thread.sleep(5000);
         final var updateDtos =
-            SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecs(2);
-        updateDtos.get(0).setSachbearbeiter(me.getId());
-        updateDtos.get(1).setSachbearbeiter(sachbearbeiterUUID);
+            SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecs(1);
+        updateDtos.get(0).setSachbearbeiter(sachbearbeiterUUID);
 
         api.createOrUpdateSachbearbeiterStammdatenList()
             .body(updateDtos)
@@ -167,7 +166,7 @@ class BenutzerResourceTest {
             is(true)
         );
         final var myZuordnung = api.getSachbearbeiterStammdaten()
-            .benutzerIdPath(me.getId())
+            .benutzerIdPath(sachbearbeiterUUID)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
