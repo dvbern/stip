@@ -160,6 +160,7 @@ public class PdfService {
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
+            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
