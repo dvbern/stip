@@ -251,7 +251,7 @@ public class UnterschriftenblattService {
     public Set<UnterschriftenblattDokumentTyp> getExistingUnterschriftenblattTypsForGesuch(final UUID gesuchId) {
         return unterschriftenblattRepository.requireForGesuch(gesuchId)
             .filter(unterschriftenblatt -> !unterschriftenblatt.getDokumente().isEmpty())
-            .map(unterschriftenblatt -> unterschriftenblatt.getDokumentTyp())
+            .map(Unterschriftenblatt::getDokumentTyp)
             .collect(Collectors.toSet());
     }
 
