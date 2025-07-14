@@ -58,6 +58,7 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
         var nachfristDokumente = "";
         if (Objects.nonNull(gesuch.getNachfristDokumente())) {
             nachfristDokumente = DateUtil.formatDate(gesuch.getNachfristDokumente());
@@ -72,6 +73,7 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
 
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
@@ -91,6 +93,8 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_EINGEREICHT)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
+
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
@@ -110,6 +114,8 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_ABGELEHNT)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
+
         final var pia = aenderung.getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
@@ -125,6 +131,7 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
 
         final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
@@ -140,6 +147,8 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
             .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
+
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -170,6 +179,7 @@ public class NotificationService {
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
             .getPersonInAusbildung();
+
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         String msg = Templates.getFehlendeDokumenteEinreichenText(anrede, pia.getNachname(), sprache).render();
@@ -178,6 +188,8 @@ public class NotificationService {
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_EINREICHEN)
             .setGesuch(gesuch)
             .setNotificationText(msg);
+        setAbsender(gesuch, notification);
+
         notificationRepository.persistAndFlush(notification);
     }
 
@@ -195,6 +207,7 @@ public class NotificationService {
             .setGesuch(verfuegung.getGesuch())
             .setNotificationText(msg)
             .setContextId(verfuegung.getId());
+        setAbsender(verfuegung.getGesuch(), notification);
         notificationRepository.persistAndFlush(notification);
     }
 
@@ -228,7 +241,14 @@ public class NotificationService {
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT)
             .setGesuch(gesuch)
             .setNotificationText(msg);
+        setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
+    }
+
+    private void setAbsender(final Gesuch gesuch, Notification notification) {
+        final var absender =
+            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        notification.setAbsender(absender);
     }
 
     @CheckedTemplate
@@ -416,6 +436,5 @@ public class NotificationService {
             }
             return neueVerfuegungDE();
         }
-
     }
 }

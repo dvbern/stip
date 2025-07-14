@@ -19,7 +19,7 @@
         (click)="openNotification(notification)"
       >
         <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
-        <span>{{ notification.userErstellt }}</span>
+        <span>{{ notification.absender }}</span>
         <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
       </button>
     }
