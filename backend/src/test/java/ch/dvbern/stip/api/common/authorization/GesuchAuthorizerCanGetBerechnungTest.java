@@ -17,11 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,10 +41,14 @@ class GesuchAuthorizerCanGetBerechnungTest {
     private GesuchAuthorizer authorizer;
 
     private GesuchRepository gesuchRepository;
+    private GesuchStatusService gesuchStatusService;
 
     @BeforeEach
     void setUp() {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
+        gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+        when(gesuchStatusService.canGetBerechnung(any())).thenCallRealMethod();
         gesuch = new Gesuch()
             .setAusbildung(
                 new Ausbildung()
@@ -52,7 +59,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         authorizer = new GesuchAuthorizer(
             null,
             gesuchRepository,
-            null,
+            gesuchStatusService,
             null,
             null,
             null,
@@ -65,6 +72,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     @Test
     @TestAsGesuchsteller
     void testGesuchStatusCorrectForBerechnung() {
+        gesuch.setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {

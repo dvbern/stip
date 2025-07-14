@@ -329,7 +329,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(17)
     void test_delete_required_custom_gesuchdokuments() {
-        dokumentApiSpec.deleteDokument()
+        dokumentApiSpec.deleteDokumentGS()
             .dokumentIdPath(dokumentId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

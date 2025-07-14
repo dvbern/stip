@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.util.List;
 import java.util.Set;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
-import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.repo.RolleRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
@@ -37,24 +37,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdminSeeding extends Seeder {
     private final ConfigService configService;
-    private final BenutzerRepository benutzerRepository;
+    private final SachbearbeiterRepository sachbearbeiterRepository;
     private final RolleRepository rolleRepository;
 
     @Override
     protected void seed() {
         LOG.info("Seeding Admin users");
-        final var foundAdmin = benutzerRepository.findByRolle(OidcConstants.ROLE_ADMIN).findFirst();
+        final var foundAdmin = sachbearbeiterRepository.findByRolle(OidcConstants.ROLE_ADMIN).findFirst();
         if (foundAdmin.isEmpty()) {
             final var adminRolle = getOrCreateRolle(OidcConstants.ROLE_ADMIN);
             final var sachbearbeiterRolle = getOrCreateRolle(OidcConstants.ROLE_SACHBEARBEITER);
 
-            final var benutzer = new Benutzer()
+            final var sachbearbeiter = (Sachbearbeiter) new Sachbearbeiter()
+                .setTelefonnummer("")
+                .setFunktionFr("")
+                .setFunktionDe("")
+                .setEmail("seededadmin.stip@mailbucket.dvbern.ch")
                 .setNachname("Seeding")
                 .setVorname("Admin")
                 .setBenutzerStatus(BenutzerStatus.AKTIV)
                 .setRollen(Set.of(adminRolle, sachbearbeiterRolle))
                 .setBenutzereinstellungen(new Benutzereinstellungen().setDigitaleKommunikation(true));
-            benutzerRepository.persistAndFlush(benutzer);
+            sachbearbeiterRepository.persistAndFlush(sachbearbeiter);
         }
     }
 

@@ -253,11 +253,11 @@ export class SozialdienstDetailComponent implements OnDestroy {
     ReplaceSozialdienstAdminDialogComponent.open(this.dialog)
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
+      .subscribe((sozialdienstAdmin) => {
+        if (sozialdienstAdmin) {
           this.store.replaceSozialdienstAdmin$({
             sozialdienstId,
-            newUser: result,
+            sozialdienstAdmin,
           });
         }
       });

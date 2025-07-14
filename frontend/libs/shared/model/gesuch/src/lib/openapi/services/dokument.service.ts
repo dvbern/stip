@@ -38,7 +38,13 @@ export interface DokumentServiceCreateCustomDokumentTypRequestParams {
     customDokumentTypCreate: CustomDokumentTypCreate;
 }
 
-export interface DokumentServiceCreateDokumentRequestParams {
+export interface DokumentServiceCreateDokumentGSRequestParams {
+    dokumentTyp: DokumentTyp;
+    gesuchTrancheId: string;
+    fileUpload: Blob;
+}
+
+export interface DokumentServiceCreateDokumentSBRequestParams {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
     fileUpload: Blob;
@@ -55,7 +61,11 @@ export interface DokumentServiceDeleteCustomDokumentTypRequestParams {
     customDokumentTypId: string;
 }
 
-export interface DokumentServiceDeleteDokumentRequestParams {
+export interface DokumentServiceDeleteDokumentGSRequestParams {
+    dokumentId: string;
+}
+
+export interface DokumentServiceDeleteDokumentSBRequestParams {
     dokumentId: string;
 }
 
@@ -112,7 +122,12 @@ export interface DokumentServiceGetUnterschriftenblaetterForGesuchRequestParams 
     gesuchId: string;
 }
 
-export interface DokumentServiceUploadCustomGesuchDokumentRequestParams {
+export interface DokumentServiceUploadCustomGesuchDokumentGSRequestParams {
+    customDokumentTypId: string;
+    fileUpload: Blob;
+}
+
+export interface DokumentServiceUploadCustomGesuchDokumentSBRequestParams {
     customDokumentTypId: string;
     fileUpload: Blob;
 }
@@ -278,26 +293,26 @@ export class DokumentService {
     }
 
     /**
-     * Upload a file for the given Typ to the Tranche
+     * Upload a file for the given Typ to the Tranche; GS Endpoint
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createDokument$(requestParameters: DokumentServiceCreateDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public createDokument$(requestParameters: DokumentServiceCreateDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public createDokument$(requestParameters: DokumentServiceCreateDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public createDokument$(requestParameters: DokumentServiceCreateDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public createDokumentGS$(requestParameters: DokumentServiceCreateDokumentGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public createDokumentGS$(requestParameters: DokumentServiceCreateDokumentGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public createDokumentGS$(requestParameters: DokumentServiceCreateDokumentGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public createDokumentGS$(requestParameters: DokumentServiceCreateDokumentGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
         const dokumentTyp = requestParameters.dokumentTyp;
         if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokument$.');
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokumentGS$.');
         }
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokument$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentGS$.');
         }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
-            throw new Error('Required parameter fileUpload was null or undefined when calling createDokument$.');
+            throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -366,7 +381,110 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        const localVarPath = `/gesuchDokument/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upload a file for the given Typ to the Tranche; SB Endpoint
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createDokumentSB$(requestParameters: DokumentServiceCreateDokumentSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public createDokumentSB$(requestParameters: DokumentServiceCreateDokumentSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public createDokumentSB$(requestParameters: DokumentServiceCreateDokumentSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public createDokumentSB$(requestParameters: DokumentServiceCreateDokumentSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokumentSB$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentSB$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        const localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (fileUpload !== undefined) {
+            localVarFormParams = localVarFormParams.append('fileUpload', <any>fileUpload) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchDokument/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -555,18 +673,18 @@ export class DokumentService {
     }
 
     /**
-     * deletes a Dokument
+     * deletes a Dokument; GS Endpoint
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public deleteDokument$(requestParameters: DokumentServiceDeleteDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public deleteDokument$(requestParameters: DokumentServiceDeleteDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public deleteDokument$(requestParameters: DokumentServiceDeleteDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public deleteDokument$(requestParameters: DokumentServiceDeleteDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public deleteDokumentGS$(requestParameters: DokumentServiceDeleteDokumentGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteDokumentGS$(requestParameters: DokumentServiceDeleteDokumentGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteDokumentGS$(requestParameters: DokumentServiceDeleteDokumentGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteDokumentGS$(requestParameters: DokumentServiceDeleteDokumentGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
         const dokumentId = requestParameters.dokumentId;
         if (dokumentId === null || dokumentId === undefined) {
-            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDokument$.');
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDokumentGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -613,7 +731,79 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/dokument/gs/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * deletes a Dokument; SB Endpoint
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteDokumentSB$(requestParameters: DokumentServiceDeleteDokumentSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteDokumentSB$(requestParameters: DokumentServiceDeleteDokumentSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteDokumentSB$(requestParameters: DokumentServiceDeleteDokumentSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteDokumentSB$(requestParameters: DokumentServiceDeleteDokumentSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDokumentSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/dokument/sb/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -1515,22 +1705,22 @@ export class DokumentService {
     }
 
     /**
-     * Upload a file for the given customDokumentTyp to the Tranche
+     * Upload a file for the given customDokumentTyp to the Tranche; GS Endpoint
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public uploadCustomGesuchDokument$(requestParameters: DokumentServiceUploadCustomGesuchDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public uploadCustomGesuchDokument$(requestParameters: DokumentServiceUploadCustomGesuchDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public uploadCustomGesuchDokument$(requestParameters: DokumentServiceUploadCustomGesuchDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public uploadCustomGesuchDokument$(requestParameters: DokumentServiceUploadCustomGesuchDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public uploadCustomGesuchDokumentGS$(requestParameters: DokumentServiceUploadCustomGesuchDokumentGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public uploadCustomGesuchDokumentGS$(requestParameters: DokumentServiceUploadCustomGesuchDokumentGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public uploadCustomGesuchDokumentGS$(requestParameters: DokumentServiceUploadCustomGesuchDokumentGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public uploadCustomGesuchDokumentGS$(requestParameters: DokumentServiceUploadCustomGesuchDokumentGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
         const customDokumentTypId = requestParameters.customDokumentTypId;
         if (customDokumentTypId === null || customDokumentTypId === undefined) {
-            throw new Error('Required parameter customDokumentTypId was null or undefined when calling uploadCustomGesuchDokument$.');
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling uploadCustomGesuchDokumentGS$.');
         }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
-            throw new Error('Required parameter fileUpload was null or undefined when calling uploadCustomGesuchDokument$.');
+            throw new Error('Required parameter fileUpload was null or undefined when calling uploadCustomGesuchDokumentGS$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1599,7 +1789,106 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/customGesuchDokument/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/customGesuchDokument/gs/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upload a file for the given customDokumentTyp to the Tranche; SB Endpoint
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public uploadCustomGesuchDokumentSB$(requestParameters: DokumentServiceUploadCustomGesuchDokumentSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public uploadCustomGesuchDokumentSB$(requestParameters: DokumentServiceUploadCustomGesuchDokumentSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public uploadCustomGesuchDokumentSB$(requestParameters: DokumentServiceUploadCustomGesuchDokumentSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public uploadCustomGesuchDokumentSB$(requestParameters: DokumentServiceUploadCustomGesuchDokumentSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling uploadCustomGesuchDokumentSB$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling uploadCustomGesuchDokumentSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        const localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (fileUpload !== undefined) {
+            localVarFormParams = localVarFormParams.append('fileUpload', <any>fileUpload) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/customGesuchDokument/sb/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

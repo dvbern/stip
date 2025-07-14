@@ -41,7 +41,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -110,7 +110,7 @@ public class Ausbildung extends AbstractMandantEntity {
 
     @NotNull
     @Column(name = "ausbildung_end", nullable = false)
-    @Future
+    @FutureOrPresent
     private LocalDate ausbildungEnd;
 
     @NotNull

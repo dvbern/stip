@@ -14,6 +14,8 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDtoSpec;
 import java.util.UUID;
@@ -62,10 +64,15 @@ public class BenutzerApiSpec {
         return Arrays.asList(
                 createOrUpdateSachbearbeiterStammdaten(),
                 createOrUpdateSachbearbeiterStammdatenList(),
+                createSachbearbeiter(),
                 deleteBenutzer(),
+                deleteSachbearbeiter(),
                 getSachbearbeitende(),
+                getSachbearbeiterForManagement(),
                 getSachbearbeiterStammdaten(),
-                prepareCurrentBenutzer()
+                getSachbearbeitersForManagement(),
+                prepareCurrentBenutzer(),
+                updateSachbearbeiter()
         );
     }
 
@@ -77,20 +84,40 @@ public class BenutzerApiSpec {
         return new CreateOrUpdateSachbearbeiterStammdatenListOper(createReqSpec());
     }
 
+    public CreateSachbearbeiterOper createSachbearbeiter() {
+        return new CreateSachbearbeiterOper(createReqSpec());
+    }
+
     public DeleteBenutzerOper deleteBenutzer() {
         return new DeleteBenutzerOper(createReqSpec());
+    }
+
+    public DeleteSachbearbeiterOper deleteSachbearbeiter() {
+        return new DeleteSachbearbeiterOper(createReqSpec());
     }
 
     public GetSachbearbeitendeOper getSachbearbeitende() {
         return new GetSachbearbeitendeOper(createReqSpec());
     }
 
+    public GetSachbearbeiterForManagementOper getSachbearbeiterForManagement() {
+        return new GetSachbearbeiterForManagementOper(createReqSpec());
+    }
+
     public GetSachbearbeiterStammdatenOper getSachbearbeiterStammdaten() {
         return new GetSachbearbeiterStammdatenOper(createReqSpec());
     }
 
+    public GetSachbearbeitersForManagementOper getSachbearbeitersForManagement() {
+        return new GetSachbearbeitersForManagementOper(createReqSpec());
+    }
+
     public PrepareCurrentBenutzerOper prepareCurrentBenutzer() {
         return new PrepareCurrentBenutzerOper(createReqSpec());
+    }
+
+    public UpdateSachbearbeiterOper updateSachbearbeiter() {
+        return new UpdateSachbearbeiterOper(createReqSpec());
     }
 
     /**
@@ -238,6 +265,78 @@ public class BenutzerApiSpec {
         }
     }
     /**
+     * Creates a new Sachbearbeiter (Sb/Jurist/Sb-Admin)
+     * 
+     *
+     * @see #body  (required)
+     * return SachbearbeiterDtoSpec
+     */
+    public static class CreateSachbearbeiterOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/benutzer/sachbearbeiter";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateSachbearbeiterOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /benutzer/sachbearbeiter
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /benutzer/sachbearbeiter
+         * @param handler handler
+         * @return SachbearbeiterDtoSpec
+         */
+        public SachbearbeiterDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SachbearbeiterDtoSpec> type = new TypeRef<SachbearbeiterDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param sachbearbeiterUpdateDtoSpec (SachbearbeiterUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateSachbearbeiterOper body(SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
+            reqSpec.setBody(sachbearbeiterUpdateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateSachbearbeiterOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateSachbearbeiterOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Deletes a benutzer with the given id
      * 
      *
@@ -300,6 +399,68 @@ public class BenutzerApiSpec {
         }
     }
     /**
+     * Deletes an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+     * 
+     *
+     * @see #sachbearbeiterIdPath  (required)
+     */
+    public static class DeleteSachbearbeiterOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/benutzer/sachbearbeiter/{sachbearbeiterId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteSachbearbeiterOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /benutzer/sachbearbeiter/{sachbearbeiterId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String SACHBEARBEITER_ID_PATH = "sachbearbeiterId";
+
+        /**
+         * @param sachbearbeiterId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteSachbearbeiterOper sachbearbeiterIdPath(Object sachbearbeiterId) {
+            reqSpec.addPathParam(SACHBEARBEITER_ID_PATH, sachbearbeiterId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * 
      * 
      *
@@ -356,6 +517,79 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public GetSachbearbeitendeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Get an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+     * 
+     *
+     * @see #sachbearbeiterIdPath  (required)
+     * return SachbearbeiterDtoSpec
+     */
+    public static class GetSachbearbeiterForManagementOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/benutzer/sachbearbeiter/{sachbearbeiterId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSachbearbeiterForManagementOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /benutzer/sachbearbeiter/{sachbearbeiterId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /benutzer/sachbearbeiter/{sachbearbeiterId}
+         * @param handler handler
+         * @return SachbearbeiterDtoSpec
+         */
+        public SachbearbeiterDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SachbearbeiterDtoSpec> type = new TypeRef<SachbearbeiterDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String SACHBEARBEITER_ID_PATH = "sachbearbeiterId";
+
+        /**
+         * @param sachbearbeiterId (UUID)  (required)
+         * @return operation
+         */
+        public GetSachbearbeiterForManagementOper sachbearbeiterIdPath(Object sachbearbeiterId) {
+            reqSpec.addPathParam(SACHBEARBEITER_ID_PATH, sachbearbeiterId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterForManagementOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterForManagementOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -434,6 +668,67 @@ public class BenutzerApiSpec {
         }
     }
     /**
+     * Get all existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+     * 
+     *
+     * return List&lt;SachbearbeiterDtoSpec&gt;
+     */
+    public static class GetSachbearbeitersForManagementOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/benutzer/sachbearbeiter";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSachbearbeitersForManagementOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /benutzer/sachbearbeiter
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /benutzer/sachbearbeiter
+         * @param handler handler
+         * @return List&lt;SachbearbeiterDtoSpec&gt;
+         */
+        public List<SachbearbeiterDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SachbearbeiterDtoSpec>> type = new TypeRef<List<SachbearbeiterDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeitersForManagementOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeitersForManagementOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Get or create and update current benutzer
      * 
      *
@@ -490,6 +785,90 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public PrepareCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Updates an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+     * 
+     *
+     * @see #sachbearbeiterIdPath  (required)
+     * @see #body  (required)
+     * return SachbearbeiterDtoSpec
+     */
+    public static class UpdateSachbearbeiterOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/benutzer/sachbearbeiter/{sachbearbeiterId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateSachbearbeiterOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /benutzer/sachbearbeiter/{sachbearbeiterId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /benutzer/sachbearbeiter/{sachbearbeiterId}
+         * @param handler handler
+         * @return SachbearbeiterDtoSpec
+         */
+        public SachbearbeiterDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SachbearbeiterDtoSpec> type = new TypeRef<SachbearbeiterDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param sachbearbeiterUpdateDtoSpec (SachbearbeiterUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public UpdateSachbearbeiterOper body(SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
+            reqSpec.setBody(sachbearbeiterUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String SACHBEARBEITER_ID_PATH = "sachbearbeiterId";
+
+        /**
+         * @param sachbearbeiterId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateSachbearbeiterOper sachbearbeiterIdPath(Object sachbearbeiterId) {
+            reqSpec.addPathParam(SACHBEARBEITER_ID_PATH, sachbearbeiterId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateSachbearbeiterOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateSachbearbeiterOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

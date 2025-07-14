@@ -65,7 +65,6 @@ export interface SharedModelTableRequiredDokument {
 export interface SharedModelTableCustomDokument {
   dokumentTyp: CustomDokumentTyp;
   canDelete: boolean;
-  showUpload: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
   kommentare: GesuchDokumentKommentar[];
@@ -115,14 +114,16 @@ export interface UploadView {
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
   permission: PermissionMap,
+  isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
     case 'GESUCH_DOKUMENT':
     case 'CUSTOM_DOKUMENT': {
-      return (
-        permission.canUploadDocuments &&
-        dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
-      );
+      if (!isSachbearbeitungApp) {
+        const status = dokumentModel.gesuchDokument?.status;
+        return status !== 'AKZEPTIERT' && permission.canUploadDocuments;
+      }
+      return permission.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;

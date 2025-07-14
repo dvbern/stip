@@ -38,7 +38,7 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "steuerdaten",
     indexes = {
-        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+        @Index(name = "IX_steuerdaten_mandant", columnList = "mandant")
     }
 )
 @Getter

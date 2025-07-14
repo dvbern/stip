@@ -8,7 +8,7 @@ export class CockpitPO {
     periodeTitle: Locator;
     gesuchEdit: Locator;
     createAusbildung: Locator;
-    cereateAaederung: Locator;
+    createAenderung: Locator;
   };
 
   constructor(page: Page) {
@@ -17,7 +17,7 @@ export class CockpitPO {
       periodeTitle: page.getByTestId('cockpit-periode-title'),
       gesuchEdit: page.getByTestId('cockpit-gesuch-edit'),
       createAusbildung: page.getByTestId('cockpit-create-ausbildung'),
-      cereateAaederung: page.getByTestId('cockpit-gesuch-aenderung-create'),
+      createAenderung: page.getByTestId('cockpit-gesuch-aenderung-create'),
     };
   }
 

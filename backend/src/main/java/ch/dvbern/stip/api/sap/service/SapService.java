@@ -91,13 +91,15 @@ public class SapService {
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
         final var sapDelivery = sapDeliveryRepository.requireById(zahlungsverbindung.getSapDelivery().getId());
-        sapDelivery.setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
-        if (sapDelivery.getSapStatus() == SapStatus.SUCCESS) {
+        final var status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        if (status == SapStatus.SUCCESS) {
             final var readResponse = sapEndpointService.readBusinessPartner(zahlungsverbindung);
             SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
             zahlungsverbindung.setSapBusinessPartnerId(
                 Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
             );
+            zahlungsverbindungRepository.persist(zahlungsverbindung);
+            sapDelivery.setSapStatus(status);
         }
     }
 
@@ -351,6 +353,9 @@ public class SapService {
         final var gesuchsWithPendingSapActions = gesuchRepository.findGesuchWithPendingSapAction().toList();
         for (var gesuch : gesuchsWithPendingSapActions) {
             try {
+                LOG.info(
+                    String.format("processPendingCreateBusinessPartnerActions: for gesuchId: %s", gesuch.getId())
+                );
                 processPendingSapAction(gesuch.getId());
             } catch (Exception e) {
                 LOG.error(

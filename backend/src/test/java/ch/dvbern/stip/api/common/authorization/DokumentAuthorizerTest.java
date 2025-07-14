@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -46,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 
 class DokumentAuthorizerTest {
-    private DokumentAuthorizer dokumentAuthorizer;
+    private GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
 
     private GesuchDokument gesuchDokument;
     private Gesuch gesuch;
@@ -59,7 +58,6 @@ class DokumentAuthorizerTest {
         mockBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
         Mockito.when(benutzerService.getCurrentBenutzer()).thenReturn(mockBenutzer);
 
-        final var gesuchRepository = Mockito.mock(GesuchRepository.class);
         sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = TestUtil.getFullGesuch();
@@ -78,8 +76,14 @@ class DokumentAuthorizerTest {
         Mockito.when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
         final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
-        dokumentAuthorizer = new DokumentAuthorizer(
-            gesuchRepository, benutzerService, gesuchTrancheRepository, sozialdienstService
+
+        gesuchDokumentAuthorizer = new GesuchDokumentAuthorizer(
+            gesuchTrancheRepository,
+            benutzerService,
+            null,
+            null,
+            sozialdienstService,
+            null
         );
     }
 
@@ -87,7 +91,7 @@ class DokumentAuthorizerTest {
     void canUploadShouldSucceedWhenDelegatedAndSozialdienstMitarbeiter() {
         setupSozialdienstMitarbeiter();
         setupDelegation(gesuch.getAusbildung().getFall());
-        assertDoesNotThrow(() -> dokumentAuthorizer.canUpload(UUID.randomUUID()));
+        assertDoesNotThrow(() -> gesuchDokumentAuthorizer.assertGsCanModifyDokumentOfTranche(UUID.randomUUID()));
     }
 
     private void setupDelegation(Fall fall) {
