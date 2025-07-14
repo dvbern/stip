@@ -29,6 +29,7 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isPending,
   isSuccess,
   mapData,
   pending,
@@ -106,12 +107,13 @@ export class DokumentsStore extends signalStore(
 
   dokumenteViewSig = computed(() => {
     // only show standard documents
-    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+    const dokuments = (this.dokuments().data ?? []).filter(
       (d) => d.dokumentTyp,
     );
 
     return {
       dokuments,
+      loading: isPending(this.dokuments()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
@@ -124,12 +126,13 @@ export class DokumentsStore extends signalStore(
 
   customDokumenteViewSig = computed(() => {
     // only show custom documents
-    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+    const dokuments = (this.dokuments().data ?? []).filter(
       (d) => d.customDokumentTyp,
     );
 
     return {
       dokuments,
+      loading: isPending(this.dokuments()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
@@ -142,9 +145,11 @@ export class DokumentsStore extends signalStore(
   });
 
   additionalDokumenteViewSig = computed(() => {
-    const dokuments = fromCachedDataSig(this.additionalDokumente) ?? [];
+    const dokuments = this.additionalDokumente().data ?? [];
     return {
       dokuments,
+      loading: isPending(this.additionalDokumente()),
+
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.unterschriftenblaetter ?? [],
     };

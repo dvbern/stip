@@ -24,10 +24,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.BuchstabenRangeUtil;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
-import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -49,7 +49,7 @@ public class ZuordnungService {
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final ZuordnungRepository zuordnungRepository;
     private final GesuchRepository gesuchRepository;
-    private final BenutzerRepository benutzerRepository;
+    private final SachbearbeiterRepository sachbearbeiterRepository;
 
     public void updateZuordnungOnAllFaelle() {
         final var newestWithPia = gesuchRepository.findAllNewestWithPia().toList();
@@ -76,7 +76,7 @@ public class ZuordnungService {
         final var newZuordnungen = new ArrayList<Zuordnung>();
 
         // Load the first admin to assign if no other SB is found
-        final var admin = benutzerRepository
+        final var admin = sachbearbeiterRepository
             .findByRolle(OidcConstants.ROLE_ADMIN)
             .findFirst()
             .orElseThrow(NotFoundException::new);
@@ -110,7 +110,7 @@ public class ZuordnungService {
         zuordnungRepository.persist(newZuordnungen);
     }
 
-    private Optional<Benutzer> findSbToAssign(
+    private Optional<Sachbearbeiter> findSbToAssign(
         final List<SachbearbeiterZuordnungStammdaten> stammdaten,
         final PersonInAusbildung pia
     ) {

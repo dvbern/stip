@@ -2,6 +2,7 @@
   class="d-flex flex-grow-1 flex-column justify-content-center align-items-center col-lg-9"
   [class.compact]="type !== 'spinner'"
   [class.mt-4]="type === 'spinner'"
+  [class.overlay]="overlay"
 >
   <div class="spinner" [class.mb-3]="type === 'spinner'" [class.mb-1]="type === 'compact'"></div>
   @if (type !== 'icon') {

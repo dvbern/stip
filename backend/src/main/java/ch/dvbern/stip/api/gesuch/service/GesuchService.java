@@ -657,6 +657,13 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
+    }
+
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
