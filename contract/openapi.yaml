@@ -3636,7 +3636,7 @@ paths:
             schema:
               $ref: '#/components/schemas/BrueckenangebotCreate'
       responses:
-        '200':
+        '201':
           content:
             application/json:
               schema:
@@ -3663,14 +3663,9 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/ausbildungskategorie'
-        - $ref: '#/components/parameters/bildungskategorie'
         - $ref: '#/components/parameters/bildungsrichtung'
-        - $ref: '#/components/parameters/bfsKategorie'
-        - $ref: '#/components/parameters/berufsbefaehigenderAbschluss'
-        - $ref: '#/components/parameters/ferien'
         - $ref: '#/components/parameters/bezeichnungDe'
         - $ref: '#/components/parameters/bezeichnungFr'
-        - $ref: '#/components/parameters/zusatzfrage'
         - $ref: '#/components/parameters/aktiv'
       responses:
         '200':
@@ -3723,7 +3718,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AusbildungsstaetteCreate'
       responses:
-        '200':
+        '201':
           content:
             application/json:
               schema:
@@ -3827,7 +3822,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AusbildungsgangCreate'
       responses:
-        '200':
+        '201':
           content:
             application/json:
               schema:
