@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -95,10 +97,15 @@ class NotificationServiceTest {
             .setTyp(GesuchTrancheTyp.TRANCHE)
             .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now()));
 
+        var sb = new Sachbearbeiter();
+        sb.setNachname("Mustermann").setVorname("Max");
+        final var zuordnung = new Zuordnung().setSachbearbeiter(sb);
+        final var fall = new Fall().setSachbearbeiterZuordnung(zuordnung);
+
         Gesuch gesuch = new Gesuch()
             .setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS)
             .setGesuchTranchen(List.of(gesuchTranche))
-            .setAusbildung(new Ausbildung().setFall(new Fall()));
+            .setAusbildung(new Ausbildung().setFall(fall));
 
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
 

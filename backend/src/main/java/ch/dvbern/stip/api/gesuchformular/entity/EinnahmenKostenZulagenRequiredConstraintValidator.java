@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -35,8 +37,8 @@ public class EinnahmenKostenZulagenRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (!gesuchFormular.getKinds().isEmpty()) {
-            if (gesuchFormular.getEinnahmenKosten().getZulagen() == null) {
+        if (!gesuchFormular.getKinds().isEmpty() && Objects.nonNull(gesuchFormular.getEinnahmenKosten())) {
+            if (Objects.isNull(gesuchFormular.getEinnahmenKosten().getZulagen())) {
                 return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             } else {
                 return true;
