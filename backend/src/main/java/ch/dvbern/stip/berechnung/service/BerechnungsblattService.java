@@ -94,7 +94,7 @@ public class BerechnungsblattService {
         final Gesuch gesuch,
         final Locale locale,
         Document document,
-        final boolean addAll
+        final boolean addAllBerechnungsblaetter
     )
     throws IOException {
         pdfFont = PdfFontFactory.createFont(FONT);
@@ -190,7 +190,10 @@ public class BerechnungsblattService {
                 var requiredUnterschriftenblatttyp =
                     UNTERSCHRIFTENBLATT_DOKUMENT_TYP_STEUERDATEN_TYP_MAP.get(steuerdatentyp);
 
-                if (!addAll && !existingUnterschriftenblaetterTyps.contains(requiredUnterschriftenblatttyp)) {
+                if (
+                    !addAllBerechnungsblaetter
+                    && !existingUnterschriftenblaetterTyps.contains(requiredUnterschriftenblatttyp)
+                ) {
                     continue;
                 }
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
