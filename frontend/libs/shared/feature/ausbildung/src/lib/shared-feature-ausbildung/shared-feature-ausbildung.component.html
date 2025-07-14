@@ -266,28 +266,30 @@
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
         {{ 'shared.form.error.maxDateFuture' | translate }}
       </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'periodeNotFound'" class="tw-whitespace-nowrap">
+      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
+        {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | translate }}
+      </mat-error>
+
+      <!-- api errors -->
+      <mat-error *dvSharedUiFormMessageError="'periodeNotFound'">
         {{ 'shared.form.ausbildung.form.error.periodeNotFound' | translate }}
       </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'inactivePeriod'" class="tw-whitespace-nowrap">
+      <mat-error *dvSharedUiFormMessageError="'inactivePeriod'">
         {{
           'shared.form.ausbildung.form.error.inactivePeriod'
             | translate
               : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
         }}
       </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'" class="tw-whitespace-nowrap">
+      <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'">
         {{
           'shared.form.ausbildung.form.error.periodeIsDraft'
             | translate
               : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
         }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
-        {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | translate }}
       </mat-error>
     </mat-form-field>
 
@@ -325,7 +327,7 @@
     </mat-form-field>
 
     <!-- PENSUM -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-mt-9">
       <mat-label>
         {{ 'shared.form.ausbildung.pensum.label' | translate }}
       </mat-label>

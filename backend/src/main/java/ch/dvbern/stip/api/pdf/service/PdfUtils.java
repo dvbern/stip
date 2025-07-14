@@ -27,6 +27,5 @@ public class PdfUtils {
             return;
         }
         document.getPdfDocument().addNewPage();
-
     }
 }
