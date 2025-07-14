@@ -160,6 +160,7 @@ public class PdfService {
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
+            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -331,34 +332,7 @@ public class PdfService {
             )
         );
 
-        final List<String> kopieAn = new ArrayList<>();
-
-        steuerdatenTabBerechnungsService
-            .calculateTabs(gesuch.getLatestGesuchTranche().getGesuchFormular().getFamiliensituation())
-            .forEach(steuerdatenTyp -> {
-                switch (steuerdatenTyp) {
-                    case FAMILIE -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.eltern"));
-                    case MUTTER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.mutter"));
-                    case VATER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.vater"));
-                }
-            });
-
-        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-            kopieAn.add(gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName());
-        }
-
-        if (!kopieAn.isEmpty()) {
-            document.add(
-                createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.pdf.footer.kopieAn") + " ",
-                    String.join(", ", kopieAn)
-                )
-            );
-        }
+        addCopieAnParagraph(gesuch, translator, leftMargin, document);
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
@@ -612,6 +586,44 @@ public class PdfService {
                     "stip.pdf.verfuegungOhneAnspruch.textBlock.vier"
                 )
             ).add(ausbildungsbeitraegeUri)
+        );
+    }
+
+    private void addCopieAnParagraph(
+        final Gesuch gesuch,
+        final TL translator,
+        final float leftMargin,
+        final Document document
+    ) {
+        if (gesuch.getAusbildung().getFall().getDelegierung() == null) {
+            return;
+        }
+
+        final List<String> kopieAn = new ArrayList<>();
+        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
+        final var sozialdienstAdresse = gesuch.getAusbildung()
+            .getFall()
+            .getDelegierung()
+            .getSozialdienst()
+            .getZahlungsverbindung()
+            .getAdresse();
+
+        kopieAn.add(sozialdienstName);
+        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+            kopieAn.add(sozialdienstAdresse.getCoAdresse());
+        }
+        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.pdf.footer.kopieAn") + " ",
+                String.join(", ", kopieAn)
+            )
         );
     }
 

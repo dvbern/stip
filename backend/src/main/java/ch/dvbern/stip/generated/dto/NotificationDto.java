@@ -26,6 +26,7 @@ public class NotificationDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.notification.type.NotificationType notificationType;
   private @Valid UUID gesuchId;
   private @Valid String userErstellt;
+  private @Valid String absender;
   private @Valid String notificationText;
   private @Valid UUID contextId;
   private @Valid LocalDate timestampErstellt;
@@ -85,6 +86,25 @@ public class NotificationDto  implements Serializable {
   @JsonProperty("userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
+  }
+
+  /**
+   **/
+  public NotificationDto absender(String absender) {
+    this.absender = absender;
+    return this;
+  }
+
+  
+  @JsonProperty("absender")
+  @NotNull
+  public String getAbsender() {
+    return absender;
+  }
+
+  @JsonProperty("absender")
+  public void setAbsender(String absender) {
+    this.absender = absender;
   }
 
   /**
@@ -154,6 +174,7 @@ public class NotificationDto  implements Serializable {
     return Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.gesuchId, notification.gesuchId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
+        Objects.equals(this.absender, notification.absender) &&
         Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt);
@@ -161,7 +182,7 @@ public class NotificationDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, contextId, timestampErstellt);
+    return Objects.hash(notificationType, gesuchId, userErstellt, absender, notificationText, contextId, timestampErstellt);
   }
 
   @Override
@@ -172,6 +193,7 @@ public class NotificationDto  implements Serializable {
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");

@@ -1191,6 +1191,7 @@ class GesuchServiceTest {
     @Test
     void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
@@ -1205,6 +1206,7 @@ class GesuchServiceTest {
     @Test
     void changeGesuchstatusFromVersendetToStipendienanspruch() {
         final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        gesuchOrig.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
         final var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))

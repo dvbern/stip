@@ -94,6 +94,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -643,16 +644,32 @@ public class GesuchService {
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
-        );
+        var relevantVerfuegung = gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+            .orElseThrow(NotFoundException::new);
 
         var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
-        if (stipendien.getBerechnung() > 0) {
-            status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+
+        if (Objects.isNull(relevantVerfuegung.getStipDecision())) {
+            final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+                gesuch,
+                configService.getCurrentDmnMajorVersion(),
+                configService.getCurrentDmnMinorVersion()
+            );
+
+            if (stipendien.getBerechnung() > 0) {
+                status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+            }
         }
+
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
