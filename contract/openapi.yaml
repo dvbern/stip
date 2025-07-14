@@ -5480,11 +5480,7 @@ components:
     AbschlussSortColumn:
       enum:
         - AUSBILDUNGSKATEGORIE
-        - BILDUNGSKATEGORIE
         - BILDUNGSRICHTUNG
-        - BFS_KATEGORIE
-        - BERUFSBEFAEHIGENDER_ABSCHLUSS
-        - FERIEN
         - BEZEICHNUNG_DE
         - BEZEICHNUNG_FR
         - AKTIV
@@ -5492,7 +5488,6 @@ components:
       type: object
       required:
         - id
-        - abschluss
         - ausbildungskategorie
         - bildungskategorie
         - bildungsrichtung
@@ -5505,8 +5500,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        abschluss:
-          type: string
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
         bildungskategorie:
@@ -5614,6 +5607,8 @@ components:
         - abschlussId
         - abschlussBezeichnungDe
         - abschlussBezeichnungFr
+        - abschlussAusbildungskategorie
+        - abschlussBildungsrichtung
         - ausbildungsstaetteId
         - ausbildungsstaetteNameDe
         - ausbildungsstaetteNameFr
@@ -5631,6 +5626,10 @@ components:
           type: string
         abschlussBezeichnungFr:
           type: string
+        ausbildungskategorie:
+          $ref: '#/components/schemas/Ausbildungskategorie'
+        bildungsrichtung:
+          $ref: '#/components/schemas/Bildungsrichtung'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteNameDe:
