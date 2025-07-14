@@ -47,20 +47,22 @@ public class GesuchsperiodeSeeding extends Seeder {
 
     @Override
     protected void seed() {
+        int currentYear = LocalDate.now().getYear();
+
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(
             ImmutablePair.of(
-                2024,
+                currentYear - 1,
                 List.of(
                     ImmutablePair.of(Season.SPRING, GueltigkeitStatus.ARCHIVIERT),
-                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.PUBLIZIERT)
+                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.ARCHIVIERT)
                 )
             ),
             ImmutablePair.of(
-                2025,
+                currentYear,
                 List.of(
                     ImmutablePair.of(Season.SPRING, GueltigkeitStatus.PUBLIZIERT),
-                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.ENTWURF)
+                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.PUBLIZIERT)
                 )
             )
         );
