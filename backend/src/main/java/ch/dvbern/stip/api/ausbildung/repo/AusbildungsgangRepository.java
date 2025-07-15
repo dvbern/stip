@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.ausbildung.repo;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -51,6 +52,13 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
         final String abschlussBezeichnungFr
     ) {
         query.where(Q_AUSBILDUNGSGANG.abschluss.bezeichnungFr.containsIgnoreCase(abschlussBezeichnungFr));
+    }
+
+    public void ausbildungskategorieFilter(
+        final JPAQuery<Ausbildungsgang> query,
+        final Ausbildungskategorie ausbildungskategorie
+    ) {
+        query.where(Q_AUSBILDUNGSGANG.abschluss.ausbildungskategorie.eq(ausbildungskategorie));
     }
 
     public void ausbildungsstaetteNameDeFilter(

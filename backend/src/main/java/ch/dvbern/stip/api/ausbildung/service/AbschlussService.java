@@ -22,11 +22,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
-import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
-import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
-import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
@@ -56,14 +53,9 @@ public class AbschlussService {
         final AbschlussSortColumn sortColumn,
         final SortOrder sortOrder,
         final Ausbildungskategorie ausbildungskategorie,
-        final Bildungskategorie bildungskategorie,
         final Bildungsrichtung bildungsrichtung,
-        final Integer bfsKategorie,
-        final Boolean berufsbefaehigenderAbschluss,
-        final FerienTyp ferien,
         final String bezeichnungDe,
         final String bezeichnungFr,
-        final AbschlussZusatzfrage zusatzfrage,
         final Boolean aktiv
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
@@ -75,29 +67,14 @@ public class AbschlussService {
         if (Objects.nonNull(ausbildungskategorie)) {
             abschlussRepository.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
         }
-        if (Objects.nonNull(bildungskategorie)) {
-            abschlussRepository.bildungskategorieFilter(baseQuery, bildungskategorie);
-        }
         if (Objects.nonNull(bildungsrichtung)) {
             abschlussRepository.bildungsrichtungFilter(baseQuery, bildungsrichtung);
-        }
-        if (Objects.nonNull(bfsKategorie)) {
-            abschlussRepository.bfsKategorieFilter(baseQuery, bfsKategorie);
-        }
-        if (Objects.nonNull(berufsbefaehigenderAbschluss)) {
-            abschlussRepository.berufsbefaehigenderAbschlussFilter(baseQuery, berufsbefaehigenderAbschluss);
-        }
-        if (Objects.nonNull(ferien)) {
-            abschlussRepository.ferienFilter(baseQuery, ferien);
         }
         if (Objects.nonNull(bezeichnungDe)) {
             abschlussRepository.bezeichnungDeFilter(baseQuery, bezeichnungDe);
         }
         if (Objects.nonNull(bezeichnungFr)) {
             abschlussRepository.bezeichnungFrFilter(baseQuery, bezeichnungFr);
-        }
-        if (Objects.nonNull(zusatzfrage)) {
-            abschlussRepository.zusatzfrageFilter(baseQuery, zusatzfrage);
         }
         if (Objects.nonNull(aktiv)) {
             abschlussRepository.aktivFilter(baseQuery, aktiv);

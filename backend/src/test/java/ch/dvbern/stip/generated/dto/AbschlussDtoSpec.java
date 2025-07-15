@@ -34,7 +34,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AbschlussDtoSpec.JSON_PROPERTY_ID,
-  AbschlussDtoSpec.JSON_PROPERTY_ABSCHLUSS,
   AbschlussDtoSpec.JSON_PROPERTY_AUSBILDUNGSKATEGORIE,
   AbschlussDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE,
   AbschlussDtoSpec.JSON_PROPERTY_BILDUNGSRICHTUNG,
@@ -51,9 +50,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AbschlussDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
-
-  public static final String JSON_PROPERTY_ABSCHLUSS = "abschluss";
-  private String abschluss;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKATEGORIE = "ausbildungskategorie";
   private AusbildungskategorieDtoSpec ausbildungskategorie;
@@ -111,32 +107,6 @@ public class AbschlussDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
-  }
-
-
-  public AbschlussDtoSpec abschluss(String abschluss) {
-    
-    this.abschluss = abschluss;
-    return this;
-  }
-
-   /**
-   * Get abschluss
-   * @return abschluss
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getAbschluss() {
-    return abschluss;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbschluss(String abschluss) {
-    this.abschluss = abschluss;
   }
 
 
@@ -409,7 +379,6 @@ public class AbschlussDtoSpec {
     }
     AbschlussDtoSpec abschluss = (AbschlussDtoSpec) o;
     return Objects.equals(this.id, abschluss.id) &&
-        Objects.equals(this.abschluss, abschluss.abschluss) &&
         Objects.equals(this.ausbildungskategorie, abschluss.ausbildungskategorie) &&
         Objects.equals(this.bildungskategorie, abschluss.bildungskategorie) &&
         Objects.equals(this.bildungsrichtung, abschluss.bildungsrichtung) &&
@@ -424,7 +393,7 @@ public class AbschlussDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschluss, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, zusatzfrage, aktiv);
+    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, zusatzfrage, aktiv);
   }
 
   @Override
@@ -432,7 +401,6 @@ public class AbschlussDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AbschlussDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    abschluss: ").append(toIndentedString(abschluss)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");

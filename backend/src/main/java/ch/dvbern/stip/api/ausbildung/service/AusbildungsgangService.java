@@ -20,8 +20,11 @@ package ch.dvbern.stip.api.ausbildung.service;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
@@ -35,12 +38,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AusbildungsgangService {
     private final AusbildungsgangRepository ausbildungsgangRepository;
+    private final AbschlussRepository abschlussRepository;
+    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangMapper ausbildungsgangMapper;
     private final ConfigService configService;
 
     @Transactional
     public AusbildungsgangDto createAusbildungsgang(final AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         final var ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
+        final var abschluss = abschlussRepository.requireById(ausbildungsgangCreateDto.getAbschlussId());
+        final var ausbildungsstaette =
+            ausbildungsstaetteRepository.requireById(ausbildungsgangCreateDto.getAusbildungsstaetteId());
+        ausbildungsgang.setAbschluss(abschluss);
+        ausbildungsgang.setAusbildungsstaette(ausbildungsstaette);
         ausbildungsgangRepository.persist(ausbildungsgang);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
@@ -52,6 +62,7 @@ public class AusbildungsgangService {
         final SortOrder sortOrder,
         final String abschlussBezeichnungDe,
         final String abschlussBezeichnungFr,
+        final Ausbildungskategorie ausbildungskategorie,
         final String ausbildungsstaetteNameDe,
         final String ausbildungsstaetteNameFr,
         final Boolean aktiv
@@ -67,6 +78,9 @@ public class AusbildungsgangService {
         }
         if (Objects.nonNull(abschlussBezeichnungFr)) {
             ausbildungsgangRepository.abschlussBezeichnungFrFilter(baseQuery, abschlussBezeichnungFr);
+        }
+        if (Objects.nonNull(ausbildungskategorie)) {
+            ausbildungsgangRepository.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
         }
         if (Objects.nonNull(ausbildungsstaetteNameDe)) {
             ausbildungsgangRepository.ausbildungsstaetteNameDeFilter(baseQuery, ausbildungsstaetteNameDe);

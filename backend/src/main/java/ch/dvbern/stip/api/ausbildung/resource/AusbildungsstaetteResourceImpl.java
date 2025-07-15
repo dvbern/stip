@@ -24,13 +24,10 @@ import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
-import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
-import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
-import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.authorization.AusbildungsstaetteAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -91,14 +88,9 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
         AbschlussSortColumn sortColumn,
         SortOrder sortOrder,
         Ausbildungskategorie ausbildungskategorie,
-        Bildungskategorie bildungskategorie,
         Bildungsrichtung bildungsrichtung,
-        Integer bfsKategorie,
-        Boolean berufsbefaehigenderAbschluss,
-        FerienTyp ferien,
         String bezeichnungDe,
         String bezeichnungFr,
-        AbschlussZusatzfrage zusatzfrage,
         Boolean aktiv
     ) {
         ausbildungsstaetteAuthorizer.canRead();
@@ -108,14 +100,9 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
             sortColumn,
             sortOrder,
             ausbildungskategorie,
-            bildungskategorie,
             bildungsrichtung,
-            bfsKategorie,
-            berufsbefaehigenderAbschluss,
-            ferien,
             bezeichnungDe,
             bezeichnungFr,
-            zusatzfrage,
             aktiv
         );
     }
@@ -129,6 +116,7 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
         SortOrder sortOrder,
         String abschlussBezeichnungDe,
         String abschlussBezeichnungFr,
+        Ausbildungskategorie ausbildungskategorie,
         String ausbildungsstaetteNameDe,
         String ausbildungsstaetteNameFr,
         Boolean aktiv
@@ -141,6 +129,7 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
             sortOrder,
             abschlussBezeichnungDe,
             abschlussBezeichnungFr,
+            ausbildungskategorie,
             ausbildungsstaetteNameDe,
             ausbildungsstaetteNameFr,
             aktiv

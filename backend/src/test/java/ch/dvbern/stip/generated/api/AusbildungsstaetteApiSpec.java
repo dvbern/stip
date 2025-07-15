@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AbschlussDtoSpec;
 import ch.dvbern.stip.generated.dto.AbschlussSortColumnDtoSpec;
-import ch.dvbern.stip.generated.dto.AbschlussZusatzfrageDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangSortColumnDtoSpec;
@@ -24,10 +23,8 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSortColumnDtoSpec;
-import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.FerienTypDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDtoSpec;
@@ -363,14 +360,9 @@ public class AusbildungsstaetteApiSpec {
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * @see #ausbildungskategorieQuery  (optional)
-     * @see #bildungskategorieQuery  (optional)
      * @see #bildungsrichtungQuery  (optional)
-     * @see #bfsKategorieQuery  (optional)
-     * @see #berufsbefaehigenderAbschlussQuery  (optional)
-     * @see #ferienQuery  (optional)
      * @see #bezeichnungDeQuery  (optional)
      * @see #bezeichnungFrQuery  (optional)
-     * @see #zusatzfrageQuery  (optional)
      * @see #aktivQuery  (optional)
      * return PaginatedAbschlussDtoSpec
      */
@@ -464,17 +456,6 @@ public class AusbildungsstaetteApiSpec {
             return this;
         }
 
-        public static final String BILDUNGSKATEGORIE_QUERY = "bildungskategorie";
-
-        /**
-         * @param bildungskategorie (BildungskategorieDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetAllAbschlussForUebersichtOper bildungskategorieQuery(Object... bildungskategorie) {
-            reqSpec.addQueryParam(BILDUNGSKATEGORIE_QUERY, bildungskategorie);
-            return this;
-        }
-
         public static final String BILDUNGSRICHTUNG_QUERY = "bildungsrichtung";
 
         /**
@@ -483,39 +464,6 @@ public class AusbildungsstaetteApiSpec {
          */
         public GetAllAbschlussForUebersichtOper bildungsrichtungQuery(Object... bildungsrichtung) {
             reqSpec.addQueryParam(BILDUNGSRICHTUNG_QUERY, bildungsrichtung);
-            return this;
-        }
-
-        public static final String BFS_KATEGORIE_QUERY = "bfsKategorie";
-
-        /**
-         * @param bfsKategorie (Integer)  (optional)
-         * @return operation
-         */
-        public GetAllAbschlussForUebersichtOper bfsKategorieQuery(Object... bfsKategorie) {
-            reqSpec.addQueryParam(BFS_KATEGORIE_QUERY, bfsKategorie);
-            return this;
-        }
-
-        public static final String BERUFSBEFAEHIGENDER_ABSCHLUSS_QUERY = "berufsbefaehigenderAbschluss";
-
-        /**
-         * @param berufsbefaehigenderAbschluss (Boolean)  (optional)
-         * @return operation
-         */
-        public GetAllAbschlussForUebersichtOper berufsbefaehigenderAbschlussQuery(Object... berufsbefaehigenderAbschluss) {
-            reqSpec.addQueryParam(BERUFSBEFAEHIGENDER_ABSCHLUSS_QUERY, berufsbefaehigenderAbschluss);
-            return this;
-        }
-
-        public static final String FERIEN_QUERY = "ferien";
-
-        /**
-         * @param ferien (FerienTypDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetAllAbschlussForUebersichtOper ferienQuery(Object... ferien) {
-            reqSpec.addQueryParam(FERIEN_QUERY, ferien);
             return this;
         }
 
@@ -538,17 +486,6 @@ public class AusbildungsstaetteApiSpec {
          */
         public GetAllAbschlussForUebersichtOper bezeichnungFrQuery(Object... bezeichnungFr) {
             reqSpec.addQueryParam(BEZEICHNUNG_FR_QUERY, bezeichnungFr);
-            return this;
-        }
-
-        public static final String ZUSATZFRAGE_QUERY = "zusatzfrage";
-
-        /**
-         * @param zusatzfrage (AbschlussZusatzfrageDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetAllAbschlussForUebersichtOper zusatzfrageQuery(Object... zusatzfrage) {
-            reqSpec.addQueryParam(ZUSATZFRAGE_QUERY, zusatzfrage);
             return this;
         }
 
@@ -593,6 +530,7 @@ public class AusbildungsstaetteApiSpec {
      * @see #sortOrderQuery  (optional)
      * @see #abschlussBezeichnungDeQuery  (optional)
      * @see #abschlussBezeichnungFrQuery  (optional)
+     * @see #ausbildungskategorieQuery  (optional)
      * @see #ausbildungsstaetteNameDeQuery  (optional)
      * @see #ausbildungsstaetteNameFrQuery  (optional)
      * @see #aktivQuery  (optional)
@@ -696,6 +634,17 @@ public class AusbildungsstaetteApiSpec {
          */
         public GetAllAusbildungsgangForUebersichtOper abschlussBezeichnungFrQuery(Object... abschlussBezeichnungFr) {
             reqSpec.addQueryParam(ABSCHLUSS_BEZEICHNUNG_FR_QUERY, abschlussBezeichnungFr);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSKATEGORIE_QUERY = "ausbildungskategorie";
+
+        /**
+         * @param ausbildungskategorie (AusbildungskategorieDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper ausbildungskategorieQuery(Object... ausbildungskategorie) {
+            reqSpec.addQueryParam(AUSBILDUNGSKATEGORIE_QUERY, ausbildungskategorie);
             return this;
         }
 

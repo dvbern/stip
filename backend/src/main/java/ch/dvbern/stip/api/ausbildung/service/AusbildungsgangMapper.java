@@ -40,6 +40,8 @@ public abstract class AusbildungsgangMapper {
     @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
     @Mapping(target = "ausbildungsstaetteNameDe", source = "ausbildungsstaette.nameDe")
     @Mapping(target = "ausbildungsstaetteNameFr", source = "ausbildungsstaette.nameFr")
+    @Mapping(target = "ausbildungskategorie", source = "abschluss.ausbildungskategorie")
+    @Mapping(target = "bildungsrichtung", source = "abschluss.bildungsrichtung")
     public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
 
     @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")

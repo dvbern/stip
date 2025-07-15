@@ -3636,7 +3636,7 @@ paths:
             schema:
               $ref: '#/components/schemas/BrueckenangebotCreate'
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
@@ -3718,7 +3718,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AusbildungsstaetteCreate'
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
@@ -3822,7 +3822,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AusbildungsgangCreate'
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:

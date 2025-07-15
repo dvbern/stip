@@ -78,11 +78,11 @@ public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungss
         final SortOrder sortOrder
     ) {
         final var fieldSpecified = switch (column) {
-            case NAME_DE -> null;
-            case NAME_FR -> null;
-            case CH_SHIS -> null;
-            case BUR_NO -> null;
-            case CT_NO -> null;
+            case NAME_DE -> Q_AUSBILDUNGSSTAETTE.nameDe;
+            case NAME_FR -> Q_AUSBILDUNGSSTAETTE.nameFr;
+            case CH_SHIS -> Q_AUSBILDUNGSSTAETTE.chShis;
+            case BUR_NO -> Q_AUSBILDUNGSSTAETTE.burNo;
+            case CT_NO -> Q_AUSBILDUNGSSTAETTE.ctNo;
             case AKTIV -> Q_AUSBILDUNGSSTAETTE.aktiv;
         };
 

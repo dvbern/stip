@@ -20,11 +20,8 @@ package ch.dvbern.stip.api.ausbildung.repo;
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.QAbschluss;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
-import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
-import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
-import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -51,27 +48,8 @@ public class AbschlussRepository implements BaseRepository<Abschluss> {
         query.where(Q_ABSCHLUSS.ausbildungskategorie.eq(ausbildungskategorie));
     }
 
-    public void bildungskategorieFilter(final JPAQuery<Abschluss> query, final Bildungskategorie bildungskategorie) {
-        query.where(Q_ABSCHLUSS.bildungskategorie.eq(bildungskategorie));
-    }
-
     public void bildungsrichtungFilter(final JPAQuery<Abschluss> query, final Bildungsrichtung bildungsrichtung) {
         query.where(Q_ABSCHLUSS.bildungsrichtung.eq(bildungsrichtung));
-    }
-
-    public void bfsKategorieFilter(final JPAQuery<Abschluss> query, final Integer bfsKategorie) {
-        query.where(Q_ABSCHLUSS.bfsKategorie.eq(bfsKategorie));
-    }
-
-    public void berufsbefaehigenderAbschlussFilter(
-        final JPAQuery<Abschluss> query,
-        final Boolean berufsbefaehigenderAbschluss
-    ) {
-        query.where(Q_ABSCHLUSS.berufsbefaehigenderAbschluss.eq(berufsbefaehigenderAbschluss));
-    }
-
-    public void ferienFilter(final JPAQuery<Abschluss> query, final FerienTyp ferien) {
-        query.where(Q_ABSCHLUSS.ferien.eq(ferien));
     }
 
     public void bezeichnungDeFilter(final JPAQuery<Abschluss> query, final String bezeichnungDe) {
@@ -80,10 +58,6 @@ public class AbschlussRepository implements BaseRepository<Abschluss> {
 
     public void bezeichnungFrFilter(final JPAQuery<Abschluss> query, final String bezeichnungFr) {
         query.where(Q_ABSCHLUSS.bezeichnungFr.containsIgnoreCase(bezeichnungFr));
-    }
-
-    public void zusatzfrageFilter(final JPAQuery<Abschluss> query, final AbschlussZusatzfrage zusatzfrage) {
-        query.where(Q_ABSCHLUSS.zusatzfrage.eq(zusatzfrage));
     }
 
     public void aktivFilter(final JPAQuery<Abschluss> query, final Boolean aktiv) {

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AbschlussDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid String abschluss;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
@@ -50,25 +49,6 @@ public class AbschlussDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public AbschlussDto abschluss(String abschluss) {
-    this.abschluss = abschluss;
-    return this;
-  }
-
-  
-  @JsonProperty("abschluss")
-  @NotNull
-  public String getAbschluss() {
-    return abschluss;
-  }
-
-  @JsonProperty("abschluss")
-  public void setAbschluss(String abschluss) {
-    this.abschluss = abschluss;
   }
 
   /**
@@ -271,7 +251,6 @@ public class AbschlussDto  implements Serializable {
     }
     AbschlussDto abschluss = (AbschlussDto) o;
     return Objects.equals(this.id, abschluss.id) &&
-        Objects.equals(this.abschluss, abschluss.abschluss) &&
         Objects.equals(this.ausbildungskategorie, abschluss.ausbildungskategorie) &&
         Objects.equals(this.bildungskategorie, abschluss.bildungskategorie) &&
         Objects.equals(this.bildungsrichtung, abschluss.bildungsrichtung) &&
@@ -286,7 +265,7 @@ public class AbschlussDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschluss, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, aktiv, zusatzfrage);
+    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, aktiv, zusatzfrage);
   }
 
   @Override
@@ -295,7 +274,6 @@ public class AbschlussDto  implements Serializable {
     sb.append("class AbschlussDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    abschluss: ").append(toIndentedString(abschluss)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
