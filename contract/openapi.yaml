@@ -3850,6 +3850,7 @@ paths:
         - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/abschlussBezeichnungDe'
         - $ref: '#/components/parameters/abschlussBezeichnungFr'
+        - $ref: '#/components/parameters/ausbildungskategorie'
         - $ref: '#/components/parameters/ausbildungsstaetteNameDe'
         - $ref: '#/components/parameters/ausbildungsstaetteNameFr'
         - $ref: '#/components/parameters/aktiv'
@@ -5590,6 +5591,7 @@ components:
       enum:
         - ABSCHLUSS_BEZEICHNUNG_DE
         - ABSCHLUSS_BEZEICHNUNG_FR
+        - ABSCHLUSS_AUSBILDUNGSKATEGORIE
         - AUSBILDUNGSSTAETTE_NAME_DE
         - AUSBILDUNGSSTAETTE_NAME_FR
         - AKTIV
