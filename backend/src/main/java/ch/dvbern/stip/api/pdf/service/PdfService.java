@@ -226,8 +226,9 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        final Link email =
-            new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
+        final String mail = sachbearbeiterBenutzer.getEmail() != null ? sachbearbeiterBenutzer.getEmail() : "aab@be.ch";
+
+        final Link email = new Link(mail, PdfAction.createURI(String.format("mailto:%s", mail)));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
