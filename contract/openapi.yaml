@@ -5585,6 +5585,7 @@ components:
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
         - fristNachreichenDokumente
+        - stichtagVolljaehrigkeitMedizinischeGrundversorgung
       properties:
         bezeichnungDe:
           type: string
@@ -5698,6 +5699,10 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+          format: date
+          description: dd.MM.yyyy
+          type: string
     AusbildungsstaetteUpdate:
       required:
         - nameFr
