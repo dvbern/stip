@@ -178,7 +178,10 @@ public class BernStipDecider extends BaseStipDecider {
             final GesuchTranche gesuchTranche,
             final PlzService plzService
         ) {
-            if (piaVolljaehrig(gesuchTranche) && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)) {
+            if (
+                piaVolljaehrigAtAusbildungsbegin(gesuchTranche)
+                && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)
+            ) {
                 return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG;
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
@@ -276,12 +279,12 @@ public class BernStipDecider extends BaseStipDecider {
                 .isBefore(LocalDate.now().minusYears(5));
         }
 
-        private static boolean piaVolljaehrig(final GesuchTranche gesuchTranche) {
-            return DateUtil.getAgeInYears(
-                gesuchTranche.getGesuchFormular()
-                    .getPersonInAusbildung()
-                    .getGeburtsdatum()
-            ) >= 18;
+        private static boolean piaVolljaehrigAtAusbildungsbegin(final GesuchTranche gesuchTranche) {
+            var ausbildungsbegin = gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin();
+            var geburtsdatumOfPia = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum();
+            var ageOfPiaAtAusbildungsbegin =
+                DateUtil.getAgeInYearsAtDate(geburtsdatumOfPia, ausbildungsbegin);
+            return ageOfPiaAtAusbildungsbegin >= 18;
         }
 
         private static boolean piaBerufsbefaehigendeAusbildungAbeschlossen(final GesuchTranche gesuchTranche) {
