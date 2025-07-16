@@ -36,12 +36,13 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
@@ -93,7 +94,7 @@ public class PdfService {
     private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
 
     private final StipDecisionTextRepository stipDecisionTextRepository;
-    private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+    private final BerechnungsblattService berechnungsblattService;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
@@ -160,6 +161,8 @@ public class PdfService {
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
+            PdfUtils.makePageNumberEven(document);
+            berechnungsblaetter(document, gesuch);
             PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -333,6 +336,12 @@ public class PdfService {
         );
 
         addCopieAnParagraph(gesuch, translator, leftMargin, document);
+    }
+
+    private void berechnungsblaetter(Document document, final Gesuch gesuch) throws IOException {
+        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+        berechnungsblattService
+            .addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document, false);
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
