@@ -54,9 +54,4 @@ public class StammdatenV1 {
             .limiteAlterAntragsstellerHalbierungElternbeitrag(25)
             .build();
     }
-
-    // private int getLimiteAlterAntragsstellerHalbierung(Gesuchsperiode gesuchsperiode, PersonInAusbildung
-    // personInAusbildung) {
-    // personInAusbildung.getA
-    // }
 }
