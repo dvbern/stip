@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -226,7 +227,9 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        final String mail = sachbearbeiterBenutzer.getEmail() != null ? sachbearbeiterBenutzer.getEmail() : "aab@be.ch";
+        final String mail = sachbearbeiterBenutzer.getEmail() != null
+            ? sachbearbeiterBenutzer.getEmail()
+            : Constants.DVB_MAILBUCKET_MAIL;
 
         final Link email = new Link(mail, PdfAction.createURI(String.format("mailto:%s", mail)));
         final Paragraph emailParagraph = new Paragraph().add(email);

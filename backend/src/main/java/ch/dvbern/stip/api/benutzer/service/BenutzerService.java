@@ -52,6 +52,8 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import static ch.dvbern.stip.api.common.util.Constants.DVB_MAILBUCKET_MAIL;
+
 @RequestScoped
 @UnlessBuildProfile("test")
 @RequiredArgsConstructor
@@ -148,7 +150,7 @@ public class BenutzerService {
             newSachbearbeiter.setKeycloakId(jsonWebToken.getSubject());
             newSachbearbeiter.setVorname(jsonWebToken.getClaim(Claims.given_name));
             newSachbearbeiter.setNachname(jsonWebToken.getClaim(Claims.family_name));
-            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? "aab@be.ch"
+            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? DVB_MAILBUCKET_MAIL
                 : jsonWebToken.getClaim(Claims.email);
             newSachbearbeiter.setEmail(email);
             newSachbearbeiter.setBenutzerStatus(BenutzerStatus.AKTIV);
