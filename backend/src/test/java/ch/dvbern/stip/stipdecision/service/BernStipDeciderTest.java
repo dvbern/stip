@@ -116,19 +116,35 @@ class BernStipDeciderTest {
     }
 
     @Test
-    void testGetDecisionPiaAelter35Jahre() {
+    void testGetDecisionPiaAelter35JahreBeforeBeginOfAusbildung() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
             .getPersonInAusbildung()
-            .setGeburtsdatum(LocalDate.now().minusYears(36));
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusDays(1).minusYears(36));
 
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+    }
+
+    @Test
+    void testGetDecisionPiaExact35JahreAtBeginOfAusbildung() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusYears(35));
+
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Test

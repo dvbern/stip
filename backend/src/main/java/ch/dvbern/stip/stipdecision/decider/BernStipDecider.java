@@ -56,7 +56,7 @@ public class BernStipDecider extends BaseStipDecider {
         if (ausbildungLaenger12Jahre(gesuchTranche)) {
             return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER;
         }
-        if (piaAelter35Jahre(gesuchTranche)) {
+        if (piaAelter35JahreBeforeAusbildungsbegin(gesuchTranche)) {
             return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA;
         }
         return StipDeciderResult.GESUCH_VALID;
@@ -124,9 +124,12 @@ public class BernStipDecider extends BaseStipDecider {
         return monthsInAusbildung / 12.0 >= 12.0;
     }
 
-    private static boolean piaAelter35Jahre(final GesuchTranche gesuchTranche) {
-        return DateUtil
-            .getAgeInYears(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum()) > 35;
+    private static boolean piaAelter35JahreBeforeAusbildungsbegin(final GesuchTranche gesuchTranche) {
+        var oneDayBeforeAusbildungsbegin = gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin().minusDays(1);
+        var geburtsdatumOfPia = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum();
+        var ageOfPiaBeforeAusbildungsbegin =
+            DateUtil.getAgeInYearsAtDate(geburtsdatumOfPia, oneDayBeforeAusbildungsbegin);
+        return ageOfPiaBeforeAusbildungsbegin > 35;
     }
 
     static final class StipendienrechtlicherWohnsitzKantonBernChecker {
