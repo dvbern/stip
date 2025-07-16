@@ -6,6 +6,7 @@
   "sourceRoot": "apps/gesuch-app/src",
   "tags": ["type:app", "scope:gesuch-app"],
   "implicitDependencies": [
+    "libs/gesuch-app/assets/i18n",
     "libs/shared/assets/i18n",
     "libs/shared/assets/images",
     "libs/shared/styles/theme",
@@ -39,6 +40,11 @@
         "polyfills": ["@angular/localize/init", "zone.js"],
         "tsConfig": "apps/gesuch-app/tsconfig.app.json",
         "assets": [
+          {
+            "glob": "**/*",
+            "input": "libs/gesuch-app/assets/i18n/src",
+            "output": "assets/i18n"
+          },
           {
             "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",

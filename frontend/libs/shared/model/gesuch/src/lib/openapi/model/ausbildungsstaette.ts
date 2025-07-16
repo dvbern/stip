@@ -9,14 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Ausbildungsgang } from './ausbildungsgang';
-import { AusbildungsstaetteAnyOf } from './ausbildungsstaetteAnyOf';
-import { AusbildungsstaetteUpdate } from './ausbildungsstaetteUpdate';
 
 export interface Ausbildungsstaette { 
-    ausbildungsgaenge?: Array<Ausbildungsgang>;
+    id: string;
     nameDe: string;
     nameFr: string;
-    id?: string;
+    chShis?: string;
+    burNo?: string;
+    ctNo?: string;
+    aktiv: boolean;
 }
 

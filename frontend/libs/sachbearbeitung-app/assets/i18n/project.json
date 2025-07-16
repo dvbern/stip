@@ -1,0 +1,12 @@
+{
+  "name": "sachbearbeitung-app-assets-i18n",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/assets/i18n/src",
+  "tags": ["scope:sachbearbeitung-app", "type:assets"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  }
+}

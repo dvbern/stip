@@ -21,7 +21,7 @@ export interface Notification {
     contextId?: string;
     userErstellt: string;
     timestampErstellt?: string;
-    absender?: string;
+    absender: string;
 }
 
 

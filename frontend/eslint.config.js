@@ -69,6 +69,7 @@ module.exports = [
             {
               sourceTag: 'type:feature',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:feature',
                 'type:pattern',
                 'type:data-access',

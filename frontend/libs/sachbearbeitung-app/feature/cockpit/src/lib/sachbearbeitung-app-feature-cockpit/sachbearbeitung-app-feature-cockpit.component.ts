@@ -18,18 +18,14 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
@@ -56,6 +52,17 @@ import {
   SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
+import {
+  SortAndPageInputs,
+  getSortAndPageInputs,
+  inverseSortMap,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  partiallyDebounceFormValueChangesSig,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/model/table';
 import { AppendFromTo, isDefined } from '@dv/shared/model/type-util';
 import {
   DEFAULT_PAGE_SIZE,
@@ -83,12 +90,6 @@ import {
   parseDate,
   toBackendLocalDate,
 } from '@dv/shared/util/validator-date';
-import {
-  inverseSortMap,
-  makeEmptyStringPropertiesNull,
-  restrictNumberParam,
-  sortMap,
-} from '@dv/shared/util-fn/filter-util';
 
 const DEFAULT_FILTER = {
   jurist: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
@@ -161,10 +162,12 @@ type DashboardFormFields =
 export class SachbearbeitungAppFeatureCockpitComponent
   implements
     OnInit,
-    Record<DashboardFormFields, InputSignal<string | undefined>>
+    Record<DashboardFormFields, InputSignal<string | undefined>>,
+    SortAndPageInputs<SbDashboardColumn>
 {
   private store = inject(Store);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
@@ -226,6 +229,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
     const show = this.show();
     return show ?? this.defaultFilterSig();
   });
+  sortList = sortList(this.router, this.route);
+  paginateList = paginateList(this.router, this.route);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
@@ -304,9 +309,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
     };
   });
 
-  filterFormChangedSig = toSignal(
-    this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
-  );
+  filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
+    'status',
+    'typ',
+  ]);
   filterStartEndFormChangedSig = toSignal(
     this.filterStartEndForm.valueChanges.pipe(
       distinctUntilChanged(
@@ -349,124 +355,91 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     return dataSource;
   });
+  totalEntriesSig = computed(() => {
+    return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
+  });
 
   constructor() {
-    // Handle the case where the page is higher than the total number of pages
-    effect(() => {
-      const { page, pageSize } = this.getInputs();
-      const totalEntries =
-        this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
-
-      if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
-        this.router.navigate(['.'], {
-          queryParams: {
-            page: Math.ceil(totalEntries / pageSize) - 1,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      }
-    });
+    limitPageToNumberOfEntriesEffect(
+      this,
+      this.totalEntriesSig,
+      this.router,
+      this.route,
+    );
 
     // Handle normal filter form control changes
-    effect(
-      () => {
-        this.filterFormChangedSig();
-        const formValue = this.filterForm.getRawValue();
-        const query = createQuery({
-          ...formValue,
-          piaGeburtsdatum: formValue.piaGeburtsdatum
-            ? toBackendLocalDate(formValue.piaGeburtsdatum)
-            : undefined,
-        });
+    effect(() => {
+      this.filterFormChangedSig();
+      const formValue = this.filterForm.getRawValue();
+      const query = createQuery({
+        ...formValue,
+        piaGeburtsdatum: formValue.piaGeburtsdatum
+          ? toBackendLocalDate(formValue.piaGeburtsdatum)
+          : undefined,
+      });
 
-        this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // Handle start-end filter form control changes seperately
-    effect(
-      () => {
-        this.filterStartEndFormChangedSig();
-        const formValue = this.filterStartEndForm.getRawValue();
-        const query = createQuery({
-          letzteAktivitaetFrom:
-            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
-              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
-              : undefined,
-          letzteAktivitaetTo:
-            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
-              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
-              : undefined,
-        });
+    effect(() => {
+      this.filterStartEndFormChangedSig();
+      const formValue = this.filterStartEndForm.getRawValue();
+      const query = createQuery({
+        letzteAktivitaetFrom:
+          formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
+            ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
+            : undefined,
+        letzteAktivitaetTo:
+          formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
+            ? toBackendLocalDate(formValue.letzteAktivitaetTo)
+            : undefined,
+      });
 
-        this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
+      this.router.navigate(['.'], {
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
     );
-    effect(
-      () => {
-        const query = quickFilterChanged();
-        const defaultFilter = this.defaultFilterSig();
-        if (!query) {
-          return;
-        }
-        this.router.navigate(['.'], {
-          queryParams: {
-            show: query === defaultFilter ? undefined : query,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const query = quickFilterChanged();
+      const defaultFilter = this.defaultFilterSig();
+      if (!query) {
+        return;
+      }
+      this.router.navigate(['.'], {
+        queryParams: {
+          show: query === defaultFilter ? undefined : query,
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // When the route param inputs change, load the gesuche
     effect(() => {
-      const {
-        query,
-        filter,
-        startEndFilter,
-        sortColumn,
-        sortOrder,
-        page,
-        pageSize,
-      } = this.getInputs();
+      const { query, filter, startEndFilter } = this.getInputs();
 
       this.gesuchStore.loadGesuche$({
         getGesucheSBQueryType: query,
         ...filter,
         ...startEndFilter,
-        sortColumn,
-        sortOrder,
-        page: page ?? 0,
-        pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
+        ...getSortAndPageInputs(this),
       });
     });
   }
 
-  /**
-   * Bundle all route param inputs into an object
-   */
   private getInputs() {
     const query = this.showViewSig();
     const filter = {
@@ -482,52 +455,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
       letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
       letzteAktivitaetTo: this.letzteAktivitaetTo(),
     };
-    const sortColumn = this.sortColumn();
-    const sortOrder = this.sortOrder();
-    const page = this.page();
-    const pageSize = this.pageSize();
 
     return {
       query,
       filter,
       startEndFilter,
-      sortColumn,
-      sortOrder,
-      page,
-      pageSize,
     };
-  }
-
-  sortData(event: Sort) {
-    this.router.navigate(['.'], {
-      queryParams: createQuery({
-        // display column names are set to the enum values, so this is safe to cast
-        sortColumn: event.active as SbDashboardColumn,
-        sortOrder: sortMap[event.direction],
-      }),
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
   }
 
   resetStatus() {
     this.filterForm.controls.status.reset();
   }
 
-  paginate(event: PageEvent) {
-    this.router.navigate(['.'], {
-      queryParams: createQuery({
-        page: event.pageIndex,
-        pageSize: event.pageSize,
-      }),
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
-  }
-
   ngOnInit() {
-    const { query, filter, startEndFilter, sortColumn, sortOrder } =
-      this.getInputs();
+    const { query, filter, startEndFilter } = this.getInputs();
+    const sortOrder = this.sortOrder();
+    const sortColumn = this.sortColumn();
 
     this.filterForm.reset({
       ...filter,

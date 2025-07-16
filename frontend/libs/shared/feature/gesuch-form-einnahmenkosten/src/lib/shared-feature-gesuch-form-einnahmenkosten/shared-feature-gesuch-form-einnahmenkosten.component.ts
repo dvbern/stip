@@ -180,8 +180,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   formStateSig = computed(() => {
     const { gesuchFormular, gesuch } = this.viewSig();
     const ausbildung = gesuchFormular?.ausbildung;
-    const ausbildungsstaettes =
-      this.ausbildungsstaetteStore.ausbildungsstaetteViewSig();
+    // TODO: fixme
+    // const ausbildungsstaettes =
+    //   this.ausbildungsstaetteStore.ausbildungsstaetteViewSig();
 
     if (!gesuchFormular) {
       return {
@@ -212,19 +213,20 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       personInAusbildung.geburtsdatum,
       this.languageSig(),
     );
-    const ausbildungsgang = ausbildungsstaettes
-      .find((a) =>
-        a.ausbildungsgaenge?.some(
-          (g) => g.id === ausbildung.ausbildungsgang?.id,
-        ),
-      )
-      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
+    // TODO: fixme
+    // const ausbildungsgang = ausbildungsstaettes
+    //   .find((a) =>
+    //     a.ausbildungsgaenge?.some(
+    //       (g) => g.id === ausbildung.ausbildungsgang?.id,
+    //     ),
+    //   )
+    //   ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
 
     const aubildungsKostenMap = {
       SEKUNDAR_2: gesuch?.gesuchsperiode.ausbKosten_SekII,
       TERTIAER: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
     };
-    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie.bildungsstufe;
+    const ausbiludungsStufe = undefined;
     const ausbildungsKostenLimit =
       ausbiludungsStufe && aubildungsKostenMap[ausbiludungsStufe];
 

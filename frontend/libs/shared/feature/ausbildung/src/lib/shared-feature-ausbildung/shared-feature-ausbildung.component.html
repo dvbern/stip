@@ -105,7 +105,8 @@
         </mat-label>
         @if (!form.value['ausbildungNichtGefunden']) {
           <!-- Ausbildungsgang Select -->
-          <mat-select
+          <!-- TODO: fixme -->
+          <!-- <mat-select
             formControlName="ausbildungsgang"
             data-testid="form-education-ausbildungsgang"
             (valueChange)="handleGangChangedByUser()"
@@ -116,7 +117,7 @@
                 {{ l.translatedName }}
               </mat-option>
             }
-          </mat-select>
+          </mat-select> -->
         } @else {
           <!-- alternativer Ausbildungsgang -->
           <input

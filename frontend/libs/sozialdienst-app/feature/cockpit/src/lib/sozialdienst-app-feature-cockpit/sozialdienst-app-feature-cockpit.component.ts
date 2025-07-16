@@ -19,17 +19,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime } from 'rxjs';
@@ -44,6 +40,14 @@ import {
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
+import {
+  inverseSortMap,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/model/table';
 import {
   DEFAULT_PAGE_SIZE,
   INPUT_DELAY,
@@ -69,12 +73,6 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { parseDate, toBackendLocalDate } from '@dv/shared/util/validator-date';
-import {
-  inverseSortMap,
-  makeEmptyStringPropertiesNull,
-  restrictNumberParam,
-  sortMap,
-} from '@dv/shared/util-fn/filter-util';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
 import {
@@ -126,6 +124,7 @@ export class SozialdienstAppFeatureCockpitComponent
   private formBuilder = inject(NonNullableFormBuilder);
   private permissionStore = inject(PermissionStore);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private store = inject(Store);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
@@ -136,17 +135,17 @@ export class SozialdienstAppFeatureCockpitComponent
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GetDelegierungSozQueryType | undefined>(undefined);
-  sortColumn = input<SozDashboardColumn | undefined>(undefined);
-  sortOrder = input<SortOrder | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
   nachname = input<string | undefined>(undefined);
   vorname = input<string | undefined>(undefined);
   geburtsdatum = input<string | undefined>(undefined);
   wohnort = input<string | undefined>(undefined);
-  page = input<number | undefined, string | undefined>(undefined, {
+  sortColumn = input<SozDashboardColumn | undefined>(undefined);
+  sortOrder = input<SortOrder | undefined>(undefined);
+  page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
   });
-  pageSize = input<number | undefined, string | undefined>(undefined, {
+  pageSize = input(<number | undefined>undefined, {
     transform: restrictNumberParam({
       min: PAGE_SIZES[0],
       max: PAGE_SIZES[PAGE_SIZES.length - 1],
@@ -186,8 +185,8 @@ export class SozialdienstAppFeatureCockpitComponent
     const show = this.show();
     return show ?? (roles['V0_Sozialdienst-Admin'] ? 'ALLE' : DEFAULT_FILTER);
   });
-
-  dataSoruce = new MatTableDataSource<FallWithDelegierung>([]);
+  sortList = sortList(this.router, this.route);
+  paginateList = paginateList(this.router, this.route);
 
   quickFilters: {
     typ: GetDelegierungSozQueryType;
@@ -237,6 +236,10 @@ export class SozialdienstAppFeatureCockpitComponent
     const dataSource = new MatTableDataSource<FallWithDelegierung>(faelle);
     return dataSource;
   });
+  totalEntriesSig = computed(() => {
+    return this.delegationStore.cockpitViewSig()?.paginatedSozDashboard
+      ?.totalEntries;
+  });
 
   constructor() {
     effect(() => {
@@ -245,23 +248,12 @@ export class SozialdienstAppFeatureCockpitComponent
       }
     });
 
-    // Handle the case where the page is higher than the total number of pages
-    effect(() => {
-      const { page, pageSize } = this.getInputs();
-      const totalEntries =
-        this.delegationStore.cockpitViewSig().paginatedSozDashboard
-          ?.totalEntries;
-
-      if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
-        this.router.navigate(['.'], {
-          queryParams: {
-            page: Math.ceil(totalEntries / pageSize) - 1,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      }
-    });
+    limitPageToNumberOfEntriesEffect(
+      this,
+      this.totalEntriesSig,
+      this.router,
+      this.route,
+    );
 
     // Handle string filter form control changes
     effect(() => {
@@ -360,28 +352,6 @@ export class SozialdienstAppFeatureCockpitComponent
       sortColumn,
       sortOrder,
     };
-  }
-
-  sortData(event: Sort) {
-    this.router.navigate(['.'], {
-      queryParams: createQuery({
-        sortColumn: event.active as SozDashboardColumn,
-        sortOrder: sortMap[event.direction],
-      }),
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
-  }
-
-  paginate(event: PageEvent) {
-    this.router.navigate(['.'], {
-      queryParams: createQuery({
-        page: event.pageIndex,
-        pageSize: event.pageSize,
-      }),
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
   }
 
   ngOnInit() {

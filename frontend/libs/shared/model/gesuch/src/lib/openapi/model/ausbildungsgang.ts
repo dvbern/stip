@@ -9,13 +9,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Bildungskategorie } from './bildungskategorie';
+import { Ausbildungskategorie } from './ausbildungskategorie';
+import { Bildungsrichtung } from './bildungsrichtung';
 
 export interface Ausbildungsgang { 
     id: string;
-    bezeichnungDe?: string;
-    bezeichnungFr?: string;
-    bildungskategorie: Bildungskategorie;
-    ausbildungsstaetteId?: string;
+    bezeichnungDe: string;
+    bezeichnungFr: string;
+    abschlussId: string;
+    abschlussBezeichnungDe: string;
+    abschlussBezeichnungFr: string;
+    ausbildungskategorie?: Ausbildungskategorie;
+    bildungsrichtung?: Bildungsrichtung;
+    ausbildungsstaetteId: string;
+    ausbildungsstaetteNameDe: string;
+    ausbildungsstaetteNameFr: string;
+    aktiv: boolean;
 }
+
+
 

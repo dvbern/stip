@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
+import { AusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
 import { OPTION_AUSBILDUNGSSTAETTE } from '@dv/sachbearbeitung-app/model/administration';
-import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
 
 import { SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent } from './sachbearbeitung-app-feature-administration-ausbildungsstaette/sachbearbeitung-app-feature-administration-ausbildungsstaette.component';
 
@@ -11,13 +11,35 @@ export const sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes: Ro
       path: '',
       pathMatch: 'prefix',
       data: { option: OPTION_AUSBILDUNGSSTAETTE },
+      providers: [AusbildungsstaetteStore],
+      component:
+        SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent,
       children: [
         {
           path: '',
-          component:
-            SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent,
-          canDeactivate: [checkUnsavedChanges],
-          title: 'sachbearbeitung-app.admin.ausbildungsstaette.route.overview',
+          pathMatch: 'full',
+          redirectTo: 'ausbildungsgang',
+        },
+        {
+          path: 'ausbildungsgang',
+          loadComponent: () =>
+            import(
+              './components/ausbildungsgang/ausbildungsgang.component'
+            ).then((m) => m.AusbildungsgangComponent),
+        },
+        {
+          path: 'ausbildungsstaette',
+          loadComponent: () =>
+            import(
+              './components/ausbildungsstaette/ausbildungsstaette.component'
+            ).then((m) => m.AusbildungsstaetteComponent),
+        },
+        {
+          path: 'abschluss',
+          loadComponent: () =>
+            import('./components/abschluss/abschluss.component').then(
+              (m) => m.AbschlussComponent,
+            ),
         },
       ],
     },

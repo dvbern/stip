@@ -78,7 +78,7 @@
                 data-testid="cockpit-table"
                 mat-table
                 matSort
-                (matSortChange)="sortData($event)"
+                (matSortChange)="sortList($event)"
                 tabindex="0"
               >
                 <caption class="cdk-visually-hidden">
@@ -349,7 +349,7 @@
             [pageSize]="pageSize() ?? defaultPageSize"
             [pageIndex]="page() ?? 0"
             [length]="delegationStore.cockpitViewSig().paginatedSozDashboard?.totalEntries ?? 0"
-            (page)="paginate($event)"
+            (page)="paginateList($event)"
           ></mat-paginator>
         </div>
       </div>

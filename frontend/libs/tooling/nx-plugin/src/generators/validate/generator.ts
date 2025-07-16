@@ -5,6 +5,13 @@ import chalk from 'chalk';
 
 import { ValidateGeneratorSchema } from './schema';
 
+export const ignoredLibs = {
+  'shared-styles-components': true,
+  'shared-styles-theme': true,
+  'shared-assets-auth': true,
+  'shared-assets-images': true,
+};
+
 export interface Project {
   name: string;
   path: string;
@@ -34,11 +41,7 @@ export default async function validate(
   const relevantLibProjectNames = projects
     .map((p) => p.name)
     .filter(
-      (n) =>
-        !n.endsWith('-app') &&
-        !n.endsWith('-e2e') &&
-        !n.startsWith('shared-styles') &&
-        !n.startsWith('shared-assets'),
+      (n) => !n.endsWith('-app') && !n.endsWith('-e2e') && !(n in ignoredLibs),
     );
 
   const aggregateViolations: string[] = [];

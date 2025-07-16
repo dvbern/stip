@@ -197,28 +197,30 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   });
 
   ausbildungsgangOptionsSig = computed(() => {
-    const ausbildungsstaettes =
-      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
-    const language = this.languageSig();
+    return [] as { id: string; bildungskategorie: { bfs: number } }[];
+    // TODO: fixme
+    // const ausbildungsstaettes =
+    //   this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    // const language = this.languageSig();
 
-    return (
-      ausbildungsstaettes
-        .find(
-          (ausbildungsstaette) =>
-            getTranslatableProp(ausbildungsstaette, 'name', language) ===
-            this.ausbildungsstaetteSig(),
-        )
-        ?.ausbildungsgaenge?.map((ausbildungsgang) => {
-          return {
-            ...ausbildungsgang,
-            translatedName: getTranslatableProp(
-              ausbildungsgang,
-              'bezeichnung',
-              language,
-            ),
-          };
-        }) ?? []
-    );
+    // return (
+    //   ausbildungsstaettes
+    //     .find(
+    //       (ausbildungsstaette) =>
+    //         getTranslatableProp(ausbildungsstaette, 'name', language) ===
+    //         this.ausbildungsstaetteSig(),
+    //     )
+    //     ?.ausbildungsgaenge?.map((ausbildungsgang) => {
+    //       return {
+    //         ...ausbildungsgang,
+    //         translatedName: getTranslatableProp(
+    //           ausbildungsgang,
+    //           'bezeichnung',
+    //           language,
+    //         ),
+    //       };
+    //     }) ?? []
+    // );
   });
 
   showBesuchtBMS = computed(() => {
@@ -343,62 +345,56 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       });
     });
 
-    effect(
-      () => {
-        const error =
-          this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
+    effect(() => {
+      const error = this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
 
-        if (error) {
-          this.withAusbildungRange((ctrl) =>
-            ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (error) {
+        this.withAusbildungRange((ctrl) =>
+          ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
+        );
+      }
+    });
 
     // fill form
-    effect(
-      () => {
-        const ausbildung = {
-          ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-            .gesuchFormular?.ausbildung,
-        };
-        const ausbildungstaetten =
-          this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    effect(() => {
+      const ausbildung = {
+        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          .gesuchFormular?.ausbildung,
+      };
+      const ausbildungstaetten =
+        this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
-        if (ausbildung && ausbildungstaetten) {
-          this.form.patchValue({
-            ...ausbildung,
-            ausbildungsgang: undefined,
-          });
-          const currentAusbildungsgang = ausbildung.ausbildungsgang;
-          if (currentAusbildungsgang) {
-            const ausbildungsstaette = ausbildungstaetten.find(
-              (ausbildungsstaette) =>
-                ausbildungsstaette.ausbildungsgaenge?.find(
-                  (ausbildungsgang) =>
-                    ausbildungsgang.id === currentAusbildungsgang.id,
-                ),
-            );
-            const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-              (ausbildungsgang) =>
-                ausbildungsgang.id === currentAusbildungsgang.id,
-            );
-            this.form.patchValue({
-              ausbildungsstaette:
-                getTranslatableProp(
-                  ausbildungsstaette,
-                  'name',
-                  this.languageSig(),
-                ) ?? undefined,
-              ausbildungsgang: ausbildungsgang?.id,
-            });
-          }
+      if (ausbildung && ausbildungstaetten) {
+        this.form.patchValue({
+          ...ausbildung,
+          ausbildungsgang: undefined,
+        });
+        const currentAusbildungsgang = ausbildung.ausbildungsgang;
+        if (currentAusbildungsgang) {
+          // TODO: fixme
+          // const ausbildungsstaette = ausbildungstaetten.find(
+          //   (ausbildungsstaette) =>
+          //     ausbildungsstaette.ausbildungsgaenge?.find(
+          //       (ausbildungsgang) =>
+          //         ausbildungsgang.id === currentAusbildungsgang.id,
+          //     ),
+          // );
+          // const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+          //   (ausbildungsgang) =>
+          //     ausbildungsgang.id === currentAusbildungsgang.id,
+          // );
+          // this.form.patchValue({
+          //   ausbildungsstaette:
+          //     getTranslatableProp(
+          //       ausbildungsstaette,
+          //       'name',
+          //       this.languageSig(),
+          //     ) ?? undefined,
+          //   ausbildungsgang: ausbildungsgang?.id,
+          // });
         }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
 
     effect(() => {
       const { readonly } = this.cachedGesuchViewSig();

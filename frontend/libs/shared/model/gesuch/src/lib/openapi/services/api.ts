@@ -1,15 +1,11 @@
 export * from './ausbildung.service';
 // import { AusbildungService } from './ausbildung.service';
-export * from './ausbildungsgang.service';
-// import { AusbildungsgangService } from './ausbildungsgang.service';
 export * from './ausbildungsstaette.service';
 // import { AusbildungsstaetteService } from './ausbildungsstaette.service';
 export * from './auszahlung.service';
 // import { AuszahlungService } from './auszahlung.service';
 export * from './benutzer.service';
 // import { BenutzerService } from './benutzer.service';
-export * from './bildungskategorie.service';
-// import { BildungskategorieService } from './bildungskategorie.service';
 export * from './buchhaltung.service';
 // import { BuchhaltungService } from './buchhaltung.service';
 export * from './configuration.service';
@@ -47,4 +43,4 @@ export * from './tenant.service';
 export * from './verfuegung.service';
 // import { VerfuegungService } from './verfuegung.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungService, AusbildungsgangService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BildungskategorieService, BuchhaltungService, ConfigurationService, DelegierenService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];
+// export const APIS = [AusbildungService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BuchhaltungService, ConfigurationService, DelegierenService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];

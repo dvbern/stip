@@ -70,7 +70,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         this.startDate,
         this.lebenslaufItems,
         this.ausbildung,
-        this.ausbildungsstaettes,
+        // this.ausbildungsstaettes,
       );
     }
   }
@@ -79,7 +79,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     expectedSartDate: Date | null,
     lebenslaufItems: LebenslaufItemUpdate[],
     plannedAusbildung: Ausbildung | undefined,
-    ausbildungsstaettes: Ausbildungsstaette[],
+    // ausbildungsstaettes: Ausbildungsstaette[],
   ) {
     const timelineRawItems = lebenslaufItems.map(
       (lebenslaufItem) =>
@@ -95,15 +95,15 @@ export class TwoColumnTimelineComponent implements OnChanges {
     );
 
     // planned ausbildung
-    const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
-      staette.ausbildungsgaenge?.some(
-        (ausbildungsgang) =>
-          plannedAusbildung?.ausbildungsgang?.id === ausbildungsgang.id,
-      ),
-    );
-    const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-      (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
-    );
+    // const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
+    //   staette.ausbildungsgaenge?.some(
+    //     (ausbildungsgang) =>
+    //       plannedAusbildung?.ausbildungsgang?.id === ausbildungsgang.id,
+    //   ),
+    // );
+    // const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+    //   (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
+    // );
 
     timelineRawItems.push({
       id: 'planned-ausbildung',
@@ -111,12 +111,14 @@ export class TwoColumnTimelineComponent implements OnChanges {
       von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin),
       bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd),
       label: {
-        title:
-          (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??
-            plannedAusbildung?.alternativeAusbildungsstaette) +
-          ': ' +
-          (this.getTranslatedAusbildungsgangBezeichung(ausbildungsgang) ??
-            plannedAusbildung?.alternativeAusbildungsgang),
+        title: '',
+        // TODO: fixme
+        // title:
+        // (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??
+        //   plannedAusbildung?.alternativeAusbildungsstaette) +
+        // ': ' +
+        // (this.getTranslatedAusbildungsgangBezeichung(ausbildungsgang) ??
+        //   plannedAusbildung?.alternativeAusbildungsgang),
         subTitle: {
           key: 'shared.form.lebenslauf.item.name.fachrichtung',
           value: plannedAusbildung?.fachrichtung,
