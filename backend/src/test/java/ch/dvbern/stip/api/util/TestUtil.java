@@ -521,6 +521,7 @@ public class TestUtil {
                 .setKinder0018(1400)
                 .setEinreichefristNormal(LocalDate.now().plusMonths(5))
                 .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
+                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(Year.now().getValue(), 12, 31))
         )
             .setGesuchTranchen(
                 List.of(

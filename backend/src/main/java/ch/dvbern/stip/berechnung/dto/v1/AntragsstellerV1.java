@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -99,14 +100,18 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
-        builder.alter(alter);
+        int alterForMedizinischeGrundversorgung = DateUtil.getAgeInYearsAtDate(
+            personInAusbildung.getGeburtsdatum(),
+            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung()
+        );
+        builder.alter(alterForMedizinischeGrundversorgung);
 
         int medizinischeGrundversorgung = 0;
         int anzahlPersonenImHaushalt = 0;
         if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
             anzahlPersonenImHaushalt = 1;
-            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(alter, gesuchsperiode);
+            medizinischeGrundversorgung +=
+                BerechnungRequestV1.getMedizinischeGrundversorgung(alterForMedizinischeGrundversorgung, gesuchsperiode);
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
@@ -174,7 +179,11 @@ public class AntragsstellerV1 {
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
         builder.halbierungElternbeitrag(
-            getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode)
+            getHalbierungElternbeitrag(
+                personInAusbildung.getGeburtsdatum(),
+                gesuchFormular.getLebenslaufItems(),
+                gesuchsperiode
+            )
         );
 
         if (partner != null) {
@@ -209,7 +218,7 @@ public class AntragsstellerV1 {
     }
 
     private static boolean getHalbierungElternbeitrag(
-        final int alter,
+        final LocalDate geburtsdatumPia,
         final Set<LebenslaufItem> lebenslaufItemSet,
         final Gesuchsperiode gesuchsperiode
     ) {
@@ -219,9 +228,13 @@ public class AntragsstellerV1 {
                 lebenslaufItem -> lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
             );
+        var ausbildungsjahr = gesuchsperiode.getGesuchsjahr().getTechnischesJahr();
+        var alterAtEndOfAusbildungsjahr =
+            DateUtil.getAgeInYearsAtDate(geburtsdatumPia, LocalDate.of(ausbildungsjahr, 12, 31));
+
         final boolean halbierungAbgeschlosseneErstausbildung =
             abgeschlosseneErstausbildung
-            && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+            && (alterAtEndOfAusbildungsjahr >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
