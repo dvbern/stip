@@ -126,7 +126,10 @@ public class GesuchTestSeeding extends Seeder {
             .setReduzierungDesGrundbedarfs(2754)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
-            .setFristNachreichenDokumente(30);
+            .setFristNachreichenDokumente(30)
+            .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(
+                LocalDate.of(gesuchsjahr.getTechnischesJahr(), 12, 31)
+            );
     }
 
     private static LocalDate getGesuchsperiodeStart() {

@@ -224,6 +224,10 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(name = "frist_nachreichen_dokumente", nullable = false)
     private Integer fristNachreichenDokumente;
 
+    @NotNull
+    @Column(name = "stichtag_volljaehrigkeit_medizinische_grundversorgung", nullable = false)
+    private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+
     public boolean isActiveFor(final LocalDate date) {
         return DateUtil.between(
             getAufschaltterminStart(),
