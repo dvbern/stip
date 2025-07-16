@@ -17,20 +17,47 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
+import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public abstract class AusbildungsgangMapper {
-    @Mapping(target = "ausbildungsstaette.id", source = "ausbildungsstaetteId")
-    @Mapping(target = "abschluss.id", source = "abschlussId")
+    @Inject
+    AbschlussService abschlussService;
+
+    @Inject
+    AusbildungsstaetteService ausbildungsstaetteService;
+
+    @Mapping(target = "ausbildungsstaette", source = "ausbildungsstaetteId", qualifiedByName = "mapAusbildungsstaette")
+    @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
     public abstract Ausbildungsgang toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
+
+    @Named("mapAbschluss")
+    protected Abschluss mapAbschluss(final UUID abschlussId) {
+        if (abschlussId == null) {
+            return null;
+        }
+        return abschlussService.requireById(abschlussId);
+    }
+
+    @Named("mapAusbildungsstaette")
+    protected Ausbildungsstaette mapAusbildungsstaette(final UUID ausbildungsstaetteId) {
+        if (ausbildungsstaetteId == null) {
+            return null;
+        }
+        return ausbildungsstaetteService.requireById(ausbildungsstaetteId);
+    }
 
     @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")
     @Mapping(target = "bezeichnungFr", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungFr")

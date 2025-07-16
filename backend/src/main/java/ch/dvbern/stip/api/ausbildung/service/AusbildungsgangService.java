@@ -46,11 +46,6 @@ public class AusbildungsgangService {
     @Transactional
     public AusbildungsgangDto createAusbildungsgang(final AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         final var ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
-        final var abschluss = abschlussRepository.requireById(ausbildungsgangCreateDto.getAbschlussId());
-        final var ausbildungsstaette =
-            ausbildungsstaetteRepository.requireById(ausbildungsgangCreateDto.getAusbildungsstaetteId());
-        ausbildungsgang.setAbschluss(abschluss);
-        ausbildungsgang.setAusbildungsstaette(ausbildungsstaette);
         ausbildungsgangRepository.persist(ausbildungsgang);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }

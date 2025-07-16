@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -39,6 +40,11 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final ConfigService configService;
+
+    @Transactional
+    public Ausbildungsstaette requireById(final UUID ausbildungsstaetteId) {
+        return ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+    }
 
     @Transactional
     public AusbildungsstaetteDto createAusbildungsstaette(

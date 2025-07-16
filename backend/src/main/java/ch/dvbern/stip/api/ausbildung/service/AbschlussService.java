@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.ausbildung.service;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
@@ -39,6 +40,11 @@ public class AbschlussService {
     private final AbschlussRepository abschlussRepository;
     private final AbschlussMapper abschlussMapper;
     private final ConfigService configService;
+
+    @Transactional
+    public Abschluss requireById(final UUID abschlussId) {
+        return abschlussRepository.requireById(abschlussId);
+    }
 
     @Transactional
     public AbschlussDto createAbschlussBrueckenangebot(final BrueckenangebotCreateDto brueckenangebotCreateDto) {
