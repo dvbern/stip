@@ -47,6 +47,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -169,6 +170,14 @@ class BuchhaltungResourceTest {
                 .assertThat()
                 .statusCode(Status.NO_CONTENT.getStatusCode());
         }
+
+        TestUtil.uploadUnterschriftenblatt(
+            dokumentApiSpec,
+            gesuch.getId(),
+            UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
+            TestUtil.getTestPng()
+        );
+
         gesuchApiSpec.bearbeitungAbschliessen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

@@ -71,7 +71,7 @@ public class PersonenImHaushaltService {
 
     public PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request) {
         final var models = dmnService.loadModelsForTenantAndVersionByName(
-            tenantService.getCurrentTenant().getIdentifier(),
+            tenantService.getCurrentTenantIdentifier(),
             request.getVersion(),
             PERSONEN_IM_HAUSHALT_MODEL_NAME
         );

@@ -69,7 +69,7 @@ public class GesuchTestSeeding extends Seeder {
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
 
-    private static Gesuchsperiode getGesuchsperiode(final Gesuchsjahr gesuchsjahr) {
+    public static Gesuchsperiode getGesuchsperiode(final Gesuchsjahr gesuchsjahr) {
         final var jahr = LocalDate.now().getYear();
         final var start = getGesuchsperiodeStart();
         final var stopp = getGesuchsperiodeStopp();
