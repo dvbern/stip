@@ -121,11 +121,11 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
             .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH
             )
             .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH,
                 Gesuchstatus.STIPENDIENANSPRUCH
             );
 
@@ -133,11 +133,11 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH
             )
             .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
                 Gesuchstatus.STIPENDIENANSPRUCH
             )
             .onEntryFrom(
@@ -198,14 +198,14 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .onEntryFrom(
                 triggers.get(
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH
                 ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
                 ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
@@ -221,14 +221,14 @@ public class GesuchStatusConfigProducer {
             )
             .onEntryFrom(
                 triggers.get(
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH
                 ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
                 ),
                 (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))

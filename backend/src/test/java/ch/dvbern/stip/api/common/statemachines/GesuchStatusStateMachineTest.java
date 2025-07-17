@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchStatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -133,8 +134,12 @@ class GesuchStatusStateMachineTest {
     }
 
     @Getter
-    static class StateChangeHandlerMock implements GesuchStatusChangeHandler {
+    static class StateChangeHandlerMock extends KomplettEingereichtHandler {
         private boolean handled = false;
+
+        public StateChangeHandlerMock() {
+            super(null, null);
+        }
 
         @Override
         public void handle(Gesuch gesuch) {

@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -10,6 +9,9 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
@@ -23,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid UUID gesuchTrancheId;
   private @Valid UUID gesuchDokumentId;
-  private @Valid GesuchDokumentStatus dokumentStatus;
+  private @Valid ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus;
   private @Valid String kommentar;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
@@ -35,7 +37,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchTrancheId")
   @NotNull
   public UUID getGesuchTrancheId() {
@@ -54,7 +56,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchDokumentId")
   @NotNull
   public UUID getGesuchDokumentId() {
@@ -68,19 +70,19 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentKommentarDto dokumentStatus(GesuchDokumentStatus dokumentStatus) {
+  public GesuchDokumentKommentarDto dokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
     this.dokumentStatus = dokumentStatus;
     return this;
   }
 
-
+  
   @JsonProperty("dokumentStatus")
-  public GesuchDokumentStatus getDokumentStatus() {
+  public ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus getDokumentStatus() {
     return dokumentStatus;
   }
 
   @JsonProperty("dokumentStatus")
-  public void setDokumentStatus(GesuchDokumentStatus dokumentStatus) {
+  public void setDokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
     this.dokumentStatus = dokumentStatus;
   }
 
@@ -91,7 +93,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kommentar")
   public String getKommentar() {
     return kommentar;
@@ -109,7 +111,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("user_erstellt")
   public String getUserErstellt() {
     return userErstellt;
@@ -127,7 +129,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -165,7 +167,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
-
+    
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");

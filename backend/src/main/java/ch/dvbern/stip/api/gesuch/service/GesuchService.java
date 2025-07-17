@@ -557,10 +557,10 @@ public class GesuchService {
                 .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
                 .orElseThrow(NotFoundException::new);
             gesuchStatusChangeEvent =
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH;
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH;
             if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
                 gesuchStatusChangeEvent =
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH;
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH;
             }
         }
         gesuchStatusService
@@ -872,13 +872,13 @@ public class GesuchService {
         if (!toUpdateStipendienAnspruch.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
             );
         }
         if (!toUpdateKeinStipendienAnspruch.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
             );
         }
     }
