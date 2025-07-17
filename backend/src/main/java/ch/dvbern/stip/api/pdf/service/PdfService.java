@@ -17,18 +17,6 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
-
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -75,6 +63,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
@@ -82,6 +82,7 @@ public class PdfService {
 
     private static final String FONT_PATH = "/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
+    private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
 
     private static final int SPACING_BIG = 30;
     private static final int SPACING_MEDIUM = 20;
@@ -331,7 +332,7 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 "- ",
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY)
             )
         );
 
@@ -352,7 +353,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title").toUpperCase()
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY).toUpperCase()
             )
                 .setUnderline()
                 .setPaddingTop(SPACING_MEDIUM)
@@ -383,7 +384,7 @@ public class PdfService {
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2."));
         mainTable.addCell(
-            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.title"))
+            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY))
         );
         mainTable.addCell(
             createCell(pdfFont, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.text"))
