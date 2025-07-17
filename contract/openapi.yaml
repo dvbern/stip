@@ -6125,6 +6125,7 @@ components:
         - gesuchId
         - timestamp
         - userErstellt
+        - absender
       properties:
         notificationText:
           type: string
@@ -6138,6 +6139,8 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+        absender:
+          type: string
     GesuchNotizTyp:
       enum:
         - GESUCH_NOTIZ

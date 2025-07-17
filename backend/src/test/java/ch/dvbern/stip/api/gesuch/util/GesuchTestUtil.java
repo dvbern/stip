@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.util;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,6 +44,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestConstants;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -100,6 +102,12 @@ public class GesuchTestUtil {
 
     public Gesuch setupValidGesuchInState(Gesuchstatus status) {
         Gesuch gesuch = setupValidGesuch();
+        if (status == Gesuchstatus.VERFUEGT) {
+            var verfuegungen = new ArrayList<Verfuegung>();
+            verfuegungen.add(new Verfuegung());
+            gesuch.setVerfuegungs(verfuegungen);
+            gesuch.setVerfuegt(true);
+        }
         return gesuch.setGesuchStatus(status);
     }
 

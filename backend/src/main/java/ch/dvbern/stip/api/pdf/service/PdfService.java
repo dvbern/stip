@@ -34,14 +34,16 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
@@ -81,6 +83,7 @@ public class PdfService {
 
     private static final String FONT_PATH = "/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
+    private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
 
     private static final int SPACING_BIG = 30;
     private static final int SPACING_MEDIUM = 20;
@@ -93,7 +96,7 @@ public class PdfService {
     private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
 
     private final StipDecisionTextRepository stipDecisionTextRepository;
-    private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+    private final BerechnungsblattService berechnungsblattService;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
@@ -160,6 +163,9 @@ public class PdfService {
             section.render(verfuegung, document, leftMargin, translator);
             footer(gesuch, document, leftMargin, translator);
             rechtsmittelbelehrung(translator, document, leftMargin);
+            PdfUtils.makePageNumberEven(document);
+            berechnungsblaetter(document, gesuch);
+            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -225,8 +231,11 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        final Link email =
-            new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
+        final String mail = sachbearbeiterBenutzer.getEmail() != null
+            ? sachbearbeiterBenutzer.getEmail()
+            : Constants.DVB_MAILBUCKET_MAIL;
+
+        final Link email = new Link(mail, PdfAction.createURI(String.format("mailto:%s", mail)));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
@@ -327,38 +336,17 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 "- ",
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY)
             )
         );
 
-        final List<String> kopieAn = new ArrayList<>();
+        addCopieAnParagraph(gesuch, translator, leftMargin, document);
+    }
 
-        steuerdatenTabBerechnungsService
-            .calculateTabs(gesuch.getLatestGesuchTranche().getGesuchFormular().getFamiliensituation())
-            .forEach(steuerdatenTyp -> {
-                switch (steuerdatenTyp) {
-                    case FAMILIE -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.eltern"));
-                    case MUTTER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.mutter"));
-                    case VATER -> kopieAn.add(translator.translate("stip.pdf.footer.kopieAn.vater"));
-                }
-            });
-
-        if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-            kopieAn.add(gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName());
-        }
-
-        if (!kopieAn.isEmpty()) {
-            document.add(
-                createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.pdf.footer.kopieAn") + " ",
-                    String.join(", ", kopieAn)
-                )
-            );
-        }
+    private void berechnungsblaetter(Document document, final Gesuch gesuch) throws IOException {
+        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+        berechnungsblattService
+            .addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document, false);
     }
 
     private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
@@ -369,7 +357,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title").toUpperCase()
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY).toUpperCase()
             )
                 .setUnderline()
                 .setPaddingTop(SPACING_MEDIUM)
@@ -400,7 +388,7 @@ public class PdfService {
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2."));
         mainTable.addCell(
-            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.title"))
+            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY))
         );
         mainTable.addCell(
             createCell(pdfFont, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.text"))
@@ -615,6 +603,44 @@ public class PdfService {
         );
     }
 
+    private void addCopieAnParagraph(
+        final Gesuch gesuch,
+        final TL translator,
+        final float leftMargin,
+        final Document document
+    ) {
+        if (gesuch.getAusbildung().getFall().getDelegierung() == null) {
+            return;
+        }
+
+        final List<String> kopieAn = new ArrayList<>();
+        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
+        final var sozialdienstAdresse = gesuch.getAusbildung()
+            .getFall()
+            .getDelegierung()
+            .getSozialdienst()
+            .getZahlungsverbindung()
+            .getAdresse();
+
+        kopieAn.add(sozialdienstName);
+        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+            kopieAn.add(sozialdienstAdresse.getCoAdresse());
+        }
+        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.pdf.footer.kopieAn") + " ",
+                String.join(", ", kopieAn)
+            )
+        );
+    }
+
     private void negativeVerfuegung(
         final Verfuegung verfuegung,
         final Document document,
@@ -629,12 +655,6 @@ public class PdfService {
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
-
-        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
-            .getAusbildung()
-            .getFall()
-            .getSachbearbeiterZuordnung()
-            .getSachbearbeiter();
 
         final LocalDate ausbildungsjahrVon = gesuch
             .getGesuchTranchen()
