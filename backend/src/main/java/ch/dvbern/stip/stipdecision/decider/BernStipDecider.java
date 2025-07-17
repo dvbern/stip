@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
-import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -180,7 +179,7 @@ public class BernStipDecider extends BaseStipDecider {
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
-                    if (piaBernZugewiesen(gesuchTranche)) {
+                    if (piaKantonMandantZugewiesen(gesuchTranche)) {
                         return StipDeciderResult.GESUCH_VALID;
                     }
                     return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN;
@@ -307,10 +306,10 @@ public class BernStipDecider extends BaseStipDecider {
                 .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CHE));
         }
 
-        private static boolean piaBernZugewiesen(final GesuchTranche gesuchTranche) {
+        private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getZustaendigerKanton() == ZustaendigerKanton.BERN;
+                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
         }
 
         private static boolean piaNationalitaetEuEfta(

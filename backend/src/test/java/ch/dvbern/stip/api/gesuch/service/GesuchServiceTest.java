@@ -255,24 +255,6 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    void testNiederlassungsstatusFluechtlingToOtherShouldResetZustaendigerKantonRequired() {
-        final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung();
-        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
-        pia.setHeimatort(null);
-        GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
-            gesuchUpdateDto,
-            Niederlassungsstatus.ALL_WITH_FLUECHTLINGSSTATUS.stream().findFirst().orElse(null),
-            Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C
-        );
-
-        assertThat(tranche.getGesuchFormular().getPersonInAusbildung().getZustaendigerKanton(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
     void testLedigToEveryOtherZivilstandShouldNotResetPartner() {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != LEDIG) {

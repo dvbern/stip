@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
-import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -152,14 +151,12 @@ class BernStipDeciderTest {
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
 
         pia.setNationalitaet(LandGenerator.initIran());
-        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
-            .setZustaendigerKanton(ZustaendigerKanton.BERN);
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON);
 
-        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
-            .setZustaendigerKanton(ZustaendigerKanton.BERN);
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
 
         decision = decider.decide(gesuch.getNewestGesuchTranche().get());
@@ -314,7 +311,6 @@ class BernStipDeciderTest {
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON);
-        pia.setZustaendigerKanton(ZustaendigerKanton.ANDERER_KANTON);
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision)
             .isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN);

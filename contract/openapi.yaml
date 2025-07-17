@@ -5076,8 +5076,6 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
-        zustaendigerKanton:
-          $ref: '#/components/schemas/ZustaendigerKanton'
         zustaendigeKESB:
           $ref: '#/components/schemas/ZustaendigeKESB'
     Sachbearbeiter:

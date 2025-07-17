@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.personinausbildung.service;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
@@ -26,7 +25,6 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import jakarta.inject.Inject;
@@ -70,24 +68,6 @@ extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
                 newFormular.setIdentischerZivilrechtlicherWohnsitzOrt(null);
                 newFormular.setIdentischerZivilrechtlicherWohnsitzPLZ(null);
             }
-        );
-
-        resetFieldIf(
-            () -> Objects.nonNull(newFormular.getNiederlassungsstatus()) &&
-            (Boolean.FALSE.equals(
-                newFormular.getNiederlassungsstatus()
-                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
-            ) ||
-            Boolean.FALSE.equals(
-                newFormular.getNiederlassungsstatus()
-                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON)
-            ) ||
-            Boolean.FALSE.equals(
-                newFormular.getNiederlassungsstatus()
-                    .equals(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
-            )),
-            "Reset zustaendigerKanton because niederlassungsstatus has changed",
-            () -> newFormular.setZustaendigerKanton(null)
         );
     }
 
