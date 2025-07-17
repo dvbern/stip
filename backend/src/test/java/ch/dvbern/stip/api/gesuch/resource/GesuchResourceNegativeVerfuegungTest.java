@@ -15,18 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.steuerdaten.resource;
-
-import java.util.List;
+package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
-import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.CreateGesuchTrancheRequestDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -36,22 +33,24 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.StipDecisionApiSpec;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
-import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -61,8 +60,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasSize;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -72,18 +70,18 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class SteuerdatenResourceTest {
+class GesuchResourceNegativeVerfuegungTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
-    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
+        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
-
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final StipDecisionApiSpec stipDecisionApiSpec =
+        StipDecisionApiSpec.stipDecision(RequestSpecUtil.quarkusSpec());
     private GesuchDtoSpec gesuch;
     private FallDtoSpec fall;
-
-    private FallAuszahlungDtoSpec auszahlung;
 
     @Test
     @TestAsGesuchsteller
@@ -132,120 +130,102 @@ class SteuerdatenResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichenGs()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.gesuchEinreichenGs()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+
+        final var gesuchTranchen = TestUtil.executeAndExtract(
+            GesuchTrancheListDtoSpec.class,
+            gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuch.getId())
+        );
+
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(5)
-    void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
+    void trancheErstellen() {
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
 
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        TestUtil.executeAndAssertOk(
+            gesuchTrancheApiSpec.createGesuchTrancheCopy()
+                .gesuchIdPath(gesuch.getId())
+                .body(CreateGesuchTrancheRequestDtoSpecModel.createGesuchTrancheRequestDtoSpec(gesuch))
+        );
+
+        assertSBTranchenCount("No Tranche was created (full override?)", 2);
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(6)
-    void gesuchAddSteuerdaten() {
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(List.of(steuerdatenUpdateDto))
+    void negativeVerfuegung() {
+        var decision = stipDecisionApiSpec.getAll()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .extract()
+            .body()
+            .as(StipDecisionTextDto[].class)[0];
+
+        var ausgewaehlterGrund = new AusgewaehlterGrundDtoSpec();
+        ausgewaehlterGrund.setDecisionId(decision.getId());
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.changeGesuchStatusToNegativeVerfuegung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+                .body(ausgewaehlterGrund)
+        );
+
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(7)
-    void gesuchAddSteuerdatenBadType() {
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.MUTTER);
-        final var validationReport = steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode())
-            .extract()
-            .body()
-            .as(ValidationReportDtoSpec.class);
-        assertThat(
-            validationReport.getValidationErrors().get(0).getMessageTemplate(),
-            equalTo("{jakarta.validation.constraints.steuerdaten.tab.invalid.message}")
+    void gesuchVersenden() {
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.changeGesuchStatusToVersendet()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(8)
-    void gesuchAddSteuerdatenBadYear() {
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenUpdateDto.setSteuerjahr(2099);
-        final var validationReport = steuerdatenApiSpec.updateSteuerdaten()
+    void gesuchShouldBeInState_Kein_Stipendienanspruch() {
+        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(List.of(steuerdatenUpdateDto))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode())
+            .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(ValidationReportDtoSpec.class);
-        assertThat(
-            validationReport.getValidationErrors().get(0).getMessageTemplate(),
-            equalTo("{jakarta.validation.constraints.steuerdaten.steuerjahr.invalid.message}")
-        );
-    }
+            .as(GesuchWithChangesDtoSpec.class);
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(9)
-    void getAndSetAsGSShouldFail() {
-        steuerdatenApiSpec.getSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(
-                Status.FORBIDDEN.getStatusCode()
+        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+            .satisfiesAnyOf(
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
             );
-
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
     @TestAsSuperUser
-    @AlwaysRun
     @Order(99)
+    @StepwiseExtension.AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    private void assertSBTranchenCount(final String message, final int size) {
+        final var gesuchTranchen = TestUtil.executeAndExtract(
+            GesuchTrancheListDtoSpec.class,
+            gesuchTrancheApiSpec.getAllTranchenForGesuchSB().gesuchIdPath(gesuch.getId())
+        );
+
+        assertThat(message, gesuchTranchen.getTranchen(), hasSize(size));
     }
 }

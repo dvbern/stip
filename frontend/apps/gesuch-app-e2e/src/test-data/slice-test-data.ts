@@ -1,6 +1,5 @@
 import {
   Adresse,
-  Auszahlung,
   Darlehen,
   EinnahmenKosten,
   Eltern,
@@ -10,8 +9,10 @@ import {
   PersonInAusbildung,
   Steuerdaten,
   SteuererklaerungUpdate,
+  Zahlungsverbindung,
 } from '@dv/shared/model/gesuch';
 import {
+  fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
@@ -27,9 +28,22 @@ export const ausbildung: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
+  ausbildungBegin: `${fruehlingOrHerbst()}.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
+};
+
+export const zahlungsverbindung: Zahlungsverbindung = {
+  vorname: 'Spoerri',
+  nachname: 'Spoerri',
+  iban: '1809000000150664878',
+  adresse: {
+    landId: 'Schweiz',
+    strasse: 'Huberstrasse',
+    hausnummer: '5a',
+    plz: '3008',
+    ort: 'Bern',
+  },
 };
 
 export const adressen = {
@@ -133,19 +147,6 @@ export const bruder: Geschwister = {
   wohnsitz: 'MUTTER_VATER',
   ausbildungssituation: 'IN_AUSBILDUNG',
   id: '',
-};
-
-export const auszahlung: Auszahlung = {
-  isDelegated: false,
-  value: {
-    auszahlungAnSozialdienst: false,
-    zahlungsverbindung: {
-      vorname: '',
-      nachname: '',
-      adresse: adressen.person,
-      iban: 'CH9300762011623852957',
-    },
-  },
 };
 
 export const einnahmenKosten: EinnahmenKosten = {

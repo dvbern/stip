@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -38,6 +39,7 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -106,7 +108,11 @@ class GesuchTrancheServiceTest {
 
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any());
 
-        var fall = new Fall();
+        var sb = new Sachbearbeiter();
+        sb.setNachname("Mustermann").setVorname("Max");
+        final var zuordnung = new Zuordnung().setSachbearbeiter(sb);
+        final var fall = new Fall().setSachbearbeiterZuordnung(zuordnung);
+
         var ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);

@@ -406,6 +406,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   bfsCodeSchweiz = BFSCODE_SCHWEIZ;
 
   constructor() {
+    this.landStore.loadLaender$();
     this.formUtils.registerFormForUnsavedCheck(this);
     this.formUtils.observeInvalidFieldsAndMarkControls(
       this.einreichenStore.invalidFormularControlsSig,

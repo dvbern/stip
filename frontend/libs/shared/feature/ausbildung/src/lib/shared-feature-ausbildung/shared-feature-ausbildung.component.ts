@@ -66,6 +66,7 @@ import {
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  provideMaterialDefaultOptions,
 } from '@dv/shared/util/form';
 import {
   createDateDependencyValidator,
@@ -115,6 +116,9 @@ const gesuchsPeriodenSelectErrorMap: Record<
     AusbildungStore,
     AusbildungsstaetteStore,
     provideDateFnsAdapter(),
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

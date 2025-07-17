@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
@@ -31,6 +27,10 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 @RequiredArgsConstructor
@@ -84,7 +84,6 @@ public class GesuchsperiodeSeeding extends Seeder {
                         LocalDate.of(yearToSeed, 1, 1),
                         LocalDate.of(yearToSeed, 12, 31),
                         LocalDate.of(yearToSeed, 1, 15),
-                        LocalDate.of(yearToSeed, 9, 30),
                         LocalDate.of(yearToSeed, 6, 30),
                         LocalDate.of(yearToSeed, 9, 30)
                     );
@@ -96,7 +95,6 @@ public class GesuchsperiodeSeeding extends Seeder {
                         LocalDate.of(yearToSeed, 7, 1),
                         LocalDate.of(yearToSeed + 1, 6, 30),
                         LocalDate.of(yearToSeed, 7, 15),
-                        LocalDate.of(yearToSeed + 1, 3, 31),
                         LocalDate.of(yearToSeed, 12, 31),
                         LocalDate.of(yearToSeed + 1, 3, 31)
                     );
@@ -131,7 +129,6 @@ public class GesuchsperiodeSeeding extends Seeder {
         final LocalDate from,
         final LocalDate to,
         final LocalDate aufschaltterminStart,
-        final LocalDate aufschaltterminStopp,
         final LocalDate einreichefristNormal,
         final LocalDate einreichefristReduziert
     ) {
