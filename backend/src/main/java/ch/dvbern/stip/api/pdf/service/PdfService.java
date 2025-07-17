@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
@@ -82,6 +83,7 @@ public class PdfService {
 
     private static final String FONT_PATH = "/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
+    private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
 
     private static final int SPACING_BIG = 30;
     private static final int SPACING_MEDIUM = 20;
@@ -229,8 +231,11 @@ public class PdfService {
             gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
         ).setPaddingTop(SPACING_MEDIUM);
 
-        final Link email =
-            new Link(sachbearbeiterBenutzer.getEmail(), PdfAction.createURI("mailto:peter.muster@be.ch"));
+        final String mail = sachbearbeiterBenutzer.getEmail() != null
+            ? sachbearbeiterBenutzer.getEmail()
+            : Constants.DVB_MAILBUCKET_MAIL;
+
+        final Link email = new Link(mail, PdfAction.createURI(String.format("mailto:%s", mail)));
         final Paragraph emailParagraph = new Paragraph().add(email);
 
         final Cell sachbearbeiter = createCell(
@@ -331,7 +336,7 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 "- ",
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title")
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY)
             )
         );
 
@@ -352,7 +357,7 @@ public class PdfService {
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.title").toUpperCase()
+                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY).toUpperCase()
             )
                 .setUnderline()
                 .setPaddingTop(SPACING_MEDIUM)
@@ -383,7 +388,7 @@ public class PdfService {
 
         mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2."));
         mainTable.addCell(
-            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.title"))
+            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY))
         );
         mainTable.addCell(
             createCell(pdfFont, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.text"))
@@ -650,12 +655,6 @@ public class PdfService {
             .getPersonInAusbildung()
             .getKorrespondenzSprache()
             .getLocale();
-
-        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
-            .getAusbildung()
-            .getFall()
-            .getSachbearbeiterZuordnung()
-            .getSachbearbeiter();
 
         final LocalDate ausbildungsjahrVon = gesuch
             .getGesuchTranchen()

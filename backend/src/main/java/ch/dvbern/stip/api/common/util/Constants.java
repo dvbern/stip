@@ -29,6 +29,8 @@ public final class Constants {
     public static final int MAX_AGE_AUSBILDUNGSBEGIN = 35;
     public static final int FALL_GESUCH_NUMBER_GEN_SEED = 184932;
 
+    public static final String DVB_MAILBUCKET_MAIL = "stip@mailbucket.dvbern.ch";
+
     private Constants() {
         throw new IllegalStateException("Constants class");
     }
