@@ -13,20 +13,9 @@
   (ngSubmit)="confirm()"
 >
   <h3 class="mb-4">
-    {{
-      config.appType === 'sachbearbeitung-app'
-        ? ('shared.dialog.gesuch.tranche.create.title' | translate)
-        : ('shared.dialog.gesuch-aenderung.title' | translate)
-    }}
+    {{ titleKeys.title | translate }}
   </h3>
-  <div
-    class="mb-4"
-    [innerHTML]="
-      config.appType === 'sachbearbeitung-app'
-        ? ('shared.dialog.gesuch.tranche.create.text' | translate)
-        : ('shared.dialog.gesuch-aenderung.text' | translate)
-    "
-  ></div>
+  <div class="mb-4" [innerHTML]="titleKeys.text | translate"></div>
   <div class="row">
     <div class="col-6">
       <mat-form-field dvSharedUiFormField class="tw-w-full">

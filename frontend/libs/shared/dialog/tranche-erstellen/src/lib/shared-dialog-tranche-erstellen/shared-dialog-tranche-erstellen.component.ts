@@ -19,12 +19,15 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addDays } from 'date-fns';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -41,11 +44,26 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 type GesuchTrancheErstellenData = {
-  forAenderung: boolean;
-  gesuchId: string;
+  type: 'createTranche' | 'createAenderung' | 'updateAenderungVonBis';
+  id: string;
   minDate: Date;
   maxDate: Date;
 };
+
+const titleKeysByTypeMap = {
+  createTranche: {
+    title: 'shared.dialog.gesuch.tranche.create.title',
+    text: 'shared.dialog.gesuch.tranche.create.text',
+  },
+  createAenderung: {
+    title: 'shared.dialog.gesuch-aenderung.create.title',
+    text: 'shared.dialog.gesuch-aenderung.create.text',
+  },
+  updateAenderungVonBis: {
+    title: 'shared.dialog.gesuch-aenderung.update-von-bis.title',
+    text: 'shared.dialog.gesuch-aenderung.update-von-bis.text',
+  },
+} satisfies Record<GesuchTrancheErstellenData['type'], unknown>;
 
 @Component({
   selector: 'dv-shared-dialog-tranche-erstellen',
@@ -78,9 +96,10 @@ export class SharedDialogTrancheErstellenComponent {
     inject(MatDialogRef);
   dialogData = inject<GesuchTrancheErstellenData>(MAT_DIALOG_DATA);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-
+  store = inject(Store);
   config = inject(SharedModelCompileTimeConfig);
 
+  titleKeys = titleKeysByTypeMap[this.dialogData.type];
   form = this.formBuilder.group({
     gueltigAb: [<Date | null>null, Validators.required],
     gueltigBis: [<Date | null>null],
@@ -125,7 +144,6 @@ export class SharedDialogTrancheErstellenComponent {
     };
 
     const servicePayload = {
-      gesuchId: this.dialogData.gesuchId,
       onSuccess: () => {
         this.dialogRef.close(null);
       },
@@ -147,19 +165,39 @@ export class SharedDialogTrancheErstellenComponent {
       },
     } as const;
 
-    if (this.dialogData.forAenderung) {
-      this.gesuchAenderungStore.createGesuchAenderung$({
-        createAenderungsantragRequest: createTrancheData,
-        ...servicePayload,
-      });
-
-      return;
+    switch (this.dialogData.type) {
+      case 'createTranche': {
+        this.gesuchAenderungStore.createGesuchTrancheCopy$({
+          createGesuchTrancheRequest: createTrancheData,
+          gesuchId: this.dialogData.id,
+          ...servicePayload,
+        });
+        break;
+      }
+      case 'createAenderung': {
+        this.gesuchAenderungStore.createGesuchAenderung$({
+          createAenderungsantragRequest: createTrancheData,
+          gesuchId: this.dialogData.id,
+          ...servicePayload,
+        });
+        break;
+      }
+      case 'updateAenderungVonBis': {
+        this.gesuchAenderungStore.updateAenderungVonBis$({
+          aenderungId: this.dialogData.id,
+          patchAenderungsInfoRequest: createTrancheData,
+          onSuccess: () => {
+            this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+            servicePayload.onSuccess();
+          },
+          onFailure: servicePayload.onFailure,
+        });
+        break;
+      }
+      default: {
+        assertUnreachable(this.dialogData.type);
+      }
     }
-
-    this.gesuchAenderungStore.createGesuchTrancheCopy$({
-      createGesuchTrancheRequest: createTrancheData,
-      ...servicePayload,
-    });
   }
 
   cancel() {

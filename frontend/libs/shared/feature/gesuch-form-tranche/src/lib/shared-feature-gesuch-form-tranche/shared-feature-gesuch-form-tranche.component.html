@@ -82,19 +82,42 @@
     <input readonly type="text" matInput formControlName="einreichefrist" data-testid="form-tranche-einreichefrist" />
   </mat-form-field>
 
-  <!-- Von -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-    <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
+  <ng-template #updateAenderungButton>
+    @let gesuch = view.gesuch;
+    @if (gesuch && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | translate"
+        data-testid="cockpit-gesuch-aenderung-von-bis-update"
+        (click)="updateAenderungVonBis(gesuch)"
+      >
+        <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
+      </button>
+    }
+  </ng-template>
 
-    <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
-  </mat-form-field>
+  <!-- Von -->
+  <div class="tw-col-start-1 tw-flex tw-gap-2">
+    <mat-form-field dvSharedUiFormField class="tw-flex-grow">
+      <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
+
+      <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
+    </mat-form-field>
+
+    <ng-container *ngTemplateOutlet="updateAenderungButton"></ng-container>
+  </div>
 
   <!-- Bis -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.tranche.bis.label' | translate }} </mat-label>
+  <div class="tw-flex tw-gap-2">
+    <mat-form-field dvSharedUiFormField class="tw-flex-grow">
+      <mat-label>{{ 'shared.form.tranche.bis.label' | translate }} </mat-label>
 
-    <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
-  </mat-form-field>
+      <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
+    </mat-form-field>
+
+    <ng-container *ngTemplateOutlet="updateAenderungButton"></ng-container>
+  </div>
 
   <!-- Bemerkung -->
   <mat-form-field dvSharedUiFormField class="md:tw-col-span-2">

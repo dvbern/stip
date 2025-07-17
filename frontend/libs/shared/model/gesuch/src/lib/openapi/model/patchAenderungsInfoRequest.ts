@@ -9,20 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NotificationType } from './notificationType';
 
-/**
- * Notification for a Gesuch
- */
-export interface Notification { 
-    notificationText?: string;
-    notificationType: NotificationType;
-    gesuchId: string;
-    contextId?: string;
-    userErstellt: string;
-    timestampErstellt?: string;
-    absender: string;
+export interface PatchAenderungsInfoRequest { 
+    start: string;
+    end?: string;
+    comment: string;
 }
-
-
 
