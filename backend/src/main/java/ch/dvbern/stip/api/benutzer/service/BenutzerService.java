@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
+import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationMapper;
@@ -51,8 +52,6 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-
-import static ch.dvbern.stip.api.common.util.Constants.DVB_MAILBUCKET_MAIL;
 
 @RequestScoped
 @UnlessBuildProfile("test")
@@ -150,7 +149,7 @@ public class BenutzerService {
             newSachbearbeiter.setKeycloakId(jsonWebToken.getSubject());
             newSachbearbeiter.setVorname(jsonWebToken.getClaim(Claims.given_name));
             newSachbearbeiter.setNachname(jsonWebToken.getClaim(Claims.family_name));
-            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? DVB_MAILBUCKET_MAIL
+            String email = Objects.isNull(jsonWebToken.getClaim(Claims.email)) ? Constants.DVB_MAILBUCKET_MAIL
                 : jsonWebToken.getClaim(Claims.email);
             newSachbearbeiter.setEmail(email);
             newSachbearbeiter.setBenutzerStatus(BenutzerStatus.AKTIV);
