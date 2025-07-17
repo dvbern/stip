@@ -47,7 +47,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -856,7 +856,7 @@ public class TestUtil {
 
         var customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND)
             .setDokumente(new ArrayList<>())
             .setCustomDokumentTyp(customDokumentTyp);
         return customGesuchDokument;

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -38,6 +40,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -50,13 +53,23 @@ public class GesuchStatusConfigProducer {
         Instance<GesuchStatusChangeHandler> handlers
     ) {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
+        Map<GesuchStatusChangeEvent, TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent>> triggers =
+            new HashMap<>();
+
+        for (GesuchStatusChangeEvent event : GesuchStatusChangeEvent.values()) {
+            triggers.put(event, config.setTriggerParameters(event, Gesuch.class));
+        }
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT)
             .onEntryFrom(
-                selectHandlerForClass(handlers, KomplettEingereichtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.EINGEREICHT),
-                (gesuch) -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
+                triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
+                (gesuch) -> selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN),
+                (gesuch) -> selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -68,71 +81,45 @@ public class GesuchStatusConfigProducer {
             )
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
+            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.EINGEREICHT),
+                (gesuch) -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            );
 
         config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
             .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, KomplettEingereichtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.EINGEREICHT),
-                (gesuch) -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, NegativeVerfuegungHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, NegativeVerfuegungHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, NegativeVerfuegungHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
+                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            );
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
+            .permit(GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (gesuch) -> selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, NegativeVerfuegungHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH
@@ -140,41 +127,11 @@ public class GesuchStatusConfigProducer {
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
                 Gesuchstatus.STIPENDIENANSPRUCH
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class).get()
-                    .trigger(
-                        config,
-                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
-                    ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class).get()
-                    .trigger(
-                        config,
-                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
-                    ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, FehlendeDokumenteHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE),
-                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, VerfuegtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERFUEGT),
-                (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
             );
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT, Gesuchstatus.IN_BEARBEITUNG_GS)
+            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH
@@ -184,45 +141,8 @@ public class GesuchStatusConfigProducer {
                 Gesuchstatus.STIPENDIENANSPRUCH
             )
             .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (gesuch) -> selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
-                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(
-                        config,
-                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
-                    ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(
-                        config,
-                        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
-                    ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
-                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (gesuch) -> selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class)
+                triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE),
+                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -233,37 +153,23 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
             .onEntryFrom(
-                selectHandlerForClass(handlers, VersandbereitHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
-                (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
+                triggers.get(GesuchStatusChangeEvent.VERFUEGT),
+                (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, VerfuegtHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERFUEGT),
-                (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
-            .onEntryFrom(
-                selectHandlerForClass(handlers, VersandbereitHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
-                (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
 
         config.configure(Gesuchstatus.VERSANDBEREIT)
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET)
             .onEntryFrom(
-                selectHandlerForClass(handlers, VersendetHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERSENDET),
-                (gesuch) -> selectHandlerForClass(handlers, VersendetHandler.class)
+                triggers.get(GesuchStatusChangeEvent.VERSANDBEREIT),
+                (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -271,18 +177,16 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH)
             .onEntryFrom(
-                selectHandlerForClass(handlers, StipendienAnspruchHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
-                (gesuch) -> selectHandlerForClass(handlers, StipendienAnspruchHandler.class)
+                triggers.get(GesuchStatusChangeEvent.VERSENDET),
+                (gesuch) -> selectHandlerForClass(handlers, VersendetHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
             .onEntryFrom(
-                selectHandlerForClass(handlers, VersandbereitHandler.class).get()
-                    .trigger(config, GesuchStatusChangeEvent.VERSANDBEREIT),
-                (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
+                triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
+                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -291,11 +195,44 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .onEntryFrom(
+                triggers.get(
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                ),
+                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            )
+            .onEntryFrom(
+                triggers.get(
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                ),
+                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            );
 
         config.configure(Gesuchstatus.STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
+                (gesuch) -> selectHandlerForClass(handlers, StipendienAnspruchHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            )
+            .onEntryFrom(
+                triggers.get(
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                ),
+                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            )
+            .onEntryFrom(
+                triggers.get(
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                ),
+                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuch))
+            );
 
         config.configure(Gesuchstatus.GESUCH_ABGELEHNT);
 
@@ -318,7 +255,9 @@ public class GesuchStatusConfigProducer {
         final Class<T> forClass
     ) {
         return handlers.stream()
-            .filter(handler -> handler.getClass().equals(forClass))
+            .filter(
+                handler -> handler.getClass().equals(forClass) || handler.getClass().getSuperclass().equals(forClass)
+            )
             .map(handler -> (T) handler)
             .findFirst();
     }

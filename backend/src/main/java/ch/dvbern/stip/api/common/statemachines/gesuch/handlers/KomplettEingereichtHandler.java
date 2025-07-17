@@ -25,11 +25,11 @@ import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
+@Singleton
 @Slf4j
 @RequiredArgsConstructor
 public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {

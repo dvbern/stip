@@ -1,10 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
-import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
@@ -13,10 +11,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 
 
 @JsonTypeName("GesuchDokument")
@@ -27,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
-  private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus status;
+  private @Valid GesuchDokumentStatus status;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid CustomDokumentTypDto customDokumentTyp;
 
@@ -38,7 +32,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -57,7 +51,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumente")
   @NotNull
   public List<DokumentDto> getDokumente() {
@@ -87,20 +81,20 @@ public class GesuchDokumentDto  implements Serializable {
   }
   /**
    **/
-  public GesuchDokumentDto status(ch.dvbern.stip.api.dokument.type.Dokumentstatus status) {
+  public GesuchDokumentDto status(GesuchDokumentStatus status) {
     this.status = status;
     return this;
   }
 
-  
+
   @JsonProperty("status")
   @NotNull
-  public ch.dvbern.stip.api.dokument.type.Dokumentstatus getStatus() {
+  public GesuchDokumentStatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.dokument.type.Dokumentstatus status) {
+  public void setStatus(GesuchDokumentStatus status) {
     this.status = status;
   }
 
@@ -111,7 +105,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumentTyp")
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
     return dokumentTyp;
@@ -129,7 +123,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("customDokumentTyp")
   public CustomDokumentTypDto getCustomDokumentTyp() {
     return customDokumentTyp;
@@ -166,7 +160,7 @@ public class GesuchDokumentDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");

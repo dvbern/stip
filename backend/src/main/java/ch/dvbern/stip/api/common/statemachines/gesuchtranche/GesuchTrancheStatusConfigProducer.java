@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -30,6 +32,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +46,22 @@ public class GesuchTrancheStatusConfigProducer {
     ) {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
+        Map<GesuchTrancheStatusChangeEvent, TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent>> triggers =
+            new HashMap<>();
+
+        for (GesuchTrancheStatusChangeEvent event : GesuchTrancheStatusChangeEvent.values()) {
+            triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class));
+        }
 
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN);
+            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
+            .onEntryFrom(
+                triggers.get(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
+                (
+                    gesuchTranche
+                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuchTranche))
+            );
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABLEHNEN, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
@@ -53,15 +69,10 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG)
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .onEntryFrom(
-                selectHandlerForClass(handlers, AkzeptiertHandler.class).get()
-                    .trigger(config, GesuchTrancheStatusChangeEvent.AKZEPTIERT),
-                (gesuchTranche) -> selectHandlerForClass(handlers, AkzeptiertHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class).get()
-                    .trigger(config, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
-                (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
+                triggers.get(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
+                (
+                    gesuchTranche
+                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 
@@ -69,25 +80,20 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.AKZEPTIERT, GesuchTrancheStatus.AKZEPTIERT);
 
         config.configure(GesuchTrancheStatus.ABGELEHNT);
-        config.configure(GesuchTrancheStatus.AKZEPTIERT);
+
+        config.configure(GesuchTrancheStatus.AKZEPTIERT)
+            .onEntryFrom(
+                triggers.get(GesuchTrancheStatusChangeEvent.AKZEPTIERT),
+                (gesuchTranche) -> selectHandlerForClass(handlers, AkzeptiertHandler.class)
+                    .ifPresent(handler -> handler.handle(gesuchTranche))
+            );
 
         config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class).get()
-                    .trigger(config, GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (
-                    gesuchTranche
-                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
-            )
-            .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class).get()
-                    .trigger(config, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
-                (
-                    gesuchTranche
-                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
+                triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
+                (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 

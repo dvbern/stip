@@ -17,16 +17,19 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchdokument;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentAbgelehntToAusstehendStatusChangeHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentStatusChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -34,28 +37,36 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 @Slf4j
 public class GesuchDokumentStatusConfigProducer {
-    public StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> createStateMachineConfig(
+    public StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> createStateMachineConfig(
         Instance<GesuchDokumentStatusChangeHandler> handlers
     ) {
-        final StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config = new StateMachineConfig<>();
-        config.configure(Dokumentstatus.AUSSTEHEND)
-            .permit(DokumentstatusChangeEvent.ABGELEHNT, Dokumentstatus.ABGELEHNT)
-            .permit(DokumentstatusChangeEvent.AKZEPTIERT, Dokumentstatus.AKZEPTIERT);
+        final StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> config =
+            new StateMachineConfig<>();
+        Map<GesuchDokumentStatusChangeEvent, TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent>> triggers =
+            new HashMap<>();
 
-        config.configure(Dokumentstatus.ABGELEHNT)
-            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND)
+        for (GesuchDokumentStatusChangeEvent event : GesuchDokumentStatusChangeEvent.values()) {
+            triggers.put(event, config.setTriggerParameters(event, GesuchDokument.class));
+        }
+
+        config.configure(GesuchDokumentStatus.AUSSTEHEND)
+            .permit(GesuchDokumentStatusChangeEvent.ABGELEHNT, GesuchDokumentStatus.ABGELEHNT)
+            .permit(GesuchDokumentStatusChangeEvent.AKZEPTIERT, GesuchDokumentStatus.AKZEPTIERT)
             .onEntryFrom(
-                selectHandlerForClass(handlers, GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class).get()
-                    .trigger(config, DokumentstatusChangeEvent.AUSSTEHEND),
+                triggers.get(GesuchDokumentStatusChangeEvent.AUSSTEHEND),
                 (
                     gesuchTranche
                 ) -> selectHandlerForClass(handlers, GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
-        config.configure(Dokumentstatus.AKZEPTIERT)
-            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
 
-        for (final var status : Dokumentstatus.values()) {
+        config.configure(GesuchDokumentStatus.ABGELEHNT)
+            .permit(GesuchDokumentStatusChangeEvent.AUSSTEHEND, GesuchDokumentStatus.AUSSTEHEND);
+
+        config.configure(GesuchDokumentStatus.AKZEPTIERT)
+            .permit(GesuchDokumentStatusChangeEvent.AUSSTEHEND, GesuchDokumentStatus.AUSSTEHEND);
+
+        for (final var status : GesuchDokumentStatus.values()) {
             var state = config.getRepresentation(status);
             if (state == null) {
                 LOG.error("Status '{}' ist nicht in der State Machine abgebildet", status);
@@ -79,7 +90,10 @@ public class GesuchDokumentStatusConfigProducer {
             .findFirst();
     }
 
-    private void logTransition(Transition<Dokumentstatus, DokumentstatusChangeEvent> transition, Object[] args) {
+    private void logTransition(
+        Transition<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> transition,
+        Object[] args
+    ) {
         GesuchDokument gesuchDokument = extractGesuchFromStateMachineArgs(args);
 
         LOG.info(

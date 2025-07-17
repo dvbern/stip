@@ -19,18 +19,6 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import com.github.oxo42.stateless4j.StateMachineConfig;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public interface GesuchTrancheStatusChangeHandler
-    extends StateChangeHandler<GesuchTranche> {
-
-    default TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent> trigger(
-        StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config,
-        GesuchTrancheStatusChangeEvent changeEvent
-    ) {
-        return config.setTriggerParameters(changeEvent, GesuchTranche.class);
-    }
+public interface GesuchTrancheStatusChangeHandler extends StateChangeHandler<GesuchTranche> {
 }

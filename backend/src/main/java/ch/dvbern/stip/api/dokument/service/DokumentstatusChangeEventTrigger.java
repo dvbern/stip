@@ -18,16 +18,16 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
 public class DokumentstatusChangeEventTrigger
-extends TriggerWithParameters1<GesuchDokument, DokumentstatusChangeEvent> {
-    private DokumentstatusChangeEventTrigger(DokumentstatusChangeEvent trigger) {
+extends TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent> {
+    private DokumentstatusChangeEventTrigger(GesuchDokumentStatusChangeEvent trigger) {
         super(trigger, GesuchDokument.class);
     }
 
-    public static DokumentstatusChangeEventTrigger createTrigger(DokumentstatusChangeEvent trigger) {
+    public static DokumentstatusChangeEventTrigger createTrigger(GesuchDokumentStatusChangeEvent trigger) {
         return new DokumentstatusChangeEventTrigger(trigger);
     }
 }

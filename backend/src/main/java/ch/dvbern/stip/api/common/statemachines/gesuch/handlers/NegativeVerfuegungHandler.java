@@ -22,12 +22,12 @@ import java.util.Comparator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
+@Singleton
 @RequiredArgsConstructor
 @Slf4j
 public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {

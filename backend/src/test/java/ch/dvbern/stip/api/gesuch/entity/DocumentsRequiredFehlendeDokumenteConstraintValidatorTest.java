@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapperImpl;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     @Test
     void dokumenteAusstehendNotValid() {
         // Arrange
-        final var gesuchDokuments = createWithStatus(Dokumentstatus.AUSSTEHEND);
+        final var gesuchDokuments = createWithStatus(GesuchDokumentStatus.AUSSTEHEND);
         final var gesuchDokumentDtos =
             gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
         final var gesuch = GesuchGenerator.initGesuch();
@@ -85,7 +85,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     @Test
     void allAbgelehntIsValid() {
         // Arrange
-        final var gesuchDokuments = createWithStatus(Dokumentstatus.ABGELEHNT);
+        final var gesuchDokuments = createWithStatus(GesuchDokumentStatus.ABGELEHNT);
         final var gesuchDokumentDtos =
             gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
         final var gesuch = GesuchGenerator.initGesuch();
@@ -107,7 +107,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     @Test
     void mixedIsValid() {
         // Arrange
-        final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT, Dokumentstatus.ABGELEHNT);
+        final var gesuchDokuments = createWithStatus(GesuchDokumentStatus.AKZEPTIERT, GesuchDokumentStatus.ABGELEHNT);
         final var gesuchDokumentDtos =
             gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
         final var gesuch = GesuchGenerator.initGesuch();
@@ -130,7 +130,11 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     void mixedWithAusstehendIsNotValid() {
         // Arrange
         final var gesuchDokuments =
-            createWithStatus(Dokumentstatus.AKZEPTIERT, Dokumentstatus.ABGELEHNT, Dokumentstatus.AUSSTEHEND);
+            createWithStatus(
+                GesuchDokumentStatus.AKZEPTIERT,
+                GesuchDokumentStatus.ABGELEHNT,
+                GesuchDokumentStatus.AUSSTEHEND
+            );
         final var gesuchDokumentDtos =
             gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
         final var gesuch = GesuchGenerator.initGesuch();
@@ -149,7 +153,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         assertThat(isValid, is(false));
     }
 
-    private List<GesuchDokument> createWithStatus(final Dokumentstatus... statuses) {
+    private List<GesuchDokument> createWithStatus(final GesuchDokumentStatus... statuses) {
         final var result = new ArrayList<GesuchDokument>();
         for (final var status : statuses) {
             result.add(

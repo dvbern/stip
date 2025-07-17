@@ -38,7 +38,7 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -139,7 +139,7 @@ class GesuchDokumentServiceTest {
         // Arrange
         final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
-            .setStatus(Dokumentstatus.AUSSTEHEND)
+            .setStatus(GesuchDokumentStatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
@@ -165,7 +165,7 @@ class GesuchDokumentServiceTest {
         // Arrange
         final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
-            .setStatus(Dokumentstatus.AUSSTEHEND)
+            .setStatus(GesuchDokumentStatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
@@ -184,7 +184,7 @@ class GesuchDokumentServiceTest {
 
         // Assert
         assertThat(comment.getKommentar(), is(ablehnenRequest.getKommentar().getKommentar()));
-        assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
+        assertThat(comment.getGesuchDokumentStatus(), is(GesuchDokumentStatus.ABGELEHNT));
     }
 
     @TestAsSachbearbeiter
@@ -192,7 +192,7 @@ class GesuchDokumentServiceTest {
     void akzeptierenCreatesCommentWithNull() {
         // Arrange
         mockedDokument = (GesuchDokument) new GesuchDokument()
-            .setStatus(Dokumentstatus.AUSSTEHEND)
+            .setStatus(GesuchDokumentStatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
@@ -206,7 +206,7 @@ class GesuchDokumentServiceTest {
 
         // Assert
         assertNull(comment.getKommentar());
-        assertThat(comment.getDokumentstatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(comment.getGesuchDokumentStatus(), is(GesuchDokumentStatus.AKZEPTIERT));
     }
 
     @Test
@@ -248,13 +248,13 @@ class GesuchDokumentServiceTest {
         gesuchDokumente.put(
             abgelehntId,
             (GesuchDokument) new GesuchDokument()
-                .setStatus(Dokumentstatus.ABGELEHNT)
+                .setStatus(GesuchDokumentStatus.ABGELEHNT)
                 .setDokumente(new ArrayList<>())
                 .setId(abgelehntId)
         );
         gesuchDokumente.put(
             UUID.randomUUID(),
-            new GesuchDokument().setStatus(Dokumentstatus.AKZEPTIERT).setDokumente(new ArrayList<>())
+            new GesuchDokument().setStatus(GesuchDokumentStatus.AKZEPTIERT).setDokumente(new ArrayList<>())
         );
 
         // Act
@@ -267,7 +267,7 @@ class GesuchDokumentServiceTest {
         final var abgelehntesGesuchDokument = gesuchDokumente
             .values()
             .stream()
-            .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
+            .filter(x -> x.getStatus() == GesuchDokumentStatus.ABGELEHNT)
             .findFirst();
         // denied GesuchDokuments will not be deleted anymore
         assertThat(abgelehntesGesuchDokument.isEmpty(), is(false));
