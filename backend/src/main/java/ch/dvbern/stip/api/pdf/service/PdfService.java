@@ -271,8 +271,8 @@ public class PdfService {
                 1,
                 1,
                 sozialdienst.getName(),
-                sozialdienst.getZahlungsverbindung().getVorname(),
-                sozialdienst.getZahlungsverbindung().getNachname(),
+                sozialdienst.getZahlungsverbindung().getVorname() + " "
+                + sozialdienst.getZahlungsverbindung().getNachname(),
                 sozialdienst.getZahlungsverbindung().getAdresse().getStrasse(),
                 sozialdienst.getZahlungsverbindung().getAdresse().getPlz() +
                 " " +
