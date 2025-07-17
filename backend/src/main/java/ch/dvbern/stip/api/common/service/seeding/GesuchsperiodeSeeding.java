@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchsperiodeSeeding extends Seeder {
+    private static final LocalDate HALF_OF_YEAR = LocalDate.of(Year.now().getValue(), 7, 1);
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
@@ -48,6 +50,15 @@ public class GesuchsperiodeSeeding extends Seeder {
     @Override
     protected void seed() {
         int currentYear = LocalDate.now().getYear();
+        var isCurrentDayPastHalfOfYear = LocalDate.now().isAfter(HALF_OF_YEAR);
+
+        var autumnOfPastYearStatus = GueltigkeitStatus.PUBLIZIERT;
+        var autumnOfCurrentYearStatus = GueltigkeitStatus.ENTWURF;
+
+        if (isCurrentDayPastHalfOfYear) {
+            autumnOfPastYearStatus = GueltigkeitStatus.ARCHIVIERT;
+            autumnOfCurrentYearStatus = GueltigkeitStatus.PUBLIZIERT;
+        }
 
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(
@@ -55,14 +66,14 @@ public class GesuchsperiodeSeeding extends Seeder {
                 currentYear - 1,
                 List.of(
                     ImmutablePair.of(Season.SPRING, GueltigkeitStatus.ARCHIVIERT),
-                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.ARCHIVIERT)
+                    ImmutablePair.of(Season.FALL, autumnOfPastYearStatus)
                 )
             ),
             ImmutablePair.of(
                 currentYear,
                 List.of(
                     ImmutablePair.of(Season.SPRING, GueltigkeitStatus.PUBLIZIERT),
-                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.PUBLIZIERT)
+                    ImmutablePair.of(Season.FALL, autumnOfCurrentYearStatus)
                 )
             )
         );
