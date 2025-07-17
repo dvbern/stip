@@ -627,9 +627,10 @@ public class GesuchTrancheService {
         aenderungsTranche.getGesuch()
             .getEingereichteGesuchTrancheValidOnDate(patchAenderungsInfoRequestDto.getStart())
             .orElseThrow(NotFoundException::new);
-        var gueltigkeit =
+        var rawGueltigkeit =
             new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
-        GesuchTrancheCopyUtil.validateAndCreateClampedDateRange(gueltigkeit, aenderungsTranche.getGesuch());
+        var gueltigkeit =
+            GesuchTrancheCopyUtil.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
