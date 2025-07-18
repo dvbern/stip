@@ -100,9 +100,9 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-        int alterForMedizinischeGrundversorgung = DateUtil.getAgeInYearsAtDate(
+        int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
             personInAusbildung.getGeburtsdatum(),
-            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung()
+            gesuchsperiode
         );
         builder.alter(alterForMedizinischeGrundversorgung);
 
@@ -215,6 +215,16 @@ public class AntragsstellerV1 {
                 gesuchsperiode.getAusbKostenTertiaer()
             );
         };
+    }
+
+    private static int getAlterForMedizinischeGrundversorgung(
+        final LocalDate geburtsdatum,
+        final Gesuchsperiode gesuchsperiode
+    ) {
+        return DateUtil.getAgeInYearsAtDate(
+            geburtsdatum,
+            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung()
+        );
     }
 
     private static boolean getHalbierungElternbeitrag(
