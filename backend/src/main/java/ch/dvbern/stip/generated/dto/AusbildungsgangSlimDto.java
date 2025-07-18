@@ -23,6 +23,7 @@ public class AusbildungsgangSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
 
   /**
    **/
@@ -81,6 +82,25 @@ public class AusbildungsgangSlimDto  implements Serializable {
     this.bezeichnungFr = bezeichnungFr;
   }
 
+  /**
+   **/
+  public AusbildungsgangSlimDto bildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
+    this.bildungskategorie = bildungskategorie;
+    return this;
+  }
+
+  
+  @JsonProperty("bildungskategorie")
+  @NotNull
+  public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
+    return bildungskategorie;
+  }
+
+  @JsonProperty("bildungskategorie")
+  public void setBildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
+    this.bildungskategorie = bildungskategorie;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -93,12 +113,13 @@ public class AusbildungsgangSlimDto  implements Serializable {
     AusbildungsgangSlimDto ausbildungsgangSlim = (AusbildungsgangSlimDto) o;
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
         Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr);
+        Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
+        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie);
   }
 
   @Override
@@ -109,6 +130,7 @@ public class AusbildungsgangSlimDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("}");
     return sb.toString();
   }

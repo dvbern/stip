@@ -5680,6 +5680,7 @@ components:
         - id
         - bezeichnungDe
         - bezeichnungFr
+        - bildungskategorie
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5687,6 +5688,8 @@ components:
           type: string
         bezeichnungFr:
           type: string
+        bildungskategorie:
+          $ref: '#/components/schemas/Bildungskategorie'
     AusbildungsstaetteSlim:
       type: object
       required:

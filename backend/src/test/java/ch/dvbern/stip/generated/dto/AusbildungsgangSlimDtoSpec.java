@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ID,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
-  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE
 })
 @JsonTypeName("AusbildungsgangSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +45,9 @@ public class AusbildungsgangSlimDtoSpec {
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
+
+  public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
+  private BildungskategorieDtoSpec bildungskategorie;
 
   public AusbildungsgangSlimDtoSpec() {
   }
@@ -124,6 +129,32 @@ public class AusbildungsgangSlimDtoSpec {
     this.bezeichnungFr = bezeichnungFr;
   }
 
+
+  public AusbildungsgangSlimDtoSpec bildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+    
+    this.bildungskategorie = bildungskategorie;
+    return this;
+  }
+
+   /**
+   * Get bildungskategorie
+   * @return bildungskategorie
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public BildungskategorieDtoSpec getBildungskategorie() {
+    return bildungskategorie;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+    this.bildungskategorie = bildungskategorie;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +166,13 @@ public class AusbildungsgangSlimDtoSpec {
     AusbildungsgangSlimDtoSpec ausbildungsgangSlim = (AusbildungsgangSlimDtoSpec) o;
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
         Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr);
+        Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
+        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie);
   }
 
   @Override
@@ -150,6 +182,7 @@ public class AusbildungsgangSlimDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("}");
     return sb.toString();
   }
