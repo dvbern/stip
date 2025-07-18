@@ -1,7 +1,8 @@
 import { Route } from '@angular/router';
 
-import { AusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
+import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
 import { OPTION_AUSBILDUNGSSTAETTE } from '@dv/sachbearbeitung-app/model/administration';
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 
 import { SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent } from './sachbearbeitung-app-feature-administration-ausbildungsstaette/sachbearbeitung-app-feature-administration-ausbildungsstaette.component';
 
@@ -11,7 +12,10 @@ export const sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes: Ro
       path: '',
       pathMatch: 'prefix',
       data: { option: OPTION_AUSBILDUNGSSTAETTE },
-      providers: [AusbildungsstaetteStore],
+      providers: [
+        AusbildungsstaetteStore,
+        AdministrationAusbildungsstaetteStore,
+      ],
       component:
         SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent,
       children: [

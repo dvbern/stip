@@ -1,11 +1,12 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sachbearbeitung-app-data-access-ausbildungsstaette',
+  displayName:
+    'sachbearbeitung-app-data-access-administration-ausbildungsstaette',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/data-access/ausbildungsstaette',
+    '../../../../coverage/libs/sachbearbeitung-app/data-access/administration-ausbildungsstaette',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

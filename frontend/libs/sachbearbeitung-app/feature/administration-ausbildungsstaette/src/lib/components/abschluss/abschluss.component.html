@@ -1,4 +1,4 @@
-<div class="tw-dv-table tw-my-6">
+<div class="tw-dv-table tw-my-3">
   <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
     @if (viewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
@@ -180,15 +180,35 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap"></th>
-        <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-w-11">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap !tw-text-right">
           <button
             type="button"
-            class="dv-icon-button dv-icon-button-md text-info"
-            (click)="showInfo(abschluss); $event.stopPropagation()"
+            class="btn btn-outline-primary btn-sm"
+            [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+            (click)="createAbschluss()"
           >
-            <span class="material-symbols-rounded"> info </span>
+            <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
           </button>
+        </th>
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-w-11">
+          <div class="tw-flex tw-justify-end">
+            @if (abschluss.aktiv) {
+              <button
+                type="button"
+                class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+                (click)="archive(abschluss); $event.stopPropagation()"
+              >
+                <span class="material-symbols-rounded !tw-text-2xl/none">archive</span>
+              </button>
+            }
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md text-info"
+              (click)="showInfo(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-2xl/none">info</span>
+            </button>
+          </div>
         </td>
       </ng-container>
 

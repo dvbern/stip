@@ -7,6 +7,7 @@ import {
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,11 +17,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { AusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
+import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
 import { StatusFilter } from '@dv/sachbearbeitung-app/model/ausbildungsstaette';
+import { StatusType } from '@dv/shared/model/ausbildung';
 import {
   Abschluss,
   AbschlussSortColumn,
@@ -43,10 +47,12 @@ import {
   getCorrectPropertyName,
   getCurrentLanguageSig,
   isDefined,
+  type,
   uppercased,
 } from '@dv/shared/model/type-util';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   TypeSafeMatCellDefDirective,
@@ -56,6 +62,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 
+import { CreateAbschlussDialogComponent } from './create-abschluss-dialog.component';
 import { DataInfoDialogComponent } from '../data-info-dialog/data-info-dialog.component';
 
 type AbschlussFilterFormKeys =
@@ -82,6 +89,7 @@ type DisplayColumns =
     MatSelectModule,
     MatInputModule,
     MatPaginatorModule,
+    MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
@@ -96,7 +104,9 @@ export class AbschlussComponent
   implements SortAndPageInputs<DisplayColumns>, OnInit
 {
   private formBuilder = inject(NonNullableFormBuilder);
-  private ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
+  private administrationAusbildungsstaetteStore = inject(
+    AdministrationAusbildungsstaetteStore,
+  );
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
@@ -106,7 +116,7 @@ export class AbschlussComponent
   abschluss = input<string | undefined>(undefined);
   ausbildungskategorie = input<Ausbildungskategorie | undefined>(undefined);
   bildungsrichtung = input<Bildungsrichtung | undefined>(undefined);
-  status = input<'ACTIVE' | 'INACTIVE' | undefined>(undefined);
+  status = input<StatusType>(undefined);
   sortColumn = input<DisplayColumns | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
@@ -123,7 +133,7 @@ export class AbschlussComponent
     abschluss: [<string | undefined>undefined],
     ausbildungskategorie: [<string | undefined>undefined],
     bildungsrichtung: [<string | undefined>undefined],
-    status: [<string | undefined>undefined],
+    status: [type<StatusType>('ACTIVE')],
   } satisfies Record<AbschlussFilterFormKeys, unknown>);
   displayedColumns = [
     'ABSCHLUSS',
@@ -133,10 +143,13 @@ export class AbschlussComponent
     'AKTIONEN',
   ] satisfies DisplayColumns[];
   viewSig = computed(() => {
-    const abschluesse = this.ausbildungsstaetteStore.abschluesseViewSig();
+    const abschluesse =
+      this.administrationAusbildungsstaetteStore.abschluesseViewSig();
 
     return {
-      loading: isPending(this.ausbildungsstaetteStore.abschluesse()),
+      loading: isPending(
+        this.administrationAusbildungsstaetteStore.abschluesse(),
+      ),
       abschluesse: abschluesse?.entries ?? [],
       totalEntries: abschluesse?.totalEntries ?? 0,
     };
@@ -161,6 +174,8 @@ export class AbschlussComponent
   bildungsrichtungValues = Object.values(Bildungsrichtung);
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
+
+  private reloadAbschluesseSig = signal<unknown | null>(null);
 
   constructor() {
     limitPageToNumberOfEntriesEffect(
@@ -188,8 +203,9 @@ export class AbschlussComponent
       const { sortColumn, sortOrder, page, pageSize } =
         getSortAndPageInputs(this);
 
+      this.reloadAbschluesseSig();
       const active = this.status();
-      this.ausbildungsstaetteStore.loadAbschluesse$({
+      this.administrationAusbildungsstaetteStore.loadAbschluesse$({
         filter: {
           [getCorrectPropertyName('bezeichnung', this.currentLangSig())]:
             this.abschluss(),
@@ -199,10 +215,50 @@ export class AbschlussComponent
           sortOrder,
           page,
           pageSize,
-          ...(isDefined(active) ? { aktiv: active === 'ACTIVE' } : {}),
+          ...(isDefined(active) ? { aktiv: active !== 'INACTIVE' } : {}),
         },
       });
     });
+  }
+
+  archive(abschluss: Abschluss) {
+    SharedUiConfirmDialogComponent.open<SachbearbeitungAppTranslationKey>(
+      this.dialog,
+      {
+        title:
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.title',
+        message:
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.message',
+        translationObject: abschluss,
+      },
+    )
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.administrationAusbildungsstaetteStore.archiveEntity$({
+            type: 'abschluss',
+            id: abschluss.id,
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
+  createAbschluss() {
+    CreateAbschlussDialogComponent.open(this.dialog)
+      .afterClosed()
+      .subscribe((brueckenangebotCreate) => {
+        if (brueckenangebotCreate) {
+          this.administrationAusbildungsstaetteStore.createAbschluss$({
+            values: { brueckenangebotCreate },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
   }
 
   showInfo(abschluss: Abschluss) {
@@ -212,49 +268,49 @@ export class AbschlussComponent
       abschluss,
       ({ info, translatedInfo, spacer }) => [
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bezeichnungDe',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe',
           'bezeichnungDe',
         ),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bezeichnungFr',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr',
           'bezeichnungFr',
-        ),
-        translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ausbildungskategorie',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
         ),
         spacer(),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungskategorie',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungskategorie.${abschluss.bildungskategorie}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
         ),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungsrichtung',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungsrichtung.${abschluss.bildungsrichtung}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie.${abschluss.bildungskategorie}`,
+        ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.${abschluss.bildungsrichtung}`,
         ),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bfsKategorie',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bfsKategorie',
           'bfsKategorie',
         ),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.berufsbefaehigenderAbschluss',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.boolean.${abschluss.berufsbefaehigenderAbschluss}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.berufsbefaehigenderAbschluss',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.boolean.${abschluss.berufsbefaehigenderAbschluss}`,
         ),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ferien',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ferien.${abschluss.ferien}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ferien',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.ferien.${abschluss.ferien}`,
         ),
         ...(abschluss.zusatzfrage
           ? [
               translatedInfo(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.zusatzfrage',
-                `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.zusatzfrage.${abschluss.zusatzfrage}`,
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage',
+                `sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.${abschluss.zusatzfrage}`,
               ),
             ]
           : []),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.status',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.status.${abschluss.aktiv}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.status',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.status.${abschluss.aktiv}`,
         ),
       ],
     );

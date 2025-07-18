@@ -1,0 +1,72 @@
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.title' | translate }}
+  </h1>
+
+  <form [formGroup]="form" class="tw-mt-5" novalidate>
+    <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | translate }}
+        </mat-label>
+        <mat-select
+          [formControl]="form.controls.schule"
+          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | translate"
+        >
+          @for (schule of schulen; track schule) {
+            <mat-option [value]="schule.value">{{ schule.label | translate }}</mat-option>
+          }
+        </mat-select>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameDe' | translate }}
+        </mat-label>
+        <input matInput [formControl]="form.controls.nameDe" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameFr' | translate }}
+        </mat-label>
+        <input matInput [formControl]="form.controls.nameFr" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      @if (form.controls.schule.value === 'BUR') {
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
+          <mat-label>
+            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.burNummer' | translate }}
+          </mat-label>
+          <input matInput [formControl]="form.controls.burNo" />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      }
+    </div>
+
+    <div class="tw-mt-5 tw-flex tw-justify-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

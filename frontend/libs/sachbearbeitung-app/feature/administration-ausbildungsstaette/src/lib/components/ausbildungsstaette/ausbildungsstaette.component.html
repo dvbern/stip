@@ -1,0 +1,253 @@
+<div class="tw-dv-table tw-my-3">
+  <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+    @if (viewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+    <table
+      [dataSource]="ausbildungsstaettenDataSourceSig()"
+      (matSortChange)="sortList($event)"
+      data-testid="cockpit-table"
+      mat-table
+      matSort
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.description'
+            | translate
+        }}
+      </caption>
+
+      <ng-container matColumnDef="AUSBILDUNGSSTAETTE">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="ausbildungsstaette">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ausbildungsstaette'
+              | translate
+          }}</label>
+          <div class="tw-relative tw-flex">
+            <mat-form-field>
+              <input
+                matInput
+                id="ausbildungsstaette"
+                class="tw-w-full"
+                [formControl]="filterForm.controls.ausbildungsstaette"
+                data-testid="ausbildungsstaetten-filter-ausbildungsstaette"
+                (click)="$event.stopPropagation()"
+              />
+            </mat-form-field>
+            <dv-shared-ui-clear-button
+              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+              (clear)="filterForm.controls.ausbildungsstaette.reset()"
+              [valueSig]="filterForm.controls.ausbildungsstaette.value"
+            ></dv-shared-ui-clear-button>
+          </div>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+        >
+          {{ ausbildungsstaette | translatedProp: 'name' : translate.currentLang }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="CH_SHIS_NUMMER">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="chShisNummer">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.chShisNummer'
+              | translate
+          }}</label>
+          <div class="tw-relative tw-flex">
+            <mat-form-field>
+              <input
+                matInput
+                id="chShisNummer"
+                class="tw-w-full"
+                [formControl]="filterForm.controls.chShisNummer"
+                data-testid="ausbildungsstaetten-filter-chShisNummer"
+                (click)="$event.stopPropagation()"
+              />
+            </mat-form-field>
+            <dv-shared-ui-clear-button
+              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+              (clear)="filterForm.controls.chShisNummer.reset()"
+              [valueSig]="filterForm.controls.chShisNummer.value"
+            ></dv-shared-ui-clear-button>
+          </div>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+        >
+          {{ ausbildungsstaette.chShis | dvPadText: 4 }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="CT_NUMMER">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="ctNummer">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ctNummer'
+              | translate
+          }}</label>
+          <div class="tw-relative tw-flex">
+            <mat-form-field>
+              <input
+                matInput
+                id="ctNummer"
+                class="tw-w-full"
+                [formControl]="filterForm.controls.ctNummer"
+                data-testid="ausbildungsstaetten-filter-ctNummer"
+                (click)="$event.stopPropagation()"
+              />
+            </mat-form-field>
+            <dv-shared-ui-clear-button
+              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+              (clear)="filterForm.controls.ctNummer.reset()"
+              [valueSig]="filterForm.controls.ctNummer.value"
+            ></dv-shared-ui-clear-button>
+          </div>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+        >
+          {{ ausbildungsstaette.ctNo }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="BUR_NUMMER">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="burNummer">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.burNummer'
+              | translate
+          }}</label>
+          <div class="tw-relative tw-flex">
+            <mat-form-field>
+              <input
+                matInput
+                id="burNummer"
+                class="tw-w-full"
+                [formControl]="filterForm.controls.burNummer"
+                data-testid="ausbildungsstaetten-filter-burNummer"
+                (click)="$event.stopPropagation()"
+              />
+            </mat-form-field>
+            <dv-shared-ui-clear-button
+              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+              (clear)="filterForm.controls.burNummer.reset()"
+              [valueSig]="filterForm.controls.burNummer.value"
+            ></dv-shared-ui-clear-button>
+          </div>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+        >
+          {{ ausbildungsstaette.burNo }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="AKTIV">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-11 tw-whitespace-nowrap">
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status' | translate
+          }}
+          <mat-form-field class="tw-w-full">
+            <mat-select
+              [aria-label]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status'
+                  | translate
+              "
+              [formControl]="filterForm.controls.status"
+              (click)="$event.stopPropagation()"
+              class="!tw-font-normal"
+              [placeholder]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate
+              "
+              panelClass="table-select"
+            >
+              <mat-option [value]="undefined">
+                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate }}
+              </mat-option>
+
+              @for (status of statusValues; track status) {
+                <mat-option [value]="status">
+                  {{
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status.' +
+                      status | translate
+                  }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let abschluss; dataSource: ausbildungsstaettenDataSourceSig()"
+          class="tw-whitespace-nowrap"
+        >
+          @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status.' + key
+              | translate
+          }}
+        </td>
+      </ng-container>
+
+      <!-- aktionen -->
+      <ng-container matColumnDef="AKTIONEN">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-24 tw-whitespace-nowrap !tw-text-right">
+          <div class="tw-relative tw-inline-block">
+            @if (addAusbildungsstaetteIsLoadingSig()) {
+              <dv-shared-ui-loading [overlay]="true" [type]="'icon'"></dv-shared-ui-loading>
+            }
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              (click)="createAusbildungsstaette()"
+              [disabled]="addAusbildungsstaetteIsLoadingSig()"
+            >
+              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+            </button>
+          </div>
+        </th>
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: ausbildungsstaettenDataSourceSig()">
+          <div class="tw-flex tw-justify-end">
+            @if (abschluss.aktiv) {
+              <button
+                type="button"
+                class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+                (click)="archive(abschluss); $event.stopPropagation()"
+              >
+                <span class="material-symbols-rounded !tw-text-2xl/none">archive</span>
+              </button>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *dvMatRowDef="let abschluss; dataSource: ausbildungsstaettenDataSourceSig(); columns: displayedColumns"
+      ></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | translate }}
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="pageSize() ?? defaultPageSize"
+    [pageIndex]="page() ?? 0"
+    [length]="viewSig().totalEntries"
+    (page)="paginateList($event)"
+  ></mat-paginator>
+</div>

@@ -282,6 +282,26 @@ $dv-all-colors: (
   }
 }
 
-.btn.active:not(:hover) {
-  --mat-menu-item-label-text-color: white;
+.mat-mdc-tab-links {
+  gap: 0 24px;
+  padding-bottom: 6px;
+
+  .mat-mdc-tab-link:not(.active) {
+    background: white;
+  }
+}
+
+.btn.active {
+  --mat-tab-header-active-focus-label-text-color: white;
+  --mat-tab-header-active-focus-indicator-color: transparent;
+
+  &:not(:hover) {
+    --mat-menu-item-label-text-color: white;
+    --mat-tab-header-active-label-text-color: white;
+    --mdc-tab-indicator-active-indicator-color: transparent;
+  }
+  &:hover {
+    --mat-tab-header-active-hover-label-text-color: white;
+    --mat-tab-header-active-hover-indicator-color: transparent;
+  }
 }

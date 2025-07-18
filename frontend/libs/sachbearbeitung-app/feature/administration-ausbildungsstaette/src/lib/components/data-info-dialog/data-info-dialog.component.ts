@@ -59,15 +59,6 @@ export class DataInfoDialogComponent {
   private dialogRef = inject(MatDialogRef);
   dialogData = inject<InfoData>(MAT_DIALOG_DATA);
 
-  static open2(dialog: MatDialog, data: InfoData) {
-    return dialog.open<DataInfoDialogComponent, InfoData>(
-      DataInfoDialogComponent,
-      {
-        data,
-      },
-    );
-  }
-
   static open<T extends object>(
     dialog: MatDialog,
     titleKey: SachbearbeitungAppTranslationKey,

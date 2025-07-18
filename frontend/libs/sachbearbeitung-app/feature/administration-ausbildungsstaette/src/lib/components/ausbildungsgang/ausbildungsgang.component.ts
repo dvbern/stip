@@ -7,6 +7,7 @@ import {
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   TranslatePipe,
@@ -23,8 +25,11 @@ import {
   isDefined,
 } from '@ngx-translate/core';
 
-import { AusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
+import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
 import { StatusFilter } from '@dv/sachbearbeitung-app/model/ausbildungsstaette';
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
+import { StatusType } from '@dv/shared/model/ausbildung';
 import {
   Ausbildungsgang,
   AusbildungsgangSortColumn,
@@ -45,10 +50,12 @@ import {
   assertUnreachable,
   getCorrectPropertyName,
   getCurrentLanguageSig,
+  type,
   uppercased,
 } from '@dv/shared/model/type-util';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   TypeSafeMatCellDefDirective,
@@ -58,6 +65,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 
+import { CreateAusbildungsgangDialogComponent } from './create-ausbildungsgang-dialog.component';
 import { DataInfoDialogComponent } from '../data-info-dialog/data-info-dialog.component';
 
 type AusbildungsgangFilterFormKeys =
@@ -85,6 +93,7 @@ type DisplayColumns =
     MatSelectModule,
     MatInputModule,
     MatPaginatorModule,
+    MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
@@ -100,6 +109,9 @@ export class AusbildungsgangComponent
 {
   private formBuilder = inject(NonNullableFormBuilder);
   private ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
+  private administrationAusbildungsstaetteStore = inject(
+    AdministrationAusbildungsstaetteStore,
+  );
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
@@ -110,7 +122,7 @@ export class AusbildungsgangComponent
   ausbildungsstaette = input<string | undefined>(undefined);
   abschluss = input<string | undefined>(undefined);
   ausbildungskategorie = input<Ausbildungskategorie | undefined>(undefined);
-  status = input<'ACTIVE' | 'INACTIVE' | undefined>(undefined);
+  status = input<StatusType>(undefined);
   sortColumn = input<DisplayColumns | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
@@ -123,12 +135,22 @@ export class AusbildungsgangComponent
     }),
   });
 
+  addAusbildungsgangIsLoadingSig = computed(() => {
+    const abschluesseLoading = isPending(
+      this.administrationAusbildungsstaetteStore.availableAbschluesse(),
+    );
+    const ausbildungsstaettenLoading = isPending(
+      this.ausbildungsstaetteStore.ausbildungsstaetten(),
+    );
+    return abschluesseLoading || ausbildungsstaettenLoading;
+  });
+
   filterForm = this.formBuilder.group({
     ausbildungsgang: [<string | undefined>undefined],
     ausbildungsstaette: [<string | undefined>undefined],
     ausbildungskategorie: [<string | undefined>undefined],
     abschluss: [<string | undefined>undefined],
-    status: [<string | undefined>undefined],
+    status: [type<StatusType>('ACTIVE')],
   } satisfies Record<AusbildungsgangFilterFormKeys, unknown>);
 
   displayedColumns = [
@@ -140,10 +162,12 @@ export class AusbildungsgangComponent
   ] satisfies DisplayColumns[];
   viewSig = computed(() => {
     const ausbildungsgaenge =
-      this.ausbildungsstaetteStore.ausbildungsgaengeViewSig();
+      this.administrationAusbildungsstaetteStore.ausbildungsgaengeViewSig();
 
     return {
-      loading: isPending(this.ausbildungsstaetteStore.ausbildungsgaenge()),
+      loading: isPending(
+        this.administrationAusbildungsstaetteStore.ausbildungsgaenge(),
+      ),
       ausbildungsgaenge: ausbildungsgaenge?.entries ?? [],
       totalEntries: ausbildungsgaenge?.totalEntries ?? 0,
     };
@@ -167,7 +191,12 @@ export class AusbildungsgangComponent
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
 
+  private reloadAbschluesseSig = signal<unknown | null>(null);
+
   constructor() {
+    this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
+    this.administrationAusbildungsstaetteStore.loadAvailableAbschluesse$();
+
     limitPageToNumberOfEntriesEffect(
       this,
       this.totalEntriesSig,
@@ -193,8 +222,9 @@ export class AusbildungsgangComponent
       const { sortColumn, sortOrder, page, pageSize } =
         getSortAndPageInputs(this);
 
+      this.reloadAbschluesseSig();
       const active = this.status();
-      this.ausbildungsstaetteStore.loadAusbildungsgaenge$({
+      this.administrationAusbildungsstaetteStore.loadAusbildungsgaenge$({
         filter: {
           [getCorrectPropertyName(
             'abschlussBezeichnung',
@@ -215,47 +245,94 @@ export class AusbildungsgangComponent
     });
   }
 
+  archive(ausbildungsgang: Ausbildungsgang) {
+    SharedUiConfirmDialogComponent.open<SachbearbeitungAppTranslationKey>(
+      this.dialog,
+      {
+        title:
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.title',
+        message:
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.message',
+        translationObject: ausbildungsgang,
+      },
+    )
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.administrationAusbildungsstaetteStore.archiveEntity$({
+            type: 'ausbildungsgang',
+            id: ausbildungsgang.id,
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
+  createAusbildungsgang() {
+    CreateAusbildungsgangDialogComponent.open(this.dialog, {
+      ausbildungsstaetten:
+        this.ausbildungsstaetteStore.ausbildungsstaetten().data ?? [],
+      abschluesse:
+        this.administrationAusbildungsstaetteStore.availableAbschluesse()
+          .data ?? [],
+    })
+      .afterClosed()
+      .subscribe((ausbildungsgangCreate) => {
+        if (ausbildungsgangCreate) {
+          this.administrationAusbildungsstaetteStore.createAusbildungsgang$({
+            values: { ausbildungsgangCreate },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
   showInfo(ausbildungsgang: Ausbildungsgang) {
     DataInfoDialogComponent.open(
       this.dialog,
       'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title',
       ausbildungsgang,
-      ({ info, translatedInfo }) => [
+      ({ info, translatedInfo, spacer }) => [
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bezeichnungDe',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe',
           'bezeichnungDe',
         ),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bezeichnungFr',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr',
           'bezeichnungFr',
         ),
+        spacer(),
         ...(ausbildungsgang.ausbildungskategorie
           ? [
               translatedInfo(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ausbildungskategorie',
-                `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.ausbildungskategorie.${ausbildungsgang.ausbildungskategorie}`,
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
+                `sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie.${ausbildungsgang.ausbildungskategorie}`,
               ),
             ]
           : []),
         ...(ausbildungsgang.bildungsrichtung
           ? [
               translatedInfo(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungsrichtung',
-                `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung',
+                `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
               ),
             ]
           : []),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.abschlussBezeichnungDe',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungDe',
           'abschlussBezeichnungDe',
         ),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.abschlussBezeichnungFr',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungFr',
           'abschlussBezeichnungFr',
         ),
         translatedInfo(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.status',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.infoDialog.status.${ausbildungsgang.aktiv}`,
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.status',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.status.${ausbildungsgang.aktiv}`,
         ),
       ],
     );

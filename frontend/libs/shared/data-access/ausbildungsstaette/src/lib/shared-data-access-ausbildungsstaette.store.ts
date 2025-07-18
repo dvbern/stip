@@ -1,21 +1,22 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   Ausbildungsstaette,
   AusbildungsstaetteService,
+  AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
-  fromCachedDataSig,
+  handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungsstaetteState = {
-  ausbildungsstaetten: CachedRemoteData<Ausbildungsstaette[]>;
+  ausbildungsstaetten: CachedRemoteData<AusbildungsstaetteSlim[]>;
 };
 
 const initialState: AusbildungsstaetteState = {
@@ -29,9 +30,7 @@ export class AusbildungsstaetteStore extends signalStore(
 ) {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
-  ausbildungsstaetteViewSig = computed(() => {
-    return fromCachedDataSig(this.ausbildungsstaetten) ?? [];
-  });
+  ausbildungsstaetteViewSig = computed(() => [] as Ausbildungsstaette[]);
 
   loadAusbildungsstaetten$ = rxMethod<void>(
     pipe(
@@ -40,16 +39,14 @@ export class AusbildungsstaetteStore extends signalStore(
           ausbildungsstaetten: cachedPending(state.ausbildungsstaetten),
         }));
       }),
-      switchMap(
-        () => EMPTY,
-        // TODO: fixme
-        // this.ausbildungsstaetteService
-        //   .getAusbildungsstaetten$()
-        //   .pipe(
-        //     handleApiResponse((ausbildungsstaette) =>
-        //       patchState(this, { ausbildungsstaetten: ausbildungsstaette }),
-        //     ),
-        //   ),
+      switchMap(() =>
+        this.ausbildungsstaetteService
+          .getAllAusbildungsstaetteForAuswahl$()
+          .pipe(
+            handleApiResponse((ausbildungsstaetten) =>
+              patchState(this, { ausbildungsstaetten }),
+            ),
+          ),
       ),
     ),
   );

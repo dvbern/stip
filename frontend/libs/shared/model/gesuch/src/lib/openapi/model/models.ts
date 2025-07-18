@@ -1,4 +1,5 @@
 export * from './abschluss';
+export * from './abschlussSlim';
 export * from './abschlussSortColumn';
 export * from './abschlussZusatzfrage';
 export * from './adresse';

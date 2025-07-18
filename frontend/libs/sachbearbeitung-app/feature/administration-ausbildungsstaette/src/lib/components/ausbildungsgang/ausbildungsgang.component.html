@@ -1,4 +1,4 @@
-<div class="tw-dv-table tw-my-6">
+<div class="tw-dv-table tw-my-3">
   <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
     @if (viewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
@@ -129,7 +129,7 @@
       </ng-container>
 
       <ng-container matColumnDef="AKTIV">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-11 tw-whitespace-nowrap">
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | translate }}
           <mat-form-field class="tw-w-full">
             <mat-select
@@ -162,7 +162,7 @@
         <td
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: ausbildungsgaengeDataSourceSig()"
-          class="tw-w-48 tw-whitespace-nowrap"
+          class="tw-whitespace-nowrap"
         >
           @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
           {{
@@ -174,15 +174,41 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap"></th>
-        <td mat-cell *dvMatCellDef="let abschluss; dataSource: ausbildungsgaengeDataSourceSig()" class="tw-w-11">
-          <button
-            type="button"
-            class="dv-icon-button dv-icon-button-md text-info"
-            (click)="showInfo(abschluss); $event.stopPropagation()"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-24 tw-whitespace-nowrap !tw-text-right">
+          <div class="tw-relative tw-inline-block">
+            @if (addAusbildungsgangIsLoadingSig()) {
+              <dv-shared-ui-loading [overlay]="true" [type]="'icon'"></dv-shared-ui-loading>
+            }
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              (click)="createAusbildungsgang()"
+              [disabled]="addAusbildungsgangIsLoadingSig()"
+            >
+              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+            </button>
+          </div>
+        </th>
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: ausbildungsgaengeDataSourceSig()">
+          <div class="tw-flex tw-justify-end">
+            @if (abschluss.aktiv) {
+              <button
+                type="button"
+                class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+                (click)="archive(abschluss); $event.stopPropagation()"
+              >
+                <span class="material-symbols-rounded !tw-text-2xl/none">archive</span>
+              </button>
+            }
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md text-info"
+              (click)="showInfo(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-2xl/none"> info </span>
+            </button>
+          </div>
         </td>
       </ng-container>
 
