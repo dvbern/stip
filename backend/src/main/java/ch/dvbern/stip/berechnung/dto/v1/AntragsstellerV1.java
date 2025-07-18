@@ -113,9 +113,13 @@ public class AntragsstellerV1 {
             medizinischeGrundversorgung +=
                 BerechnungRequestV1.getMedizinischeGrundversorgung(alterForMedizinischeGrundversorgung, gesuchsperiode);
             if (partner != null) {
+                int alterPartnerForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
+                    partner.getGeburtsdatum(),
+                    gesuchsperiode
+                );
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAgeInYears(partner.getGeburtsdatum()),
+                    alterPartnerForMedizinischeGrundversorgung,
                     gesuchsperiode
                 );
             }
@@ -123,8 +127,12 @@ public class AntragsstellerV1 {
                 // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
+                    int alterKindForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
+                        kind.getGeburtsdatum(),
+                        gesuchsperiode
+                    );
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
+                        alterKindForMedizinischeGrundversorgung,
                         gesuchsperiode
                     );
                 }
