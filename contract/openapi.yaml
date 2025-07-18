@@ -3811,6 +3811,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllAusbildungsstaetteForAuswahl
       summary: Returns all AusbildungsstaetteSlim
+  /abschluss/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbschlussSlim'
+          description: Returns all AbschlussSlim
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllAbschluessForAuswahl
+      summary: Returns all AbschlussSlim
   /ausbildungsgang:
     post:
       tags:
@@ -5684,6 +5705,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungsgangSlim'
+    AbschlussSlim:
+      type: object
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - ausbildungskategorie
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        ausbildungskategorie:
+          $ref: '#/components/schemas/Ausbildungskategorie'
     Ausbildungsort:
       type: string
     GesuchsperiodeWithDaten:
