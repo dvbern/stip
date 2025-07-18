@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -51,6 +53,13 @@ public class AbschlussService {
         final var brueckenangebot = abschlussMapper.createBrueckenangebot(brueckenangebotCreateDto);
         abschlussRepository.persist(brueckenangebot);
         return abschlussMapper.toDto(brueckenangebot);
+    }
+
+    @Transactional
+    public List<AbschlussSlimDto> getAllAbschlussForAuswahl() {
+        return abschlussRepository.findAllAktiv()
+            .map(abschlussMapper::toSlimDto)
+            .toList();
     }
 
     public PaginatedAbschlussDto getAllAbschlussForUebersicht(

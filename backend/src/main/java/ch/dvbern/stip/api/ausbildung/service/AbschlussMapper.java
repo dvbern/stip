@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import jakarta.ws.rs.BadRequestException;
 import org.mapstruct.Mapper;
@@ -49,4 +50,5 @@ public abstract class AbschlussMapper {
         };
     }
 
+    abstract AbschlussSlimDto toSlimDto(Abschluss abschluss);
 }

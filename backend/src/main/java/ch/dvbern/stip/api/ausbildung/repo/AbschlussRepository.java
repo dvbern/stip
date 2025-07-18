@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.ausbildung.repo;
 
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.QAbschluss;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
@@ -39,6 +41,13 @@ public class AbschlussRepository implements BaseRepository<Abschluss> {
 
     public JPAQuery<Abschluss> baseQuery() {
         return new JPAQueryFactory(entityManager).selectFrom(Q_ABSCHLUSS);
+    }
+
+    public Stream<Abschluss> findAllAktiv() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_ABSCHLUSS)
+            .where(Q_ABSCHLUSS.aktiv.isTrue())
+            .stream();
     }
 
     public void ausbildungskategorieFilter(

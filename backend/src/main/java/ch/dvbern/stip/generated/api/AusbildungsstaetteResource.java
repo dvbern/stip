@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
@@ -46,6 +47,11 @@ public interface AusbildungsstaetteResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     AusbildungsstaetteDto createAusbildungsstaette(@Valid @NotNull AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
+
+    @GET
+    @Path("/abschluss/slim")
+    @Produces({ "application/json", "text/plain" })
+    List<AbschlussSlimDto> getAllAbschluessForAuswahl();
 
     @GET
     @Path("/abschluss")

@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AbschlussDtoSpec;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.AbschlussSortColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
@@ -75,6 +76,7 @@ public class AusbildungsstaetteApiSpec {
                 createAbschlussBrueckenangebot(),
                 createAusbildungsgang(),
                 createAusbildungsstaette(),
+                getAllAbschluessForAuswahl(),
                 getAllAbschlussForUebersicht(),
                 getAllAusbildungsgangForUebersicht(),
                 getAllAusbildungsstaetteForAuswahl(),
@@ -95,6 +97,10 @@ public class AusbildungsstaetteApiSpec {
 
     public CreateAusbildungsstaetteOper createAusbildungsstaette() {
         return new CreateAusbildungsstaetteOper(createReqSpec());
+    }
+
+    public GetAllAbschluessForAuswahlOper getAllAbschluessForAuswahl() {
+        return new GetAllAbschluessForAuswahlOper(createReqSpec());
     }
 
     public GetAllAbschlussForUebersichtOper getAllAbschlussForUebersicht() {
@@ -347,6 +353,67 @@ public class AusbildungsstaetteApiSpec {
          * @return operation
          */
         public CreateAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all AbschlussSlim
+     * 
+     *
+     * return List&lt;AbschlussSlimDtoSpec&gt;
+     */
+    public static class GetAllAbschluessForAuswahlOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/abschluss/slim";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAbschluessForAuswahlOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /abschluss/slim
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /abschluss/slim
+         * @param handler handler
+         * @return List&lt;AbschlussSlimDtoSpec&gt;
+         */
+        public List<AbschlussSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AbschlussSlimDtoSpec>> type = new TypeRef<List<AbschlussSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschluessForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschluessForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
@@ -105,6 +106,13 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
             bezeichnungFr,
             aktiv
         );
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public List<AbschlussSlimDto> getAllAbschluessForAuswahl() {
+        ausbildungsstaetteAuthorizer.canRead();
+        return abschlussService.getAllAbschlussForAuswahl();
     }
 
     @Override
