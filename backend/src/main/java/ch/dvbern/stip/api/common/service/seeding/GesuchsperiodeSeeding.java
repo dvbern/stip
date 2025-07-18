@@ -53,11 +53,9 @@ public class GesuchsperiodeSeeding extends Seeder {
         var isCurrentDayPastHalfOfYear = LocalDate.now().isAfter(HALF_OF_YEAR);
 
         var autumnOfPastYearStatus = GueltigkeitStatus.PUBLIZIERT;
-        var autumnOfCurrentYearStatus = GueltigkeitStatus.ENTWURF;
 
         if (isCurrentDayPastHalfOfYear) {
             autumnOfPastYearStatus = GueltigkeitStatus.ARCHIVIERT;
-            autumnOfCurrentYearStatus = GueltigkeitStatus.PUBLIZIERT;
         }
 
         LOG.info("Seeding Gesuchsperiode and Jahr");
@@ -73,7 +71,7 @@ public class GesuchsperiodeSeeding extends Seeder {
                 currentYear,
                 List.of(
                     ImmutablePair.of(Season.SPRING, GueltigkeitStatus.PUBLIZIERT),
-                    ImmutablePair.of(Season.FALL, autumnOfCurrentYearStatus)
+                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.PUBLIZIERT)
                 )
             )
         );
