@@ -272,8 +272,8 @@ class GesuchTrancheAenderungEinbindenTest {
     void patchGueltigkeitOfAenderung() {
         var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
         aenderungPatch.setComment("change gueltigkeit");
-        aenderungPatch.setStart(LocalDate.now());
-        aenderungPatch.setEnd(LocalDate.now().plusMonths(1));
+        aenderungPatch.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb());
+        aenderungPatch.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
 
         gesuchTrancheApiSpec.patchAenderungInfo()
             .aenderungIdPath(aenderungId)
