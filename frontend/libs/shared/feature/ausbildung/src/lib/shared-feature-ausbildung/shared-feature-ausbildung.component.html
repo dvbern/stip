@@ -105,8 +105,7 @@
         </mat-label>
         @if (!form.value['ausbildungNichtGefunden']) {
           <!-- Ausbildungsgang Select -->
-          <!-- TODO: fixme -->
-          <!-- <mat-select
+          <mat-select
             formControlName="ausbildungsgang"
             data-testid="form-education-ausbildungsgang"
             (valueChange)="handleGangChangedByUser()"
@@ -117,7 +116,7 @@
                 {{ l.translatedName }}
               </mat-option>
             }
-          </mat-select> -->
+          </mat-select>
         } @else {
           <!-- alternativer Ausbildungsgang -->
           <input
@@ -187,14 +186,14 @@
     </div>
 
     <!-- besuchtBMS -->
-    @if (showBesuchtBMS()) {
+    <!-- @if (showBesuchtBMS()) {
       <mat-checkbox
         class="tw-col-span-2 tw-col-start-1 tw-mb-6"
         formControlName="besuchtBMS"
         data-testid="form-education-besuchtBMS"
         >{{ 'shared.form.ausbildung.besuchtBMS.label' | translate }}</mat-checkbox
       >
-    }
+    } -->
 
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">
       <mat-label>

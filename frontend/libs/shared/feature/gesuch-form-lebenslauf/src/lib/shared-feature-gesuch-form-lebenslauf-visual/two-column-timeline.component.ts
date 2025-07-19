@@ -14,8 +14,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import {
   Ausbildung,
-  Ausbildungsgang,
-  Ausbildungsstaette,
+  AusbildungsgangSlim,
+  AusbildungsstaetteSlim,
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
 import {
@@ -55,7 +55,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
   @Input({ required: true }) startDate!: Date | null;
   @Input({ required: true }) lebenslaufItems!: LebenslaufItemUpdate[];
   @Input({ required: true }) ausbildung!: Ausbildung;
-  @Input({ required: true }) ausbildungsstaettes!: Ausbildungsstaette[];
+  @Input({ required: true }) ausbildungsstaettes!: AusbildungsstaetteSlim[];
   @Input({ required: true }) language!: string;
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -70,7 +70,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         this.startDate,
         this.lebenslaufItems,
         this.ausbildung,
-        // this.ausbildungsstaettes,
+        this.ausbildungsstaettes,
       );
     }
   }
@@ -79,7 +79,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     expectedSartDate: Date | null,
     lebenslaufItems: LebenslaufItemUpdate[],
     plannedAusbildung: Ausbildung | undefined,
-    // ausbildungsstaettes: Ausbildungsstaette[],
+    ausbildungsstaettes: AusbildungsstaetteSlim[],
   ) {
     const timelineRawItems = lebenslaufItems.map(
       (lebenslaufItem) =>
@@ -95,15 +95,15 @@ export class TwoColumnTimelineComponent implements OnChanges {
     );
 
     // planned ausbildung
-    // const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
-    //   staette.ausbildungsgaenge?.some(
-    //     (ausbildungsgang) =>
-    //       plannedAusbildung?.ausbildungsgang?.id === ausbildungsgang.id,
-    //   ),
-    // );
-    // const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-    //   (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
-    // );
+    const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
+      staette.ausbildungsgaenge?.some(
+        (ausbildungsgang) =>
+          plannedAusbildung?.ausbildungsgang?.id === ausbildungsgang.id,
+      ),
+    );
+    const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+      (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
+    );
 
     timelineRawItems.push({
       id: 'planned-ausbildung',
@@ -111,14 +111,12 @@ export class TwoColumnTimelineComponent implements OnChanges {
       von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin),
       bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd),
       label: {
-        title: '',
-        // TODO: fixme
-        // title:
-        // (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??
-        //   plannedAusbildung?.alternativeAusbildungsstaette) +
-        // ': ' +
-        // (this.getTranslatedAusbildungsgangBezeichung(ausbildungsgang) ??
-        //   plannedAusbildung?.alternativeAusbildungsgang),
+        title:
+          (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??
+            plannedAusbildung?.alternativeAusbildungsstaette) +
+          ': ' +
+          (this.getTranslatedAusbildungsgangBezeichung(ausbildungsgang) ??
+            plannedAusbildung?.alternativeAusbildungsgang),
         subTitle: {
           key: 'shared.form.lebenslauf.item.name.fachrichtung',
           value: plannedAusbildung?.fachrichtung,
@@ -206,7 +204,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
   }
 
   private getTranslatedAusbildungstaetteName(
-    staette: Ausbildungsstaette | undefined,
+    staette: AusbildungsstaetteSlim | undefined,
   ): string | undefined {
     if (staette === undefined) {
       return undefined;
@@ -217,7 +215,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
   protected readonly printDateAsMonthYear = printDateAsMonthYear;
 
   private getTranslatedAusbildungsgangBezeichung(
-    ausbildungsgang: Ausbildungsgang | undefined,
+    ausbildungsgang: AusbildungsgangSlim | undefined,
   ): string | undefined {
     if (ausbildungsgang === undefined) {
       return undefined;

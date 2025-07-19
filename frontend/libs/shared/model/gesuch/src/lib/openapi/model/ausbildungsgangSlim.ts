@@ -9,10 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Bildungskategorie } from './bildungskategorie';
 
 export interface AusbildungsgangSlim { 
     id: string;
     bezeichnungDe: string;
     bezeichnungFr: string;
+    bildungskategorie: Bildungskategorie;
 }
+
+
 

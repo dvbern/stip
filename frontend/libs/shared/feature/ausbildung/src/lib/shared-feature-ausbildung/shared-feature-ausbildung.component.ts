@@ -43,7 +43,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
-  Ausbildungsstaette,
+  AusbildungsstaetteSlim,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
 import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
@@ -197,53 +197,52 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   });
 
   ausbildungsgangOptionsSig = computed(() => {
-    return [] as { id: string; bildungskategorie: { bfs: number } }[];
-    // TODO: fixme
-    // const ausbildungsstaettes =
-    //   this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
-    // const language = this.languageSig();
+    const ausbildungsstaettes =
+      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    const language = this.languageSig();
 
-    // return (
-    //   ausbildungsstaettes
-    //     .find(
-    //       (ausbildungsstaette) =>
-    //         getTranslatableProp(ausbildungsstaette, 'name', language) ===
-    //         this.ausbildungsstaetteSig(),
-    //     )
-    //     ?.ausbildungsgaenge?.map((ausbildungsgang) => {
-    //       return {
-    //         ...ausbildungsgang,
-    //         translatedName: getTranslatableProp(
-    //           ausbildungsgang,
-    //           'bezeichnung',
-    //           language,
-    //         ),
-    //       };
-    //     }) ?? []
-    // );
-  });
-
-  showBesuchtBMS = computed(() => {
-    const ausbildungsgangId = this.ausbildungsgangChangedSig();
-    if (!ausbildungsgangId) return false;
-
-    const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
-    const gang = ausbildungsgange.find(
-      (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
+    return (
+      ausbildungsstaettes
+        .find(
+          (ausbildungsstaette) =>
+            getTranslatableProp(ausbildungsstaette, 'name', language) ===
+            this.ausbildungsstaetteSig(),
+        )
+        ?.ausbildungsgaenge?.map((ausbildungsgang) => {
+          return {
+            ...ausbildungsgang,
+            translatedName: getTranslatableProp(
+              ausbildungsgang,
+              'bezeichnung',
+              language,
+            ),
+          };
+        }) ?? []
     );
-    if (!gang) return false;
-
-    const bfs = gang.bildungskategorie.bfs;
-
-    return bfs === 4 || bfs === 5;
   });
+
+  // TODO: fixme
+  // showBesuchtBMS = computed(() => {
+  //   const ausbildungsgangId = this.ausbildungsgangChangedSig();
+  //   if (!ausbildungsgangId) return false;
+
+  //   const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
+  //   const gang = ausbildungsgange.find(
+  //     (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
+  //   );
+  //   if (!gang) return false;
+
+  //   const bfs = gang.bildungskategorie.bfs;
+
+  //   return bfs === 4 || bfs === 5;
+  // });
 
   ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
     () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
   );
 
   ausbildungsstaettOptionsSig: Signal<
-    (Ausbildungsstaette & { translatedName?: string })[]
+    (AusbildungsstaetteSlim & { translatedName?: string })[]
   > = computed(() => {
     const currentAusbildungsstaette = this.ausbildungsstaetteSig();
     const ausbildungstaetten =
@@ -371,27 +370,26 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         });
         const currentAusbildungsgang = ausbildung.ausbildungsgang;
         if (currentAusbildungsgang) {
-          // TODO: fixme
-          // const ausbildungsstaette = ausbildungstaetten.find(
-          //   (ausbildungsstaette) =>
-          //     ausbildungsstaette.ausbildungsgaenge?.find(
-          //       (ausbildungsgang) =>
-          //         ausbildungsgang.id === currentAusbildungsgang.id,
-          //     ),
-          // );
-          // const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-          //   (ausbildungsgang) =>
-          //     ausbildungsgang.id === currentAusbildungsgang.id,
-          // );
-          // this.form.patchValue({
-          //   ausbildungsstaette:
-          //     getTranslatableProp(
-          //       ausbildungsstaette,
-          //       'name',
-          //       this.languageSig(),
-          //     ) ?? undefined,
-          //   ausbildungsgang: ausbildungsgang?.id,
-          // });
+          const ausbildungsstaette = ausbildungstaetten.find(
+            (ausbildungsstaette) =>
+              ausbildungsstaette.ausbildungsgaenge?.find(
+                (ausbildungsgang) =>
+                  ausbildungsgang.id === currentAusbildungsgang.id,
+              ),
+          );
+          const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+            (ausbildungsgang) =>
+              ausbildungsgang.id === currentAusbildungsgang.id,
+          );
+          this.form.patchValue({
+            ausbildungsstaette:
+              getTranslatableProp(
+                ausbildungsstaette,
+                'name',
+                this.languageSig(),
+              ) ?? undefined,
+            ausbildungsgang: ausbildungsgang?.id,
+          });
         }
       }
     });

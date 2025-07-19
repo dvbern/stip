@@ -4,7 +4,6 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
-  Ausbildungsstaette,
   AusbildungsstaetteService,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
@@ -30,7 +29,9 @@ export class AusbildungsstaetteStore extends signalStore(
 ) {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
-  ausbildungsstaetteViewSig = computed(() => [] as Ausbildungsstaette[]);
+  ausbildungsstaetteViewSig = computed(
+    () => this.ausbildungsstaetten.data() ?? [],
+  );
 
   loadAusbildungsstaetten$ = rxMethod<void>(
     pipe(
