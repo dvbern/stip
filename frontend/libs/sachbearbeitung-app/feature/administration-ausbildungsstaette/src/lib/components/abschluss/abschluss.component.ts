@@ -175,7 +175,7 @@ export class AbschlussComponent
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
 
-  private reloadAbschluesseSig = signal<unknown | null>(null);
+  private reloadAbschluesseSig = signal<unknown>(null);
 
   constructor() {
     limitPageToNumberOfEntriesEffect(

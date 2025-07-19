@@ -1,9 +1,7 @@
-// TODO: Fix and reenable once ausbildungsstaette is updated
-
 import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
-import { render } from '@testing-library/angular';
+import { fireEvent, render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { of } from 'rxjs';
 
@@ -15,10 +13,14 @@ import {
   provideSharedPatternJestTestSetup,
 } from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+import {
+  checkMatCheckbox,
+  clickFirstMatSelectOption,
+  prepareEvent,
+} from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureAusbildungComponent } from './shared-feature-ausbildung.component';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
@@ -83,169 +85,163 @@ describe(SharedFeatureAusbildungComponent.name, () => {
       jest.useRealTimers();
     });
 
-    it('TODO Placeholder', () => {
-      console.log(
-        'TODO Placeholder: Fix and reenable once ausbildungsstaette is updated',
-      );
+    it('should be invalid if begin is not a date', async () => {
+      const { getByTestId, detectChanges } = await setup();
+      const input = getByTestId('form-education-beginn-der-ausbildung');
+      await prepareEvent().type(input, 'gugus');
+      fireEvent.blur(input);
+
+      detectChanges();
+
+      expect(input).toHaveClass('ng-invalid');
     });
 
-    // it('should be invalid if begin is not a date', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
-    //   const input = getByTestId('form-education-beginn-der-ausbildung');
-    //   await prepareEvent().type(input, 'gugus');
-    //   fireEvent.blur(input);
+    it('should be invalid if end is not a date', async () => {
+      const { getByTestId, detectChanges } = await setup();
+      const input = getByTestId('form-education-ende-der-ausbildung');
+      await prepareEvent().type(input, 'gugus');
+      fireEvent.blur(input);
 
-    //   detectChanges();
+      detectChanges();
 
-    //   expect(input).toHaveClass('ng-invalid');
-    // });
+      expect(input).toHaveClass('ng-invalid');
+    });
 
-    // it('should be invalid if end is not a date', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
-    //   const input = getByTestId('form-education-ende-der-ausbildung');
-    //   await prepareEvent().type(input, 'gugus');
-    //   fireEvent.blur(input);
+    it('should be valid if a past date is provided for begin', async () => {
+      const { getByTestId, detectChanges } = await setup();
+      const input = getByTestId('form-education-beginn-der-ausbildung');
+      await prepareEvent().type(input, '01.2018');
+      fireEvent.blur(input);
 
-    //   detectChanges();
+      detectChanges();
 
-    //   expect(input).toHaveClass('ng-invalid');
-    // });
+      expect(input).not.toHaveClass('ng-invalid');
+    });
 
-    // it('should be valid if a past date is provided for begin', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
-    //   const input = getByTestId('form-education-beginn-der-ausbildung');
-    //   await prepareEvent().type(input, '01.2018');
-    //   fireEvent.blur(input);
+    it('should be valid if the begin date is before the end date', async () => {
+      const { getByTestId, detectChanges } = await setup();
+      const beginInput = getByTestId('form-education-beginn-der-ausbildung');
+      const endInput = getByTestId('form-education-ende-der-ausbildung');
+      await prepareEvent().type(beginInput, '01.2019');
+      fireEvent.blur(beginInput);
+      await prepareEvent().type(endInput, '01.2020');
+      fireEvent.blur(endInput);
+      detectChanges();
 
-    //   detectChanges();
+      expect(beginInput).not.toHaveClass('ng-invalid');
+    });
 
-    //   expect(input).not.toHaveClass('ng-invalid');
-    // });
+    it('should be invalid if the begin date is after the end date', async () => {
+      const { getByTestId, detectChanges } = await setup();
+      const beginInput = getByTestId('form-education-beginn-der-ausbildung');
+      const endInput = getByTestId('form-education-ende-der-ausbildung');
+      await prepareEvent().type(beginInput, '01.2020');
+      fireEvent.blur(beginInput);
+      await prepareEvent().type(endInput, '01.2019');
+      fireEvent.blur(endInput);
 
-    // it('should be valid if the begin date is before the end date', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
-    //   const beginInput = getByTestId('form-education-beginn-der-ausbildung');
-    //   const endInput = getByTestId('form-education-ende-der-ausbildung');
-    //   await prepareEvent().type(beginInput, '01.2019');
-    //   fireEvent.blur(beginInput);
-    //   await prepareEvent().type(endInput, '01.2020');
-    //   fireEvent.blur(endInput);
-    //   detectChanges();
+      detectChanges();
 
-    //   expect(beginInput).not.toHaveClass('ng-invalid');
-    // });
+      expect(beginInput).not.toHaveClass('ng-invalid');
+      expect(endInput).toHaveClass('ng-invalid');
+      expect(
+        getByTestId('form-education-form').querySelector('mat-error'),
+      ).toHaveTextContent('shared.form.ausbildung.form.error.monthYearAfter');
+    });
 
-    // it('should be invalid if the begin date is after the end date', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
-    //   const beginInput = getByTestId('form-education-beginn-der-ausbildung');
-    //   const endInput = getByTestId('form-education-ende-der-ausbildung');
-    //   await prepareEvent().type(beginInput, '01.2020');
-    //   fireEvent.blur(beginInput);
-    //   await prepareEvent().type(endInput, '01.2019');
-    //   fireEvent.blur(endInput);
+    (
+      [
+        ['before', '01.2019', true],
+        ['equal', '02.2019', true],
+        ['after', '03.2019', false],
+      ] as const
+    ).forEach(([position, endDate, shouldBeInvalid]) => {
+      it(`should be invalid=${shouldBeInvalid} if end date is ${position} the current month`, async () => {
+        const { getByTestId, detectChanges } = await setup();
+        const input = getByTestId('form-education-ende-der-ausbildung');
+        await prepareEvent().type(input, endDate);
+        fireEvent.blur(input);
 
-    //   detectChanges();
+        detectChanges();
 
-    //   expect(beginInput).not.toHaveClass('ng-invalid');
-    //   expect(endInput).toHaveClass('ng-invalid');
-    //   expect(
-    //     getByTestId('form-education-form').querySelector('mat-error'),
-    //   ).toHaveTextContent('shared.form.ausbildung.form.error.monthYearAfter');
-    // });
+        (shouldBeInvalid ? expect(input) : expect(input).not).toHaveClass(
+          `ng-invalid`,
+        );
+      });
+    });
 
-    // (
-    //   [
-    //     ['before', '01.2019', true],
-    //     ['equal', '02.2019', true],
-    //     ['after', '03.2019', false],
-    //   ] as const
-    // ).forEach(([position, endDate, shouldBeInvalid]) => {
-    //   it(`should be invalid=${shouldBeInvalid} if end date is ${position} the current month`, async () => {
-    //     const { getByTestId, detectChanges } = await setup();
-    //     const input = getByTestId('form-education-ende-der-ausbildung');
-    //     await prepareEvent().type(input, endDate);
-    //     fireEvent.blur(input);
+    it('should have disabled inputs depending on each previous input state', async () => {
+      const fields = {
+        notFound: 'form-education-ausbildungNichtGefunden',
+        staette: 'form-education-ausbildungsstaette',
+        gang: 'form-education-ausbildungsgang',
+        alternativ: {
+          staette: 'form-education-alternativeAusbildungsstaette',
+          gang: 'form-education-alternativeAusbildungsgang',
+        },
+        fachrichtung: 'form-education-fachrichtung',
+      };
+      const { getByTestId, detectChanges } = await setup();
 
-    //     detectChanges();
+      detectChanges();
 
-    //     (shouldBeInvalid ? expect(input) : expect(input).not).toHaveClass(
-    //       `ng-invalid`,
-    //     );
-    //   });
-    // });
+      await clickFirstMatSelectOption(fields.staette);
+      detectChanges();
 
-    // it('should have disabled inputs depending on each previous input state', async () => {
-    //   const fields = {
-    //     notFound: 'form-education-ausbildungNichtGefunden',
-    //     staette: 'form-education-ausbildungsstaette',
-    //     gang: 'form-education-ausbildungsgang',
-    //     alternativ: {
-    //       staette: 'form-education-alternativeAusbildungsstaette',
-    //       gang: 'form-education-alternativeAusbildungsgang',
-    //     },
-    //     fachrichtung: 'form-education-fachrichtung',
-    //   };
-    //   const { getByTestId, detectChanges } = await setup();
+      expect(getByTestId(fields.gang)).not.toHaveClass(
+        'mat-mdc-select-disabled',
+      );
 
-    //   detectChanges();
+      await clickFirstMatSelectOption(fields.gang);
+      detectChanges();
 
-    //   await clickFirstMatSelectOption(fields.staette);
-    //   detectChanges();
+      expect(getByTestId(fields.fachrichtung)).toBeEnabled();
+      expect(getByTestId(fields.fachrichtung)).not.toHaveClass(
+        'mat-mdc-select-disabled',
+      );
 
-    //   expect(getByTestId(fields.gang)).not.toHaveClass(
-    //     'mat-mdc-select-disabled',
-    //   );
+      await prepareEvent().type(
+        getByTestId(fields.fachrichtung),
+        'fachrichtung1',
+      );
+      detectChanges();
 
-    //   await clickFirstMatSelectOption(fields.gang);
-    //   detectChanges();
+      expect(getByTestId(fields.fachrichtung)).toHaveValue('fachrichtung1');
 
-    //   expect(getByTestId(fields.fachrichtung)).toBeEnabled();
-    //   expect(getByTestId(fields.fachrichtung)).not.toHaveClass(
-    //     'mat-mdc-select-disabled',
-    //   );
+      await checkMatCheckbox(fields.notFound);
+      detectChanges();
 
-    //   await prepareEvent().type(
-    //     getByTestId(fields.fachrichtung),
-    //     'fachrichtung1',
-    //   );
-    //   detectChanges();
+      for (const field of [
+        fields.alternativ.staette,
+        fields.alternativ.gang,
+        fields.fachrichtung,
+      ]) {
+        const fieldEl = getByTestId(field);
 
-    //   expect(getByTestId(fields.fachrichtung)).toHaveValue('fachrichtung1');
+        expect(fieldEl).toHaveValue('');
+        expect(fieldEl).toBeEnabled();
 
-    //   await checkMatCheckbox(fields.notFound);
-    //   detectChanges();
+        await prepareEvent().click(fieldEl);
+        fireEvent.blur(fieldEl);
 
-    //   for (const field of [
-    //     fields.alternativ.staette,
-    //     fields.alternativ.gang,
-    //     fields.fachrichtung,
-    //   ]) {
-    //     const fieldEl = getByTestId(field);
+        detectChanges();
 
-    //     expect(fieldEl).toHaveValue('');
-    //     expect(fieldEl).toBeEnabled();
+        expect(fieldEl).toHaveClass('ng-invalid');
+      }
+    });
 
-    //     await prepareEvent().click(fieldEl);
-    //     fireEvent.blur(fieldEl);
+    it('should disable ausbildungsort if isAusbildungAusland is checked', async () => {
+      const { getByTestId, detectChanges } = await setup();
 
-    //     detectChanges();
+      detectChanges();
 
-    //     expect(fieldEl).toHaveClass('ng-invalid');
-    //   }
-    // });
+      expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
 
-    // it('should disable ausbildungsort if isAusbildungAusland is checked', async () => {
-    //   const { getByTestId, detectChanges } = await setup();
+      await checkMatCheckbox('form-education-isAusbildungAusland');
 
-    //   detectChanges();
+      detectChanges();
 
-    //   expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
-
-    //   await checkMatCheckbox('form-education-isAusbildungAusland');
-
-    //   detectChanges();
-
-    //   expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
-    // });
+      expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
+    });
   });
 });

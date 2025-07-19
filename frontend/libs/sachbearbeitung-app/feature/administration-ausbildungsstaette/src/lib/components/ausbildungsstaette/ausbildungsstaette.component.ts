@@ -193,7 +193,7 @@ export class AusbildungsstaetteComponent
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
 
-  private reloadAbschluesseSig = signal<unknown | null>(null);
+  private reloadAbschluesseSig = signal<unknown>(null);
 
   constructor() {
     this.ausbildungsstaetteStore.loadAusbildungsstaetten$();

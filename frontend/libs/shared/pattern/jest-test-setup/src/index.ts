@@ -10,8 +10,8 @@ import {
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 import {
-  Ausbildungsstaette,
   AusbildungsstaetteService,
+  AusbildungsstaetteSlim,
   GesuchFormularType,
   GesuchTranche,
   SharedModelGesuch,
@@ -111,7 +111,7 @@ export function provideSharedPatternJestTestAusbildungstaetten() {
   return {
     provide: AusbildungsstaetteService,
     useValue: {
-      getAusbildungsstaetten$: () => {
+      getAllAusbildungsstaetteForAuswahl$: () => {
         return of([
           {
             nameDe: 'staette1',
@@ -119,21 +119,14 @@ export function provideSharedPatternJestTestAusbildungstaetten() {
             id: '1',
             ausbildungsgaenge: [
               {
-                bildungskategorie: {
-                  id: '',
-                  bfs: -1,
-                  bezeichnungDe: '',
-                  bezeichnungFr: '',
-                  bildungsstufe: 'SEKUNDAR_2',
-                },
                 bezeichnungDe: 'gang1',
                 bezeichnungFr: 'gang1',
-                ausbildungsstaetteId: '1',
                 id: '1',
+                bildungskategorie: 'SEKUNDARSTUFE_I',
               },
             ],
           },
-        ] satisfies Ausbildungsstaette[]);
+        ] satisfies AusbildungsstaetteSlim[]);
       },
     },
   };
