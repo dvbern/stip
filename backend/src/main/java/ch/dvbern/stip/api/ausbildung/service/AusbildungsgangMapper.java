@@ -77,19 +77,11 @@ public abstract class AusbildungsgangMapper {
 
     @Named("getAusbildungsgangBezeichnungDe")
     public String getAusbildungsgangBezeichnungDe(Ausbildungsgang ausbildungsgang) {
-        return String.format(
-            "%s - %s",
-            ausbildungsgang.getAusbildungsstaette().getNameDe(),
-            ausbildungsgang.getAbschluss().getBezeichnungDe()
-        );
+        return ausbildungsgang.getAbschluss().getBezeichnungDe();
     }
 
     @Named("getAusbildungsgangBezeichnungFr")
     public String getAusbildungsgangBezeichnungFr(Ausbildungsgang ausbildungsgang) {
-        return String.format(
-            "%s - %s",
-            ausbildungsgang.getAusbildungsstaette().getNameFr(),
-            ausbildungsgang.getAbschluss().getBezeichnungFr()
-        );
+        return ausbildungsgang.getAbschluss().getBezeichnungFr();
     }
 }
