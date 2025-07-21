@@ -18,8 +18,20 @@
 package ch.dvbern.stip.api.common.statemachines;
 
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,17 +42,17 @@ class GesuchStatusConfigProducerTest {
     @Test
     void allGesuchstatusInConfig() {
         final var config = new GesuchStatusConfigProducer(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            Mockito.mock(GesuchFehlendeDokumenteNichtEingereichtHandler.class),
+            Mockito.mock(GesuchZurueckweisenHandler.class),
+            Mockito.mock(KomplettEingereichtHandler.class),
+            Mockito.mock(FehlendeDokumenteEinreichenHandler.class),
+            Mockito.mock(FehlendeDokumenteHandler.class),
+            Mockito.mock(VersandbereitHandler.class),
+            Mockito.mock(VersendetHandler.class),
+            Mockito.mock(NegativeVerfuegungHandler.class),
+            Mockito.mock(AenderungZurueckweisenHandler.class),
+            Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class),
+            Mockito.mock(StipendienAnspruchHandler.class)
         ).createStateMachineConfig();
 
         for (final var status : Gesuchstatus.values()) {
