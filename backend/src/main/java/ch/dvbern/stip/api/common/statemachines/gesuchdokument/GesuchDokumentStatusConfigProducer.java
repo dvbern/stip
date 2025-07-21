@@ -18,27 +18,26 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchdokument;
 
 import java.util.EnumMap;
-import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentAbgelehntToAusstehendStatusChangeHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers.GesuchDokumentStatusChangeHandler;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import jakarta.enterprise.inject.Instance;
-import lombok.experimental.UtilityClass;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@UtilityClass
+@ApplicationScoped
+@RequiredArgsConstructor
 @Slf4j
 public class GesuchDokumentStatusConfigProducer {
-    public StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> createStateMachineConfig(
-        Instance<GesuchDokumentStatusChangeHandler> handlers
-    ) {
+    private final GesuchDokumentAbgelehntToAusstehendStatusChangeHandler gesuchDokumentAbgelehntToAusstehendStatusChangeHandler;
+
+    public StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> config =
             new StateMachineConfig<>();
         final var triggers =
@@ -55,11 +54,7 @@ public class GesuchDokumentStatusConfigProducer {
             .permit(GesuchDokumentStatusChangeEvent.AKZEPTIERT, GesuchDokumentStatus.AKZEPTIERT)
             .onEntryFrom(
                 triggers.get(GesuchDokumentStatusChangeEvent.AUSSTEHEND),
-                gesuchTranche -> selectHandlerForClass(
-                    handlers,
-                    GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class
-                )
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
+                this.gesuchDokumentAbgelehntToAusstehendStatusChangeHandler::handle
             );
 
         config.configure(GesuchDokumentStatus.ABGELEHNT)
@@ -75,21 +70,10 @@ public class GesuchDokumentStatusConfigProducer {
                 continue;
             }
 
-            state.addEntryAction(GesuchDokumentStatusConfigProducer::logTransition);
+            state.addEntryAction(this::logTransition);
         }
 
         return config;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends GesuchDokumentStatusChangeHandler> Optional<T> selectHandlerForClass(
-        final Instance<GesuchDokumentStatusChangeHandler> handlers,
-        final Class<T> forClass
-    ) {
-        return handlers.stream()
-            .filter(handler -> handler.getClass().equals(forClass))
-            .map(handler -> (T) handler)
-            .findFirst();
     }
 
     private void logTransition(

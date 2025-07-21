@@ -18,31 +18,32 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 
 import java.util.EnumMap;
-import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusChangeHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import jakarta.enterprise.inject.Instance;
-import lombok.experimental.UtilityClass;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@UtilityClass
+@ApplicationScoped
+@RequiredArgsConstructor
 @Slf4j
 public class GesuchTrancheStatusConfigProducer {
+    private final GesuchTrancheFehlendeDokumenteNichtEingereichtHandler gesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
+    private final GesuchTrancheFehlendeDokumenteEinreichenHandler gesuchTrancheFehlendeDokumenteEinreichenHandler;
+    private final AkzeptiertHandler akzeptiertHandler;
+    private final GesuchTrancheFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
 
-    public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig(
-        Instance<GesuchTrancheStatusChangeHandler> handlers
-    ) {
+    public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
         final var triggers =
@@ -58,11 +59,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                gesuchTranche -> selectHandlerForClass(
-                    handlers,
-                    GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class
-                )
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
+                gesuchTrancheFehlendeDokumenteNichtEingereichtHandler::handle
             );
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
@@ -72,8 +69,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
-                gesuchTranche -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
+                gesuchTrancheFehlendeDokumenteEinreichenHandler::handle
             );
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
@@ -84,8 +80,7 @@ public class GesuchTrancheStatusConfigProducer {
         config.configure(GesuchTrancheStatus.AKZEPTIERT)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.AKZEPTIERT),
-                gesuchTranche -> selectHandlerForClass(handlers, AkzeptiertHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
+                akzeptiertHandler::handle
             );
 
         config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
@@ -93,8 +88,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
-                gesuchTranche -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuchTranche))
+                gesuchTrancheFehlendeDokumenteHandler::handle
             );
 
         for (final var status : GesuchTrancheStatus.values()) {
@@ -104,21 +98,10 @@ public class GesuchTrancheStatusConfigProducer {
                 continue;
             }
 
-            state.addEntryAction(GesuchTrancheStatusConfigProducer::logTransition);
+            state.addEntryAction(this::logTransition);
         }
 
         return config;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends GesuchTrancheStatusChangeHandler> Optional<T> selectHandlerForClass(
-        final Instance<GesuchTrancheStatusChangeHandler> handlers,
-        final Class<T> forClass
-    ) {
-        return handlers.stream()
-            .filter(handler -> handler.getClass().equals(forClass))
-            .map(handler -> (T) handler)
-            .findFirst();
     }
 
     private void logTransition(

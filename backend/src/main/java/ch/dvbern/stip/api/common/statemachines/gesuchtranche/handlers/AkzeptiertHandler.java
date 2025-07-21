@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
-@Singleton
+@ApplicationScoped
 @RequiredArgsConstructor
 public class AkzeptiertHandler implements GesuchTrancheStatusChangeHandler {
     private final GesuchTrancheService gesuchTrancheService;

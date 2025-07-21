@@ -19,11 +19,11 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-@Singleton
+@ApplicationScoped
 @RequiredArgsConstructor
 public class AenderungZurueckweisenHandler implements GesuchStatusChangeHandler {
     private final GesuchService gesuchService;

@@ -19,11 +19,11 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Singleton
+@ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
 public class GesuchTrancheFehlendeDokumenteEinreichenHandler implements GesuchTrancheStatusChangeHandler {

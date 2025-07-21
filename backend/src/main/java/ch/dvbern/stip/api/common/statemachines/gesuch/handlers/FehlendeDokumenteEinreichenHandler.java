@@ -20,11 +20,11 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Singleton
+@ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
 public class FehlendeDokumenteEinreichenHandler implements GesuchStatusChangeHandler {

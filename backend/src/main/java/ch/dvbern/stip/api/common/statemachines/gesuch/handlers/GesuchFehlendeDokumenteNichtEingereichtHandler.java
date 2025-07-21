@@ -22,11 +22,11 @@ import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-@Singleton
+@ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;

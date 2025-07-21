@@ -21,10 +21,10 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
-@Singleton
+@ApplicationScoped
 @RequiredArgsConstructor
 public class FehlendeDokumenteHandler implements GesuchStatusChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;

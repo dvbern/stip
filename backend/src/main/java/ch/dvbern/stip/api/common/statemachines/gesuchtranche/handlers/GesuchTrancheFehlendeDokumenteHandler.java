@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
-@Singleton
+@ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
