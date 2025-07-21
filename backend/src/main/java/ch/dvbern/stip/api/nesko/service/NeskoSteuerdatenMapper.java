@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.nesko.service;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -29,6 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class NeskoSteuerdatenMapper {
+    private Integer getMaxOrZeroFromEffSatzType(EffSatzType effSatzType) {
+        var effektiv = Objects.requireNonNullElse(effSatzType.getEffektiv(), BigDecimal.ZERO);
+        var satzbestimmend = Objects.requireNonNullElse(effSatzType.getSatzbestimmend(), BigDecimal.ZERO);
+        return effektiv.max(satzbestimmend).intValue();
+    }
+
     public Steuerdaten updateFromNeskoSteuerdaten(
         Steuerdaten steuerdaten,
         GetSteuerdatenResponse getSteuerdatenResponse
@@ -36,7 +43,7 @@ public class NeskoSteuerdatenMapper {
         var steuerdatenNesko = getSteuerdatenResponse.getSteuerdaten();
 
         steuerdaten.setTotalEinkuenfte(
-            Objects.requireNonNullElse(steuerdatenNesko.getTotalEinkuenfte().getEffektiv().intValue(), 0)
+            getMaxOrZeroFromEffSatzType(steuerdatenNesko.getTotalEinkuenfte())
         );
         steuerdaten.setEigenmietwert(
             Objects.requireNonNullElse(steuerdatenNesko.getMietwertKanton(), BigDecimal.ZERO).intValue()
@@ -53,48 +60,27 @@ public class NeskoSteuerdatenMapper {
         if (isArbeitsverhaeltnisSelbstaendig) {
             if (Objects.nonNull(steuerdatenNesko.getBeitraegeSaeule3A())) {
                 if (Objects.nonNull(steuerdatenNesko.getBeitraegeSaeule3A().getMann())) {
-                    saeule3a += Objects
-                        .requireNonNullElse(
-                            steuerdatenNesko.getBeitraegeSaeule3A().getMann().getEffektiv(),
-                            BigDecimal.ZERO
-                        )
-                        .intValue();
+                    saeule3a += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getBeitraegeSaeule3A().getMann());
                 }
                 if (Objects.nonNull(steuerdatenNesko.getBeitraegeSaeule3A().getFrau())) {
-                    saeule3a += Objects
-                        .requireNonNullElse(
-                            steuerdatenNesko.getBeitraegeSaeule3A().getFrau().getEffektiv(),
-                            BigDecimal.ZERO
-                        )
-                        .intValue();
+                    saeule3a += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getBeitraegeSaeule3A().getFrau());
                 }
             }
             if (Objects.nonNull(steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson())) {
-                saeule2 += Objects.requireNonNullElse(
-                    steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson()
-                        .getPersoenlicheBeitraegeSaeule2()
-                        .getEffektiv(),
-                    BigDecimal.ZERO
-                )
-                    .intValue();
+                saeule2 += getMaxOrZeroFromEffSatzType(
+                    steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson().getPersoenlicheBeitraegeSaeule2()
+                );
             }
             if (Objects.nonNull(steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn())) {
-                saeule2 += Objects.requireNonNullElse(
-                    steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn()
-                        .getPersoenlicheBeitraegeSaeule2()
-                        .getEffektiv(),
-                    BigDecimal.ZERO
-                )
-                    .intValue();
+                saeule2 += getMaxOrZeroFromEffSatzType(
+                    steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn().getPersoenlicheBeitraegeSaeule2()
+                );
             }
         }
         steuerdaten.setSaeule3a(saeule3a);
         steuerdaten.setSaeule2(saeule2);
         steuerdaten.setKinderalimente(0); // TODO: Fix
-        steuerdaten.setVermoegen(
-            Objects.requireNonNullElse(steuerdatenNesko.getSteuerbaresVermoegenKanton().getEffektiv(), BigDecimal.ZERO)
-                .intValue()
-        );
+        steuerdaten.setVermoegen(getMaxOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton()));
         steuerdaten.setSteuernKantonGemeinde(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragKanton(), BigDecimal.ZERO).intValue()
         );
@@ -106,85 +92,66 @@ public class NeskoSteuerdatenMapper {
         int verpflegung = 0;
         int verpflegungPartner = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
-                fahrkosten += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getMann().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
+            if (Objects.nonNull(steuerdatenNesko.getFahrkosten())) {
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
+                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
+                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
-                fahrkosten += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getFrau().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
+
+            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung())) {
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
+                    verpflegung +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
+                    verpflegung +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
-                verpflegung += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
-                verpflegung += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
-            }
+
         } else if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.VATER) {
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
-                fahrkosten += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getMann().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
+            if (Objects.nonNull(steuerdatenNesko.getFahrkosten())) {
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
+                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
+                    fahrkostenPartner += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
-                fahrkostenPartner += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getFrau().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
+
+            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung())) {
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
+                    verpflegung +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
+                    verpflegungPartner +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
-                verpflegung += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
-                verpflegungPartner += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
-            }
+
         } else if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER) {
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
-                fahrkosten += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getFrau().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
+            if (Objects.nonNull(steuerdatenNesko.getFahrkosten())) {
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
+                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
+                    fahrkostenPartner += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
+                }
             }
-            if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
-                fahrkostenPartner += Objects
-                    .requireNonNullElse(steuerdatenNesko.getFahrkosten().getMann().getEffektiv(), BigDecimal.ZERO)
-                    .intValue();
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
-                verpflegung += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
-            }
-            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
-                verpflegungPartner += Objects
-                    .requireNonNullElse(
-                        steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann().getEffektiv(),
-                        BigDecimal.ZERO
-                    )
-                    .intValue();
+
+            if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung())) {
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
+                    verpflegung +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau());
+                }
+                if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
+                    verpflegungPartner +=
+                        getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
+                }
             }
         }
 

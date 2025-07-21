@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweis
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -151,12 +150,7 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.VERFUEGT),
-                (gesuch) -> selectHandlerForClass(handlers, VerfuegtHandler.class)
-                    .ifPresent(handler -> handler.handle(gesuch))
-            );
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)

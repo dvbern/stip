@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +26,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
@@ -111,9 +114,44 @@ public class SteuerdatenService {
             neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
+        updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
         steuerdatenRepository.persistAndFlush(steuerdaten);
         return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
+    }
+
+    private void updateDependentDataInSteuerdaten(
+        Steuerdaten steuerdaten,
+        GesuchFormular gesuchFormular
+    ) {
+        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(
+            evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+                steuerdaten,
+                gesuchFormular.getSteuerdaten(),
+                gesuchFormular.getFamiliensituation()
+            )
+        );
+    }
+
+    public boolean evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+        Steuerdaten actualSteuerdaten,
+        Set<Steuerdaten> allSteuerdatenTabs,
+        Familiensituation familiensituation
+    ) {
+        if (
+            Objects.nonNull(familiensituation.getVaterWiederverheiratet()) &&
+            familiensituation.getVaterWiederverheiratet()
+            || Objects.nonNull(familiensituation.getMutterWiederverheiratet())
+            && familiensituation.getMutterWiederverheiratet()
+        ) {
+            return allSteuerdatenTabs.stream()
+                .anyMatch(
+                    steuerdaten1 -> Objects.nonNull(steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig())
+                    && steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig()
+                );
+        }
+
+        return actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig();
     }
 }

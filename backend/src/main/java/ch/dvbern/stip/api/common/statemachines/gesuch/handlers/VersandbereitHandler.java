@@ -17,8 +17,18 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import java.io.IOException;
+import java.util.Comparator;
+
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
 import jakarta.inject.Singleton;
+import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +36,43 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class VersandbereitHandler implements GesuchStatusChangeHandler {
+    private final ConfigService configService;
+    private final BerechnungService berechnungService;
+    private final BuchhaltungService buchhaltungService;
+    private final VerfuegungService verfuegungService;
+
     @Override
     public void handle(Gesuch gesuch) {
         gesuch.setVerfuegt(true);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
+            ? stipendien.getBerechnungReduziert()
+            : stipendien.getBerechnung();
+
+        if (berechnungsresultat == 0) {
+            try {
+                verfuegungService.createPdfForVerfuegungOhneAnspruch(
+                    gesuch.getVerfuegungs()
+                        .stream()
+                        .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+                        .orElseThrow(NotFoundException::new)
+                );
+            } catch (IOException e) {
+                throw new InternalServerErrorException(e);
+            }
+        }
+
+        if (berechnungsresultat > 0) {
+            buchhaltungService.createStipendiumBuchhaltungEntry(
+                gesuch,
+                berechnungsresultat
+            );
+        }
     }
 }
