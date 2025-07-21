@@ -24,7 +24,7 @@
             <column name="dokument_typ" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="gesuchDokumentStatus" type="VARCHAR(255)"/>
+            <column name="dokumentstatus" type="VARCHAR(255)"/>
             <column name="kommentar" type="VARCHAR(255)"/>
             <column name="gesuch_id" type="UUID">
                 <constraints nullable="false"/>
@@ -46,7 +46,7 @@
             <column name="user_mutiert" type="VARCHAR(255)"/>
             <column name="mandant" type="VARCHAR(255)"/>
             <column name="dokument_typ" type="VARCHAR(255)"/>
-            <column name="gesuchDokumentStatus" type="VARCHAR(255)"/>
+            <column name="dokumentstatus" type="VARCHAR(255)"/>
             <column name="kommentar" type="VARCHAR(255)"/>
             <column name="gesuch_id" type="UUID"/>
         </createTable>

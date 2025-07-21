@@ -60,7 +60,7 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     private GesuchDokument gesuchDokument;
 
     @NotNull
-    @Column(name = "dokumentstatus")
+    @Column(name = "gesuch_dokument_status")
     @Enumerated(EnumType.STRING)
     private GesuchDokumentStatus gesuchDokumentStatus;
 
