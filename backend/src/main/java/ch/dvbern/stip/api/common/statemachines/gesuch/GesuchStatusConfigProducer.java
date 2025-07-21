@@ -17,8 +17,7 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -52,8 +51,10 @@ public class GesuchStatusConfigProducer {
         Instance<GesuchStatusChangeHandler> handlers
     ) {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
-        Map<GesuchStatusChangeEvent, TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent>> triggers =
-            new HashMap<>();
+        final var triggers =
+            new EnumMap<GesuchStatusChangeEvent, TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent>>(
+                GesuchStatusChangeEvent.class
+            );
 
         for (GesuchStatusChangeEvent event : GesuchStatusChangeEvent.values()) {
             triggers.put(event, config.setTriggerParameters(event, Gesuch.class));
@@ -63,12 +64,12 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
-                (gesuch) -> selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class)
+                gesuch -> selectHandlerForClass(handlers, GesuchFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN),
-                (gesuch) -> selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class)
+                gesuch -> selectHandlerForClass(handlers, GesuchZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -83,7 +84,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.EINGEREICHT),
-                (gesuch) -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
+                gesuch -> selectHandlerForClass(handlers, KomplettEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -108,7 +109,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
-                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
+                gesuch -> selectHandlerForClass(handlers, FehlendeDokumenteEinreichenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -141,7 +142,7 @@ public class GesuchStatusConfigProducer {
             )
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE),
-                (gesuch) -> selectHandlerForClass(handlers, FehlendeDokumenteHandler.class)
+                gesuch -> selectHandlerForClass(handlers, FehlendeDokumenteHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -163,7 +164,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERSANDBEREIT),
-                (gesuch) -> selectHandlerForClass(handlers, VersandbereitHandler.class)
+                gesuch -> selectHandlerForClass(handlers, VersandbereitHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -172,7 +173,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERSENDET),
-                (gesuch) -> selectHandlerForClass(handlers, VersendetHandler.class)
+                gesuch -> selectHandlerForClass(handlers, VersendetHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -180,7 +181,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                (gesuch) -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
+                gesuch -> selectHandlerForClass(handlers, NegativeVerfuegungHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -194,14 +195,14 @@ public class GesuchStatusConfigProducer {
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH
                 ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
+                gesuch -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
                 ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
+                gesuch -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 
@@ -210,21 +211,21 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
-                (gesuch) -> selectHandlerForClass(handlers, StipendienAnspruchHandler.class)
+                gesuch -> selectHandlerForClass(handlers, StipendienAnspruchHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH
                 ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
+                gesuch -> selectHandlerForClass(handlers, AenderungZurueckweisenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             )
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
                 ),
-                (gesuch) -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
+                gesuch -> selectHandlerForClass(handlers, AenderungFehlendeDokumenteNichtEingereichtHandler.class)
                     .ifPresent(handler -> handler.handle(gesuch))
             );
 

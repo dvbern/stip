@@ -17,8 +17,7 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -46,8 +45,10 @@ public class GesuchTrancheStatusConfigProducer {
     ) {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
-        Map<GesuchTrancheStatusChangeEvent, TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent>> triggers =
-            new HashMap<>();
+        final var triggers =
+            new EnumMap<GesuchTrancheStatusChangeEvent, TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent>>(
+                GesuchTrancheStatusChangeEvent.class
+            );
 
         for (GesuchTrancheStatusChangeEvent event : GesuchTrancheStatusChangeEvent.values()) {
             triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class));
@@ -57,9 +58,10 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                (
-                    gesuchTranche
-                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class)
+                gesuchTranche -> selectHandlerForClass(
+                    handlers,
+                    GesuchTrancheFehlendeDokumenteNichtEingereichtHandler.class
+                )
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 
@@ -70,9 +72,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
-                (
-                    gesuchTranche
-                ) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
+                gesuchTranche -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteEinreichenHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 
@@ -84,7 +84,7 @@ public class GesuchTrancheStatusConfigProducer {
         config.configure(GesuchTrancheStatus.AKZEPTIERT)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.AKZEPTIERT),
-                (gesuchTranche) -> selectHandlerForClass(handlers, AkzeptiertHandler.class)
+                gesuchTranche -> selectHandlerForClass(handlers, AkzeptiertHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 
@@ -93,7 +93,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
-                (gesuchTranche) -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
+                gesuchTranche -> selectHandlerForClass(handlers, GesuchTrancheFehlendeDokumenteHandler.class)
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 

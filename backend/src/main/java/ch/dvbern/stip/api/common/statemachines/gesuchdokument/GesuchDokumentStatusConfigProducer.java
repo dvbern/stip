@@ -17,8 +17,7 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchdokument;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -42,8 +41,10 @@ public class GesuchDokumentStatusConfigProducer {
     ) {
         final StateMachineConfig<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> config =
             new StateMachineConfig<>();
-        Map<GesuchDokumentStatusChangeEvent, TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent>> triggers =
-            new HashMap<>();
+        final var triggers =
+            new EnumMap<GesuchDokumentStatusChangeEvent, TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent>>(
+                GesuchDokumentStatusChangeEvent.class
+            );
 
         for (GesuchDokumentStatusChangeEvent event : GesuchDokumentStatusChangeEvent.values()) {
             triggers.put(event, config.setTriggerParameters(event, GesuchDokument.class));
@@ -54,9 +55,10 @@ public class GesuchDokumentStatusConfigProducer {
             .permit(GesuchDokumentStatusChangeEvent.AKZEPTIERT, GesuchDokumentStatus.AKZEPTIERT)
             .onEntryFrom(
                 triggers.get(GesuchDokumentStatusChangeEvent.AUSSTEHEND),
-                (
-                    gesuchTranche
-                ) -> selectHandlerForClass(handlers, GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class)
+                gesuchTranche -> selectHandlerForClass(
+                    handlers,
+                    GesuchDokumentAbgelehntToAusstehendStatusChangeHandler.class
+                )
                     .ifPresent(handler -> handler.handle(gesuchTranche))
             );
 
