@@ -315,7 +315,7 @@
 
         <!-- Info Konkubinat -->
         @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
-          <div class="col-12 col-md-6 col-xl-4">
+          <div class="col-12 col-md-12 col-xl-4">
             <dv-shared-ui-info-container>
               <div class="d-flex gap-3">
                 <span class="material-symbols-rounded text-info"> info </span>
@@ -324,8 +324,8 @@
             </dv-shared-ui-info-container>
           </div>
         } @else if (form.get('zivilstand')?.value === Zivilstand.KONKUBINAT) {
-          <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
-            <dv-shared-ui-info-container [type]="'info'">
+          <div class="col-12 col-md-12 col-xl-4">
+            <dv-shared-ui-info-container>
               <div class="d-flex gap-3 align-content-center">
                 <span class="material-symbols-rounded text-info">info</span>
                 <span>{{ 'shared.form.person.zivilstand.konkubinat.info' | translate }}</span>
@@ -391,13 +391,23 @@
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
-            #niederLassungInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-4"
-          ></div>
+          <div class="col-12 col-md-12 col-xl-4">
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+              #niederLassungInfoDialog="dvSharedUiInfoDialog"
+            ></div>
+
+            @if (showNiederlassungsstatusNichtBerechtigtWarningSig()) {
+              <dv-shared-ui-info-container [type]="'warning'">
+                <div class="d-flex gap-3">
+                  <span class="material-symbols-rounded text-warning">warning</span>
+                  <span>{{ 'shared.form.person.niederlassungstatus.info' | translate }}</span>
+                </div>
+              </dv-shared-ui-info-container>
+            }
+          </div>
         }
 
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
@@ -439,7 +449,7 @@
           <div class="d-none-lg col-md-6 col-xl-4"></div>
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
             <mat-radio-group
-              class="col-12 col-md-6 col-xl-4"
+              class="col-12 col-md-6 col-xl-4 tw-w-full"
               formControlName="fluechtlingsstatus"
               data-testid="form-person-fluechtlingsstatus"
               dvSharedUiFormField
@@ -513,7 +523,7 @@
           </mat-form-field>
 
           @if (showEinreiseDatumWarningSig()) {
-            <div class="col-12 col-md-6 col-xl-4">
+            <div class="col-12 col-md-12 col-xl-4">
               <dv-shared-ui-info-container [type]="'warning'">
                 <div class="d-flex gap-3">
                   <span class="material-symbols-rounded text-warning">warning</span>

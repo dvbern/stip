@@ -462,6 +462,7 @@
   "shared.form.person.niederlassungsstatus.DIPLOMATISCHE_FUNKTION": "Permis diplomatique",
   "shared.form.person.niederlassungsstatus.INTERNATIONALE_FUNKTION": "Permis pour les fonctionnaires internationaux",
   "shared.form.person.niederlassungsstatus.NICHT_ZUGETEILT": "Non attribué",
+  "shared.form.person.niederlassungstatus.info": "Avec le statut d'établissement sélectionné, vous n'avez pas droit à une bourse",
   "shared.form.person.einreisedatum.label": "Date d'entrée en Suisse",
   "shared.form.person.einreisedatum.info": "Seules les personnes titulaires d'un permis d'établissement B bernois et ayant un domicile en Suisse depuis cinq ans sont autorisées à faire une demande.",
   "shared.form.person.fluechtlingsstatus.label": "Statut de réfugié",

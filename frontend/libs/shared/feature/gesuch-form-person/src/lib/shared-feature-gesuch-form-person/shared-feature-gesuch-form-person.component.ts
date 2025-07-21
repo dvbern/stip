@@ -104,9 +104,34 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 const vorlaeufigAufgenommenF = 'VORLAEUFIG_AUFGENOMMEN_F';
 type VorlaeufigAufgenommenF = typeof vorlaeufigAufgenommenF;
 
+type AllNiederlassungsstatusExceptF = Exclude<
+  Niederlassungsstatus,
+  `${VorlaeufigAufgenommenF}${string}`
+>;
 type AvailableNiederlassungsstatus =
-  | Exclude<Niederlassungsstatus, `${VorlaeufigAufgenommenF}${string}`>
+  | AllNiederlassungsstatusExceptF
   | VorlaeufigAufgenommenF;
+
+type IsNiederlassungsstatusBerechtigt<T extends AvailableNiederlassungsstatus> =
+  // Only B and C are considered as "berechtigt" for the gesuch (KSTIP-1993)
+  // F is also considered as "berechtigt" but only if fluechtlingsstatus is true
+  T extends `${string}_${'B' | 'C'}` ? true : false;
+const berechtigteNiederlassungsstatus = {
+  SAISONARBEITEND_A: false,
+  AUFENTHALTSBEWILLIGUNG_B: true,
+  NIEDERLASSUNGSBEWILLIGUNG_C: true,
+  PARTNER_ERWERBSTAETIG_UND_KIND_CI: false,
+  GRENZGAENGIG_G: false,
+  KURZAUFENTHALT_L: false,
+  ASYLSUCHEND_N: false,
+  SCHUTZBEDUERFTIG_S: false,
+  MELDEPFLICHTIG: false,
+  DIPLOMATISCHE_FUNKTION: false,
+  INTERNATIONALE_FUNKTION: false,
+  NICHT_ZUGETEILT: false,
+} satisfies {
+  [T in AllNiederlassungsstatusExceptF]: IsNiederlassungsstatusBerechtigt<T>;
+};
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
@@ -366,6 +391,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     refreshSig: this.gotReenabledSig,
   });
   showEinreiseDatumWarningSig = signal(false);
+  showNiederlassungsstatusNichtBerechtigtWarningSig = signal(false);
 
   private niederlassungsstatusChangedSig = toSignal(
     this.form.controls.niederlassungsstatus.valueChanges,
@@ -619,6 +645,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         disabled: this.viewSig().readonly,
         resetOnInvisible: true,
       });
+    });
+
+    effect(() => {
+      this.gotReenabledSig();
+      const niederlassungsstatus = this.niederlassungsstatusChangedSig();
+      const fluechtlingsstatus = this.fluechtlingsstatusChangedSig();
+
+      if (niederlassungsstatus) {
+        const isNiederlassungsstatusBerechtigt =
+          niederlassungsstatus === vorlaeufigAufgenommenF
+            ? fluechtlingsstatus
+            : berechtigteNiederlassungsstatus[niederlassungsstatus];
+        this.showNiederlassungsstatusNichtBerechtigtWarningSig.set(
+          !(isNiederlassungsstatusBerechtigt ?? true),
+        );
+      }
     });
 
     effect(() => {

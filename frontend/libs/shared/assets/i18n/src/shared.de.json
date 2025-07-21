@@ -464,6 +464,7 @@
   "shared.form.person.niederlassungsstatus.DIPLOMATISCHE_FUNKTION": "Diplomaten",
   "shared.form.person.niederlassungsstatus.INTERNATIONALE_FUNKTION": "Internationale Funktionäre",
   "shared.form.person.niederlassungsstatus.NICHT_ZUGETEILT": "Nicht zugeteilt",
+  "shared.form.person.niederlassungstatus.info": "Mit dem ausgewählten Niederlassungstatus sind sie nicht stipendienberechtigt",
   "shared.form.person.einreisedatum.label": "Einreisedatum Schweiz",
   "shared.form.person.einreisedatum.info": "Gesuchsberechtigt sind nur Personen welche eine bernische Niederlassungsbewilligung B besitzen und seit fünf Jahren einen Wohnsitz in der Schweiz haben.",
   "shared.form.person.fluechtlingsstatus.label": "Flüchtlingsstatus",
