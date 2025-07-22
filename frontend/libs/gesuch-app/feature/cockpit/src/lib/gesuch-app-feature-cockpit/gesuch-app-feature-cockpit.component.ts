@@ -143,7 +143,7 @@ export class GesuchAppFeatureCockpitComponent {
       gesuch: { id, startDate, endDate },
     } = melden;
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
-      type: 'updateAenderungVonBis',
+      type: 'createAenderung',
       id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
