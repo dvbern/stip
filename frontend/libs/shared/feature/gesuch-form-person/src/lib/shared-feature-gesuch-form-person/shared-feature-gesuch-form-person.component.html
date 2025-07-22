@@ -367,7 +367,7 @@
               </mat-select>
               <mat-hint
                 *dvZuvorHint="
-                  view.formChanges?.niederlassungsstatus
+                  niederlassungstatusChangesSig()?.niederlassungsstatus
                     | translateChange: 'shared.form.person.niederlassungsstatus.$VALUE'
                 "
               ></mat-hint>
@@ -447,7 +447,7 @@
       @if (!hiddenFieldsSetSig().has(form.controls.fluechtlingsstatus)) {
         <div class="row g-4 mt-1">
           <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+          <div class="col-12 col-md-6 col-xl-4 tw-flex-col tw-gap-2">
             <mat-radio-group
               class="col-12 col-md-6 col-xl-4 tw-w-full"
               formControlName="fluechtlingsstatus"
@@ -464,10 +464,19 @@
                   }}</mat-radio-button>
                 }
               </div>
+              <mat-hint
+                *dvZuvorHint="
+                  niederlassungstatusChangesSig()?.fluechtlingsstatus
+                    | translateChange: 'shared.form.person.fluechtlingsstatus.$VALUE'
+                "
+              ></mat-hint>
+
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </div>
             </mat-radio-group>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
           </div>
         </div>
       }
@@ -476,7 +485,7 @@
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
         <div class="row g-4 mt-1">
           <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 tw-flex tw-flex-col tw-gap-2">
             <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
             <mat-select
               formControlName="zustaendigerKanton"
@@ -491,9 +500,11 @@
             </mat-select>
             <mat-hint
               *dvZuvorHint="
-                view.formChanges?.zustaendigerKanton | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
+                niederlassungstatusChangesSig()?.zustaendigerKanton
+                  | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
               "
             ></mat-hint>
+
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>

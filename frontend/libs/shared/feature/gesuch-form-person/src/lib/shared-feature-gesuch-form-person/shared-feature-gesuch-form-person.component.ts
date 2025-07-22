@@ -424,6 +424,35 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     this.form.controls.zustaendigerKanton.valueChanges,
   );
 
+  niederlassungstatusChangesSig = computed(() => {
+    const niederlassungstatusChanges =
+      this.viewSig().formChanges?.niederlassungsstatus;
+    const niederlassungstatusCurrent =
+      this.viewSig().gesuchFormular?.personInAusbildung?.niederlassungsstatus;
+
+    if (!niederlassungstatusChanges) {
+      return null;
+    }
+    const changed = niederlassungsStatusConverter.from(
+      niederlassungstatusChanges,
+    );
+    const current = niederlassungsStatusConverter.from(
+      niederlassungstatusCurrent,
+    );
+
+    return {
+      ...(changed.fluechtlingsstatus !== current.fluechtlingsstatus
+        ? { fluechtlingsstatus: changed.fluechtlingsstatus }
+        : {}),
+      ...(changed.niederlassungsstatus !== current.niederlassungsstatus
+        ? { niederlassungsstatus: changed.niederlassungsstatus }
+        : {}),
+      ...(changed.zustaendigerKanton !== current.zustaendigerKanton
+        ? { zustaendigerKanton: changed.zustaendigerKanton }
+        : {}),
+    };
+  });
+
   nationalitaetBfsCodeSig = computed(() => {
     const id = this.nationalitaetIdChangedSig();
     const laender = this.landStore.landListViewSig();
