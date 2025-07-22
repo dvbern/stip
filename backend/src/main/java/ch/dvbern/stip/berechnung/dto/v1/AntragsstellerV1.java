@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -181,7 +182,7 @@ public class AntragsstellerV1 {
             getHalbierungElternbeitrag(
                 personInAusbildung.getGeburtsdatum(),
                 gesuchFormular.getLebenslaufItems(),
-                gesuchsperiode
+                gesuchFormular.getTranche().getGesuch()
             )
         );
 
@@ -229,7 +230,7 @@ public class AntragsstellerV1 {
     private static boolean getHalbierungElternbeitrag(
         final LocalDate geburtsdatumPia,
         final Set<LebenslaufItem> lebenslaufItemSet,
-        final Gesuchsperiode gesuchsperiode
+        final Gesuch gesuch
     ) {
         final boolean abgeschlosseneErstausbildung = lebenslaufItemSet.stream()
             .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
@@ -237,13 +238,14 @@ public class AntragsstellerV1 {
                 lebenslaufItem -> lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
             );
-        var ausbildungsjahr = gesuchsperiode.getGesuchsjahr().getTechnischesJahr();
+        var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
         var alterAtEndOfAusbildungsjahr =
-            DateUtil.getAgeInYearsAtDate(geburtsdatumPia, LocalDate.of(ausbildungsjahr, 12, 31));
+            DateUtil.getAgeInYearsAtDate(geburtsdatumPia, endOfAusbildungsjahr);
 
         final boolean halbierungAbgeschlosseneErstausbildung =
             abgeschlosseneErstausbildung
-            && (alterAtEndOfAusbildungsjahr >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+            && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
+                .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT

@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -46,8 +45,7 @@ class AntragsstellerV1StichdatenTest {
     @Test
     void stichdatum_pia_alter_halbierungElternbeitragTest() {
         var ausbildung = gesuch.getAusbildung();
-        var ausbildungsjahr = gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr();
-        var endOfAusbildungsjahr = LocalDate.of(ausbildungsjahr, 12, 31);
+        var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
 
         // pia has at least 1 abgeschlossene Ausbildung in Lebenslauf
         var bildungsart = LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS;
@@ -61,6 +59,7 @@ class AntragsstellerV1StichdatenTest {
         // pia < 25 years old at end of current ausbildungsjahr
         gesuchFormular.getPersonInAusbildung().setGeburtsdatum(endOfAusbildungsjahr.minusYears(24));
 
+        // todo set end to be end of last gesuchtranche
         // assert
         antragsstellerV1 =
             AntragsstellerV1.buildFromDependants(gesuchFormular, 0);

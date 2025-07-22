@@ -526,6 +526,7 @@ public class TestUtil {
             .setGesuchTranchen(
                 List.of(
                     (GesuchTranche) new GesuchTranche()
+                        .setTyp(GesuchTrancheTyp.TRANCHE)
                         .setGesuchFormular(
                             new GesuchFormular()
                                 .setPersonInAusbildung(
