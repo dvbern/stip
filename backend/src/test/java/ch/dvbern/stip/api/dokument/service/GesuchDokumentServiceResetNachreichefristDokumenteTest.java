@@ -51,7 +51,7 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
     GesuchDokumentRepository gesuchDokumentRepository;
 
     @InjectMock
-    DokumentstatusService dokumentstatusService;
+    GesuchDokumentstatusService gesuchDokumentstatusService;
 
     Gesuch gesuch;
     GesuchDokument gesuchDokument1;
@@ -87,7 +87,7 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
 
     @Test
     void nachfristDokumenteShouldBeRemovedWhenAllAccepted() {
-        Mockito.doNothing().when(dokumentstatusService).triggerStatusChange(any(), any());
+        Mockito.doNothing().when(gesuchDokumentstatusService).triggerStatusChange(any(), any());
         gesuchDokument1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
         assertEquals(gesuch.getNachfristDokumente(), nachfrist);
@@ -110,7 +110,7 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         gesuch.getGesuchTranchen().add(tranche2);
         tranche2.setGesuch(gesuch);
 
-        Mockito.doNothing().when(dokumentstatusService).triggerStatusChange(any(), any());
+        Mockito.doNothing().when(gesuchDokumentstatusService).triggerStatusChange(any(), any());
         gesuchDokument1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
 

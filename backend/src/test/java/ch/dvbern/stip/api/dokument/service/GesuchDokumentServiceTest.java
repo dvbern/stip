@@ -222,7 +222,7 @@ class GesuchDokumentServiceTest {
             null,
             null,
             null,
-            new DokumentstatusService(
+            new GesuchDokumentstatusService(
                 new GesuchDokumentKommentarService(
                     null,
                     gesuchDokumentKommentarRepository,
@@ -335,7 +335,7 @@ class GesuchDokumentServiceTest {
         GesuchTrancheRepository gesuchTrancheRepository,
         S3AsyncClient s3,
         ConfigService configService,
-        DokumentstatusService dokumentstatusService,
+        GesuchDokumentstatusService gesuchDokumentstatusService,
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
@@ -352,7 +352,7 @@ class GesuchDokumentServiceTest {
                 gesuchTrancheRepository,
                 s3,
                 configService,
-                dokumentstatusService,
+                gesuchDokumentstatusService,
                 requiredDokumentService,
                 antivirus,
                 gesuchDokumentKommentarRepository,

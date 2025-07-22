@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DokumentstatusService {
+public class GesuchDokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
     private final GesuchDokumentStatusConfigProducer configProducer;
 
@@ -37,12 +37,12 @@ public class DokumentstatusService {
         final GesuchDokumentStatusChangeEvent event
     ) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
     }
 
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final GesuchDokumentStatusChangeEvent event) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
         dokumentKommentarService.createEmptyKommentarForGesuchDokument(gesuchDokument);
     }
 
@@ -52,7 +52,7 @@ public class DokumentstatusService {
         final GesuchDokumentKommentarDto commentDto
     ) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
         dokumentKommentarService.createKommentarForGesuchDokument(gesuchDokument, commentDto);
     }
 

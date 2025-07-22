@@ -79,7 +79,7 @@ public class GesuchDokumentService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
-    private final DokumentstatusService dokumentstatusService;
+    private final GesuchDokumentstatusService gesuchDokumentstatusService;
     private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
@@ -327,7 +327,7 @@ public class GesuchDokumentService {
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
-        dokumentstatusService.triggerStatusChangeWithComment(
+        gesuchDokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             GesuchDokumentStatusChangeEvent.ABGELEHNT,
             dto.getKommentar()
@@ -338,7 +338,7 @@ public class GesuchDokumentService {
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
-        dokumentstatusService.triggerStatusChange(
+        gesuchDokumentstatusService.triggerStatusChange(
             gesuchDokument,
             GesuchDokumentStatusChangeEvent.AKZEPTIERT
         );
@@ -418,7 +418,8 @@ public class GesuchDokumentService {
 
         for (final var gesuchDokument : gesuchDokumente) {
             if (gesuchDokument.getStatus() != GesuchDokumentStatus.AUSSTEHEND) {
-                dokumentstatusService.triggerStatusChange(gesuchDokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
+                gesuchDokumentstatusService
+                    .triggerStatusChange(gesuchDokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
             }
         }
     }
@@ -486,7 +487,7 @@ public class GesuchDokumentService {
             .toList();
 
         for (var gesuchdokument : abgelehnteGesuchDokumente) {
-            dokumentstatusService
+            gesuchDokumentstatusService
                 .triggerStatusChangeNoComment(gesuchdokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
         }
     }

@@ -21,13 +21,13 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public class DokumentstatusChangeEventTrigger
+public class GesuchDokumentstatusChangeEventTrigger
 extends TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent> {
-    private DokumentstatusChangeEventTrigger(GesuchDokumentStatusChangeEvent trigger) {
+    private GesuchDokumentstatusChangeEventTrigger(GesuchDokumentStatusChangeEvent trigger) {
         super(trigger, GesuchDokument.class);
     }
 
-    public static DokumentstatusChangeEventTrigger createTrigger(GesuchDokumentStatusChangeEvent trigger) {
-        return new DokumentstatusChangeEventTrigger(trigger);
+    public static GesuchDokumentstatusChangeEventTrigger createTrigger(GesuchDokumentStatusChangeEvent trigger) {
+        return new GesuchDokumentstatusChangeEventTrigger(trigger);
     }
 }

@@ -10,10 +10,10 @@
             <column name="gesuch_dokument_status" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="philipp.schaerer (generated)" id="1753089948100-4">
-        <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
+    <changeSet author="jafa (generated)" id="1753187000561-2">
+      <dropColumn columnName="dokumentstatus" tableName="gesuch_dokument_kommentar"/>
     </changeSet>
-    <changeSet author="philipp.schaerer (generated)" id="1753089948100-5">
-        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+    <changeSet author="jafa (generated)" id="1753187000561-3">
+      <dropColumn columnName="dokumentstatus" tableName="gesuch_dokument_kommentar_aud"/>
     </changeSet>
 </databaseChangeLog>
