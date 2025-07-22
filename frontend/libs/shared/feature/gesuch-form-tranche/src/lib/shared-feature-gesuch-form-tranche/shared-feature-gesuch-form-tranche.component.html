@@ -87,7 +87,7 @@
     @if (gesuch && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
         [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | translate"
         data-testid="cockpit-gesuch-aenderung-von-bis-update"
         (click)="updateAenderungVonBis(gesuch)"

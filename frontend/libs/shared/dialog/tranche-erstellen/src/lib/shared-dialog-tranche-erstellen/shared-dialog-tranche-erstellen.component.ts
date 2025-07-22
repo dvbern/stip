@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   computed,
   inject,
 } from '@angular/core';
@@ -49,6 +50,8 @@ type GesuchTrancheErstellenData = {
   id: string;
   minDate: Date;
   maxDate: Date;
+  currentGueligAb?: Date;
+  currentGueligBis?: Date;
 };
 
 const titleKeysByTypeMap = {
@@ -91,7 +94,7 @@ const titleKeysByTypeMap = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedDialogTrancheErstellenComponent {
+export class SharedDialogTrancheErstellenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private dialogRef: MatDialogRef<SharedDialogTrancheErstellenComponent> =
     inject(MatDialogRef);
@@ -117,6 +120,19 @@ export class SharedDialogTrancheErstellenComponent {
     }
     return addDays(gueltigAb, 1);
   });
+
+  ngOnInit() {
+    if (this.dialogData.currentGueligAb) {
+      this.form.controls.gueltigAb.setValue(this.dialogData.currentGueligAb, {
+        emitEvent: false,
+      });
+    }
+    if (this.dialogData.currentGueligBis) {
+      this.form.controls.gueltigBis.setValue(this.dialogData.currentGueligBis, {
+        emitEvent: false,
+      });
+    }
+  }
 
   static open(dialog: MatDialog, data: GesuchTrancheErstellenData) {
     return dialog.open<

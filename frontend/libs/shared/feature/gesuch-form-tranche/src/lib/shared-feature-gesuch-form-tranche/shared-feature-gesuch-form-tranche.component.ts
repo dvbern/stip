@@ -235,7 +235,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   updateAenderungVonBis(gesuch: SharedModelGesuch) {
     const {
-      gesuchTrancheToWorkWith: { id },
+      gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis },
       gesuchsperiode: { gesuchsperiodeStart, gesuchsperiodeStopp },
     } = gesuch;
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
@@ -243,6 +243,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
       id: id,
       minDate: new Date(gesuchsperiodeStart),
       maxDate: new Date(gesuchsperiodeStopp),
+      currentGueligAb: new Date(gueltigAb),
+      currentGueligBis: new Date(gueltigBis),
     })
       .afterClosed()
       .subscribe();
