@@ -100,11 +100,9 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-        int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
-            personInAusbildung.getGeburtsdatum(),
-            gesuchsperiode
-        );
-        builder.alter(alterForMedizinischeGrundversorgung);
+
+        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
+        builder.alter(alter);
 
         int medizinischeGrundversorgung = 0;
         int anzahlPersonenImHaushalt = 0;
