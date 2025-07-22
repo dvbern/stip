@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.buchhaltung.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -32,6 +36,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -39,6 +44,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.Length;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
@@ -72,12 +78,9 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @OneToOne(optional = true)
-    @JoinColumn(
-        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_sapdelivery_id"),
-        nullable = true
-    )
-    private SapDelivery sapDelivery;
+    @Length
+    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER)
+    private List<SapDelivery> sapDeliverys = new ArrayList<>();
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
@@ -95,4 +98,9 @@ public class Buchhaltung extends AbstractMandantEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_fall_id"))
     private Fall fall;
+
+    @Nullable
+    @OneToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "zahlungsverbindung_id")
+    private Zahlungsverbindung zahlungsverbindung;
 }

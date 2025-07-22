@@ -17,22 +17,24 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
+import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.util.JwtUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -52,6 +54,7 @@ public class BuchhaltungService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
+    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
         return buchhaltungList
@@ -111,19 +114,6 @@ public class BuchhaltungService {
         final Integer betrag,
         final String comment
     ) {
-        return createBuchaltungForFallAndGesuch(fall, gesuch, buchhaltungType, betrag, comment, null, null);
-    }
-
-    @Transactional
-    public BuchhaltungEntryDto createBuchaltungForFallAndGesuch(
-        final Fall fall,
-        final Gesuch gesuch,
-        final BuchhaltungType buchhaltungType,
-        final Integer betrag,
-        final String comment,
-        final BigDecimal sapDeliveryId,
-        final SapStatus sapStatus
-    ) {
         final var lastEntrySaldo = getLastEntrySaldo(fall.getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
@@ -161,7 +151,16 @@ public class BuchhaltungService {
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
+        if (Objects.nonNull(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung())) {
+            final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
+            );
+            zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
+            buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
+        }
+
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
+        buchhaltungEntry.setUserErstellt(JwtUtil.SYSTEM_USR);
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungEntry;
     }
@@ -185,10 +184,17 @@ public class BuchhaltungService {
             .setBuchhaltungType(buchhaltungType)
             .setBetrag(betrag)
             .setSaldo(lastEntrySaldo - betrag)
-            .setStipendium(0)
             .setComment(translator.translate(tlKey))
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
+
+        if (Objects.nonNull(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung())) {
+            final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
+            );
+            zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
+            buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
+        }
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);

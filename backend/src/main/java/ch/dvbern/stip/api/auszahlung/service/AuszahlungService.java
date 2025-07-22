@@ -60,6 +60,10 @@ public class AuszahlungService {
         }
 
         auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
+        if (fall.getAuszahlung().getZahlungsverbindung() != null) {
+            fall.getAuszahlung().getZahlungsverbindung().setSapDelivery(null);
+            fall.getAuszahlung().getZahlungsverbindung().setSapBusinessPartnerId(null);
+        }
         return auszahlungMapper.toDto(fall);
     }
 }

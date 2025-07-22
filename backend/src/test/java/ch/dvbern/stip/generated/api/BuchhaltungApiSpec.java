@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -59,7 +60,9 @@ public class BuchhaltungApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createBuchhaltungSaldokorrektur(),
-                getBuchhaltungEntrys()
+                getBuchhaltungEntrys(),
+                getFailedAuszahlungBuchhaltungEntrys(),
+                retryFailedAuszahlungBuchhaltungForGesuch()
         );
     }
 
@@ -69,6 +72,14 @@ public class BuchhaltungApiSpec {
 
     public GetBuchhaltungEntrysOper getBuchhaltungEntrys() {
         return new GetBuchhaltungEntrysOper(createReqSpec());
+    }
+
+    public GetFailedAuszahlungBuchhaltungEntrysOper getFailedAuszahlungBuchhaltungEntrys() {
+        return new GetFailedAuszahlungBuchhaltungEntrysOper(createReqSpec());
+    }
+
+    public RetryFailedAuszahlungBuchhaltungForGesuchOper retryFailedAuszahlungBuchhaltungForGesuch() {
+        return new RetryFailedAuszahlungBuchhaltungForGesuchOper(createReqSpec());
     }
 
     /**
@@ -234,6 +245,164 @@ public class BuchhaltungApiSpec {
          * @return operation
          */
         public GetBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
+     * 
+     *
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * return List&lt;PaginatedFailedAuszahlungBuchhaltungDtoSpec&gt;
+     */
+    public static class GetFailedAuszahlungBuchhaltungEntrysOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/buchhaltung/failed";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetFailedAuszahlungBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /buchhaltung/failed
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /buchhaltung/failed
+         * @param handler handler
+         * @return List&lt;PaginatedFailedAuszahlungBuchhaltungDtoSpec&gt;
+         */
+        public List<PaginatedFailedAuszahlungBuchhaltungDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<PaginatedFailedAuszahlungBuchhaltungDtoSpec>> type = new TypeRef<List<PaginatedFailedAuszahlungBuchhaltungDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetFailedAuszahlungBuchhaltungEntrysOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetFailedAuszahlungBuchhaltungEntrysOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetFailedAuszahlungBuchhaltungEntrysOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetFailedAuszahlungBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * return BuchhaltungEntry for retry
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return BuchhaltungEntryDtoSpec
+     */
+    public static class RetryFailedAuszahlungBuchhaltungForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/buchhaltung/retry/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public RetryFailedAuszahlungBuchhaltungForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /buchhaltung/retry/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /buchhaltung/retry/{gesuchId}
+         * @param handler handler
+         * @return BuchhaltungEntryDtoSpec
+         */
+        public BuchhaltungEntryDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BuchhaltungEntryDtoSpec> type = new TypeRef<BuchhaltungEntryDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public RetryFailedAuszahlungBuchhaltungForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public RetryFailedAuszahlungBuchhaltungForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public RetryFailedAuszahlungBuchhaltungForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

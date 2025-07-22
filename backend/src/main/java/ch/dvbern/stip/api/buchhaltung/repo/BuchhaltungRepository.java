@@ -36,15 +36,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     private final EntityManager entityManager;
-    static final QBuchhaltung BUCHHALTUNG = QBuchhaltung.buchhaltung;
+    static final QBuchhaltung Q_BUCHHALTUNG = QBuchhaltung.buchhaltung;
 
     public Stream<Buchhaltung> findAllForFallId(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
 
         final var query = queryFactory
-            .selectFrom(BUCHHALTUNG)
-            .where(BUCHHALTUNG.fall.id.eq(fallId))
-            .orderBy(BUCHHALTUNG.timestampErstellt.asc());
+            .selectFrom(Q_BUCHHALTUNG)
+            .where(Q_BUCHHALTUNG.fall.id.eq(fallId))
+            .orderBy(Q_BUCHHALTUNG.timestampErstellt.asc());
         return query.stream();
     }
 
@@ -60,13 +60,13 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
         final var sapDelivery = QSapDelivery.sapDelivery;
 
         final var query = queryFactory
-            .selectFrom(BUCHHALTUNG)
-            .where(BUCHHALTUNG.fall.id.eq(fallId))
-            .where(BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
+            .selectFrom(Q_BUCHHALTUNG)
+            .where(Q_BUCHHALTUNG.fall.id.eq(fallId))
+            .where(Q_BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
             .join(sapDelivery)
-            .on(BUCHHALTUNG.sapDelivery.id.eq(sapDelivery.id))
+            .on(Q_BUCHHALTUNG.sapDeliverys.any().id.eq(sapDelivery.id))
             .where(sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
-            .orderBy(BUCHHALTUNG.timestampErstellt.desc());
+            .orderBy(Q_BUCHHALTUNG.timestampErstellt.desc());
         return query.stream().findFirst();
     }
 
@@ -74,17 +74,18 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
         final var queryFactory = new JPAQueryFactory(entityManager);
 
         final var query = queryFactory
-            .selectFrom(BUCHHALTUNG)
-            .where(BUCHHALTUNG.gesuch.id.eq(gesuchId))
-            .where(BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
-            .orderBy(BUCHHALTUNG.timestampErstellt.asc());
+            .selectFrom(Q_BUCHHALTUNG)
+            .where(Q_BUCHHALTUNG.gesuch.id.eq(gesuchId))
+            .where(Q_BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
+            .orderBy(Q_BUCHHALTUNG.timestampErstellt.asc());
         return query.stream();
     }
 
     public Stream<Buchhaltung> findBuchhaltungWithPendingSapDelivery() {
         return new JPAQueryFactory(entityManager)
-            .selectFrom(BUCHHALTUNG)
-            .where(BUCHHALTUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .selectFrom(Q_BUCHHALTUNG)
+            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS))
+            // .where(Q_BUCHHALTUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
             .stream();
     }
 }

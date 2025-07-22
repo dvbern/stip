@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
@@ -57,30 +56,29 @@ public class SapService {
     private final SapEndpointService sapEndpointService;
     private final BuchhaltungService buchhaltungService;
     private final SapDeliveryRepository sapDeliveryRepository;
-    private final AuszahlungRepository auszahlungRepository;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
-    @Transactional
-    public void doOrReadChangeBusinessPartner(final Zahlungsverbindung zahlungsverbindung) {
-        BigDecimal deliveryid = null;
-        if (Objects.isNull(zahlungsverbindung.getSapDelivery())) {
-            deliveryid = SapEndpointService.generateDeliveryId();
-            final var changeResponse = sapEndpointService.changeBusinessPartner(zahlungsverbindung, deliveryid);
-            SapReturnCodeType.assertSuccess(changeResponse.getRETURNCODE().get(0).getTYPE());
-            final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid);
-            sapDeliveryRepository.persistAndFlush(sapStatus);
-            zahlungsverbindung.setSapDelivery(sapStatus);
-        }
-        deliveryid = zahlungsverbindung.getSapDelivery().getSapDeliveryId();
-        final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
-
-        zahlungsverbindung.getSapDelivery()
-            .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
-    }
+    // @Transactional
+    // public void doOrReadChangeBusinessPartner(final Zahlungsverbindung zahlungsverbindung) {
+    // BigDecimal deliveryid = null;
+    // if (Objects.isNull(zahlungsverbindung.getSapDelivery())) {
+    // deliveryid = SapEndpointService.generateDeliveryId();
+    // final var changeResponse = sapEndpointService.changeBusinessPartner(zahlungsverbindung, deliveryid);
+    // SapReturnCodeType.assertSuccess(changeResponse.getRETURNCODE().get(0).getTYPE());
+    // final var sapStatus = new SapDelivery().setSapDeliveryId(deliveryid);
+    // sapDeliveryRepository.persistAndFlush(sapStatus);
+    // zahlungsverbindung.setSapDelivery(sapStatus);
+    // }
+    // deliveryid = zahlungsverbindung.getSapDelivery().getSapDeliveryId();
+    // final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+    // SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
+    //
+    // zahlungsverbindung.getSapDelivery()
+    // .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+    // }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void getBusinessPartnerCreateStatus(final UUID zahlungsverbindungId) {
@@ -121,16 +119,13 @@ public class SapService {
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
         final var businessPartnerCreateBuchhaltung =
             buchhaltungService.createBuchhaltungForBusinessPartnerCreate(gesuch.getId());
-        businessPartnerCreateBuchhaltung.setSapDelivery(sapDelivery);
+        businessPartnerCreateBuchhaltung.getSapDeliverys().add(sapDelivery);
     }
 
     public SapStatus getOrCreateBusinessPartner(final Gesuch gesuch) {
         final var zahlungsverbindung = gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung();
 
-        if (Objects.nonNull(zahlungsverbindung.getSapBusinessPartnerId())) {
-            // Sap BusinessPartnerId exists
-            doOrReadChangeBusinessPartner(zahlungsverbindung);
-        } else if (Objects.nonNull(zahlungsverbindung.getSapDelivery())) {
+        if (Objects.nonNull(zahlungsverbindung.getSapDelivery())) {
             // Sap BusinessPartner was created but hasn't been retrieved yet
             getBusinessPartnerCreateStatus(zahlungsverbindung.getId());
         } else {
@@ -159,13 +154,20 @@ public class SapService {
 
     @Transactional
     public SapStatus getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
-        final var deliveryid = buchhaltung.getSapDelivery().getSapDeliveryId();
+        final var sapDelivery = buchhaltung.getSapDeliverys()
+            .stream()
+            .filter(
+                sapDelivery1 -> sapDelivery1.getSapStatus() == SapStatus.IN_PROGRESS
+            )
+            .findFirst()
+            .get();
+        final var deliveryid = sapDelivery.getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-        buchhaltung.getSapDelivery()
+        sapDelivery
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
-        return buchhaltung.getSapDelivery().getSapStatus();
+        return sapDelivery.getSapStatus();
     }
 
     @Transactional
@@ -178,13 +180,20 @@ public class SapService {
             throw new IllegalStateException("Cannot create vendor posting without existing businessPartnerId");
         }
         BigDecimal deliveryid = null;
-        if (Objects.isNull(buchhaltung.getSapDelivery())) {
+        final var sapDelivery = buchhaltung.getSapDeliverys()
+            .stream()
+            .filter(
+                sapDelivery1 -> sapDelivery1.getSapStatus() == SapStatus.IN_PROGRESS
+            )
+            .findFirst();
+
+        if (sapDelivery.isEmpty()) {
             deliveryid = SapEndpointService.generateDeliveryId();
 
-            final var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
+            final var newSapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
                 .setSapBusinessPartnerId(zahlungsverbindung.getSapBusinessPartnerId());
-            sapDeliveryRepository.persistAndFlush(sapDelivery);
-            buchhaltung.setSapDelivery(sapDelivery);
+            sapDeliveryRepository.persistAndFlush(newSapDelivery);
+            buchhaltung.getSapDeliverys().add(newSapDelivery);
 
             final var vendorPostingCreateResponse =
                 sapEndpointService.createVendorPosting(

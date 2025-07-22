@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.BuchhaltungResource;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
+import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,18 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     public List<BuchhaltungEntryDto> getBuchhaltungEntrys(UUID gesuchId) {
         buchhaltungAuthorizer.canGetBuchhaltungEntrys();
         return buchhaltungService.getAllDtoForGesuchId(gesuchId).toList();
+    }
+
+    @Override
+    public List<PaginatedFailedAuszahlungBuchhaltungDto> getFailedAuszahlungBuchhaltungEntrys(
+        Integer page,
+        Integer pageSize
+    ) {
+        return List.of();
+    }
+
+    @Override
+    public BuchhaltungEntryDto retryFailedAuszahlungBuchhaltungForGesuch(UUID gesuchId) {
+        return null;
     }
 }
