@@ -15,13 +15,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
-public interface DokumentstatusChangeHandler
-    extends StateChangeHandler<Dokumentstatus, DokumentstatusChangeEvent, GesuchDokument> {
+@ApplicationScoped
+@RequiredArgsConstructor
+public class AenderungZurueckweisenHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
+
+    @Override
+    @Transactional
+    public void handle(Gesuch gesuch) {
+        if (!gesuch.isVerfuegt()) {
+            illegalHandleCall();
+        }
+        gesuchService.resetGesuchZurueckweisen(gesuch);
+    }
 }

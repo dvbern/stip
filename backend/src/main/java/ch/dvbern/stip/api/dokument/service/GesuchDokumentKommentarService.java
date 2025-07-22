@@ -167,7 +167,7 @@ public class GesuchDokumentKommentarService {
             createEmptyKommentarForGesuchDokument(gesuchDokument);
         } else {
             kommentar.setGesuchDokument(gesuchDokument);
-            kommentar.setDokumentstatus(gesuchDokument.getStatus());
+            kommentar.setGesuchDokumentStatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
     }
@@ -175,7 +175,7 @@ public class GesuchDokumentKommentarService {
     @Transactional
     public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument) {
         final var kommentar = new GesuchDokumentKommentar()
-            .setDokumentstatus(gesuchDokument.getStatus())
+            .setGesuchDokumentStatus(gesuchDokument.getStatus())
             .setGesuchDokument(gesuchDokument)
             .setKommentar(null);
         gesuchDokumentKommentarRepository.persistAndFlush(kommentar);

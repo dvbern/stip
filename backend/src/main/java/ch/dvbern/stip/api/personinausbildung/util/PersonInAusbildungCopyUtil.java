@@ -44,7 +44,6 @@ public class PersonInAusbildungCopyUtil {
         target.setNationalitaet(source.getNationalitaet());
         target.setHeimatort(source.getHeimatort());
         target.setNiederlassungsstatus(source.getNiederlassungsstatus());
-        target.setZustaendigerKanton(source.getZustaendigerKanton());
         target.setEinreisedatum(source.getEinreisedatum());
         target.setZivilstand(source.getZivilstand());
         target.setSozialhilfebeitraege(source.isSozialhilfebeitraege());

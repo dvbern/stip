@@ -15,14 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import java.time.ZonedDateTime;
+
+import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,22 +32,21 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class FehlendeDokumenteEinreichenHandler implements GesuchStatusStateChangeHandler {
+public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
+    private final MailService mailService;
     private final NotificationService notificationService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getTrigger() == GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG
-        && transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
-        && transition.getDestination() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
+    public void handle(Gesuch gesuch) {
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        notificationService.createGesuchEingereichtNotification(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
-        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuch);
+
+        // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
+        final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
+        gesuch.setEinreichedatum(todayInZuerich);
     }
 }

@@ -23,8 +23,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
@@ -38,7 +37,6 @@ import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +48,7 @@ public class GesuchStatusService {
     private final MailService mailService;
     private final NotificationService notificationService;
     private final Validator validator;
-
-    private final Instance<GesuchStatusStateChangeHandler> handlers;
+    private final GesuchStatusConfigProducer configProducer;
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
@@ -117,7 +114,7 @@ public class GesuchStatusService {
         final Gesuch gesuch,
         final KommentarDto kommentarDto
     ) {
-        final var config = GesuchStatusConfigProducer.createStateMachineConfig(handlers);
+        final var config = configProducer.createStateMachineConfig();
 
         StateMachineUtil.addExit(
             config,

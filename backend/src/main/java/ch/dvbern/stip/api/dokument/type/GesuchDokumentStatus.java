@@ -15,20 +15,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.dokument.type;
 
-import java.util.Objects;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
-import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+public enum GesuchDokumentStatus {
+    AUSSTEHEND,
+    ABGELEHNT,
+    AKZEPTIERT;
 
-public class ZustaendigerKantonConstraintValidator
-    implements ConstraintValidator<ZustaendigerKantonConstraint, PersonInAusbildung> {
-    @Override
-    public boolean isValid(PersonInAusbildung pia, ConstraintValidatorContext context) {
-        if (pia.getNiederlassungsstatus() != Niederlassungsstatus.FLUECHTLING)
-            return Objects.isNull(pia.getZustaendigerKanton());
-        return Objects.nonNull(pia.getZustaendigerKanton());
-    }
+    public static final Set<GesuchDokumentStatus> GESUCHSTELLER_CAN_UPLOAD_DOKUMENT = Collections.unmodifiableSet(
+        EnumSet.of(AUSSTEHEND)
+    );
 }
