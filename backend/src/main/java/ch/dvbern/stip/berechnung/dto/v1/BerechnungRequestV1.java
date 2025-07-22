@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +43,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import static ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1.getAlterForMedizinischeGrundversorgung;
 
 @Data
 @Builder
@@ -224,11 +227,18 @@ public class BerechnungRequestV1 implements DmnRequest {
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 
-    public static int getMedizinischeGrundversorgung(final int alter, final Gesuchsperiode gesuchsperiode) {
+    public static int getMedizinischeGrundversorgung(
+        final LocalDate geburtsdatum,
+        final Gesuchsperiode gesuchsperiode
+    ) {
+        int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
+            geburtsdatum,
+            gesuchsperiode
+        );
         int medizinischeGrundversorgung = gesuchsperiode.getErwachsene2699();
-        if (alter <= 18) {
+        if (alterForMedizinischeGrundversorgung <= 18) {
             medizinischeGrundversorgung = gesuchsperiode.getKinder0018();
-        } else if (alter <= 25) {
+        } else if (alterForMedizinischeGrundversorgung <= 25) {
             medizinischeGrundversorgung = gesuchsperiode.getJugendlicheErwachsene1925();
         }
         return medizinischeGrundversorgung;

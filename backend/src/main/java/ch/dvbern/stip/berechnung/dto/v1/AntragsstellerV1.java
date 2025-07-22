@@ -111,15 +111,12 @@ public class AntragsstellerV1 {
         if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
             anzahlPersonenImHaushalt = 1;
             medizinischeGrundversorgung +=
-                BerechnungRequestV1.getMedizinischeGrundversorgung(alterForMedizinischeGrundversorgung, gesuchsperiode);
+                BerechnungRequestV1
+                    .getMedizinischeGrundversorgung(personInAusbildung.getGeburtsdatum(), gesuchsperiode);
             if (partner != null) {
-                int alterPartnerForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
-                    partner.getGeburtsdatum(),
-                    gesuchsperiode
-                );
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    alterPartnerForMedizinischeGrundversorgung,
+                    partner.getGeburtsdatum(),
                     gesuchsperiode
                 );
             }
@@ -127,12 +124,8 @@ public class AntragsstellerV1 {
                 // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
-                    int alterKindForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
-                        kind.getGeburtsdatum(),
-                        gesuchsperiode
-                    );
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        alterKindForMedizinischeGrundversorgung,
+                        kind.getGeburtsdatum(),
                         gesuchsperiode
                     );
                 }
@@ -225,7 +218,7 @@ public class AntragsstellerV1 {
         };
     }
 
-    private static int getAlterForMedizinischeGrundversorgung(
+    static int getAlterForMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
         final Gesuchsperiode gesuchsperiode
     ) {
