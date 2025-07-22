@@ -94,7 +94,7 @@ const titleKeysByTypeMap = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedDialogTrancheErstellenComponent implements OnInit {
+export class SharedDialogTrancheErstellenComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private dialogRef: MatDialogRef<SharedDialogTrancheErstellenComponent> =
     inject(MatDialogRef);
@@ -105,8 +105,11 @@ export class SharedDialogTrancheErstellenComponent implements OnInit {
 
   titleKeys = titleKeysByTypeMap[this.dialogData.type];
   form = this.formBuilder.group({
-    gueltigAb: [<Date | null>null, Validators.required],
-    gueltigBis: [<Date | null>null],
+    gueltigAb: [
+      <Date | undefined>this.dialogData.currentGueligAb,
+      Validators.required,
+    ],
+    gueltigBis: [<Date | undefined>this.dialogData.currentGueligBis],
     kommentar: [<string | null>null, Validators.required],
   });
 
@@ -120,19 +123,6 @@ export class SharedDialogTrancheErstellenComponent implements OnInit {
     }
     return addDays(gueltigAb, 1);
   });
-
-  ngOnInit() {
-    if (this.dialogData.currentGueligAb) {
-      this.form.controls.gueltigAb.setValue(this.dialogData.currentGueligAb, {
-        emitEvent: false,
-      });
-    }
-    if (this.dialogData.currentGueligBis) {
-      this.form.controls.gueltigBis.setValue(this.dialogData.currentGueligBis, {
-        emitEvent: false,
-      });
-    }
-  }
 
   static open(dialog: MatDialog, data: GesuchTrancheErstellenData) {
     return dialog.open<
