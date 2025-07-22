@@ -20,6 +20,7 @@ import {
   withInMemoryScrolling,
   withRouterConfig,
 } from '@angular/router';
+import { provideTransloco } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { Store, provideState, provideStore } from '@ngrx/store';
@@ -58,6 +59,8 @@ import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-t
 import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
 import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+
+import { TranslocoHttpLoader } from './transloco-loader';
 
 export class ExplicitMissingTranslationHandler
   implements MissingTranslationHandler
@@ -128,6 +131,15 @@ export function provideSharedPatternCore(
       sharedDataAccessConfigEffects,
       sharedDataAccessLanguageEffects,
     ),
+    provideTransloco({
+      config: {
+        availableLangs: ['de', 'fr'],
+        defaultLang: 'de',
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader,
+    }),
     provideTranslateService({
       missingTranslationHandler: {
         provide: MissingTranslationHandler,

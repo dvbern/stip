@@ -116,6 +116,7 @@
     "@jscutlery/swc-angular": "^0.20.2",
     "@jscutlery/swc-angular-plugin": "^0.20.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",
+    "@jsverse/transloco": "^7.6.1",
     "@keycloak/keycloak-admin-client": "^26.2.3",
     "@ngrx/eslint-plugin": "19.0.0",
     "@nx/angular": "21.0.3",

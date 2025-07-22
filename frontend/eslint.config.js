@@ -59,6 +59,7 @@ module.exports = [
             {
               sourceTag: 'type:app',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:feature',
                 'type:data-access',
                 'type:pattern',
@@ -85,6 +86,7 @@ module.exports = [
             {
               sourceTag: 'type:pattern',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:dialog',
                 'type:pattern',
                 'type:data-access',
@@ -99,6 +101,7 @@ module.exports = [
             {
               sourceTag: 'type:data-access',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:data-access',
                 'type:event',
                 'type:util',
@@ -115,6 +118,7 @@ module.exports = [
             {
               sourceTag: 'type:ui',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:ui',
                 'type:util',
                 'type:util-data-access',
@@ -127,6 +131,7 @@ module.exports = [
             {
               sourceTag: 'type:dialog',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:feature',
                 'type:data-access',
                 'type:ui',
@@ -140,6 +145,7 @@ module.exports = [
             {
               sourceTag: 'type:util',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:util',
                 'type:util-fn',
                 'type:model',
@@ -159,6 +165,7 @@ module.exports = [
             {
               sourceTag: 'type:util-data-access',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:data-access',
                 'type:util',
                 'type:util-fn',
@@ -176,12 +183,16 @@ module.exports = [
             },
             {
               sourceTag: 'type:util-fn',
-              onlyDependOnLibsWithTags: ['type:util-fn', 'type:model'],
+              onlyDependOnLibsWithTags: [
+                'type:assets',
+                'type:util-fn',
+                'type:model',
+              ],
               bannedExternalImports: ['@angular/*', '@ngrx/*'],
             },
             {
               sourceTag: 'type:model',
-              onlyDependOnLibsWithTags: ['type:model'],
+              onlyDependOnLibsWithTags: ['type:assets', 'type:model'],
               bannedExternalImports: ['@ngrx/*'],
             },
             {
