@@ -7,6 +7,3 @@ export type GesuchAppTranslationKey = AssertMatchAndMergeTranslations<
   typeof de,
   typeof fr
 >;
-export type SharedT<T extends string> = T extends GesuchAppTranslationKey
-  ? T
-  : never;
