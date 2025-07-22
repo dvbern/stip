@@ -24,7 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -51,7 +51,7 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
     GesuchDokumentRepository gesuchDokumentRepository;
 
     @InjectMock
-    DokumentstatusService dokumentstatusService;
+    GesuchDokumentstatusService gesuchDokumentstatusService;
 
     Gesuch gesuch;
     GesuchDokument gesuchDokument1;
@@ -68,11 +68,11 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         gesuchDokument2 = new GesuchDokument();;
 
         gesuchDokument1.setDokumentTyp(DokumentTyp.EK_VERDIENST);
-        gesuchDokument1.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokument1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokument1.setId(UUID.randomUUID());
         gesuchDokument1.setGesuchTranche(tranche);
         gesuchDokument2.setDokumentTyp(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
-        gesuchDokument2.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokument2.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokument2.setId(UUID.randomUUID());
         gesuchDokument2.setGesuchTranche(tranche);
 
@@ -87,11 +87,11 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
 
     @Test
     void nachfristDokumenteShouldBeRemovedWhenAllAccepted() {
-        Mockito.doNothing().when(dokumentstatusService).triggerStatusChange(any(), any());
-        gesuchDokument1.setStatus(Dokumentstatus.AKZEPTIERT);
+        Mockito.doNothing().when(gesuchDokumentstatusService).triggerStatusChange(any(), any());
+        gesuchDokument1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
         assertEquals(gesuch.getNachfristDokumente(), nachfrist);
-        gesuchDokument2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokument2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument2.getId());
         // since all documents are accepted, reset nachreichefrist
         assertNull(gesuch.getNachfristDokumente());
@@ -110,8 +110,8 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         gesuch.getGesuchTranchen().add(tranche2);
         tranche2.setGesuch(gesuch);
 
-        Mockito.doNothing().when(dokumentstatusService).triggerStatusChange(any(), any());
-        gesuchDokument1.setStatus(Dokumentstatus.AKZEPTIERT);
+        Mockito.doNothing().when(gesuchDokumentstatusService).triggerStatusChange(any(), any());
+        gesuchDokument1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument1.getId());
 
         // also check 2nd tranche with a new dokument
@@ -122,11 +122,11 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         tranche2.setGesuchDokuments(new ArrayList<>());
         tranche2.getGesuchDokuments().add(gesuchDokument3);
         tranche2.getGesuchDokuments().add(gesuchDokument1);
-        gesuchDokument3.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokument3.setStatus(GesuchDokumentStatus.AUSSTEHEND);
 
         assertEquals(gesuch.getNachfristDokumente(), nachfrist);
-        gesuchDokument2.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokument3.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokument2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokument3.setStatus(GesuchDokumentStatus.AKZEPTIERT);
 
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokument2.getId());
         // since all documents are accepted, reset nachreichefrist

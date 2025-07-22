@@ -15,13 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 
-public interface GesuchTrancheStatusStateChangeHandler
-    extends StateChangeHandler<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent, GesuchTranche> {
+public interface GesuchStatusChangeHandler extends StateChangeHandler<Gesuch> {
 }

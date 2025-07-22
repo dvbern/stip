@@ -15,19 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.service;
+package ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers;
+
+import java.util.List;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-public class DokumentstatusChangeEventTrigger
-extends TriggerWithParameters1<GesuchDokument, DokumentstatusChangeEvent> {
-    private DokumentstatusChangeEventTrigger(DokumentstatusChangeEvent trigger) {
-        super(trigger, GesuchDokument.class);
-    }
+@ApplicationScoped
+@Slf4j
+@RequiredArgsConstructor
+public class GesuchDokumentAbgelehntToAusstehendStatusChangeHandler implements GesuchDokumentStatusChangeHandler {
+    private final GesuchDokumentService gesuchDokumentService;
 
-    public static DokumentstatusChangeEventTrigger createTrigger(DokumentstatusChangeEvent trigger) {
-        return new DokumentstatusChangeEventTrigger(trigger);
+    @Override
+    public void handle(
+        GesuchDokument gesuchdokument
+    ) {
+        gesuchDokumentService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List.of(gesuchdokument));
     }
 }

@@ -17,55 +17,49 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
-import ch.dvbern.stip.api.common.statemachines.dokumentstatus.handlers.DokumentstatusChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchdokument.GesuchDokumentStatusConfigProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DokumentstatusService {
+public class GesuchDokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
-    private final Instance<DokumentstatusChangeHandler> handlers;
+    private final GesuchDokumentStatusConfigProducer configProducer;
 
     public void triggerStatusChangeNoComment(
         final GesuchDokument gesuchDokument,
-        final DokumentstatusChangeEvent event
+        final GesuchDokumentStatusChangeEvent event
     ) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
     }
 
-    public void triggerStatusChange(final GesuchDokument gesuchDokument, final DokumentstatusChangeEvent event) {
+    public void triggerStatusChange(final GesuchDokument gesuchDokument, final GesuchDokumentStatusChangeEvent event) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
         dokumentKommentarService.createEmptyKommentarForGesuchDokument(gesuchDokument);
     }
 
     public void triggerStatusChangeWithComment(
         final GesuchDokument gesuchDokument,
-        final DokumentstatusChangeEvent event,
+        final GesuchDokumentStatusChangeEvent event,
         final GesuchDokumentKommentarDto commentDto
     ) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(
-            DokumentstatusChangeEventTriggerWithComment.createTrigger(event),
-            gesuchDokument,
-            commentDto.getKommentar()
-        );
+        sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
         dokumentKommentarService.createKommentarForGesuchDokument(gesuchDokument, commentDto);
     }
 
-    private StateMachine<Dokumentstatus, DokumentstatusChangeEvent> createStateMachine(
+    private StateMachine<GesuchDokumentStatus, GesuchDokumentStatusChangeEvent> createStateMachine(
         final GesuchDokument gesuchDokument
     ) {
-        var config = DokumentstatusConfigProducer.createStateMachineConfig(handlers);
+        var config = configProducer.createStateMachineConfig();
         return new StateMachine<>(
             gesuchDokument.getStatus(),
             gesuchDokument::getStatus,

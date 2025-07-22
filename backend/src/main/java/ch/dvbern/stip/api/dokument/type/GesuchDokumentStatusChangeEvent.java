@@ -17,16 +17,8 @@
 
 package ch.dvbern.stip.api.dokument.type;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
-
-public enum Dokumentstatus {
+public enum GesuchDokumentStatusChangeEvent {
     AUSSTEHEND,
     ABGELEHNT,
-    AKZEPTIERT;
-
-    public static final Set<Dokumentstatus> GESUCHSTELLER_CAN_UPLOAD_DOKUMENT = Collections.unmodifiableSet(
-        EnumSet.of(AUSSTEHEND)
-    );
+    AKZEPTIERT
 }

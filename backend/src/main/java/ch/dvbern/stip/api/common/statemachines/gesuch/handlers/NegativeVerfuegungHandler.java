@@ -15,33 +15,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+
+import java.util.Comparator;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.sap.service.SapService;
-import com.github.oxo42.stateless4j.transitions.Transition;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class StipendienAnspruchHandler implements GesuchStatusStateChangeHandler {
-    private final SapService sapService;
+@Slf4j
+public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {
+    private final VerfuegungService verfuegungService;
 
     @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.VERSENDET
-        && transition.getDestination() == Gesuchstatus.STIPENDIENANSPRUCH;
-    }
-
-    @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        sapService.createInitialAuszahlungOrGetStatus(
-            gesuch.getId()
+    public void handle(Gesuch gesuch) {
+        verfuegungService.createPdfForNegtativeVerfuegung(
+            gesuch.getVerfuegungs()
+                .stream()
+                .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+                .orElseThrow(NotFoundException::new)
         );
     }
 }

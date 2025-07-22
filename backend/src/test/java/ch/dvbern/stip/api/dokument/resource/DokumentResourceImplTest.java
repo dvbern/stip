@@ -39,7 +39,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
@@ -193,18 +193,18 @@ class DokumentResourceImplTest {
         List<GesuchDokument> dokuments = new ArrayList<>();
 
         GesuchDokument customGesuchDokument1 = new GesuchDokument();
-        customGesuchDokument1.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument1.setDokumente(List.of(new Dokument()));
         customGesuchDokument1.setCustomDokumentTyp(customDokumentTyp1);
 
         GesuchDokument customGesuchDokument2 = new GesuchDokument();
-        customGesuchDokument2.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument2.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument2.setDokumente(List.of());
         customGesuchDokument2.setCustomDokumentTyp(customDokumentTyp2);
 
         for (DokumentTyp dokumentTyp : DokumentTyp.values()) {
             var gesuchDokument = new GesuchDokument();
-            gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
             gesuchDokument.setDokumentTyp(dokumentTyp);
             gesuchDokument.setDokumente(List.of(new Dokument()));
             dokuments.add(gesuchDokument);
