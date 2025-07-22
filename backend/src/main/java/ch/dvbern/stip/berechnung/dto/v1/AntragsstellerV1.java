@@ -232,18 +232,30 @@ public class AntragsstellerV1 {
         final Set<LebenslaufItem> lebenslaufItemSet,
         final Gesuch gesuch
     ) {
-        final boolean abgeschlosseneErstausbildung = lebenslaufItemSet.stream()
-            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
-            .anyMatch(
-                lebenslaufItem -> lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+        final var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
+        final var beginOfAusbildungsjahr = gesuch.getEarliestGesuchTranche().getGueltigkeit().getGueltigAb();
+
+        final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
+            .filter(
+                lebenslaufItem -> lebenslaufItem.getBildungsart() != null
+                && lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
-            );
-        var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
+            )
+            .findFirst();
+
+        final boolean abgeschlosseneErstausbildung = Objects.nonNull(abgeschlosseneErstausbildungLebenslaufItem);
+
+        boolean erstAusbildungWasCompletedBeforeAusbildungsjahr = false;
+        if (abgeschlosseneErstausbildungLebenslaufItem.isPresent()) {
+            erstAusbildungWasCompletedBeforeAusbildungsjahr =
+                abgeschlosseneErstausbildungLebenslaufItem.get().getVon().isBefore(beginOfAusbildungsjahr);
+        }
+
         var alterAtEndOfAusbildungsjahr =
             DateUtil.getAgeInYearsAtDate(geburtsdatumPia, endOfAusbildungsjahr);
 
         final boolean halbierungAbgeschlosseneErstausbildung =
-            abgeschlosseneErstausbildung
+            abgeschlosseneErstausbildung && erstAusbildungWasCompletedBeforeAusbildungsjahr
             && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
                 .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
