@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -26,6 +24,8 @@ import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,7 +59,6 @@ class AntragsstellerV1StichdatenTest {
         // pia < 25 years old at end of current ausbildungsjahr
         gesuchFormular.getPersonInAusbildung().setGeburtsdatum(endOfAusbildungsjahr.minusYears(24));
 
-        // todo set end to be end of last gesuchtranche
         // assert
         antragsstellerV1 =
             AntragsstellerV1.buildFromDependants(gesuchFormular, 0);
