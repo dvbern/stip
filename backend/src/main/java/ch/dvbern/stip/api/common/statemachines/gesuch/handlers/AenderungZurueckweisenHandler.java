@@ -15,10 +15,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.type;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-public enum DokumentstatusChangeEvent {
-    AUSSTEHEND,
-    ABGELEHNT,
-    AKZEPTIERT
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+public class AenderungZurueckweisenHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
+
+    @Override
+    @Transactional
+    public void handle(Gesuch gesuch) {
+        if (!gesuch.isVerfuegt()) {
+            illegalHandleCall();
+        }
+        gesuchService.resetGesuchZurueckweisen(gesuch);
+    }
 }

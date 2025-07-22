@@ -15,15 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines;
+package ch.dvbern.stip.api.dokument.service;
 
-import jakarta.ws.rs.BadRequestException;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public interface StateChangeHandler<T> {
-    void handle(final T parameter);
-
-    default void illegalHandleCall() {
-        throw new BadRequestException();
+public class GesuchDokumentstatusChangeEventTrigger
+extends TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent> {
+    private GesuchDokumentstatusChangeEventTrigger(GesuchDokumentStatusChangeEvent trigger) {
+        super(trigger, GesuchDokument.class);
     }
 
+    public static GesuchDokumentstatusChangeEventTrigger createTrigger(GesuchDokumentStatusChangeEvent trigger) {
+        return new GesuchDokumentstatusChangeEventTrigger(trigger);
+    }
 }

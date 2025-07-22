@@ -32,7 +32,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -217,16 +217,16 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
 
         // arrange
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AUSSTEHEND);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
 
         // act
@@ -238,8 +238,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          * check for ABGELEHNTE GesuchDokuments as well
          */
         // arrange
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.ABGELEHNT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.ABGELEHNT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
@@ -267,7 +267,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          * check that all files have been processed by SB
          */
         // arrange
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokumentOfTranche1.setDokumente(List.of(new Dokument()));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -280,7 +280,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuchDokumentOfTranche2.setDokumente(List.of());
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
@@ -300,8 +300,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         Mockito.doNothing().when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         // act
         var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
@@ -310,8 +310,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.ABGELEHNT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.ABGELEHNT);
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
@@ -323,8 +323,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
@@ -337,8 +337,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         Mockito.doThrow(ValidationsException.class).when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(Dokumentstatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert

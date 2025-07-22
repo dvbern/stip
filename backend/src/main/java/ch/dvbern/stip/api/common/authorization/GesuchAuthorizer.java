@@ -97,7 +97,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (

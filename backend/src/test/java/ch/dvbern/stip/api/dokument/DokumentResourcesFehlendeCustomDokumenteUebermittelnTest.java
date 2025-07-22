@@ -27,7 +27,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -262,7 +262,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(dok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente(), is(empty()));
 
         var customDok = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
@@ -274,7 +274,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(customDok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(customDok.getValue().getDokumente(), is(empty()));
     }
 
@@ -337,7 +337,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(dok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
 
         customDok = dokumentApiSpec.getCustomGesuchDokumentForTypGS()
@@ -365,7 +365,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(customDok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
 
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
@@ -458,7 +458,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .body()
             .as(NullableGesuchDokumentDto.class);
 
-        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(dok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(dok.getValue().getDokumente(), is(empty()));
 
         customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
@@ -470,7 +470,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(customDok.getValue().getStatus(), is(GesuchDokumentStatus.AUSSTEHEND));
         assertThat(customDok.getValue().getDokumente(), is(empty()));
     }
 
@@ -559,7 +559,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .body()
             .as(NullableGesuchDokumentDto.class);
 
-        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(dok.getValue().getStatus(), is(GesuchDokumentStatus.AKZEPTIERT));
         assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
 
         customDok = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
@@ -571,7 +571,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(NullableGesuchDokumentDto.class);
-        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(customDok.getValue().getStatus(), is(GesuchDokumentStatus.AKZEPTIERT));
         assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
     }
 
