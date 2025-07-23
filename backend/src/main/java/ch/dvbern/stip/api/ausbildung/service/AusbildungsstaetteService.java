@@ -31,6 +31,7 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -129,6 +130,9 @@ public class AusbildungsstaetteService {
     @Transactional
     public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(final UUID ausbildungsstaetteId) {
         final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        if (Objects.nonNull(ausbildungsstaette.getChShis())) {
+            throw new ForbiddenException("Can't set ausbildungsstaette inaktiv that was not user created");
+        }
         ausbildungsstaette.setAktiv(false);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }

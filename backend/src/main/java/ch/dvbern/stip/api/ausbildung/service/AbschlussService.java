@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -124,6 +125,9 @@ public class AbschlussService {
     @Transactional
     public AbschlussDto setAbschlussInaktiv(final UUID abschlussId) {
         final var abschluss = abschlussRepository.requireById(abschlussId);
+        if (abschluss.getAusbildungskategorie() != Ausbildungskategorie.BRUECKENANGEBOT) {
+            throw new ForbiddenException("Can't set abschluss inaktiv that was not user created");
+        }
         abschluss.setAktiv(false);
         return abschlussMapper.toDto(abschluss);
     }
