@@ -279,7 +279,7 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .setAbschluss(new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSMATURITAET));
+            .setAbschluss(new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET));
         // Test Ausbildung Validation for BFS value = 4: both true/false valid
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()

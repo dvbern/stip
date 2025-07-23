@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.Objects;
-import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import jakarta.validation.ConstraintValidator;
@@ -26,8 +25,6 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class AusbildungBesuchtBMSValidationConstraintValidator
     implements ConstraintValidator<AusbildungBesuchtBMSValidationConstraint, Ausbildung> {
-
-    public static final Set<Integer> VALID_BFS_VALUES_FOR_BMS_FLAG = Set.of(4, 5);
 
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
@@ -39,7 +36,7 @@ public class AusbildungBesuchtBMSValidationConstraintValidator
         }
         final var abschluss = ausbildung.getAusbildungsgang().getAbschluss();
 
-        if (abschluss.getZusatzfrage() == AbschlussZusatzfrage.BERUFSMATURITAET) {
+        if (abschluss.getZusatzfrage() == AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET) {
             // both values (true/false) are valid for BMS flag
             return true;
         }

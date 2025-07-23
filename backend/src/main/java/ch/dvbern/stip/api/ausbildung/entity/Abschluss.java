@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
@@ -98,5 +99,5 @@ public class Abschluss extends AbstractMandantEntity {
     private boolean aktiv = true;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "abschluss")
-    private List<Ausbildungsgang> ausbildungsgaenge;
+    private List<Ausbildungsgang> ausbildungsgaenge = new ArrayList<>();
 }
