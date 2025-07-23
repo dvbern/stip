@@ -15,17 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import jakarta.ws.rs.BadRequestException;
+import ch.dvbern.stip.api.sap.service.SapService;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-public interface GesuchStatusStateChangeHandler
-    extends StateChangeHandler<Gesuchstatus, GesuchStatusChangeEvent, Gesuch> {
-    default void illegalHandleCall() {
-        throw new BadRequestException();
+@ApplicationScoped
+@Slf4j
+@RequiredArgsConstructor
+public class StipendienAnspruchHandler implements GesuchStatusChangeHandler {
+    private final SapService sapService;
+
+    @Override
+    public void handle(Gesuch gesuch) {
+        sapService.createInitialAuszahlungOrGetStatus(
+            gesuch.getId()
+        );
     }
 }

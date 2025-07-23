@@ -15,18 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.type;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
+import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 
-public enum Dokumentstatus {
-    AUSSTEHEND,
-    ABGELEHNT,
-    AKZEPTIERT;
-
-    public static final Set<Dokumentstatus> GESUCHSTELLER_CAN_UPLOAD_DOKUMENT = Collections.unmodifiableSet(
-        EnumSet.of(AUSSTEHEND)
-    );
+public interface GesuchStatusChangeHandler extends StateChangeHandler<Gesuch> {
 }

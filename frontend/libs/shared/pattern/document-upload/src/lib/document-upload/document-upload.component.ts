@@ -3,8 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  OnInit,
   computed,
+  effect,
   inject,
   input,
   output,
@@ -45,7 +45,7 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UploadStore],
 })
-export class SharedPatternDocumentUploadComponent implements OnInit {
+export class SharedPatternDocumentUploadComponent {
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
   private uploadStore = inject(UploadStore);
@@ -85,17 +85,17 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
         this.handleDokumentChange(initialDokumente, dokument);
       });
-  }
 
-  ngOnInit() {
-    const initialDocuments = this.optionsSig()?.initialDokumente;
+    effect(() => {
+      const options = this.optionsSig();
+      const initialDocuments = options?.initialDokumente;
 
-    if (initialDocuments) {
-      this.uploadStore.setInitialDocuments(initialDocuments);
-    } else {
-      // Only load the documents with the initial required options, not on every change with for example an effect
-      this.uploadStore.loadDocuments(this.optionsSig());
-    }
+      if (initialDocuments) {
+        this.uploadStore.setInitialDocuments(initialDocuments);
+      } else {
+        this.uploadStore.loadDocuments(options);
+      }
+    });
   }
 
   openDialog(): void {

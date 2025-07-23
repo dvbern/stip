@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -83,7 +83,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         }
 
         final var dokument = dokumentOpt.get();
-        if (Dokumentstatus.GESUCHSTELLER_CAN_UPLOAD_DOKUMENT.contains(dokument.getStatus())) {
+        if (GesuchDokumentStatus.GESUCHSTELLER_CAN_UPLOAD_DOKUMENT.contains(dokument.getStatus())) {
             return;
         }
 
@@ -125,7 +125,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final var gesuchTranche = gesuchDokument.getGesuchTranche();
 
         assertGsCanModifyDokumentOfTranche(gesuchTranche.getId());
-        if (gesuchDokument.getStatus() == Dokumentstatus.AUSSTEHEND) {
+        if (gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND) {
             return;
         }
 

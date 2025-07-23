@@ -20,26 +20,17 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusStateChangeHandler {
+public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchService gesuchService;
 
     @Override
-    public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
-        return transition.getDestination() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE;
-    }
-
-    @Override
     public void handle(
-        Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         GesuchTranche gesuchTranche
     ) {
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuchTranche.getGesuch());

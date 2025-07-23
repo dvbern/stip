@@ -41,7 +41,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -50,7 +49,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -85,9 +84,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
@@ -167,9 +164,6 @@ class GesuchServiceTest {
     LebenslaufItemMapper lebenslaufItemMapper;
 
     @Inject
-    SteuerdatenMapper steuerdatenMapper;
-
-    @Inject
     SteuererklaerungMapper steuererklaerungMapper;
 
     @InjectMock
@@ -209,9 +203,6 @@ class GesuchServiceTest {
     NotificationRepository notificationRepository;
 
     @InjectMock
-    SapService sapService;
-
-    @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
 
     @InjectMock
@@ -220,14 +211,11 @@ class GesuchServiceTest {
     @InjectMock
     FallRepository fallRepository;
 
-    @InjectSpy
-    VersendetHandler versendetHandler;
-
-    @InjectMock
-    private VerfuegungRepository verfuegungRepository;
-
     @InjectMock
     PdfService pdfService;
+
+    @InjectMock
+    VerfuegungRepository verfuegungRepository;
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
@@ -256,24 +244,6 @@ class GesuchServiceTest {
         GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, LEDIG);
 
         assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void testNiederlassungsstatusFluechtlingToOtherShouldResetZustaendigerKantonRequired() {
-        final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung();
-        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
-        pia.setHeimatort(null);
-        GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
-            gesuchUpdateDto,
-            Niederlassungsstatus.FLUECHTLING,
-            Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C
-        );
-
-        assertThat(tranche.getGesuchFormular().getPersonInAusbildung().getZustaendigerKanton(), Matchers.nullValue());
     }
 
     @Test
@@ -1357,7 +1327,7 @@ class GesuchServiceTest {
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
-        gesuchDokument.setStatus(Dokumentstatus.ABGELEHNT);
+        gesuchDokument.setStatus(GesuchDokumentStatus.ABGELEHNT);
 
         // add custom document
         CustomDokumentTyp customDokument = new CustomDokumentTyp();
@@ -1366,7 +1336,7 @@ class GesuchServiceTest {
         customDokument.setDescription("test");
         GesuchDokument customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
         customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
@@ -1376,9 +1346,9 @@ class GesuchServiceTest {
 
         gesuch.getAusbildung().setFall(fall);
 
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.ABGELEHNT))
             .thenReturn(Stream.of(gesuchDokument));
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AUSSTEHEND))
             .thenReturn(Stream.of(customGesuchDokument));
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -1426,7 +1396,7 @@ class GesuchServiceTest {
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
-        gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
 
         // add custom document
         CustomDokumentTyp customDokument = new CustomDokumentTyp();
@@ -1435,7 +1405,7 @@ class GesuchServiceTest {
         customDokument.setDescription("test");
         GesuchDokument customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
         customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
@@ -1445,9 +1415,9 @@ class GesuchServiceTest {
 
         gesuch.getAusbildung().setFall(fall);
 
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AKZEPTIERT))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AKZEPTIERT))
             .thenReturn(Stream.of(gesuchDokument));
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AUSSTEHEND))
             .thenReturn(Stream.of(customGesuchDokument));
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);

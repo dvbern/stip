@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid UUID gesuchTrancheId;
   private @Valid UUID gesuchDokumentId;
-  private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus;
+  private @Valid ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus;
   private @Valid String kommentar;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
@@ -70,19 +70,19 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentKommentarDto dokumentStatus(ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus) {
+  public GesuchDokumentKommentarDto dokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
     this.dokumentStatus = dokumentStatus;
     return this;
   }
 
   
   @JsonProperty("dokumentStatus")
-  public ch.dvbern.stip.api.dokument.type.Dokumentstatus getDokumentStatus() {
+  public ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus getDokumentStatus() {
     return dokumentStatus;
   }
 
   @JsonProperty("dokumentStatus")
-  public void setDokumentStatus(ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus) {
+  public void setDokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
     this.dokumentStatus = dokumentStatus;
   }
 
