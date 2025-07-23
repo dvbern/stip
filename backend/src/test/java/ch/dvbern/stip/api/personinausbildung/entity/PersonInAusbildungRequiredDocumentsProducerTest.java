@@ -78,11 +78,35 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfNiederlassungsstatusFluechtling() {
-        formular.setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING));
+    void requiresIfNiederlassungsstatusVorlaeufigAufgenommen_AndererKatnon() {
+        formular.setPersonInAusbildung(
+            createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON)
+        );
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        );
+    }
+
+    @Test
+    void requiresIfNiederlassungsstatusVorlaeufigAufgenommen_Mandant() {
+        formular.setPersonInAusbildung(
+            createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
+        );
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        );
+    }
+
+    @Test
+    void requiresIfNiederlassungsstatusVorlaeufigAufgenommen_OhneFluechtlingsstatus() {
+        formular.setPersonInAusbildung(
+            createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
+        );
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
         );
     }
 

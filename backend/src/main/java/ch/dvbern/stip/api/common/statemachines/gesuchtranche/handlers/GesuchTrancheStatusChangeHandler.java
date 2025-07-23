@@ -15,21 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchtranche.service;
+package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
+import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 
-public final class GesuchTrancheStatusChangeEventTriggerWithComment
-extends TriggerWithParameters2<GesuchTranche, String, GesuchTrancheStatusChangeEvent> {
-    private GesuchTrancheStatusChangeEventTriggerWithComment(GesuchTrancheStatusChangeEvent underlyingTrigger) {
-        super(underlyingTrigger, GesuchTranche.class, String.class);
-    }
-
-    public static GesuchTrancheStatusChangeEventTriggerWithComment createTrigger(
-        GesuchTrancheStatusChangeEvent trigger
-    ) {
-        return new GesuchTrancheStatusChangeEventTriggerWithComment(trigger);
-    }
+public interface GesuchTrancheStatusChangeHandler extends StateChangeHandler<GesuchTranche> {
 }

@@ -15,13 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
+package ch.dvbern.stip.api.dokument.service;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public interface GesuchTrancheStatusStateChangeHandler
-    extends StateChangeHandler<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent, GesuchTranche> {
+public class GesuchDokumentstatusChangeEventTrigger
+extends TriggerWithParameters1<GesuchDokument, GesuchDokumentStatusChangeEvent> {
+    private GesuchDokumentstatusChangeEventTrigger(GesuchDokumentStatusChangeEvent trigger) {
+        super(trigger, GesuchDokument.class);
+    }
+
+    public static GesuchDokumentstatusChangeEventTrigger createTrigger(GesuchDokumentStatusChangeEvent trigger) {
+        return new GesuchDokumentstatusChangeEventTrigger(trigger);
+    }
 }

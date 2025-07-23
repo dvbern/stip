@@ -15,51 +15,33 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
-
-import java.util.Set;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class AenderungFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusStateChangeHandler {
+public class GesuchFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;
     private final MailService mailService;
     private final GesuchService gesuchService;
 
-    private static final Set<GesuchStatusChangeEvent> POSSIBLE_TRIGGERS = Set.of(
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
-        GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
-    );
-    private static final Set<Gesuchstatus> POSSIBLE_DESTINATIONS =
-        Set.of(Gesuchstatus.STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
-
-    @Override
-    public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getSource() == Gesuchstatus.FEHLENDE_DOKUMENTE
-        && POSSIBLE_TRIGGERS.contains(transition.getTrigger())
-        && POSSIBLE_DESTINATIONS.contains(transition.getDestination());
-    }
-
     @Transactional
     @Override
-    public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        if (!gesuch.isVerfuegt()) {
+    public void handle(Gesuch gesuch) {
+        if (gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
         gesuch.setNachfristDokumente(null);
+        gesuch.setEinreichedatum(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }

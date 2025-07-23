@@ -95,7 +95,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
@@ -180,7 +179,7 @@ class GesuchValidatorTest {
     @CsvSource(
         {
             // niederlassungsstatus | zustaendigerKanton
-            "FLUECHTLING,",
+            "VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,",
             "NIEDERLASSUNGSBEWILLIGUNG_C,BERN"
         }
     )
@@ -190,9 +189,7 @@ class GesuchValidatorTest {
     ) {
         String[] constraintMessages =
             { VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
-                VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE,
-                VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE
-            };
+                VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         // Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
@@ -205,7 +202,6 @@ class GesuchValidatorTest {
         personInAusbildung.setHeimatort("");
         // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
         personInAusbildung.setNiederlassungsstatus(niederlassungsstatus);
-        personInAusbildung.setZustaendigerKanton(zustaendigerKanton);
 
         Gesuch gesuch = prepareDummyGesuch();
         gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);

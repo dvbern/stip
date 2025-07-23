@@ -45,7 +45,6 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   private @Valid Boolean vormundschaft;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
-  private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton;
   private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
 
   /**
@@ -465,24 +464,6 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public PersonInAusbildungUpdateDto zustaendigerKanton(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton) {
-    this.zustaendigerKanton = zustaendigerKanton;
-    return this;
-  }
-
-  
-  @JsonProperty("zustaendigerKanton")
-  public ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton getZustaendigerKanton() {
-    return zustaendigerKanton;
-  }
-
-  @JsonProperty("zustaendigerKanton")
-  public void setZustaendigerKanton(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton zustaendigerKanton) {
-    this.zustaendigerKanton = zustaendigerKanton;
-  }
-
-  /**
-   **/
   public PersonInAusbildungUpdateDto zustaendigeKESB(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB) {
     this.zustaendigeKESB = zustaendigeKESB;
     return this;
@@ -531,13 +512,12 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
         Objects.equals(this.vormundschaft, personInAusbildungUpdate.vormundschaft) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzPLZ) &&
-        Objects.equals(this.zustaendigerKanton, personInAusbildungUpdate.zustaendigerKanton) &&
         Objects.equals(this.zustaendigeKESB, personInAusbildungUpdate.zustaendigeKESB);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigeKESB);
   }
 
   @Override
@@ -567,7 +547,6 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
     sb.append("    vormundschaft: ").append(toIndentedString(vormundschaft)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
-    sb.append("    zustaendigerKanton: ").append(toIndentedString(zustaendigerKanton)).append("\n");
     sb.append("    zustaendigeKESB: ").append(toIndentedString(zustaendigeKESB)).append("\n");
     sb.append("}");
     return sb.toString();
