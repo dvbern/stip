@@ -31,8 +31,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungsgangDtoSpec.JSON_PROPERTY_ID,
-  AusbildungsgangDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
-  AusbildungsgangDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_ID,
   AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_DE,
   AusbildungsgangDtoSpec.JSON_PROPERTY_ABSCHLUSS_BEZEICHNUNG_FR,
@@ -48,12 +46,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsgangDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
-
-  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
-  private String bezeichnungDe;
-
-  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
-  private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_ABSCHLUSS_ID = "abschlussId";
   private UUID abschlussId;
@@ -108,58 +100,6 @@ public class AusbildungsgangDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
-  }
-
-
-  public AusbildungsgangDtoSpec bezeichnungDe(String bezeichnungDe) {
-    
-    this.bezeichnungDe = bezeichnungDe;
-    return this;
-  }
-
-   /**
-   * Get bezeichnungDe
-   * @return bezeichnungDe
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-  }
-
-
-  public AusbildungsgangDtoSpec bezeichnungFr(String bezeichnungFr) {
-    
-    this.bezeichnungFr = bezeichnungFr;
-    return this;
-  }
-
-   /**
-   * Get bezeichnungFr
-   * @return bezeichnungFr
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
   }
 
 
@@ -406,8 +346,6 @@ public class AusbildungsgangDtoSpec {
     }
     AusbildungsgangDtoSpec ausbildungsgang = (AusbildungsgangDtoSpec) o;
     return Objects.equals(this.id, ausbildungsgang.id) &&
-        Objects.equals(this.bezeichnungDe, ausbildungsgang.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgang.bezeichnungFr) &&
         Objects.equals(this.abschlussId, ausbildungsgang.abschlussId) &&
         Objects.equals(this.abschlussBezeichnungDe, ausbildungsgang.abschlussBezeichnungDe) &&
         Objects.equals(this.abschlussBezeichnungFr, ausbildungsgang.abschlussBezeichnungFr) &&
@@ -421,7 +359,7 @@ public class AusbildungsgangDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungskategorie, bildungsrichtung, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv);
+    return Objects.hash(id, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungskategorie, bildungsrichtung, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv);
   }
 
   @Override
@@ -429,8 +367,6 @@ public class AusbildungsgangDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsgangDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
     sb.append("    abschlussBezeichnungDe: ").append(toIndentedString(abschlussBezeichnungDe)).append("\n");
     sb.append("    abschlussBezeichnungFr: ").append(toIndentedString(abschlussBezeichnungFr)).append("\n");

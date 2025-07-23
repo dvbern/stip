@@ -5491,9 +5491,8 @@ components:
         - LEHRE
     AbschlussZusatzfrage:
       enum:
-        - BERUFSBEZEICHNUNG
+        - BERUFSBEZEICHNUNG_BERUFSMATURITAET
         - FACHRICHTUNG
-        - BERUFSMATURITAET
     AbschlussSortColumn:
       enum:
         - AUSBILDUNGSKATEGORIE
@@ -5620,8 +5619,6 @@ components:
       type: object
       required:
         - id
-        - bezeichnungDe
-        - bezeichnungFr
         - abschlussId
         - abschlussBezeichnungDe
         - abschlussBezeichnungFr
@@ -5634,10 +5631,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        bezeichnungDe:
-          type: string
-        bezeichnungFr:
-          type: string
         abschlussId:
           $ref: '#/components/schemas/UUID'
         abschlussBezeichnungDe:
@@ -5690,6 +5683,8 @@ components:
           type: string
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
     AusbildungsstaetteSlim:
       type: object
       required:

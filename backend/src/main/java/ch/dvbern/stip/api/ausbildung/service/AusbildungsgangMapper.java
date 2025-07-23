@@ -59,8 +59,6 @@ public abstract class AusbildungsgangMapper {
         return ausbildungsstaetteService.requireById(ausbildungsstaetteId);
     }
 
-    @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")
-    @Mapping(target = "bezeichnungFr", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungFr")
     @Mapping(target = "abschlussId", source = "abschluss.id")
     @Mapping(target = "abschlussBezeichnungDe", source = "abschluss.bezeichnungDe")
     @Mapping(target = "abschlussBezeichnungFr", source = "abschluss.bezeichnungFr")
@@ -71,17 +69,7 @@ public abstract class AusbildungsgangMapper {
     @Mapping(target = "bildungsrichtung", source = "abschluss.bildungsrichtung")
     public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
 
-    @Mapping(target = "bezeichnungDe", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungDe")
-    @Mapping(target = "bezeichnungFr", source = ".", qualifiedByName = "getAusbildungsgangBezeichnungFr")
+    @Mapping(target = "bezeichnungDe", source = "abschluss.bezeichnungDe")
+    @Mapping(target = "bezeichnungFr", source = "abschluss.bezeichnungFr")
     public abstract AusbildungsgangSlimDto toSlimDto(Ausbildungsgang ausbildungsgang);
-
-    @Named("getAusbildungsgangBezeichnungDe")
-    public String getAusbildungsgangBezeichnungDe(Ausbildungsgang ausbildungsgang) {
-        return ausbildungsgang.getAbschluss().getBezeichnungDe();
-    }
-
-    @Named("getAusbildungsgangBezeichnungFr")
-    public String getAusbildungsgangBezeichnungFr(Ausbildungsgang ausbildungsgang) {
-        return ausbildungsgang.getAbschluss().getBezeichnungFr();
-    }
 }

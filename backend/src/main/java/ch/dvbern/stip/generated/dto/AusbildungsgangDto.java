@@ -21,8 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungsgangDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
   private @Valid UUID abschlussId;
   private @Valid String abschlussBezeichnungDe;
   private @Valid String abschlussBezeichnungFr;
@@ -50,44 +48,6 @@ public class AusbildungsgangDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto bezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-    return this;
-  }
-
-  
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
-  }
-
-  @JsonProperty("bezeichnungDe")
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto bezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
-    return this;
-  }
-
-  
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
-  }
-
-  @JsonProperty("bezeichnungFr")
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
   }
 
   /**
@@ -270,8 +230,6 @@ public class AusbildungsgangDto  implements Serializable {
     }
     AusbildungsgangDto ausbildungsgang = (AusbildungsgangDto) o;
     return Objects.equals(this.id, ausbildungsgang.id) &&
-        Objects.equals(this.bezeichnungDe, ausbildungsgang.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgang.bezeichnungFr) &&
         Objects.equals(this.abschlussId, ausbildungsgang.abschlussId) &&
         Objects.equals(this.abschlussBezeichnungDe, ausbildungsgang.abschlussBezeichnungDe) &&
         Objects.equals(this.abschlussBezeichnungFr, ausbildungsgang.abschlussBezeichnungFr) &&
@@ -285,7 +243,7 @@ public class AusbildungsgangDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv, ausbildungskategorie, bildungsrichtung);
+    return Objects.hash(id, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv, ausbildungskategorie, bildungsrichtung);
   }
 
   @Override
@@ -294,8 +252,6 @@ public class AusbildungsgangDto  implements Serializable {
     sb.append("class AusbildungsgangDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
     sb.append("    abschlussBezeichnungDe: ").append(toIndentedString(abschlussBezeichnungDe)).append("\n");
     sb.append("    abschlussBezeichnungFr: ").append(toIndentedString(abschlussBezeichnungFr)).append("\n");
