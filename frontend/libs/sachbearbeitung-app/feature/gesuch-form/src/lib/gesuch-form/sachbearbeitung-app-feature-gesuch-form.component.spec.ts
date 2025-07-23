@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 import { initial } from '@dv/shared/util/remote-data';
 
 import { SachbearbeitungAppFeatureGesuchFormComponent } from './sachbearbeitung-app-feature-gesuch-form.component';
@@ -32,7 +32,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
             configs: {},
           },
         }),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
       ],
       imports: [SachbearbeitungAppFeatureGesuchFormComponent],
     }).compileComponents();

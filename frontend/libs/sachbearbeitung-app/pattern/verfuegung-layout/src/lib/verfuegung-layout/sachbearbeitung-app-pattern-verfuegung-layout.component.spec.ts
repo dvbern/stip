@@ -8,7 +8,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SachbearbeitungAppPatternVerfuegungLayoutComponent } from './sachbearbeitung-app-pattern-verfuegung-layout.component';
 
@@ -43,7 +43,7 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
             configs: {},
           },
         }),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
       ],
     }).compileComponents();
 

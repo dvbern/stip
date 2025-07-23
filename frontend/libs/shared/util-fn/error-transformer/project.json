@@ -16,10 +16,10 @@
       "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/util-fn/error-transformer/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/util-fn/error-transformer"
       }
     }
   }

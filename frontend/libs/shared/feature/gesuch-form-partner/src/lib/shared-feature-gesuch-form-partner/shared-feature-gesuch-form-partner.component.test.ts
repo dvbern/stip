@@ -12,7 +12,7 @@ import {
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
   provideSharedOAuthServiceWithGesuchstellerJWT,
-} from '@dv/shared/pattern/jest-test-setup';
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import {
   checkMatCheckbox,

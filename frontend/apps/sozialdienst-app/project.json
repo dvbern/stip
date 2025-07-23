@@ -125,10 +125,10 @@
       "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "apps/sozialdienst-app/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/apps/sozialdienst-app"
       }
     },
     "serve-static": {

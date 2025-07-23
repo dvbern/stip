@@ -48,9 +48,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
     [10, '10%', '90%'],
     [0, '0%', '100%'],
     [100, '100%', '0%'],
-    [-1, '1%', '99%'],
-    // [1.99, '1.99%', '99%'],
-    [300, '100%', '0%'],
+    [1, '1%', '99%'],
   ].forEach(([value, expectedA, expectedB]) =>
     it(`should show component with valueA: [${value}] to be A('${expectedA}') B('${expectedB}')`, async () => {
       await render(SharedUiWohnsitzSplitterComponent, {

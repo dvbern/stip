@@ -13,10 +13,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/ui/replace-app-type/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/ui/replace-app-type"
       }
     },
     "lint": {

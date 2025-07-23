@@ -17,9 +17,9 @@ import {
 import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
-  provideSharedPatternJestTestAusbildungstaetten,
-  provideSharedPatternJestTestSetup,
-} from '@dv/shared/pattern/jest-test-setup';
+  provideSharedPatternVitestTestAusbildungstaetten,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
@@ -57,8 +57,8 @@ async function setup(formular: GesuchFormular) {
         },
       }),
       provideMaterialDefaultOptions(),
-      provideSharedPatternJestTestSetup(),
-      provideSharedPatternJestTestAusbildungstaetten(),
+      provideSharedPatternVitestTestSetup(),
+      provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
     ],
   });

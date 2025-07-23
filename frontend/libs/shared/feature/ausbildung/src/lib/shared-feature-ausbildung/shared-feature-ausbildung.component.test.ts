@@ -9,9 +9,9 @@ import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { Ausbildung, AusbildungService } from '@dv/shared/model/gesuch';
 import {
-  provideSharedPatternJestTestAusbildungstaetten,
-  provideSharedPatternJestTestSetup,
-} from '@dv/shared/pattern/jest-test-setup';
+  provideSharedPatternVitestTestAusbildungstaetten,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import {
   checkMatCheckbox,
@@ -62,11 +62,11 @@ async function setup() {
         },
       }),
       provideMaterialDefaultOptions(),
-      provideSharedPatternJestTestSetup({
+      provideSharedPatternVitestTestSetup({
         appType: 'sachbearbeitung-app',
         authClientId: 'stip-sachbearbeitung-app',
       }),
-      provideSharedPatternJestTestAusbildungstaetten(),
+      provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
       AusbildungStore,
     ],
@@ -76,13 +76,13 @@ async function setup() {
 describe(SharedFeatureAusbildungComponent.name, () => {
   describe('form validity', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
-      jest.setSystemTime(new Date('2019-02-01'));
+      vitest.useFakeTimers();
+      vitest.setSystemTime(new Date('2019-02-01'));
     });
 
     afterEach(() => {
-      jest.runOnlyPendingTimers();
-      jest.useRealTimers();
+      vitest.runOnlyPendingTimers();
+      vitest.useRealTimers();
     });
 
     it('should be invalid if begin is not a date', async () => {

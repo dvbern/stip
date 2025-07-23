@@ -25,7 +25,7 @@ export function extendTestSetupSwc(tree: Tree, options: NormalizedSchema) {
 }
 
 export function extendJestConfigSwc(tree: Tree, options: NormalizedSchema) {
-  const jestConfigPath = `${options.projectRoot}/jest.config.ts`;
+  const jestConfigPath = `${options.projectRoot}/vite.config.mts`;
 
   const jestConfigContent = tree.read(jestConfigPath, 'utf-8');
 

@@ -7,7 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import { success } from '@dv/shared/util/remote-data';
 
@@ -17,14 +17,14 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   let component: SachbearbeitungAppPatternGesuchHeaderComponent;
   let fixture: ComponentFixture<SachbearbeitungAppPatternGesuchHeaderComponent>;
   const setStatus$ = {
-    SET_TO_BEARBEITUNG: jest.fn(),
-    EINGEREICHT: jest.fn(),
-    BEARBEITUNG_ABSCHLIESSEN: jest.fn(),
-    BEREIT_FUER_BEARBEITUNG: jest.fn(),
-    NEGATIVE_VERFUEGUNG_ERSTELLEN: jest.fn(),
-    VERFUEGT: jest.fn(),
-    VERSENDET: jest.fn(),
-    ZURUECKWEISEN: jest.fn(),
+    SET_TO_BEARBEITUNG: vitest.fn(),
+    EINGEREICHT: vitest.fn(),
+    BEARBEITUNG_ABSCHLIESSEN: vitest.fn(),
+    BEREIT_FUER_BEARBEITUNG: vitest.fn(),
+    NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
+    VERFUEGT: vitest.fn(),
+    VERSENDET: vitest.fn(),
+    ZURUECKWEISEN: vitest.fn(),
   } satisfies Record<StatusUebergang, unknown>;
 
   beforeEach(async () => {
@@ -43,7 +43,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
             },
           },
         }),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         {
           provide: MatDialog,
           useValue: {

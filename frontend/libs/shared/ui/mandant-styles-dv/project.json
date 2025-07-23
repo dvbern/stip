@@ -13,10 +13,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/ui/mandant-styles-dv/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/ui/mandant-styles-dv"
       }
     },
     "lint": {

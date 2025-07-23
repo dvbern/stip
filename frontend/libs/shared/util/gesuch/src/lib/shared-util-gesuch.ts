@@ -7,6 +7,7 @@ import {
   filter,
   map,
   startWith,
+  tap,
 } from 'rxjs';
 
 import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
@@ -21,10 +22,15 @@ export function getLatestGesuchIdFromGesuch$(
   viewSig: Signal<{ gesuch?: { id: string } | null; gesuchId?: string }>,
 ) {
   return toObservable(viewSig).pipe(
+    tap((x) => console.log('getLatestGesuchIdFromGesuch$ 1', x)),
     map((view) => view.gesuch?.id ?? view.gesuchId),
+    tap((x) => console.log('getLatestGesuchIdFromGesuch$ 2', x)),
     startWith(viewSig().gesuch?.id),
+    tap((x) => console.log('getLatestGesuchIdFromGesuch$ 3', x)),
     filter(isDefined),
+    tap((x) => console.log('getLatestGesuchIdFromGesuch$ 4', x)),
     distinctUntilChanged(),
+    tap((x) => console.log('getLatestGesuchIdFromGesuch$ 5', x)),
   );
 }
 

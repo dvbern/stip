@@ -14,8 +14,8 @@ import { RolesMap } from '@dv/shared/model/benutzer';
 import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
-  provideSharedPatternJestTestSetup,
-} from '@dv/shared/pattern/jest-test-setup';
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 
 import {
   CreateAusbildungData,
@@ -51,7 +51,7 @@ describe('SharedDialogCreateAusbildungComponent', () => {
           },
         }),
         provideHttpClient(),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },

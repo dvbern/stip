@@ -13,10 +13,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/sachbearbeitung-app/data-access/gesuchsperiode/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/sachbearbeitung-app/data-access/gesuchsperiode"
       }
     }
   }

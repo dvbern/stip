@@ -14,7 +14,7 @@ describe('prepareSteuerjahrValidation', () => {
   ] as const)(
     'should set steuerjahrControl validators and be valid[%s] if current Jahr %s is <= Gesuchjahr %s',
     (valid, current, gesuchjahr) => {
-      jest.useFakeTimers();
+      vitest.useFakeTimers();
       const viewSig = signal({
         gesuch: {
           gesuchsperiode: { gesuchsjahr: { technischesJahr: gesuchjahr } },
@@ -25,7 +25,7 @@ describe('prepareSteuerjahrValidation', () => {
       TestBed.runInInjectionContext(() => {
         prepareSteuerjahrValidation(steuerjahrControl, viewSig).createEffect();
       });
-      jest.runOnlyPendingTimers();
+      vitest.runOnlyPendingTimers();
       expect(steuerjahrControl.valid).toBe(valid);
     },
   );

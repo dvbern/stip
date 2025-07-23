@@ -43,7 +43,7 @@ describe('SharedDataAccessBenutzer Effects', () => {
         prepareCurrentBenutzer$: () => cold('150ms a', { a: {} }),
       } as unknown as BenutzerService;
 
-      jest.spyOn(oauthService, 'hasValidIdToken').mockReturnValue(true);
+      vitest.spyOn(oauthService, 'hasValidIdToken').mockReturnValue(true);
       const eventsMock$ = hot('10ms a', {
         a: SharedDataAccessBenutzerApiEvents.loadCurrentBenutzer(),
       });

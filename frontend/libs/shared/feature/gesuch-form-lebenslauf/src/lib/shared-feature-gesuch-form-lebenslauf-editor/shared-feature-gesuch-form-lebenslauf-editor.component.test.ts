@@ -12,7 +12,7 @@ import {
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
-} from '@dv/shared/pattern/jest-test-setup';
+} from '@dv/shared/pattern/vitest-test-setup';
 import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';

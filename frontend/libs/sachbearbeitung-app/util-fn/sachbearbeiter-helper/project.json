@@ -15,10 +15,10 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/sachbearbeitung-app/util-fn/sachbearbeiter-helper/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/sachbearbeitung-app/util-fn/sachbearbeiter-helper"
       }
     }
   }

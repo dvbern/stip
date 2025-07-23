@@ -79,7 +79,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1560kb"
+              "maximumError": "1600kb"
             },
             {
               "type": "anyComponentStyle",
@@ -126,10 +126,10 @@
       "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "apps/sachbearbeitung-app/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/apps/sachbearbeitung-app"
       }
     },
     "serve-static": {

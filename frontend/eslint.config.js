@@ -292,6 +292,8 @@ module.exports = [
       '.nx',
       '.swc',
       '.angular',
+      '**/vite.config.*.timestamp*',
+      '**/vitest.config.*.timestamp*',
     ],
   },
 ];

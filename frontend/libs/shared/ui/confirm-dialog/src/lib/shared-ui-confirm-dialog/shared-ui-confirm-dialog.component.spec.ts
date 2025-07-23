@@ -16,7 +16,7 @@ class MatDialogRefMock {
   close() {}
 }
 
-const dialogData: ConfirmDialogData = {
+const dialogData: ConfirmDialogData<string> = {
   title: 'title',
   message: 'message',
   confirmText: 'confirmText',

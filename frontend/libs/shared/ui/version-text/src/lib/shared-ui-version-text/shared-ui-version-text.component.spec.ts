@@ -28,16 +28,13 @@ describe('SharedUiVersionTextComponent', () => {
   });
 
   it('should show 2 versions if both are different', () => {
-    component.version = {
+    fixture.componentRef.setInput('version', {
       frontend: '1.0.0',
       backend: '1.0.1',
       sameVersion: false,
-    };
+    });
     fixture.detectChanges();
-    // Jest is not waiting for the next tick, so we need to wait for it
-    setTimeout(() => {
-      expect(fixture.nativeElement.textContent).toContain('Frontend: 1.0.0');
-      expect(fixture.nativeElement.textContent).toContain('Backend: 1.0.1');
-    }, 0);
+    expect(fixture.nativeElement.textContent).toContain('Frontend: 1.0.0');
+    expect(fixture.nativeElement.textContent).toContain('Backend: 1.0.1');
   });
 });

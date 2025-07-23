@@ -13,10 +13,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/sozialdienst-app/pattern/gesuch-step-layout/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/sozialdienst-app/pattern/gesuch-step-layout"
       }
     },
     "lint": {

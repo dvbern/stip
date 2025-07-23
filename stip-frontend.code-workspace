@@ -54,7 +54,6 @@
     },
     "eslint.validate": ["json"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
-    "jest.rootPath": "frontend",
     "tailwindCSS.experimental.classRegex": [
       "HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]",
       "tw([\\s\\S*]*['\"`](.+?)['\"`],?[\\s\\S*]*)"
@@ -139,13 +138,6 @@
     "files.eol": "\n",
     "exportall.config.relExclusion": [],
     "testing.openTesting": "neverOpen",
-    "jest.outputConfig": "neutral",
-    "jest.runMode": {
-      "type": "on-save",
-      "runAllTestsOnStartup": false,
-      "showInlineError": true,
-      "testFileOnly": true
-    },
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     },

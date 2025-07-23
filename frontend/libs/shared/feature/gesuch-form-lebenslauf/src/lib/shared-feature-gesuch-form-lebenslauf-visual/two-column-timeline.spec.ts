@@ -56,7 +56,7 @@ describe('TwoColumnTimeline', () => {
   const dummyItems = createDummyItems();
 
   beforeEach(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {
+    vitest.spyOn(console, 'log').mockImplementation(() => {
       // do nothing
     });
   });

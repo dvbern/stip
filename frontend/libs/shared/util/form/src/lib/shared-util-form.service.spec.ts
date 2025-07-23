@@ -31,8 +31,8 @@ describe('SharedUtilFormService', () => {
   };
 
   beforeEach(async () => {
-    jest.spyOn(wndw, 'addEventListener');
-    jest.spyOn(wndw, 'removeEventListener');
+    vitest.spyOn(wndw, 'addEventListener');
+    vitest.spyOn(wndw, 'removeEventListener');
     await TestBed.configureTestingModule({
       providers: [provideTranslateService()],
       imports: [TestComponent],

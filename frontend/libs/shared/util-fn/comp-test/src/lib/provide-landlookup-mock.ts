@@ -44,7 +44,7 @@ const mockLaender: Land[] = [
 
 // Mock LandLookupService
 const mockLandLookupService = {
-  getCachedLandLookup: jest.fn().mockReturnValue(signal(mockLaender)),
+  getCachedLandLookup: vitest.fn().mockReturnValue(signal(mockLaender)),
 };
 
 export function provideLandLookupMock() {

@@ -12,10 +12,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/model/table/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/model/table"
       }
     }
   }

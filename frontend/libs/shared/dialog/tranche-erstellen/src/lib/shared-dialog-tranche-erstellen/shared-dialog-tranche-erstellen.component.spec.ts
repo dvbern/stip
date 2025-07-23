@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedDialogTrancheErstellenComponent } from './shared-dialog-tranche-erstellen.component';
 
@@ -15,7 +15,7 @@ describe('SharedDialogTrancheErstellenComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SharedDialogTrancheErstellenComponent],
       providers: [
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         provideHttpClient(),
         {
           provide: MAT_DIALOG_DATA,

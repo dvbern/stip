@@ -10,7 +10,7 @@ import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import {
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
-} from '@dv/shared/pattern/jest-test-setup';
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
@@ -18,7 +18,7 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 
 const formularMock = {
   ausbildung: {
-    ausbildungBegin: '01.' + new Date().getFullYear(),
+    ausbildungBegin: `01.${new Date().getFullYear()}`,
   },
 };
 

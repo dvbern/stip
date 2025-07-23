@@ -13,10 +13,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur"
       }
     },
     "lint": {

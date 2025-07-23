@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { AbschlussPhase } from '@dv/shared/model/einreichen';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedFeatureGesuchFormAbschlussComponent } from './shared-feature-gesuch-form-abschluss.component';
 
@@ -41,7 +41,7 @@ async function setup(abschlussPhase: AbschlussPhase) {
         },
       },
       provideHttpClient(),
-      provideSharedPatternJestTestSetup(),
+      provideSharedPatternVitestTestSetup(),
       provideMockStore({
         initialState: {
           gesuchs: {
