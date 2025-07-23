@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
@@ -64,7 +64,7 @@ public class RequiredDokumentUtil {
             .getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
+                gesuchDokument -> !gesuchDokument.getStatus().equals(GesuchDokumentStatus.AKZEPTIERT)
                 && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
             )
             .map(GesuchDokument::getDokumentTyp)
@@ -101,7 +101,7 @@ public class RequiredDokumentUtil {
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                gesuchDokument -> gesuchDokument.getStatus().equals(GesuchDokumentStatus.AUSSTEHEND)
                 && gesuchDokument.getDokumente().isEmpty()
             )
             .count() > 0;
@@ -111,7 +111,7 @@ public class RequiredDokumentUtil {
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
+                gesuchDokument -> gesuchDokument.getStatus().equals(GesuchDokumentStatus.AUSSTEHEND)
                 && !gesuchDokument.getDokumente().isEmpty()
             )
             .count() > 0;
@@ -121,7 +121,7 @@ public class RequiredDokumentUtil {
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.ABGELEHNT)
+                gesuchDokument -> gesuchDokument.getStatus().equals(GesuchDokumentStatus.ABGELEHNT)
             )
             .count() > 0;
     }
@@ -129,6 +129,6 @@ public class RequiredDokumentUtil {
     public boolean allGesuchDokumentsAreAcceptedInTranche(final GesuchTranche gesuchTranche) {
         return gesuchTranche.getGesuchDokuments()
             .stream()
-            .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT));
+            .allMatch(gesuchDokument -> gesuchDokument.getStatus().equals(GesuchDokumentStatus.AKZEPTIERT));
     }
 }

@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -154,7 +154,7 @@ class GesuchFormularServiceTest {
         var gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(tranche);
         gesuchDokument.setDokumentTyp(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
-        gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customDokument.setDokumente(List.of());
         reportDto = gesuchFormularService.validatePages(gesuchFormular);
         assertThat(reportDto.getValidationWarnings().size(), Matchers.is(2));

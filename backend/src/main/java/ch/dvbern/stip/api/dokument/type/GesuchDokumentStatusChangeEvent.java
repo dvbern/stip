@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.type;
 
-public enum DokumentstatusChangeEvent {
+public enum GesuchDokumentStatusChangeEvent {
     AUSSTEHEND,
     ABGELEHNT,
     AKZEPTIERT

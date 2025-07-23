@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -64,7 +64,7 @@ class DocumentsRequiredConstraintValidatorTest {
             GesuchDokument gesuchDokument = new GesuchDokument();
             gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
-            gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
@@ -91,7 +91,7 @@ class DocumentsRequiredConstraintValidatorTest {
             GesuchDokument gesuchDokument = new GesuchDokument();
             gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
-            gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
@@ -105,7 +105,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
         var customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setCustomDokumentTyp(customTyp);
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().add(customGesuchDokument);
         assertFalse(constraintValidator.isValid(formular, null));
     }
@@ -121,7 +121,7 @@ class DocumentsRequiredConstraintValidatorTest {
             GesuchDokument gesuchDokument = new GesuchDokument();
             gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
-            gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
@@ -142,7 +142,7 @@ class DocumentsRequiredConstraintValidatorTest {
             GesuchDokument gesuchDokument = new GesuchDokument();
             gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
-            gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
@@ -160,7 +160,7 @@ class DocumentsRequiredConstraintValidatorTest {
             GesuchDokument gesuchDokument = new GesuchDokument();
             gesuchDokument.addDokument(new Dokument());
             gesuchDokument.setDokumentTyp(dokumentType);
-            gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
             normalGesuchDokuments.add(gesuchDokument);
         });
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(normalGesuchDokuments);
@@ -174,7 +174,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
         var customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setCustomDokumentTyp(customTyp);
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().add(customGesuchDokument);
         assertFalse(constraintValidator.isValid(formular, null));
     }
