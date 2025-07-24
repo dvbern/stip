@@ -10,7 +10,9 @@
  * Do not edit the class manually.
  */
 import { BuchhaltungType } from './buchhaltungType';
+import { Zahlungsverbindung } from './zahlungsverbindung';
 import { SapStatus } from './sapStatus';
+import { SapDelivery } from './sapDelivery';
 
 export interface BuchhaltungEntry { 
     userErstellt: string;
@@ -21,12 +23,13 @@ export interface BuchhaltungEntry {
     rueckforderung?: number;
     saldoAenderung: number;
     saldo: number;
-    sapId?: string;
-    sapStatus?: SapStatus;
     businessPartnerId?: number;
     comment: string;
     verfuegungId?: string;
     gesuchId?: string;
+    zahlungsverbindung?: Zahlungsverbindung;
+    sapStatus?: SapStatus;
+    sapDeliverys?: Array<SapDelivery>;
 }
 
 

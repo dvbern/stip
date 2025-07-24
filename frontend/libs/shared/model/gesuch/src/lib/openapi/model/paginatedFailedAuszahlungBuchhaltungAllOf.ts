@@ -9,20 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NotificationType } from './notificationType';
+import { FailedAuszahlungBuchhaltung } from './failedAuszahlungBuchhaltung';
 
-/**
- * Notification for a Gesuch
- */
-export interface Notification { 
-    notificationText?: string;
-    notificationType: NotificationType;
-    gesuchId: string;
-    contextId?: string;
-    userErstellt: string;
-    timestampErstellt?: string;
-    absender: string;
+export interface PaginatedFailedAuszahlungBuchhaltungAllOf { 
+    entries?: Array<FailedAuszahlungBuchhaltung>;
 }
-
-
 
