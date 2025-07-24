@@ -91,6 +91,7 @@ export function provideSharedPatternCore(
       appRoutes,
       withRouterConfig({
         onSameUrlNavigation: 'reload',
+        paramsInheritanceStrategy: 'always',
       }),
       withComponentInputBinding(),
       withDisabledInitialNavigation(),
