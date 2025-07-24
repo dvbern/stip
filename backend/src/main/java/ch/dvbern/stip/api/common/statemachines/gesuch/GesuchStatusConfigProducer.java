@@ -82,6 +82,7 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.EINGEREICHT)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
                 GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
@@ -100,7 +101,15 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
-        config.configure(Gesuchstatus.ANSPRUCH_PRUEFEN);
+        config.configure(Gesuchstatus.ANSPRUCH_PRUEFEN)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(
+                GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+            )
+            .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
+            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
