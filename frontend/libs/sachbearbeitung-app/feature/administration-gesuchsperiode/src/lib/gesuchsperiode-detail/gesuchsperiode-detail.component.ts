@@ -123,6 +123,10 @@ export class GesuchsperiodeDetailComponent {
     einreichefristNormal: [<string | null>null, [Validators.required]],
     einreichefristReduziert: [<string | null>null, [Validators.required]],
     fristNachreichenDokumente: [<number | null>null, [Validators.required]],
+    stichtagVolljaehrigkeitMedizinischeGrundversorgung: [
+      <string | null>null,
+      [Validators.required],
+    ],
     zweiterAuszahlungsterminMonat: [<number | null>null, [Validators.required]],
     zweiterAuszahlungsterminTag: [<number | null>null, [Validators.required]],
     ausbKosten_SekII: [<string | null>null, [Validators.required]],
@@ -286,6 +290,7 @@ export class GesuchsperiodeDetailComponent {
               'einreichefristNormal',
               'einreichefristReduziert',
               'fristNachreichenDokumente',
+              'stichtagVolljaehrigkeitMedizinischeGrundversorgung',
               'zweiterAuszahlungsterminMonat',
               'zweiterAuszahlungsterminTag',
             ],
