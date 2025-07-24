@@ -28,8 +28,9 @@ import {
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
+import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchUrlType } from '@dv/shared/model/gesuch';
+import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
@@ -73,11 +74,11 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
 
+  isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -169,10 +170,11 @@ export class SharedFeatureGesuchFormTrancheComponent {
         isEditingAenderung && tranche.status !== 'UEBERPRUEFEN';
       const status = useTrancheStatus ? tranche.status : gesuch?.gesuchStatus;
       const type = useTrancheStatus ? 'tranche' : 'contract';
+      const appPrefix = type === 'contract' ? appType : 'shared';
 
       this.form.patchValue({
         status: this.translate.instant(
-          `${appType}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
+          `${appPrefix}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
         ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
@@ -229,6 +231,23 @@ export class SharedFeatureGesuchFormTrancheComponent {
           });
         }
       });
+  }
+
+  updateAenderungVonBis(gesuch: SharedModelGesuch) {
+    const {
+      gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis },
+      gesuchsperiode: { gesuchsperiodeStart, gesuchsperiodeStopp },
+    } = gesuch;
+    SharedDialogTrancheErstellenComponent.open(this.dialog, {
+      type: 'updateAenderungVonBis',
+      id: id,
+      minDate: new Date(gesuchsperiodeStart),
+      maxDate: new Date(gesuchsperiodeStopp),
+      currentGueligAb: new Date(gueltigAb),
+      currentGueligBis: new Date(gueltigBis),
+    })
+      .afterClosed()
+      .subscribe();
   }
 
   async changeAenderungState(

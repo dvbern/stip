@@ -14,6 +14,7 @@ import {
   GesuchTrancheList,
   GesuchTrancheService,
   GesuchTrancheStatus,
+  PatchAenderungsInfoRequest,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
@@ -211,6 +212,36 @@ export class GesuchAenderungStore extends signalStore(
                   onFailure,
                 },
               ),
+            ),
+      ),
+    ),
+  );
+
+  updateAenderungVonBis$ = rxMethod<{
+    aenderungId: string;
+    patchAenderungsInfoRequest: PatchAenderungsInfoRequest;
+    onSuccess: () => void;
+    onFailure: (error: unknown) => void;
+  }>(
+    pipe(
+      switchMap(
+        ({ aenderungId, patchAenderungsInfoRequest, onSuccess, onFailure }) =>
+          this.gesuchTrancheService
+            .patchAenderungInfo$({
+              aenderungId,
+              patchAenderungsInfoRequest,
+            })
+            .pipe(
+              handleApiResponse(() => undefined, {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'shared.dialog.gesuch-aenderung.update-von-bis.success',
+                  });
+                  onSuccess();
+                },
+                onFailure,
+              }),
             ),
       ),
     ),

@@ -3375,6 +3375,38 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllTranchenForGesuchSB
+  '/gesuchtranche/{aenderungId}/patchAenderungInfo':
+    parameters:
+      - name: aenderungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAenderungsInfoRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: patchAenderungInfo
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -6661,6 +6693,13 @@ components:
         comment:
           type: string
     CreateAenderungsantragRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    PatchAenderungsInfoRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
         - type: object

@@ -35,6 +35,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -142,6 +143,13 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public List<GesuchDokumentDto> getGesuchDokumenteSB(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
         return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
+    }
+
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    @Override
+    public GesuchDto patchAenderungInfo(UUID aenderungId, PatchAenderungsInfoRequestDto patchAenderungsInfoRequestDto) {
+        gesuchTrancheAuthorizer.sbCanUpdateGueltigkeitOfAenderung(aenderungId);
+        return gesuchTrancheService.updateGueltigkeitOfAenderung(aenderungId, patchAenderungsInfoRequestDto);
     }
 
     @Override

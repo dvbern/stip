@@ -89,7 +89,7 @@ public class GesuchTrancheCopyUtil {
         return new DateRange(minStartDate, maxEndDate);
     }
 
-    private static DateRange validateAndCreateClampedDateRange(final DateRange gueltigkeit, final Gesuch gesuch) {
+    public static DateRange validateAndCreateClampedDateRange(final DateRange gueltigkeit, final Gesuch gesuch) {
         final var maxRange =
             validateAndCreateDateRange(gueltigkeit.getGueltigAb(), gueltigkeit.getGueltigBis(), gesuch);
 
