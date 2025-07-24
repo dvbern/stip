@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.ausbildung.type;
 
 public enum AbschlussZusatzfrage {
-    BERUFSBEZEICHNUNG,
-    FACHRICHTUNG,
-    BERUFSMATURITAET
+    BERUFSBEZEICHNUNG_BERUFSMATURITAET,
+    FACHRICHTUNG
 }

@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AusbildungsstaetteService {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
+    private final AusbildungsstaetteQueryBuilder ausbildungsstaetteQueryBuilder;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final ConfigService configService;
 
@@ -79,38 +82,38 @@ public class AusbildungsstaetteService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = ausbildungsstaetteRepository.baseQuery();
+        final var baseQuery = ausbildungsstaetteQueryBuilder.baseQuery();
 
         if (Objects.nonNull(nameDe)) {
-            ausbildungsstaetteRepository.nameDeFilter(baseQuery, nameDe);
+            ausbildungsstaetteQueryBuilder.nameDeFilter(baseQuery, nameDe);
         }
         if (Objects.nonNull(nameFr)) {
-            ausbildungsstaetteRepository.nameFrFilter(baseQuery, nameFr);
+            ausbildungsstaetteQueryBuilder.nameFrFilter(baseQuery, nameFr);
         }
         if (Objects.nonNull(chShis)) {
-            ausbildungsstaetteRepository.chShisFilter(baseQuery, chShis);
+            ausbildungsstaetteQueryBuilder.chShisFilter(baseQuery, chShis);
         }
         if (Objects.nonNull(burNo)) {
-            ausbildungsstaetteRepository.burNoFilter(baseQuery, burNo);
+            ausbildungsstaetteQueryBuilder.burNoFilter(baseQuery, burNo);
         }
         if (Objects.nonNull(ctNo)) {
-            ausbildungsstaetteRepository.ctNoFilter(baseQuery, ctNo);
+            ausbildungsstaetteQueryBuilder.ctNoFilter(baseQuery, ctNo);
         }
         if (Objects.nonNull(aktiv)) {
-            ausbildungsstaetteRepository.aktivFilter(baseQuery, aktiv);
+            ausbildungsstaetteQueryBuilder.aktivFilter(baseQuery, aktiv);
         }
 
         // Creating the count query must happen before ordering,
         // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
-        final var countQuery = ausbildungsstaetteRepository.getCountQuery(baseQuery);
+        final var countQuery = ausbildungsstaetteQueryBuilder.getCountQuery(baseQuery);
 
         if (sortColumn != null && sortOrder != null) {
-            ausbildungsstaetteRepository.orderBy(baseQuery, sortColumn, sortOrder);
+            ausbildungsstaetteQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
         } else {
-            ausbildungsstaetteRepository.defaultOrder(baseQuery);
+            ausbildungsstaetteQueryBuilder.defaultOrder(baseQuery);
         }
 
-        ausbildungsstaetteRepository.paginate(baseQuery, page, pageSize);
+        ausbildungsstaetteQueryBuilder.paginate(baseQuery, page, pageSize);
 
         final var results = baseQuery.stream()
             .map(ausbildungsstaetteMapper::toDto)
@@ -127,6 +130,9 @@ public class AusbildungsstaetteService {
     @Transactional
     public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(final UUID ausbildungsstaetteId) {
         final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        if (Objects.nonNull(ausbildungsstaette.getChShis())) {
+            throw new ForbiddenException("Can't set ausbildungsstaette inaktiv that was not user created");
+        }
         ausbildungsstaette.setAktiv(false);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }

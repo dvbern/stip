@@ -151,6 +151,7 @@ export * from './paginatedSozDashboard';
 export * from './paginatedSozDashboardAllOf';
 export * from './partner';
 export * from './partnerUpdate';
+export * from './patchAenderungsInfoRequest';
 export * from './persoenlicheAngaben';
 export * from './persoenlichesBudgetresultat';
 export * from './personInAusbildung';

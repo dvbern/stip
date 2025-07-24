@@ -56,10 +56,16 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
     return this.ausbildungsgaenge.data();
   });
   abschluesseViewSig = computed(() => {
-    return this.abschluesse.data();
+    return preparePaginatedData(this.abschluesse.data(), (e) => ({
+      ...e,
+      canArchive: e.aktiv && e.ausbildungskategorie === 'BRUECKENANGEBOT',
+    }));
   });
   ausbildungsstaettenViewSig = computed(() => {
-    return this.ausbildungsstaetten.data();
+    return preparePaginatedData(this.ausbildungsstaetten.data(), (e) => ({
+      ...e,
+      canArchive: e.aktiv && !e.chShis,
+    }));
   });
 
   loadAvailableAbschluesse$ = rxMethod<void>(
@@ -266,3 +272,15 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
     ),
   );
 }
+
+const preparePaginatedData = <List extends { entries?: unknown[] }, R>(
+  data: List | undefined,
+  mapper: (entry: Exclude<List['entries'], undefined>[number]) => R,
+) => {
+  return data
+    ? {
+        ...data,
+        entries: data.entries?.map(mapper),
+      }
+    : data;
+};

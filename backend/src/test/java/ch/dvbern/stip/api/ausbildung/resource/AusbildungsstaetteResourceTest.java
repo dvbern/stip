@@ -18,7 +18,9 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
 import java.util.Arrays;
+import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -337,8 +339,27 @@ class AusbildungsstaetteResourceTest {
             .body()
             .as(PaginatedAbschlussDto.class);
 
+        final var abschluesse = paginatedAbschlussDto.getEntries();
+
+        final var abschlussCannotSetInaktiv = abschluesse.stream()
+            .filter(abschlussDto -> abschlussDto.getAusbildungskategorie() != Ausbildungskategorie.BRUECKENANGEBOT)
+            .findFirst()
+            .get();
+
+        ausbildungsstaetteApiSpec.setAbschlussInaktiv()
+            .abschlussIdPath(abschlussCannotSetInaktiv.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+
+        final var abschlussCanSetInaktiv = abschluesse.stream()
+            .filter(abschlussDto -> abschlussDto.getAusbildungskategorie() == Ausbildungskategorie.BRUECKENANGEBOT)
+            .findFirst()
+            .get();
+
         final var abschlussDto = ausbildungsstaetteApiSpec.setAbschlussInaktiv()
-            .abschlussIdPath(paginatedAbschlussDto.getEntries().get(0).getId())
+            .abschlussIdPath(abschlussCanSetInaktiv.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -393,8 +414,27 @@ class AusbildungsstaetteResourceTest {
             .body()
             .as(PaginatedAusbildungsstaetteDto.class);
 
+        final var ausbildungsstaetten = paginatedAusbildungsstaetteDto.getEntries();
+
+        final var ausbildungsstaetteCannotSetInaktiv = ausbildungsstaetten.stream()
+            .filter(ausbildungsstaetteDto -> Objects.nonNull(ausbildungsstaetteDto.getChShis()))
+            .findFirst()
+            .get();
+
+        ausbildungsstaetteApiSpec.setAusbildungsstaetteInaktiv()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteCannotSetInaktiv.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+
+        final var ausbildungsstaetteCanSetInaktiv = ausbildungsstaetten.stream()
+            .filter(ausbildungsstaetteDto -> Objects.isNull(ausbildungsstaetteDto.getChShis()))
+            .findFirst()
+            .get();
+
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.setAusbildungsstaetteInaktiv()
-            .ausbildungsstaetteIdPath(paginatedAusbildungsstaetteDto.getEntries().get(0).getId())
+            .ausbildungsstaetteIdPath(ausbildungsstaetteCanSetInaktiv.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

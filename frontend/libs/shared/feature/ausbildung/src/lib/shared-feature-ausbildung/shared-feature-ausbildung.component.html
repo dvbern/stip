@@ -111,9 +111,9 @@
             (valueChange)="handleGangChangedByUser()"
             [placeholder]="'shared.form.select.empty' | translate"
           >
-            @for (l of ausbildungsgangOptionsSig(); track $index) {
-              <mat-option [value]="l.id" [attr.data-testid]="l.bezeichnungDe">
-                {{ l.translatedName }}
+            @for (ausbildungsgang of ausbildungsgangOptionsSig(); track $index) {
+              <mat-option [value]="ausbildungsgang" [attr.data-testid]="ausbildungsgang.bezeichnungDe">
+                {{ ausbildungsgang.translatedName }}
               </mat-option>
             }
           </mat-select>
@@ -143,29 +143,32 @@
 
     <!-- FACHRICHTUNG -->
     <div class="tw-flex tw-w-full tw-gap-2">
-      <mat-form-field class="tw-w-full" dvSharedUiFormField>
-        <mat-label>
-          {{ 'shared.form.ausbildung.fachrichtung.label' | translate }}
-        </mat-label>
-        <input
-          type="text"
-          matInput
-          dvMaxLength
-          formControlName="fachrichtung"
-          data-testid="form-education-fachrichtung"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-      <button
-        type="button"
-        (click)="fachrichtungInfoDialog.toggle()"
-        class="dv-icon-button dv-icon-button-md text-info mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-      >
-        <span class="material-symbols-rounded"> info </span>
-      </button>
+      @let zusatzfrage = form.controls.ausbildungsgang.value?.zusatzfrage;
+      @if (zusatzfrage) {
+        <mat-form-field class="tw-w-full" dvSharedUiFormField>
+          <mat-label>
+            {{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrage | translate }}
+          </mat-label>
+          <input
+            type="text"
+            matInput
+            dvMaxLength
+            formControlName="fachrichtung"
+            data-testid="form-education-fachrichtung"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="fachrichtungInfoDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      }
     </div>
 
     <div class="xl:tw-col-start-3">
@@ -186,14 +189,14 @@
     </div>
 
     <!-- besuchtBMS -->
-    <!-- @if (showBesuchtBMS()) {
+    @if (showBesuchtBMS()) {
       <mat-checkbox
         class="tw-col-span-2 tw-col-start-1 tw-mb-6"
         formControlName="besuchtBMS"
         data-testid="form-education-besuchtBMS"
         >{{ 'shared.form.ausbildung.besuchtBMS.label' | translate }}</mat-checkbox
       >
-    } -->
+    }
 
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">
       <mat-label>

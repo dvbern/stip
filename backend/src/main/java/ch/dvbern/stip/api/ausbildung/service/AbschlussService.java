@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.repo.AbschlussQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AbschlussService {
     private final AbschlussRepository abschlussRepository;
+    private final AbschlussQueryBuilder abschlussQueryBuilder;
     private final AbschlussMapper abschlussMapper;
     private final ConfigService configService;
 
@@ -77,35 +80,35 @@ public class AbschlussService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = abschlussRepository.baseQuery();
+        final var baseQuery = abschlussQueryBuilder.baseQuery();
 
         if (Objects.nonNull(ausbildungskategorie)) {
-            abschlussRepository.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
+            abschlussQueryBuilder.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
         }
         if (Objects.nonNull(bildungsrichtung)) {
-            abschlussRepository.bildungsrichtungFilter(baseQuery, bildungsrichtung);
+            abschlussQueryBuilder.bildungsrichtungFilter(baseQuery, bildungsrichtung);
         }
         if (Objects.nonNull(bezeichnungDe)) {
-            abschlussRepository.bezeichnungDeFilter(baseQuery, bezeichnungDe);
+            abschlussQueryBuilder.bezeichnungDeFilter(baseQuery, bezeichnungDe);
         }
         if (Objects.nonNull(bezeichnungFr)) {
-            abschlussRepository.bezeichnungFrFilter(baseQuery, bezeichnungFr);
+            abschlussQueryBuilder.bezeichnungFrFilter(baseQuery, bezeichnungFr);
         }
         if (Objects.nonNull(aktiv)) {
-            abschlussRepository.aktivFilter(baseQuery, aktiv);
+            abschlussQueryBuilder.aktivFilter(baseQuery, aktiv);
         }
 
         // Creating the count query must happen before ordering,
         // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
-        final var countQuery = abschlussRepository.getCountQuery(baseQuery);
+        final var countQuery = abschlussQueryBuilder.getCountQuery(baseQuery);
 
         if (sortColumn != null && sortOrder != null) {
-            abschlussRepository.orderBy(baseQuery, sortColumn, sortOrder);
+            abschlussQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
         } else {
-            abschlussRepository.defaultOrder(baseQuery);
+            abschlussQueryBuilder.defaultOrder(baseQuery);
         }
 
-        abschlussRepository.paginate(baseQuery, page, pageSize);
+        abschlussQueryBuilder.paginate(baseQuery, page, pageSize);
 
         final var results = baseQuery.stream()
             .map(abschlussMapper::toDto)
@@ -122,6 +125,9 @@ public class AbschlussService {
     @Transactional
     public AbschlussDto setAbschlussInaktiv(final UUID abschlussId) {
         final var abschluss = abschlussRepository.requireById(abschlussId);
+        if (abschluss.getAusbildungskategorie() != Ausbildungskategorie.BRUECKENANGEBOT) {
+            throw new ForbiddenException("Can't set abschluss inaktiv that was not user created");
+        }
         abschluss.setAktiv(false);
         return abschlussMapper.toDto(abschluss);
     }

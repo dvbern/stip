@@ -298,12 +298,20 @@ export class AusbildungsgangComponent
       ausbildungsgang,
       ({ info, translatedInfo, spacer }) => [
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe',
-          'bezeichnungDe',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaetteBezeichnungDe',
+          'ausbildungsstaetteNameDe',
         ),
         info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr',
-          'bezeichnungFr',
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaetteBezeichnungFr',
+          'ausbildungsstaetteNameFr',
+        ),
+        info(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungDe',
+          'abschlussBezeichnungDe',
+        ),
+        info(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungFr',
+          'abschlussBezeichnungFr',
         ),
         spacer(),
         ...(ausbildungsgang.ausbildungskategorie
@@ -322,14 +330,6 @@ export class AusbildungsgangComponent
               ),
             ]
           : []),
-        info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungDe',
-          'abschlussBezeichnungDe',
-        ),
-        info(
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungFr',
-          'abschlussBezeichnungFr',
-        ),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.status',
           `sachbearbeitung-app.feature.administration.ausbildungsstaette.status.${ausbildungsgang.aktiv}`,
