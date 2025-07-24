@@ -3814,9 +3814,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BuchhaltungEntry'
+                $ref: '#/components/schemas/BuchhaltungOverview'
           description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3891,9 +3889,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PaginatedFailedAuszahlungBuchhaltung'
+                $ref: '#/components/schemas/PaginatedFailedAuszahlungBuchhaltung'
           description: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -6773,6 +6769,18 @@ components:
           format: date-time
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
+    BuchhaltungOverview:
+      type: object
+      required:
+        - canRetryAuszahlung
+        - buchhaltungEntrys
+      properties:
+        canRetryAuszahlung:
+          type: boolean
+        buchhaltungEntrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/BuchhaltungEntry'
     BuchhaltungEntry:
       type: object
       required:
