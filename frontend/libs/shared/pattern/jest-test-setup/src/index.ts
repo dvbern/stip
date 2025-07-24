@@ -123,6 +123,7 @@ export function provideSharedPatternJestTestAusbildungstaetten() {
                 bezeichnungFr: 'gang1',
                 id: '1',
                 bildungskategorie: 'SEKUNDARSTUFE_I',
+                zusatzfrage: 'FACHRICHTUNG',
               },
             ],
           },

@@ -30,6 +30,7 @@ public class AusbildungsgangDto  implements Serializable {
   private @Valid Boolean aktiv;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
   /**
    **/
@@ -219,6 +220,24 @@ public class AusbildungsgangDto  implements Serializable {
     this.bildungsrichtung = bildungsrichtung;
   }
 
+  /**
+   **/
+  public AusbildungsgangDto zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+    return this;
+  }
+
+  
+  @JsonProperty("zusatzfrage")
+  public ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage getZusatzfrage() {
+    return zusatzfrage;
+  }
+
+  @JsonProperty("zusatzfrage")
+  public void setZusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -238,12 +257,13 @@ public class AusbildungsgangDto  implements Serializable {
         Objects.equals(this.ausbildungsstaetteNameFr, ausbildungsgang.ausbildungsstaetteNameFr) &&
         Objects.equals(this.aktiv, ausbildungsgang.aktiv) &&
         Objects.equals(this.ausbildungskategorie, ausbildungsgang.ausbildungskategorie) &&
-        Objects.equals(this.bildungsrichtung, ausbildungsgang.bildungsrichtung);
+        Objects.equals(this.bildungsrichtung, ausbildungsgang.bildungsrichtung) &&
+        Objects.equals(this.zusatzfrage, ausbildungsgang.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv, ausbildungskategorie, bildungsrichtung);
+    return Objects.hash(id, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv, ausbildungskategorie, bildungsrichtung, zusatzfrage);
   }
 
   @Override
@@ -261,6 +281,7 @@ public class AusbildungsgangDto  implements Serializable {
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
+    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

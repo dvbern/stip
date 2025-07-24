@@ -5671,6 +5671,8 @@ components:
           type: string
         aktiv:
           type: boolean
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'

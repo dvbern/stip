@@ -211,11 +211,7 @@ describe(SharedFeatureAusbildungComponent.name, () => {
       await checkMatCheckbox(fields.notFound);
       detectChanges();
 
-      for (const field of [
-        fields.alternativ.staette,
-        fields.alternativ.gang,
-        fields.fachrichtung,
-      ]) {
+      for (const field of [fields.alternativ.staette, fields.alternativ.gang]) {
         const fieldEl = getByTestId(field);
 
         expect(fieldEl).toHaveValue('');
