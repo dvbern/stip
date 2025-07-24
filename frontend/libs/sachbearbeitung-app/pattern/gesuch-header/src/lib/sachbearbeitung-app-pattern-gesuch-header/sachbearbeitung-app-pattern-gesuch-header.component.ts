@@ -320,13 +320,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   createTranche() {
-    const gesuchId = this.gesuchIdSig();
+    const id = this.gesuchIdSig();
     const periode = this.gesuchStore.gesuchInfo().data;
-    if (!gesuchId || !periode) return;
+    if (!id || !periode) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
-      forAenderung: false,
-      gesuchId,
+      type: 'createTranche',
+      id,
       minDate: new Date(periode.startDate),
       maxDate: new Date(periode.endDate),
     })

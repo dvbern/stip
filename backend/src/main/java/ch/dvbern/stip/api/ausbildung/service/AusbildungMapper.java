@@ -129,7 +129,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
             && (AusbildungDiffUtil.hasAusbildungsgangChanged(ausbildung, newAusbildung))
             && !Objects.equals(
                 ausbildung.getAusbildungsgang().getAbschluss().getZusatzfrage(),
-                AbschlussZusatzfrage.BERUFSMATURITAET
+                AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET
             ),
             "Reset BMS-Flag if it has changed and Ausbildung is not valid",
             () -> {

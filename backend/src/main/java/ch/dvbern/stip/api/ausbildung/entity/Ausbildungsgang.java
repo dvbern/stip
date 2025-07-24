@@ -51,7 +51,6 @@ public class Ausbildungsgang extends AbstractMandantEntity {
         name = "ausbildungsstaette_id",
         foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"),
         nullable = false
-
     )
     private Ausbildungsstaette ausbildungsstaette;
 
@@ -61,7 +60,6 @@ public class Ausbildungsgang extends AbstractMandantEntity {
         name = "abschluss_id",
         foreignKey = @ForeignKey(name = "FK_ausbildungsgang_abschluss_id"),
         nullable = false
-
     )
     private Abschluss abschluss;
 

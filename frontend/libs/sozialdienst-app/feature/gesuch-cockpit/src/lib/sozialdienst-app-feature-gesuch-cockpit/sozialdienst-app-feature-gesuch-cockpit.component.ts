@@ -131,8 +131,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
       gesuch: { id, startDate, endDate },
     } = melden;
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
-      forAenderung: true,
-      gesuchId: id,
+      type: 'createAenderung',
+      id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
     })

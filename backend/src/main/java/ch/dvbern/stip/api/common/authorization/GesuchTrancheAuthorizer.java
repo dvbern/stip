@@ -110,6 +110,22 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanUpdateGueltigkeitOfAenderung(final UUID aenderungId) {
+        final var gesuchTranche = gesuchTrancheRepository.findById(aenderungId);
+
+        if (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG) {
+            throw new IllegalStateException();
+        }
+        assertGesuchTrancheIsInGesuchTrancheStatus(aenderungId, GesuchTrancheStatus.UEBERPRUEFEN);
+
+        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
     public void canFehlendeDokumenteUebermitteln(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
 

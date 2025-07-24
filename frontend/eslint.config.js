@@ -140,7 +140,6 @@ module.exports = [
                 'type:util-fn',
                 'type:model',
               ],
-              bannedExternalImports: ['@ngrx/*'],
             },
             {
               sourceTag: 'type:util',

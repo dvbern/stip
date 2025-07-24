@@ -20,9 +20,8 @@ package ch.dvbern.stip.api.ausbildung.service;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -38,8 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AusbildungsgangService {
     private final AusbildungsgangRepository ausbildungsgangRepository;
-    private final AbschlussRepository abschlussRepository;
-    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
+    private final AusbildungsgangQueryBuilder ausbildungsgangQueryBuilder;
     private final AusbildungsgangMapper ausbildungsgangMapper;
     private final ConfigService configService;
 
@@ -66,38 +64,38 @@ public class AusbildungsgangService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = ausbildungsgangRepository.baseQuery();
+        final var baseQuery = ausbildungsgangQueryBuilder.baseQuery();
 
         if (Objects.nonNull(abschlussBezeichnungDe)) {
-            ausbildungsgangRepository.abschlussBezeichnungDeFilter(baseQuery, abschlussBezeichnungDe);
+            ausbildungsgangQueryBuilder.abschlussBezeichnungDeFilter(baseQuery, abschlussBezeichnungDe);
         }
         if (Objects.nonNull(abschlussBezeichnungFr)) {
-            ausbildungsgangRepository.abschlussBezeichnungFrFilter(baseQuery, abschlussBezeichnungFr);
+            ausbildungsgangQueryBuilder.abschlussBezeichnungFrFilter(baseQuery, abschlussBezeichnungFr);
         }
         if (Objects.nonNull(ausbildungskategorie)) {
-            ausbildungsgangRepository.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
+            ausbildungsgangQueryBuilder.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
         }
         if (Objects.nonNull(ausbildungsstaetteNameDe)) {
-            ausbildungsgangRepository.ausbildungsstaetteNameDeFilter(baseQuery, ausbildungsstaetteNameDe);
+            ausbildungsgangQueryBuilder.ausbildungsstaetteNameDeFilter(baseQuery, ausbildungsstaetteNameDe);
         }
         if (Objects.nonNull(ausbildungsstaetteNameFr)) {
-            ausbildungsgangRepository.ausbildungsstaetteNameFrFilter(baseQuery, ausbildungsstaetteNameFr);
+            ausbildungsgangQueryBuilder.ausbildungsstaetteNameFrFilter(baseQuery, ausbildungsstaetteNameFr);
         }
         if (Objects.nonNull(aktiv)) {
-            ausbildungsgangRepository.aktivFilter(baseQuery, aktiv);
+            ausbildungsgangQueryBuilder.aktivFilter(baseQuery, aktiv);
         }
 
         // Creating the count query must happen before ordering,
         // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
-        final var countQuery = ausbildungsgangRepository.getCountQuery(baseQuery);
+        final var countQuery = ausbildungsgangQueryBuilder.getCountQuery(baseQuery);
 
         if (sortColumn != null && sortOrder != null) {
-            ausbildungsgangRepository.orderBy(baseQuery, sortColumn, sortOrder);
+            ausbildungsgangQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
         } else {
-            ausbildungsgangRepository.defaultOrder(baseQuery);
+            ausbildungsgangQueryBuilder.defaultOrder(baseQuery);
         }
 
-        ausbildungsgangRepository.paginate(baseQuery, page, pageSize);
+        ausbildungsgangQueryBuilder.paginate(baseQuery, page, pageSize);
 
         final var results = baseQuery.stream()
             .map(ausbildungsgangMapper::toDto)

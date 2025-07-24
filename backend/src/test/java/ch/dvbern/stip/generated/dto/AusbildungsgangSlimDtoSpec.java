@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AbschlussZusatzfrageDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ID,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE,
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE
 })
 @JsonTypeName("AusbildungsgangSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +50,9 @@ public class AusbildungsgangSlimDtoSpec {
 
   public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
   private BildungskategorieDtoSpec bildungskategorie;
+
+  public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
+  private AbschlussZusatzfrageDtoSpec zusatzfrage;
 
   public AusbildungsgangSlimDtoSpec() {
   }
@@ -155,6 +160,32 @@ public class AusbildungsgangSlimDtoSpec {
     this.bildungskategorie = bildungskategorie;
   }
 
+
+  public AusbildungsgangSlimDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+    
+    this.zusatzfrage = zusatzfrage;
+    return this;
+  }
+
+   /**
+   * Get zusatzfrage
+   * @return zusatzfrage
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public AbschlussZusatzfrageDtoSpec getZusatzfrage() {
+    return zusatzfrage;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -167,12 +198,13 @@ public class AusbildungsgangSlimDtoSpec {
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
         Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
-        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie);
+        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie) &&
+        Objects.equals(this.zusatzfrage, ausbildungsgangSlim.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage);
   }
 
   @Override
@@ -183,6 +215,7 @@ public class AusbildungsgangSlimDtoSpec {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
+    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

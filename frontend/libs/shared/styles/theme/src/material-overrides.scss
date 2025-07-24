@@ -289,6 +289,9 @@ $dv-all-colors: (
   .mat-mdc-tab-link:not(.active) {
     background: white;
   }
+  .mat-mdc-tab-link {
+    -webkit-font-smoothing: initial;
+  }
 }
 
 .btn.active {

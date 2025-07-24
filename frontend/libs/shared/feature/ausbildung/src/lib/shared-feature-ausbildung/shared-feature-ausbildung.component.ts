@@ -43,6 +43,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
+  AusbildungsgangSlim,
   AusbildungsstaetteSlim,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
@@ -147,7 +148,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
     isAusbildungAusland: [false, []],
     ausbildungsstaette: [<string | undefined>undefined, [Validators.required]],
-    ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
+    ausbildungsgang: [
+      <AusbildungsgangSlim | undefined>undefined,
+      [Validators.required],
+    ],
     besuchtBMS: [false, []],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
@@ -221,21 +225,18 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   });
 
-  // TODO: fixme
-  // showBesuchtBMS = computed(() => {
-  //   const ausbildungsgangId = this.ausbildungsgangChangedSig();
-  //   if (!ausbildungsgangId) return false;
+  showBesuchtBMS = computed(() => {
+    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    if (!newAusbildungsgang) return false;
 
-  //   const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
-  //   const gang = ausbildungsgange.find(
-  //     (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
-  //   );
-  //   if (!gang) return false;
+    const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
+    const gang = ausbildungsgange.find(
+      (ausbildungsgang) => ausbildungsgang.id === newAusbildungsgang.id,
+    );
+    if (!gang?.zusatzfrage) return false;
 
-  //   const bfs = gang.bildungskategorie.bfs;
-
-  //   return bfs === 4 || bfs === 5;
-  // });
+    return gang.zusatzfrage === 'BERUFSBEZEICHNUNG_BERUFSMATURITAET';
+  });
 
   ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
     () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
@@ -388,7 +389,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
                 'name',
                 this.languageSig(),
               ) ?? undefined,
-            ausbildungsgang: ausbildungsgang?.id,
+            ausbildungsgang: ausbildungsgang,
           });
         }
       }
@@ -530,14 +531,16 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
-    const { ausbildungsgang: ausbildungsgangId, ...formValues } =
+    const { ausbildungsgang: formAusbildungsgang, ...formValues } =
       convertTempFormToRealValues(this.form, ['fachrichtung', 'pensum']);
     delete formValues.ausbildungsstaette;
 
     const ausbildungId =
       this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
         .gesuchFormular?.ausbildung.id;
-    const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
+    const ausbildungsgang = formAusbildungsgang
+      ? { ausbildungsgangId: formAusbildungsgang.id }
+      : {};
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {

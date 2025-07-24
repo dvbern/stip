@@ -3375,6 +3375,38 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllTranchenForGesuchSB
+  '/gesuchtranche/{aenderungId}/patchAenderungInfo':
+    parameters:
+      - name: aenderungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAenderungsInfoRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: patchAenderungInfo
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -5513,9 +5545,8 @@ components:
         - LEHRE
     AbschlussZusatzfrage:
       enum:
-        - BERUFSBEZEICHNUNG
+        - BERUFSBEZEICHNUNG_BERUFSMATURITAET
         - FACHRICHTUNG
-        - BERUFSMATURITAET
     AbschlussSortColumn:
       enum:
         - AUSBILDUNGSKATEGORIE
@@ -5642,8 +5673,6 @@ components:
       type: object
       required:
         - id
-        - bezeichnungDe
-        - bezeichnungFr
         - abschlussId
         - abschlussBezeichnungDe
         - abschlussBezeichnungFr
@@ -5656,10 +5685,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        bezeichnungDe:
-          type: string
-        bezeichnungFr:
-          type: string
         abschlussId:
           $ref: '#/components/schemas/UUID'
         abschlussBezeichnungDe:
@@ -5678,6 +5703,8 @@ components:
           type: string
         aktiv:
           type: boolean
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -5712,6 +5739,8 @@ components:
           type: string
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
     AusbildungsstaetteSlim:
       type: object
       required:
@@ -6664,6 +6693,13 @@ components:
         comment:
           type: string
     CreateAenderungsantragRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    PatchAenderungsInfoRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
         - type: object

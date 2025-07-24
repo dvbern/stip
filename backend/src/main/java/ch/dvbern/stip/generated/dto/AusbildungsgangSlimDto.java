@@ -24,6 +24,7 @@ public class AusbildungsgangSlimDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
   /**
    **/
@@ -101,6 +102,24 @@ public class AusbildungsgangSlimDto  implements Serializable {
     this.bildungskategorie = bildungskategorie;
   }
 
+  /**
+   **/
+  public AusbildungsgangSlimDto zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+    return this;
+  }
+
+  
+  @JsonProperty("zusatzfrage")
+  public ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage getZusatzfrage() {
+    return zusatzfrage;
+  }
+
+  @JsonProperty("zusatzfrage")
+  public void setZusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -114,12 +133,13 @@ public class AusbildungsgangSlimDto  implements Serializable {
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
         Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
-        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie);
+        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie) &&
+        Objects.equals(this.zusatzfrage, ausbildungsgangSlim.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage);
   }
 
   @Override
@@ -131,6 +151,7 @@ public class AusbildungsgangSlimDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
+    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

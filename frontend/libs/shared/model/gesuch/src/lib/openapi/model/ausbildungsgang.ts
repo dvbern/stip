@@ -11,11 +11,10 @@
  */
 import { Ausbildungskategorie } from './ausbildungskategorie';
 import { Bildungsrichtung } from './bildungsrichtung';
+import { AbschlussZusatzfrage } from './abschlussZusatzfrage';
 
 export interface Ausbildungsgang { 
     id: string;
-    bezeichnungDe: string;
-    bezeichnungFr: string;
     abschlussId: string;
     abschlussBezeichnungDe: string;
     abschlussBezeichnungFr: string;
@@ -25,6 +24,7 @@ export interface Ausbildungsgang {
     ausbildungsstaetteNameDe: string;
     ausbildungsstaetteNameFr: string;
     aktiv: boolean;
+    zusatzfrage?: AbschlussZusatzfrage;
 }
 
 
