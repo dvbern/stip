@@ -486,62 +486,57 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     };
 
     // patch form value
-    effect(
-      () => {
-        const { gesuchFormular } = this.viewSig();
+    effect(() => {
+      const { gesuchFormular } = this.viewSig();
 
-        const svValidators = [
-          Validators.required,
-          sharedUtilValidatorAhv('personInAusbildung', gesuchFormular),
-          isUniqueSozialversicherungsnummer,
-        ];
-        this.form.controls.sozialversicherungsnummer.clearValidators();
-        this.form.controls.sozialversicherungsnummer.addValidators(
-          svValidators,
+      const svValidators = [
+        Validators.required,
+        sharedUtilValidatorAhv('personInAusbildung', gesuchFormular),
+        isUniqueSozialversicherungsnummer,
+      ];
+      this.form.controls.sozialversicherungsnummer.clearValidators();
+      this.form.controls.sozialversicherungsnummer.addValidators(svValidators);
+      if (gesuchFormular?.personInAusbildung) {
+        const person = gesuchFormular.personInAusbildung;
+        const personForForm = {
+          ...person,
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            person.geburtsdatum,
+            this.languageSig(),
+          ),
+          einreisedatum: parseBackendLocalDateAndPrint(
+            person.einreisedatum,
+            this.languageSig(),
+          ),
+        };
+        const niederlassungsstatus = personForForm.niederlassungsstatus;
+        this.form.patchValue({
+          ...personForForm,
+          ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
+          ...niederlassungsStatusConverter.from(niederlassungsstatus),
+        });
+        SharedUiFormAddressComponent.patchForm(
+          this.form.controls.adresse,
+          personForForm.adresse,
         );
-        if (gesuchFormular?.personInAusbildung) {
-          const person = gesuchFormular.personInAusbildung;
-          const personForForm = {
-            ...person,
-            geburtsdatum: parseBackendLocalDateAndPrint(
-              person.geburtsdatum,
-              this.languageSig(),
-            ),
-            einreisedatum: parseBackendLocalDateAndPrint(
-              person.einreisedatum,
-              this.languageSig(),
-            ),
-          };
-          const niederlassungsstatus = personForForm.niederlassungsstatus;
-          this.form.patchValue({
-            ...personForForm,
-            ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
-            ...niederlassungsStatusConverter.from(niederlassungsstatus),
-          });
-          SharedUiFormAddressComponent.patchForm(
-            this.form.controls.adresse,
-            personForForm.adresse,
-          );
-          this.formUtils.invalidateControlIfValidationFails(
-            this.form,
-            ['wohnsitz'],
-            {
-              shouldReset: true,
-              specialValidationErrors: untracked(
-                this.einreichenStore.validationViewSig,
-              ).invalidFormularProps.specialValidationErrors,
-              validatorFn: (value) =>
-                this.wohnsitzHelper
-                  .wohnsitzValuesSig()
-                  .includes(value as Wohnsitz),
-            },
-          );
-        } else {
-          this.form.reset();
-        }
-      },
-      { allowSignalWrites: true },
-    );
+        this.formUtils.invalidateControlIfValidationFails(
+          this.form,
+          ['wohnsitz'],
+          {
+            shouldReset: true,
+            specialValidationErrors: untracked(
+              this.einreichenStore.validationViewSig,
+            ).invalidFormularProps.specialValidationErrors,
+            validatorFn: (value) =>
+              this.wohnsitzHelper
+                .wohnsitzValuesSig()
+                .includes(value as Wohnsitz),
+          },
+        );
+      } else {
+        this.form.reset();
+      }
+    });
 
     // visibility and disabled state for identischerZivilrechtlicherWohnsitz
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
