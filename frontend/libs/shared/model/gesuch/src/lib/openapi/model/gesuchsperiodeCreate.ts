@@ -77,5 +77,9 @@ export interface GesuchsperiodeCreate {
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
     fristNachreichenDokumente: number;
+    /**
+     * dd.MM.yyyy
+     */
+    stichtagVolljaehrigkeitMedizinischeGrundversorgung: string;
 }
 

@@ -256,6 +256,8 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
   "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Nachreichefrist für Dokumente",
+  "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label": "Stichtag Volljährigkeit",
+  "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info": "für die medizinische Grundversorgung",
 
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Sozialdienste",
   "sachbearbeitung-app.admin.sozialdienst.name.label": "Name Sozialdienst",

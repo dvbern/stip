@@ -78,6 +78,10 @@ export interface GesuchsperiodeWithDaten {
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
     fristNachreichenDokumente: number;
+    /**
+     * dd.MM.yyyy
+     */
+    stichtagVolljaehrigkeitMedizinischeGrundversorgung: string;
     id: string;
     gueltigkeitStatus: GueltigkeitStatus;
 }
