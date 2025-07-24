@@ -80,6 +80,20 @@
           </td>
         </ng-container>
 
+        <!-- saldoAenderung -->
+        <ng-container matColumnDef="saldoAenderung">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right tw-font-bold"
+          >
+            {{ buchhaltung.entry.saldoAenderung | formatChf }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="saldo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | translate }}
@@ -104,6 +118,16 @@
             [dvTruncateTooltip]="buchhaltung.entry.comment"
           >
             {{ buchhaltung.entry.comment }}
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.status' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | translate }}
           </td>
         </ng-container>
 

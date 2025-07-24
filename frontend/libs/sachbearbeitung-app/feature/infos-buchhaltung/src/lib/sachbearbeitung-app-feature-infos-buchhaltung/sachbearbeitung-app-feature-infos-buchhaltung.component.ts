@@ -71,6 +71,7 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
     'stipendienbetrag',
     'auszahlung',
     'rueckforderung',
+    'saldoAenderung',
     'saldo',
     'comment',
     'info',

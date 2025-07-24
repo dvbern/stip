@@ -41,7 +41,7 @@
     }
 
     <dt class="tw-whitespace-nowrap tw-font-semibold">
-      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.salodannderung' | translate }}
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldoAenderung' | translate }}
     </dt>
     <dd class="tw-font-normal">{{ dialogData.saldoAenderung | formatChf }}</dd>
 
@@ -49,13 +49,6 @@
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldo' | translate }}
     </dt>
     <dd class="tw-font-normal">{{ dialogData.saldo | formatChf }}</dd>
-
-    @if (dialogData.sapId) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}
-      </dt>
-      <dd class="tw-font-normal">{{ dialogData.sapId }}</dd>
-    }
 
     @if (dialogData.sapStatus) {
       <dt class="tw-whitespace-nowrap tw-font-semibold">
@@ -73,6 +66,29 @@
       <dd class="tw-font-normal">{{ dialogData.businessPartnerId }}</dd>
     }
 
+    <!-- auszahlung an -->
+    @let zv = dialogData.zahlungsverbindung;
+    @if (zv) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlungAn' | translate }}
+      </dt>
+      <dd class="tw-font-normal">
+        <div>
+          <span class="tw-text-sm tw-font-semibold">
+            {{ zv.vorname }}
+          </span>
+          <span>
+            {{ zv.nachname }}
+          </span>
+        </div>
+        <div>{{ zv.adresse.strasse }}</div>
+        <div>{{ zv.adresse.hausnummer }}</div>
+        <div>{{ zv.adresse.plz }}</div>
+        <div>{{ zv.adresse.ort }}</div>
+        <div>{{ zv.iban }}</div>
+      </dd>
+    }
+
     <dt class="tw-mt-4 tw-whitespace-nowrap tw-font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | translate }}
     </dt>
@@ -81,6 +97,22 @@
       [innerText]="dialogData.comment"
     ></dd>
   </dl>
+
+  <!-- SAP delivery Verlauf -->
+  @if (sapDeliverysSig()?.length) {
+    <div class="tw-mt-4">{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | translate }}</div>
+    <dl class="tw-grid tw-grid-cols-[min-content_3fr] tw-gap-x-4 tw-pl-0">
+      @for (sapDelivery of sapDeliverysSig(); track sapDelivery.sapId) {
+        <dt class="tw-whitespace-nowrap tw-font-semibold">
+          {{ sapDelivery.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
+        </dt>
+        <dd class="tw-font-normal">{{ sapDelivery.sapId }}</dd>
+        <dd class="tw-font-normal">
+          {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + sapDelivery.sapStatus | translate }}
+        </dd>
+      }
+    </dl>
+  }
 
   <div class="tw-mt-10 tw-flex tw-justify-end">
     <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
