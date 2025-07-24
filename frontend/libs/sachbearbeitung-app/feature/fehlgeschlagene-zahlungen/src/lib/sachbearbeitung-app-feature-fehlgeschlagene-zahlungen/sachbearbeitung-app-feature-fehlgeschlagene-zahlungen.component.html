@@ -1,0 +1,146 @@
+<dv-sachbearbeitung-app-pattern-overview-layout>
+  <div class="container">
+    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
+      {{ 'sachbearbeitung-app.cockpit.gesuche' | translate }}
+    </h1>
+    <div class="tw-my-6">
+      <div class="tw-dv-table">
+        <div [class.opacity-50]="buchhaltungsStore.fehlgeschlageneZahlungenView().loading">
+          <table
+            mat-table
+            [dvSharedUiFocusableList]="items"
+            [dataSource]="fehlgeschlageneZahlungenDataSourceSig()"
+            data-testid="cockpit-table"
+            tabindex="0"
+          >
+            <caption class="cdk-visually-hidden">
+              {{
+                'sachbearbeitung-app.fehlende-zahlungen.table.description' | translate
+              }}
+            </caption>
+
+            <ng-container matColumnDef="fallNummer">
+              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.fallNummer' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                <!-- todo: implement routerLink -->
+                <a [routerLink]="" (click)="$event.stopPropagation()">
+                  {{ fz.fallNummer }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Gesuch -->
+            <ng-container matColumnDef="gesuchNummer">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.gesuchNummer' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                <!-- todo: implement routerLink -->
+                <a routerLink="" (click)="$event.stopPropagation()">
+                  {{ fz.gesuchNummer }}
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nachname">
+              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.nachname' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-whitespace-nowrap"
+                [dvTruncateTooltip]="fz.name"
+              >
+                {{ fz.name }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="vorname">
+              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.vorname' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-max-w-32 tw-whitespace-nowrap"
+                [dvTruncateTooltip]="fz.vorname"
+              >
+                {{ fz.vorname }}
+              </td>
+            </ng-container>
+
+            <!-- letzter Zahlungsversuch / timestamp -->
+            <ng-container matColumnDef="lastTryDate">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.lastTryDate' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                {{ fz.lastTryDate | date: 'dd.MM.yyyy HH:mm' }}
+              </td>
+            </ng-container>
+
+            <!-- Pseudobuchhalung / link -->
+            <ng-container matColumnDef="pseudobuchhaltung">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.pseudobuchhaltung' | translate }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                <a [routerLink]="['/buchhaltung', 'pseudobuchhaltung', fz.fallNummer]">
+                  <i class="material-symbols-rounded text-white me-2">description</i>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              dvSharedUiFocusableListItem
+              mat-row
+              tabindex="-1"
+              *dvMatRowDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig(); columns: displayedColumns"
+              class="highlightable"
+            ></tr>
+            <tr class="mat-mdc-row" *matNoDataRow>
+              <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                {{ 'shared.table.noData' | translate }}
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator
+            showFirstLastButtons
+            [pageSizeOptions]="pageSizes"
+            [pageSize]="pageSize() ?? defaultPageSize"
+            [pageIndex]="page() ?? 0"
+            [length]="buchhaltungsStore.fehlgeschlageneZahlungenView().data?.totalEntries"
+            (page)="paginate($event)"
+          ></mat-paginator>
+        </div>
+        @if (buchhaltungsStore.fehlgeschlageneZahlungenView().loading) {
+          <dv-shared-ui-loading
+            class="position-absolute top-50 start-50 translate-middle"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout>

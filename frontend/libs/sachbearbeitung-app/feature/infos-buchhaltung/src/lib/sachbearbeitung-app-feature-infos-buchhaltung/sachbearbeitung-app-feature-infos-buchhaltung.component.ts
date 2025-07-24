@@ -78,7 +78,7 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   ];
   buchhaltungDataSourceSig = computed(() => {
     const buchhaltungEntries =
-      this.buchhaltungStore.buchhaltungEntriesViewSig();
+      this.buchhaltungStore.buchhaltungEntriesViewSig().buchhaltungEntrys;
 
     const dataSource = new MatTableDataSource(buchhaltungEntries);
     const sort = this.sortSig();

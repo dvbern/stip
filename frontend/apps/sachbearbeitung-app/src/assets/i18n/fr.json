@@ -2,6 +2,7 @@
   "app-name": "Stipends Online",
   "sachbearbeitung-app.header.antraege": "Demandes",
   "sachbearbeitung-app.header.administration": "Administration",
+  "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Paiements échoués",
   "sachbearbeitung-app.header.verfuegung": "Décision",
   "sachbearbeitung-app.header.infos": "Infos",
   "sachbearbeitung-app.header.tranche.erstellen": "Demande",

@@ -2,6 +2,7 @@
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
   "sachbearbeitung-app.header.administration": "Administration",
+  "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Fehlgeschlagene Zahlungen",
   "sachbearbeitung-app.header.verfuegung": "Verfügung",
   "sachbearbeitung-app.header.infos": "Infos",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranchen",
@@ -276,6 +277,15 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.title": "Sozialdienst löschen",
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtern...",
+
+  "sachbearbeitung-app.fehlgeschlagene-zahlungen.title": "Fehlgeschlagene Zahlungen",
+  "sachbearbeitung-app.fehlende-zahlungen.table.description": "Übersicht aller fehlgeschlagenen Zahlungen",
+  "sachbearbeitung-app.fehlende-zahlungen.table.fallNummer": "Fallnummer",
+  "sachbearbeitung-app.fehlende-zahlungen.table.gesuchNummer": "Gesuchnummer",
+  "sachbearbeitung-app.fehlende-zahlungen.table.nachname": "Nachname",
+  "sachbearbeitung-app.fehlende-zahlungen.table.vorname": "Vorname",
+  "sachbearbeitung-app.fehlende-zahlungen.table.lastTryDate": "Letzter Versuch",
+  "sachbearbeitung-app.fehlende-zahlungen.table.pseudobuchhaltung": "Pseudobuchhaltung",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",

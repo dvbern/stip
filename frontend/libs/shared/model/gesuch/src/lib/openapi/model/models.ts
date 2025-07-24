@@ -35,6 +35,7 @@ export * from './beschwerdeVerlaufEntryCreate';
 export * from './bildungskategorie';
 export * from './bildungsstufe';
 export * from './buchhaltungEntry';
+export * from './buchhaltungOverview';
 export * from './buchhaltungSaldokorrektur';
 export * from './buchhaltungType';
 export * from './createAenderungsantragRequest';

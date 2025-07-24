@@ -11,6 +11,14 @@
           <i class="material-symbols-rounded text-white me-2">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
         </div>
+        <!-- Fehlgeschlagene Zahlungen -->
+        <a
+          routerLink="/fehlgeschlagene-zahlungen"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
+        >
+          {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | translate }}
+        </a>
         <a
           *dvHasRoles="['V0_Sachbearbeiter-Admin', 'V0_Jurist']"
           routerLink="/administration"

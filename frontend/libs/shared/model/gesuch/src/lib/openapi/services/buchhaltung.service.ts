@@ -19,6 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { BuchhaltungEntry } from '../model/buchhaltungEntry';
+import { BuchhaltungOverview } from '../model/buchhaltungOverview';
 import { BuchhaltungSaldokorrektur } from '../model/buchhaltungSaldokorrektur';
 import { PaginatedFailedAuszahlungBuchhaltung } from '../model/paginatedFailedAuszahlungBuchhaltung';
 
@@ -203,9 +204,9 @@ export class BuchhaltungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<BuchhaltungEntry>>;
-     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<BuchhaltungEntry>>>;
-     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<BuchhaltungEntry>>>;
+     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<BuchhaltungOverview>;
+     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<BuchhaltungOverview>>;
+     public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<BuchhaltungOverview>>;
      public getBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
@@ -258,7 +259,7 @@ export class BuchhaltungService {
         }
 
         const localVarPath = `/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<BuchhaltungEntry>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<BuchhaltungOverview>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -276,9 +277,9 @@ export class BuchhaltungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<PaginatedFailedAuszahlungBuchhaltung>>;
-     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<PaginatedFailedAuszahlungBuchhaltung>>>;
-     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<PaginatedFailedAuszahlungBuchhaltung>>>;
+     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedFailedAuszahlungBuchhaltung>;
+     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedFailedAuszahlungBuchhaltung>>;
+     public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedFailedAuszahlungBuchhaltung>>;
      public getFailedAuszahlungBuchhaltungEntrys$(requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
@@ -345,7 +346,7 @@ export class BuchhaltungService {
         }
 
         const localVarPath = `/buchhaltung/failed`;
-        return this.httpClient.request<Array<PaginatedFailedAuszahlungBuchhaltung>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PaginatedFailedAuszahlungBuchhaltung>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
