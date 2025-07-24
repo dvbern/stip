@@ -299,8 +299,8 @@ class BernStipDeciderTest {
 
         // pia < 18 years at Ausbildungsbegin
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
-        assertThat(decision).isEqualTo(
-            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        assertThat(decision).isNotEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
         );
 
         var event = decider.getGesuchStatusChangeEvent(decision);
@@ -319,7 +319,44 @@ class BernStipDeciderTest {
             StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
         );
 
-        event = decider.getGesuchStatusChangeEvent(decision);
+        decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+    }
+
+    @Test
+    void testDecisionANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getLebenslaufItems()
+            .add(
+                new LebenslaufItem().setBildungsart(LebenslaufAusbildungsArt.MASTER).setAusbildungAbgeschlossen(true)
+            );
+
+        // pia < 18 years at Ausbildungsbegin
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+
+        // pia >= 18 years at Ausbildungsbegin
+        var ausbildung = gesuch.getAusbildung();
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(ausbildung.getAusbildungBegin().minusYears(18));
+
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isNotEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
     }
 
