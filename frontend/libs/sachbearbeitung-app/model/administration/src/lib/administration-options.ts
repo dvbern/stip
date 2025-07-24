@@ -73,7 +73,7 @@ export const CHILD_OPTION_GESUCHSJAHRE = (
   type: 'CHILD',
   route: 'jahr',
   titleTranslationKey,
-  parentRoute: OPTION_GESUCHSPERIODEN.route,
+  parentRoute: `${OPTION_GESUCHSPERIODEN.route}/jahr`,
 });
 
 export const CHILD_OPTION_GESUCHSPERIODE = (
@@ -82,7 +82,7 @@ export const CHILD_OPTION_GESUCHSPERIODE = (
   type: 'CHILD',
   route: 'gesuchsperiode',
   titleTranslationKey,
-  parentRoute: OPTION_GESUCHSPERIODEN.route,
+  parentRoute: `${OPTION_GESUCHSPERIODEN.route}/gesuchsperiode`,
 });
 
 export const CHILD_OPTION_BENUTZER_ERSTELLEN = (
