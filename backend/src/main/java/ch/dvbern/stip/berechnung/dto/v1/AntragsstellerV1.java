@@ -243,10 +243,10 @@ public class AntragsstellerV1 {
             )
             .findFirst();
 
-        final boolean abgeschlosseneErstausbildung = Objects.nonNull(abgeschlosseneErstausbildungLebenslaufItem);
+        final boolean abgeschlosseneErstausbildung = abgeschlosseneErstausbildungLebenslaufItem.isPresent();
 
         boolean erstAusbildungWasCompletedBeforeAusbildungsjahr = false;
-        if (abgeschlosseneErstausbildungLebenslaufItem.isPresent()) {
+        if (abgeschlosseneErstausbildung) {
             erstAusbildungWasCompletedBeforeAusbildungsjahr =
                 abgeschlosseneErstausbildungLebenslaufItem.get().getVon().isBefore(beginOfAusbildungsjahr);
         }
@@ -255,7 +255,7 @@ public class AntragsstellerV1 {
             DateUtil.getAgeInYearsAtDate(geburtsdatumPia, endOfAusbildungsjahr);
 
         final boolean halbierungAbgeschlosseneErstausbildung =
-            abgeschlosseneErstausbildung && erstAusbildungWasCompletedBeforeAusbildungsjahr
+            erstAusbildungWasCompletedBeforeAusbildungsjahr
             && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
                 .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
