@@ -22,6 +22,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -39,16 +40,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.Length;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Audited
+@SapDeliverysLengthConstraint
 @Entity
 @Table(
     name = "buchhaltung",
@@ -78,7 +80,6 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @Length
     @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER)
     private List<SapDelivery> sapDeliverys = new ArrayList<>();
 
@@ -103,4 +104,31 @@ public class Buchhaltung extends AbstractMandantEntity {
     @OneToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "zahlungsverbindung_id")
     private Zahlungsverbindung zahlungsverbindung;
+
+    @Transient
+    public SapStatus getSapStatus() {
+        return switch (this.getBuchhaltungType()) {
+            case SALDOAENDERUNG, STIPENDIUM -> null;
+            case BUSINESSPARTNER_CREATE -> sapDeliverys.isEmpty() ? null : sapDeliverys.getFirst().getSapStatus();
+            case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER -> {
+                if (sapDeliverys.isEmpty()) {
+                    yield null;
+                }
+                if (sapDeliverys.stream().anyMatch(sapDelivery -> sapDelivery.getSapStatus() == SapStatus.SUCCESS)) {
+                    yield SapStatus.SUCCESS;
+                }
+
+                if (
+                    sapDeliverys.stream().anyMatch(sapDelivery -> sapDelivery.getSapStatus() == SapStatus.IN_PROGRESS)
+                ) {
+                    yield SapStatus.IN_PROGRESS;
+                }
+
+                if (sapDeliverys.size() < SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG) {
+                    yield SapStatus.IN_PROGRESS;
+                }
+                yield SapStatus.FAILURE;
+            }
+        };
+    }
 }

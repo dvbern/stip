@@ -33,7 +33,6 @@ public abstract class BuchhaltungMapper {
     @Mapping(source = "betrag", target = "saldoAenderung")
     @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
-    // @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapDeliveryId")
     @Mapping(source = ".", target = "businessPartnerId", qualifiedByName = "getBusinessPartnerId")
     @Mapping(source = "gesuch.id", target = "gesuchId")
     public abstract BuchhaltungEntryDto toDto(Buchhaltung buchhaltung);

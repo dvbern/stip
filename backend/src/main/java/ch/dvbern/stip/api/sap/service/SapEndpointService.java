@@ -138,14 +138,17 @@ public class SapEndpointService {
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 
-    public BusinessPartnerReadResponse readBusinessPartner(Zahlungsverbindung zahlungsverbindung) {
+    public BusinessPartnerReadResponse readBusinessPartner(
+        Zahlungsverbindung zahlungsverbindung,
+        BigDecimal sapDeliveryId
+    ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
         this.setAuthHeader((BindingProvider) port);
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
-            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, zahlungsverbindung);
+            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, sapDeliveryId, zahlungsverbindung);
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
     }
 

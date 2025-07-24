@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
 import java.util.UUID;
@@ -31,12 +32,12 @@ public interface BuchhaltungResource {
     @GET
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    List<BuchhaltungEntryDto> getBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
+    BuchhaltungOverviewDto getBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/failed")
     @Produces({ "application/json", "text/plain" })
-    List<PaginatedFailedAuszahlungBuchhaltungDto> getFailedAuszahlungBuchhaltungEntrys(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize);
+    PaginatedFailedAuszahlungBuchhaltungDto getFailedAuszahlungBuchhaltungEntrys(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize);
 
     @POST
     @Path("/retry/{gesuchId}")

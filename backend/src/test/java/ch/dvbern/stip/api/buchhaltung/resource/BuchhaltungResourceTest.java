@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.buchhaltung.resource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -40,7 +39,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
-import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -193,19 +192,19 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(8)
     void getBuchhaltung() {
-        final var buchhaltungEntrys = Arrays.stream(
-            buchhaltungApiSpec.getBuchhaltungEntrys()
-                .gesuchIdPath(gesuch.getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(
-                    BuchhaltungEntryDtoSpec[].class
-                )
-        ).toList();
+        final var buchhaltungOverview = buchhaltungApiSpec.getBuchhaltungEntrys()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(
+                BuchhaltungOverviewDto.class
+            );
+
+        final var buchhaltungEntrys = buchhaltungOverview.getBuchhaltungEntrys();
 
         assertThat(buchhaltungEntrys.size(), is(1));
         assertThat(buchhaltungEntrys.get(0).getBuchhaltungType(), equalTo(BuchhaltungTypeDtoSpec.STIPENDIUM));

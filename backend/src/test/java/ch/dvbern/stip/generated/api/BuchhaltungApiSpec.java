@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDtoSpec;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDtoSpec;
 import java.util.UUID;
@@ -181,7 +182,7 @@ public class BuchhaltungApiSpec {
      * 
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
-     * return List&lt;BuchhaltungEntryDtoSpec&gt;
+     * return BuchhaltungOverviewDtoSpec
      */
     public static class GetBuchhaltungEntrysOper implements Oper {
 
@@ -211,10 +212,10 @@ public class BuchhaltungApiSpec {
         /**
          * GET /buchhaltung/{gesuchId}
          * @param handler handler
-         * @return List&lt;BuchhaltungEntryDtoSpec&gt;
+         * @return BuchhaltungOverviewDtoSpec
          */
-        public List<BuchhaltungEntryDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<BuchhaltungEntryDtoSpec>> type = new TypeRef<List<BuchhaltungEntryDtoSpec>>(){};
+        public BuchhaltungOverviewDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BuchhaltungOverviewDtoSpec> type = new TypeRef<BuchhaltungOverviewDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -255,7 +256,7 @@ public class BuchhaltungApiSpec {
      *
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
-     * return List&lt;PaginatedFailedAuszahlungBuchhaltungDtoSpec&gt;
+     * return PaginatedFailedAuszahlungBuchhaltungDtoSpec
      */
     public static class GetFailedAuszahlungBuchhaltungEntrysOper implements Oper {
 
@@ -285,10 +286,10 @@ public class BuchhaltungApiSpec {
         /**
          * GET /buchhaltung/failed
          * @param handler handler
-         * @return List&lt;PaginatedFailedAuszahlungBuchhaltungDtoSpec&gt;
+         * @return PaginatedFailedAuszahlungBuchhaltungDtoSpec
          */
-        public List<PaginatedFailedAuszahlungBuchhaltungDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<PaginatedFailedAuszahlungBuchhaltungDtoSpec>> type = new TypeRef<List<PaginatedFailedAuszahlungBuchhaltungDtoSpec>>(){};
+        public PaginatedFailedAuszahlungBuchhaltungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedFailedAuszahlungBuchhaltungDtoSpec> type = new TypeRef<PaginatedFailedAuszahlungBuchhaltungDtoSpec>(){};
             return execute(handler).as(type);
         }
 

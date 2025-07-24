@@ -52,7 +52,7 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
         return findEntrysOfTypeForGesuch(gesuchId, BuchhaltungType.STIPENDIUM);
     }
 
-    public Optional<Buchhaltung> findPendingBuchhaltungEntryOfGesuch(
+    public Optional<Buchhaltung> findPendingBuchhaltungEntryOfFall(
         final UUID fallId,
         final BuchhaltungType buchhaltungType
     ) {
@@ -65,7 +65,7 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
             .where(Q_BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
             .join(sapDelivery)
             .on(Q_BUCHHALTUNG.sapDeliverys.any().id.eq(sapDelivery.id))
-            .where(sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
+            .where(sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS).or(Q_BUCHHALTUNG.sapDeliverys.size().lt(3)))
             .orderBy(Q_BUCHHALTUNG.timestampErstellt.desc());
         return query.stream().findFirst();
     }
@@ -81,9 +81,13 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
         return query.stream();
     }
 
-    public Stream<Buchhaltung> findBuchhaltungWithPendingSapDelivery() {
+    public Stream<Buchhaltung> findAuszahlungBuchhaltungWithPendingSapDelivery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_BUCHHALTUNG)
+            .where(
+                Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_INITIAL)
+                    .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_REMAINDER))
+            )
             .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS))
             // .where(Q_BUCHHALTUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
             .stream();

@@ -25,11 +25,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -40,7 +42,9 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -59,6 +63,14 @@ public class BuchhaltungService {
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
         return buchhaltungList
             .stream()
+            .filter(
+                buchhaltung -> buchhaltung.getSapDeliverys()
+                    .stream()
+                    .map(SapDelivery::getSapStatus)
+                    .noneMatch(
+                        SapStatus.NO_SUCCESS::contains
+                    )
+            )
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
             .map(Buchhaltung::getSaldo)
             .orElse(0);
@@ -155,6 +167,10 @@ public class BuchhaltungService {
             final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
                 gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
             );
+            newZahlungsverbindung.setAdresse(
+                AdresseCopyUtil
+                    .createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
+            );
             zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
             buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
         }
@@ -188,13 +204,14 @@ public class BuchhaltungService {
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
-        if (Objects.nonNull(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung())) {
-            final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
-                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
-            );
-            zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
-            buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
-        }
+        final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+            gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
+        );
+        newZahlungsverbindung.setAdresse(
+            AdresseCopyUtil.createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
+        );
+        zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
+        buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
@@ -210,7 +227,7 @@ public class BuchhaltungService {
         final UUID fallId,
         final BuchhaltungType buchhaltungType
     ) {
-        return buchhaltungRepository.findPendingBuchhaltungEntryOfGesuch(fallId, buchhaltungType);
+        return buchhaltungRepository.findPendingBuchhaltungEntryOfFall(fallId, buchhaltungType);
     }
 
     @Transactional
@@ -263,6 +280,13 @@ public class BuchhaltungService {
         return getAllForFallId(gesuch.getAusbildung().getFall().getId()).map(buchhaltungMapper::toDto);
     }
 
+    public BuchhaltungOverviewDto getBuchhaltungOverviewDto(final UUID gesuchId) {
+        final BuchhaltungOverviewDto buchhaltungOverviewDto = new BuchhaltungOverviewDto();
+        buchhaltungOverviewDto.setBuchhaltungEntrys(getAllDtoForGesuchId(gesuchId).toList());
+        buchhaltungOverviewDto.setCanRetryAuszahlung(canRetryAuszahlungBuchhaltung(gesuchId));
+        return buchhaltungOverviewDto;
+    }
+
     @Transactional
     public void deleteBuchhaltungsForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -270,5 +294,26 @@ public class BuchhaltungService {
         for (var buchhaltung : buchhaltungs.toList()) {
             buchhaltungRepository.delete(buchhaltung);
         }
+    }
+
+    public boolean canRetryAuszahlungBuchhaltung(final Fall fall) {
+        final var lastAuszahlungBuchhaltung =
+            fall
+                .getBuchhaltungs()
+                .stream()
+                .filter(
+                    buchhaltung -> BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType())
+                )
+                .min(Comparator.comparing(Buchhaltung::getTimestampErstellt));
+        return lastAuszahlungBuchhaltung.filter(buchhaltung -> buchhaltung.getSapStatus() == SapStatus.FAILURE)
+            .isPresent();
+    }
+
+    public boolean canRetryAuszahlungBuchhaltung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return canRetryAuszahlungBuchhaltung(
+            gesuch.getAusbildung()
+                .getFall()
+        );
     }
 }

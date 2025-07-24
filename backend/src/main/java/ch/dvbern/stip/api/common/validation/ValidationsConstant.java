@@ -217,6 +217,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.formular.land.ungueltig}";
     public static final String VALIDATION_ZAHLUNGSVERBINDUNG_ISO2CODE_MUST_BE_SET =
         "{jakarta.validation.constraints.zahlungsverbindung.iso2code.must.be.set}";
+    public static final String VALIDATION_SAP_DELIVERYS_LENGTH_VIOLATION =
+        "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

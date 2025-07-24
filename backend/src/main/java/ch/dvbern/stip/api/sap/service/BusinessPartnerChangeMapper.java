@@ -37,11 +37,14 @@ public abstract class BusinessPartnerChangeMapper {
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER getHeader(Integer businessPartnerId);
 
     @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(Zahlungsverbindung zahlungsverbindung);
+    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
+        @Context BigDecimal deliveryid,
+        Zahlungsverbindung zahlungsverbindung
+    );
 
     @Named("getExtId")
-    public String getExtId(Zahlungsverbindung zahlungsverbindung) {
-        return String.valueOf(Math.abs(zahlungsverbindung.getId().getMostSignificantBits()));
+    public String getExtId(@Context BigDecimal deliveryid, Zahlungsverbindung zahlungsverbindung) {
+        return String.valueOf(Math.abs(deliveryid.longValue()));
     }
 
     @Mapping(source = "zahlungsverbindung.vorname", target = "FIRSTNAME")
@@ -78,6 +81,7 @@ public abstract class BusinessPartnerChangeMapper {
     @Mapping(source = "zahlungsverbindung", target = "ADDRESS", qualifiedByName = "setAdress")
     @Mapping(source = "zahlungsverbindung", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER toBusinessPartner(
+        @Context BigDecimal deliveryid,
         Zahlungsverbindung zahlungsverbindung
     );
 
