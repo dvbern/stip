@@ -27,6 +27,7 @@ import { GesuchTranche } from '../model/gesuchTranche';
 import { GesuchTrancheList } from '../model/gesuchTrancheList';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
 import { Kommentar } from '../model/kommentar';
+import { PatchAenderungsInfoRequest } from '../model/patchAenderungsInfoRequest';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -108,6 +109,11 @@ export interface GesuchTrancheServiceGetGesuchDokumenteGSRequestParams {
 
 export interface GesuchTrancheServiceGetGesuchDokumenteSBRequestParams {
     gesuchTrancheId: string;
+}
+
+export interface GesuchTrancheServicePatchAenderungInfoRequestParams {
+    aenderungId: string;
+    patchAenderungsInfoRequest: PatchAenderungsInfoRequest;
 }
 
 export interface GesuchTrancheServiceValidateGesuchTranchePagesGSRequestParams {
@@ -1438,6 +1444,92 @@ export class GesuchTrancheService {
         return this.httpClient.request<Array<GesuchDokument>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public patchAenderungInfo$(requestParameters: GesuchTrancheServicePatchAenderungInfoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
+     public patchAenderungInfo$(requestParameters: GesuchTrancheServicePatchAenderungInfoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
+     public patchAenderungInfo$(requestParameters: GesuchTrancheServicePatchAenderungInfoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
+     public patchAenderungInfo$(requestParameters: GesuchTrancheServicePatchAenderungInfoRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const aenderungId = requestParameters.aenderungId;
+        if (aenderungId === null || aenderungId === undefined) {
+            throw new Error('Required parameter aenderungId was null or undefined when calling patchAenderungInfo$.');
+        }
+        const patchAenderungsInfoRequest = requestParameters.patchAenderungsInfoRequest;
+        if (patchAenderungsInfoRequest === null || patchAenderungsInfoRequest === undefined) {
+            throw new Error('Required parameter patchAenderungsInfoRequest was null or undefined when calling patchAenderungInfo$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "aenderungId", value: aenderungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/patchAenderungInfo`;
+        return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: patchAenderungsInfoRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -343,62 +343,55 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       });
     });
 
-    effect(
-      () => {
-        const error =
-          this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
+    effect(() => {
+      const error = this.ausbildungStore.ausbildungCreateErrorResponseViewSig();
 
-        if (error) {
-          this.withAusbildungRange((ctrl) =>
-            ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+      if (error) {
+        this.withAusbildungRange((ctrl) =>
+          ctrl.setErrors(gesuchsPeriodenSelectErrorMap[error.type]),
+        );
+      }
+    });
 
     // fill form
-    effect(
-      () => {
-        const ausbildung = {
-          ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-            .gesuchFormular?.ausbildung,
-        };
-        const ausbildungstaetten =
-          this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+    effect(() => {
+      const ausbildung = {
+        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          .gesuchFormular?.ausbildung,
+      };
+      const ausbildungstaetten =
+        this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
-        if (ausbildung && ausbildungstaetten) {
+      if (ausbildung && ausbildungstaetten) {
+        this.form.patchValue({
+          ...ausbildung,
+          ausbildungsgang: undefined,
+        });
+        const currentAusbildungsgang = ausbildung.ausbildungsgang;
+        if (currentAusbildungsgang) {
+          const ausbildungsstaette = ausbildungstaetten.find(
+            (ausbildungsstaette) =>
+              ausbildungsstaette.ausbildungsgaenge?.find(
+                (ausbildungsgang) =>
+                  ausbildungsgang.id === currentAusbildungsgang.id,
+              ),
+          );
+          const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
+            (ausbildungsgang) =>
+              ausbildungsgang.id === currentAusbildungsgang.id,
+          );
           this.form.patchValue({
-            ...ausbildung,
-            ausbildungsgang: undefined,
+            ausbildungsstaette:
+              getTranslatableProp(
+                ausbildungsstaette,
+                'name',
+                this.languageSig(),
+              ) ?? undefined,
+            ausbildungsgang: ausbildungsgang?.id,
           });
-          const currentAusbildungsgang = ausbildung.ausbildungsgang;
-          if (currentAusbildungsgang) {
-            const ausbildungsstaette = ausbildungstaetten.find(
-              (ausbildungsstaette) =>
-                ausbildungsstaette.ausbildungsgaenge?.find(
-                  (ausbildungsgang) =>
-                    ausbildungsgang.id === currentAusbildungsgang.id,
-                ),
-            );
-            const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-              (ausbildungsgang) =>
-                ausbildungsgang.id === currentAusbildungsgang.id,
-            );
-            this.form.patchValue({
-              ausbildungsstaette:
-                getTranslatableProp(
-                  ausbildungsstaette,
-                  'name',
-                  this.languageSig(),
-                ) ?? undefined,
-              ausbildungsgang: ausbildungsgang?.id,
-            });
-          }
         }
-      },
-      { allowSignalWrites: true },
-    );
+      }
+    });
 
     effect(() => {
       const { readonly } = this.cachedGesuchViewSig();

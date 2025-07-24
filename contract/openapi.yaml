@@ -3581,6 +3581,38 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllTranchenForGesuchSB
+  '/gesuchtranche/{aenderungId}/patchAenderungInfo':
+    parameters:
+      - name: aenderungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAenderungsInfoRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: patchAenderungInfo
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -3929,7 +3961,19 @@ components:
         - AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - PERSON_NIEDERLASSUNGSSTATUS_C
         - PERSON_NIEDERLASSUNGSSTATUS_B
-        - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        - PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A
+        - PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G
+        - PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L
+        - PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N
+        - PERSON_NIEDERLASSUNGSSTATUS_SCHUTZBEDUERFTIG_S
+        - PERSON_NIEDERLASSUNGSSTATUS_MELDEPFLICHTIG
+        - PERSON_NIEDERLASSUNGSSTATUS_DIPLOMATISCHE_FUNKTION
+        - PERSON_NIEDERLASSUNGSSTATUS_INTERNATIONALE_FUNKTION
+        - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
         - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
@@ -4048,9 +4092,21 @@ components:
       example: '2022-03-10'
     Niederlassungsstatus:
       enum:
-        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - SAISONARBEITEND_A
         - AUFENTHALTSBEWILLIGUNG_B
-        - FLUECHTLING
+        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - GRENZGAENGIG_G
+        - KURZAUFENTHALT_L
+        - ASYLSUCHEND_N
+        - SCHUTZBEDUERFTIG_S
+        - MELDEPFLICHTIG
+        - DIPLOMATISCHE_FUNKTION
+        - INTERNATIONALE_FUNKTION
+        - NICHT_ZUGETEILT
       type: string
     Zivilstand:
       enum:
@@ -5052,8 +5108,6 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
-        zustaendigerKanton:
-          $ref: '#/components/schemas/ZustaendigerKanton'
         zustaendigeKESB:
           $ref: '#/components/schemas/ZustaendigeKESB'
     Sachbearbeiter:
@@ -6419,6 +6473,13 @@ components:
         comment:
           type: string
     CreateAenderungsantragRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    PatchAenderungsInfoRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
         - type: object

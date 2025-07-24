@@ -1,11 +1,14 @@
-import { DialogRef } from '@angular/cdk/dialog';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   inject,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
@@ -45,7 +48,7 @@ export class SharedPatternDocumentUploadDialogComponent {
     store: UploadStore;
   }>(MAT_DIALOG_DATA);
   private translate = inject(TranslateService);
-  private dialogRef = inject(DialogRef);
+  private dialogRef = inject(MatDialogRef);
   private documentMerger = inject(SharedUtilDocumentMergerService);
   private config = inject(SharedModelCompileTimeConfig);
 

@@ -22,6 +22,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
+import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -83,6 +84,7 @@ public class GesuchTrancheApiSpec {
                 getDocumentsToUploadSB(),
                 getGesuchDokumenteGS(),
                 getGesuchDokumenteSB(),
+                patchAenderungInfo(),
                 validateGesuchTranchePagesGS(),
                 validateGesuchTranchePagesSB()
         );
@@ -154,6 +156,10 @@ public class GesuchTrancheApiSpec {
 
     public GetGesuchDokumenteSBOper getGesuchDokumenteSB() {
         return new GetGesuchDokumenteSBOper(createReqSpec());
+    }
+
+    public PatchAenderungInfoOper patchAenderungInfo() {
+        return new PatchAenderungInfoOper(createReqSpec());
     }
 
     public ValidateGesuchTranchePagesGSOper validateGesuchTranchePagesGS() {
@@ -1422,6 +1428,90 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GetGesuchDokumenteSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath  (required)
+     * @see #body  (required)
+     * return GesuchDtoSpec
+     */
+    public static class PatchAenderungInfoOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/patchAenderungInfo";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public PatchAenderungInfoOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/patchAenderungInfo
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/patchAenderungInfo
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param patchAenderungsInfoRequestDtoSpec (PatchAenderungsInfoRequestDtoSpec)  (required)
+         * @return operation
+         */
+        public PatchAenderungInfoOper body(PatchAenderungsInfoRequestDtoSpec patchAenderungsInfoRequestDtoSpec) {
+            reqSpec.setBody(patchAenderungsInfoRequestDtoSpec);
+            return this;
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID)  (required)
+         * @return operation
+         */
+        public PatchAenderungInfoOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public PatchAenderungInfoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public PatchAenderungInfoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

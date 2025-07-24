@@ -315,7 +315,7 @@
 
         <!-- Info Konkubinat -->
         @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
-          <div class="col-12 col-md-6 col-xl-4">
+          <div class="col-12 col-md-12 col-xl-4">
             <dv-shared-ui-info-container>
               <div class="d-flex gap-3">
                 <span class="material-symbols-rounded text-info"> info </span>
@@ -324,8 +324,8 @@
             </dv-shared-ui-info-container>
           </div>
         } @else if (form.get('zivilstand')?.value === Zivilstand.KONKUBINAT) {
-          <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
-            <dv-shared-ui-info-container [type]="'info'">
+          <div class="col-12 col-md-12 col-xl-4">
+            <dv-shared-ui-info-container>
               <div class="d-flex gap-3 align-content-center">
                 <span class="material-symbols-rounded text-info">info</span>
                 <span>{{ 'shared.form.person.zivilstand.konkubinat.info' | translate }}</span>
@@ -356,6 +356,7 @@
               <mat-select
                 formControlName="niederlassungsstatus"
                 data-testid="form-person-niederlassungsstatus"
+                [panelWidth]="null"
                 [placeholder]="'shared.form.select.empty' | translate"
               >
                 @for (n of niederlassungsStatusValues; track $index) {
@@ -366,7 +367,7 @@
               </mat-select>
               <mat-hint
                 *dvZuvorHint="
-                  view.formChanges?.niederlassungsstatus
+                  niederlassungstatusChangesSig()?.niederlassungsstatus
                     | translateChange: 'shared.form.person.niederlassungsstatus.$VALUE'
                 "
               ></mat-hint>
@@ -390,14 +391,25 @@
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
-            #niederLassungInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-4"
-          ></div>
+          <div class="col-12 col-md-12 col-xl-4">
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+              #niederLassungInfoDialog="dvSharedUiInfoDialog"
+            ></div>
+
+            @if (showNiederlassungsstatusNichtBerechtigtWarningSig()) {
+              <dv-shared-ui-info-container [type]="'warning'">
+                <div class="d-flex gap-3">
+                  <span class="material-symbols-rounded text-warning">warning</span>
+                  <span>{{ 'shared.form.person.niederlassungstatus.info' | translate }}</span>
+                </div>
+              </dv-shared-ui-info-container>
+            }
+          </div>
         }
+
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
           <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -431,34 +443,72 @@
         }
       </div>
 
+      <!-- FLUECHTLINGSSTATUS -->
+      @if (!hiddenFieldsSetSig().has(form.controls.fluechtlingsstatus)) {
+        <div class="row g-4 mt-1">
+          <div class="d-none-lg col-md-6 col-xl-4"></div>
+          <div class="col-12 col-md-6 col-xl-4 tw-flex-col tw-gap-2">
+            <mat-radio-group
+              class="col-12 col-md-6 col-xl-4 tw-w-full"
+              formControlName="fluechtlingsstatus"
+              data-testid="form-person-fluechtlingsstatus"
+              dvSharedUiFormField
+            >
+              <div class="d-flex col-12">
+                <mat-label>{{ 'shared.form.person.fluechtlingsstatus.label' | translate }}</mat-label>
+              </div>
+              <div class="d-flex gap-2 col-12 justify-content-between flex-column">
+                @for (value of [true, false]; track $index) {
+                  <mat-radio-button [value]="value">{{
+                    'shared.form.person.fluechtlingsstatus.' + value | translate
+                  }}</mat-radio-button>
+                }
+              </div>
+              <mat-hint
+                *dvZuvorHint="
+                  niederlassungstatusChangesSig()?.fluechtlingsstatus
+                    | translateChange: 'shared.form.person.fluechtlingsstatus.$VALUE'
+                "
+              ></mat-hint>
+
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </div>
+            </mat-radio-group>
+          </div>
+        </div>
+      }
+
       <!-- ZUSTAENDIGER_KANTON -->
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
         <div class="row g-4 mt-1">
           <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
-              <mat-select
-                formControlName="zustaendigerKanton"
-                data-testid="form-person-zustaendigerKanton"
-                [placeholder]="'shared.form.select.empty' | translate"
-              >
-                @for (kanton of zugstaendigerKantonValues; track $index) {
-                  <mat-option [value]="kanton" [attr.data-testid]="kanton">
-                    {{ 'shared.form.person.zustaendigerKanton.' + kanton | translate }}
-                  </mat-option>
-                }
-              </mat-select>
-              <mat-hint
-                *dvZuvorHint="
-                  view.formChanges?.zustaendigerKanton | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
-                "
-              ></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-          </div>
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 tw-flex tw-flex-col tw-gap-2">
+            <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
+            <mat-select
+              formControlName="zustaendigerKanton"
+              data-testid="form-person-zustaendigerKanton"
+              [placeholder]="'shared.form.select.empty' | translate"
+            >
+              @for (kanton of zustaendigerKantonValues; track $index) {
+                <mat-option [value]="kanton" [attr.data-testid]="kanton">
+                  {{ 'shared.form.person.zustaendigerKanton.' + kanton | translate }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-hint
+              *dvZuvorHint="
+                niederlassungstatusChangesSig()?.zustaendigerKanton
+                  | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
+              "
+            ></mat-hint>
+
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
       }
 
@@ -484,7 +534,7 @@
           </mat-form-field>
 
           @if (showEinreiseDatumWarningSig()) {
-            <div class="col-12 col-md-6 col-xl-4">
+            <div class="col-12 col-md-12 col-xl-4">
               <dv-shared-ui-info-container [type]="'warning'">
                 <div class="d-flex gap-3">
                   <span class="material-symbols-rounded text-warning">warning</span>

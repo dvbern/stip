@@ -36,8 +36,8 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -79,7 +79,7 @@ public class GesuchDokumentService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
-    private final DokumentstatusService dokumentstatusService;
+    private final GesuchDokumentstatusService gesuchDokumentstatusService;
     private final RequiredDokumentService requiredDokumentService;
     private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
@@ -100,7 +100,7 @@ public class GesuchDokumentService {
         }
         final var gesuchDokument = gesuchDokumentOpt.get();
 
-        gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        gesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokumentRepository.persist(gesuchDokument);
     }
 
@@ -108,12 +108,12 @@ public class GesuchDokumentService {
     public void setGesuchDokumentOfCustomDokumentTypToAusstehend(final UUID customDokumentTypId) {
         customDocumentTypRepository.requireById(customDokumentTypId)
             .getGesuchDokument()
-            .setStatus(Dokumentstatus.AUSSTEHEND);
+            .setStatus(GesuchDokumentStatus.AUSSTEHEND);
     }
 
     @Transactional
     public void setGesuchDokumentOfDokumentToAusstehend(final UUID dokumentId) {
-        dokumentRepository.requireById(dokumentId).getGesuchDokument().setStatus(Dokumentstatus.AUSSTEHEND);
+        dokumentRepository.requireById(dokumentId).getGesuchDokument().setStatus(GesuchDokumentStatus.AUSSTEHEND);
     }
 
     @Transactional
@@ -327,9 +327,9 @@ public class GesuchDokumentService {
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
-        dokumentstatusService.triggerStatusChangeWithComment(
+        gesuchDokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
-            DokumentstatusChangeEvent.ABGELEHNT,
+            GesuchDokumentStatusChangeEvent.ABGELEHNT,
             dto.getKommentar()
         );
     }
@@ -338,9 +338,9 @@ public class GesuchDokumentService {
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
-        dokumentstatusService.triggerStatusChange(
+        gesuchDokumentstatusService.triggerStatusChange(
             gesuchDokument,
-            DokumentstatusChangeEvent.AKZEPTIERT
+            GesuchDokumentStatusChangeEvent.AKZEPTIERT
         );
         removeNachfristDokumenteIfAllAccepted(gesuchDokument);
     }
@@ -350,7 +350,7 @@ public class GesuchDokumentService {
         final var allGesuchDokuments = new ArrayList<GesuchDokument>();
         gesuch.getGesuchTranchen().stream().map(GesuchTranche::getGesuchDokuments).forEach(allGesuchDokuments::addAll);
         final var allAccepted = allGesuchDokuments.stream()
-            .allMatch(dok -> dok.getStatus().equals(Dokumentstatus.AKZEPTIERT));
+            .allMatch(dok -> dok.getStatus().equals(GesuchDokumentStatus.AKZEPTIERT));
         if (!allAccepted) {
             return;
         }
@@ -417,8 +417,9 @@ public class GesuchDokumentService {
         dokumente.forEach(this::removeDokument);
 
         for (final var gesuchDokument : gesuchDokumente) {
-            if (gesuchDokument.getStatus() != Dokumentstatus.AUSSTEHEND) {
-                dokumentstatusService.triggerStatusChange(gesuchDokument, DokumentstatusChangeEvent.AUSSTEHEND);
+            if (gesuchDokument.getStatus() != GesuchDokumentStatus.AUSSTEHEND) {
+                gesuchDokumentstatusService
+                    .triggerStatusChange(gesuchDokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
             }
         }
     }
@@ -482,11 +483,12 @@ public class GesuchDokumentService {
         // Query for these instead of iterating "in memory" because abgelehnteGesuchDokumente are lazy loaded
         // and this results in only loading the ones we need instead of all
         final var abgelehnteGesuchDokumente = gesuchDokumentRepository
-            .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
+            .getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.ABGELEHNT)
             .toList();
 
         for (var gesuchdokument : abgelehnteGesuchDokumente) {
-            dokumentstatusService.triggerStatusChangeNoComment(gesuchdokument, DokumentstatusChangeEvent.AUSSTEHEND);
+            gesuchDokumentstatusService
+                .triggerStatusChangeNoComment(gesuchdokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
         }
     }
 
