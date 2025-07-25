@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -44,9 +45,10 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        // todo: if else verfuegt -> msg versenden
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
-        notificationService.createGesuchEingereichtNotification(gesuch);
+        if (Objects.isNull(gesuch.getEinreichedatum())) {
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            notificationService.createGesuchEingereichtNotification(gesuch);
+        }
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)

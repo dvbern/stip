@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AnspruchPruefenStatusHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -60,7 +59,6 @@ class GesuchStatusStateMachineTest {
     private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
-    private AnspruchPruefenStatusHandler anspruchPruefenStatusHandlerSpy;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     @BeforeEach
@@ -78,7 +76,6 @@ class GesuchStatusStateMachineTest {
         aenderungFehlendeDokumenteNichtEingereichtHandlerSpy =
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class);
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
-        anspruchPruefenStatusHandlerSpy = Mockito.mock(AnspruchPruefenStatusHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -91,8 +88,7 @@ class GesuchStatusStateMachineTest {
             negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
-            stipendienAnspruchHandlerSpy,
-            anspruchPruefenStatusHandlerSpy
+            stipendienAnspruchHandlerSpy
         ).createStateMachineConfig();
     }
 

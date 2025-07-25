@@ -487,6 +487,12 @@ public class GesuchService {
         }
     }
 
+    public void performGesuchEinreichen(UUID gesuchId) {
+        gesuchEinreichen(gesuchId);
+        setGesuchStatusToAnspruchPruefen(gesuchId);
+        stipendienAnspruchPruefen(gesuchId);
+    }
+
     @Transactional(TxType.REQUIRES_NEW)
     public void gesuchEinreichen(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);

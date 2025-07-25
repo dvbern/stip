@@ -266,9 +266,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.gsCanGesuchEinreichen(gesuchId);
 
-        gesuchService.gesuchEinreichen(gesuchId);
-        gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
-        gesuchService.stipendienAnspruchPruefen(gesuchId);
+        gesuchService.performGesuchEinreichen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -279,9 +277,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.juristCanGesuchEinreichen(gesuchId);
 
-        gesuchService.gesuchEinreichen(gesuchId);
-        gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
-        gesuchService.stipendienAnspruchPruefen(gesuchId);
+        gesuchService.performGesuchEinreichen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 

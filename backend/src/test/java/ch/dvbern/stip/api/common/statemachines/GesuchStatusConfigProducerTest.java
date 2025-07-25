@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.common.statemachines;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AnspruchPruefenStatusHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -53,9 +52,9 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(NegativeVerfuegungHandler.class),
             Mockito.mock(AenderungZurueckweisenHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class),
-            Mockito.mock(StipendienAnspruchHandler.class),
-            Mockito.mock(AnspruchPruefenStatusHandler.class)
-        ).createStateMachineConfig();
+            Mockito.mock(StipendienAnspruchHandler.class)
+        )
+            .createStateMachineConfig();
 
         for (final var status : Gesuchstatus.values()) {
             final var representation = config.getRepresentation(status);
