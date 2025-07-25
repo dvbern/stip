@@ -267,6 +267,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.gsCanGesuchEinreichen(gesuchId);
 
         gesuchService.gesuchEinreichen(gesuchId);
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
@@ -279,6 +280,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.juristCanGesuchEinreichen(gesuchId);
 
         gesuchService.gesuchEinreichen(gesuchId);
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
