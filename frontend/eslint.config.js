@@ -1,3 +1,4 @@
+const { globalIgnores } = require('eslint/config');
 const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 const nxEslintPlugin = require('@nx/eslint-plugin');
@@ -9,6 +10,29 @@ const compat = new FlatCompat({
 });
 
 module.exports = [
+  ...nxEslintPlugin.configs['flat/angular'],
+  ...nxEslintPlugin.configs['flat/angular-template'],
+  {
+    files: ['**/*.ts'],
+    rules: {
+      '@angular-eslint/directive-selector': [
+        'error',
+        {
+          type: 'attribute',
+          prefix: 'dv',
+          style: 'camelCase',
+        },
+      ],
+      '@angular-eslint/component-selector': [
+        'error',
+        {
+          type: 'element',
+          prefix: 'dv',
+          style: 'kebab-case',
+        },
+      ],
+    },
+  },
   {
     plugins: {
       '@nx': nxEslintPlugin,
@@ -283,16 +307,26 @@ module.exports = [
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
   {
-    ignores: [
-      'libs/shared/model/gesuch/src/lib/openapi',
-      'libs/tooling/',
-      'dist',
-      'coverage',
-      '.nx',
-      '.swc',
-      '.angular',
-      '**/vite.config.*.timestamp*',
-      '**/vitest.config.*.timestamp*',
-    ],
+    name: 'angular-eslint/template-accessibility',
+    rules: {
+      '@angular-eslint/template/label-has-associated-control': ['off'],
+    },
+    files: ['**/*.html'],
   },
+  globalIgnores([
+    'libs/shared/model/gesuch/src/lib/openapi',
+    'libs/tooling/',
+    '.*',
+    '*.*',
+    'Caddyfile',
+    'Dockerfile',
+    'coverage',
+    'deploy',
+    'dist',
+    'docs',
+    'extensions',
+    'node_modules',
+    'scripts',
+    'tmp',
+  ]),
 ];

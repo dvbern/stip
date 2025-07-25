@@ -14,8 +14,8 @@ if hasChanges $frontend; then
 
     npx lint-staged
     npm run validate
-    npm run lint
-    npm run test
+    npm run lint:without-progress
+    npm run test:changed
     npm run build
 fi
 
