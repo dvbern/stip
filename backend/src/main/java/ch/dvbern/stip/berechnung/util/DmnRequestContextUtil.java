@@ -28,6 +28,11 @@ import lombok.experimental.UtilityClass;
 public class DmnRequestContextUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    static {
+        OBJECT_MAPPER.findAndRegisterModules();
+
+    }
+
     public Map<String, Object> toContext(final DmnRequest berechnungRequest) {
         // Use Jackson to serialize the BerechnungRequest to a Map<String, Object> via JSON
         // Once we have a separate DMN Server we'll send the JSON as the input directly

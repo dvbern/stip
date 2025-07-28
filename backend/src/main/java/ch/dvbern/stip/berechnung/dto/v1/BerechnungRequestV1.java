@@ -172,7 +172,8 @@ public class BerechnungRequestV1 implements DmnRequest {
                         )
                         .count(),
                     elternTyp,
-                    gesuchFormular.getFamiliensituation()
+                    gesuchFormular.getFamiliensituation(),
+                    gesuch.getAusbildung().getAusbildungBegin()
                 )
             );
         }
@@ -229,10 +230,12 @@ public class BerechnungRequestV1 implements DmnRequest {
 
     public static int getMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
+        final LocalDate ausbildungsBegin,
         final Gesuchsperiode gesuchsperiode
     ) {
         int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
             geburtsdatum,
+            ausbildungsBegin,
             gesuchsperiode
         );
         int medizinischeGrundversorgung = gesuchsperiode.getErwachsene2699();

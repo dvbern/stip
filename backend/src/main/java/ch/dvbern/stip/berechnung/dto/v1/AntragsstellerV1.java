@@ -111,11 +111,16 @@ public class AntragsstellerV1 {
             anzahlPersonenImHaushalt = 1;
             medizinischeGrundversorgung +=
                 BerechnungRequestV1
-                    .getMedizinischeGrundversorgung(personInAusbildung.getGeburtsdatum(), gesuchsperiode);
+                    .getMedizinischeGrundversorgung(
+                        personInAusbildung.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
+                        gesuchsperiode
+                    );
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     partner.getGeburtsdatum(),
+                    ausbildung.getAusbildungBegin(),
                     gesuchsperiode
                 );
             }
@@ -125,6 +130,7 @@ public class AntragsstellerV1 {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         kind.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
                         gesuchsperiode
                     );
                 }
@@ -219,11 +225,15 @@ public class AntragsstellerV1 {
 
     static int getAlterForMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
+        final LocalDate ausbildungsbegin,
         final Gesuchsperiode gesuchsperiode
     ) {
+        final int yearOfAusbildungsbegin = ausbildungsbegin.getYear();
+        final var stichtag =
+            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung().withYear(yearOfAusbildungsbegin);
         return DateUtil.getAgeInYearsAtDate(
             geburtsdatum,
-            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung()
+            stichtag
         );
     }
 

@@ -59,6 +59,7 @@ public class ElternteilV1 {
     boolean selbststaendigErwerbend;
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
+    LocalDate ausbildungsBegin;
 
     public static ElternteilV1Builder builderWithDefaults() {
         return new ElternteilV1Builder();
@@ -73,7 +74,8 @@ public class ElternteilV1 {
         final int anzahlGeschwisterInAusbildung,
         final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
-        final Familiensituation familiensituation
+        final Familiensituation familiensituation,
+        final LocalDate ausbildungsBegin
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
 
@@ -89,6 +91,7 @@ public class ElternteilV1 {
 
         builder.steuernBund(steuerdaten.getSteuernBund());
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
+        builder.ausbildungsBegin(ausbildungsBegin);
 
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
@@ -96,12 +99,14 @@ public class ElternteilV1 {
                 builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     elternteil.getGeburtsdatum(),
+                    ausbildungsBegin,
                     gesuchsperiode
                 );
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kindDerElternInHaushalten.getGeburtsdatum(),
+                    ausbildungsBegin,
                     gesuchsperiode
                 );
             }
@@ -128,6 +133,7 @@ public class ElternteilV1 {
             for (final var kind : kindDesElternteilsVollzeit) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kind.getGeburtsdatum(),
+                    ausbildungsBegin,
                     gesuchsperiode
                 );
             }
@@ -146,6 +152,7 @@ public class ElternteilV1 {
                 for (final var kind : kinderDerElternTeilzeit) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         kind.getGeburtsdatum(),
+                        ausbildungsBegin,
                         gesuchsperiode
                     );
                 }
@@ -164,11 +171,13 @@ public class ElternteilV1 {
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     elternteilToUse.getGeburtsdatum(),
+                    ausbildungsBegin,
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         LocalDate.now().minusYears(29),
+                        ausbildungsBegin,
                         gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
                                        // 29 für margin
                     );
@@ -184,11 +193,13 @@ public class ElternteilV1 {
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     elternteilToUse.getGeburtsdatum(),
+                    ausbildungsBegin,
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         LocalDate.now().minusYears(29),
+                        ausbildungsBegin,
                         gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
                                        // 29 für margin
                     );
@@ -239,7 +250,8 @@ public class ElternteilV1 {
         final int anzahlGeschwisterInAusbildung,
         final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
-        final Familiensituation familiensituation
+        final Familiensituation familiensituation,
+        final LocalDate ausbildungsBegin
     ) {
         return builderFromDependants(
             gesuchsperiode,
@@ -250,7 +262,8 @@ public class ElternteilV1 {
             anzahlGeschwisterInAusbildung,
             anzahlGeschwisterInNachobligatorischerAusbildung,
             elternTyp,
-            familiensituation
+            familiensituation,
+            ausbildungsBegin
         ).build();
     }
 
