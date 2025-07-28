@@ -52,17 +52,7 @@ import {
   SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import {
-  SortAndPageInputs,
-  getSortAndPageInputs,
-  inverseSortMap,
-  limitPageToNumberOfEntriesEffect,
-  makeEmptyStringPropertiesNull,
-  paginateList,
-  partiallyDebounceFormValueChangesSig,
-  restrictNumberParam,
-  sortList,
-} from '@dv/shared/model/table';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 import { AppendFromTo, isDefined } from '@dv/shared/model/type-util';
 import {
   DEFAULT_PAGE_SIZE,
@@ -85,6 +75,16 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import {
+  getSortAndPageInputs,
+  inverseSortMap,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  partiallyDebounceFormValueChangesSig,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/util/table';
 import {
   getDiffFormat,
   parseDate,

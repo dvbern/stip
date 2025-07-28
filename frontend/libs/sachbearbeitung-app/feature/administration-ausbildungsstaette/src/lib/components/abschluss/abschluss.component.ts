@@ -32,16 +32,7 @@ import {
   Bildungsrichtung,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import {
-  SortAndPageInputs,
-  getSortAndPageInputs,
-  limitPageToNumberOfEntriesEffect,
-  makeEmptyStringPropertiesNull,
-  paginateList,
-  partiallyDebounceFormValueChangesSig,
-  restrictNumberParam,
-  sortList,
-} from '@dv/shared/model/table';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   assertUnreachable,
   getCorrectPropertyName,
@@ -61,6 +52,15 @@ import {
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
+import {
+  getSortAndPageInputs,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  partiallyDebounceFormValueChangesSig,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/util/table';
 
 import { CreateAbschlussDialogComponent } from './create-abschluss-dialog.component';
 import { DataInfoDialogComponent } from '../data-info-dialog/data-info-dialog.component';
