@@ -136,6 +136,7 @@ class BerechnungTest {
                                 .setBfs(10)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
@@ -197,6 +198,7 @@ class BerechnungTest {
                                 .setBfs(5)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -295,6 +297,7 @@ class BerechnungTest {
                                 .setBfs(5)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -407,6 +410,7 @@ class BerechnungTest {
                                 .setBfs(6)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -570,6 +574,7 @@ class BerechnungTest {
                                 .setBfs(9)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -714,6 +719,7 @@ class BerechnungTest {
                                 .setBfs(5)
                         )
                 )
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
@@ -856,6 +862,7 @@ class BerechnungTest {
                         )
                 )
                 .setPensum(AusbildungsPensum.TEILZEIT)
+                .setAusbildungBegin(LocalDate.now().plusMonths(3))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();

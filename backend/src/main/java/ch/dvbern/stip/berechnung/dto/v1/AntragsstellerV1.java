@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -99,6 +101,7 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
+
         int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         builder.alter(alter);
 
@@ -106,11 +109,18 @@ public class AntragsstellerV1 {
         int anzahlPersonenImHaushalt = 0;
         if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
             anzahlPersonenImHaushalt = 1;
-            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(alter, gesuchsperiode);
+            medizinischeGrundversorgung +=
+                BerechnungRequestV1
+                    .getMedizinischeGrundversorgung(
+                        personInAusbildung.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
+                        gesuchsperiode
+                    );
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAgeInYears(partner.getGeburtsdatum()),
+                    partner.getGeburtsdatum(),
+                    ausbildung.getAusbildungBegin(),
                     gesuchsperiode
                 );
             }
@@ -119,7 +129,8 @@ public class AntragsstellerV1 {
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
+                        kind.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
                         gesuchsperiode
                     );
                 }
@@ -174,7 +185,11 @@ public class AntragsstellerV1 {
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
         builder.halbierungElternbeitrag(
-            getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode)
+            getHalbierungElternbeitrag(
+                personInAusbildung.getGeburtsdatum(),
+                gesuchFormular.getLebenslaufItems(),
+                gesuchFormular.getTranche().getGesuch()
+            )
         );
 
         if (partner != null) {
@@ -208,20 +223,51 @@ public class AntragsstellerV1 {
         };
     }
 
-    private static boolean getHalbierungElternbeitrag(
-        final int alter,
-        final Set<LebenslaufItem> lebenslaufItemSet,
+    static int getAlterForMedizinischeGrundversorgung(
+        final LocalDate geburtsdatum,
+        final LocalDate ausbildungsbegin,
         final Gesuchsperiode gesuchsperiode
     ) {
-        final boolean abgeschlosseneErstausbildung = lebenslaufItemSet.stream()
-            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
-            .anyMatch(
-                lebenslaufItem -> lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+        final int yearOfAusbildungsbegin = ausbildungsbegin.getYear();
+        final var stichtag =
+            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung().withYear(yearOfAusbildungsbegin);
+        return DateUtil.getAgeInYearsAtDate(
+            geburtsdatum,
+            stichtag
+        );
+    }
+
+    private static boolean getHalbierungElternbeitrag(
+        final LocalDate geburtsdatumPia,
+        final Set<LebenslaufItem> lebenslaufItemSet,
+        final Gesuch gesuch
+    ) {
+        final var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
+        final var beginOfAusbildungsjahr = gesuch.getEarliestGesuchTranche().getGueltigkeit().getGueltigAb();
+
+        final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
+            .filter(
+                lebenslaufItem -> lebenslaufItem.getBildungsart() != null
+                && lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
-            );
+            )
+            .findFirst();
+
+        final boolean abgeschlosseneErstausbildung = abgeschlosseneErstausbildungLebenslaufItem.isPresent();
+
+        boolean erstAusbildungWasCompletedBeforeAusbildungsjahr = false;
+        if (abgeschlosseneErstausbildung) {
+            erstAusbildungWasCompletedBeforeAusbildungsjahr =
+                abgeschlosseneErstausbildungLebenslaufItem.get().getVon().isBefore(beginOfAusbildungsjahr);
+        }
+
+        var alterAtEndOfAusbildungsjahr =
+            DateUtil.getAgeInYearsAtDate(geburtsdatumPia, endOfAusbildungsjahr);
+
         final boolean halbierungAbgeschlosseneErstausbildung =
-            abgeschlosseneErstausbildung
-            && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+            erstAusbildungWasCompletedBeforeAusbildungsjahr
+            && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
+                .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT

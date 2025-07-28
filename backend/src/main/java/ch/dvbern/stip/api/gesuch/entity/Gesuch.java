@@ -141,6 +141,13 @@ public class Gesuch extends AbstractMandantEntity {
             .get();
     }
 
+    public GesuchTranche getEarliestGesuchTranche() {
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(Comparator.comparing((GesuchTranche gesuchTranche) -> gesuchTranche.getGueltigkeit().getGueltigAb()))
+            .get();
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """
         (
