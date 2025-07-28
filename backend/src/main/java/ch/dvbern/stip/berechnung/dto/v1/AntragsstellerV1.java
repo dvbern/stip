@@ -20,11 +20,8 @@ package ch.dvbern.stip.berechnung.dto.v1;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
-import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -174,7 +171,7 @@ public class AntragsstellerV1 {
             .equals(
                 Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
             )
-            && abschluss.isBerufsbefaehigenderAbschluss();
+        && abschluss.isBerufsbefaehigenderAbschluss();
         builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
@@ -222,11 +219,11 @@ public class AntragsstellerV1 {
             .filter(lebenslaufItem -> lebenslaufItem.getAbschluss() != null)
             .anyMatch(
                 lebenslaufItem -> lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
-                    && lebenslaufItem.isAusbildungAbgeschlossen()
+                && lebenslaufItem.isAusbildungAbgeschlossen()
             );
         final boolean halbierungAbgeschlosseneErstausbildung =
             abgeschlosseneErstausbildung
-                && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+            && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
@@ -243,7 +240,7 @@ public class AntragsstellerV1 {
         final int monthsBerufstaetig = berufstaetigeItems
             .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
             .sum()
-            / 30;
+        / 30;
         final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
 
         return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;

@@ -38,8 +38,8 @@ public class LebenslaufItemCopyUtil {
         target.setBis(source.getBis());
         target.setTaetigkeitsart(source.getTaetigkeitsart());
         target.setTaetigkeitsBeschreibung(source.getTaetigkeitsBeschreibung());
-        target.setBerufsbezeichnung(source.getBerufsbezeichnung());
-        target.setFachrichtung(source.getFachrichtung());
+        target.setFachrichtungBerufsbezeichnung(source.getFachrichtungBerufsbezeichnung());
+        target.setFachrichtungBerufsbezeichnung(source.getFachrichtungBerufsbezeichnung());
         target.setAusbildungAbgeschlossen(source.isAusbildungAbgeschlossen());
         target.setWohnsitz(source.getWohnsitz());
     }

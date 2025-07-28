@@ -26,8 +26,7 @@ public class LebenslaufItemDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID abschlussId;
   private @Valid Boolean ausbildungAbgeschlossen;
-  private @Valid String berufsbezeichnung;
-  private @Valid String fachrichtung;
+  private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
 
@@ -145,41 +144,22 @@ public class LebenslaufItemDto  implements Serializable {
   }
 
   /**
-   * Requierd wenn bildungsart &#x3D; &#39;EIDGENOESSISCHES_BERUFSATTEST&#39; oder &#39;EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS&#39;
+   * Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
    **/
-  public LebenslaufItemDto berufsbezeichnung(String berufsbezeichnung) {
-    this.berufsbezeichnung = berufsbezeichnung;
+  public LebenslaufItemDto fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
   
-  @JsonProperty("berufsbezeichnung")
-  public String getBerufsbezeichnung() {
-    return berufsbezeichnung;
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
   }
 
-  @JsonProperty("berufsbezeichnung")
-  public void setBerufsbezeichnung(String berufsbezeichnung) {
-    this.berufsbezeichnung = berufsbezeichnung;
-  }
-
-  /**
-   * Required wenn bildungsart &#x3D; \&quot;BACHELOR_HOCHSCHULE_UNI\&quot; oder \&quot;BACHELOR_FACHHOCHSCHULE\&quot; oder \&quot;MASTER\&quot;
-   **/
-  public LebenslaufItemDto fachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
-    return this;
-  }
-
-  
-  @JsonProperty("fachrichtung")
-  public String getFachrichtung() {
-    return fachrichtung;
-  }
-
-  @JsonProperty("fachrichtung")
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
   /**
@@ -235,15 +215,14 @@ public class LebenslaufItemDto  implements Serializable {
         Objects.equals(this.id, lebenslaufItem.id) &&
         Objects.equals(this.abschlussId, lebenslaufItem.abschlussId) &&
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItem.ausbildungAbgeschlossen) &&
-        Objects.equals(this.berufsbezeichnung, lebenslaufItem.berufsbezeichnung) &&
-        Objects.equals(this.fachrichtung, lebenslaufItem.fachrichtung) &&
+        Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
         Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, taetigkeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung);
   }
 
   @Override
@@ -257,8 +236,7 @@ public class LebenslaufItemDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
     sb.append("    ausbildungAbgeschlossen: ").append(toIndentedString(ausbildungAbgeschlossen)).append("\n");
-    sb.append("    berufsbezeichnung: ").append(toIndentedString(berufsbezeichnung)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
+    sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
     sb.append("}");

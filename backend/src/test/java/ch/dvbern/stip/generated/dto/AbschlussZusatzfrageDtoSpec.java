@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum AbschlussZusatzfrageDtoSpec {
   
-  BERUFSBEZEICHNUNG_BERUFSMATURITAET("BERUFSBEZEICHNUNG_BERUFSMATURITAET"),
+  BERUFSBEZEICHNUNG("BERUFSBEZEICHNUNG"),
   
   FACHRICHTUNG("FACHRICHTUNG");
 

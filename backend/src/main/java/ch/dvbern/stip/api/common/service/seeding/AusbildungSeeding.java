@@ -114,6 +114,7 @@ public class AusbildungSeeding extends Seeder {
                             .setZusatzfrage(
                                 abschlussLine[8].isEmpty() ? null : AbschlussZusatzfrage.valueOf(abschlussLine[8])
                             )
+                            .setAskForBerufsmaturitaet(Boolean.valueOf(abschlussLine[9]))
                     )
                     .toList();
             }

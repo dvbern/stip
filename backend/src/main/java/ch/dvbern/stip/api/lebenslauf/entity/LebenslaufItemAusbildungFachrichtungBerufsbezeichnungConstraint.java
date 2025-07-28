@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NOTNULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = LebenslaufItemAusbildungFachrichtungConstraintValidator.class)
+@Constraint(validatedBy = LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraintValidator.class)
 @Documented
-public @interface LebenslaufItemAusbildungFachrichtungConstraint {
-    String message() default VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NOTNULL_MESSAGE;
+public @interface LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraint {
+    String message() default VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE;
 
     Class<?>[] groups() default {};
 

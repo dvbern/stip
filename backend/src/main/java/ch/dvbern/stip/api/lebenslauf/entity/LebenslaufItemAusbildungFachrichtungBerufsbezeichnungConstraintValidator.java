@@ -17,26 +17,32 @@
 
 package ch.dvbern.stip.api.lebenslauf.entity;
 
+import java.util.Objects;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE;
 
-public class LebenslaufItemAusbildungFachrichtungConstraintValidator
-    implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungConstraint, LebenslaufItem> {
+public class LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraintValidator
+    implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraint, LebenslaufItem> {
     @Override
     public boolean isValid(LebenslaufItem lebenslaufItem, ConstraintValidatorContext constraintValidatorContext) {
-        if (lebenslaufItem.getAbschluss().getZusatzfrage() == AbschlussZusatzfrage.FACHRICHTUNG) {
-            return lebenslaufItem.getFachrichtung() != null;
+        if (Objects.isNull(lebenslaufItem.getAbschluss())) {
+            return true;
         }
 
-        if (lebenslaufItem.getFachrichtung() == null) {
+        if (Objects.nonNull(lebenslaufItem.getAbschluss().getZusatzfrage())) {
+            return lebenslaufItem.getFachrichtungBerufsbezeichnung() != null;
+        }
+
+        if (lebenslaufItem.getFachrichtungBerufsbezeichnung() == null) {
             return true;
         }
 
         constraintValidatorContext.disableDefaultConstraintViolation();
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE
+            VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE
         )
             .addConstraintViolation();
         return false;

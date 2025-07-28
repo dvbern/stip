@@ -34,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE,
-  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET
 })
 @JsonTypeName("AusbildungsgangSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -53,6 +54,9 @@ public class AusbildungsgangSlimDtoSpec {
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
+
+  public static final String JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET = "askForBerufsmaturitaet";
+  private Boolean askForBerufsmaturitaet;
 
   public AusbildungsgangSlimDtoSpec() {
   }
@@ -186,6 +190,32 @@ public class AusbildungsgangSlimDtoSpec {
     this.zusatzfrage = zusatzfrage;
   }
 
+
+  public AusbildungsgangSlimDtoSpec askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+    return this;
+  }
+
+   /**
+   * Get askForBerufsmaturitaet
+   * @return askForBerufsmaturitaet
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getAskForBerufsmaturitaet() {
+    return askForBerufsmaturitaet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -199,12 +229,13 @@ public class AusbildungsgangSlimDtoSpec {
         Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
         Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie) &&
-        Objects.equals(this.zusatzfrage, ausbildungsgangSlim.zusatzfrage);
+        Objects.equals(this.zusatzfrage, ausbildungsgangSlim.zusatzfrage) &&
+        Objects.equals(this.askForBerufsmaturitaet, ausbildungsgangSlim.askForBerufsmaturitaet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage, askForBerufsmaturitaet);
   }
 
   @Override
@@ -216,6 +247,7 @@ public class AusbildungsgangSlimDtoSpec {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
+    sb.append("    askForBerufsmaturitaet: ").append(toIndentedString(askForBerufsmaturitaet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

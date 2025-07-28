@@ -29,6 +29,7 @@ public class AbschlussDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
+  private @Valid Boolean askForBerufsmaturitaet;
   private @Valid Boolean aktiv;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
@@ -205,6 +206,25 @@ public class AbschlussDto  implements Serializable {
 
   /**
    **/
+  public AbschlussDto askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+    return this;
+  }
+
+  
+  @JsonProperty("askForBerufsmaturitaet")
+  @NotNull
+  public Boolean getAskForBerufsmaturitaet() {
+    return askForBerufsmaturitaet;
+  }
+
+  @JsonProperty("askForBerufsmaturitaet")
+  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+  }
+
+  /**
+   **/
   public AbschlussDto aktiv(Boolean aktiv) {
     this.aktiv = aktiv;
     return this;
@@ -259,13 +279,14 @@ public class AbschlussDto  implements Serializable {
         Objects.equals(this.ferien, abschluss.ferien) &&
         Objects.equals(this.bezeichnungDe, abschluss.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, abschluss.bezeichnungFr) &&
+        Objects.equals(this.askForBerufsmaturitaet, abschluss.askForBerufsmaturitaet) &&
         Objects.equals(this.aktiv, abschluss.aktiv) &&
         Objects.equals(this.zusatzfrage, abschluss.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, aktiv, zusatzfrage);
+    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, askForBerufsmaturitaet, aktiv, zusatzfrage);
   }
 
   @Override
@@ -282,6 +303,7 @@ public class AbschlussDto  implements Serializable {
     sb.append("    ferien: ").append(toIndentedString(ferien)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    askForBerufsmaturitaet: ").append(toIndentedString(askForBerufsmaturitaet)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");

@@ -1,215 +1,264 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="jafa (generated)" id="1752071244162-23">
-        <dropForeignKeyConstraint baseTableName="ausbildungsgang" constraintName="FK_ausbildungsgang_bildungsart_id"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-24">
-        <dropForeignKeyConstraint baseTableName="bildungskategorie_aud" constraintName="FKoxlaw6erkk3yug8c86aa4pman"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-2">
-        <createTable tableName="abschluss">
-            <column name="id" type="UUID">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="abschlussPK"/>
-            </column>
-            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_erstellt" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_mutiert" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="BIGINT"/>
-            <column name="mandant" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="aktiv" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ausbildungskategorie" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="berufsbefaehigender_abschluss" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bezeichnung_de" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bezeichnung_fr" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bfs_kategorie" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bildungskategorie" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bildungsrichtung" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ferien" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="zusatzfrage" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-3">
-        <createTable tableName="abschluss_aud">
-            <column name="id" type="UUID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="rev" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="revtype" type="SMALLINT"/>
-            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
-            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
-            <column name="user_erstellt" type="VARCHAR(255)"/>
-            <column name="user_mutiert" type="VARCHAR(255)"/>
-            <column name="mandant" type="VARCHAR(255)"/>
-            <column name="aktiv" type="BOOLEAN"/>
-            <column name="ausbildungskategorie" type="VARCHAR(255)"/>
-            <column name="berufsbefaehigender_abschluss" type="BOOLEAN"/>
-            <column name="bezeichnung_de" type="VARCHAR(255)"/>
-            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
-            <column name="bfs_kategorie" type="INTEGER"/>
-            <column name="bildungskategorie" type="VARCHAR(255)"/>
-            <column name="bildungsrichtung" type="VARCHAR(255)"/>
-            <column name="ferien" type="VARCHAR(255)"/>
-            <column name="zusatzfrage" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-4">
-        <addColumn tableName="ausbildungsgang">
-            <column name="abschluss_id" type="UUID">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-5">
-        <addColumn tableName="ausbildungsgang_aud">
-            <column name="abschluss_id" type="UUID"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-6">
-        <addColumn tableName="ausbildungsgang">
-            <column name="aktiv" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-7">
-        <addColumn tableName="ausbildungsgang_aud">
-            <column name="aktiv" type="BOOLEAN"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-8">
-        <addColumn tableName="ausbildungsstaette">
-            <column name="aktiv" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-9">
-        <addColumn tableName="ausbildungsstaette_aud">
-            <column name="aktiv" type="BOOLEAN"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-10">
-        <addColumn tableName="ausbildungsstaette">
-            <column name="bur_no" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-11">
-        <addColumn tableName="ausbildungsstaette_aud">
-            <column name="bur_no" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-12">
-        <addColumn tableName="ausbildungsstaette">
-            <column name="ch_shis" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-13">
-        <addColumn tableName="ausbildungsstaette_aud">
-            <column name="ch_shis" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-14">
-        <addColumn tableName="ausbildungsstaette">
-            <column name="ct_no" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-15">
-        <addColumn tableName="ausbildungsstaette_aud">
-            <column name="ct_no" type="VARCHAR(20)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-16">
-        <addPrimaryKey columnNames="rev, id" constraintName="abschluss_audPK" tableName="abschluss_aud"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-19">
-        <createIndex indexName="IX_abschluss_mandant" tableName="abschluss">
-            <column name="mandant"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-20">
-        <createIndex indexName="IX_ausbildungsgang_abschluss_id" tableName="ausbildungsgang">
-            <column name="abschluss_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-21">
-        <addForeignKeyConstraint baseColumnNames="abschluss_id" baseTableName="ausbildungsgang" constraintName="FK_ausbildungsgang_abschluss_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="abschluss" validate="true"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-22">
-        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="abschluss_aud" constraintName="FKklse9cqsqnr932vhxfpen8tp" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-25">
-        <dropTable tableName="bildungskategorie"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-26">
-        <dropTable tableName="bildungskategorie_aud"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-27">
-        <dropColumn columnName="bezeichnung_de" tableName="ausbildungsgang"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-28">
-        <dropColumn columnName="bezeichnung_de" tableName="ausbildungsgang_aud"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-29">
-        <dropColumn columnName="bezeichnung_fr" tableName="ausbildungsgang"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-30">
-        <dropColumn columnName="bezeichnung_fr" tableName="ausbildungsgang_aud"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-31">
-        <dropColumn columnName="bildungskategorie_id" tableName="ausbildungsgang"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1752071244162-32">
-        <dropColumn columnName="bildungskategorie_id" tableName="ausbildungsgang_aud"/>
-    </changeSet>
-<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-1">-->
-<!--        <dropNotNullConstraint tableName="ausbildung" columnName="fachrichtung" />-->
-<!--    </changeSet>-->
-<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-2">-->
-<!--        <dropColumn columnName="titel_des_abschlusses" tableName="lebenslauf_item"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-3">-->
-<!--        <dropColumn columnName="bildungsart" tableName="lebenslauf_item"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-4">-->
-<!--        <addColumn tableName="lebenslauf_item">-->
-<!--            <column name="abschluss_id" type="uuid" />-->
-<!--        </addColumn>-->
-<!--    </changeSet>-->
-<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-5">-->
-<!--        <addUniqueConstraint columnNames="abschluss_id" constraintName="UC_LEBENSLAUF_ITEM_ABSCHLUSS_ID_COL" tableName="lebenslauf_item"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet author="philipp.schaerer (generated)" id="1723455825466-6">-->
-<!--        <addForeignKeyConstraint baseColumnNames="abschluss_id" baseTableName="lebenslauf_item" constraintName="FK_lebenslauf_item_abschluss_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="abschluss" validate="true"/>-->
-<!--    </changeSet>-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1753709316588-30">
+    <dropForeignKeyConstraint baseTableName="ausbildungsgang" constraintName="FK_ausbildungsgang_bildungsart_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-31">
+    <dropForeignKeyConstraint baseTableName="bildungskategorie_aud" constraintName="FKoxlaw6erkk3yug8c86aa4pman"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-2">
+    <createTable tableName="abschluss">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="abschlussPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="aktiv" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ask_for_berufsmaturitaet" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ausbildungskategorie" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="berufsbefaehigender_abschluss" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bezeichnung_de" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bezeichnung_fr" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bfs_kategorie" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bildungskategorie" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bildungsrichtung" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ferien" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="zusatzfrage" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-3">
+    <createTable tableName="abschluss_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="aktiv" type="BOOLEAN"/>
+      <column name="ask_for_berufsmaturitaet" type="BOOLEAN"/>
+      <column name="ausbildungskategorie" type="VARCHAR(255)"/>
+      <column name="berufsbefaehigender_abschluss" type="BOOLEAN"/>
+      <column name="bezeichnung_de" type="VARCHAR(255)"/>
+      <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+      <column name="bfs_kategorie" type="INTEGER"/>
+      <column name="bildungskategorie" type="VARCHAR(255)"/>
+      <column name="bildungsrichtung" type="VARCHAR(255)"/>
+      <column name="ferien" type="VARCHAR(255)"/>
+      <column name="zusatzfrage" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-4">
+    <addColumn tableName="ausbildungsgang">
+      <column name="abschluss_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-5">
+    <addColumn tableName="ausbildungsgang_aud">
+      <column name="abschluss_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-6">
+    <addColumn tableName="lebenslauf_item">
+      <column name="abschluss_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-7">
+    <addColumn tableName="lebenslauf_item_aud">
+      <column name="abschluss_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-8">
+    <addColumn tableName="ausbildungsgang">
+      <column name="aktiv" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-9">
+    <addColumn tableName="ausbildungsgang_aud">
+      <column name="aktiv" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-10">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="aktiv" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-11">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="aktiv" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-12">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="bur_no" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-13">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="bur_no" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-14">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="ch_shis" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-15">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="ch_shis" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-16">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="ct_no" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-17">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="ct_no" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-18">
+    <addColumn tableName="ausbildung">
+      <column name="fachrichtung_berufsbezeichnung" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-19">
+    <addColumn tableName="ausbildung_aud">
+      <column name="fachrichtung_berufsbezeichnung" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-20">
+    <addColumn tableName="lebenslauf_item">
+      <column name="fachrichtung_berufsbezeichnung" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-21">
+    <addColumn tableName="lebenslauf_item_aud">
+      <column name="fachrichtung_berufsbezeichnung" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-22">
+    <addPrimaryKey columnNames="rev, id" constraintName="abschluss_audPK" tableName="abschluss_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-25">
+    <createIndex indexName="IX_abschluss_mandant" tableName="abschluss">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-26">
+    <createIndex indexName="IX_ausbildungsgang_abschluss_id" tableName="ausbildungsgang">
+      <column name="abschluss_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-27">
+    <addForeignKeyConstraint baseColumnNames="abschluss_id" baseTableName="ausbildungsgang" constraintName="FK_ausbildungsgang_abschluss_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="abschluss" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-28">
+    <addForeignKeyConstraint baseColumnNames="abschluss_id" baseTableName="lebenslauf_item" constraintName="FK_lebenslauf_item_abschluss_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="abschluss" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-29">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="abschluss_aud" constraintName="FKklse9cqsqnr932vhxfpen8tp" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-32">
+    <dropTable tableName="bildungskategorie"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-33">
+    <dropTable tableName="bildungskategorie_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-34">
+    <dropColumn columnName="berufsbezeichnung" tableName="lebenslauf_item"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-35">
+    <dropColumn columnName="berufsbezeichnung" tableName="lebenslauf_item_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-36">
+    <dropColumn columnName="bezeichnung_de" tableName="ausbildungsgang"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-37">
+    <dropColumn columnName="bezeichnung_de" tableName="ausbildungsgang_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-38">
+    <dropColumn columnName="bezeichnung_fr" tableName="ausbildungsgang"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-39">
+    <dropColumn columnName="bezeichnung_fr" tableName="ausbildungsgang_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-40">
+    <dropColumn columnName="bildungsart" tableName="lebenslauf_item"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-41">
+    <dropColumn columnName="bildungsart" tableName="lebenslauf_item_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-42">
+    <dropColumn columnName="bildungskategorie_id" tableName="ausbildungsgang"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-43">
+    <dropColumn columnName="bildungskategorie_id" tableName="ausbildungsgang_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-44">
+    <dropColumn columnName="fachrichtung" tableName="ausbildung"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-45">
+    <dropColumn columnName="fachrichtung" tableName="ausbildung_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-46">
+    <dropColumn columnName="fachrichtung" tableName="lebenslauf_item_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-47">
+    <dropColumn columnName="fachrichtungBerufsbezeichnung" tableName="lebenslauf_item"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-48">
+    <dropColumn columnName="titel_des_abschlusses" tableName="lebenslauf_item"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1753709316588-49">
+    <dropColumn columnName="titel_des_abschlusses" tableName="lebenslauf_item_aud"/>
+  </changeSet>
 </databaseChangeLog>

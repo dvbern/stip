@@ -97,8 +97,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.null.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NOTNULL_MESSAGE =
         "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.notnull.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.null.message}";
+    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE =
+        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtungBerufsbezeichnung.null.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NOTNULL_MESSAGE =
         "{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.notnull.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE =

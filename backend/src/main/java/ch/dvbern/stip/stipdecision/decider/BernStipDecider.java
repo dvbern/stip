@@ -18,10 +18,7 @@
 package ch.dvbern.stip.stipdecision.decider;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
-import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -70,26 +67,18 @@ public class BernStipDecider extends BaseStipDecider {
             case GESUCH_VALID -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
             case NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN ->
-                GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN ->
-                GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN ->
-                GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             // case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN ->
             // GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG ->
-                GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN ->
-                GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN ->
-                GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN ->
-                GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT ->
-                GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
+            case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
             case ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
             case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDeciderResult: " + decision);
         };
@@ -140,8 +129,7 @@ public class BernStipDecider extends BaseStipDecider {
     }
 
     static final class StipendienrechtlicherWohnsitzKantonBernChecker {
-        private StipendienrechtlicherWohnsitzKantonBernChecker() {
-        }
+        private StipendienrechtlicherWohnsitzKantonBernChecker() {}
 
         public static StipDeciderResult evaluate(
             final GesuchTranche gesuchTranche,
@@ -277,7 +265,7 @@ public class BernStipDecider extends BaseStipDecider {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
                 .getEinreisedatum() != null
-                && gesuchTranche.getGesuchFormular()
+            && gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
                 .getEinreisedatum()
                 .isBefore(LocalDate.now().minusYears(5));
@@ -298,8 +286,8 @@ public class BernStipDecider extends BaseStipDecider {
                 .anyMatch(
                     item -> item.getAbschluss() != null
 
-                        && item.getAbschluss().isBerufsbefaehigenderAbschluss()
-                        && item.isAusbildungAbgeschlossen()
+                    && item.getAbschluss().isBerufsbefaehigenderAbschluss()
+                    && item.isAusbildungAbgeschlossen()
                 );
         }
 
@@ -309,7 +297,7 @@ public class BernStipDecider extends BaseStipDecider {
                     .getPersonInAusbildung()
                     .getNiederlassungsstatus()
             )
-                || gesuchTranche.getGesuchFormular()
+            || gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
                 .getNationalitaet()
                 .is(WellKnownLand.STATELESS);
@@ -325,8 +313,7 @@ public class BernStipDecider extends BaseStipDecider {
         private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getNiederlassungsstatus()
-                == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
+                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
         }
 
         private static boolean piaNationalitaetEuEfta(

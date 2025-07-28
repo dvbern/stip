@@ -17,10 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungDiffUtil;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
@@ -127,10 +124,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
             () -> newAusbildung != null
             && ausbildung.getAusbildungsgang() != null
             && (AusbildungDiffUtil.hasAusbildungsgangChanged(ausbildung, newAusbildung))
-            && !Objects.equals(
-                ausbildung.getAusbildungsgang().getAbschluss().getZusatzfrage(),
-                AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET
-            ),
+            && !ausbildung.getAusbildungsgang().getAbschluss().isAskForBerufsmaturitaet(),
             "Reset BMS-Flag if it has changed and Ausbildung is not valid",
             () -> {
                 // reset invalid data

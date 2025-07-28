@@ -95,6 +95,10 @@ public class Abschluss extends AbstractMandantEntity {
     private AbschlussZusatzfrage zusatzfrage;
 
     @NotNull
+    @Column(name = "ask_for_berufsmaturitaet", nullable = false)
+    private boolean askForBerufsmaturitaet;
+
+    @NotNull
     @Column(name = "aktiv", nullable = false)
     private boolean aktiv = true;
 

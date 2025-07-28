@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ class LebenslaufItemAusbildungBerufsbezeichnungConstraintValidatorTest {
     void shouldBeValidIfBildungsartNullAndBerufsbezeichnungNull() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem()
             .setAbschluss(null)
-            .setBerufsbezeichnung(null);
+            .setFachrichtungBerufsbezeichnung(null);
 
         assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
     }
