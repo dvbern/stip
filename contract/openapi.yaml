@@ -4384,15 +4384,9 @@ components:
           $ref: '#/components/schemas/WohnsitzKanton'
         ausbildungAbgeschlossen:
           type: boolean
-        berufsbezeichnung:
+        fachrichtungBerufsbezeichnung:
           description: >-
-            Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
-            'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
-          type: string
-        fachrichtung:
-          description: >-
-            Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
-            oder "MASTER"
+            Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
           type: string
         taetigkeitsart:
           $ref: '#/components/schemas/Taetigkeitsart'
@@ -4926,28 +4920,6 @@ components:
         - ANDERE_TAETIGKEIT
         - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
       type: string
-    Bildungsstufe:
-      enum:
-        - SEKUNDAR_2
-        - TERTIAER
-    LebenslaufAusbildungsArt:
-      enum:
-        - BERUFSVORBEREITENDES_SCHULJAHR
-        - VORLEHRE
-        - GESTALTERISCHE_VORKURSE
-        - EIDGENOESSISCHES_BERUFSATTEST
-        - EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
-        - BERUFSMATURITAET_NACH_LEHRE
-        - FACHMATURITAET
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - EIDGENOESSISCHES_DIPLOM
-        - EIDGENOESSISCHER_FACHAUSWEIS
-        - DIPLOM_HOEHERE_FACHSCHULE
-        - BACHELOR_HOCHSCHULE_UNI
-        - BACHELOR_FACHHOCHSCHULE
-        - MASTER
-        - ANDERER_BILDUNGSABSCHLUSS
-      type: string
     PersonInAusbildung:
       type: object
       allOf:
@@ -5431,7 +5403,7 @@ components:
           $ref: '#/components/schemas/UUID'
         fallId:
           $ref: '#/components/schemas/UUID'
-        fachrichtung:
+        fachrichtungBerufsbezeichnung:
           type: string
         ausbildungNichtGefunden:
           type: boolean
@@ -5442,7 +5414,7 @@ components:
           description: Datum im Format mm.YYYY
           type: string
         besuchtBMS:
-          description: Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+          description: Required wenn Abschluss.askForBerufsmaturitaet = true
           type: boolean
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
@@ -5541,7 +5513,7 @@ components:
         - LEHRE
     AbschlussZusatzfrage:
       enum:
-        - BERUFSBEZEICHNUNG_BERUFSMATURITAET
+        - BERUFSBEZEICHNUNG
         - FACHRICHTUNG
     AbschlussSortColumn:
       enum:
@@ -5560,6 +5532,7 @@ components:
         - bfsKategorie
         - berufsbefaehigenderAbschluss
         - ferien
+        - askForBerufsmaturitaet
         - bezeichnungDe
         - bezeichnungFr
         - aktiv
@@ -5582,6 +5555,8 @@ components:
           type: string
         bezeichnungFr:
           type: string
+        askForBerufsmaturitaet:
+          type: boolean
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
@@ -5737,6 +5712,8 @@ components:
           $ref: '#/components/schemas/Bildungskategorie'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
+        askForBerufsmaturitaet:
+          type: boolean
     AusbildungsstaetteSlim:
       type: object
       required:
@@ -5771,6 +5748,8 @@ components:
           type: string
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
     Ausbildungsort:
       type: string
     GesuchsperiodeWithDaten:
