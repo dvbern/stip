@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
-import { ZustaendigerKanton } from './zustaendigerKanton';
 import { ZustaendigeKESB } from './zustaendigeKESB';
 import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
@@ -59,7 +58,6 @@ export interface PersonInAusbildungUpdate {
      */
     identischerZivilrechtlicherWohnsitzPLZ?: string;
     korrespondenzSprache: Sprache;
-    zustaendigerKanton?: ZustaendigerKanton;
     zustaendigeKESB?: ZustaendigeKESB;
 }
 

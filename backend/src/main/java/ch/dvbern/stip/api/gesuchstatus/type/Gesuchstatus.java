@@ -73,6 +73,7 @@ public enum Gesuchstatus {
 
     public static final Set<Gesuchstatus> JURIST_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
+            // JURISTISCHE_ABKLAERUNG,
             ABKLAERUNG_DURCH_RECHSTABTEILUNG
         )
     );

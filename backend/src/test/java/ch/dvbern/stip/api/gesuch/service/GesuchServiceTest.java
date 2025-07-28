@@ -1860,7 +1860,8 @@ class GesuchServiceTest {
         gesuch.setEinreichedatum(LocalDate.now());
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        gesuchService.performGesuchEinreichen(gesuch.getId());
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuch.getId());
+        gesuchService.stipendienAnspruchPruefen(gesuch.getId());
         verify(mailService, never()).sendStandardNotificationEmail(any(), any(), any(), any());
         verify(notificationRepository, never()).persistAndFlush(any(Notification.class));
     }
