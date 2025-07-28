@@ -161,24 +161,40 @@ public class PdfService {
             logo.setMarginTop(-35);
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+                addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator);
+
+                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 document.add(logo);
                 header(gesuch, document, leftMargin, translator, true);
             }
 
-            document.add(logo);
-            header(gesuch, document, leftMargin, translator, false);
-
-            // Add the main content and footer sections.
-            section.render(verfuegung, document, leftMargin, translator);
-            footer(gesuch, document, leftMargin, translator);
-            rechtsmittelbelehrung(translator, document, leftMargin);
-            PdfUtils.makePageNumberEven(document);
-            berechnungsblaetter(document, gesuch);
-            PdfUtils.makePageNumberEven(document);
+            addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
         return out;
+    }
+
+    private void addVerfuegung(
+        final Gesuch gesuch,
+        final Verfuegung verfuegung,
+        final Document document,
+        final PdfSection section,
+        final Image logo,
+        final float leftMargin,
+        final TL translator
+    ) throws IOException {
+        document.add(logo);
+        header(gesuch, document, leftMargin, translator, false);
+
+        // Add the main content and footer sections.
+        section.render(verfuegung, document, leftMargin, translator);
+        footer(gesuch, document, leftMargin, translator);
+        rechtsmittelbelehrung(translator, document, leftMargin);
+        PdfUtils.makePageNumberEven(document);
+
+        berechnungsblaetter(document, gesuch);
+        PdfUtils.makePageNumberEven(document);
     }
 
     private void header(

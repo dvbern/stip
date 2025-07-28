@@ -18,6 +18,8 @@
 package ch.dvbern.stip.api.pdf.service;
 
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.properties.AreaBreakType;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -27,5 +29,6 @@ public class PdfUtils {
             return;
         }
         document.getPdfDocument().addNewPage();
+        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
     }
 }
