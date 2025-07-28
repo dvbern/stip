@@ -54,9 +54,9 @@ export interface GesuchsperiodeUpdate {
     personen_6: number;
     personen_7: number;
     proWeiterePerson: number;
-    kinder_00_18: number;
-    jugendliche_erwachsene_19_25: number;
-    erwachsene_26_99: number;
+    kinder_00_17: number;
+    jugendliche_erwachsene_18_24: number;
+    erwachsene_25_99: number;
     wohnkosten_fam_1pers: number;
     wohnkosten_fam_2pers: number;
     wohnkosten_fam_3pers: number;
