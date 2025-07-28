@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -85,7 +85,10 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         }
     }
 
-    public Stream<GesuchDokument> getAllForGesuchInStatus(final Gesuch gesuch, final Dokumentstatus dokumentstatus) {
+    public Stream<GesuchDokument> getAllForGesuchInStatus(
+        final Gesuch gesuch,
+        final GesuchDokumentStatus gesuchDokumentStatus
+    ) {
         final var gesuchDokument = QGesuchDokument.gesuchDokument;
 
         return new JPAQueryFactory(entityManager)
@@ -93,7 +96,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .where(
                 gesuchDokument.gesuchTranche.id.in(
                     gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList()
-                ).and(gesuchDokument.status.eq(dokumentstatus))
+                ).and(gesuchDokument.status.eq(gesuchDokumentStatus))
             )
             .stream();
     }

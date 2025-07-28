@@ -35,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NotificationDtoSpec.JSON_PROPERTY_GESUCH_ID,
   NotificationDtoSpec.JSON_PROPERTY_CONTEXT_ID,
   NotificationDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
-  NotificationDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
+  NotificationDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  NotificationDtoSpec.JSON_PROPERTY_ABSENDER
 })
 @JsonTypeName("Notification")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -57,6 +58,9 @@ public class NotificationDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private LocalDate timestampErstellt;
+
+  public static final String JSON_PROPERTY_ABSENDER = "absender";
+  private String absender;
 
   public NotificationDtoSpec() {
   }
@@ -216,6 +220,32 @@ public class NotificationDtoSpec {
     this.timestampErstellt = timestampErstellt;
   }
 
+
+  public NotificationDtoSpec absender(String absender) {
+    
+    this.absender = absender;
+    return this;
+  }
+
+   /**
+   * Get absender
+   * @return absender
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ABSENDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAbsender() {
+    return absender;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ABSENDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAbsender(String absender) {
+    this.absender = absender;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -230,12 +260,13 @@ public class NotificationDtoSpec {
         Objects.equals(this.gesuchId, notification.gesuchId) &&
         Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
-        Objects.equals(this.timestampErstellt, notification.timestampErstellt);
+        Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
+        Objects.equals(this.absender, notification.absender);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationText, notificationType, gesuchId, contextId, userErstellt, timestampErstellt);
+    return Objects.hash(notificationText, notificationType, gesuchId, contextId, userErstellt, timestampErstellt, absender);
   }
 
   @Override
@@ -248,6 +279,7 @@ public class NotificationDtoSpec {
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
     sb.append("}");
     return sb.toString();
   }

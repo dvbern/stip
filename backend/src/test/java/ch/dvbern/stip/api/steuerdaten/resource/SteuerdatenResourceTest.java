@@ -22,23 +22,31 @@ import java.util.List;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
+import ch.dvbern.stip.generated.dto.FallAuszahlungDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -50,6 +58,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import wiremock.org.eclipse.jetty.http.HttpStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -70,13 +79,19 @@ class SteuerdatenResourceTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private GesuchDtoSpec gesuch;
+    private FallDtoSpec fall;
+
+    private FallAuszahlungDtoSpec auszahlung;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        fall = TestUtil.getFall(fallApiSpec).orElseThrow(() -> new RuntimeException("Failed to create/ get fall"));
+
     }
 
     @Test
@@ -89,6 +104,33 @@ class SteuerdatenResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(3)
+    void createAuszahlung() {
+        var auszahlungDtoSpec = new AuszahlungUpdateDtoSpec();
+        auszahlungDtoSpec.setAuszahlungAnSozialdienst(false);
+        ZahlungsverbindungDtoSpec zahlungsverbindungDtoSpec = new ZahlungsverbindungDtoSpec();
+        final var adresse =
+            AdresseSpecModel.adresseDtoSpec();
+        zahlungsverbindungDtoSpec.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+        zahlungsverbindungDtoSpec.setVorname("Max");
+        zahlungsverbindungDtoSpec.setNachname("Muster");
+        zahlungsverbindungDtoSpec.setAdresse(adresse);
+        auszahlungDtoSpec.setZahlungsverbindung(zahlungsverbindungDtoSpec);
+
+        auszahlungApiSpec.createAuszahlungForGesuch()
+            .fallIdPath(fall.getId())
+            .body(auszahlungDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK_200)
+            .extract()
+            .body()
+            .as(FallAuszahlungDto.class);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -100,7 +142,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -117,7 +159,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void gesuchAddSteuerdaten() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -132,7 +174,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void gesuchAddSteuerdatenBadType() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.MUTTER);
@@ -154,7 +196,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void gesuchAddSteuerdatenBadYear() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -177,7 +219,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(9)
     void getAndSetAsGSShouldFail() {
         steuerdatenApiSpec.getSteuerdaten()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

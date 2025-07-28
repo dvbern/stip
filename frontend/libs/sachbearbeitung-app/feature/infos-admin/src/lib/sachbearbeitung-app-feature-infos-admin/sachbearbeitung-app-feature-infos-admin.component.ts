@@ -83,18 +83,15 @@ export class SachbearbeitungAppFeatureInfosAdminComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        const gesuchId = this.gesuchIdSig();
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
 
-        if (!gesuchId) {
-          return;
-        }
+      if (!gesuchId) {
+        return;
+      }
 
-        this.infosAdminStore.loadVerfuegungen$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
+      this.infosAdminStore.loadVerfuegungen$({ gesuchId });
+    });
   }
 
   gesuchAbbrechen() {

@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.util.List;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.inject.Inject;
@@ -54,6 +54,6 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
 
     private boolean isAnyAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
         return gesuchDokumentDtos.stream()
-            .anyMatch(gesuchDokumentDto -> gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND);
+            .anyMatch(gesuchDokumentDto -> gesuchDokumentDto.getStatus() == GesuchDokumentStatus.AUSSTEHEND);
     }
 }

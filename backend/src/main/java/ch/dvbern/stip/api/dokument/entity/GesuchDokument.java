@@ -22,7 +22,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -79,7 +79,7 @@ public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Dokumentstatus status = Dokumentstatus.AUSSTEHEND;
+    private GesuchDokumentStatus status = GesuchDokumentStatus.AUSSTEHEND;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
     private List<Dokument> dokumente = new ArrayList<>();

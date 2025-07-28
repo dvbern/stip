@@ -35,8 +35,8 @@ export const ifPropsAreDefined = <T extends Record<string, unknown>>(
 /**
  * A generic function comparing two objects by their id property
  */
-export const compareById = <T extends { id: string | number }>(a: T, b: T) =>
-  a.id === b.id;
+export const compareById = <T extends { id: string | number }>(a: T, b?: T) =>
+  a.id === b?.id;
 
 /**
  * A type that appends 'From' and 'To' to a given string

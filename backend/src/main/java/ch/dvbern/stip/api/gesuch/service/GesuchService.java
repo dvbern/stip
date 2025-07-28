@@ -93,6 +93,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -551,16 +552,16 @@ public class GesuchService {
     public GesuchZurueckweisenResponseDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        var gesuchStatusChangeEvent = GesuchStatusChangeEvent.IN_BEARBEITUNG_GS;
+        var gesuchStatusChangeEvent = GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN;
         if (gesuch.isVerfuegt()) {
             var verfuegtGesuch = gesuchHistoryRepository
                 .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
                 .orElseThrow(NotFoundException::new);
             gesuchStatusChangeEvent =
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH;
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH;
             if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
                 gesuchStatusChangeEvent =
-                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH;
+                    GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH;
             }
         }
         gesuchStatusService
@@ -634,16 +635,32 @@ public class GesuchService {
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
-        );
+        var relevantVerfuegung = gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+            .orElseThrow(NotFoundException::new);
 
         var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
-        if (stipendien.getBerechnung() > 0) {
-            status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+
+        if (Objects.isNull(relevantVerfuegung.getStipDecision())) {
+            final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+                gesuch,
+                configService.getCurrentDmnMajorVersion(),
+                configService.getCurrentDmnMinorVersion()
+            );
+
+            if (stipendien.getBerechnung() > 0) {
+                status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+            }
         }
+
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
@@ -815,7 +832,7 @@ public class GesuchService {
         ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
         gesuchStatusService.triggerStateMachineEvent(
             gesuchTranche.getGesuch(),
-            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG
+            GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
         );
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
@@ -859,19 +876,19 @@ public class GesuchService {
         if (!toUpdateEingereicht.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateEingereicht,
-                GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
+                GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
         if (!toUpdateStipendienAnspruch.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
             );
         }
         if (!toUpdateKeinStipendienAnspruch.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_OR_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
             );
         }
     }

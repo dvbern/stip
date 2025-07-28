@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
+    private final UnterschriftenblattRepository unterschriftenblattRepository;
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
 
@@ -57,7 +59,7 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canDeleteUnterschriftenblattDokument(final UUID dokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuchForDokument = gesuchRepository.requireGesuchForDokument(dokumentId);
+        final var gesuchForDokument = unterschriftenblattRepository.requireByDokumentId(dokumentId).getGesuch();
 
         // Only SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
         if (isSachbearbeiter(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
