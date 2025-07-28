@@ -79,6 +79,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
+    public void juristCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
+    }
+
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(
@@ -155,7 +159,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void juristCanGesuchEinreichen(final UUID gesuchId) {
+    public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }
 

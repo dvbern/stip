@@ -291,6 +291,7 @@
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Eingereicht",
+  "sachbearbeitung-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Anspruch prüfen",
   "sachbearbeitung-app.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
   "sachbearbeitung-app.gesuch.status.contract.IN_FREIGABE": "In Freigabe",

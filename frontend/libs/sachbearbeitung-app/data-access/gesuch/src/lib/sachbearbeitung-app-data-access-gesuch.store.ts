@@ -123,10 +123,10 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    EINGEREICHT: rxMethod<{ gesuchTrancheId: string }>(
+    ANSPRUCH_PRUEFEN: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>
-          this.gesuchService.gesuchEinreichenJur$({
+          this.gesuchService.gesuchManuellPruefenJur$({
             gesuchTrancheId,
           }),
         ),

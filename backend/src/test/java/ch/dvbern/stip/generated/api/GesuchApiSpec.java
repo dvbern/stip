@@ -97,8 +97,8 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 einreichedatumManuellAendern(),
                 gesuchEinreichenGs(),
-                gesuchEinreichenJur(),
                 gesuchFehlendeDokumenteUebermitteln(),
+                gesuchManuellPruefenJur(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getAllBeschwerdeVerlaufEntrys(),
@@ -178,12 +178,12 @@ public class GesuchApiSpec {
         return new GesuchEinreichenGsOper(createReqSpec());
     }
 
-    public GesuchEinreichenJurOper gesuchEinreichenJur() {
-        return new GesuchEinreichenJurOper(createReqSpec());
-    }
-
     public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
         return new GesuchFehlendeDokumenteUebermittelnOper(createReqSpec());
+    }
+
+    public GesuchManuellPruefenJurOper gesuchManuellPruefenJur() {
+        return new GesuchManuellPruefenJurOper(createReqSpec());
     }
 
     public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchTrancheFehlendeDokumenteEinreichen() {
@@ -1357,79 +1357,6 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Das Gesuch einreichen als Jurist
-     * 
-     *
-     * @see #gesuchTrancheIdPath  (required)
-     * return GesuchDtoSpec
-     */
-    public static class GesuchEinreichenJurOper implements Oper {
-
-        public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/einreichen/jur";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GesuchEinreichenJurOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PATCH /gesuch/{gesuchTrancheId}/einreichen/jur
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * PATCH /gesuch/{gesuchTrancheId}/einreichen/jur
-         * @param handler handler
-         * @return GesuchDtoSpec
-         */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GesuchEinreichenJurOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GesuchEinreichenJurOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GesuchEinreichenJurOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * Dem GS übermitteln das Dokumente nicht akzeptiert wurden
      * 
      *
@@ -1498,6 +1425,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Das Gesuch manuell pruefen als Jurist
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class GesuchManuellPruefenJurOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/pruefen/jur";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchManuellPruefenJurOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/pruefen/jur
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/pruefen/jur
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchManuellPruefenJurOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchManuellPruefenJurOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchManuellPruefenJurOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

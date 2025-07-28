@@ -118,14 +118,14 @@ public interface GesuchResource {
     GesuchDto gesuchEinreichenGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/einreichen/jur")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchEinreichenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/pruefen/jur")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto gesuchManuellPruefenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")

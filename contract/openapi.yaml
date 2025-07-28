@@ -2570,7 +2570,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenGs
       summary: Das Gesuch einreichen als Gesuchsteller
-  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+  '/gesuch/{gesuchTrancheId}/pruefen/jur':
     patch:
       tags:
         - Gesuch
@@ -2586,7 +2586,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gesuch eingereicht
+          description: Gesuch geprueft
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2595,8 +2595,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenJur
-      summary: Das Gesuch einreichen als Jurist
+      operationId: gesuchManuellPruefenJur
+      summary: Das Gesuch manuell pruefen als Jurist
   '/gesuch/{gesuchId}/verfuegungen':
     parameters:
       - name: gesuchId
@@ -4057,6 +4057,7 @@ components:
         - IN_FREIGABE
         - IN_BEARBEITUNG_GS
         - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
         - JURISTISCHE_ABKLAERUNG
