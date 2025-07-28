@@ -75,22 +75,7 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0,
-                              "ausbildungsBegin" : {
-                                    "year" : 2024,
-                                    "month" : "JULY",
-                                    "monthValue" : 7,
-                                    "dayOfMonth" : 28,
-                                    "leapYear" : true,
-                                    "dayOfWeek" : "SUNDAY",
-                                    "dayOfYear" : 210,
-                                    "era" : "CE",
-                                    "chronology" : {
-                                      "id" : "ISO",
-                                      "calendarType" : "iso8601",
-                                      "isoBased" : true
-                                    }
-                                  }
+                        "anzahlGeschwisterInAusbildung": 0
                     }
                 },
                 "InputFamilienbudget_2_V1": {
@@ -114,22 +99,7 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0,
-                         "ausbildungsBegin" : {
-                                    "year" : 2024,
-                                    "month" : "JULY",
-                                    "monthValue" : 7,
-                                    "dayOfMonth" : 28,
-                                    "leapYear" : true,
-                                    "dayOfWeek" : "SUNDAY",
-                                    "dayOfYear" : 210,
-                                    "era" : "CE",
-                                    "chronology" : {
-                                      "id" : "ISO",
-                                      "calendarType" : "iso8601",
-                                      "isoBased" : true
-                                    }
-                                  }
+                        "anzahlGeschwisterInAusbildung": 0
                     }
                 },
                 "InputPersoenlichesbudget_V1": {

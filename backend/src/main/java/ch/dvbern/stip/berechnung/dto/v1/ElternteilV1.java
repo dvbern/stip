@@ -59,7 +59,6 @@ public class ElternteilV1 {
     boolean selbststaendigErwerbend;
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
-    LocalDate ausbildungsBegin;
 
     public static ElternteilV1Builder builderWithDefaults() {
         return new ElternteilV1Builder();
@@ -91,7 +90,6 @@ public class ElternteilV1 {
 
         builder.steuernBund(steuerdaten.getSteuernBund());
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
-        builder.ausbildungsBegin(ausbildungsBegin);
 
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
