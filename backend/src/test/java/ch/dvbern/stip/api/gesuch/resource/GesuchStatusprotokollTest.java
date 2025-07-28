@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -67,6 +68,7 @@ class GesuchStatusprotokollTest {
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -84,6 +86,7 @@ class GesuchStatusprotokollTest {
     @Order(2)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
@@ -129,14 +132,15 @@ class GesuchStatusprotokollTest {
             .body()
             .as(StatusprotokollEntryDtoSpec[].class);
 
-        assertThat(statusProtokoll.length, is(4));
+        assertThat(statusProtokoll.length, is(5));
         final var sorted = Arrays.stream(statusProtokoll)
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
         assertThat(sorted.get(0).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
         assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.EINGEREICHT));
-        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-        assertThat(sorted.get(3).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN));
+        assertThat(sorted.get(3).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(sorted.get(4).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
@@ -173,9 +177,9 @@ class GesuchStatusprotokollTest {
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
 
-        assertThat(statusprotokollEntryList.size(), is(5));
+        assertThat(statusprotokollEntryList.size(), is(6));
         assertThat(
-            statusprotokollEntryList.get(4).getKommentar(),
+            statusprotokollEntryList.get(5).getKommentar(),
             Matchers.equalTo(ZURUECKWEISEN_COMMENT)
         );
     }

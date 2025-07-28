@@ -18,7 +18,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   let fixture: ComponentFixture<SachbearbeitungAppPatternGesuchHeaderComponent>;
   const setStatus$ = {
     SET_TO_BEARBEITUNG: jest.fn(),
-    EINGEREICHT: jest.fn(),
+    ANSPRUCH_PRUEFEN: jest.fn(),
     BEARBEITUNG_ABSCHLIESSEN: jest.fn(),
     BEREIT_FUER_BEARBEITUNG: jest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: jest.fn(),
