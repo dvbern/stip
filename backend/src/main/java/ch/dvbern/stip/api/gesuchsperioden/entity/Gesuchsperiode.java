@@ -143,14 +143,14 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "pro_weitere_person")
     private Integer proWeiterePerson;
 
-    @Column(nullable = false, name = "kinder_00_18")
-    private Integer kinder0018;
+    @Column(nullable = false, name = "kinder_00_17")
+    private Integer kinder0017;
 
-    @Column(nullable = false, name = "jugendliche_erwachsene_19_25")
-    private Integer jugendlicheErwachsene1925;
+    @Column(nullable = false, name = "jugendliche_erwachsene_18_24")
+    private Integer jugendlicheErwachsene1824;
 
-    @Column(nullable = false, name = "erwachsene_26_99")
-    private Integer erwachsene2699;
+    @Column(nullable = false, name = "erwachsene_25_99")
+    private Integer erwachsene2599;
 
     @Column(nullable = false, name = "wohnkosten_fam_1pers")
     private Integer wohnkostenFam1pers;

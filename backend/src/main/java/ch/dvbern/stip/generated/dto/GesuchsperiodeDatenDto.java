@@ -48,9 +48,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid Integer personen6;
   private @Valid Integer personen7;
   private @Valid Integer proWeiterePerson;
-  private @Valid Integer kinder0018;
-  private @Valid Integer jugendlicheErwachsene1925;
-  private @Valid Integer erwachsene2699;
+  private @Valid Integer kinder0017;
+  private @Valid Integer jugendlicheErwachsene1824;
+  private @Valid Integer erwachsene2599;
   private @Valid Integer wohnkostenFam1pers;
   private @Valid Integer wohnkostenFam2pers;
   private @Valid Integer wohnkostenFam3pers;
@@ -594,59 +594,59 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeDatenDto kinder0018(Integer kinder0018) {
-    this.kinder0018 = kinder0018;
+  public GesuchsperiodeDatenDto kinder0017(Integer kinder0017) {
+    this.kinder0017 = kinder0017;
     return this;
   }
 
   
-  @JsonProperty("kinder_00_18")
+  @JsonProperty("kinder_00_17")
   @NotNull
-  public Integer getKinder0018() {
-    return kinder0018;
+  public Integer getKinder0017() {
+    return kinder0017;
   }
 
-  @JsonProperty("kinder_00_18")
-  public void setKinder0018(Integer kinder0018) {
-    this.kinder0018 = kinder0018;
+  @JsonProperty("kinder_00_17")
+  public void setKinder0017(Integer kinder0017) {
+    this.kinder0017 = kinder0017;
   }
 
   /**
    **/
-  public GesuchsperiodeDatenDto jugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
-    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+  public GesuchsperiodeDatenDto jugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+    this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
     return this;
   }
 
   
-  @JsonProperty("jugendliche_erwachsene_19_25")
+  @JsonProperty("jugendliche_erwachsene_18_24")
   @NotNull
-  public Integer getJugendlicheErwachsene1925() {
-    return jugendlicheErwachsene1925;
+  public Integer getJugendlicheErwachsene1824() {
+    return jugendlicheErwachsene1824;
   }
 
-  @JsonProperty("jugendliche_erwachsene_19_25")
-  public void setJugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
-    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+  @JsonProperty("jugendliche_erwachsene_18_24")
+  public void setJugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+    this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
   }
 
   /**
    **/
-  public GesuchsperiodeDatenDto erwachsene2699(Integer erwachsene2699) {
-    this.erwachsene2699 = erwachsene2699;
+  public GesuchsperiodeDatenDto erwachsene2599(Integer erwachsene2599) {
+    this.erwachsene2599 = erwachsene2599;
     return this;
   }
 
   
-  @JsonProperty("erwachsene_26_99")
+  @JsonProperty("erwachsene_25_99")
   @NotNull
-  public Integer getErwachsene2699() {
-    return erwachsene2699;
+  public Integer getErwachsene2599() {
+    return erwachsene2599;
   }
 
-  @JsonProperty("erwachsene_26_99")
-  public void setErwachsene2699(Integer erwachsene2699) {
-    this.erwachsene2699 = erwachsene2699;
+  @JsonProperty("erwachsene_25_99")
+  public void setErwachsene2599(Integer erwachsene2599) {
+    this.erwachsene2599 = erwachsene2599;
   }
 
   /**
@@ -1104,9 +1104,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
         Objects.equals(this.personen6, gesuchsperiodeDaten.personen6) &&
         Objects.equals(this.personen7, gesuchsperiodeDaten.personen7) &&
         Objects.equals(this.proWeiterePerson, gesuchsperiodeDaten.proWeiterePerson) &&
-        Objects.equals(this.kinder0018, gesuchsperiodeDaten.kinder0018) &&
-        Objects.equals(this.jugendlicheErwachsene1925, gesuchsperiodeDaten.jugendlicheErwachsene1925) &&
-        Objects.equals(this.erwachsene2699, gesuchsperiodeDaten.erwachsene2699) &&
+        Objects.equals(this.kinder0017, gesuchsperiodeDaten.kinder0017) &&
+        Objects.equals(this.jugendlicheErwachsene1824, gesuchsperiodeDaten.jugendlicheErwachsene1824) &&
+        Objects.equals(this.erwachsene2599, gesuchsperiodeDaten.erwachsene2599) &&
         Objects.equals(this.wohnkostenFam1pers, gesuchsperiodeDaten.wohnkostenFam1pers) &&
         Objects.equals(this.wohnkostenFam2pers, gesuchsperiodeDaten.wohnkostenFam2pers) &&
         Objects.equals(this.wohnkostenFam3pers, gesuchsperiodeDaten.wohnkostenFam3pers) &&
@@ -1133,7 +1133,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung, einreichfrist);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung, einreichfrist);
   }
 
   @Override
@@ -1168,9 +1168,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     sb.append("    personen6: ").append(toIndentedString(personen6)).append("\n");
     sb.append("    personen7: ").append(toIndentedString(personen7)).append("\n");
     sb.append("    proWeiterePerson: ").append(toIndentedString(proWeiterePerson)).append("\n");
-    sb.append("    kinder0018: ").append(toIndentedString(kinder0018)).append("\n");
-    sb.append("    jugendlicheErwachsene1925: ").append(toIndentedString(jugendlicheErwachsene1925)).append("\n");
-    sb.append("    erwachsene2699: ").append(toIndentedString(erwachsene2699)).append("\n");
+    sb.append("    kinder0017: ").append(toIndentedString(kinder0017)).append("\n");
+    sb.append("    jugendlicheErwachsene1824: ").append(toIndentedString(jugendlicheErwachsene1824)).append("\n");
+    sb.append("    erwachsene2599: ").append(toIndentedString(erwachsene2599)).append("\n");
     sb.append("    wohnkostenFam1pers: ").append(toIndentedString(wohnkostenFam1pers)).append("\n");
     sb.append("    wohnkostenFam2pers: ").append(toIndentedString(wohnkostenFam2pers)).append("\n");
     sb.append("    wohnkostenFam3pers: ").append(toIndentedString(wohnkostenFam3pers)).append("\n");

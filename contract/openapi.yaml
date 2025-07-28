@@ -5616,9 +5616,9 @@ components:
         - personen_6
         - personen_7
         - proWeiterePerson
-        - kinder_00_18
-        - jugendliche_erwachsene_19_25
-        - erwachsene_26_99
+        - kinder_00_17
+        - jugendliche_erwachsene_18_24
+        - erwachsene_25_99
         - wohnkosten_fam_1pers
         - wohnkosten_fam_2pers
         - wohnkosten_fam_3pers
@@ -5707,11 +5707,11 @@ components:
           type: integer
         proWeiterePerson:
           type: integer
-        kinder_00_18:
+        kinder_00_17:
           type: integer
-        jugendliche_erwachsene_19_25:
+        jugendliche_erwachsene_18_24:
           type: integer
-        erwachsene_26_99:
+        erwachsene_25_99:
           type: integer
         wohnkosten_fam_1pers:
           type: integer

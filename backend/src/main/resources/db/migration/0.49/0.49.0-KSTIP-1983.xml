@@ -1,15 +1,69 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="anna-lea.fuhrer (generated)" id="1752657491839-2">
-        <addColumn tableName="gesuchsperiode">
-            <column name="stichtag_volljaehrigkeit_medizinische_grundversorgung" type="date">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1752657491839-3">
-        <addColumn tableName="gesuchsperiode_aud">
-            <column name="stichtag_volljaehrigkeit_medizinische_grundversorgung" type="date"/>
-        </addColumn>
-    </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-2">
+    <addColumn tableName="gesuchsperiode">
+      <column name="erwachsene_25_99" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-3">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="erwachsene_25_99" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-4">
+    <addColumn tableName="gesuchsperiode">
+      <column name="jugendliche_erwachsene_18_24" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-5">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="jugendliche_erwachsene_18_24" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-6">
+    <addColumn tableName="gesuchsperiode">
+      <column name="kinder_00_17" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-7">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="kinder_00_17" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-8">
+    <addColumn tableName="gesuchsperiode">
+      <column name="stichtag_volljaehrigkeit_medizinische_grundversorgung" type="date">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-9">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="stichtag_volljaehrigkeit_medizinische_grundversorgung" type="date"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-12">
+    <dropColumn columnName="erwachsene_26_99" tableName="gesuchsperiode"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-13">
+    <dropColumn columnName="erwachsene_26_99" tableName="gesuchsperiode_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-14">
+    <dropColumn columnName="jugendliche_erwachsene_19_25" tableName="gesuchsperiode"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-15">
+    <dropColumn columnName="jugendliche_erwachsene_19_25" tableName="gesuchsperiode_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-16">
+    <dropColumn columnName="kinder_00_18" tableName="gesuchsperiode"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1753705768733-17">
+    <dropColumn columnName="kinder_00_18" tableName="gesuchsperiode_aud"/>
+  </changeSet>
 </databaseChangeLog>
