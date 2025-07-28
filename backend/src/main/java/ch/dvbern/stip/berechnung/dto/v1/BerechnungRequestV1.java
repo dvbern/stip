@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ListIterator;
-
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -43,6 +37,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
 
 import static ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1.getAlterForMedizinischeGrundversorgung;
 
@@ -238,10 +238,13 @@ public class BerechnungRequestV1 implements DmnRequest {
             ausbildungsBegin,
             gesuchsperiode
         );
+        // Per Stichtag 25 Jahre alt oder älter (inkl. 25. Geburtstag am Stichtag) = Erwachsene
         int medizinischeGrundversorgung = gesuchsperiode.getErwachsene2699();
-        if (alterForMedizinischeGrundversorgung <= 18) {
+        // Per Stichtag 0-17 Jahre alt (inkl. 17. Geburtstag am Stichtag) = Kindertarif
+        if (alterForMedizinischeGrundversorgung <= 17) {
             medizinischeGrundversorgung = gesuchsperiode.getKinder0018();
-        } else if (alterForMedizinischeGrundversorgung <= 25) {
+        } else if (alterForMedizinischeGrundversorgung <= 24) {
+            // Per Stichtag 18 bis und mit 24 (inkl. 18. und 24. Geburtstag am Stichtag) = Junge Erwachsene
             medizinischeGrundversorgung = gesuchsperiode.getJugendlicheErwachsene1925();
         }
         return medizinischeGrundversorgung;
