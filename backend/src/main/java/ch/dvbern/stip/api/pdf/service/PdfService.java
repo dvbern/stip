@@ -106,7 +106,7 @@ public class PdfService {
 
     public ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
         final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
-        return this.createPdf(verfuegung, negativeVerfuegungSection);
+        return this.createPdf(verfuegung, negativeVerfuegungSection, false);
     }
 
     public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
@@ -114,12 +114,13 @@ public class PdfService {
     ) {
         final PdfSection negativeVerfuegungSection =
             this::verfuegungOhneAnspruch;
-        return this.createPdf(verfuegung, negativeVerfuegungSection);
+        return this.createPdf(verfuegung, negativeVerfuegungSection, true);
     }
 
     private ByteArrayOutputStream createPdf(
         final Verfuegung verfuegung,
-        final PdfSection section
+        final PdfSection section,
+        final boolean addBerechnungsblaetter
     ) {
         final Gesuch gesuch = verfuegung.getGesuch();
 
@@ -161,14 +162,23 @@ public class PdfService {
             logo.setMarginTop(-35);
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
-                addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator);
+                addVerfuegung(
+                    gesuch,
+                    verfuegung,
+                    document,
+                    section,
+                    logo,
+                    leftMargin,
+                    translator,
+                    addBerechnungsblaetter
+                );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 document.add(logo);
                 header(gesuch, document, leftMargin, translator, true);
             }
 
-            addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator);
+            addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator, addBerechnungsblaetter);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -182,7 +192,8 @@ public class PdfService {
         final PdfSection section,
         final Image logo,
         final float leftMargin,
-        final TL translator
+        final TL translator,
+        final boolean addBerechnungsblaetter
     ) throws IOException {
         document.add(logo);
         header(gesuch, document, leftMargin, translator, false);
@@ -193,8 +204,10 @@ public class PdfService {
         rechtsmittelbelehrung(translator, document, leftMargin);
         PdfUtils.makePageNumberEven(document);
 
-        berechnungsblaetter(document, gesuch);
-        PdfUtils.makePageNumberEven(document);
+        if (addBerechnungsblaetter) {
+            berechnungsblaetter(document, gesuch);
+            PdfUtils.makePageNumberEven(document);
+        }
     }
 
     private void header(
