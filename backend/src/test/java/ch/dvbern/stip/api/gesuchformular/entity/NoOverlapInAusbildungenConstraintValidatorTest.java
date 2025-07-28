@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -45,7 +46,7 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
         final var lebenslaufItems = new ArrayList<LebenslaufItem>();
         lebenslaufItems.add(
             new LebenslaufItem()
-                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setAbschluss(new Abschluss())
                 .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
                 .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
         );
@@ -63,7 +64,7 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
         final var lebenslaufItems = new ArrayList<LebenslaufItem>();
         lebenslaufItems.add(
             new LebenslaufItem()
-                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setAbschluss(new Abschluss())
                 .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
                 .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
         );
@@ -94,7 +95,7 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
         var lebenslaufItems = new HashSet<LebenslaufItem>();
         lebenslaufItems.add(
             new LebenslaufItem()
-                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setAbschluss(new Abschluss())
                 .setVon(LocalDate.of(2024, 2, 1))
                 .setBis(LocalDate.of(2024, 3, 1).with(lastDayOfMonth()))
         );
@@ -108,7 +109,7 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
         lebenslaufItems = new HashSet<>();
         lebenslaufItems.add(
             new LebenslaufItem()
-                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setAbschluss(new Abschluss())
                 .setVon(LocalDate.of(2023, 2, 1))
                 .setBis(LocalDate.of(2023, 3, 1).with(lastDayOfMonth()))
         );

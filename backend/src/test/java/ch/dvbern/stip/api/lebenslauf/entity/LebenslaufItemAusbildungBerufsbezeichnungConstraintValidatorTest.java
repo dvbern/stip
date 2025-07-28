@@ -53,7 +53,7 @@ class LebenslaufItemAusbildungBerufsbezeichnungConstraintValidatorTest {
     @Test
     void shouldBeValidIfBildungsartNullAndBerufsbezeichnungNull() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem()
-            .setBildungsart(null)
+            .setAbschluss(null)
             .setBerufsbezeichnung(null);
 
         assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));

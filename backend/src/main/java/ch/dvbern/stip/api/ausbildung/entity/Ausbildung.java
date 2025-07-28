@@ -96,9 +96,9 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "alternative_ausbildungsstaette", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsstaette;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "fachrichtung", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "fachrichtung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtung;
 
     @Column(name = "ausbildung_nicht_gefunden", nullable = false)

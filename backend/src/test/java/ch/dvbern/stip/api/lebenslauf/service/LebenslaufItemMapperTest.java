@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
@@ -67,7 +70,6 @@ class LebenslaufItemMapperTest {
 
     private LebenslaufItemUpdateDto prepareData() {
         var lebenslaufItem = new LebenslaufItemUpdateDto();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BERUFSVORBEREITENDES_SCHULJAHR);
         lebenslaufItem.setBis("02.2022");
         lebenslaufItem.setVon("01.2022");
         lebenslaufItem.setWohnsitz(WohnsitzKanton.BE);

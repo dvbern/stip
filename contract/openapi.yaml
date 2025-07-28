@@ -4371,8 +4371,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        bildungsart:
-          $ref: '#/components/schemas/LebenslaufAusbildungsArt'
+        abschlussId:
+          $ref: '#/components/schemas/UUID'
           description: Required wenn taetigkeitsart = null
         von:
           description: Datum im Format mm.YYYY
@@ -4393,9 +4393,6 @@ components:
           description: >-
             Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
             oder "MASTER"
-          type: string
-        titelDesAbschlusses:
-          description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
           type: string
         taetigkeitsart:
           $ref: '#/components/schemas/Taetigkeitsart'
@@ -5425,7 +5422,6 @@ components:
     AusbildungBase:
       required:
         - fallId
-        - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
         - pensum

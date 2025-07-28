@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class LebenslaufAusbildungUeberschneidenConstraintValidatorTest {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setVon(von);
         lebenslaufItem.setBis(bis);
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BERUFSVORBEREITENDES_SCHULJAHR);
+        lebenslaufItem.setAbschluss(new Abschluss());
         return lebenslaufItem;
     }
 }

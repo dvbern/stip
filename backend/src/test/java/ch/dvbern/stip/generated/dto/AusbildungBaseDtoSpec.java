@@ -146,9 +146,9 @@ public class AusbildungBaseDtoSpec {
    * Get fachrichtung
    * @return fachrichtung
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFachrichtung() {
     return fachrichtung;
@@ -156,7 +156,7 @@ public class AusbildungBaseDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFachrichtung(String fachrichtung) {
     this.fachrichtung = fachrichtung;
   }

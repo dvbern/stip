@@ -47,7 +47,7 @@ public class NoOverlapInAusbildungenConstraintValidator
     public boolean hasOverlap(final Ausbildung ausbildung, final Stream<LebenslaufItem> lebenslaufItems) {
         final var ausbildungStart = ausbildung.getAusbildungBegin();
         final var ausbildungEnd = ausbildung.getAusbildungEnd();
-        return lebenslaufItems.filter(x -> x.getBildungsart() != null).anyMatch(item -> {
+        return lebenslaufItems.filter(x -> x.getAbschluss() != null).anyMatch(item -> {
             if (
                 (ausbildungStart.isBefore(item.getBis()) || ausbildungStart.isEqual(item.getBis())) &&
                 (ausbildungEnd.isAfter(item.getVon()) || ausbildungEnd.isEqual(item.getVon()))

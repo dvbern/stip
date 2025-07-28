@@ -27,13 +27,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid UUID fallId;
-  private @Valid String fachrichtung;
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
   private @Valid Boolean editable;
   private @Valid UUID id;
+  private @Valid String fachrichtung;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid Boolean besuchtBMS;
   private @Valid String alternativeAusbildungsstaette;
@@ -60,25 +60,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
-  }
-
-  /**
-   **/
-  public AusbildungDashboardItemDto fachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
-    return this;
-  }
-
-  
-  @JsonProperty("fachrichtung")
-  @NotNull
-  public String getFachrichtung() {
-    return fachrichtung;
-  }
-
-  @JsonProperty("fachrichtung")
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
   }
 
   /**
@@ -194,6 +175,24 @@ public class AusbildungDashboardItemDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   **/
+  public AusbildungDashboardItemDto fachrichtung(String fachrichtung) {
+    this.fachrichtung = fachrichtung;
+    return this;
+  }
+
+  
+  @JsonProperty("fachrichtung")
+  public String getFachrichtung() {
+    return fachrichtung;
+  }
+
+  @JsonProperty("fachrichtung")
+  public void setFachrichtung(String fachrichtung) {
+    this.fachrichtung = fachrichtung;
   }
 
   /**
@@ -371,13 +370,13 @@ public class AusbildungDashboardItemDto  implements Serializable {
     }
     AusbildungDashboardItemDto ausbildungDashboardItem = (AusbildungDashboardItemDto) o;
     return Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
         Objects.equals(this.ausbildungBegin, ausbildungDashboardItem.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
         Objects.equals(this.status, ausbildungDashboardItem.status) &&
         Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
+        Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
         Objects.equals(this.besuchtBMS, ausbildungDashboardItem.besuchtBMS) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
@@ -390,7 +389,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
   }
 
   @Override
@@ -399,13 +398,13 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("class AusbildungDashboardItemDto {\n");
     
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");

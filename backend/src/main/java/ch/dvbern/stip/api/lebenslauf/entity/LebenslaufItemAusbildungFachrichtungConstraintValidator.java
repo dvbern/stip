@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.lebenslauf.entity;
 
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -27,11 +26,7 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidator
     implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungConstraint, LebenslaufItem> {
     @Override
     public boolean isValid(LebenslaufItem lebenslaufItem, ConstraintValidatorContext constraintValidatorContext) {
-        if (
-            lebenslaufItem.getBildungsart() == LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE
-            || lebenslaufItem.getBildungsart() == LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI
-            || lebenslaufItem.getBildungsart() == LebenslaufAusbildungsArt.MASTER
-        ) {
+        if (lebenslaufItem.getAbschluss().getZusatzfrage() == AbschlussZusatzfrage.FACHRICHTUNG) {
             return lebenslaufItem.getFachrichtung() != null;
         }
 

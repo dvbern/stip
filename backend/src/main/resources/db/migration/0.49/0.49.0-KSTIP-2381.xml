@@ -192,4 +192,24 @@
     <changeSet author="jafa (generated)" id="1752071244162-32">
         <dropColumn columnName="bildungskategorie_id" tableName="ausbildungsgang_aud"/>
     </changeSet>
+<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-1">-->
+<!--        <dropNotNullConstraint tableName="ausbildung" columnName="fachrichtung" />-->
+<!--    </changeSet>-->
+<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-2">-->
+<!--        <dropColumn columnName="titel_des_abschlusses" tableName="lebenslauf_item"/>-->
+<!--    </changeSet>-->
+<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-3">-->
+<!--        <dropColumn columnName="bildungsart" tableName="lebenslauf_item"/>-->
+<!--    </changeSet>-->
+<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-4">-->
+<!--        <addColumn tableName="lebenslauf_item">-->
+<!--            <column name="abschluss_id" type="uuid" />-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+<!--    <changeSet author="philipp.schaerer (generated)" id="1753611779906-5">-->
+<!--        <addUniqueConstraint columnNames="abschluss_id" constraintName="UC_LEBENSLAUF_ITEM_ABSCHLUSS_ID_COL" tableName="lebenslauf_item"/>-->
+<!--    </changeSet>-->
+<!--    <changeSet author="philipp.schaerer (generated)" id="1723455825466-6">-->
+<!--        <addForeignKeyConstraint baseColumnNames="abschluss_id" baseTableName="lebenslauf_item" constraintName="FK_lebenslauf_item_abschluss_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="abschluss" validate="true"/>-->
+<!--    </changeSet>-->
 </databaseChangeLog>

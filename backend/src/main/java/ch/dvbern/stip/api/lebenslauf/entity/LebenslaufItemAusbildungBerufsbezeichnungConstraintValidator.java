@@ -17,7 +17,8 @@
 
 package ch.dvbern.stip.api.lebenslauf.entity;
 
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -28,8 +29,8 @@ public class LebenslaufItemAusbildungBerufsbezeichnungConstraintValidator
     @Override
     public boolean isValid(LebenslaufItem lebenslaufItem, ConstraintValidatorContext constraintValidatorContext) {
         if (
-            lebenslaufItem.getBildungsart() == LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST
-            || lebenslaufItem.getBildungsart() == LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
+            lebenslaufItem.getAbschluss() != null && lebenslaufItem.getAbschluss()
+                .getZusatzfrage() == AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET
         ) {
             return lebenslaufItem.getBerufsbezeichnung() != null;
         }
