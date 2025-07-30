@@ -137,7 +137,7 @@ public final class GesuchGenerator {
             )
             .setAlternativeAusbildungsgang(ausbildungDtoSpec.getAlternativeAusbildungsgang())
             .setAlternativeAusbildungsstaette(ausbildungDtoSpec.getAlternativeAusbildungsstaette())
-            .setFachrichtungBerufsbezeichnung(ausbildungDtoSpec.getFachrichtung())
+            .setFachrichtungBerufsbezeichnung(ausbildungDtoSpec.getFachrichtungBerufsbezeichnung())
             .setAusbildungNichtGefunden(ausbildungDtoSpec.getAusbildungNichtGefunden())
             .setAusbildungBegin(LocalDate.parse(ausbildungDtoSpec.getAusbildungBegin(), fmtStart))
             .setAusbildungEnd(LocalDate.parse(ausbildungDtoSpec.getAusbildungEnd(), fmtEnd))

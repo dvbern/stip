@@ -263,7 +263,8 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang());
+            .setAusbildungsgang(new Ausbildungsgang())
+            .setFachrichtungBerufsbezeichnung("test");
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
         assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
 
@@ -274,7 +275,9 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .setAbschluss(new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET));
+            .setAbschluss(
+                new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG).setAskForBerufsmaturitaet(true)
+            );
         // Test Ausbildung Validation for BFS value = 4: both true/false valid
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
@@ -293,6 +296,7 @@ class GesuchValidatorTest {
             .getAusbildungsgang()
             .getAbschluss()
             .setBfsKategorie(0)
+            .setAskForBerufsmaturitaet(false)
             .setZusatzfrage(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
         assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), true);
@@ -439,7 +443,7 @@ class GesuchValidatorTest {
     void testLebenslaufItemArtValidationError() {
 
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
+        lebenslaufItem.setAbschluss(new Abschluss());
         lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
@@ -490,7 +494,7 @@ class GesuchValidatorTest {
     @Test
     void testGesuchEinreichenValidationLebenslauf() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
+        lebenslaufItem.setAbschluss(new Abschluss());
         lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
         lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));

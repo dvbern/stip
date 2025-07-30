@@ -101,9 +101,7 @@
   </changeSet>
   <changeSet author="jafa (generated)" id="1753709316588-6">
     <addColumn tableName="lebenslauf_item">
-      <column name="abschluss_id" type="UUID">
-        <constraints nullable="false"/>
-      </column>
+      <column name="abschluss_id" type="UUID"/>
     </addColumn>
   </changeSet>
   <changeSet author="jafa (generated)" id="1753709316588-7">

@@ -57,7 +57,7 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @Nullable
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
-        name = "abschluss_id", nullable = false, foreignKey = @ForeignKey(name = "FK_lebenslauf_item_abschluss_id")
+        name = "abschluss_id", nullable = true, foreignKey = @ForeignKey(name = "FK_lebenslauf_item_abschluss_id")
     )
     private Abschluss abschluss;
 
