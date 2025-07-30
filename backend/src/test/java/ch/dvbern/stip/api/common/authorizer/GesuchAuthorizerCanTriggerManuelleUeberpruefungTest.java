@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorizer;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -30,6 +28,8 @@ import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -80,9 +80,10 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
             if (Gesuchstatus.JURIST_CAN_EDIT.contains(gesuchStatus)) {
                 assertDoesNotThrow(() -> gesuchAuthorizer.juristCanGesuchManuellPruefen(UUID.randomUUID()));
             } else {
+                final var uuid = UUID.randomUUID();
                 assertThrows(
                     ForbiddenException.class,
-                    () -> gesuchAuthorizer.juristCanGesuchManuellPruefen(UUID.randomUUID())
+                    () -> gesuchAuthorizer.juristCanGesuchManuellPruefen(uuid)
                 );
             }
         }
