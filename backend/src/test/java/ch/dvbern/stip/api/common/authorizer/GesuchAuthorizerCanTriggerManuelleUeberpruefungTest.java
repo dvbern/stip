@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorizer;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
@@ -56,36 +57,49 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
 
     @Test
     void sbCanTriggerManuellPruefenTest() {
-        for (Gesuchstatus gesuchStatus : Gesuchstatus.values()) {
-            gesuch = GesuchTestUtil.setupValidGesuchInState(gesuchStatus);
-            when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK) {
+            gesuch.setGesuchStatus(gesuchStatusToSucceed);
+            assertDoesNotThrow(() -> gesuchAuthorizer.sbCanGesuchManuellPruefen(UUID.randomUUID()));
+        }
 
-            if (Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK.contains(gesuchStatus)) {
-                assertDoesNotThrow(() -> gesuchAuthorizer.sbCanGesuchManuellPruefen(UUID.randomUUID()));
-            } else {
-                assertThrows(
-                    ForbiddenException.class,
-                    () -> gesuchAuthorizer.sbCanGesuchManuellPruefen(UUID.randomUUID())
-                );
-            }
+        final var otherGesuchStatus = Arrays.stream(Gesuchstatus.values())
+            .filter(gesuchStatus -> !Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK.contains(gesuchStatus))
+            .toList();
+
+        for (Gesuchstatus gesuchStatusToFail : otherGesuchStatus) {
+            gesuch.setGesuchStatus(gesuchStatusToFail);
+
+            final var uuid = UUID.randomUUID();
+            assertThrows(
+                ForbiddenException.class,
+                () -> gesuchAuthorizer.sbCanGesuchManuellPruefen(uuid)
+            );
         }
     }
 
     @Test
     void juristCanTriggerManuellPruefenTest() {
-        for (Gesuchstatus gesuchStatus : Gesuchstatus.values()) {
-            gesuch = GesuchTestUtil.setupValidGesuchInState(gesuchStatus);
-            when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.JURIST_CAN_EDIT) {
+            gesuch.setGesuchStatus(gesuchStatusToSucceed);
+            assertDoesNotThrow(() -> gesuchAuthorizer.juristCanGesuchManuellPruefen(UUID.randomUUID()));
+        }
 
-            if (Gesuchstatus.JURIST_CAN_EDIT.contains(gesuchStatus)) {
-                assertDoesNotThrow(() -> gesuchAuthorizer.juristCanGesuchManuellPruefen(UUID.randomUUID()));
-            } else {
-                final var uuid = UUID.randomUUID();
-                assertThrows(
-                    ForbiddenException.class,
-                    () -> gesuchAuthorizer.juristCanGesuchManuellPruefen(uuid)
-                );
-            }
+        final var otherGesuchStatus = Arrays.stream(Gesuchstatus.values())
+            .filter(gesuchStatus -> !Gesuchstatus.JURIST_CAN_EDIT.contains(gesuchStatus))
+            .toList();
+
+        for (Gesuchstatus gesuchStatusToFail : otherGesuchStatus) {
+            gesuch.setGesuchStatus(gesuchStatusToFail);
+
+            final var uuid = UUID.randomUUID();
+            assertThrows(
+                ForbiddenException.class,
+                () -> gesuchAuthorizer.juristCanGesuchManuellPruefen(uuid)
+            );
         }
     }
 }
