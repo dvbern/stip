@@ -294,7 +294,7 @@ export class AusbildungsgangComponent
   showInfo(ausbildungsgang: Ausbildungsgang) {
     DataInfoDialogComponent.open(
       this.dialog,
-      'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title',
+      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.infoDialog.title',
       ausbildungsgang,
       ({ info, translatedInfo, spacer }) => [
         info(
