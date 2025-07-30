@@ -21,3 +21,7 @@ Eidg. Berufsattest;Attestation fédéral de formation profesionnelle;BERUFSFACHS
 Eidg. Berufsattest;Attestation fédéral de formation profesionnelle;BETRIEBE;SEKUNDARSTUFE_II;BERUFLICHE_GRUNDBILDUNG;5;FALSE;LEHRE;BERUFSBEZEICHNUNG;false
 Gymnasialer Unterricht im 9. Schuljahr;Enseignement gymnasial en 9e année scolaire;OBLIGATORISCHE_SCHULE;SEKUNDARSTUFE_I;OBLIGATORISCHE_SCHULE;1;FALSE;SCHULE;;false
 10. Schuljahr;10e année scolaire;BRUECKENANGEBOT;SEKUNDARSTUFE_II;BERUFLICHE_GRUNDBILDUNG;3;FALSE;SCHULE;;false
+Brückenangebot Allgemeinbildende Schule;Brückenangebot Allgemeinbildende Schule;BRUECKENANGEBOT;SEKUNDARSTUFE_II;ALLGEMEINBILDENDE_SCHULE;3;FALSE;SCHULE;;false
+Brückenangebot Höhere Berufsbildung;Brückenangebot Höhere Berufsbildung;BRUECKENANGEBOT;TERTIAERSTUFE_B;HOEHERE_BERUFSBILDUNG;3;FALSE;SCHULE;;false
+Brückenangebot Hochschule;Brückenangebot Hochschule;BRUECKENANGEBOT;TERTIAERSTUFE_B;HOCHSCHULE;3;FALSE;SCHULE;;false
+Brückenangebot Berufliche Grundbildung;Brückenangebot Berufliche Grundbildung;BRUECKENANGEBOT;SEKUNDARSTUFE_II;BERUFLICHE_GRUNDBILDUNG;3;FALSE;SCHULE;;false
