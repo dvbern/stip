@@ -20,7 +20,10 @@ package ch.dvbern.stip.api.lebenslauf.service;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -29,30 +32,45 @@ import ch.dvbern.stip.api.common.service.MonthYearToEndOfMonth;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
-public interface LebenslaufItemMapper {
+public abstract class LebenslaufItemMapper {
+    @Inject
+    AbschlussService abschlussService;
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
-    LebenslaufItem toEntity(LebenslaufItemDto lebenslaufItemDto);
+    @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    public abstract LebenslaufItem toEntity(LebenslaufItemDto lebenslaufItemDto);
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
-    LebenslaufItemDto toDto(LebenslaufItem lebenslaufItem);
+    @Mapping(target = "abschlussId", source = "abschluss.id")
+    public abstract LebenslaufItemDto toDto(LebenslaufItem lebenslaufItem);
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
-    LebenslaufItem partialUpdate(
+    @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    public abstract LebenslaufItem partialUpdate(
         LebenslaufItemUpdateDto lebenslaufItemUpdateDto,
         @MappingTarget LebenslaufItem lebenslaufItem
     );
 
-    default Set<LebenslaufItem> map(
+    @Named("mapAbschluss")
+    protected Abschluss mapAbschluss(final UUID abschlussId) {
+        if (abschlussId == null) {
+            return null;
+        }
+        return abschlussService.requireById(abschlussId);
+    }
+
+    Set<LebenslaufItem> map(
         List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos,
         @MappingTarget Set<LebenslaufItem> lebenslaufItemSet
     ) {
@@ -90,5 +108,6 @@ public interface LebenslaufItemMapper {
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
-    LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
+    @Mapping(target = "abschlussId", source = "abschluss.id")
+    public abstract LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
 }
