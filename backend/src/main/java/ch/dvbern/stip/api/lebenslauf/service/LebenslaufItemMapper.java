@@ -62,6 +62,13 @@ public abstract class LebenslaufItemMapper {
         @MappingTarget LebenslaufItem lebenslaufItem
     );
 
+    @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
+    @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
+    @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    public abstract LebenslaufItem toEntity(
+        LebenslaufItemUpdateDto lebenslaufItemUpdateDto
+    );
+
     @Named("mapAbschluss")
     protected Abschluss mapAbschluss(final UUID abschlussId) {
         if (abschlussId == null) {
@@ -70,7 +77,7 @@ public abstract class LebenslaufItemMapper {
         return abschlussService.requireById(abschlussId);
     }
 
-    Set<LebenslaufItem> map(
+    public Set<LebenslaufItem> map(
         List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos,
         @MappingTarget Set<LebenslaufItem> lebenslaufItemSet
     ) {
