@@ -42,12 +42,21 @@ class LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraintValidatorTe
     }
 
     @Test
-    void shouldBeValidIfBildungsartNullAndBerufsbezeichnungNull() {
+    void shouldBeValidIfAbshlussNullAndFachrichtungBerufsbezeichnungNull() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem()
             .setAbschluss(null)
             .setFachrichtungBerufsbezeichnung(null);
 
         assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+    }
+
+    @Test
+    void shouldnOTBeValidIfAbshlussNullAndFachrichtungBerufsbezeichnungNotNull() {
+        LebenslaufItem lebenslaufItem = new LebenslaufItem()
+            .setAbschluss(null)
+            .setFachrichtungBerufsbezeichnung("FachrichtungBerufsbezeichnung");
+
+        assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
     }
 
     @Test

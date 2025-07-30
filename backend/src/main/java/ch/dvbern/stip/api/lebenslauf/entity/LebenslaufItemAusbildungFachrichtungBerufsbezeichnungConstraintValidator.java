@@ -18,31 +18,32 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NOT_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE;
 
 public class LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraintValidator
     implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraint, LebenslaufItem> {
     @Override
     public boolean isValid(LebenslaufItem lebenslaufItem, ConstraintValidatorContext constraintValidatorContext) {
-        if (Objects.isNull(lebenslaufItem.getAbschluss())) {
-            return true;
-        }
+        final var hasFachrichtungBerufsbezeichnung = Objects.nonNull(lebenslaufItem.getFachrichtungBerufsbezeichnung());
+        final var needsFachrichtungBerufsbezeichnung = Optional.ofNullable(lebenslaufItem.getAbschluss())
+            .map(abschluss -> Objects.nonNull(abschluss.getZusatzfrage()))
+            .orElse(false);
 
-        if (Objects.nonNull(lebenslaufItem.getAbschluss().getZusatzfrage())) {
-            return lebenslaufItem.getFachrichtungBerufsbezeichnung() != null;
-        }
-
-        if (lebenslaufItem.getFachrichtungBerufsbezeichnung() == null) {
+        if (needsFachrichtungBerufsbezeichnung == hasFachrichtungBerufsbezeichnung) {
             return true;
         }
 
         constraintValidatorContext.disableDefaultConstraintViolation();
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE
+            hasFachrichtungBerufsbezeichnung
+                ? VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE
+                : VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NOT_NULL_MESSAGE
         )
             .addConstraintViolation();
         return false;
