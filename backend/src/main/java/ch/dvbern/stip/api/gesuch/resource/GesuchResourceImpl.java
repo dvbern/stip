@@ -285,6 +285,18 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
+    public GesuchDto gesuchManuellPruefenSB(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanGesuchManuellPruefen(gesuchId);
+
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
+        gesuchService.stipendienAnspruchPruefen(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
