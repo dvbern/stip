@@ -2,7 +2,10 @@ import { Locator, Page, expect } from '@playwright/test';
 
 import { LebenslaufItem } from '@dv/shared/model/gesuch';
 
-import { LebenslaufEditorPO } from './lebenslauf-editor.po';
+import {
+  LebenslaufEditorPO,
+  LebenslaufItemValues,
+} from './lebenslauf-editor.po';
 
 export class LebenslaufPO {
   public elems: {
@@ -33,7 +36,7 @@ export class LebenslaufPO {
     };
   }
 
-  async addAusbildung(item: LebenslaufItem) {
+  async addAusbildung(item: LebenslaufItemValues) {
     await this.elems.addAusbildung.click();
 
     const editorPO = new LebenslaufEditorPO(this.elems.page);

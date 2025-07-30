@@ -43,6 +43,7 @@ export async function clickAutocompleteOption(
 ) {
   const autocomplete = screen.getByTestId(autocompleteTestId);
 
+  (autocomplete as HTMLInputElement).value = '';
   await prepareEvent().type(autocomplete, searchText);
   await waitFor(() =>
     expect(screen.queryByRole('listbox')).toBeInTheDocument(),

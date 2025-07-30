@@ -3,8 +3,13 @@ import { Locator, Page } from '@playwright/test';
 import { LebenslaufItem } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
+  fillAutoCompleteSelectFirst,
   selectMatOption,
 } from '@dv/shared/util-fn/e2e-util';
+
+export type LebenslaufItemValues = LebenslaufItem & {
+  abschluss?: string;
+};
 
 export class LebenslaufEditorPO {
   public elems: {
@@ -12,10 +17,8 @@ export class LebenslaufEditorPO {
 
     form: Locator;
 
-    ausbildungsartSelect: Locator;
-    berufsbezeichnung: Locator;
-    fachrichtung: Locator;
-    titelDesAbschlusses: Locator;
+    abschlussAutocomplete: Locator;
+    fachrichtungBerufsbezeichnung: Locator;
     taetigkeitsartSelect: Locator;
     taetigkeitsBeschreibung: Locator;
     beginn: Locator;
@@ -34,15 +37,11 @@ export class LebenslaufEditorPO {
 
       form: page.getByTestId('form-lebenslauf-form'),
 
-      ausbildungsartSelect: page.getByTestId(
-        'lebenslauf-editor-ausbildungsart-select',
+      abschlussAutocomplete: page.getByTestId(
+        'lebenslauf-editor-abschluss-select',
       ),
-      berufsbezeichnung: page.getByTestId(
-        'lebenslauf-editor-berufsbezeichnung',
-      ),
-      fachrichtung: page.getByTestId('lebenslauf-editor-fachrichtung'),
-      titelDesAbschlusses: page.getByTestId(
-        'lebenslauf-editor-titelDesAbschlusses',
+      fachrichtungBerufsbezeichnung: page.getByTestId(
+        'lebenslauf-editor-fachrichtungBerufsbezeichnung',
       ),
       taetigkeitsartSelect: page.getByTestId(
         'lebenslauf-editor-taetigkeitsart-select',
@@ -63,10 +62,17 @@ export class LebenslaufEditorPO {
     };
   }
 
-  async addAusbildung(item: LebenslaufItem) {
-    await selectMatOption(
-      this.elems.ausbildungsartSelect,
-      item.bildungsart ?? 'FACHMATURITAET',
+  async addAusbildung(item: LebenslaufItemValues) {
+    if (item.abschluss) {
+      await fillAutoCompleteSelectFirst(
+        this.elems.abschlussAutocomplete,
+        item.abschluss,
+        this.elems.page,
+      );
+    }
+
+    await this.elems.fachrichtungBerufsbezeichnung.fill(
+      item.fachrichtungBerufsbezeichnung ?? '',
     );
 
     await this.elems.beginn.fill(item.von);

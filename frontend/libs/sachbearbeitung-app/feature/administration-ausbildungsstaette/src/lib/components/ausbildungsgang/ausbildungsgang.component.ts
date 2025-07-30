@@ -318,7 +318,7 @@ export class AusbildungsgangComponent
           ? [
               translatedInfo(
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
-                `sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie.${ausbildungsgang.ausbildungskategorie}`,
+                `shared.ausbildungskategorie.${ausbildungsgang.ausbildungskategorie}`,
               ),
             ]
           : []),

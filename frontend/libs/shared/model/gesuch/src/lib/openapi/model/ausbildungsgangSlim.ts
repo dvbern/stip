@@ -18,6 +18,7 @@ export interface AusbildungsgangSlim {
     bezeichnungFr: string;
     bildungskategorie: Bildungskategorie;
     zusatzfrage?: AbschlussZusatzfrage;
+    askForBerufsmaturitaet?: boolean;
 }
 
 

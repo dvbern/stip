@@ -9,6 +9,7 @@ import {
   inject,
   input,
   output,
+  signal,
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -47,7 +48,11 @@ import {
   AusbildungsstaetteSlim,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
-import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
+import {
+  capitalized,
+  compareById,
+  getTranslatableProp,
+} from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -68,6 +73,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
   provideMaterialDefaultOptions,
+  updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 import {
   createDateDependencyValidator,
@@ -153,7 +159,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       [Validators.required],
     ],
     besuchtBMS: [false, []],
-    fachrichtung: [<string | null>null, [Validators.required]],
+    fachrichtungBerufsbezeichnung: [
+      <string | undefined>undefined,
+      [Validators.required],
+    ],
     ausbildungNichtGefunden: [false, []],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
@@ -225,6 +234,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   });
 
+  zusatzfrageSig = computed(() => {
+    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    if (!newAusbildungsgang) return undefined;
+
+    return newAusbildungsgang.zusatzfrage;
+  });
+
   showBesuchtBMS = computed(() => {
     const newAusbildungsgang = this.ausbildungsgangChangedSig();
     if (!newAusbildungsgang) return false;
@@ -233,9 +249,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const gang = ausbildungsgange.find(
       (ausbildungsgang) => ausbildungsgang.id === newAusbildungsgang.id,
     );
-    if (!gang?.zusatzfrage) return false;
 
-    return gang.zusatzfrage === 'BERUFSBEZEICHNUNG_BERUFSMATURITAET';
+    return gang?.askForBerufsmaturitaet;
   });
 
   ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
@@ -266,6 +281,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       };
     });
   });
+
+  hiddenFieldsSetSig = signal(new Set<FormControl>());
+  compareById = compareById;
 
   constructor() {
     this.ausbildungsstatteStore.loadAusbildungsstaetten$();
@@ -382,6 +400,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             (ausbildungsgang) =>
               ausbildungsgang.id === currentAusbildungsgang.id,
           );
+          console.log(
+            'ausbildungsgang',
+            ausbildungsgang,
+            'ausbildungsstaette',
+            ausbildungsstaette,
+          );
           this.form.patchValue({
             ausbildungsstaette:
               getTranslatableProp(
@@ -393,6 +417,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           });
         }
       }
+
+      console.log('form value', this.form.controls.ausbildungsgang.value);
     });
 
     effect(() => {
@@ -462,7 +488,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         this.form.controls.ausbildungsgang.reset();
         this.form.controls.besuchtBMS.reset();
         if (!this.form.controls.ausbildungNichtGefunden) {
-          this.form.controls.fachrichtung.reset();
+          this.form.controls.fachrichtungBerufsbezeichnung.reset();
           this.form.controls.ausbildungsort.reset();
         }
       }
@@ -482,10 +508,22 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     effect(() => {
       const isWritable = this.isEditableSig();
       this.formUtils.setDisabledState(
-        this.form.controls.fachrichtung,
+        this.form.controls.fachrichtungBerufsbezeichnung,
         !isWritable || (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
         isWritable,
       );
+    });
+
+    effect(() => {
+      const { readonly } = this.cachedGesuchViewSig();
+      const ausbildungsgang = ausbildungsgangSig();
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.fachrichtungBerufsbezeichnung,
+        visible: !!ausbildungsgang?.zusatzfrage,
+        disabled: readonly,
+      });
+      this.form.controls.fachrichtungBerufsbezeichnung.updateValueAndValidity();
     });
   }
 
@@ -496,7 +534,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   handleGangChangedByUser() {
-    this.form.controls.fachrichtung.reset();
+    this.form.controls.fachrichtungBerufsbezeichnung.reset();
     this.form.controls.ausbildungsort.reset();
     this.form.controls.besuchtBMS.reset();
   }
@@ -506,7 +544,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.controls.alternativeAusbildungsstaette.reset();
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
-    this.form.controls.fachrichtung.reset();
+    this.form.controls.fachrichtungBerufsbezeichnung.reset();
     this.form.controls.ausbildungsort.reset();
     this.form.controls.besuchtBMS.reset();
   }
@@ -532,7 +570,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
     const { ausbildungsgang: formAusbildungsgang, ...formValues } =
-      convertTempFormToRealValues(this.form, ['fachrichtung', 'pensum']);
+      convertTempFormToRealValues(this.form, ['pensum']);
     delete formValues.ausbildungsstaette;
 
     const ausbildungId =

@@ -9,6 +9,7 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 
 type InfoEntry =
   | {
@@ -19,7 +20,7 @@ type InfoEntry =
   | {
       type: 'translatedInfo';
       labelKey: SachbearbeitungAppTranslationKey;
-      valueKey: SachbearbeitungAppTranslationKey;
+      valueKey: SharedTranslationKey | SachbearbeitungAppTranslationKey;
     }
   | {
       type: 'spacer';
@@ -40,7 +41,7 @@ const createInfoData = <T extends object>(entry: T) => ({
   }),
   translatedInfo: (
     labelKey: SachbearbeitungAppTranslationKey,
-    valueKey: SachbearbeitungAppTranslationKey,
+    valueKey: SharedTranslationKey | SachbearbeitungAppTranslationKey,
   ): InfoEntry => ({
     type: 'translatedInfo',
     labelKey,

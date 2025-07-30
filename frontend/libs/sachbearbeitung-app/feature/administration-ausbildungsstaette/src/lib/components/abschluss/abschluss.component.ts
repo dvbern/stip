@@ -278,7 +278,7 @@ export class AbschlussComponent
         spacer(),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
+          `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
         ),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie',

@@ -43,7 +43,7 @@
               type="button"
               matSuffix
               mat-icon-button
-              aria-label="Clear"
+              [attr.aria-label]="'shared.ui.clear' | translate"
               (click)="form.controls.ausbildungsstaette.reset()"
               data-testid="button-form-education-ausbildungsstaette-clear"
             >
@@ -109,6 +109,7 @@
             formControlName="ausbildungsgang"
             data-testid="form-education-ausbildungsgang"
             (valueChange)="handleGangChangedByUser()"
+            [compareWith]="compareById"
             [placeholder]="'shared.form.select.empty' | translate"
           >
             @for (ausbildungsgang of ausbildungsgangOptionsSig(); track $index) {
@@ -143,17 +144,16 @@
 
     <!-- FACHRICHTUNG -->
     <div class="tw-flex tw-w-full tw-gap-2">
-      @let zusatzfrage = form.controls.ausbildungsgang.value?.zusatzfrage;
-      @if (zusatzfrage) {
+      @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig()) {
         <mat-form-field class="tw-w-full" dvSharedUiFormField>
           <mat-label>
-            {{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrage | translate }}
+            {{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrageSig() | translate }}
           </mat-label>
           <input
             type="text"
             matInput
             dvMaxLength
-            formControlName="fachrichtung"
+            formControlName="fachrichtungBerufsbezeichnung"
             data-testid="form-education-fachrichtung"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
