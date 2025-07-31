@@ -250,8 +250,8 @@ public class AntragsstellerV1 {
         final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.isAusbildung()
-                    && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
-                    && lebenslaufItem.isAusbildungAbgeschlossen()
+                && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
+                && lebenslaufItem.isAusbildungAbgeschlossen()
             )
             .findFirst();
 
@@ -268,7 +268,7 @@ public class AntragsstellerV1 {
 
         final boolean halbierungAbgeschlosseneErstausbildung =
             erstAusbildungWasCompletedBeforeAusbildungsjahr
-                && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
+            && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
                 .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,

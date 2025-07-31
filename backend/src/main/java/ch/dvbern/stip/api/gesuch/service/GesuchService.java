@@ -341,12 +341,6 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
-        if (Objects.nonNull(gesuch.getAusbildung().getAusbildungsgang())) {
-            gesuch.getAusbildung()
-                .setAusbildungsgang(
-                    ausbildungsgangRepository.requireById(gesuch.getAusbildung().getAusbildungsgang().getId())
-                );
-        }
 
         return Pair.of(
             gesuchMapperUtil.mapWithTranche(

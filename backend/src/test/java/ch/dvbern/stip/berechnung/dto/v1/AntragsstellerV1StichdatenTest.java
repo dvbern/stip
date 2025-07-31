@@ -50,7 +50,11 @@ class AntragsstellerV1StichdatenTest {
 
         // pia has at least 1 abgeschlossene Ausbildung in Lebenslauf
         var lebenslaufitem = new LebenslaufItem();
-        lebenslaufitem.setAbschluss(new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG).setAskForBerufsmaturitaet(true).setBerufsbefaehigenderAbschluss(true));
+        lebenslaufitem.setAbschluss(
+            new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG)
+                .setAskForBerufsmaturitaet(true)
+                .setBerufsbefaehigenderAbschluss(true)
+        );
         lebenslaufitem.setBis(ausbildung.getAusbildungBegin().minusMonths(1));
         lebenslaufitem.setVon(ausbildung.getAusbildungBegin().minusYears(1));
         lebenslaufitem.setAusbildungAbgeschlossen(true);
