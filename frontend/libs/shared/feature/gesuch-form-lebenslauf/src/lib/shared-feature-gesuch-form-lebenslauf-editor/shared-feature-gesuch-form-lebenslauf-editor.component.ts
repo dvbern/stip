@@ -66,6 +66,8 @@ import {
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
 
+type EditingAbschlussSlim = AbschlussSlim | string | undefined;
+
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
   imports: [
@@ -122,10 +124,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       <string | undefined>undefined,
       [Validators.required],
     ],
-    abschluss: [
-      <AbschlussSlim | string | undefined>undefined,
-      [Validators.required],
-    ],
+    abschluss: [<EditingAbschlussSlim>undefined, [Validators.required]],
     fachrichtungBerufsbezeichnung: [
       <string | undefined>undefined,
       [Validators.required],
@@ -419,7 +418,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     }
   }
 
-  displayAbschluss = (abschluss: AbschlussSlim | string | undefined) => {
+  displayAbschluss = (abschluss: EditingAbschlussSlim) => {
     if (isAbschluss(abschluss)) {
       return abschlussFullName(
         abschluss,
@@ -441,9 +440,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   protected readonly taetigkeitsartValues = Object.values(Taetigkeitsart);
 }
 
-const isAbschluss = (
-  value: AbschlussSlim | string | undefined,
-): value is AbschlussSlim => isDefined(value) && typeof value !== 'string';
+const isAbschluss = (value: EditingAbschlussSlim): value is AbschlussSlim =>
+  isDefined(value) && typeof value !== 'string';
 
 const abschlussFullName = (
   abschluss: AbschlussSlim,
