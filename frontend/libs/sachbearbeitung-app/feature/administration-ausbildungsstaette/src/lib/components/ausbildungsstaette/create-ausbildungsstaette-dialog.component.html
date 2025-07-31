@@ -39,6 +39,9 @@
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'notUniqueAusbildungsstaette'">
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | translate }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
@@ -47,6 +50,9 @@
         <input matInput [formControl]="form.controls.nameFr" />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'notUniqueAusbildungsstaette'">
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | translate }}
         </mat-error>
       </mat-form-field>
       @if (form.controls.schule.value === 'BUR') {

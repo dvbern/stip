@@ -211,7 +211,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   ausbildungsgangOptionsSig = computed(() => {
     const ausbildungsstaettes =
-      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+      this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
     const language = this.languageSig();
 
     return (

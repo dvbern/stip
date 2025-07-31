@@ -178,6 +178,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage": "Question supplémentaire",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.BERUFSBEZEICHNUNG": "Désignation professionnelle",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.FACHRICHTUNG": "Spécialisation",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique": "Ce nom a déjà été utilisé.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status": "Statut",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status.true": "Actif",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status.false": "Inactif",

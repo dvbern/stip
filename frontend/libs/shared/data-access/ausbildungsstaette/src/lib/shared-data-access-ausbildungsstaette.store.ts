@@ -35,6 +35,11 @@ export class AusbildungsstaetteStore extends signalStore(
   ausbildungsstaetteViewSig = computed(
     () => this.ausbildungsstaetten.data() ?? [],
   );
+  ausbildungsstaettenWithAusbildungsgaengeViewSig = computed(() =>
+    this.ausbildungsstaetteViewSig().filter(
+      (a) => a.ausbildungsgaenge.length > 0,
+    ),
+  );
 
   abschluesseViewSig = computed(() => this.abschluesse.data() ?? []);
 
