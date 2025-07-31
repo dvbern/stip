@@ -87,7 +87,7 @@ class LebenslaufItemMapperTest {
         final var lebenslaufItem = lebenslaufItemMapper.toEntity(lebenslaufItemUpdateDto);
         Assertions.assertNotNull(lebenslaufItem.getAbschluss());
         Assertions.assertEquals(abschlussToMap, lebenslaufItem.getAbschluss());
-        Assertions.assertEquals(lebenslaufItem.getAbschluss().getBezeichnungDe(), ABSCHLUSS_BEZEICHNUNG_DE);
+        Assertions.assertEquals(ABSCHLUSS_BEZEICHNUNG_DE, lebenslaufItem.getAbschluss().getBezeichnungDe());
     }
 
     private LebenslaufItemUpdateDto prepareData() {
