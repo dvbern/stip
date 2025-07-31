@@ -178,6 +178,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage": "Zusatzfrage",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.BERUFSBEZEICHNUNG": "Berufsbezeichnung",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.FACHRICHTUNG": "Fachrichtung",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique": "Dieser Name wurde bereits verwendet.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status": "Status",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status.true": "Aktiv",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.status.false": "Inaktiv",
