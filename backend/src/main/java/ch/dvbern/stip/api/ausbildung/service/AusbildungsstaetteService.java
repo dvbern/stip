@@ -62,7 +62,6 @@ public class AusbildungsstaetteService {
     public List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl() {
         return ausbildungsstaetteRepository.findAllAktiv()
             .map(ausbildungsstaetteMapper::toSlimDto)
-            .filter(ausbildungsstaetteSlimDto -> !ausbildungsstaetteSlimDto.getAusbildungsgaenge().isEmpty())
             .toList();
     }
 
