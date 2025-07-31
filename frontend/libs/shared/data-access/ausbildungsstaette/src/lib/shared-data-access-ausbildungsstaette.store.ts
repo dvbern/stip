@@ -4,6 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
+  AbschlussSlim,
   AusbildungsstaetteService,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
@@ -16,10 +17,12 @@ import {
 
 type AusbildungsstaetteState = {
   ausbildungsstaetten: CachedRemoteData<AusbildungsstaetteSlim[]>;
+  abschluesse: CachedRemoteData<AbschlussSlim[]>;
 };
 
 const initialState: AusbildungsstaetteState = {
   ausbildungsstaetten: initial(),
+  abschluesse: initial(),
 };
 
 @Injectable()
@@ -32,6 +35,8 @@ export class AusbildungsstaetteStore extends signalStore(
   ausbildungsstaetteViewSig = computed(
     () => this.ausbildungsstaetten.data() ?? [],
   );
+
+  abschluesseViewSig = computed(() => this.abschluesse.data() ?? []);
 
   loadAusbildungsstaetten$ = rxMethod<void>(
     pipe(
@@ -46,6 +51,25 @@ export class AusbildungsstaetteStore extends signalStore(
           .pipe(
             handleApiResponse((ausbildungsstaetten) =>
               patchState(this, { ausbildungsstaetten }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  loadAbschluesse$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          abschluesse: cachedPending(state.abschluesse),
+        }));
+      }),
+      switchMap(() =>
+        this.ausbildungsstaetteService
+          .getAllAbschluessForAuswahl$()
+          .pipe(
+            handleApiResponse((abschluesse) =>
+              patchState(this, { abschluesse }),
             ),
           ),
       ),

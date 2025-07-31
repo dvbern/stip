@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Adresse } from '@dv/shared/model/gesuch';
-import { fillLandAutoComplete } from '@dv/shared/util-fn/e2e-util';
+import { fillAutoComplete } from '@dv/shared/util-fn/e2e-util';
 
 export class AddressPO {
   public elems: {
@@ -33,7 +33,7 @@ export class AddressPO {
     await this.elems.plz.fill(adresse.plz);
     await this.elems.ort.fill(adresse.ort);
 
-    await fillLandAutoComplete(
+    await fillAutoComplete(
       this.elems.landAutocomplete,
       adresse.landId,
       this.elems.page,

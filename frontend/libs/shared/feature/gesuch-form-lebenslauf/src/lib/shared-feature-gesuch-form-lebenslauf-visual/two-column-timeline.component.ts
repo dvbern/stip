@@ -4,14 +4,14 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
-  OnChanges,
   Output,
-  SimpleChanges,
+  effect,
   inject,
+  input,
 } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import {
   Ausbildung,
   AusbildungsgangSlim,
@@ -43,36 +43,39 @@ import {
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwoColumnTimelineComponent implements OnChanges {
+export class TwoColumnTimelineComponent {
   cd = inject(ChangeDetectorRef);
   translate = inject(TranslateService);
+  ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
 
   @Output() addAusbildungTriggered = new EventEmitter<TimelineAddCommand>();
   @Output() addTaetigkeitTriggered = new EventEmitter<TimelineAddCommand>();
   @Output() editItemTriggered = new EventEmitter<string>();
   @Output() deleteItemTriggered = new EventEmitter<string>();
 
-  @Input({ required: true }) startDate!: Date | null;
-  @Input({ required: true }) lebenslaufItems!: LebenslaufItemUpdate[];
-  @Input({ required: true }) ausbildung!: Ausbildung;
-  @Input({ required: true }) ausbildungsstaettes!: AusbildungsstaetteSlim[];
-  @Input({ required: true }) language!: string;
+  startDate = input.required<Date | null>();
+  lebenslaufItems = input.required<LebenslaufItemUpdate[]>();
+  ausbildung = input.required<Ausbildung>();
+  ausbildungsstaettes = input.required<AusbildungsstaetteSlim[]>();
+  language = input.required<string>();
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (
-      (changes['startDate'] &&
-        changes['lebenslaufItems'] &&
-        changes['ausbildung'] &&
-        changes['ausbildungsstaettes']) ||
-      changes['language']
-    ) {
+  constructor() {
+    this.ausbildungsstaetteStore.loadAbschluesse$();
+
+    effect(() => {
+      const startDate = this.startDate();
+      const lebenslaufItems = this.lebenslaufItems();
+      const ausbildung = this.ausbildung();
+      const ausbildungsstaettes = this.ausbildungsstaettes();
+      this.language();
+
       this.setLebenslaufItems(
-        this.startDate,
-        this.lebenslaufItems,
-        this.ausbildung,
-        this.ausbildungsstaettes,
+        startDate,
+        lebenslaufItems,
+        ausbildung,
+        ausbildungsstaettes,
       );
-    }
+    });
   }
 
   setLebenslaufItems(
@@ -84,7 +87,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     const timelineRawItems = lebenslaufItems.map(
       (lebenslaufItem) =>
         ({
-          col: lebenslaufItem.bildungsart ? 'LEFT' : 'RIGHT',
+          col: lebenslaufItem.abschlussId ? 'LEFT' : 'RIGHT',
           von: dateFromMonthYearString(lebenslaufItem.von),
           bis: dateFromMonthYearString(lebenslaufItem.bis),
           id: lebenslaufItem.id,
@@ -117,10 +120,14 @@ export class TwoColumnTimelineComponent implements OnChanges {
           ': ' +
           (this.getTranslatedAusbildungsgangBezeichung(ausbildungsgang) ??
             plannedAusbildung?.alternativeAusbildungsgang),
-        subTitle: {
-          key: 'shared.form.lebenslauf.item.name.fachrichtung',
-          value: plannedAusbildung?.fachrichtung,
-        },
+        ...(plannedAusbildung && ausbildungsgang?.zusatzfrage
+          ? {
+              subTitle: {
+                key: `shared.form.lebenslauf.item.name.zusatzfrage.${ausbildungsgang.zusatzfrage}`,
+                value: plannedAusbildung.fachrichtungBerufsbezeichnung,
+              },
+            }
+          : {}),
       },
       editable: false,
       ausbildungAbgeschlossen: false,
@@ -139,36 +146,26 @@ export class TwoColumnTimelineComponent implements OnChanges {
     ) {
       return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }
-    if (
-      lebenslaufItem.bildungsart === 'EIDGENOESSISCHES_BERUFSATTEST' ||
-      lebenslaufItem.bildungsart === 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
-    ) {
-      return {
-        title: `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
-        subTitle: {
-          key: 'shared.form.lebenslauf.item.name.berufsbezeichnung',
-          value: lebenslaufItem.berufsbezeichnung,
-        },
-      };
+
+    const abschluss = this.ausbildungsstaetteStore
+      .abschluesseViewSig()
+      .find((abschluss) => abschluss.id === lebenslaufItem.abschlussId);
+
+    if (!abschluss) {
+      console.warn(`Abschluss with id ${lebenslaufItem.abschlussId} not found`);
+      return { title: '' };
     }
-    if (
-      lebenslaufItem.bildungsart === 'BACHELOR_HOCHSCHULE_UNI' ||
-      lebenslaufItem.bildungsart === 'BACHELOR_FACHHOCHSCHULE' ||
-      lebenslaufItem.bildungsart === 'MASTER'
-    ) {
-      return {
-        title: `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
-        subTitle: {
-          key: 'shared.form.lebenslauf.item.name.fachrichtung',
-          value: lebenslaufItem.fachrichtung,
-        },
-      };
-    }
+
     return {
-      title:
-        lebenslaufItem.bildungsart === 'ANDERER_BILDUNGSABSCHLUSS'
-          ? (lebenslaufItem.titelDesAbschlusses ?? '')
-          : `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
+      title: `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
+      ...(abschluss.zusatzfrage
+        ? {
+            subTitle: {
+              key: `shared.form.lebenslauf.item.name.zusatzfrage.${abschluss.zusatzfrage}`,
+              value: lebenslaufItem.fachrichtungBerufsbezeichnung,
+            },
+          }
+        : {}),
     };
   }
 
@@ -209,7 +206,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     if (staette === undefined) {
       return undefined;
     }
-    return this.language === 'fr' ? staette.nameFr : staette.nameDe;
+    return this.language() === 'fr' ? staette.nameFr : staette.nameDe;
   }
 
   protected readonly printDateAsMonthYear = printDateAsMonthYear;
@@ -220,7 +217,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     if (ausbildungsgang === undefined) {
       return undefined;
     }
-    return this.language === 'fr'
+    return this.language() === 'fr'
       ? ausbildungsgang.bezeichnungFr
       : ausbildungsgang.bezeichnungDe;
   }

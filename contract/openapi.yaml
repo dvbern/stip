@@ -4390,7 +4390,7 @@ components:
           type: string
         taetigkeitsart:
           $ref: '#/components/schemas/Taetigkeitsart'
-          description: Required wenn bildungsart = null
+          description: Required wenn abschluss != null
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
           type: string

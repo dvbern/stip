@@ -15,7 +15,7 @@
       type="button"
       matSuffix
       mat-icon-button
-      aria-label="Clear"
+      [attr.aria-label]="'shared.ui.clear' | translate"
       (click)="resetControl()"
       data-testid="button-form-education-ausbildungsstaette-clear"
     >

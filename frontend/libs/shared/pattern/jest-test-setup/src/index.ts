@@ -10,6 +10,7 @@ import {
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 import {
+  AbschlussSlim,
   AusbildungsstaetteService,
   AusbildungsstaetteSlim,
   GesuchFormularType,
@@ -107,27 +108,78 @@ export function provideSharedOAuthServiceWithGesuchstellerJWT() {
   };
 }
 
+const prepareAbschluss = (abschluss: AbschlussSlim) => {
+  return {
+    ...abschluss,
+    matchName: `${abschluss.bezeichnungDe} - shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
+  };
+};
+
+export const TEST_AUSBILDUNGSSTAETTEN = {
+  staette1: {
+    ...{
+      nameDe: 'Ausbildungsstaette DE 1',
+      nameFr: 'Ausbildungsstaette FR 1',
+      id: '1',
+    },
+    ausbildungsgaenge: [
+      {
+        bezeichnungDe: 'Ausbildungsgang 1 DE',
+        bezeichnungFr: 'Ausbildungsgang 1 FR',
+        id: '1',
+        bildungskategorie: 'SEKUNDARSTUFE_I',
+        zusatzfrage: 'FACHRICHTUNG',
+      },
+    ],
+  },
+} satisfies Record<string, AusbildungsstaetteSlim>;
+
+export const TEST_ABSCHLUESSE = {
+  abschlussFachrichtung1: prepareAbschluss({
+    id: '1',
+    bezeichnungDe: 'Abschluss Fachrichtung 1 DE',
+    bezeichnungFr: 'Abschluss Fachrichtung 1 FR',
+    ausbildungskategorie: 'HOEHERE_FACHSCHULE',
+    zusatzfrage: 'FACHRICHTUNG',
+  }),
+  abschlussFachrichtung2: prepareAbschluss({
+    id: '2',
+    bezeichnungDe: 'Abschluss Fachrichtung 2 DE',
+    bezeichnungFr: 'Abschluss Fachrichtung 2 FR',
+    ausbildungskategorie: 'HOEHERE_FACHSCHULE',
+    zusatzfrage: 'FACHRICHTUNG',
+  }),
+  abschlussBerufsbezeichnung1: prepareAbschluss({
+    id: '3',
+    bezeichnungDe: 'Abschluss Berufsbezeichnung 1 DE',
+    bezeichnungFr: 'Abschluss Berufsbezeichnung 1 FR',
+    ausbildungskategorie: 'BERUFSFACHSCHULEN',
+    zusatzfrage: 'BERUFSBEZEICHNUNG',
+  }),
+  abschlussBerufsbezeichnung2: prepareAbschluss({
+    id: '4',
+    bezeichnungDe: 'Abschluss Berufsbezeichnung 2 DE',
+    bezeichnungFr: 'Abschluss Berufsbezeichnung 2 FR',
+    ausbildungskategorie: 'BERUFSFACHSCHULEN',
+    zusatzfrage: 'BERUFSBEZEICHNUNG',
+  }),
+  abschlussWithoutZusatzfrage1: prepareAbschluss({
+    id: '5',
+    bezeichnungDe: 'Abschluss Without Zusatzfrage 1 DE',
+    bezeichnungFr: 'Abschluss Without Zusatzfrage 1 FR',
+    ausbildungskategorie: 'BERUFS_UND_HOEHERE_FACHSCHULE',
+  }),
+} satisfies Record<string, AbschlussSlim & { matchName: string }>;
+
 export function provideSharedPatternJestTestAusbildungstaetten() {
   return {
     provide: AusbildungsstaetteService,
     useValue: {
       getAllAusbildungsstaetteForAuswahl$: () => {
-        return of([
-          {
-            nameDe: 'staette1',
-            nameFr: 'staette1',
-            id: '1',
-            ausbildungsgaenge: [
-              {
-                bezeichnungDe: 'gang1',
-                bezeichnungFr: 'gang1',
-                id: '1',
-                bildungskategorie: 'SEKUNDARSTUFE_I',
-                zusatzfrage: 'FACHRICHTUNG',
-              },
-            ],
-          },
-        ] satisfies AusbildungsstaetteSlim[]);
+        return of(Object.values(TEST_AUSBILDUNGSSTAETTEN));
+      },
+      getAllAbschluessForAuswahl$: () => {
+        return of(Object.values(TEST_ABSCHLUESSE));
       },
     },
   };

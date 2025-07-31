@@ -10,12 +10,14 @@
  * Do not edit the class manually.
  */
 import { Ausbildungskategorie } from './ausbildungskategorie';
+import { AbschlussZusatzfrage } from './abschlussZusatzfrage';
 
 export interface AbschlussSlim { 
     id: string;
     bezeichnungDe: string;
     bezeichnungFr: string;
     ausbildungskategorie: Ausbildungskategorie;
+    zusatzfrage?: AbschlussZusatzfrage;
 }
 
 

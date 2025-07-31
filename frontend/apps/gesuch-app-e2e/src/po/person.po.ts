@@ -3,7 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
-  fillLandAutoComplete,
+  fillAutoComplete,
   selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -112,7 +112,7 @@ export class PersonPO {
     // Scroll a bit down to prevent flaky tests
     await this.elems.sozialhilfeBeitraegeRadio.scrollIntoViewIfNeeded();
 
-    await fillLandAutoComplete(
+    await fillAutoComplete(
       this.elems.nationalitaetAutocomplete,
       person.nationalitaetId,
       this.elems.page,
@@ -131,10 +131,6 @@ export class PersonPO {
     }
     if (person.wohnsitzAnteilVater) {
       await this.elems.wohnsitzVater.fill(`${person.wohnsitzAnteilVater}`);
-    }
-    if (person.zustaendigerKanton) {
-      await this.elems.zustaendigerKantonSelect.click();
-      await this.elems.page.getByTestId(person.zustaendigerKanton).click();
     }
 
     await selectMatRadio(

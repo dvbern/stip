@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-export type AbschlussZusatzfrage = 'BERUFSBEZEICHNUNG_BERUFSMATURITAET' | 'FACHRICHTUNG';
+export type AbschlussZusatzfrage = 'BERUFSBEZEICHNUNG' | 'FACHRICHTUNG';
 
 export const AbschlussZusatzfrage = {
-    BERUFSBEZEICHNUNG_BERUFSMATURITAET: 'BERUFSBEZEICHNUNG_BERUFSMATURITAET' as AbschlussZusatzfrage,
+    BERUFSBEZEICHNUNG: 'BERUFSBEZEICHNUNG' as AbschlussZusatzfrage,
     FACHRICHTUNG: 'FACHRICHTUNG' as AbschlussZusatzfrage
 };
 

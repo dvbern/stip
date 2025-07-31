@@ -25,6 +25,7 @@ export interface Abschluss {
     ferien: FerienTyp;
     bezeichnungDe: string;
     bezeichnungFr: string;
+    askForBerufsmaturitaet: boolean;
     zusatzfrage?: AbschlussZusatzfrage;
     aktiv: boolean;
 }

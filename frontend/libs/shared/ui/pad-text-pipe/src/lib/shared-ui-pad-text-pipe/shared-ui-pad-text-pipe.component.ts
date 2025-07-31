@@ -17,10 +17,10 @@ export class SharedUiPadTextPipeComponent implements PipeTransform {
     length: number,
     options: PadTextOptions = { direction: 'left', padChar: '0' },
   ): string | undefined | null {
-    if (!isDefined(value)) {
+    if (!isDefined(value) || value === '') {
       return value;
     }
-    if ((typeof value !== 'string' && !isNaN(value)) || length < 0) {
+    if ((typeof value !== 'string' && !Number.isNaN(value)) || length < 0) {
       throw new Error(
         'Invalid input: value must be a string or a number, and length must be a non-negative integer.',
       );
