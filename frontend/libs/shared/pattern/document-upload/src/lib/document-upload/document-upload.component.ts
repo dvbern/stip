@@ -119,28 +119,29 @@ export class SharedPatternDocumentUploadComponent {
       gesuchTrancheId: dokument.trancheId,
     });
 
+    if (dokument.art === 'UNTERSCHRIFTENBLATT') {
+      this.dokumentsStore.getAdditionalDokumente$({
+        gesuchId: dokument.gesuchId,
+      });
+      this.dokumentsStore.getDocumentsToUpload$({
+        gesuchTrancheId: dokument.trancheId,
+      });
+      return;
+    }
+
+    // Update view when on dokument overview page
     if (initialDokumente) {
-      this.dokumentsStore.getDokumenteAndRequired$({
+      this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
         gesuchTrancheId: dokument.trancheId,
       });
     }
 
-    switch (dokument.art) {
-      case 'GESUCH_DOKUMENT':
-        this.dokumentsStore.getRequiredGesuchDokument$({
-          trancheId: dokument.trancheId,
-          dokumentTyp: dokument.dokumentTyp,
-        });
-        break;
-
-      case 'CUSTOM_DOKUMENT':
-        break;
-
-      case 'UNTERSCHRIFTENBLATT':
-        this.dokumentsStore.getAdditionalDokumente$({
-          gesuchId: dokument.gesuchId,
-        });
-        break;
+    // update if dokument status if not in dokument overview page
+    if (dokument.art === 'GESUCH_DOKUMENT') {
+      this.dokumentsStore.getGesuchDokument$({
+        trancheId: dokument.trancheId,
+        dokumentTyp: dokument.dokumentTyp,
+      });
     }
   }
 }
