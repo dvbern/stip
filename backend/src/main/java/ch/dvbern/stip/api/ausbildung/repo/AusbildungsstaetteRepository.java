@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.repo;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
@@ -39,5 +40,21 @@ public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungss
             .selectFrom(Q_AUSBILDUNGSSTAETTE)
             .where(Q_AUSBILDUNGSSTAETTE.aktiv.isTrue())
             .stream();
+    }
+
+    public Optional<Ausbildungsstaette> findByNameDe(final String nameDe) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_AUSBILDUNGSSTAETTE)
+            .where(Q_AUSBILDUNGSSTAETTE.nameDe.eq(nameDe))
+            .stream()
+            .findAny();
+    }
+
+    public Optional<Ausbildungsstaette> findByNameFr(final String nameFr) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_AUSBILDUNGSSTAETTE)
+            .where(Q_AUSBILDUNGSSTAETTE.nameFr.eq(nameFr))
+            .stream()
+            .findAny();
     }
 }

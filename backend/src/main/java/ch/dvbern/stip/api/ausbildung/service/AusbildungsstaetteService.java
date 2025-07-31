@@ -25,6 +25,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
@@ -36,6 +38,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungsstaetteService {
@@ -43,6 +47,23 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteQueryBuilder ausbildungsstaetteQueryBuilder;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final ConfigService configService;
+
+    private void validateAusbildungsstaetteNameUniqueness(
+        final String ausbildungsstaetteNameDe,
+        final String ausbildungsstaetteNameFr
+    ) {
+        final var duplicateDe = ausbildungsstaetteRepository.findByNameDe(ausbildungsstaetteNameDe);
+        final var duplicateFr = ausbildungsstaetteRepository.findByNameFr(ausbildungsstaetteNameFr);
+        if (duplicateDe.isPresent() || duplicateFr.isPresent()) {
+            throw new CustomValidationsException(
+                "nameDe and nameFr must be unique",
+                new CustomConstraintViolation(
+                    VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE,
+                    "name"
+                )
+            );
+        }
+    }
 
     @Transactional
     public Ausbildungsstaette requireById(final UUID ausbildungsstaetteId) {
@@ -53,6 +74,10 @@ public class AusbildungsstaetteService {
     public AusbildungsstaetteDto createAusbildungsstaette(
         final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
     ) {
+        validateAusbildungsstaetteNameUniqueness(
+            ausbildungsstaetteCreateDto.getNameDe(),
+            ausbildungsstaetteCreateDto.getNameFr()
+        );
         final var ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreateDto);
         ausbildungsstaetteRepository.persist(ausbildungsstaette);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);

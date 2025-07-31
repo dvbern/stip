@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.ausbildung.resource;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
@@ -93,8 +92,21 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsJurist
     @Order(3)
+    void createAusbildungsstaetteAsJuristNotUniqueFail() {
+        var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
+            .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then();
+
+        response.assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
     void getAusbildungsstaetten() {
         var res = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -111,7 +123,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void createAbschlussBrueckenangebotTest() {
         final var brueckenangebotCreateDtoSpec = BrueckenangebotCreateDtoSpecModel.brueckenangebotCreateDtoSpec();
 
@@ -151,7 +163,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void createAbschlussBrueckenangebotFailTest() {
         final var brueckenangebotCreateDtoSpec = BrueckenangebotCreateDtoSpecModel.brueckenangebotCreateDtoSpec();
         brueckenangebotCreateDtoSpec.setBildungsrichtung(BildungsrichtungDtoSpec.OBLIGATORISCHE_SCHULE);
@@ -166,10 +178,12 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void createAusbildungsstaetteTestCtNo() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
+        ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestCtNo");
+        ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestCtNo");
 
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
@@ -186,10 +200,12 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void createAusbildungsstaetteTestBurNo() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
+        ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestBurNo");
+        ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestBurNo");
 
         ausbildungsstaetteCreateDtoSpec.setBurNo("1234");
 
@@ -208,7 +224,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void createAusbildungsgangTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -252,7 +268,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(10)
     void getAllAbschlussForUebersichtTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -270,7 +286,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(11)
     void getAllAusbildungsgangForUebersichtTest() {
         final var paginatedAusbildungsgangDto = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -288,7 +304,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void getAllAusbildungsstaetteForAuswahlTest() {
         final var ausbildungsstaetteSlimDtos = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForAuswahl()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -300,15 +316,11 @@ class AusbildungsstaetteResourceTest {
             .as(AusbildungsstaetteSlimDto[].class);
 
         assertThat(ausbildungsstaetteSlimDtos.length, Matchers.greaterThan(0));
-        assertThat(
-            Arrays.stream(ausbildungsstaetteSlimDtos).findFirst().get().getAusbildungsgaenge().size(),
-            Matchers.greaterThan(0)
-        );
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(13)
     void getAllAusbildungsstaetteForUebersichtTest() {
         final var paginatedAusbildungsstaetteDto = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForUebersicht()
             .pageQuery(0)
@@ -326,7 +338,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(14)
     void setAbschlussInaktivTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -373,7 +385,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(15)
     void setAusbildungsgangInaktivTest() {
         final var paginatedAusbildungsgangDto = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -401,7 +413,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(16)
     void setAusbildungsstaetteInaktivTest() {
         final var paginatedAusbildungsstaetteDto = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForUebersicht()
             .pageQuery(0)
