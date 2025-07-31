@@ -510,6 +510,12 @@ public class GesuchService {
     }
 
     @Transactional(TxType.REQUIRES_NEW)
+    public void setGesuchStatusToAnspruchPruefen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {

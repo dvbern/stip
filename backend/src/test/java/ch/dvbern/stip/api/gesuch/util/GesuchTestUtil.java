@@ -138,8 +138,6 @@ public class GesuchTestUtil {
     }
 
     public GesuchFormular setupGesuchFormularWithChildEntities() {
-        var auszahlung =
-            new Auszahlung().setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()).setIban(""));
         var formular = new GesuchFormular()
             .setPersonInAusbildung(
                 new PersonInAusbildung().setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()))

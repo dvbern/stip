@@ -228,7 +228,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     switch (nextStatus) {
       case 'SET_TO_BEARBEITUNG':
-      case 'EINGEREICHT':
+      case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });

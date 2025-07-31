@@ -2458,7 +2458,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenGs
       summary: Das Gesuch einreichen als Gesuchsteller
-  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+  '/gesuch/{gesuchTrancheId}/pruefen/jur':
     patch:
       tags:
         - Gesuch
@@ -2474,7 +2474,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gesuch eingereicht
+          description: Gesuch geprueft
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2483,8 +2483,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenJur
-      summary: Das Gesuch einreichen als Jurist
+      operationId: gesuchManuellPruefenJur
+      summary: Das Gesuch manuell pruefen als Jurist
   '/gesuch/{gesuchId}/verfuegungen':
     parameters:
       - name: gesuchId
@@ -4118,6 +4118,7 @@ components:
         - IN_FREIGABE
         - IN_BEARBEITUNG_GS
         - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
         - JURISTISCHE_ABKLAERUNG
@@ -5854,9 +5855,9 @@ components:
         - personen_6
         - personen_7
         - proWeiterePerson
-        - kinder_00_18
-        - jugendliche_erwachsene_19_25
-        - erwachsene_26_99
+        - kinder_00_17
+        - jugendliche_erwachsene_18_24
+        - erwachsene_25_99
         - wohnkosten_fam_1pers
         - wohnkosten_fam_2pers
         - wohnkosten_fam_3pers
@@ -5877,6 +5878,7 @@ components:
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
         - fristNachreichenDokumente
+        - stichtagVolljaehrigkeitMedizinischeGrundversorgung
       properties:
         bezeichnungDe:
           type: string
@@ -5944,11 +5946,11 @@ components:
           type: integer
         proWeiterePerson:
           type: integer
-        kinder_00_18:
+        kinder_00_17:
           type: integer
-        jugendliche_erwachsene_19_25:
+        jugendliche_erwachsene_18_24:
           type: integer
-        erwachsene_26_99:
+        erwachsene_25_99:
           type: integer
         wohnkosten_fam_1pers:
           type: integer
@@ -5990,6 +5992,10 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
+    stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+      format: date
+      description: dd.MM.yyyy
+      type: string
     AusbildungsStatus:
       enum:
         - AKTIV

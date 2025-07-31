@@ -103,9 +103,9 @@ public class GesuchTestSeeding extends Seeder {
             .setPersonen6(1)
             .setPersonen7(1)
             .setProWeiterePerson(1)
-            .setKinder0018(1)
-            .setJugendlicheErwachsene1925(1)
-            .setErwachsene2699(1)
+            .setKinder0017(1)
+            .setJugendlicheErwachsene1824(1)
+            .setErwachsene2599(1)
             .setWohnkostenFam1pers(1)
             .setWohnkostenFam2pers(1)
             .setWohnkostenFam3pers(1)
@@ -126,7 +126,10 @@ public class GesuchTestSeeding extends Seeder {
             .setReduzierungDesGrundbedarfs(2754)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
-            .setFristNachreichenDokumente(30);
+            .setFristNachreichenDokumente(30)
+            .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(
+                LocalDate.of(gesuchsjahr.getTechnischesJahr(), 12, 31)
+            );
     }
 
     private static LocalDate getGesuchsperiodeStart() {

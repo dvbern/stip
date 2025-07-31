@@ -30,10 +30,10 @@ public class LebenslaufItemArtRequiredFieldsConstraintValidator
         LebenslaufItem lebenslaufItem,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (lebenslaufItem.getAbschluss() == null && lebenslaufItem.getTaetigkeitsart() == null) {
+        if (!lebenslaufItem.isAusbildung() && lebenslaufItem.getTaetigkeitsart() == null) {
             return false;
         }
-        if (lebenslaufItem.getAbschluss() != null && lebenslaufItem.getTaetigkeitsart() != null) {
+        if (lebenslaufItem.isAusbildung() && lebenslaufItem.getTaetigkeitsart() != null) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(
                 VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE

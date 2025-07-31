@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
@@ -35,6 +36,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -94,4 +96,9 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
+
+    @Transient
+    public boolean isAusbildung() {
+        return Objects.nonNull(abschluss);
+    }
 }

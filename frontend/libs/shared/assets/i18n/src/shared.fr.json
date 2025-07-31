@@ -291,6 +291,7 @@
 
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
+  "sachbearbeitung-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Vérification des droits",
   "sachbearbeitung-app.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_SB": "En cours de traitement",
   "sachbearbeitung-app.gesuch.status.contract.IN_FREIGABE": "En attente de validation",

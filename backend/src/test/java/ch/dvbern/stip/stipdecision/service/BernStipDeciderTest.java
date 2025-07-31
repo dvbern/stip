@@ -124,19 +124,35 @@ class BernStipDeciderTest {
     }
 
     @Test
-    void testGetDecisionPiaAelter35Jahre() {
+    void testGetDecisionPiaAelter35JahreBeforeBeginOfAusbildung() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
             .getPersonInAusbildung()
-            .setGeburtsdatum(LocalDate.now().minusYears(36));
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusDays(1).minusYears(36));
 
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+    }
+
+    @Test
+    void testGetDecisionPiaExact35JahreAtBeginOfAusbildung() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusYears(35));
+
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Test
@@ -293,12 +309,70 @@ class BernStipDeciderTest {
             .getGesuchFormular()
             .getLebenslaufItems()
             .add(new LebenslaufItem().setAbschluss(abschluss).setAusbildungAbgeschlossen(true));
+
+        // pia < 18 years at Ausbildungsbegin
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
-        assertThat(decision).isEqualTo(
+        assertThat(decision).isNotEqualTo(
             StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
         );
 
         var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+
+        // pia >= 18 years at Ausbildungsbegin
+        var ausbildung = gesuch.getAusbildung();
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(ausbildung.getAusbildungBegin().minusYears(18));
+
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
+        );
+
+        decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+    }
+
+    @Test
+    void testDecisionANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG() {
+        final var abschluss = new Abschluss();
+        abschluss.setAusbildungskategorie(Ausbildungskategorie.UNIVERSITAET_ETH);
+        abschluss.setBildungsrichtung(Bildungsrichtung.HOCHSCHULE);
+        abschluss.setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_A);
+        abschluss.setBerufsbefaehigenderAbschluss(true);
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getLebenslaufItems()
+            .add(new LebenslaufItem().setAbschluss(abschluss).setAusbildungAbgeschlossen(true));
+
+        // pia < 18 years at Ausbildungsbegin
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+
+        // pia >= 18 years at Ausbildungsbegin
+        var ausbildung = gesuch.getAusbildung();
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(ausbildung.getAusbildungBegin().minusYears(18));
+
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isNotEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
     }
 
