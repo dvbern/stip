@@ -50,6 +50,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
@@ -92,6 +93,7 @@ type DisplayColumns =
     MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     TranslatedPropertyPipe,
@@ -265,15 +267,14 @@ export class AbschlussComponent
     DataInfoDialogComponent.open(
       this.dialog,
       'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title',
-      abschluss,
       ({ info, translatedInfo, spacer }) => [
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe',
-          'bezeichnungDe',
+          abschluss.bezeichnungDe,
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr',
-          'bezeichnungFr',
+          abschluss.bezeichnungFr,
         ),
         spacer(),
         translatedInfo(
@@ -290,7 +291,7 @@ export class AbschlussComponent
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bfsKategorie',
-          'bfsKategorie',
+          abschluss.bfsKategorie,
         ),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.berufsbefaehigenderAbschluss',

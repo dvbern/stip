@@ -54,6 +54,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
@@ -97,6 +98,7 @@ type DisplayColumns =
     MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiTruncateTooltipDirective,
     SharedUiPadTextPipeComponent,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,

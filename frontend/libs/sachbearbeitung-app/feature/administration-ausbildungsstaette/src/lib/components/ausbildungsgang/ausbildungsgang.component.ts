@@ -53,6 +53,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
@@ -96,6 +97,7 @@ type DisplayColumns =
     MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     TranslatedPropertyPipe,
@@ -295,41 +297,81 @@ export class AusbildungsgangComponent
     DataInfoDialogComponent.open(
       this.dialog,
       'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.infoDialog.title',
-      ausbildungsgang,
       ({ info, translatedInfo, spacer }) => [
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaetteBezeichnungDe',
-          'ausbildungsstaetteNameDe',
+          ausbildungsgang.ausbildungsstaette.nameDe,
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaetteBezeichnungFr',
-          'ausbildungsstaetteNameFr',
+          ausbildungsgang.ausbildungsstaette.nameFr,
         ),
+        ...(ausbildungsgang.ausbildungsstaette.chShis
+          ? [
+              info(
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.chShisNummer',
+                ausbildungsgang.ausbildungsstaette.chShis,
+              ),
+            ]
+          : []),
+        ...(ausbildungsgang.ausbildungsstaette.ctNo
+          ? [
+              info(
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ctNummer',
+                ausbildungsgang.ausbildungsstaette.ctNo,
+              ),
+            ]
+          : []),
+        ...(ausbildungsgang.ausbildungsstaette.burNo
+          ? [
+              info(
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.burNummer',
+                ausbildungsgang.ausbildungsstaette.burNo,
+              ),
+            ]
+          : []),
+        spacer(),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungDe',
-          'abschlussBezeichnungDe',
+          ausbildungsgang.abschluss.bezeichnungDe,
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungFr',
-          'abschlussBezeichnungFr',
+          ausbildungsgang.abschluss.bezeichnungFr,
         ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
+          `shared.ausbildungskategorie.${ausbildungsgang.abschluss.ausbildungskategorie}`,
+        ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie.${ausbildungsgang.abschluss.bildungskategorie}`,
+        ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.${ausbildungsgang.abschluss.bildungsrichtung}`,
+        ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.berufsbefaehigenderAbschluss',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.boolean.${ausbildungsgang.abschluss.berufsbefaehigenderAbschluss}`,
+        ),
+        translatedInfo(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ferien',
+          `sachbearbeitung-app.feature.administration.ausbildungsstaette.ferien.${ausbildungsgang.abschluss.ferien}`,
+        ),
+        info(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.bfsKategorie',
+          ausbildungsgang.abschluss.bfsKategorie,
+        ),
+        ...(ausbildungsgang.abschluss.zusatzfrage
+          ? [
+              translatedInfo(
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage',
+                `sachbearbeitung-app.feature.administration.ausbildungsstaette.zusatzfrage.${ausbildungsgang.abschluss.zusatzfrage}`,
+              ),
+            ]
+          : []),
         spacer(),
-        ...(ausbildungsgang.ausbildungskategorie
-          ? [
-              translatedInfo(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
-                `shared.ausbildungskategorie.${ausbildungsgang.ausbildungskategorie}`,
-              ),
-            ]
-          : []),
-        ...(ausbildungsgang.bildungsrichtung
-          ? [
-              translatedInfo(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung',
-                `sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
-              ),
-            ]
-          : []),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.status',
           `sachbearbeitung-app.feature.administration.ausbildungsstaette.status.${ausbildungsgang.aktiv}`,

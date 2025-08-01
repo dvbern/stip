@@ -9,6 +9,7 @@
       data-testid="cockpit-table"
       mat-table
       matSort
+      class="tw-w-full !tw-table-fixed"
     >
       <caption class="cdk-visually-hidden">
         {{
@@ -43,9 +44,10 @@
         <td
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
+          [dvTruncateTooltip]="ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.currentLang"
           class="tw-w-32 tw-whitespace-nowrap"
         >
-          {{ ausbildungsgang | translatedProp: 'ausbildungsstaetteName' : translate.currentLang }}
+          {{ ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.currentLang }}
         </td>
       </ng-container>
 
@@ -76,8 +78,9 @@
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.currentLang"
         >
-          {{ ausbildungsgang | translatedProp: 'abschlussBezeichnung' : translate.currentLang }}
+          {{ ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.currentLang }}
         </td>
       </ng-container>
 
@@ -121,15 +124,18 @@
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="
+            'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | translate
+          "
         >
-          @if (ausbildungsgang.ausbildungskategorie) {
-            {{ 'shared.ausbildungskategorie.' + ausbildungsgang.ausbildungskategorie | translate }}
+          @if (ausbildungsgang.abschluss.ausbildungskategorie) {
+            {{ 'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | translate }}
           }
         </td>
       </ng-container>
 
       <ng-container matColumnDef="AKTIV">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-11 tw-whitespace-nowrap">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | translate }}
           <mat-form-field class="tw-w-full">
             <mat-select
@@ -174,7 +180,7 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-24 tw-whitespace-nowrap !tw-text-right">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-20 tw-whitespace-nowrap !tw-text-right">
           <div class="tw-relative tw-inline-block">
             @if (addAusbildungsgangIsLoadingSig()) {
               <dv-shared-ui-loading [overlay]="true" [type]="'icon'"></dv-shared-ui-loading>
