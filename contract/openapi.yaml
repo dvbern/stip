@@ -5992,10 +5992,10 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
-    stichtagVolljaehrigkeitMedizinischeGrundversorgung:
-      format: date
-      description: dd.MM.yyyy
-      type: string
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+          format: date
+          description: dd.MM.yyyy
+          type: string
     AusbildungsStatus:
       enum:
         - AKTIV
