@@ -5645,38 +5645,18 @@ components:
       type: object
       required:
         - id
-        - abschlussId
-        - abschlussBezeichnungDe
-        - abschlussBezeichnungFr
-        - abschlussAusbildungskategorie
-        - abschlussBildungsrichtung
-        - ausbildungsstaetteId
-        - ausbildungsstaetteNameDe
-        - ausbildungsstaetteNameFr
+        - abschluss
+        - ausbildungsstaette
         - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        abschlussId:
-          $ref: '#/components/schemas/UUID'
-        abschlussBezeichnungDe:
-          type: string
-        abschlussBezeichnungFr:
-          type: string
-        ausbildungskategorie:
-          $ref: '#/components/schemas/Ausbildungskategorie'
-        bildungsrichtung:
-          $ref: '#/components/schemas/Bildungsrichtung'
-        ausbildungsstaetteId:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsstaetteNameDe:
-          type: string
-        ausbildungsstaetteNameFr:
-          type: string
+        abschluss:
+          $ref: '#/components/schemas/Abschluss'
+        ausbildungsstaette:
+          $ref: '#/components/schemas/Ausbildungsstaette'
         aktiv:
           type: boolean
-        zusatzfrage:
-          $ref: '#/components/schemas/AbschlussZusatzfrage'
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
