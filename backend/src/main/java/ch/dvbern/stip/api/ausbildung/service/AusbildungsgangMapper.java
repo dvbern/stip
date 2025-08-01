@@ -59,15 +59,6 @@ public abstract class AusbildungsgangMapper {
         return ausbildungsstaetteService.requireById(ausbildungsstaetteId);
     }
 
-    @Mapping(target = "abschlussId", source = "abschluss.id")
-    @Mapping(target = "abschlussBezeichnungDe", source = "abschluss.bezeichnungDe")
-    @Mapping(target = "abschlussBezeichnungFr", source = "abschluss.bezeichnungFr")
-    @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
-    @Mapping(target = "ausbildungsstaetteNameDe", source = "ausbildungsstaette.nameDe")
-    @Mapping(target = "ausbildungsstaetteNameFr", source = "ausbildungsstaette.nameFr")
-    @Mapping(target = "ausbildungskategorie", source = "abschluss.ausbildungskategorie")
-    @Mapping(target = "bildungsrichtung", source = "abschluss.bildungsrichtung")
-    @Mapping(target = "zusatzfrage", source = "abschluss.zusatzfrage")
     public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
 
     @Mapping(target = "bezeichnungDe", source = "abschluss.bezeichnungDe")

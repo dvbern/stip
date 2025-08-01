@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -21,16 +23,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungsgangDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid UUID abschlussId;
-  private @Valid String abschlussBezeichnungDe;
-  private @Valid String abschlussBezeichnungFr;
-  private @Valid UUID ausbildungsstaetteId;
-  private @Valid String ausbildungsstaetteNameDe;
-  private @Valid String ausbildungsstaetteNameFr;
+  private @Valid AbschlussDto abschluss;
+  private @Valid AusbildungsstaetteDto ausbildungsstaette;
   private @Valid Boolean aktiv;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
   /**
    **/
@@ -53,116 +48,40 @@ public class AusbildungsgangDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangDto abschlussId(UUID abschlussId) {
-    this.abschlussId = abschlussId;
+  public AusbildungsgangDto abschluss(AbschlussDto abschluss) {
+    this.abschluss = abschluss;
     return this;
   }
 
   
-  @JsonProperty("abschlussId")
+  @JsonProperty("abschluss")
   @NotNull
-  public UUID getAbschlussId() {
-    return abschlussId;
+  public AbschlussDto getAbschluss() {
+    return abschluss;
   }
 
-  @JsonProperty("abschlussId")
-  public void setAbschlussId(UUID abschlussId) {
-    this.abschlussId = abschlussId;
+  @JsonProperty("abschluss")
+  public void setAbschluss(AbschlussDto abschluss) {
+    this.abschluss = abschluss;
   }
 
   /**
    **/
-  public AusbildungsgangDto abschlussBezeichnungDe(String abschlussBezeichnungDe) {
-    this.abschlussBezeichnungDe = abschlussBezeichnungDe;
+  public AusbildungsgangDto ausbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
+    this.ausbildungsstaette = ausbildungsstaette;
     return this;
   }
 
   
-  @JsonProperty("abschlussBezeichnungDe")
+  @JsonProperty("ausbildungsstaette")
   @NotNull
-  public String getAbschlussBezeichnungDe() {
-    return abschlussBezeichnungDe;
+  public AusbildungsstaetteDto getAusbildungsstaette() {
+    return ausbildungsstaette;
   }
 
-  @JsonProperty("abschlussBezeichnungDe")
-  public void setAbschlussBezeichnungDe(String abschlussBezeichnungDe) {
-    this.abschlussBezeichnungDe = abschlussBezeichnungDe;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto abschlussBezeichnungFr(String abschlussBezeichnungFr) {
-    this.abschlussBezeichnungFr = abschlussBezeichnungFr;
-    return this;
-  }
-
-  
-  @JsonProperty("abschlussBezeichnungFr")
-  @NotNull
-  public String getAbschlussBezeichnungFr() {
-    return abschlussBezeichnungFr;
-  }
-
-  @JsonProperty("abschlussBezeichnungFr")
-  public void setAbschlussBezeichnungFr(String abschlussBezeichnungFr) {
-    this.abschlussBezeichnungFr = abschlussBezeichnungFr;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsstaetteId")
-  @NotNull
-  public UUID getAusbildungsstaetteId() {
-    return ausbildungsstaetteId;
-  }
-
-  @JsonProperty("ausbildungsstaetteId")
-  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto ausbildungsstaetteNameDe(String ausbildungsstaetteNameDe) {
-    this.ausbildungsstaetteNameDe = ausbildungsstaetteNameDe;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsstaetteNameDe")
-  @NotNull
-  public String getAusbildungsstaetteNameDe() {
-    return ausbildungsstaetteNameDe;
-  }
-
-  @JsonProperty("ausbildungsstaetteNameDe")
-  public void setAusbildungsstaetteNameDe(String ausbildungsstaetteNameDe) {
-    this.ausbildungsstaetteNameDe = ausbildungsstaetteNameDe;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto ausbildungsstaetteNameFr(String ausbildungsstaetteNameFr) {
-    this.ausbildungsstaetteNameFr = ausbildungsstaetteNameFr;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsstaetteNameFr")
-  @NotNull
-  public String getAusbildungsstaetteNameFr() {
-    return ausbildungsstaetteNameFr;
-  }
-
-  @JsonProperty("ausbildungsstaetteNameFr")
-  public void setAusbildungsstaetteNameFr(String ausbildungsstaetteNameFr) {
-    this.ausbildungsstaetteNameFr = ausbildungsstaetteNameFr;
+  @JsonProperty("ausbildungsstaette")
+  public void setAusbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
+    this.ausbildungsstaette = ausbildungsstaette;
   }
 
   /**
@@ -184,60 +103,6 @@ public class AusbildungsgangDto  implements Serializable {
     this.aktiv = aktiv;
   }
 
-  /**
-   **/
-  public AusbildungsgangDto ausbildungskategorie(ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie) {
-    this.ausbildungskategorie = ausbildungskategorie;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungskategorie")
-  public ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie getAusbildungskategorie() {
-    return ausbildungskategorie;
-  }
-
-  @JsonProperty("ausbildungskategorie")
-  public void setAusbildungskategorie(ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie) {
-    this.ausbildungskategorie = ausbildungskategorie;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
-    this.bildungsrichtung = bildungsrichtung;
-    return this;
-  }
-
-  
-  @JsonProperty("bildungsrichtung")
-  public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
-    return bildungsrichtung;
-  }
-
-  @JsonProperty("bildungsrichtung")
-  public void setBildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
-    this.bildungsrichtung = bildungsrichtung;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
-    this.zusatzfrage = zusatzfrage;
-    return this;
-  }
-
-  
-  @JsonProperty("zusatzfrage")
-  public ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage getZusatzfrage() {
-    return zusatzfrage;
-  }
-
-  @JsonProperty("zusatzfrage")
-  public void setZusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
-    this.zusatzfrage = zusatzfrage;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -249,21 +114,14 @@ public class AusbildungsgangDto  implements Serializable {
     }
     AusbildungsgangDto ausbildungsgang = (AusbildungsgangDto) o;
     return Objects.equals(this.id, ausbildungsgang.id) &&
-        Objects.equals(this.abschlussId, ausbildungsgang.abschlussId) &&
-        Objects.equals(this.abschlussBezeichnungDe, ausbildungsgang.abschlussBezeichnungDe) &&
-        Objects.equals(this.abschlussBezeichnungFr, ausbildungsgang.abschlussBezeichnungFr) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgang.ausbildungsstaetteId) &&
-        Objects.equals(this.ausbildungsstaetteNameDe, ausbildungsgang.ausbildungsstaetteNameDe) &&
-        Objects.equals(this.ausbildungsstaetteNameFr, ausbildungsgang.ausbildungsstaetteNameFr) &&
-        Objects.equals(this.aktiv, ausbildungsgang.aktiv) &&
-        Objects.equals(this.ausbildungskategorie, ausbildungsgang.ausbildungskategorie) &&
-        Objects.equals(this.bildungsrichtung, ausbildungsgang.bildungsrichtung) &&
-        Objects.equals(this.zusatzfrage, ausbildungsgang.zusatzfrage);
+        Objects.equals(this.abschluss, ausbildungsgang.abschluss) &&
+        Objects.equals(this.ausbildungsstaette, ausbildungsgang.ausbildungsstaette) &&
+        Objects.equals(this.aktiv, ausbildungsgang.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschlussId, abschlussBezeichnungDe, abschlussBezeichnungFr, ausbildungsstaetteId, ausbildungsstaetteNameDe, ausbildungsstaetteNameFr, aktiv, ausbildungskategorie, bildungsrichtung, zusatzfrage);
+    return Objects.hash(id, abschluss, ausbildungsstaette, aktiv);
   }
 
   @Override
@@ -272,16 +130,9 @@ public class AusbildungsgangDto  implements Serializable {
     sb.append("class AusbildungsgangDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
-    sb.append("    abschlussBezeichnungDe: ").append(toIndentedString(abschlussBezeichnungDe)).append("\n");
-    sb.append("    abschlussBezeichnungFr: ").append(toIndentedString(abschlussBezeichnungFr)).append("\n");
-    sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
-    sb.append("    ausbildungsstaetteNameDe: ").append(toIndentedString(ausbildungsstaetteNameDe)).append("\n");
-    sb.append("    ausbildungsstaetteNameFr: ").append(toIndentedString(ausbildungsstaetteNameFr)).append("\n");
+    sb.append("    abschluss: ").append(toIndentedString(abschluss)).append("\n");
+    sb.append("    ausbildungsstaette: ").append(toIndentedString(ausbildungsstaette)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
-    sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
-    sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
-    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

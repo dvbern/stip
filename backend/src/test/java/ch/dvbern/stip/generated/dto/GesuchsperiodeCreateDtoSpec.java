@@ -79,8 +79,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE
 })
 @JsonTypeName("GesuchsperiodeCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -237,9 +236,6 @@ public class GesuchsperiodeCreateDtoSpec {
 
   public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
   private Integer fristNachreichenDokumente;
-
-  public static final String JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG = "stichtagVolljaehrigkeitMedizinischeGrundversorgung";
-  private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
 
   public GesuchsperiodeCreateDtoSpec() {
   }
@@ -1569,32 +1565,6 @@ public class GesuchsperiodeCreateDtoSpec {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
 
-
-  public GesuchsperiodeCreateDtoSpec stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
-    
-    this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
-    return this;
-  }
-
-   /**
-   * dd.MM.yyyy
-   * @return stichtagVolljaehrigkeitMedizinischeGrundversorgung
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getStichtagVolljaehrigkeitMedizinischeGrundversorgung() {
-    return stichtagVolljaehrigkeitMedizinischeGrundversorgung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
-    this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1654,13 +1624,12 @@ public class GesuchsperiodeCreateDtoSpec {
         Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, gesuchsperiodeCreate.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
         Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeCreate.zweiterAuszahlungsterminMonat) &&
         Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeCreate.zweiterAuszahlungsterminTag) &&
-        Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeCreate.fristNachreichenDokumente) &&
-        Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeCreate.stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+        Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeCreate.fristNachreichenDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente);
   }
 
   @Override
@@ -1718,7 +1687,6 @@ public class GesuchsperiodeCreateDtoSpec {
     sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
     sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
-    sb.append("    stichtagVolljaehrigkeitMedizinischeGrundversorgung: ").append(toIndentedString(stichtagVolljaehrigkeitMedizinischeGrundversorgung)).append("\n");
     sb.append("}");
     return sb.toString();
   }
