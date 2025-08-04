@@ -79,6 +79,11 @@ public interface SozialdienstResource {
     SozialdienstBenutzerDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminDto sozialdienstAdminDto);
 
     @PATCH
+    @Path("/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}")
+    @Produces({ "application/json", "text/plain" })
+    SozialdienstDto setSozialdienstStatusTo(@PathParam("sozialdienstId") UUID sozialdienstId,@PathParam("targetStatus") ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus targetStatus);
+
+    @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     SozialdienstDto updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);

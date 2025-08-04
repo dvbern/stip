@@ -20,6 +20,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import java.util.UUID;
 
@@ -74,6 +75,7 @@ public class SozialdienstApiSpec {
                 getSozialdienstBenutzer(),
                 getSozialdienstBenutzerList(),
                 replaceSozialdienstAdmin(),
+                setSozialdienstStatusTo(),
                 updateSozialdienst(),
                 updateSozialdienstAdmin(),
                 updateSozialdienstBenutzer()
@@ -118,6 +120,10 @@ public class SozialdienstApiSpec {
 
     public ReplaceSozialdienstAdminOper replaceSozialdienstAdmin() {
         return new ReplaceSozialdienstAdminOper(createReqSpec());
+    }
+
+    public SetSozialdienstStatusToOper setSozialdienstStatusTo() {
+        return new SetSozialdienstStatusToOper(createReqSpec());
     }
 
     public UpdateSozialdienstOper updateSozialdienst() {
@@ -830,6 +836,91 @@ public class SozialdienstApiSpec {
          * @return operation
          */
         public ReplaceSozialdienstAdminOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Changes a Sozialdienst&#39;s status to a given value
+     * 
+     *
+     * @see #sozialdienstIdPath  (required)
+     * @see #targetStatusPath  (required)
+     * return SozialdienstDtoSpec
+     */
+    public static class SetSozialdienstStatusToOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetSozialdienstStatusToOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}
+         * @param handler handler
+         * @return SozialdienstDtoSpec
+         */
+        public SozialdienstDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstDtoSpec> type = new TypeRef<SozialdienstDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String SOZIALDIENST_ID_PATH = "sozialdienstId";
+
+        /**
+         * @param sozialdienstId (UUID)  (required)
+         * @return operation
+         */
+        public SetSozialdienstStatusToOper sozialdienstIdPath(Object sozialdienstId) {
+            reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
+            return this;
+        }
+
+        public static final String TARGET_STATUS_PATH = "targetStatus";
+
+        /**
+         * @param targetStatus (SozialdienstStatusDtoSpec)  (required)
+         * @return operation
+         */
+        public SetSozialdienstStatusToOper targetStatusPath(Object targetStatus) {
+            reqSpec.addPathParam(TARGET_STATUS_PATH, targetStatus);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetSozialdienstStatusToOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetSozialdienstStatusToOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

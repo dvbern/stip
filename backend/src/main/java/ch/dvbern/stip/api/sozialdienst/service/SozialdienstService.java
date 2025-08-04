@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -56,6 +57,7 @@ public class SozialdienstService {
         final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
         sozialdienst.getSozialdienstBenutzers().add(admin);
+        sozialdienst.setStatus(SozialdienstStatus.AKTIV);
 
         final var zahlungsverbindung = zahlungsverbindungService.createZahlungsverbindung(dto.getZahlungsverbindung());
         sozialdienst.setZahlungsverbindung(zahlungsverbindung);
@@ -123,5 +125,13 @@ public class SozialdienstService {
     ) {
         final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
         return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
+    }
+
+    @Transactional
+    public SozialdienstDto setSozialdienstStatusTo(final UUID sozialdienstId, final SozialdienstStatus targetStatus) {
+        final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        sozialdienst.setStatus(targetStatus);
+
+        return sozialdienstMapper.toDto(sozialdienst);
     }
 }

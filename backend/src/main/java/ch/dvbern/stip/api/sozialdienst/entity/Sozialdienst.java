@@ -24,11 +24,14 @@ import java.util.Objects;
 import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -83,6 +86,11 @@ public class Sozialdienst extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "sozialdienst_zahlungsverbindung_id"))
     private Zahlungsverbindung zahlungsverbindung;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SozialdienstStatus status;
 
     @Transient
     public boolean isBenutzerAdmin(final SozialdienstBenutzer sozialdienstBenutzer) {
