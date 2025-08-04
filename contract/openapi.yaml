@@ -6132,6 +6132,8 @@ components:
               $ref: '#/components/schemas/SozialdienstBenutzer'
             zahlungsverbindung:
               $ref: '#/components/schemas/Zahlungsverbindung'
+            status:
+              $ref: '#/components/schemas/SozialdienstStatus'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object

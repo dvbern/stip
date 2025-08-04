@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstDtoSpec.JSON_PROPERTY_ID,
   SozialdienstDtoSpec.JSON_PROPERTY_NAME,
   SozialdienstDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN,
-  SozialdienstDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
+  SozialdienstDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG,
+  SozialdienstDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("Sozialdienst")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,6 +51,9 @@ public class SozialdienstDtoSpec {
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private SozialdienstStatusDtoSpec status;
 
   public SozialdienstDtoSpec() {
   }
@@ -156,6 +161,32 @@ public class SozialdienstDtoSpec {
     this.zahlungsverbindung = zahlungsverbindung;
   }
 
+
+  public SozialdienstDtoSpec status(SozialdienstStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SozialdienstStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(SozialdienstStatusDtoSpec status) {
+    this.status = status;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -168,12 +199,13 @@ public class SozialdienstDtoSpec {
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
-        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
+        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung) &&
+        Objects.equals(this.status, sozialdienst.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, status);
   }
 
   @Override
@@ -184,6 +216,7 @@ public class SozialdienstDtoSpec {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }
