@@ -1730,6 +1730,34 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
+  /sozialdienst/{sozialdienstId}/changeStatusTo/{targetStatus}:
+    parameters:
+      - $ref: '#/components/parameters/sozialdienstId'
+      - name: targetStatus
+        schema:
+          $ref: '#/components/schemas/SozialdienstStatus'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: changeSozialdienstStatus
+      summary: Changes a Sozialdienst's status to a given value
   /sozialdienst/benutzer:
     get:
       tags:
@@ -6855,6 +6883,11 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
+    SozialdienstStatus:
+      type: string
+      enum:
+        - AKTIV
+        - INAKTIV
   responses:
     Unauthorized:
       content:
