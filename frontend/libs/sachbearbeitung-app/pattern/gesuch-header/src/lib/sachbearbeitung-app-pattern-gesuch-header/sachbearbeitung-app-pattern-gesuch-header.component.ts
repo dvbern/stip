@@ -26,6 +26,7 @@ import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
@@ -82,6 +83,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
   private config = inject(SharedModelCompileTimeConfig);
+
+  private deploymentConfigSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
   route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -253,7 +258,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
+              this.gesuchStore.setStatus$.BEREIT_FUER_BEARBEITUNG({
                 gesuchTrancheId,
                 text: result.kommentar,
               });
@@ -272,7 +277,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$['ZURUECKWEISEN']({
+              this.gesuchStore.setStatus$.ZURUECKWEISEN({
                 gesuchTrancheId,
                 text: result.kommentar,
                 onSuccess: (newGesuchTrancheId) => {
@@ -301,16 +306,29 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           labelKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.label`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.message`,
           confirmKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.confirm`,
+          allowedTypes:
+            this.deploymentConfigSig().deploymentConfig?.allowedMimeTypes,
         })
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$[nextStatus]({
-                gesuchTrancheId,
-                grundId: result.entityId,
-                kanton: result.kanton,
-              });
+              if (result.verfuegungUpload) {
+                this.gesuchStore.createManuelleVerfuegung$({
+                  gesuchTrancheId,
+                  fileUpload: result.verfuegungUpload,
+                  kommentar: result.kommentar,
+                  onSuccess: () => {
+                    this.gesuchStore.loadGesuchInfo$({ gesuchId });
+                  },
+                });
+              } else {
+                this.gesuchStore.setStatus$[nextStatus]({
+                  gesuchTrancheId,
+                  grundId: result.entityId,
+                  kanton: result.kanton,
+                });
+              }
             }
           });
         break;
