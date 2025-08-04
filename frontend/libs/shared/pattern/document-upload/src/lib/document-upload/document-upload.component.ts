@@ -71,6 +71,13 @@ export class SharedPatternDocumentUploadComponent {
     );
   });
 
+  initialOptionsSig = computed(
+    () => {
+      return this.optionsSig();
+    },
+    { equal: (a, b) => a.dokument.dokumentTyp === b.dokument.dokumentTyp },
+  );
+
   @HostBinding('class') klass = 'tw-block tw-self-start tw-relative tw-h-14';
 
   constructor() {
@@ -87,7 +94,7 @@ export class SharedPatternDocumentUploadComponent {
       });
 
     effect(() => {
-      const options = this.optionsSig();
+      const options = this.initialOptionsSig();
       const initialDocuments = options?.initialDokumente;
 
       if (initialDocuments) {
