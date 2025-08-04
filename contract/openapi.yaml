@@ -6712,6 +6712,7 @@ components:
         - NICHT_BERECHTIGTE_PERSON
         - ANSPRUCH_MANUELL_PRUEFEN
         - ANSPRUCH_UNKLAR
+        - MANUELLE_VERFUEGUNG
     StipDecisionText:
       type: object
       required:
