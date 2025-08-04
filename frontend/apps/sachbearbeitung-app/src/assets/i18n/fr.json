@@ -498,7 +498,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
 
-  "sachbearbeitung-app.verfuegung.custom.dialog.comment": "Commentaire",
+  "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Commentaire",
+  "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Télécharger la décision manuelle",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",

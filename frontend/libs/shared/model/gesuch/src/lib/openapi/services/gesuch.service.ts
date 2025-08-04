@@ -1186,10 +1186,10 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
+     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
+     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
+     public createManuelleVerfuegung$(requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createManuelleVerfuegung$.');
@@ -1219,6 +1219,7 @@ export class GesuchService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json',
                 'text/plain'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -1270,7 +1271,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/manuelle-verfuegung`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchWithChanges>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,

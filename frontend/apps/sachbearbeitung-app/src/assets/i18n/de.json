@@ -499,7 +499,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
 
-  "sachbearbeitung-app.verfuegung.custom.dialog.comment": "Kommentar",
+  "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Kommentar",
+  "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Manuelle Verfügung hochladen",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",

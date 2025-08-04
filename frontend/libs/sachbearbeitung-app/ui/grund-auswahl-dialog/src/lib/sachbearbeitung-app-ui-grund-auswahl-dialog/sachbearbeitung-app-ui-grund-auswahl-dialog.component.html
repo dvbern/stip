@@ -21,8 +21,15 @@
           [placeholder]="'shared.form.select.empty' | translate"
           [aria-label]="dialogData.labelKey | translate"
         >
-          @for (grund of store.ablehnungsGruende(); track grund) {
-            <mat-option [value]="grund">{{ grund.titleDe }}</mat-option>
+          @for (grund of allAblehnungsGruendeSig(); track grund) {
+            @if (grund.stipDecision === grundManuell.stipDecision) {
+              <mat-divider></mat-divider>
+              <mat-option [value]="grundManuell">{{
+                'sachbearbeitung-app.verfuegung.negativ.dialog.manuell' | translate
+              }}</mat-option>
+            } @else {
+              <mat-option [value]="grund">{{ grund.titleDe }}</mat-option>
+            }
           }
         </mat-select>
         <mat-error *dvSharedUiFormMessageError="'required'">
@@ -33,7 +40,7 @@
       @if (showVerfuegungUploadSig()) {
         <mat-form-field class="tw-mt-3 tw-w-full" dvSharedUiFormField>
           <mat-label>
-            {{ 'sachbearbeitung-app.verfuegung.custom.dialog.comment' | translate }}
+            {{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | translate }}
             ({{ 'shared.form.optional.label' | translate }})
           </mat-label>
           <textarea

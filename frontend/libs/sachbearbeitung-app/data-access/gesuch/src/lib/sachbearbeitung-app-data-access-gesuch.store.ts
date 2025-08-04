@@ -229,7 +229,6 @@ export class GesuchStore extends signalStore(
   createManuelleVerfuegung$ = rxMethod<{
     gesuchTrancheId: string;
     fileUpload: File;
-    onSuccess?: () => void;
     kommentar?: string;
   }>(
     pipe(
@@ -238,7 +237,7 @@ export class GesuchStore extends signalStore(
           lastStatusChange: pending(),
         }));
       }),
-      switchMap(({ gesuchTrancheId, fileUpload, onSuccess, kommentar }) =>
+      switchMap(({ gesuchTrancheId, fileUpload, kommentar }) =>
         this.gesuchService
           .createManuelleVerfuegung$({
             gesuchTrancheId,
@@ -251,7 +250,14 @@ export class GesuchStore extends signalStore(
                 patchState(this, { lastStatusChange: success(null) });
               },
               {
-                onSuccess,
+                onSuccess: (data) => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.gesuchSetReturned({
+                      gesuch: data,
+                    }),
+                  );
+                  this.loadGesuchInfo$({ gesuchId: data.id });
+                },
               },
             ),
           ),

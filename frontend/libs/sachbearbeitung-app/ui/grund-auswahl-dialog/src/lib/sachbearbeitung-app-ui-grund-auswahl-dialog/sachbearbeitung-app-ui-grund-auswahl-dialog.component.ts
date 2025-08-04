@@ -20,6 +20,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -50,12 +51,19 @@ export interface GrundAuswahlDialogData {
   allowedTypes?: string[];
 }
 
-export interface GrundAuswahlDialogResult {
-  entityId: string;
-  kanton?: Kanton;
-  kommentar?: string;
-  verfuegungUpload?: File;
-}
+export type GrundAuswahlDialogResult =
+  | {
+      type: 'grund';
+      entityId: string;
+      kanton?: Kanton;
+    }
+  | {
+      type: 'manuell';
+      kommentar?: string;
+      verfuegungUpload: File;
+    };
+
+const GRUND_MANUELL = { id: undefined, stipDecision: 'MANUELL' as const };
 
 @Component({
   selector: 'dv-sachbearbeitung-app-ui-grund-auswahl-dialog',
@@ -66,6 +74,7 @@ export interface GrundAuswahlDialogResult {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDividerModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiDropFileComponent,
@@ -84,16 +93,24 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  readonly kantone = Object.values(Kanton);
   fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   selectedFileSig = signal<File | null>(null);
   dialogData = inject<GrundAuswahlDialogData>(MAT_DIALOG_DATA);
   store = inject(AblehnungGrundStore);
-  readonly kantone = Object.values(Kanton);
+  grundManuell = GRUND_MANUELL;
 
+  allAblehnungsGruendeSig = computed(() => {
+    const ablehnungsGruende = this.store.gruende();
+    return [...(ablehnungsGruende.data ?? []), GRUND_MANUELL];
+  });
   form = this.formBuilder.group({
     fileUpload: [<File | undefined>undefined],
     kommentar: [<string | undefined>undefined],
-    grund: [<StipDecisionText | undefined>undefined, [Validators.required]],
+    grund: [
+      <StipDecisionText | typeof GRUND_MANUELL | undefined>undefined,
+      [Validators.required],
+    ],
     kanton: [<Kanton | undefined>undefined, [Validators.required]],
   });
 
@@ -136,7 +153,7 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   );
 
   readonly showVerfuegungUploadSig = computed(
-    () => this.grundSig()?.stipDecision === StipDecision.MANUELLE_VERFUEGUNG,
+    () => this.grundSig()?.stipDecision === 'MANUELL',
   );
 
   updateFileList(event: Event) {
@@ -167,12 +184,19 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
       this.form,
       ['grund'],
     );
-    this.dialogRef.close({
-      entityId: grund.id,
-      kanton,
-      kommentar: kommentar || undefined,
-      verfuegungUpload: verfuegungUpload ?? undefined,
-    });
+    if (grund.id) {
+      return this.dialogRef.close({
+        type: 'grund',
+        entityId: grund.id,
+        kanton,
+      });
+    } else if (verfuegungUpload) {
+      return this.dialogRef.close({
+        type: 'manuell',
+        kommentar: kommentar || undefined,
+        verfuegungUpload,
+      });
+    }
   }
 
   resetSelectedFile() {

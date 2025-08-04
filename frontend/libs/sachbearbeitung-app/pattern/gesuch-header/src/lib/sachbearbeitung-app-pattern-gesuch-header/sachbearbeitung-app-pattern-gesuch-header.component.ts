@@ -313,21 +313,25 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              if (result.verfuegungUpload) {
-                this.gesuchStore.createManuelleVerfuegung$({
-                  gesuchTrancheId,
-                  fileUpload: result.verfuegungUpload,
-                  kommentar: result.kommentar,
-                  onSuccess: () => {
-                    this.gesuchStore.loadGesuchInfo$({ gesuchId });
-                  },
-                });
-              } else {
-                this.gesuchStore.setStatus$[nextStatus]({
-                  gesuchTrancheId,
-                  grundId: result.entityId,
-                  kanton: result.kanton,
-                });
+              switch (result.type) {
+                case 'manuell': {
+                  this.gesuchStore.createManuelleVerfuegung$({
+                    gesuchTrancheId,
+                    fileUpload: result.verfuegungUpload,
+                    kommentar: result.kommentar,
+                  });
+                  break;
+                }
+                case 'grund': {
+                  this.gesuchStore.setStatus$[nextStatus]({
+                    gesuchTrancheId,
+                    grundId: result.entityId,
+                    kanton: result.kanton,
+                  });
+                  break;
+                }
+                default:
+                  assertUnreachable(result);
               }
             }
           });
