@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
@@ -144,6 +145,7 @@ class SozialdienstServiceTest {
         sozialdienstA.setZahlungsverbindung(zahlungsverbindung1);
         sozialdienstA.setSozialdienstBenutzers(List.of(benutzerOfSozialdienstA));
         sozialdienstA.setSozialdienstAdmin(sozialdienstAdminOfSozialdienstA);
+        sozialdienstA.setStatus(SozialdienstStatus.AKTIV);
         sozialdienstRepository.persistAndFlush(sozialdienstA);
 
         sozialdienstB = new Sozialdienst();
@@ -151,6 +153,7 @@ class SozialdienstServiceTest {
         sozialdienstB.setZahlungsverbindung(zahlungsverbindung2);
         sozialdienstB.setSozialdienstBenutzers(List.of(benutzerOfSozialdienstB));
         sozialdienstB.setSozialdienstAdmin(sozialdienstAdminOfSozialdienstB);
+        sozialdienstB.setStatus(SozialdienstStatus.AKTIV);
         sozialdienstRepository.persistAndFlush(sozialdienstB);
 
         sozialdienstBenutzerRepository.persistAndFlush(benutzerOfSozialdienstA);

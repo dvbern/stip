@@ -39,6 +39,7 @@ import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
@@ -52,6 +53,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -72,21 +76,39 @@ class DelegierenResourceImplTest {
     private final DelegierungRepository delegierungRepository;
 
     private SozialdienstDtoSpec sozialdienst;
+    private SozialdienstDtoSpec inaktiverSozialdienst;
     private GesuchDtoSpec gesuch;
     private FallDtoSpec fall;
 
     @Test
     @Order(1)
     @TestAsAdmin
-    void createSozialdienst() {
-        final var sozialdienstCreate = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(
-            SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec()
-        );
+    void createSozialdienste() {
+        final var sozialdienstAdmin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
+        final var sozialdienstCreate = SozialdienstCreateDtoSpecModel
+            .sozialdienstCreateDtoSpec(sozialdienstAdmin);
 
         sozialdienst = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,
             sozialdienstApi.createSozialdienst().body(sozialdienstCreate)
         );
+
+        final var inaktivSozialdienstCreate = SozialdienstCreateDtoSpecModel
+            .sozialdienstCreateDtoSpec(sozialdienstAdmin);
+
+        inaktiverSozialdienst = TestUtil.executeAndExtract(
+            SozialdienstDtoSpec.class,
+            sozialdienstApi.createSozialdienst().body(inaktivSozialdienstCreate)
+        );
+
+        inaktiverSozialdienst = TestUtil.executeAndExtract(
+            SozialdienstDtoSpec.class,
+            sozialdienstApi.setSozialdienstStatusTo()
+                .sozialdienstIdPath(inaktiverSozialdienst.getId())
+                .targetStatusPath(SozialdienstStatusDtoSpec.INAKTIV)
+        );
+
+        assertThat(inaktiverSozialdienst.getStatus(), is(SozialdienstStatusDtoSpec.INAKTIV));
     }
 
     @Test
@@ -112,6 +134,19 @@ class DelegierenResourceImplTest {
 
     @Test
     @Order(4)
+    @TestAsGesuchsteller
+    void delegateToInaktiverSozialdienstFails() {
+        TestUtil.executeAndAssert(
+            delegierenApiSpec.fallDelegieren()
+                .fallIdPath(fall.getId())
+                .sozialdienstIdPath(inaktiverSozialdienst.getId())
+                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
+            Status.BAD_REQUEST.getStatusCode()
+        );
+    }
+
+    @Test
+    @Order(5)
     @TestAsGesuchsteller
     void delegateGesuch() {
         TestUtil.executeAndAssert(
