@@ -163,7 +163,6 @@ public class PdfService {
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
                 addVerfuegung(
-                    gesuch,
                     verfuegung,
                     document,
                     section,
@@ -178,7 +177,7 @@ public class PdfService {
                 header(gesuch, document, leftMargin, translator, true);
             }
 
-            addVerfuegung(gesuch, verfuegung, document, section, logo, leftMargin, translator, addBerechnungsblaetter);
+            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator, addBerechnungsblaetter);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -186,7 +185,6 @@ public class PdfService {
     }
 
     private void addVerfuegung(
-        final Gesuch gesuch,
         final Verfuegung verfuegung,
         final Document document,
         final PdfSection section,
@@ -195,6 +193,7 @@ public class PdfService {
         final TL translator,
         final boolean addBerechnungsblaetter
     ) throws IOException {
+        final var gesuch = verfuegung.getGesuch();
         document.add(logo);
         header(gesuch, document, leftMargin, translator, false);
 
