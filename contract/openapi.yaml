@@ -2772,7 +2772,11 @@ paths:
         - $ref: '#/components/parameters/gesuchTrancheId'
       responses:
         '200':
-          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch with changes in status
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2780,7 +2784,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createManuelleVerfuegung
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
