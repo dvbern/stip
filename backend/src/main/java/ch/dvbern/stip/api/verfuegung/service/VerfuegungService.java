@@ -31,16 +31,17 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.Kanton;
+import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @RequestScoped
@@ -59,7 +60,7 @@ public class VerfuegungService {
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
-    private final BerechnungsblattService berechnungsblattService;
+    private final Antivirus antivirus;
 
     @Transactional
     public void createVerfuegung(final UUID gesuchId) {
@@ -69,7 +70,11 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createNegativeVerfuegung(final UUID gesuchId, final UUID stipDecisionId, Optional<Kanton> kanton) {
+    public void createNegativeVerfuegungWithDecision(
+        final UUID gesuchId,
+        final UUID stipDecisionId,
+        final Optional<Kanton> kanton
+    ) {
         final var stipDecision = stipDecisionTextRepository.requireById(stipDecisionId);
 
         final Verfuegung verfuegung = new Verfuegung();
@@ -78,6 +83,26 @@ public class VerfuegungService {
         verfuegung.setKanton(kanton.orElse(null));
         verfuegung.setNegativeVerfuegung(true);
         verfuegungRepository.persistAndFlush(verfuegung);
+    }
+
+    @Transactional
+    public void createNegativeVerfuegungManuell(final UUID gesuchId, final FileUpload fileUpload) {
+        final var verfuegung = new Verfuegung();
+        verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
+        verfuegung.setNegativeVerfuegung(true);
+
+        DokumentUploadUtil.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            VERFUEGUNG_DOKUMENT_PATH,
+            verfuegung::setObjectId,
+            throwable -> LOG.error(throwable.getMessage())
+        );
+
+        verfuegung.setFilename(fileUpload.fileName());
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
     @Transactional

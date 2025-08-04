@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -35,11 +36,12 @@ public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        verfuegungService.createPdfForNegtativeVerfuegung(
-            gesuch.getVerfuegungs()
-                .stream()
-                .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-                .orElseThrow(NotFoundException::new)
-        );
+        final var latestVerfuegung = gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+            .orElseThrow(NotFoundException::new);
+        if (Objects.nonNull(latestVerfuegung.getStipDecision())) {
+            verfuegungService.createPdfForNegtativeVerfuegung(latestVerfuegung);
+        }
     }
 }

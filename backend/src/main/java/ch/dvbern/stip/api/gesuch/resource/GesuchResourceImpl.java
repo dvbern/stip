@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
+import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
@@ -42,7 +43,6 @@ import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -116,7 +116,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
-    private final GesuchStatusService gesuchStatusService;
+    private final VerfuegungAuthorizer verfuegungAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -139,11 +139,26 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToNegativeVerfuegung(gesuchId);
 
-        gesuchService.changeGesuchStatusToNegativeVerfuegung(
+        gesuchService.changeGesuchStatusToNegativeVerfuegungWithDecision(
             gesuchId,
             ausgewaehlterGrundDto
         );
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
+    public Uni<Response> createManuelleVerfuegung(UUID gesuchTrancheId, FileUpload fileUpload, String kommentar) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanCreateManuelleVerfuegung(gesuchId);
+
+        gesuchService.changeGesuchStatusToNegativeVerfuegungManuell(
+            gesuchId,
+            fileUpload,
+            kommentar
+        );
+        return null;
     }
 
     @Override

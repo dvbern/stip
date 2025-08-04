@@ -102,7 +102,7 @@ public interface GesuchResource {
     GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @POST
-    @Path("/{gesuchTrancheId}/manuelle-verfügung")
+    @Path("/{gesuchTrancheId}/manuelle-verfuegung")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createManuelleVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "kommentar")  String kommentar);

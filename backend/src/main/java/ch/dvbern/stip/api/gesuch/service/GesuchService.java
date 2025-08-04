@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,9 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -132,6 +136,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -678,7 +683,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToNegativeVerfuegung(
+    public void changeGesuchStatusToNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final AusgewaehlterGrundDto ausgewaehlterGrundDto
     ) {
@@ -686,9 +691,47 @@ public class GesuchService {
         final var decisionId = ausgewaehlterGrundDto.getDecisionId();
         var decision = stipDecisionTextRepository.requireById(decisionId);
         verfuegungService
-            .createNegativeVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
+            .createNegativeVerfuegungWithDecision(
+                gesuchId,
+                decisionId,
+                Optional.ofNullable(ausgewaehlterGrundDto.getKanton())
+            );
         var kommentarTxt = decision.getTitleDe();
         var kommentarDto = new KommentarDto(kommentarTxt);
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
+            kommentarDto,
+            false
+        );
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
+    }
+
+    @Transactional
+    public void changeGesuchStatusToNegativeVerfuegungManuell(
+        final UUID gesuchId,
+        final FileUpload fileUpload,
+        final String kommentar
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+
+        KommentarDto kommentarDto;
+        if (kommentar.isBlank()) {
+            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell"));
+        } else {
+            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell") + ", " + kommentar);
+        }
+
+        verfuegungService.createNegativeVerfuegungManuell(gesuchId, fileUpload);
+
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
