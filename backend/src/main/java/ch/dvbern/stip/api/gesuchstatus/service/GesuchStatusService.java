@@ -98,7 +98,7 @@ public class GesuchStatusService {
             return Gesuchstatus.JURIST_CAN_EDIT.contains(gesuch.getGesuchStatus());
 
         }
-        return Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK.contains(gesuch.getGesuchStatus());
+        return Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK.contains(gesuch.getGesuchStatus());
     }
 
     public boolean canGetBerechnung(final Gesuch gesuch) {

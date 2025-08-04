@@ -59,13 +59,13 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
     void sbCanTriggerManuellPruefenTest() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK) {
+        for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK) {
             gesuch.setGesuchStatus(gesuchStatusToSucceed);
             assertDoesNotThrow(() -> gesuchAuthorizer.sbCanGesuchManuellPruefen(UUID.randomUUID()));
         }
 
         final var otherGesuchStatus = Arrays.stream(Gesuchstatus.values())
-            .filter(gesuchStatus -> !Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_STATUS_CHECK.contains(gesuchStatus))
+            .filter(gesuchStatus -> !Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK.contains(gesuchStatus))
             .toList();
 
         for (Gesuchstatus gesuchStatusToFail : otherGesuchStatus) {

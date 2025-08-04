@@ -154,7 +154,6 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
-            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.VERFUEGT)
@@ -162,7 +161,6 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
-            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
