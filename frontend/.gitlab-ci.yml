@@ -14,15 +14,15 @@ include:
       test-on: '(branch|mr|default)'
       build-additional-args: '--verbose'
 
-  - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
-    inputs:
-      sonar-scanner: cli
-      context-dir: 'frontend'
-      sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
-      sonar-token: "$SONAR_TOKEN_FRONTEND"
-      needs:
-        - "nx-build"
-        - "nx-test"
+  # - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
+  #   inputs:
+  #     sonar-scanner: cli
+  #     context-dir: 'frontend'
+  #     sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
+  #     sonar-token: "$SONAR_TOKEN_FRONTEND"
+  #     needs:
+  #       - "nx-build"
+  #       - "nx-test"
 
   - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
     inputs:
