@@ -91,18 +91,20 @@ public class VerfuegungService {
         verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
         verfuegung.setNegativeVerfuegung(true);
 
-        DokumentUploadUtil.validateScanUploadDokument(
+        final var response = DokumentUploadUtil.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
             antivirus,
             VERFUEGUNG_DOKUMENT_PATH,
-            verfuegung::setObjectId,
-            throwable -> LOG.error(throwable.getMessage())
+            verfuegung::setObjectId, // TODO ____ Create everything inside the callback
+            throwable -> LOG.error(throwable.getMessage()) // TODO ____ Do not remove exception (check with Juri)
         );
+        response.await();
 
         verfuegung.setFilename(fileUpload.fileName());
         verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+        verfuegungRepository.persistAndFlush(verfuegung);
     }
 
     @Transactional

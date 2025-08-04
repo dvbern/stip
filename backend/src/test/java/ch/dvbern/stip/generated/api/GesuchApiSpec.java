@@ -1149,6 +1149,7 @@ public class GesuchApiSpec {
      * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
      * @see #fileUploadMultiPart  (required)
      * @see #kommentarForm  (optional)
+     * return GesuchWithChangesDtoSpec
      */
     public static class CreateManuelleVerfuegungOper implements Oper {
 
@@ -1161,7 +1162,7 @@ public class GesuchApiSpec {
         public CreateManuelleVerfuegungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1174,6 +1175,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/{gesuchTrancheId}/manuelle-verfuegung
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";

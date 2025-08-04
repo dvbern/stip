@@ -146,9 +146,14 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
+    @Blocking
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
-    public Uni<Response> createManuelleVerfuegung(UUID gesuchTrancheId, FileUpload fileUpload, String kommentar) {
+    public GesuchWithChangesDto createManuelleVerfuegung(
+        UUID gesuchTrancheId,
+        FileUpload fileUpload,
+        String kommentar
+    ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanCreateManuelleVerfuegung(gesuchId);
@@ -158,7 +163,7 @@ public class GesuchResourceImpl implements GesuchResource {
             fileUpload,
             kommentar
         );
-        return null;
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
     @Override
