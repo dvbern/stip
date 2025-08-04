@@ -217,14 +217,14 @@ public class SapService {
         final var gesuch = fall.getAusbildungs()
             .stream()
             .sorted(
-                Comparator.comparing(Ausbildung::getTimestampErstellt)
+                Comparator.comparing(Ausbildung::getTimestampErstellt).reversed()
             )
             .findFirst()
             .get()
             .getGesuchs()
             .stream()
             .sorted(
-                Comparator.comparing(Gesuch::getTimestampErstellt)
+                Comparator.comparing(Gesuch::getTimestampErstellt).reversed()
             )
             .findFirst()
             .get();
