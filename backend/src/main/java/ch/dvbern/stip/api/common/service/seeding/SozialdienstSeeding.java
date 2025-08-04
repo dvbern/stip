@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
@@ -136,6 +137,7 @@ public class SozialdienstSeeding extends Seeder {
             .setNachname("Muster");
         final var sozialdienst = new Sozialdienst()
             .setName(envSozialdienst.getName())
+            .setStatus(SozialdienstStatus.AKTIV)
             .setZahlungsverbindung(zahlungsverbindung);
 
         final var admin = seedSozialdienstBenutzer(
