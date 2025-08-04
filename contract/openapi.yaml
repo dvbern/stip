@@ -2759,6 +2759,28 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchZurueckweisen
       summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchTrancheId}/manuelle-verfügung':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManuelleVerfuegungCreate'
+      parameters:
+        - $ref: '#/components/parameters/gesuchTrancheId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createManuelleVerfuegung
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -4534,6 +4556,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+    ManuelleVerfuegungCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: "#/components/schemas/FileUpload"
     Gesuch:
       required:
         - fallId
