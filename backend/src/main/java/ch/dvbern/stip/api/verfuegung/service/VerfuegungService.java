@@ -38,7 +38,6 @@ import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -102,9 +101,6 @@ public class VerfuegungService {
                 verfuegung.setFilename(fileUpload.fileName());
                 verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
                 verfuegungRepository.persistAndFlush(verfuegung);
-            },
-            throwable -> {
-                throw new InternalServerErrorException(throwable);
             }
         );
         response.await().indefinitely();

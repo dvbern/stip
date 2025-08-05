@@ -33,6 +33,7 @@ import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
+import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.experimental.UtilityClass;
@@ -75,6 +76,29 @@ public class DokumentUploadUtil {
         );
     }
 
+    public Uni<Response> validateScanUploadDokument(
+        final FileUpload fileUpload,
+        final S3AsyncClient s3,
+        final ConfigService configService,
+        final Antivirus antivirus,
+        final String dokumentPathPrefix,
+        final Consumer<String> serviceCallback
+    ) {
+        if (!DokumentUploadUtil.checkFileUpload(fileUpload, configService)) {
+            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
+        }
+
+        DokumentUploadUtil.scanDokument(antivirus, fileUpload);
+
+        return DokumentUploadUtil.uploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            dokumentPathPrefix,
+            serviceCallback
+        );
+    }
+
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
@@ -108,6 +132,34 @@ public class DokumentUploadUtil {
             })
             .onFailure()
             .recoverWithItem(Response.serverError().build());
+    }
+
+    public Uni<Response> uploadDokument(
+        final FileUpload fileUpload,
+        final S3AsyncClient s3,
+        final ConfigService configService,
+        final String dokumentPathPrefix,
+        final Consumer<String> serviceCallback
+    ) {
+        final var objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
+        final var key = dokumentPathPrefix + objectId;
+
+        final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
+            s3,
+            fileUpload,
+            configService.getBucketName(),
+            key
+        );
+
+        return Uni.createFrom()
+            .completionStage(stageSupplier)
+            .onItem()
+            .invoke(() -> serviceCallback.accept(objectId))
+            .onItem()
+            .ignore()
+            .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+            .onFailure()
+            .transform(InternalServerErrorException::new);
     }
 
     public String executeUploadDocument(
