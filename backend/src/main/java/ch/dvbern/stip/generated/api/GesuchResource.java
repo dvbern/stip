@@ -128,6 +128,11 @@ public interface GesuchResource {
     GesuchDto gesuchManuellPruefenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
+    @Path("/{gesuchTrancheId}/pruefen/sb")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto gesuchManuellPruefenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
     GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);

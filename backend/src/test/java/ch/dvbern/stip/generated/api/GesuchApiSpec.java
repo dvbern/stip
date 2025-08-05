@@ -99,6 +99,7 @@ public class GesuchApiSpec {
                 gesuchEinreichenGs(),
                 gesuchFehlendeDokumenteUebermitteln(),
                 gesuchManuellPruefenJur(),
+                gesuchManuellPruefenSB(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getAllBeschwerdeVerlaufEntrys(),
@@ -184,6 +185,10 @@ public class GesuchApiSpec {
 
     public GesuchManuellPruefenJurOper gesuchManuellPruefenJur() {
         return new GesuchManuellPruefenJurOper(createReqSpec());
+    }
+
+    public GesuchManuellPruefenSBOper gesuchManuellPruefenSB() {
+        return new GesuchManuellPruefenSBOper(createReqSpec());
     }
 
     public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchTrancheFehlendeDokumenteEinreichen() {
@@ -1498,6 +1503,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchManuellPruefenJurOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Das Gesuch manuell pruefen als Sachbearbeiter
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class GesuchManuellPruefenSBOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/pruefen/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchManuellPruefenSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/pruefen/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/pruefen/sb
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchManuellPruefenSBOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchManuellPruefenSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchManuellPruefenSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

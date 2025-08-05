@@ -100,7 +100,8 @@ export type StatusUebergang =
   | 'BEARBEITUNG_ABSCHLIESSEN'
   | 'VERFUEGT'
   | 'VERSENDET'
-  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN';
+  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
+  | 'STATUS_PRUEFUNG_AUSLOESEN';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses
@@ -225,5 +226,13 @@ export const StatusUebergaengeOptions: Record<
       disabledReason: context?.permissions.canNegativVerfuegen
         ? undefined
         : 'CANNOT_NEGATIV_VERFUEGEN',
+    }) as const,
+  STATUS_PRUEFUNG_AUSLOESEN: () =>
+    ({
+      icon: 'check_circle',
+      titleKey: 'STATUS_PRUEFUNG_AUSLOESEN',
+      typ: 'STATUS_PRUEFUNG_AUSLOESEN',
+      allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
     }) as const,
 };

@@ -216,6 +216,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienstMitarbeiterDashboard
       summary: Returns gesuche for dashboard filtered by gs
+  '/gesuch/{gesuchTrancheId}/pruefen/sb':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch geprueft
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchManuellPruefenSB
+      summary: Das Gesuch manuell pruefen als Sachbearbeiter
   /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
@@ -4653,6 +4680,7 @@ components:
         - endDate
         - canGetBerechnung
         - beschwerdeHaengig
+        - canTriggerManuellPruefen
       type: object
       properties:
         id:
@@ -4668,6 +4696,8 @@ components:
         canGetBerechnung:
           type: boolean
         beschwerdeHaengig:
+          type: boolean
+        canTriggerManuellPruefen:
           type: boolean
     FallDashboardItem:
       required:
