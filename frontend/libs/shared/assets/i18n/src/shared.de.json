@@ -259,6 +259,8 @@
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
   "shared.admin.sozialdienst.sozialdienstAktualisiert": "Sozialdienst wurde erfolgreich aktualisiert",
   "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.AKTIV": "Sozialdienst wurde erfolgreich aktiviert",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.INAKTIV": "Sozialdienst wurde erfolgreich deaktiviert",
   "shared.admin.sozialdienstBenutzer.erstellt": "Sozialdienst Arbeiter wurde erfolgreich erfasst",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "Sozialdienst Arbeiter wurde erfolgreich aktualisiert",
 

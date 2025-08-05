@@ -504,7 +504,11 @@ export class SozialdienstStore extends signalStore(
               {
                 onSuccess: () => {
                   this.loadAllSozialdienste$();
-                  // TODO Maybe notification here?
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'shared.admin.sozialdienst.sozialdienstStatusChanged.' +
+                      targetStatus,
+                  });
                 },
                 onFailure: () => {
                   this.loadAllSozialdienste$();

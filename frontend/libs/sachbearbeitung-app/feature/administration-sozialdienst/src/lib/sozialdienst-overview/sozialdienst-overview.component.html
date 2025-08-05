@@ -76,8 +76,7 @@
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32">
               <label for="statusFilter">
-                <!-- TODO Translation -->
-                Status
+                {{ 'sachbearbeitung-app.admin.sozialdienst.status' | translate }}
               </label>
               <div class="d-flex position-relative align-items-center justify-content-end">
                 <mat-form-field class="filter-form-field">
@@ -89,7 +88,6 @@
                   >
                     @for (status of availableStatus; track status) {
                       <mat-option [value]="status">
-                        <!-- TODO Translation -->
                         {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + status | translate }}
                       </mat-option>
                     }

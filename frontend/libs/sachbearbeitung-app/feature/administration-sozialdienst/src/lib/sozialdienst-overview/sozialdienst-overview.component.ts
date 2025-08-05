@@ -157,14 +157,7 @@ export class SozialdienstOverviewComponent {
       message:
         'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.' +
         sozialdienst.status,
-      translationObject: {
-        name: sozialdienst.name,
-        action: this.translate
-          .instant(
-            `sachbearbeitung-app.admin.sozialdienst.status.action.${sozialdienst.status}`,
-          )
-          .toLowerCase(),
-      },
+      translationObject: sozialdienst,
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
