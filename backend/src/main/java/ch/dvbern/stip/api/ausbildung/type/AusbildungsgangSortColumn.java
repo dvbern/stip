@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.ausbildung.type;
 public enum AusbildungsgangSortColumn {
     ABSCHLUSS_BEZEICHNUNG_DE,
     ABSCHLUSS_BEZEICHNUNG_FR,
+    ABSCHLUSS_AUSBILDUNGSKATEGORIE,
     AUSBILDUNGSSTAETTE_NAME_DE,
     AUSBILDUNGSSTAETTE_NAME_FR,
     AKTIV

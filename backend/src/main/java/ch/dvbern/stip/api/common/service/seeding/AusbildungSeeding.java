@@ -145,9 +145,9 @@ public class AusbildungSeeding extends Seeder {
                         ausbildungsstaetteLine -> new Ausbildungsstaette()
                             .setNameDe(ausbildungsstaetteLine[0])
                             .setNameFr(ausbildungsstaetteLine[1])
-                            .setChShis(ausbildungsstaetteLine[2])
-                            .setBurNo(ausbildungsstaetteLine[3])
-                            .setCtNo(ausbildungsstaetteLine[4])
+                            .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
+                            .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
+                            .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
                     )
                     .toList();
             }
