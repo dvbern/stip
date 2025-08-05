@@ -78,10 +78,7 @@ export class AdditionalDokumenteComponent {
           }),
         }) satisfies SharedModelTableAdditionalDokument,
     );
-    console.log('unterschriftenblaetter', {
-      uploadedDokuments,
-      requiredDocumentTypes,
-    });
+
     const list = [
       ...uploadedDokuments,
       ...requiredDocumentTypes
