@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.repo;
+package ch.dvbern.stip.api.zahlungsverbindung.repo;
 
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.auszahlung.entity.QZahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.QZahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;

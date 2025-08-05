@@ -26,8 +26,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
-import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
-import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
@@ -43,6 +41,8 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
+import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
@@ -292,7 +292,9 @@ public class BuchhaltungService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var buchhaltungs = getAllForFallId(gesuch.getAusbildung().getFall().getId());
         for (var buchhaltung : buchhaltungs.toList()) {
-            buchhaltungRepository.delete(buchhaltung);
+            if (Objects.nonNull(buchhaltung.getGesuch()) && buchhaltung.getGesuch().equals(gesuch)) {
+                buchhaltung.setGesuch(null);
+            }
         }
     }
 

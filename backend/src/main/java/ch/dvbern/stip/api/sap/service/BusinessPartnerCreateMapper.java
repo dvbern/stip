@@ -21,11 +21,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

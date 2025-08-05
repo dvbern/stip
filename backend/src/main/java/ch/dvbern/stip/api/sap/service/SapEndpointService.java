@@ -29,7 +29,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
@@ -46,6 +45,8 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateServ
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.xml.ws.BindingProvider;
@@ -56,6 +57,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Slf4j
 @RequestScoped
+@UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapEndpointService {
     private final BusinessPartnerCreateMapper businessPartnerCreateMapper;

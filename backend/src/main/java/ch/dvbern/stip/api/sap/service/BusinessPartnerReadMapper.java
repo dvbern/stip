@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.sap.service;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParms;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

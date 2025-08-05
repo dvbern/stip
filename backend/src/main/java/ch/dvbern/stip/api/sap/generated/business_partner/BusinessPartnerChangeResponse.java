@@ -70,4 +70,8 @@ public class BusinessPartnerChangeResponse {
         return this.returncode;
     }
 
+    public void setRETURNCODE(List<ReturnCode> returncode) {
+        this.returncode = returncode;
+    }
+
 }

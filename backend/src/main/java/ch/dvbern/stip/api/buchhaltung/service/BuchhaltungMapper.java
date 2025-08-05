@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
-import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungMapper;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.service.SapDeliveryMapper;
+import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungMapper;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

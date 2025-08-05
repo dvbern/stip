@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.auszahlung.service;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import jakarta.enterprise.context.RequestScoped;

@@ -227,6 +227,10 @@ public class ImportStatusReadResponse {
         return this.delivery;
     }
 
+    public void setDELIVERY(List<DELIVERY> delivery) {
+        this.delivery = delivery;
+    }
+
     /**
      * Gets the value of the returncode property.
      *
@@ -259,6 +263,9 @@ public class ImportStatusReadResponse {
         return this.returncode;
     }
 
+    public void setRETURNCODE(List<ReturnCodeID> returncode) {
+        this.returncode = returncode;
+    }
 
     /**
      * <p>Java class for anonymous complex type</p>.

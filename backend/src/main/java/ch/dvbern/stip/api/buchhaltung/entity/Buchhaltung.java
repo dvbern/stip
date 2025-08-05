@@ -20,13 +20,13 @@ package ch.dvbern.stip.api.buchhaltung.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

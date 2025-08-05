@@ -58,7 +58,6 @@ public class GesuchNotizService {
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return getAllByFall(gesuch.getAusbildung().getFall());
-
     }
 
     @Transactional

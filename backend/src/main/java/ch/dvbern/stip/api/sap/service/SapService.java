@@ -24,8 +24,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -40,7 +38,8 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
-import io.quarkus.arc.profile.UnlessBuildProfile;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -52,7 +51,7 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.AUSZAHLUNG_INI
 
 @Slf4j
 @RequestScoped
-@UnlessBuildProfile("test")
+// @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapService {
     private final SapEndpointService sapEndpointService;
