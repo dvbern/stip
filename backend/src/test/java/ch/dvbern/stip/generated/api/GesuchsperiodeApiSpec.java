@@ -63,6 +63,7 @@ public class GesuchsperiodeApiSpec {
         return Arrays.asList(
                 createGesuchsperiode(),
                 deleteGesuchsperiode(),
+                getAllAssignableGesuchsperiode(),
                 getGesuchsperiode(),
                 getGesuchsperioden(),
                 getLatest(),
@@ -77,6 +78,10 @@ public class GesuchsperiodeApiSpec {
 
     public DeleteGesuchsperiodeOper deleteGesuchsperiode() {
         return new DeleteGesuchsperiodeOper(createReqSpec());
+    }
+
+    public GetAllAssignableGesuchsperiodeOper getAllAssignableGesuchsperiode() {
+        return new GetAllAssignableGesuchsperiodeOper(createReqSpec());
     }
 
     public GetGesuchsperiodeOper getGesuchsperiode() {
@@ -239,6 +244,67 @@ public class GesuchsperiodeApiSpec {
          * @return operation
          */
         public DeleteGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all assignable gesuchsperiode.
+     * 
+     *
+     * return List&lt;GesuchsperiodeDtoSpec&gt;
+     */
+    public static class GetAllAssignableGesuchsperiodeOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchsperiode/get-all-assignable";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAssignableGesuchsperiodeOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchsperiode/get-all-assignable
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchsperiode/get-all-assignable
+         * @param handler handler
+         * @return List&lt;GesuchsperiodeDtoSpec&gt;
+         */
+        public List<GesuchsperiodeDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchsperiodeDtoSpec>> type = new TypeRef<List<GesuchsperiodeDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAssignableGesuchsperiodeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAssignableGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
