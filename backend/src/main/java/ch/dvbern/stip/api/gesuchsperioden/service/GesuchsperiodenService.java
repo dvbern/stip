@@ -44,7 +44,6 @@ import org.apache.commons.lang3.tuple.Pair;
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchsperiodenService {
-    private static final String PROPERTY_PATH = "gesuchsperiode";
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
@@ -188,5 +187,13 @@ public class GesuchsperiodenService {
             gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
             LOG.info("Updated Gesuchsperiode with id %s to Gueltigkeisstatus ARCHIVIERT");
         });
+    }
+
+    @Transactional
+    public List<GesuchsperiodeDto> getAllAssignableGesuchsperioden() {
+        return gesuchsperiodeRepository.getAllAssignableGesuchsperioden()
+            .stream()
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 }

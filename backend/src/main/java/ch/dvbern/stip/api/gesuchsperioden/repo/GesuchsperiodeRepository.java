@@ -90,4 +90,16 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
                     .and(gesuchsperiode.gesuchsperiodeStopp.goe(ausbildungBegin))
             );
     }
+
+    public List<Gesuchsperiode> getAllAssignableGesuchsperioden() {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        return queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(
+                gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT)
+                    .or(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.ARCHIVIERT))
+            )
+            .stream()
+            .toList();
+    }
 }
