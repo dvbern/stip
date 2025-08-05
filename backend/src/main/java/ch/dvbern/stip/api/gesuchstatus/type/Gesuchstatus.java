@@ -77,6 +77,12 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB
+        )
+    );
+
     /*
      * Alle Gesuchstatus zwischen eingereicht bis verfügt
      */

@@ -159,6 +159,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanGesuchManuellPruefen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK);
+    }
+
+    @Transactional
     public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }

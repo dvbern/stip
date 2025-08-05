@@ -187,6 +187,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       this.einreichnenStore.validationViewSig().invalidFormularProps
         .validations;
 
+    const canTriggerManuellPruefen =
+      this.gesuchStore.gesuchInfo().data?.canTriggerManuellPruefen;
+
     if (!gesuchStatus) {
       return {};
     }
@@ -200,6 +203,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
     const list = StatusUebergaengeMap[gesuchStatus]
+      ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
           permissions,
@@ -230,6 +234,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'SET_TO_BEARBEITUNG':
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
+      case 'STATUS_PRUEFUNG_AUSLOESEN':
       case 'VERFUEGT':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;

@@ -197,6 +197,14 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
+    STATUS_PRUEFUNG_AUSLOESEN: rxMethod<{ gesuchTrancheId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId }) =>
+          this.gesuchService.gesuchManuellPruefenSB$({ gesuchTrancheId }),
+        ),
+      ),
+    ),
+
     ZURUECKWEISEN: rxMethod<{
       gesuchTrancheId: string;
       text: string;
