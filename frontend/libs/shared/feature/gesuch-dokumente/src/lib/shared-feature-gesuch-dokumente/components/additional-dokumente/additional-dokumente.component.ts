@@ -78,18 +78,27 @@ export class AdditionalDokumenteComponent {
           }),
         }) satisfies SharedModelTableAdditionalDokument,
     );
+    console.log('unterschriftenblaetter', {
+      uploadedDokuments,
+      requiredDocumentTypes,
+    });
     const list = [
       ...uploadedDokuments,
-      ...requiredDocumentTypes.map((dokumentTyp) => ({
-        dokumentTyp: dokumentTyp,
-        dokumentOptions: createAdditionalDokumentOptions({
-          gesuchId,
-          trancheId,
-          allowTypes,
-          dokumentTyp,
-          permissions,
-        }),
-      })),
+      ...requiredDocumentTypes
+        .filter(
+          (dokumentTyp) =>
+            !uploadedDokuments.some((u) => u.dokumentTyp === dokumentTyp),
+        )
+        .map((dokumentTyp) => ({
+          dokumentTyp: dokumentTyp,
+          dokumentOptions: createAdditionalDokumentOptions({
+            gesuchId,
+            trancheId,
+            allowTypes,
+            dokumentTyp,
+            permissions,
+          }),
+        })),
     ];
     return new MatTableDataSource<SharedModelTableAdditionalDokument>(list);
   });

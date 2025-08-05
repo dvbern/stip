@@ -34,7 +34,6 @@ import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
 } from '@dv/shared/ui/if-app-type';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
@@ -61,7 +60,6 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
     AdditionalDokumenteComponent,
     CustomDokumenteComponent,
     SharedUiStepFormButtonsComponent,
-    SharedUiLoadingComponent,
     SharedUiIfGesuchstellerDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiRdIsPendingPipe,

@@ -127,10 +127,8 @@ export class SharedPatternDocumentUploadComponent {
     });
 
     if (dokument.art === 'UNTERSCHRIFTENBLATT') {
-      this.dokumentsStore.getAdditionalDokumente$({
+      this.dokumentsStore.getAdditionalDokumenteAndDocumentsToUpload$({
         gesuchId: dokument.gesuchId,
-      });
-      this.dokumentsStore.getDocumentsToUpload$({
         gesuchTrancheId: dokument.trancheId,
       });
       return;

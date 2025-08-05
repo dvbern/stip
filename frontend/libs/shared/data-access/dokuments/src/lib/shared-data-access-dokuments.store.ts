@@ -357,6 +357,52 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
+  // get Unterschriftenblaetter
+  getAdditionalDokumenteAndDocumentsToUpload$ = rxMethod<{
+    gesuchId: string;
+    gesuchTrancheId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          additionalDokumente: cachedPending(state.additionalDokumente),
+        }));
+      }),
+      switchMap(({ gesuchId, gesuchTrancheId }) =>
+        combineLatest([
+          this.dokumentService.getUnterschriftenblaetterForGesuch$({
+            gesuchId,
+          }),
+          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+        ]).pipe(
+          tapResponse({
+            next: ([additionalDokumente, documentsToUpload]) => {
+              patchState(this, () => ({
+                // Patch both lists at the same time to avoid unecessary rerenders
+                additionalDokumente: success(additionalDokumente),
+                documentsToUpload: success(documentsToUpload),
+              }));
+            },
+            // Achtung! Dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
+            // vom combineLatest passiert!
+            error: (error) => {
+              patchState(this, () => ({
+                additionalDokumente: failure(error),
+                documentsToUpload: failure(error),
+              }));
+            },
+          }),
+          catchRemoteDataError((error) => {
+            patchState(this, () => ({
+              additionalDokumente: failure(error),
+              documentsToUpload: failure(error),
+            }));
+          }),
+        ),
+      ),
+    ),
+  );
+
   // get all missing documents that need to be uploaded
   getDocumentsToUpload$ = rxMethod<{
     gesuchTrancheId: string;
