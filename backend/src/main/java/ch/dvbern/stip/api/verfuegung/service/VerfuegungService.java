@@ -107,7 +107,7 @@ public class VerfuegungService {
                 throw new InternalServerErrorException(throwable);
             }
         );
-        response.await();
+        response.await().indefinitely();
     }
 
     @Transactional
