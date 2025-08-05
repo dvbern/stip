@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -22,7 +23,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import { Sozialdienst } from '@dv/shared/model/gesuch';
+import { Sozialdienst, SozialdienstStatus } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -43,6 +44,7 @@ const INPUT_DELAY = 600;
     TranslatePipe,
     ReactiveFormsModule,
     MatTableModule,
+    MatSelectModule,
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
@@ -68,7 +70,9 @@ export class SozialdienstOverviewComponent {
   store = inject(SozialdienstStore);
   destroyRef = inject(DestroyRef);
 
-  displayedColumns = ['name', 'ort', 'actions'];
+  displayedColumns = ['name', 'ort', 'status', 'actions'];
+
+  availableStatus = ['ALL', ...Object.values(SozialdienstStatus)];
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
@@ -76,6 +80,7 @@ export class SozialdienstOverviewComponent {
   filterForm = this.formBuilder.group({
     name: [<string | null>null],
     ort: [<string | null>null],
+    status: [<SozialdienstStatus | null>'ALL'],
   });
   private filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(
@@ -94,11 +99,14 @@ export class SozialdienstOverviewComponent {
     const paginator = this.paginatorSig();
 
     datasource.filterPredicate = (data, filter) => {
-      const { name, ort } = JSON.parse(filter);
+      const { name, ort, status } = JSON.parse(filter);
       if (name && !data.name.toLowerCase().includes(name.toLowerCase())) {
         return false;
       }
       if (ort && !data.ort.toLowerCase().includes(ort.toLowerCase())) {
+        return false;
+      }
+      if (status && data.status !== status && status !== 'ALL') {
         return false;
       }
       return true;
@@ -139,4 +147,6 @@ export class SozialdienstOverviewComponent {
         }
       });
   }
+
+  toggleStatus(sozialdienst: Sozialdienst) {}
 }

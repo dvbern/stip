@@ -6127,6 +6127,7 @@ components:
             - name
             - sozialdienstAdmin
             - zahlungsverbindung
+            - status
           properties:
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'

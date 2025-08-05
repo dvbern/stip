@@ -164,6 +164,7 @@ export * from './sozialdienstBenutzerCreateAllOf';
 export * from './sozialdienstBenutzerUpdate';
 export * from './sozialdienstCreate';
 export * from './sozialdienstSlim';
+export * from './sozialdienstStatus';
 export * from './sozialdienstUpdate';
 export * from './sprache';
 export * from './statusprotokollEntry';

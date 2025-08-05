@@ -25,6 +25,7 @@ import { SozialdienstBenutzerCreate } from '../model/sozialdienstBenutzerCreate'
 import { SozialdienstBenutzerUpdate } from '../model/sozialdienstBenutzerUpdate';
 import { SozialdienstCreate } from '../model/sozialdienstCreate';
 import { SozialdienstSlim } from '../model/sozialdienstSlim';
+import { SozialdienstStatus } from '../model/sozialdienstStatus';
 import { SozialdienstUpdate } from '../model/sozialdienstUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -58,6 +59,11 @@ export interface SozialdienstServiceGetSozialdienstBenutzerRequestParams {
 export interface SozialdienstServiceReplaceSozialdienstAdminRequestParams {
     sozialdienstId: string;
     sozialdienstAdmin?: SozialdienstAdmin;
+}
+
+export interface SozialdienstServiceSetSozialdienstStatusToRequestParams {
+    sozialdienstId: string;
+    targetStatus: SozialdienstStatus;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstRequestParams {
@@ -861,6 +867,83 @@ export class SozialdienstService {
             {
                 context: localVarHttpContext,
                 body: sozialdienstAdmin,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Changes a Sozialdienst\&#39;s status to a given value
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Sozialdienst>;
+     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Sozialdienst>>;
+     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Sozialdienst>>;
+     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling setSozialdienstStatusTo$.');
+        }
+        const targetStatus = requestParameters.targetStatus;
+        if (targetStatus === null || targetStatus === undefined) {
+            throw new Error('Required parameter targetStatus was null or undefined when calling setSozialdienstStatusTo$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/setSozialdienstStatusTo/${this.configuration.encodeParam({name: "targetStatus", value: targetStatus, in: "path", style: "simple", explode: false, dataType: "SozialdienstStatus", dataFormat: undefined})}`;
+        return this.httpClient.request<Sozialdienst>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

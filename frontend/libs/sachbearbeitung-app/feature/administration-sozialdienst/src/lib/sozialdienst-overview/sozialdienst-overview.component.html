@@ -73,6 +73,35 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32">
+              <label for="statusFilter">
+                <!-- TODO Translation -->
+                Status
+              </label>
+              <div class="d-flex position-relative align-items-center justify-content-end">
+                <mat-form-field class="filter-form-field">
+                  <mat-select
+                    formControlName="status"
+                    (click)="$event.stopPropagation()"
+                    class="fw-normal"
+                    panelClass="table-select"
+                  >
+                    @for (status of availableStatus; track status) {
+                      <mat-option [value]="status">
+                        <!-- TODO Translation -->
+                        {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + status | translate }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </th>
+            <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
+              {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + sozialdienst.status | translate }}
+            </td>
+          </ng-container>
+
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>
               <div class="action-cell-content">
@@ -96,6 +125,20 @@
                 >
                   <i class="material-symbols-rounded fs-5">edit</i>
                 </a>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  (click)="toggleStatus(sozialdienst); $event.stopPropagation()"
+                  [matTooltip]="
+                    'sachbearbeitung-app.admin.sozialdienst.status.action.' + sozialdienst.status | translate
+                  "
+                >
+                  @if (sozialdienst.status === 'AKTIV') {
+                    <i class="material-symbols-rounded fs-5">cancel</i>
+                  } @else {
+                    <i class="material-symbols-rounded fs-5">check_circle</i>
+                  }
+                </button>
                 <button
                   type="button"
                   class="btn btn-link"

@@ -9,15 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SozialdienstStatus } from './sozialdienstStatus';
-import { Zahlungsverbindung } from './zahlungsverbindung';
-import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
-export interface SozialdienstAllOf { 
-    sozialdienstAdmin: SozialdienstBenutzer;
-    zahlungsverbindung: Zahlungsverbindung;
-    status: SozialdienstStatus;
-}
+export type SozialdienstStatus = 'AKTIV' | 'INAKTIV';
 
-
+export const SozialdienstStatus = {
+    AKTIV: 'AKTIV' as SozialdienstStatus,
+    INAKTIV: 'INAKTIV' as SozialdienstStatus
+};
 

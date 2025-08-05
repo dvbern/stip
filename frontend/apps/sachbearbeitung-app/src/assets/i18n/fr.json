@@ -277,6 +277,11 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.title": "Supprimer le service social",
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Voulez-vous vraiment supprimer le service social \"{{ name }}\" ?",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtrer...",
+  "sachbearbeitung-app.admin.sozialdienst.status.ALL": "Tous",
+  "sachbearbeitung-app.admin.sozialdienst.status.AKTIV": "Actif",
+  "sachbearbeitung-app.admin.sozialdienst.status.INAKTIV": "Inactif",
+  "sachbearbeitung-app.admin.sozialdienst.status.action.AKTIV": "Désactiver",
+  "sachbearbeitung-app.admin.sozialdienst.status.action.INAKTIV": "Activer",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
