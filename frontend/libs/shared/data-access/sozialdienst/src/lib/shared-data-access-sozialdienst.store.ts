@@ -16,6 +16,7 @@ import {
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstSlim,
+  SozialdienstStatus,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
 import { handleUnauthorized } from '@dv/shared/util/http';
@@ -477,6 +478,45 @@ export class SozialdienstStore extends signalStore(
             }),
           ),
       ),
+    ),
+  );
+
+  setSozialdienstStatusTo$ = rxMethod<{
+    sozialdienstId: string;
+    targetStatus: SozialdienstStatus;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienste: cachedPending(state.sozialdienste),
+        }));
+      }),
+      exhaustMap(({ sozialdienstId, targetStatus }) =>
+        this.sozialdienstService
+          .setSozialdienstStatusTo$({ sozialdienstId, targetStatus })
+          .pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, {
+                  sozialdienst: initial(),
+                });
+              },
+              {
+                onSuccess: () => {
+                  this.loadAllSozialdienste$();
+                  // TODO Maybe notification here?
+                },
+                onFailure: () => {
+                  this.loadAllSozialdienste$();
+                },
+              },
+            ),
+          ),
+      ),
+      catchError((error) => {
+        this.loadAllSozialdienste$();
+        return throwError(() => error);
+      }),
     ),
   );
 }

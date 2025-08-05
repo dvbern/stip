@@ -19,7 +19,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
@@ -67,6 +67,7 @@ const INPUT_DELAY = 600;
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
+  private translate = inject(TranslateService);
   store = inject(SozialdienstStore);
   destroyRef = inject(DestroyRef);
 
@@ -148,5 +149,34 @@ export class SozialdienstOverviewComponent {
       });
   }
 
-  toggleStatus(sozialdienst: Sozialdienst) {}
+  toggleStatus(sozialdienst: Sozialdienst) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title:
+        'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.' +
+        sozialdienst.status,
+      message:
+        'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.' +
+        sozialdienst.status,
+      translationObject: {
+        name: sozialdienst.name,
+        action: this.translate
+          .instant(
+            `sachbearbeitung-app.admin.sozialdienst.status.action.${sozialdienst.status}`,
+          )
+          .toLowerCase(),
+      },
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          const targetStatus: SozialdienstStatus =
+            sozialdienst.status === 'AKTIV' ? 'INAKTIV' : 'AKTIV';
+          this.store.setSozialdienstStatusTo$({
+            sozialdienstId: sozialdienst.id,
+            targetStatus,
+          });
+        }
+      });
+  }
 }

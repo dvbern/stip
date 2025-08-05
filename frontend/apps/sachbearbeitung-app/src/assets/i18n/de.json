@@ -282,6 +282,10 @@
   "sachbearbeitung-app.admin.sozialdienst.status.INAKTIV": "Inaktiv",
   "sachbearbeitung-app.admin.sozialdienst.status.action.AKTIV": "Deaktivieren",
   "sachbearbeitung-app.admin.sozialdienst.status.action.INAKTIV": "Aktivieren",
+  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.AKTIV": "Sozialdienst deaktivieren",
+  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.INAKTIV": "Sozialdienst aktivieren",
+  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.AKTIV": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich deaktivieren?",
+  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.INAKTIV": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich aktivieren?",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
