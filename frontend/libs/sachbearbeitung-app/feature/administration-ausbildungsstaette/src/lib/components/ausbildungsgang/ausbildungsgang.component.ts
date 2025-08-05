@@ -248,6 +248,11 @@ export class AusbildungsgangComponent
   }
 
   archive(ausbildungsgang: Ausbildungsgang) {
+    const getBezeichnung = (
+      lang: 'De' | 'Fr',
+      ausbildungsgang: Ausbildungsgang,
+    ) =>
+      `${ausbildungsgang?.ausbildungsstaette?.[`name${lang}`]} - ${ausbildungsgang?.abschluss?.[`bezeichnung${lang}`]}`;
     SharedUiConfirmDialogComponent.open<SachbearbeitungAppTranslationKey>(
       this.dialog,
       {
@@ -255,7 +260,10 @@ export class AusbildungsgangComponent
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.title',
         message:
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.message',
-        translationObject: ausbildungsgang,
+        translationObject: {
+          bezeichnungDe: getBezeichnung('De', ausbildungsgang),
+          bezeichnungFr: getBezeichnung('Fr', ausbildungsgang),
+        },
       },
     )
       .afterClosed()

@@ -198,7 +198,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.title": "Ausbildungsgang erstellen",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.success": "Der Ausbildungsgang wurde erfolgreich erstellt.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.title": "Ausbildungsgang archivieren",
-  "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.message": "Der Ausbildungsgang \"{{ ausbildungsstaetteNameDe }} - {{ abschlussBezeichnungDe }}\" wird archiviert. Möchten Sie fortfahren?",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.message": "Der Ausbildungsgang \"{{ bezeichnungDe }}\" wird archiviert. Möchten Sie fortfahren?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.success": "Der Ausbildungsgang wurde erfolgreich archiviert.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.infoDialog.title": "Ausbildungsgang Info",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.description": "Übersicht aller Ausbildungsstätten",
