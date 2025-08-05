@@ -277,6 +277,7 @@
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm": "Admin erstellen",
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.title": "Sozialdienst löschen",
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich löschen?",
+  "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtern...",
   "sachbearbeitung-app.admin.sozialdienst.status.ALL": "Alle",
   "sachbearbeitung-app.admin.sozialdienst.status.AKTIV": "Aktiv",
   "sachbearbeitung-app.admin.sozialdienst.status.INAKTIV": "Inaktiv",
