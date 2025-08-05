@@ -197,7 +197,7 @@
   "shared.dashboard.ausbildung.status.AKTIV": "Aktiv",
   "shared.dashboard.ausbildung.status.ABGEBROCHEN": "Abgebrochen",
   "shared.dashboard.ausbildung.status.ABGESCHLOSSEN": "Abgeschlossen",
-  "shared.dashboard.ausbildung.title": "Ausbildung \"{{ ausbildungsstaetteNameDe }} - {{ abschlussBezeichnungDe }}\"",
+  "shared.dashboard.ausbildung.title": "Ausbildung \"{{ bezeichnungDe }}\"",
   "shared.dashboard.ausbildung.description": "Beginn der Ausbildung: {{ start }}, voraussichtliches Ende der Ausbildung {{ end }}",
   "shared.dashboard.periode.einreichefrist.reduziert": "Die Eingabefrist ist abgelaufen",
   "shared.dashboard.periode.einreichefrist.remaining": "Sie haben noch <b>{{ days }}</b> Tage um das Gesuch einzureichen",

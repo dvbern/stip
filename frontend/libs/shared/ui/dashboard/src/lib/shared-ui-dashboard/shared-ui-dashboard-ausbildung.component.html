@@ -5,13 +5,7 @@
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
         <i class="material-symbols-rounded tw-text-2xl">school</i>
       </dv-shared-ui-icon-chip>
-      {{
-        'shared.dashboard.ausbildung.title'
-          | translate
-            : (ausbildung.ausbildungNichtGefunden
-                ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
-                : ausbildung.ausbildungsgang)
-      }}
+      {{ 'shared.dashboard.ausbildung.title' | translate: ausbildung }}
     </h2>
     <p class="tw-mb-10 tw-ml-4">
       {{
