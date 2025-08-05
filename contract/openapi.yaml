@@ -5533,10 +5533,10 @@ components:
         - SEKUNDARSTUFE_II
     Bildungsrichtung:
       enum:
+        - BERUFLICHE_GRUNDBILDUNG
+        - ALLGEMEINBILDENDE_SCHULE
         - HOEHERE_BERUFSBILDUNG
         - HOCHSCHULE
-        - ALLGEMEINBILDENDE_SCHULE
-        - BERUFLICHE_GRUNDBILDUNG
         - OBLIGATORISCHE_SCHULE
     FerienTyp:
       enum:
