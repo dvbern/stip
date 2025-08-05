@@ -51,7 +51,6 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.AUSZAHLUNG_INI
 
 @Slf4j
 @RequestScoped
-// @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapService {
     private final SapEndpointService sapEndpointService;
@@ -275,7 +274,7 @@ public class SapService {
             final var relevantStipendienBuchhaltung =
                 buchhaltungService.getLastEntryStipendiumOpt(gesuch.getId()).orElseThrow(NotFoundException::new);
             final var lastBuchhaltungEntry =
-                buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
 
             var auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag() / 2;
             if (isPastSecondPaymentDate(gesuch)) {
@@ -325,7 +324,7 @@ public class SapService {
 
         if (pendingAuszahlungOpt.isEmpty()) {
             final var lastBuchhaltungEntry =
-                buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
             if (lastBuchhaltungEntry.getSaldo() <= 0) {
                 return SapStatus.SUCCESS;
             }

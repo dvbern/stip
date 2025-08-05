@@ -86,6 +86,16 @@ public class BuchhaltungService {
     }
 
     @Transactional
+    public Buchhaltung getLatestNotFailedBuchhaltungEntry(final UUID fallId) {
+        return buchhaltungRepository.findAllForFallId(fallId)
+            .filter(buchhaltung -> buchhaltung.getSapStatus() != SapStatus.FAILURE)
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .orElseThrow(
+                NotFoundException::new
+            );
+    }
+
+    @Transactional
     public BuchhaltungEntryDto createBuchhaltungSaldokorrekturForFall(
         final UUID gesuchId,
         final BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
