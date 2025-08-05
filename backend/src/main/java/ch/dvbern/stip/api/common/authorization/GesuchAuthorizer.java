@@ -79,6 +79,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
+    public void juristCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
+    }
+
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(
@@ -97,7 +101,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (
@@ -155,7 +159,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void juristCanGesuchEinreichen(final UUID gesuchId) {
+    public void sbCanGesuchManuellPruefen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK);
+    }
+
+    @Transactional
+    public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }
 

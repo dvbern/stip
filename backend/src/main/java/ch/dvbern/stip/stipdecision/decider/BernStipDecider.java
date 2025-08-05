@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
-import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -56,7 +55,7 @@ public class BernStipDecider extends BaseStipDecider {
         if (ausbildungLaenger12Jahre(gesuchTranche)) {
             return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER;
         }
-        if (piaAelter35Jahre(gesuchTranche)) {
+        if (piaAelter35JahreBeforeAusbildungsbegin(gesuchTranche)) {
             return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA;
         }
         return StipDeciderResult.GESUCH_VALID;
@@ -124,9 +123,12 @@ public class BernStipDecider extends BaseStipDecider {
         return monthsInAusbildung / 12.0 >= 12.0;
     }
 
-    private static boolean piaAelter35Jahre(final GesuchTranche gesuchTranche) {
-        return DateUtil
-            .getAgeInYears(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum()) > 35;
+    private static boolean piaAelter35JahreBeforeAusbildungsbegin(final GesuchTranche gesuchTranche) {
+        var oneDayBeforeAusbildungsbegin = gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin().minusDays(1);
+        var geburtsdatumOfPia = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum();
+        var ageOfPiaBeforeAusbildungsbegin =
+            DateUtil.getAgeInYearsAtDate(geburtsdatumOfPia, oneDayBeforeAusbildungsbegin);
+        return ageOfPiaBeforeAusbildungsbegin > 35;
     }
 
     static final class StipendienrechtlicherWohnsitzKantonBernChecker {
@@ -153,7 +155,7 @@ public class BernStipDecider extends BaseStipDecider {
             if (piaHasSchweizerBuergerrecht(gesuchTranche)) {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
-            if (piaIsFluechtling(gesuchTranche)) {
+            if (piaHasFluechtlingsstatus(gesuchTranche)) {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (piaNationalitaetEuEfta(gesuchTranche)) {
@@ -175,12 +177,15 @@ public class BernStipDecider extends BaseStipDecider {
             final GesuchTranche gesuchTranche,
             final PlzService plzService
         ) {
-            if (piaVolljaehrig(gesuchTranche) && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)) {
+            if (
+                piaVolljaehrigAtAusbildungsbegin(gesuchTranche)
+                && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)
+            ) {
                 return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG;
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
-                    if (piaBernZugewiesen(gesuchTranche)) {
+                    if (piaKantonMandantZugewiesen(gesuchTranche)) {
                         return StipDeciderResult.GESUCH_VALID;
                     }
                     return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN;
@@ -237,10 +242,9 @@ public class BernStipDecider extends BaseStipDecider {
                 .is(WellKnownLand.CHE);
         }
 
-        private static boolean piaIsFluechtling(final GesuchTranche gesuchTranche) {
-            return gesuchTranche.getGesuchFormular()
-                .getPersonInAusbildung()
-                .getNiederlassungsstatus() == Niederlassungsstatus.FLUECHTLING;
+        private static boolean piaHasFluechtlingsstatus(final GesuchTranche gesuchTranche) {
+            return Niederlassungsstatus.ALL_WITH_FLUECHTLINGSSTATUS
+                .contains(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNiederlassungsstatus());
         }
 
         private static boolean piaWohntSchweiz(final GesuchTranche gesuchTranche) {
@@ -273,12 +277,12 @@ public class BernStipDecider extends BaseStipDecider {
                 .isBefore(LocalDate.now().minusYears(5));
         }
 
-        private static boolean piaVolljaehrig(final GesuchTranche gesuchTranche) {
-            return DateUtil.getAgeInYears(
-                gesuchTranche.getGesuchFormular()
-                    .getPersonInAusbildung()
-                    .getGeburtsdatum()
-            ) >= 18;
+        private static boolean piaVolljaehrigAtAusbildungsbegin(final GesuchTranche gesuchTranche) {
+            var ausbildungsbegin = gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin();
+            var geburtsdatumOfPia = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum();
+            var ageOfPiaAtAusbildungsbegin =
+                DateUtil.getAgeInYearsAtDate(geburtsdatumOfPia, ausbildungsbegin);
+            return ageOfPiaAtAusbildungsbegin >= 18;
         }
 
         private static boolean piaBerufsbefaehigendeAusbildungAbeschlossen(final GesuchTranche gesuchTranche) {
@@ -293,9 +297,11 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static boolean piaFluechtlingOderStaatenlos(final GesuchTranche gesuchTranche) {
-            return gesuchTranche.getGesuchFormular()
-                .getPersonInAusbildung()
-                .getNiederlassungsstatus() == Niederlassungsstatus.FLUECHTLING
+            return Niederlassungsstatus.ALL_WITH_FLUECHTLINGSSTATUS.contains(
+                gesuchTranche.getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .getNiederlassungsstatus()
+            )
             || gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet().is(WellKnownLand.STATELESS);
         }
 
@@ -306,10 +312,10 @@ public class BernStipDecider extends BaseStipDecider {
                 .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CHE));
         }
 
-        private static boolean piaBernZugewiesen(final GesuchTranche gesuchTranche) {
+        private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getZustaendigerKanton() == ZustaendigerKanton.BERN;
+                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
         }
 
         private static boolean piaNationalitaetEuEfta(

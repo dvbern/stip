@@ -52,7 +52,7 @@ class EinreisedatumRequiredIfNiederlassungsstatusConstraintValidatorTest {
     @Test
     void einreisedatumNotRequiredIfFluechtling() {
         final var pia = new PersonInAusbildung();
-        pia.setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING);
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
 
         final var validator = new EinreisedatumRequiredIfNiederlassungsstatusConstraintValidator();
         assertThat(validator.isValid(pia, null), is(true));

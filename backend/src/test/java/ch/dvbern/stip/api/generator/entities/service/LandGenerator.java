@@ -44,6 +44,7 @@ public class LandGenerator {
             .setItKurzform("TEST Land")
             .setEnKurzform("TEST Land")
             .setIso3code("TSL")
+            .setIso2code("TSL")
             .setGueltig(true)
             .setLaendercodeBfs(wellKnownLand.getLaendercodeBfs())
             .setId(UUID.randomUUID());

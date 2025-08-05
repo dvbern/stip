@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -28,6 +28,6 @@ public class DocumentsAcceptedConstraintValidator
         return formular.getTranche()
             .getGesuchDokuments()
             .stream()
-            .allMatch(gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.AKZEPTIERT);
+            .allMatch(gesuchDokument -> gesuchDokument.getStatus() == GesuchDokumentStatus.AKZEPTIERT);
     }
 }

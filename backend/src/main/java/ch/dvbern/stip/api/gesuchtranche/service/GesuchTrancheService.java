@@ -79,6 +79,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -613,6 +614,27 @@ public class GesuchTrancheService {
             .validateGesuchTrancheForStatus(aenderungsTranche, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
         gesuchTrancheStatusService
             .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    @Transactional
+    public GesuchDto updateGueltigkeitOfAenderung(
+        final UUID aenderungId,
+        final PatchAenderungsInfoRequestDto patchAenderungsInfoRequestDto
+    ) {
+        final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
+
+        // validate (modified) guetligkeit start of aenderung
+        aenderungsTranche.getGesuch()
+            .getEingereichteGesuchTrancheValidOnDate(patchAenderungsInfoRequestDto.getStart())
+            .orElseThrow(NotFoundException::new);
+        var rawGueltigkeit =
+            new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
+        var gueltigkeit =
+            GesuchTrancheCopyUtil.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
+
+        aenderungsTranche.setGueltigkeit(gueltigkeit);
+        aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
     }
 
 }

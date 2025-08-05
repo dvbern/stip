@@ -57,8 +57,6 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.niederlassungsstatus.required.message}";
     public static final String VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.niederlassungsstatus.required.null.message}";
-    public static final String VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE =
-        "{jakarta.validation.constraints.zustaendigerkanton.required.null.message}";
     public static final String VALIDATION_ZUSTAENDIGE_KESB_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.zustaendigeKESB.required.null.message}";
     public static final String VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE =

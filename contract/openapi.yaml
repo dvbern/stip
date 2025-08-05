@@ -216,6 +216,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienstMitarbeiterDashboard
       summary: Returns gesuche for dashboard filtered by gs
+  '/gesuch/{gesuchTrancheId}/pruefen/sb':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch geprueft
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchManuellPruefenSB
+      summary: Das Gesuch manuell pruefen als Sachbearbeiter
   /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
@@ -2570,7 +2597,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenGs
       summary: Das Gesuch einreichen als Gesuchsteller
-  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+  '/gesuch/{gesuchTrancheId}/pruefen/jur':
     patch:
       tags:
         - Gesuch
@@ -2586,7 +2613,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gesuch eingereicht
+          description: Gesuch geprueft
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2595,8 +2622,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenJur
-      summary: Das Gesuch einreichen als Jurist
+      operationId: gesuchManuellPruefenJur
+      summary: Das Gesuch manuell pruefen als Jurist
   '/gesuch/{gesuchId}/verfuegungen':
     parameters:
       - name: gesuchId
@@ -3581,6 +3608,38 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllTranchenForGesuchSB
+  '/gesuchtranche/{aenderungId}/patchAenderungInfo':
+    parameters:
+      - name: aenderungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAenderungsInfoRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: patchAenderungInfo
   '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
@@ -3976,7 +4035,19 @@ components:
         - AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - PERSON_NIEDERLASSUNGSSTATUS_C
         - PERSON_NIEDERLASSUNGSSTATUS_B
-        - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        - PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A
+        - PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G
+        - PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L
+        - PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N
+        - PERSON_NIEDERLASSUNGSSTATUS_SCHUTZBEDUERFTIG_S
+        - PERSON_NIEDERLASSUNGSSTATUS_MELDEPFLICHTIG
+        - PERSON_NIEDERLASSUNGSSTATUS_DIPLOMATISCHE_FUNKTION
+        - PERSON_NIEDERLASSUNGSSTATUS_INTERNATIONALE_FUNKTION
+        - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
         - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
@@ -4060,6 +4131,7 @@ components:
         - IN_FREIGABE
         - IN_BEARBEITUNG_GS
         - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
         - JURISTISCHE_ABKLAERUNG
@@ -4095,9 +4167,21 @@ components:
       example: '2022-03-10'
     Niederlassungsstatus:
       enum:
-        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - SAISONARBEITEND_A
         - AUFENTHALTSBEWILLIGUNG_B
-        - FLUECHTLING
+        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - GRENZGAENGIG_G
+        - KURZAUFENTHALT_L
+        - ASYLSUCHEND_N
+        - SCHUTZBEDUERFTIG_S
+        - MELDEPFLICHTIG
+        - DIPLOMATISCHE_FUNKTION
+        - INTERNATIONALE_FUNKTION
+        - NICHT_ZUGETEILT
       type: string
     Zivilstand:
       enum:
@@ -4676,6 +4760,7 @@ components:
         - endDate
         - canGetBerechnung
         - beschwerdeHaengig
+        - canTriggerManuellPruefen
       type: object
       properties:
         id:
@@ -4691,6 +4776,8 @@ components:
         canGetBerechnung:
           type: boolean
         beschwerdeHaengig:
+          type: boolean
+        canTriggerManuellPruefen:
           type: boolean
     FallDashboardItem:
       required:
@@ -5132,8 +5219,6 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
-        zustaendigerKanton:
-          $ref: '#/components/schemas/ZustaendigerKanton'
         zustaendigeKESB:
           $ref: '#/components/schemas/ZustaendigeKESB'
     Sachbearbeiter:
@@ -5642,9 +5727,9 @@ components:
         - personen_6
         - personen_7
         - proWeiterePerson
-        - kinder_00_18
-        - jugendliche_erwachsene_19_25
-        - erwachsene_26_99
+        - kinder_00_17
+        - jugendliche_erwachsene_18_24
+        - erwachsene_25_99
         - wohnkosten_fam_1pers
         - wohnkosten_fam_2pers
         - wohnkosten_fam_3pers
@@ -5665,6 +5750,7 @@ components:
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
         - fristNachreichenDokumente
+        - stichtagVolljaehrigkeitMedizinischeGrundversorgung
       properties:
         bezeichnungDe:
           type: string
@@ -5732,11 +5818,11 @@ components:
           type: integer
         proWeiterePerson:
           type: integer
-        kinder_00_18:
+        kinder_00_17:
           type: integer
-        jugendliche_erwachsene_19_25:
+        jugendliche_erwachsene_18_24:
           type: integer
-        erwachsene_26_99:
+        erwachsene_25_99:
           type: integer
         wohnkosten_fam_1pers:
           type: integer
@@ -5778,6 +5864,10 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+          format: date
+          description: dd.MM.yyyy
+          type: string
     AusbildungsstaetteUpdate:
       required:
         - nameFr
@@ -6494,6 +6584,13 @@ components:
         comment:
           type: string
     CreateAenderungsantragRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    PatchAenderungsInfoRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
         - type: object

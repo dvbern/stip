@@ -46,7 +46,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -516,15 +516,17 @@ public class TestUtil {
                 .setWohnkostenFam5pluspers(25260)
                 .setAusbKostenSekII(2000)
                 .setAusbKostenTertiaer(3000)
-                .setErwachsene2699(5400)
-                .setJugendlicheErwachsene1925(4600)
-                .setKinder0018(1400)
+                .setErwachsene2599(5400)
+                .setJugendlicheErwachsene1824(4600)
+                .setKinder0017(1400)
                 .setEinreichefristNormal(LocalDate.now().plusMonths(5))
                 .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
+                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(Year.now().getValue(), 12, 31))
         )
             .setGesuchTranchen(
                 List.of(
                     (GesuchTranche) new GesuchTranche()
+                        .setTyp(GesuchTrancheTyp.TRANCHE)
                         .setGesuchFormular(
                             new GesuchFormular()
                                 .setPersonInAusbildung(
@@ -856,7 +858,7 @@ public class TestUtil {
 
         var customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND)
             .setDokumente(new ArrayList<>())
             .setCustomDokumentTyp(customDokumentTyp);
         return customGesuchDokument;
