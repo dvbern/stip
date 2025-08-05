@@ -81,7 +81,7 @@ export class SozialdienstOverviewComponent {
   filterForm = this.formBuilder.group({
     name: [<string | null>null],
     ort: [<string | null>null],
-    status: [<SozialdienstStatus | null>'ALL'],
+    status: [<SozialdienstStatus | 'ALL'>'ALL'],
   });
   private filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(

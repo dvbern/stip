@@ -283,8 +283,6 @@
   "sachbearbeitung-app.admin.sozialdienst.status.INAKTIV": "Inactif",
   "sachbearbeitung-app.admin.sozialdienst.status.action.AKTIV": "Désactiver",
   "sachbearbeitung-app.admin.sozialdienst.status.action.INAKTIV": "Activer",
-  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title": "{{ action }} le service social",
-  "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text": "Voulez-vous vraiment {{ action }} le service social \"{{ name }}\"?",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.AKTIV": "Désactiver le service social",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.INAKTIV": "Activer le service social",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.AKTIV": "Voulez-vous vraiment désactiver le service social \"{{ name }}\"?",
