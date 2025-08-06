@@ -98,38 +98,57 @@ public class KeycloakBenutzerService {
 
         final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
 
+        String keycloakUserId = null;
         try (
             Response response = keycloakUsersResource.create(userRep)
         ) {
             response.bufferEntity();
             if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
-                Log.error("Failed to create Keycloak user");
-                throw new WebApplicationException(response);
+                LOG.error("Keycloak did not return a successful response: {}", response);
+                throw new WebApplicationException(response.toString());
             }
             final var locationHeaderParts = response.getHeaderString("location").split("/");
-            final var keycloakUserId = locationHeaderParts[locationHeaderParts.length - 1];
-            final var keycloakUserResource = keycloakUsersResource.get(keycloakUserId);
-            var rolesToAddList = new ArrayList<>(
-                keycloakUserResource.roles()
-                    .realmLevel()
-                    .listAvailable()
-                    .stream()
-                    .filter(
-                        roleRepresentation -> roles.contains(roleRepresentation.getName())
-                    )
-                    .toList()
-            );
-            try {
-                keycloakUserResource.roles().realmLevel().add(rolesToAddList);
-            } catch (Exception e) {
-                deleteKeycloakBenutzer(keycloakUserId);
-                throw new WebApplicationException(
-                    "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
-                );
-            }
-
-            return keycloakUserId;
+            keycloakUserId = locationHeaderParts[locationHeaderParts.length - 1];
         }
+
+        // This is only a sanity check, it should never be triggered
+        if (keycloakUserId == null) {
+            final var message = "Failed to get Keycloak user ID from response";
+            LOG.error(message);
+            throw new WebApplicationException(message);
+        }
+
+        final var keycloakUserResource = keycloakUsersResource.get(keycloakUserId);
+        var rolesToAddList = new ArrayList<>(
+            keycloakUserResource.roles()
+                .realmLevel()
+                .listAvailable()
+                .stream()
+                .filter(
+                    roleRepresentation -> roles.contains(roleRepresentation.getName())
+                )
+                .toList()
+        );
+
+        try {
+            keycloakUserResource.roles().realmLevel().add(rolesToAddList);
+        } catch (Exception e) {
+            deleteKeycloakBenutzer(keycloakUserId);
+            throw new WebApplicationException(
+                "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
+            );
+        }
+
+        return keycloakUserId;
+    }
+
+    public boolean benutzerWithUsernameExistsInKeycloak(final String username) {
+        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+
+        // No need for pagination, this should only ever return 0 or 1 users
+        final var found = keycloakUsersResource.searchByUsername(username, true);
+
+        return !found.isEmpty();
     }
 
     public void updateKeycloakBenutzer(
