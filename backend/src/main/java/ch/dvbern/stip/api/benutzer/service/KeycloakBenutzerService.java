@@ -102,11 +102,16 @@ public class KeycloakBenutzerService {
         try (
             Response response = keycloakUsersResource.create(userRep)
         ) {
-            response.bufferEntity();
-            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
-                LOG.error("Keycloak did not return a successful response: {}", response);
+            if (response.getStatus() != Status.CREATED.getStatusCode()) {
+                if (response.getStatus() == Status.CONFLICT.getStatusCode()) {
+                    LOG.info("Tried to create a Keycloak user with a duplicate username");
+                    throw new WebApplicationException(response.getStatus());
+                }
+
+                LOG.error("Keycloak did not return a successful response: {}", response.getStatus());
                 throw new WebApplicationException(response.toString());
             }
+
             final var locationHeaderParts = response.getHeaderString("location").split("/");
             keycloakUserId = locationHeaderParts[locationHeaderParts.length - 1];
         }
@@ -140,15 +145,6 @@ public class KeycloakBenutzerService {
         }
 
         return keycloakUserId;
-    }
-
-    public boolean benutzerWithUsernameExistsInKeycloak(final String username) {
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
-
-        // No need for pagination, this should only ever return 0 or 1 users
-        final var found = keycloakUsersResource.searchByUsername(username, true);
-
-        return !found.isEmpty();
     }
 
     public void updateKeycloakBenutzer(

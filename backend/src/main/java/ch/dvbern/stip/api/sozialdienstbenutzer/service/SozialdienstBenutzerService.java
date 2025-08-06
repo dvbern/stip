@@ -39,8 +39,6 @@ import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -127,10 +125,6 @@ public class SozialdienstBenutzerService {
         welcomeMailDto.setRedirectUri(sozialdienstBenutzerCreateDto.getRedirectUri());
 
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstBenutzer);
-
-        if (keycloakBenutzerService.benutzerWithUsernameExistsInKeycloak(sozialdienstBenutzerCreateDto.getEmail())) {
-            throw new WebApplicationException(Status.CONFLICT);
-        }
 
         final var keycloakId = keycloakBenutzerService.createKeycloakBenutzer(
             sozialdienstBenutzerCreateDto.getVorname(),
