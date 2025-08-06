@@ -98,7 +98,7 @@ public class KeycloakBenutzerService {
 
         final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
 
-        String keycloakUserId = null;
+        String keycloakUserId;
         try (
             Response response = keycloakUsersResource.create(userRep)
         ) {
