@@ -1730,12 +1730,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
-  /sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}:
+  /sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}:
     parameters:
       - $ref: '#/components/parameters/sozialdienstId'
-      - name: targetStatus
+      - name: aktiv
         schema:
-          $ref: '#/components/schemas/SozialdienstStatus'
+          type: boolean
         in: path
         required: true
     patch:
@@ -1756,7 +1756,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: setSozialdienstStatusTo
+      operationId: setSozialdienstAktivTo
       summary: Changes a Sozialdienst's status to a given value
   /sozialdienst/benutzer:
     get:
@@ -6127,14 +6127,14 @@ components:
             - name
             - sozialdienstAdmin
             - zahlungsverbindung
-            - status
+            - aktiv
           properties:
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
             zahlungsverbindung:
               $ref: '#/components/schemas/Zahlungsverbindung'
-            status:
-              $ref: '#/components/schemas/SozialdienstStatus'
+            aktiv:
+              type: boolean
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -6886,11 +6886,6 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
-    SozialdienstStatus:
-      type: string
-      enum:
-        - AKTIV
-        - INAKTIV
   responses:
     Unauthorized:
       content:
