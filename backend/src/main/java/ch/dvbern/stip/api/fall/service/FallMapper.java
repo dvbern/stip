@@ -17,11 +17,22 @@
 
 package ch.dvbern.stip.api.fall.service;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.generated.dto.FailedAuszahlungBuchhaltungDto;
 import ch.dvbern.stip.generated.dto.FallDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = { DelegierungMapper.class })
 public interface FallMapper {
@@ -29,4 +40,45 @@ public interface FallMapper {
     Fall toEntity(FallDto fallDto);
 
     FallDto toDto(Fall fall);
+
+    @Mapping(source = "id", target = "fallId")
+    @Mapping(source = "fallNummer", target = "fallNummer")
+    @Mapping(source = ".", target = "gesuchId", qualifiedByName = "getGesuchId")
+    @Mapping(source = ".", target = "gesuchNummer", qualifiedByName = "getGesuchNummer")
+    @Mapping(source = "auszahlung.zahlungsverbindung.vorname", target = "vorname")
+    @Mapping(source = "auszahlung.zahlungsverbindung.nachname", target = "name")
+    @Mapping(source = ".", target = "lastTryDate", qualifiedByName = "getLastTryDate")
+    FailedAuszahlungBuchhaltungDto toFailedAuszahlungBuchhaltungDto(Fall fall);
+
+    default Buchhaltung getLastFailedBuchhaltungAuszahlung(Fall fall) {
+        return fall.getBuchhaltungs()
+            .stream()
+            .sorted(Comparator.comparing(Buchhaltung::getTimestampErstellt).reversed())
+            .filter(buchhaltung -> BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()))
+            .filter(buchhaltung -> buchhaltung.getSapStatus() == SapStatus.FAILURE)
+            .findFirst()
+            .orElseThrow();
+    }
+
+    @Named("getGesuchId")
+    default UUID getGesuchId(Fall fall) {
+        return getLastFailedBuchhaltungAuszahlung(fall).getGesuch().getId();
+    }
+
+    @Named("getGesuchNummer")
+    default String getGesuchNummer(Fall fall) {
+        return getLastFailedBuchhaltungAuszahlung(fall).getGesuch().getGesuchNummer();
+    }
+
+    @Named("getLastTryDate")
+    default LocalDate getLastTryDate(Fall fall) {
+        return getLastFailedBuchhaltungAuszahlung(fall).getSapDeliverys()
+            .stream()
+            .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
+            .findFirst()
+            .orElseThrow()
+            .getTimestampErstellt()
+            .toLocalDate();
+    }
+
 }

@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.common.util.JwtUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
@@ -46,6 +47,7 @@ import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
+import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -58,6 +60,7 @@ public class BuchhaltungService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
+    private final FallMapper fallMapper;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
@@ -328,4 +331,18 @@ public class BuchhaltungService {
                 .getFall()
         );
     }
+
+    public PaginatedFailedAuszahlungBuchhaltungDto getPaginatedFailedAuszahlungBuchhaltung(
+        final Integer page,
+        final Integer pageSize
+    ) {
+        final var dto = new PaginatedFailedAuszahlungBuchhaltungDto();
+        dto.setEntries(
+            fallRepository.findAllFallsWithFailedAuszahlungBuchhaltung(page, pageSize)
+                .map(fallMapper::toFailedAuszahlungBuchhaltungDto)
+                .toList()
+        );
+        return dto;
+    }
+
 }

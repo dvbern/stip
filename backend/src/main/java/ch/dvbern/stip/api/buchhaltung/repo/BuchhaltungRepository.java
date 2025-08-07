@@ -37,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     private final EntityManager entityManager;
     static final QBuchhaltung Q_BUCHHALTUNG = QBuchhaltung.buchhaltung;
+    static final QSapDelivery Q_SAP_DELIVERY = QSapDelivery.sapDelivery;
 
     public Stream<Buchhaltung> findAllForFallId(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
@@ -89,7 +90,6 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
                     .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_REMAINDER))
             )
             .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS))
-            // .where(Q_BUCHHALTUNG.sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS))
             .stream();
     }
 }

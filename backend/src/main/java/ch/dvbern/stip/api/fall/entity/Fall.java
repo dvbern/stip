@@ -97,6 +97,10 @@ public class Fall extends AbstractMandantEntity {
     @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_fall_auszahlung_id"))
     private @Valid Auszahlung auszahlung;
 
+    @NotNull
+    @Column(name = "has_failed_buchhaltung_auszahlung", nullable = false)
+    private boolean hasFailedBuchhaltungAuszahlung = false;
+
     public Zahlungsverbindung getRelevantZahlungsverbindung() {
         if (auszahlung.isAuszahlungAnSozialdienst()) {
             return delegierung.getSozialdienst().getZahlungsverbindung();

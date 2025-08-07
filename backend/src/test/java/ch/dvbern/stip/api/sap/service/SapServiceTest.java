@@ -18,31 +18,37 @@
 package ch.dvbern.stip.api.sap.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.SapEndpointServiceMock;
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
-import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import io.quarkus.test.InjectMock;
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -51,20 +57,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
-@QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ExtendWith(StepwiseExtension.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
@@ -72,30 +74,193 @@ public class SapServiceTest {
     @Inject
     SapService sapService;
 
+    @Inject
+    SapEndpointServiceMock sapEndpointServiceMock;
+
     @InjectMock
-    BuchhaltungService buchhaltungServiceMock;
+    BuchhaltungRepository buchhaltungRepositoryMock;
 
     @InjectMock
     GesuchRepository gesuchRepositoryMock;
 
     @InjectMock
-    SapDeliveryRepository sapDeliveryRepositoryMock;
+    FallRepository fallRepositoryMock;
 
-    @Inject
-    SapEndpointServiceMock sapEndpointServiceMock;
+    @InjectMock
+    ZahlungsverbindungRepository zahlungsverbindungRepositoryMock;
+
+    @InjectMock
+    SapDeliveryRepository sapDeliveryRepositoryMock;
 
     @Transactional
     @BeforeAll
     void setUp() {
-        QuarkusMock.installMockForType(buchhaltungServiceMock, BuchhaltungService.class);
-        QuarkusMock.installMockForType(gesuchRepositoryMock, GesuchRepository.class);
         QuarkusMock.installMockForType(sapDeliveryRepositoryMock, SapDeliveryRepository.class);
+        QuarkusMock.installMockForType(buchhaltungRepositoryMock, BuchhaltungRepository.class);
+        QuarkusMock.installMockForType(gesuchRepositoryMock, GesuchRepository.class);
+        QuarkusMock.installMockForType(fallRepositoryMock, FallRepository.class);
+        QuarkusMock.installMockForType(zahlungsverbindungRepositoryMock, ZahlungsverbindungRepository.class);
+    }
+
+    @BeforeEach
+    void setUpEach() {
+        Mockito.doAnswer(invocationOnMock -> {
+            final var buchhaltung = invocationOnMock.getArgument(0, Buchhaltung.class);
+            buchhaltung.setId(UUID.randomUUID());
+            return buchhaltung;
+        }
+        ).when(buchhaltungRepositoryMock).persistAndFlush(any());
     }
 
     @Test
-    void testCreateInitialAuszahlungOrGetStatus() {
+    void testCreateInitialAuszahlungOrGetStatusSimple() {
+        // Arrange
+        final var gesuch = prepareGesuchForSapService();
+
+        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
+            .thenReturn(Optional.empty());
+
+        final var stipendiumsBetrag = 1000;
+        final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
+            .setBetrag(stipendiumsBetrag)
+            .setSaldo(stipendiumsBetrag)
+            .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
+        lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
+        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
+            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+
+        Mockito.when(buchhaltungRepositoryMock.findAllForFallId(any()))
+            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+
+        gesuch.getAusbildung().getFall().setBuchhaltungs(new ArrayList<>());
+        gesuch.getAusbildung().getFall().getBuchhaltungs().add(lastEntryStipendiumBuchhaltung);
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+        assertThat(
+            gesuch.getAusbildung()
+                .getFall()
+                .getBuchhaltungs()
+                .get(gesuch.getAusbildung().getFall().getBuchhaltungs().size() - 1)
+                .getSapDeliverys()
+                .size(),
+            Matchers.greaterThanOrEqualTo(1)
+        );
+    }
+
+    @Test
+    void testCreateInitialAuszahlungOrGetStatusMultipleCalls() {
+        // Arrange
+        final var gesuch = prepareGesuchForSapService();
+
+        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
+            .thenReturn(Optional.empty());
+
+        final var stipendiumsBetrag = 1000;
+        final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
+            .setBetrag(stipendiumsBetrag)
+            .setSaldo(stipendiumsBetrag)
+            .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
+        lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
+        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
+            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+
+        Mockito.when(buchhaltungRepositoryMock.findAllForFallId(any()))
+            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+
+        final var auszahlungBuchhaltungForGesuch =
+            new Buchhaltung().setBuchhaltungType(BuchhaltungType.AUSZAHLUNG_INITIAL);
+        auszahlungBuchhaltungForGesuch.setBetrag(stipendiumsBetrag);
+        gesuch.getAusbildung().getFall().setBuchhaltungs(new ArrayList<>());
+        gesuch.getAusbildung().getFall().getBuchhaltungs().add(lastEntryStipendiumBuchhaltung);
+
+        sapEndpointServiceMock.setImportStatusReadResponse(SapEndpointServiceMock.SUCCESS_STRING, SapStatus.FAILURE);
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+        final var relevantBuchhaltung = gesuch.getAusbildung()
+            .getFall()
+            .getBuchhaltungs()
+            .get(gesuch.getAusbildung().getFall().getBuchhaltungs().size() - 1);
+
+        // Assert
+        assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(1));
+
+        // Arrange
+        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
+            .thenReturn(Optional.of(relevantBuchhaltung));
+
+        relevantBuchhaltung.getSapDeliverys().get(0).setTimestampErstellt(LocalDateTime.now());
+        relevantBuchhaltung.getSapDeliverys().get(0).setTimestampMutiert(LocalDateTime.now());
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+        assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(1));
+
+        // Arrange
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(
+                sapDelivery -> sapDelivery
+                    .setTimestampErstellt(LocalDateTime.now().minusHours(SapService.HOURS_BETWEEN_SAP_TRIES + 1))
+            );
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(
+                sapDelivery -> sapDelivery
+                    .setTimestampMutiert(LocalDateTime.now().minusHours(SapService.HOURS_BETWEEN_SAP_TRIES + 1))
+            );
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+        assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(2));
+
+        // Arrange
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(sapDelivery -> sapDelivery.setTimestampErstellt(LocalDateTime.now()));
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(sapDelivery -> sapDelivery.setTimestampMutiert(LocalDateTime.now()));
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+        assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(2));
+
+        // Arrange
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(
+                sapDelivery -> sapDelivery
+                    .setTimestampErstellt(LocalDateTime.now().minusHours(SapService.HOURS_BETWEEN_SAP_TRIES + 1))
+            );
+        relevantBuchhaltung.getSapDeliverys()
+            .forEach(
+                sapDelivery -> sapDelivery
+                    .setTimestampMutiert(LocalDateTime.now().minusHours(SapService.HOURS_BETWEEN_SAP_TRIES + 1))
+            );
+
+        // Act
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+        assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(3));
+        assertThat(relevantBuchhaltung.getSapStatus(), Matchers.equalTo(SapStatus.FAILURE));
+        assertThrows(
+            IllegalStateException.class,
+            () -> sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID())
+        );
+    }
+
+    private Gesuch prepareGesuchForSapService() {
         final var gesuch = new Gesuch();
-        final var gesuchTranche = new GesuchTranche().setGueltigkeit(new DateRange().setGueltigAb(LocalDate.now()))
+        final var gesuchTranche = new GesuchTranche()
+            .setGueltigkeit(
+                new DateRange().setGueltigAb(LocalDate.now())
+            )
             .setTyp(
                 GesuchTrancheTyp.TRANCHE
             );
@@ -103,36 +268,27 @@ public class SapServiceTest {
             Sprache.DEUTSCH
         );
         pia.setVorname("").setNachname("");
-        final var gesuchFormular = new GesuchFormular().setPersonInAusbildung(pia);
+        final var gesuchFormular = new GesuchFormular()
+            .setPersonInAusbildung(pia);
         gesuchTranche.setGesuchFormular(gesuchFormular);
         gesuch.setGesuchTranchen(List.of(gesuchTranche));
-        gesuch.setGesuchsperiode(new Gesuchsperiode().setZweiterAuszahlungsterminMonat(12));
+        gesuch.setGesuchsperiode(
+            new Gesuchsperiode()
+                .setZweiterAuszahlungsterminMonat(12)
+        );
         final var zahlungsverbindung = new Zahlungsverbindung()
-            .setSapBusinessPartnerId(123);
+            .setSapBusinessPartnerId(123)
+            .setAdresse(new Adresse().setLand(new Land()));
         gesuch.setAusbildung(
             new Ausbildung()
-                .setFall(new Fall().setAuszahlung(new Auszahlung().setZahlungsverbindung(zahlungsverbindung)))
+                .setFall(
+                    new Fall().setAuszahlung(
+                        new Auszahlung().setZahlungsverbindung(zahlungsverbindung)
+                    )
+                )
         );
         Mockito.when(gesuchRepositoryMock.requireById(any())).thenReturn(gesuch);
-
-        Mockito.when(buchhaltungServiceMock.findLatestPendingBuchhaltungAuszahlungOpt(any(), any()))
-            .thenReturn(Optional.empty());
-        final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
-            .setBetrag(1000);
-        Mockito.when(buchhaltungServiceMock.getLastEntryStipendiumOpt(any()))
-            .thenReturn(Optional.of(lastEntryStipendiumBuchhaltung));
-        final var latestNotFailedBuchhaltung = new Buchhaltung()
-            .setSaldo(1000);
-        Mockito.when(buchhaltungServiceMock.getLatestNotFailedBuchhaltungEntry(any()))
-            .thenReturn(latestNotFailedBuchhaltung);
-        final var auszahlungBuchhaltungForGesuch = new Buchhaltung();
-        auszahlungBuchhaltungForGesuch.setId(UUID.randomUUID());
-        auszahlungBuchhaltungForGesuch.setBetrag(1000);
-        Mockito.when(buchhaltungServiceMock.createAuszahlungBuchhaltungForGesuch(any(), any(), any()))
-            .thenReturn(auszahlungBuchhaltungForGesuch);
-
-        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
-        assertThat(auszahlungBuchhaltungForGesuch.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(1));
+        return gesuch;
     }
 
 }

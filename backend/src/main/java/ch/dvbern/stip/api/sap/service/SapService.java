@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
@@ -53,6 +54,8 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.AUSZAHLUNG_INI
 @RequestScoped
 @RequiredArgsConstructor
 public class SapService {
+    public static final Integer HOURS_BETWEEN_SAP_TRIES = 24;
+
     private final SapEndpointService sapEndpointService;
     private final BuchhaltungService buchhaltungService;
     private final SapDeliveryRepository sapDeliveryRepository;
@@ -155,13 +158,16 @@ public class SapService {
 
     @Transactional
     public SapStatus getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
-        final var sapDelivery = buchhaltung.getSapDeliverys()
+        final var sapDeliveryOpt = buchhaltung.getSapDeliverys()
             .stream()
             .filter(
                 sapDelivery1 -> sapDelivery1.getSapStatus() == SapStatus.IN_PROGRESS
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        if (sapDeliveryOpt.isEmpty()) {
+            return SapStatus.IN_PROGRESS;
+        }
+        final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
@@ -180,33 +186,50 @@ public class SapService {
         if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
             throw new IllegalStateException("Cannot create vendor posting without existing businessPartnerId");
         }
-        BigDecimal deliveryid = null;
-        final var sapDelivery = buchhaltung.getSapDeliverys()
+        if (buchhaltung.getSapStatus() != SapStatus.IN_PROGRESS) {
+            throw new IllegalStateException("buchhaltung status is not IN_PROGRESS");
+        }
+
+        final var sapDeliverys = buchhaltung.getSapDeliverys();
+
+        final var sapDeliveryInProgress = sapDeliverys
             .stream()
             .filter(
                 sapDelivery1 -> sapDelivery1.getSapStatus() == SapStatus.IN_PROGRESS
             )
+            .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        if (sapDelivery.isEmpty()) {
-            deliveryid = SapEndpointService.generateDeliveryId();
+        final var lastSapDelivery = sapDeliverys.stream().min(Comparator.comparing(SapDelivery::getTimestampErstellt));
 
-            final var newSapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
-                .setSapBusinessPartnerId(zahlungsverbindung.getSapBusinessPartnerId());
-            newSapDelivery.setSapStatus(SapStatus.IN_PROGRESS);
-            newSapDelivery.setBuchhaltung(buchhaltung);
-            sapDeliveryRepository.persistAndFlush(newSapDelivery);
-            buchhaltung.getSapDeliverys().add(newSapDelivery);
+        BigDecimal deliveryid = null;
+        if (sapDeliveryInProgress.isEmpty()) {
+            final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
+            && lastSapDelivery.get()
+                .getTimestampMutiert()
+                .plusHours(HOURS_BETWEEN_SAP_TRIES)
+                .isBefore(LocalDateTime.now());
 
-            final var vendorPostingCreateResponse =
-                sapEndpointService.createVendorPosting(
-                    zahlungsverbindung,
-                    buchhaltung.getBetrag(),
-                    deliveryid,
-                    getQrIbanAddlInfoString(gesuch),
-                    String.valueOf(Math.abs(buchhaltung.getId().getMostSignificantBits()))
-                );
-            SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
+            if (lastSapDelivery.isEmpty() || lastTryWasBeforeRetryPeriod) {
+                deliveryid = SapEndpointService.generateDeliveryId();
+
+                final var newSapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
+                    .setSapBusinessPartnerId(zahlungsverbindung.getSapBusinessPartnerId());
+                newSapDelivery.setSapStatus(SapStatus.IN_PROGRESS);
+                newSapDelivery.setBuchhaltung(buchhaltung);
+                sapDeliveryRepository.persistAndFlush(newSapDelivery);
+                buchhaltung.getSapDeliverys().add(newSapDelivery);
+
+                final var vendorPostingCreateResponse =
+                    sapEndpointService.createVendorPosting(
+                        zahlungsverbindung,
+                        buchhaltung.getBetrag(),
+                        deliveryid,
+                        getQrIbanAddlInfoString(gesuch),
+                        String.valueOf(Math.abs(buchhaltung.getId().getMostSignificantBits()))
+                    );
+                SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
+            }
         }
         return getVendorPostingCreateStatus(buchhaltung);
     }

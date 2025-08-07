@@ -41,4 +41,16 @@
     <changeSet author="jafa (generated)" id="1753176217440-14">
         <dropColumn columnName="sapdelivery_id" tableName="buchhaltung_aud"/>
     </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-15">
+      <addColumn tableName="fall">
+        <column name="has_failed_buchhaltung_auszahlung" type="BOOLEAN">
+          <constraints nullable="false"/>
+        </column>
+      </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-16">
+      <addColumn tableName="fall_aud">
+        <column name="has_failed_buchhaltung_auszahlung" type="BOOLEAN"/>
+      </addColumn>
+    </changeSet>
 </databaseChangeLog>
