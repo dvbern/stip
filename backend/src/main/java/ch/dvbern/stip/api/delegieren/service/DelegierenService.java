@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
@@ -61,7 +60,7 @@ public class DelegierenService {
         }
 
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
-        if (sozialdienst.getStatus() == SozialdienstStatus.INAKTIV) {
+        if (!sozialdienst.isAktiv()) {
             throw new BadRequestException();
         }
 

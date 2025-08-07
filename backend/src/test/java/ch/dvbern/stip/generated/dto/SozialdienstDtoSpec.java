@@ -16,7 +16,6 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstDtoSpec.JSON_PROPERTY_NAME,
   SozialdienstDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN,
   SozialdienstDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG,
-  SozialdienstDtoSpec.JSON_PROPERTY_STATUS
+  SozialdienstDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Sozialdienst")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -52,8 +51,8 @@ public class SozialdienstDtoSpec {
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private SozialdienstStatusDtoSpec status;
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public SozialdienstDtoSpec() {
   }
@@ -162,29 +161,29 @@ public class SozialdienstDtoSpec {
   }
 
 
-  public SozialdienstDtoSpec status(SozialdienstStatusDtoSpec status) {
+  public SozialdienstDtoSpec aktiv(Boolean aktiv) {
     
-    this.status = status;
+    this.aktiv = aktiv;
     return this;
   }
 
    /**
-   * Get status
-   * @return status
+   * Get aktiv
+   * @return aktiv
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public SozialdienstStatusDtoSpec getStatus() {
-    return status;
+  public Boolean getAktiv() {
+    return aktiv;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatus(SozialdienstStatusDtoSpec status) {
-    this.status = status;
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
   @Override
@@ -200,12 +199,12 @@ public class SozialdienstDtoSpec {
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
         Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung) &&
-        Objects.equals(this.status, sozialdienst.status);
+        Objects.equals(this.aktiv, sozialdienst.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, status);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, aktiv);
   }
 
   @Override
@@ -216,7 +215,7 @@ public class SozialdienstDtoSpec {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

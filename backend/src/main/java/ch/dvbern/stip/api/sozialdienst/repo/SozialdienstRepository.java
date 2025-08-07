@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.QSozialdienst;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
-import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -63,7 +62,7 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
         return new JPAQueryFactory(entityManager)
             .selectFrom(sozialdienst)
             .where(
-                sozialdienst.sozialdienstBenutzers.isNotEmpty().and(sozialdienst.status.eq(SozialdienstStatus.AKTIV))
+                sozialdienst.sozialdienstBenutzers.isNotEmpty().and(sozialdienst.aktiv)
             )
             .stream();
     }

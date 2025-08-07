@@ -23,7 +23,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import { Sozialdienst, SozialdienstStatus } from '@dv/shared/model/gesuch';
+import { Sozialdienst } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -37,6 +37,9 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 const INPUT_DELAY = 600;
+
+const availableStatus = ['AKTIV', 'INAKTIV', 'ALL'] as const;
+type SozialdienstStatus = (typeof availableStatus)[number];
 
 @Component({
   imports: [
@@ -72,8 +75,7 @@ export class SozialdienstOverviewComponent {
   destroyRef = inject(DestroyRef);
 
   displayedColumns = ['name', 'ort', 'status', 'actions'];
-
-  availableStatus = ['ALL', ...Object.values(SozialdienstStatus)];
+  availableStatus = availableStatus;
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
@@ -107,7 +109,16 @@ export class SozialdienstOverviewComponent {
       if (ort && !data.ort.toLowerCase().includes(ort.toLowerCase())) {
         return false;
       }
-      if (status && data.status !== status && status !== 'ALL') {
+      if (status) {
+        switch (status) {
+          case 'AKTIV':
+            return data.aktiv;
+          case 'INAKTIV':
+            return !data.aktiv;
+          case 'ALL':
+            return true;
+        }
+
         return false;
       }
       return true;
@@ -153,21 +164,20 @@ export class SozialdienstOverviewComponent {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title:
         'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.' +
-        sozialdienst.status,
+        sozialdienst.aktiv,
       message:
         'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.' +
-        sozialdienst.status,
+        sozialdienst.aktiv,
       translationObject: sozialdienst,
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          const targetStatus: SozialdienstStatus =
-            sozialdienst.status === 'AKTIV' ? 'INAKTIV' : 'AKTIV';
+          const targetAktiv = !sozialdienst.aktiv;
           this.store.setSozialdienstStatusTo$({
             sozialdienstId: sozialdienst.id,
-            targetStatus,
+            aktiv: targetAktiv,
           });
         }
       });

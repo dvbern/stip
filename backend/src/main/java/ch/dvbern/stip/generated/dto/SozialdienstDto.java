@@ -26,7 +26,7 @@ public class SozialdienstDto  implements Serializable {
   private @Valid String name;
   private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
-  private @Valid ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus status;
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -106,20 +106,21 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstDto status(ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus status) {
-    this.status = status;
+  public SozialdienstDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
     return this;
   }
 
   
-  @JsonProperty("status")
-  public ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus getStatus() {
-    return status;
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
   }
 
-  @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus status) {
-    this.status = status;
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
 
@@ -136,12 +137,12 @@ public class SozialdienstDto  implements Serializable {
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
         Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung) &&
-        Objects.equals(this.status, sozialdienst.status);
+        Objects.equals(this.aktiv, sozialdienst.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, status);
+    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung, aktiv);
   }
 
   @Override
@@ -153,7 +154,7 @@ public class SozialdienstDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -20,7 +20,6 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import java.util.UUID;
 
@@ -75,7 +74,7 @@ public class SozialdienstApiSpec {
                 getSozialdienstBenutzer(),
                 getSozialdienstBenutzerList(),
                 replaceSozialdienstAdmin(),
-                setSozialdienstStatusTo(),
+                setSozialdienstAktivTo(),
                 updateSozialdienst(),
                 updateSozialdienstAdmin(),
                 updateSozialdienstBenutzer()
@@ -122,8 +121,8 @@ public class SozialdienstApiSpec {
         return new ReplaceSozialdienstAdminOper(createReqSpec());
     }
 
-    public SetSozialdienstStatusToOper setSozialdienstStatusTo() {
-        return new SetSozialdienstStatusToOper(createReqSpec());
+    public SetSozialdienstAktivToOper setSozialdienstAktivTo() {
+        return new SetSozialdienstAktivToOper(createReqSpec());
     }
 
     public UpdateSozialdienstOper updateSozialdienst() {
@@ -845,25 +844,25 @@ public class SozialdienstApiSpec {
      * 
      *
      * @see #sozialdienstIdPath  (required)
-     * @see #targetStatusPath  (required)
+     * @see #aktivPath  (required)
      * return SozialdienstDtoSpec
      */
-    public static class SetSozialdienstStatusToOper implements Oper {
+    public static class SetSozialdienstAktivToOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}";
+        public static final String REQ_URI = "/sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public SetSozialdienstStatusToOper(RequestSpecBuilder reqSpec) {
+        public SetSozialdienstAktivToOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}
+         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -874,7 +873,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstStatusTo/{targetStatus}
+         * PATCH /sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}
          * @param handler handler
          * @return SozialdienstDtoSpec
          */
@@ -889,19 +888,19 @@ public class SozialdienstApiSpec {
          * @param sozialdienstId (UUID)  (required)
          * @return operation
          */
-        public SetSozialdienstStatusToOper sozialdienstIdPath(Object sozialdienstId) {
+        public SetSozialdienstAktivToOper sozialdienstIdPath(Object sozialdienstId) {
             reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
             return this;
         }
 
-        public static final String TARGET_STATUS_PATH = "targetStatus";
+        public static final String AKTIV_PATH = "aktiv";
 
         /**
-         * @param targetStatus (SozialdienstStatusDtoSpec)  (required)
+         * @param aktiv (Boolean)  (required)
          * @return operation
          */
-        public SetSozialdienstStatusToOper targetStatusPath(Object targetStatus) {
-            reqSpec.addPathParam(TARGET_STATUS_PATH, targetStatus);
+        public SetSozialdienstAktivToOper aktivPath(Object aktiv) {
+            reqSpec.addPathParam(AKTIV_PATH, aktiv);
             return this;
         }
 
@@ -910,7 +909,7 @@ public class SozialdienstApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public SetSozialdienstStatusToOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public SetSozialdienstAktivToOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -920,7 +919,7 @@ public class SozialdienstApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public SetSozialdienstStatusToOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public SetSozialdienstAktivToOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

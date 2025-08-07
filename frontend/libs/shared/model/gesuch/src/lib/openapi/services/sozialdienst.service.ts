@@ -25,7 +25,6 @@ import { SozialdienstBenutzerCreate } from '../model/sozialdienstBenutzerCreate'
 import { SozialdienstBenutzerUpdate } from '../model/sozialdienstBenutzerUpdate';
 import { SozialdienstCreate } from '../model/sozialdienstCreate';
 import { SozialdienstSlim } from '../model/sozialdienstSlim';
-import { SozialdienstStatus } from '../model/sozialdienstStatus';
 import { SozialdienstUpdate } from '../model/sozialdienstUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -61,9 +60,9 @@ export interface SozialdienstServiceReplaceSozialdienstAdminRequestParams {
     sozialdienstAdmin?: SozialdienstAdmin;
 }
 
-export interface SozialdienstServiceSetSozialdienstStatusToRequestParams {
+export interface SozialdienstServiceSetSozialdienstAktivToRequestParams {
     sozialdienstId: string;
-    targetStatus: SozialdienstStatus;
+    aktiv: boolean;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstRequestParams {
@@ -882,17 +881,17 @@ export class SozialdienstService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Sozialdienst>;
-     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Sozialdienst>>;
-     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Sozialdienst>>;
-     public setSozialdienstStatusTo$(requestParameters: SozialdienstServiceSetSozialdienstStatusToRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public setSozialdienstAktivTo$(requestParameters: SozialdienstServiceSetSozialdienstAktivToRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Sozialdienst>;
+     public setSozialdienstAktivTo$(requestParameters: SozialdienstServiceSetSozialdienstAktivToRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Sozialdienst>>;
+     public setSozialdienstAktivTo$(requestParameters: SozialdienstServiceSetSozialdienstAktivToRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Sozialdienst>>;
+     public setSozialdienstAktivTo$(requestParameters: SozialdienstServiceSetSozialdienstAktivToRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const sozialdienstId = requestParameters.sozialdienstId;
         if (sozialdienstId === null || sozialdienstId === undefined) {
-            throw new Error('Required parameter sozialdienstId was null or undefined when calling setSozialdienstStatusTo$.');
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling setSozialdienstAktivTo$.');
         }
-        const targetStatus = requestParameters.targetStatus;
-        if (targetStatus === null || targetStatus === undefined) {
-            throw new Error('Required parameter targetStatus was null or undefined when calling setSozialdienstStatusTo$.');
+        const aktiv = requestParameters.aktiv;
+        if (aktiv === null || aktiv === undefined) {
+            throw new Error('Required parameter aktiv was null or undefined when calling setSozialdienstAktivTo$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -940,7 +939,7 @@ export class SozialdienstService {
             }
         }
 
-        const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/setSozialdienstStatusTo/${this.configuration.encodeParam({name: "targetStatus", value: targetStatus, in: "path", style: "simple", explode: false, dataType: "SozialdienstStatus", dataFormat: undefined})}`;
+        const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/setSozialdienstAktivTo/${this.configuration.encodeParam({name: "aktiv", value: aktiv, in: "path", style: "simple", explode: false, dataType: "boolean", dataFormat: undefined})}`;
         return this.httpClient.request<Sozialdienst>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

@@ -9,15 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SozialdienstStatus } from './sozialdienstStatus';
 import { Zahlungsverbindung } from './zahlungsverbindung';
 import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
 export interface SozialdienstAllOf { 
     sozialdienstAdmin: SozialdienstBenutzer;
     zahlungsverbindung: Zahlungsverbindung;
-    status: SozialdienstStatus;
+    aktiv: boolean;
 }
-
-
 

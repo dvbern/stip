@@ -2,14 +2,14 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="Juri Furer (generated)" id="1754308448906-2">
         <addColumn tableName="sozialdienst">
-            <column name="status" type="VARCHAR(255)">
+            <column name="aktiv" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
     <changeSet author="Juri Furer (generated)" id="1754308448906-3">
         <addColumn tableName="sozialdienst_aud">
-            <column name="status" type="VARCHAR(255)"/>
+            <column name="aktiv" type="boolean"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

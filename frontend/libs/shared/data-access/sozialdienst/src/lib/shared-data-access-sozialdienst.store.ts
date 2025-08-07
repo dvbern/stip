@@ -16,7 +16,6 @@ import {
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstSlim,
-  SozialdienstStatus,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
 import { handleUnauthorized } from '@dv/shared/util/http';
@@ -483,7 +482,7 @@ export class SozialdienstStore extends signalStore(
 
   setSozialdienstStatusTo$ = rxMethod<{
     sozialdienstId: string;
-    targetStatus: SozialdienstStatus;
+    aktiv: boolean;
   }>(
     pipe(
       tap(() => {
@@ -491,9 +490,9 @@ export class SozialdienstStore extends signalStore(
           sozialdienste: cachedPending(state.sozialdienste),
         }));
       }),
-      exhaustMap(({ sozialdienstId, targetStatus }) =>
+      exhaustMap(({ sozialdienstId, aktiv }) =>
         this.sozialdienstService
-          .setSozialdienstStatusTo$({ sozialdienstId, targetStatus })
+          .setSozialdienstAktivTo$({ sozialdienstId, aktiv })
           .pipe(
             handleApiResponse(
               () => {
@@ -507,7 +506,7 @@ export class SozialdienstStore extends signalStore(
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey:
                       'shared.admin.sozialdienst.sozialdienstStatusChanged.' +
-                      targetStatus,
+                      aktiv,
                   });
                 },
                 onFailure: () => {

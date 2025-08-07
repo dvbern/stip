@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.api.sozialdienst.type.SozialdienstStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -92,9 +91,9 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @Override
     @RolesAllowed(SOZIALDIENST_UPDATE)
-    public SozialdienstDto setSozialdienstStatusTo(UUID sozialdienstId, SozialdienstStatus targetStatus) {
+    public SozialdienstDto setSozialdienstAktivTo(UUID sozialdienstId, Boolean aktiv) {
         sozialdienstAuthorizer.canUpdateSozialdienstStatus();
-        return sozialdienstService.setSozialdienstStatusTo(sozialdienstId, targetStatus);
+        return sozialdienstService.setSozialdienstStatusTo(sozialdienstId, aktiv);
     }
 
     @Override
