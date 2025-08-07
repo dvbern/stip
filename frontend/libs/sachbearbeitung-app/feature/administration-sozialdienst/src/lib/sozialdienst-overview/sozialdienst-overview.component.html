@@ -96,7 +96,7 @@
               </div>
             </th>
             <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
-              {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + sozialdienst.aktiv | translate }}
+              {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + booleanToStatus(sozialdienst.aktiv) | translate }}
             </td>
           </ng-container>
 
@@ -128,7 +128,8 @@
                   class="btn btn-link"
                   (click)="toggleStatus(sozialdienst); $event.stopPropagation()"
                   [matTooltip]="
-                    'sachbearbeitung-app.admin.sozialdienst.status.action.' + sozialdienst.aktiv | translate
+                    'sachbearbeitung-app.admin.sozialdienst.status.action.' + booleanToStatus(sozialdienst.aktiv)
+                      | translate
                   "
                 >
                   @if (sozialdienst.aktiv) {

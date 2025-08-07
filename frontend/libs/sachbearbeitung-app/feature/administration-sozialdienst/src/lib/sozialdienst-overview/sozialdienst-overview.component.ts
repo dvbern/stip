@@ -164,10 +164,10 @@ export class SozialdienstOverviewComponent {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title:
         'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.' +
-        sozialdienst.aktiv,
+        this.booleanToStatus(sozialdienst.aktiv),
       message:
         'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.' +
-        sozialdienst.aktiv,
+        this.booleanToStatus(sozialdienst.aktiv),
       translationObject: sozialdienst,
     })
       .afterClosed()
@@ -181,5 +181,9 @@ export class SozialdienstOverviewComponent {
           });
         }
       });
+  }
+
+  booleanToStatus(value: boolean): SozialdienstStatus {
+    return value ? 'AKTIV' : 'INAKTIV';
   }
 }
