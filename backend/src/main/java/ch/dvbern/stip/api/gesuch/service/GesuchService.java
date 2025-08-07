@@ -40,8 +40,8 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
+import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
@@ -72,6 +72,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -180,6 +181,7 @@ public class GesuchService {
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
+    private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -922,19 +924,6 @@ public class GesuchService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var gesuchsperiode = gesuch.getGesuchsperiode();
-        final var newEinreichedatum = dto.getNewEinreichedatum();
-        final var between = DateUtil.between(
-            gesuchsperiode.getGesuchsperiodeStart(),
-            gesuchsperiode.getGesuchsperiodeStopp(),
-            newEinreichedatum,
-            true
-        );
-
-        if (!between) {
-            throw new BadRequestException("New einreichedatum is outside of the Gesuchsperiode");
-        }
-
         gesuch.setEinreichedatum(dto.getNewEinreichedatum());
         gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
 
@@ -1178,5 +1167,22 @@ public class GesuchService {
         } else {
             resetGesuchZurueckweisenToEingereicht(gesuch);
         }
+    }
+
+    @Transactional
+    public GesuchDto setGesuchsperiodeForGesuch(final UUID gesuchId, final UUID gesuchsperiodeId) {
+        final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(gesuchsperiodeId).orElseThrow();
+
+        if (!GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS.contains(gesuchsperiode.getGueltigkeitStatus())) {
+            throw new BadRequestException("Gesuchsperiode is not assignable");
+        }
+
+        var gesuch = gesuchRepository.requireById(gesuchId);
+
+        gesuch.setGesuchsperiode(gesuchsperiode);
+
+        gesuchRepository.persistAndFlush(gesuch);
+
+        return gesuchMapper.toDto(gesuch);
     }
 }

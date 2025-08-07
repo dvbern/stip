@@ -118,6 +118,16 @@ public class GesuchStatusService {
         return canGetBerechnung;
     }
 
+    public boolean canChangeGesuchsperiode(final Gesuch gesuch) {
+        final var isInStatus = gesuchIsInOneOfGesuchStatus(gesuch, Set.of(Gesuchstatus.IN_BEARBEITUNG_SB));
+
+        if (isInStatus && !gesuch.isVerfuegt()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean gesuchIsInOneOfGesuchStatus(final Gesuch gesuch, final Set<Gesuchstatus> gesuchStatusSet) {
         return gesuchStatusSet.contains(gesuch.getGesuchStatus());
     }

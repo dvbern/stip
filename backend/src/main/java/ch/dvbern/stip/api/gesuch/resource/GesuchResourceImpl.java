@@ -542,6 +542,10 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchDto setGesuchsperiodeForGesuch(UUID gesuchTrancheId, @NotNull UUID gesuchsperiodeId) {
-        return null;
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchsperiodeForGesuch(gesuchId);
+
+        return gesuchService.setGesuchsperiodeForGesuch(gesuchTrancheId, gesuchsperiodeId);
     }
 }

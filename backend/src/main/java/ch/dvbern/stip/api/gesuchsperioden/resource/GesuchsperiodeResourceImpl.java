@@ -103,6 +103,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     @RolesAllowed(STAMMDATEN_READ)
     public List<GesuchsperiodeDto> getAllAssignableGesuchsperiode() {
+        gesuchsperiodeAuthorizer.canRead();
         return gesuchsperiodenService.getAllAssignableGesuchsperioden();
     }
 }
