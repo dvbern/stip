@@ -69,11 +69,25 @@
   </div>
 
   <!-- Gesuchsperiode -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-    <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | translate }} </mat-label>
+  <div class="tw-col-start-1 tw-flex tw-gap-2">
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+      <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | translate }} </mat-label>
 
-    <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
-  </mat-form-field>
+      <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
+    </mat-form-field>
+    <!-- change gesuchsPeriode Button -->
+    @if (isSbApp && gesuchStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
+        [attr.aria-label]="'shared.form.tranche.gesuchsperiode.change' | translate"
+        data-testid="form-tranche-gesuchsperiode-change-button"
+        (click)="changeGesuchsperiode(tranche?.id)"
+      >
+        <i class="material-symbols-rounded tw-text-3xl/none">format_indent_increase</i>
+      </button>
+    }
+  </div>
 
   <!-- Einreichefrist -->
   <mat-form-field dvSharedUiFormField>
@@ -82,14 +96,14 @@
     <input readonly type="text" matInput formControlName="einreichefrist" data-testid="form-tranche-einreichefrist" />
   </mat-form-field>
 
-  <ng-template #updateAenderungButton>
+  <ng-template #updateAenderungVonBisButton>
     @let gesuch = view.gesuch;
     @if (gesuch && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
       <button
         type="button"
         class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
         [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | translate"
-        data-testid="cockpit-gesuch-aenderung-von-bis-update"
+        data-testid="form-tranche-aenderung-von-bis-update"
         (click)="updateAenderungVonBis(gesuch)"
       >
         <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
@@ -105,7 +119,7 @@
       <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
     </mat-form-field>
 
-    <ng-container *ngTemplateOutlet="updateAenderungButton"></ng-container>
+    <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
   </div>
 
   <!-- Bis -->
@@ -116,7 +130,7 @@
       <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
     </mat-form-field>
 
-    <ng-container *ngTemplateOutlet="updateAenderungButton"></ng-container>
+    <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
   </div>
 
   <!-- Bemerkung -->

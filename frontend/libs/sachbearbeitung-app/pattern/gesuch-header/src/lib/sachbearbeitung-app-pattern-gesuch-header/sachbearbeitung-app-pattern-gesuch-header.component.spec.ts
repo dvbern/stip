@@ -25,6 +25,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     VERFUEGT: jest.fn(),
     VERSENDET: jest.fn(),
     ZURUECKWEISEN: jest.fn(),
+    STATUS_PRUEFUNG_AUSLOESEN: jest.fn(),
   } satisfies Record<StatusUebergang, unknown>;
 
   beforeEach(async () => {

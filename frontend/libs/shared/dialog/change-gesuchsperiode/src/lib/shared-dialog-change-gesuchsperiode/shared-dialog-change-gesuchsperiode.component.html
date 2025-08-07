@@ -1,0 +1,46 @@
+<button
+  type="button"
+  class="dv-icon-button dv-icon-button-lg !tw-absolute tw-end-0 tw-top-0 tw-m-1"
+  [attr.aria-label]="'shared.cancel' | translate"
+  (click)="cancel()"
+>
+  <span class="material-symbols-rounded">close</span>
+</button>
+<form
+  [formGroup]="form"
+  data-testid="form-change-gesuchsperiode-dialog-form"
+  class="tw-block tw-max-w-[580px] tw-p-4"
+  (ngSubmit)="confirm()"
+>
+  <h3 class="tw-mb-6">
+    {{ 'shared.dialog.change-gesuchsperiode.title' | translate }}
+  </h3>
+  <div class="tw-mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | translate"></div>
+  <div class="row">
+    <div class="tw-w-full">
+      <!-- gesuchsperiode select -->
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | translate }}</mat-label>
+        <mat-select formControlName="gesuchsperiodeId" data-testid="form-change-gesuchsperiode-dialog-gesuchsperiode">
+          @for (gesuchsperiode of gesuchsperiodenViewSig(); track gesuchsperiode.id) {
+            <mat-option [value]="gesuchsperiode.id">{{ gesuchsperiode.displayName }}</mat-option>
+          }
+        </mat-select>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="tw-mt-10 tw-flex tw-justify-between">
+    <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+      {{ 'shared.cancel' | translate }}
+    </button>
+    <dv-shared-ui-form-save
+      data-testid="dialog-confirm"
+      [disabled]="form.invalid || form.pristine"
+      [loading]="changeGesuchsperiodeStore.changeGesuchsperiode() | rdIsPending: { ignoreInitial: true }"
+    ></dv-shared-ui-form-save>
+  </div>
+</form>

@@ -12,6 +12,7 @@ import {
 import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
 import { routes } from './app.routes';
+import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(sharedDataAccessGesuchEffects),
     provideAnimations(),
     GesuchStore,
+    ChangeGesuchsperiodeStore,
   ],
 };

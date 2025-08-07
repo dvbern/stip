@@ -49,6 +49,8 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-tranche',
@@ -81,6 +83,9 @@ export class SharedFeatureGesuchFormTrancheComponent {
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchStore = inject(GesuchStore, {
+    optional: true,
+  });
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
@@ -245,6 +250,18 @@ export class SharedFeatureGesuchFormTrancheComponent {
       maxDate: new Date(gesuchsperiodeStopp),
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),
+    })
+      .afterClosed()
+      .subscribe();
+  }
+
+  changeGesuchsperiode(gesuchTrancheId: string | undefined) {
+    if (!gesuchTrancheId) {
+      return;
+    }
+
+    SharedDialogChangeGesuchsperiodeComponent.open(this.dialog, {
+      gesuchTrancheId,
     })
       .afterClosed()
       .subscribe();
