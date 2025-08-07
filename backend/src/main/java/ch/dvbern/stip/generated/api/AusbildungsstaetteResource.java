@@ -11,6 +11,8 @@ import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -72,6 +74,18 @@ public interface AusbildungsstaetteResource {
     @Path("/ausbildungsstaette")
     @Produces({ "application/json", "text/plain" })
     PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("nameDe")   String nameDe,@QueryParam("nameFr")   String nameFr,@QueryParam("chShis")   String chShis,@QueryParam("burNo")   String burNo,@QueryParam("ctNo")   String ctNo,@QueryParam("aktiv")   Boolean aktiv);
+
+    @PATCH
+    @Path("/abschluss/rename/{abschlussId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AbschlussDto renameAbschluss(@PathParam("abschlussId") UUID abschlussId,@Valid @NotNull RenameAbschlussDto renameAbschlussDto);
+
+    @PATCH
+    @Path("/ausbildungsstaette/rename/{ausbildungsstaetteId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsstaetteDto renameAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId,@Valid @NotNull RenameAusbildungsstaetteDto renameAusbildungsstaetteDto);
 
     @PATCH
     @Path("/abschluss/inaktiv/{abschlussId}")

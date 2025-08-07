@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -161,4 +162,13 @@ public class AusbildungsstaetteService {
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }
 
+    @Transactional
+    public AusbildungsstaetteDto renameAusbildungsstaette(
+        final UUID ausbildungsstaetteId,
+        final RenameAusbildungsstaetteDto renameAusbildungsstaetteDto
+    ) {
+        final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
+        ausbildungsstaetteMapper.partialUpdate(renameAusbildungsstaetteDto, ausbildungsstaette);
+        return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
+    }
 }

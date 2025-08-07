@@ -43,6 +43,8 @@ import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -178,6 +180,23 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
             ctNo,
             aktiv
         );
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AbschlussDto renameAbschluss(UUID abschlussId, RenameAbschlussDto renameAbschlussDto) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return abschlussService.renameAbschluss(abschlussId, renameAbschlussDto);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AusbildungsstaetteDto renameAusbildungsstaette(
+        UUID ausbildungsstaetteId,
+        RenameAusbildungsstaetteDto renameAusbildungsstaetteDto
+    ) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return ausbildungsstaetteService.renameAusbildungsstaette(ausbildungsstaetteId, renameAusbildungsstaetteDto);
     }
 
     @Override

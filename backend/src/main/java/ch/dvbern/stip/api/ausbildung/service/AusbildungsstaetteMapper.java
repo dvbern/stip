@@ -24,8 +24,10 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 @Mapper(
@@ -48,4 +50,9 @@ public abstract class AusbildungsstaetteMapper {
 
     @Mapping(source = "aktiveAusbildungsgaenge", target = "ausbildungsgaenge")
     abstract AusbildungsstaetteSlimDto toSlimDto(Ausbildungsstaette ausbildungsstaette);
+
+    abstract void partialUpdate(
+        RenameAusbildungsstaetteDto renameAbschlussDto,
+        @MappingTarget Ausbildungsstaette abschluss
+    );
 }
