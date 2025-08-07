@@ -1170,19 +1170,20 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto setGesuchsperiodeForGesuch(final UUID gesuchId, final UUID gesuchsperiodeId) {
+    public GesuchDto setGesuchsperiodeForGesuch(final UUID gesuchTrancheId, final UUID gesuchsperiodeId) {
         final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(gesuchsperiodeId).orElseThrow();
 
         if (!GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS.contains(gesuchsperiode.getGueltigkeitStatus())) {
             throw new BadRequestException("Gesuchsperiode is not assignable");
         }
 
-        var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
 
         gesuch.setGesuchsperiode(gesuchsperiode);
 
         gesuchRepository.persistAndFlush(gesuch);
 
-        return gesuchMapper.toDto(gesuch);
+        return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche);
     }
 }
