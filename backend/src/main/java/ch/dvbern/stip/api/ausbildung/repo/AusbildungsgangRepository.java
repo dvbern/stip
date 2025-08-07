@@ -17,12 +17,34 @@
 
 package ch.dvbern.stip.api.ausbildung.repo;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang> {
+    private final EntityManager em;
+
+    public Optional<Ausbildungsgang> findByAusbildungsstaetteAndAbschluss(
+        final UUID ausbildungsstaetteId,
+        final UUID abschlussId
+    ) {
+        final var ausbildungsgang = QAusbildungsgang.ausbildungsgang;
+        return new JPAQueryFactory(em)
+            .selectFrom(ausbildungsgang)
+            .where(
+                ausbildungsgang.ausbildungsstaette.id.eq(ausbildungsstaetteId)
+                    .and(ausbildungsgang.abschluss.id.eq(abschlussId))
+            )
+            .stream()
+            .findFirst();
+    }
 }
