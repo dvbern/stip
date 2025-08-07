@@ -3743,11 +3743,7 @@ paths:
       summary: Returns all Abschluesse
   /abschluss/inaktiv/{abschlussId}:
     parameters:
-      - name: abschlussId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/abschlussId'
     patch:
       tags:
         - Ausbildungsstaette
@@ -3766,6 +3762,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: setAbschlussInaktiv
       summary: Set an Abschluss to Inaktiv
+  /abschluss/rename/{abschlussId}:
+    parameters:
+      - $ref: '#/components/parameters/abschlussId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAbschluss'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Abschluss'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: renameAbschluss
+      summary: Renames a specified Abschluss
   /ausbildungsstaette:
     post:
       tags:
@@ -3826,11 +3849,7 @@ paths:
       summary: Returns all Ausbildungsstaette
   /ausbildungsstaette/inaktiv/{ausbildungsstaetteId}:
     parameters:
-      - name: ausbildungsstaetteId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
     patch:
       tags:
         - Ausbildungsstaette
@@ -3849,6 +3868,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: setAusbildungsstaetteInaktiv
       summary: Set an Ausbildungsstaette to Inaktiv
+  /ausbildungsstaette/rename/{ausbildungsstaetteId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAusbildungsstaette'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildungsstaette'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: renameAusbildungsstaette
+      summary: Renames a specified Ausbildungsstaette
   /ausbildungsstaette/slim:
     get:
       tags:
@@ -7065,6 +7111,26 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
+    RenameAusbildungsstaette:
+      type: object
+      required:
+        - nameDe
+        - nameFr
+      properties:
+        nameDe:
+          type: string
+        nameFr:
+          type: string
+    RenameAbschluss:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -7342,6 +7408,18 @@ components:
       schema:
         type: string
       in: query
+    ausbildungsstaetteId:
+      name: ausbildungsstaetteId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
+    abschlussId:
+      name: abschlussId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
