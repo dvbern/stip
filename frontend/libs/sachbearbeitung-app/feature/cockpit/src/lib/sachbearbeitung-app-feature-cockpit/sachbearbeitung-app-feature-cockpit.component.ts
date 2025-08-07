@@ -369,76 +369,63 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
 
     // Handle normal filter form control changes
-    effect(
-      () => {
-        this.filterFormChangedSig();
-        const formValue = this.filterForm.getRawValue();
-        const query = createQuery({
-          ...formValue,
-          piaGeburtsdatum: formValue.piaGeburtsdatum
-            ? toBackendLocalDate(formValue.piaGeburtsdatum)
-            : undefined,
-        });
+    effect(() => {
+      this.filterFormChangedSig();
+      const formValue = this.filterForm.getRawValue();
+      const query = createQuery({
+        ...formValue,
+        piaGeburtsdatum: formValue.piaGeburtsdatum
+          ? toBackendLocalDate(formValue.piaGeburtsdatum)
+          : undefined,
+      });
 
-        this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
+      this.router.navigate(['.'], {
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // Handle start-end filter form control changes seperately
-    effect(
-      () => {
-        this.filterStartEndFormChangedSig();
-        const formValue = this.filterStartEndForm.getRawValue();
-        const query = createQuery({
-          letzteAktivitaetFrom:
-            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
-              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
-              : undefined,
-          letzteAktivitaetTo:
-            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
-              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
-              : undefined,
-        });
+    effect(() => {
+      this.filterStartEndFormChangedSig();
+      const formValue = this.filterStartEndForm.getRawValue();
+      const query = createQuery({
+        letzteAktivitaetFrom:
+          formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
+            ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
+            : undefined,
+        letzteAktivitaetTo:
+          formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
+            ? toBackendLocalDate(formValue.letzteAktivitaetTo)
+            : undefined,
+      });
 
-        this.router.navigate(['.'], {
-          queryParams: makeEmptyStringPropertiesNull(query),
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
+      this.router.navigate(['.'], {
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
     );
-    effect(
-      () => {
-        const query = quickFilterChanged();
-        const defaultFilter = this.defaultFilterSig();
-        if (!query) {
-          return;
-        }
-        this.router.navigate(['.'], {
-          queryParams: {
-            show: query === defaultFilter ? undefined : query,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const query = quickFilterChanged();
+      const defaultFilter = this.defaultFilterSig();
+      if (!query) {
+        return;
+      }
+      this.router.navigate(['.'], {
+        queryParams: {
+          show: query === defaultFilter ? undefined : query,
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
     // When the route param inputs change, load the gesuche
     effect(() => {

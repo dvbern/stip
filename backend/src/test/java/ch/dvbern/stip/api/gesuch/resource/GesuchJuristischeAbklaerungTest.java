@@ -158,8 +158,8 @@ class GesuchJuristischeAbklaerungTest {
     @Test
     @TestAsJurist
     @Order(7)
-    void gesuchEinreichenAsJurShouldWork() {
-        gesuchApiSpec.gesuchEinreichenJur()
+    void gesuchManuellPruefenJurShouldWork() {
+        gesuchApiSpec.gesuchManuellPruefenJur()
             .gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

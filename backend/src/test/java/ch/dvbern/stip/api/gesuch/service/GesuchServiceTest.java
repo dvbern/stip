@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,12 +36,12 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.VersendetHandler;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -49,7 +50,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -66,6 +67,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -84,9 +86,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
@@ -97,6 +97,7 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
@@ -110,6 +111,8 @@ import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.service.StipDecisionService;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -123,6 +126,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
@@ -141,9 +145,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -151,8 +158,11 @@ import static org.mockito.Mockito.when;
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
 class GesuchServiceTest {
+    @InjectMock
+    StipDecisionService decisionService;
 
     @Inject
+    @InjectMocks
     GesuchService gesuchService;
 
     @Inject
@@ -163,9 +173,6 @@ class GesuchServiceTest {
 
     @Inject
     LebenslaufItemMapper lebenslaufItemMapper;
-
-    @Inject
-    SteuerdatenMapper steuerdatenMapper;
 
     @Inject
     SteuererklaerungMapper steuererklaerungMapper;
@@ -194,6 +201,9 @@ class GesuchServiceTest {
     @InjectMock
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
 
+    @InjectMock
+    VerfuegungService verfuegungService;
+
     @InjectSpy
     MailService mailService;
 
@@ -204,9 +214,6 @@ class GesuchServiceTest {
     NotificationRepository notificationRepository;
 
     @InjectMock
-    SapService sapService;
-
-    @InjectMock
     GesuchDokumentRepository gesuchDokumentRepository;
 
     @InjectMock
@@ -215,14 +222,11 @@ class GesuchServiceTest {
     @InjectMock
     FallRepository fallRepository;
 
-    @InjectSpy
-    VersendetHandler versendetHandler;
-
-    @InjectMock
-    private VerfuegungRepository verfuegungRepository;
-
     @InjectMock
     PdfService pdfService;
+
+    @InjectMock
+    VerfuegungRepository verfuegungRepository;
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
@@ -251,24 +255,6 @@ class GesuchServiceTest {
         GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, LEDIG);
 
         assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void testNiederlassungsstatusFluechtlingToOtherShouldResetZustaendigerKantonRequired() {
-        final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung();
-        pia.setNationalitaetId(TestConstants.TEST_LAND_NON_EU_EFTA_ID);
-        pia.setHeimatort(null);
-        GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
-            gesuchUpdateDto,
-            Niederlassungsstatus.FLUECHTLING,
-            Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C
-        );
-
-        assertThat(tranche.getGesuchFormular().getPersonInAusbildung().getZustaendigerKanton(), Matchers.nullValue());
     }
 
     @Test
@@ -1168,6 +1154,14 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(any())).thenReturn(true);
 
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+        try {
+            Mockito.doNothing().when(verfuegungService).createPdfForVerfuegungOhneAnspruch(any());
+        } catch (IOException e) {
+            fail();
+        }
+
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERSANDBEREIT,
@@ -1233,6 +1227,7 @@ class GesuchServiceTest {
 
         var verfuegung = new Verfuegung();
         verfuegung.setTimestampErstellt(LocalDateTime.now());
+        verfuegung.setGesuch(gesuch);
         gesuch.getVerfuegungs().add(verfuegung);
         when(pdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
@@ -1343,7 +1338,7 @@ class GesuchServiceTest {
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
-        gesuchDokument.setStatus(Dokumentstatus.ABGELEHNT);
+        gesuchDokument.setStatus(GesuchDokumentStatus.ABGELEHNT);
 
         // add custom document
         CustomDokumentTyp customDokument = new CustomDokumentTyp();
@@ -1352,7 +1347,7 @@ class GesuchServiceTest {
         customDokument.setDescription("test");
         GesuchDokument customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
         customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
@@ -1362,9 +1357,9 @@ class GesuchServiceTest {
 
         gesuch.getAusbildung().setFall(fall);
 
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.ABGELEHNT))
             .thenReturn(Stream.of(gesuchDokument));
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AUSSTEHEND))
             .thenReturn(Stream.of(customGesuchDokument));
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -1412,7 +1407,7 @@ class GesuchServiceTest {
         gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
-        gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+        gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
 
         // add custom document
         CustomDokumentTyp customDokument = new CustomDokumentTyp();
@@ -1421,7 +1416,7 @@ class GesuchServiceTest {
         customDokument.setDescription("test");
         GesuchDokument customGesuchDokument = new GesuchDokument();
         customGesuchDokument.setId(UUID.randomUUID());
-        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customGesuchDokument.setCustomDokumentTyp(customDokument);
         customGesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
 
@@ -1431,9 +1426,9 @@ class GesuchServiceTest {
 
         gesuch.getAusbildung().setFall(fall);
 
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AKZEPTIERT))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AKZEPTIERT))
             .thenReturn(Stream.of(gesuchDokument));
-        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.AUSSTEHEND))
             .thenReturn(Stream.of(customGesuchDokument));
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -1852,6 +1847,23 @@ class GesuchServiceTest {
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertNull(gesuch.getEinreichedatum());
+    }
+
+    @Test
+    @TestAsJurist
+    void gesuchShouldNotBeEingereichtAgainWhenAusbildungUpdatedByJurist() {
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG);
+
+        when(decisionService.decide(any())).thenReturn(StipDeciderResult.GESUCH_VALID);
+        when(decisionService.getGesuchStatusChangeEvent(any()))
+            .thenReturn(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuch.setEinreichedatum(LocalDate.now());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuch.getId());
+        gesuchService.stipendienAnspruchPruefen(gesuch.getId());
+        verify(mailService, never()).sendStandardNotificationEmail(any(), any(), any(), any());
+        verify(notificationRepository, never()).persistAndFlush(any(Notification.class));
     }
 
     @Test

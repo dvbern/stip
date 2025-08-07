@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
-import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -116,19 +115,35 @@ class BernStipDeciderTest {
     }
 
     @Test
-    void testGetDecisionPiaAelter35Jahre() {
+    void testGetDecisionPiaAelter35JahreBeforeBeginOfAusbildung() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
             .getPersonInAusbildung()
-            .setGeburtsdatum(LocalDate.now().minusYears(36));
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusDays(1).minusYears(36));
 
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+    }
+
+    @Test
+    void testGetDecisionPiaExact35JahreAtBeginOfAusbildung() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(gesuch.getAusbildung().getAusbildungBegin().minusYears(35));
+
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Test
@@ -150,11 +165,17 @@ class BernStipDeciderTest {
     void testStipendienrechtlicherWohnsitzKantonBernCheckFluechtlingBern() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING)
-            .setZustaendigerKanton(ZustaendigerKanton.BERN);
+
+        pia.setNationalitaet(LandGenerator.initIran());
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS);
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON);
+
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
 
-        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
@@ -275,12 +296,67 @@ class BernStipDeciderTest {
             .add(
                 new LebenslaufItem().setBildungsart(LebenslaufAusbildungsArt.MASTER).setAusbildungAbgeschlossen(true)
             );
+
+        // pia < 18 years at Ausbildungsbegin
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
-        assertThat(decision).isEqualTo(
+        assertThat(decision).isNotEqualTo(
             StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
         );
 
         var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+
+        // pia >= 18 years at Ausbildungsbegin
+        var ausbildung = gesuch.getAusbildung();
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(ausbildung.getAusbildungBegin().minusYears(18));
+
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG
+        );
+
+        decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+    }
+
+    @Test
+    void testDecisionANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getLebenslaufItems()
+            .add(
+                new LebenslaufItem().setBildungsart(LebenslaufAusbildungsArt.MASTER).setAusbildungAbgeschlossen(true)
+            );
+
+        // pia < 18 years at Ausbildungsbegin
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+
+        // pia >= 18 years at Ausbildungsbegin
+        var ausbildung = gesuch.getAusbildung();
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(ausbildung.getAusbildungBegin().minusYears(18));
+
+        decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isNotEqualTo(
+            StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG
+        );
+
+        decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
     }
 
@@ -305,8 +381,7 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
-        pia.setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING);
-        pia.setZustaendigerKanton(ZustaendigerKanton.ANDERER_KANTON);
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON);
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision)
             .isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN);

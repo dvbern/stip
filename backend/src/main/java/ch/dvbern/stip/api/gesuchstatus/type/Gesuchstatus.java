@@ -34,6 +34,7 @@ public enum Gesuchstatus {
     IN_FREIGABE,
     IN_BEARBEITUNG_GS,
     ANSPRUCH_MANUELL_PRUEFEN,
+    ANSPRUCH_PRUEFEN,
     BEREIT_FUER_BEARBEITUNG,
     EINGEREICHT,
     JURISTISCHE_ABKLAERUNG,
@@ -73,6 +74,12 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> JURIST_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        )
+    );
+
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_SB
         )
     );
 

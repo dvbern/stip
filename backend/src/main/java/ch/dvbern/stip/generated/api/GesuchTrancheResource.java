@@ -9,6 +9,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -116,6 +117,12 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/dokumente/sb")
     @Produces({ "application/json", "text/plain" })
     List<GesuchDokumentDto> getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{aenderungId}/patchAenderungInfo")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto patchAenderungInfo(@PathParam("aenderungId") UUID aenderungId,@Valid @NotNull PatchAenderungsInfoRequestDto patchAenderungsInfoRequestDto);
 
     @GET
     @Path("/validatePages/{gesuchTrancheId}/gs")

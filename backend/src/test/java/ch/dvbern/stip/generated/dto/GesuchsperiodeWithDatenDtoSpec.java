@@ -60,9 +60,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN6,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN7,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PRO_WEITERE_PERSON,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_KINDER0018,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ERWACHSENE2699,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_KINDER0017,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ERWACHSENE2599,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM1PERS,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM2PERS,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM3PERS,
@@ -82,7 +82,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG
 })
 @JsonTypeName("GesuchsperiodeWithDaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -177,14 +178,14 @@ public class GesuchsperiodeWithDatenDtoSpec {
   public static final String JSON_PROPERTY_PRO_WEITERE_PERSON = "proWeiterePerson";
   private Integer proWeiterePerson;
 
-  public static final String JSON_PROPERTY_KINDER0018 = "kinder_00_18";
-  private Integer kinder0018;
+  public static final String JSON_PROPERTY_KINDER0017 = "kinder_00_17";
+  private Integer kinder0017;
 
-  public static final String JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925 = "jugendliche_erwachsene_19_25";
-  private Integer jugendlicheErwachsene1925;
+  public static final String JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824 = "jugendliche_erwachsene_18_24";
+  private Integer jugendlicheErwachsene1824;
 
-  public static final String JSON_PROPERTY_ERWACHSENE2699 = "erwachsene_26_99";
-  private Integer erwachsene2699;
+  public static final String JSON_PROPERTY_ERWACHSENE2599 = "erwachsene_25_99";
+  private Integer erwachsene2599;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM1PERS = "wohnkosten_fam_1pers";
   private Integer wohnkostenFam1pers;
@@ -245,6 +246,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
   public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
   private Integer fristNachreichenDokumente;
+
+  public static final String JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG = "stichtagVolljaehrigkeitMedizinischeGrundversorgung";
+  private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
 
   public GesuchsperiodeWithDatenDtoSpec() {
   }
@@ -1029,81 +1033,81 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec kinder0018(Integer kinder0018) {
+  public GesuchsperiodeWithDatenDtoSpec kinder0017(Integer kinder0017) {
     
-    this.kinder0018 = kinder0018;
+    this.kinder0017 = kinder0017;
     return this;
   }
 
    /**
-   * Get kinder0018
-   * @return kinder0018
+   * Get kinder0017
+   * @return kinder0017
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KINDER0018)
+  @JsonProperty(JSON_PROPERTY_KINDER0017)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getKinder0018() {
-    return kinder0018;
+  public Integer getKinder0017() {
+    return kinder0017;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KINDER0018)
+  @JsonProperty(JSON_PROPERTY_KINDER0017)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKinder0018(Integer kinder0018) {
-    this.kinder0018 = kinder0018;
+  public void setKinder0017(Integer kinder0017) {
+    this.kinder0017 = kinder0017;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
+  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
     
-    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+    this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
     return this;
   }
 
    /**
-   * Get jugendlicheErwachsene1925
-   * @return jugendlicheErwachsene1925
+   * Get jugendlicheErwachsene1824
+   * @return jugendlicheErwachsene1824
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
+  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getJugendlicheErwachsene1925() {
-    return jugendlicheErwachsene1925;
+  public Integer getJugendlicheErwachsene1824() {
+    return jugendlicheErwachsene1824;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
+  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setJugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
-    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+  public void setJugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+    this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec erwachsene2699(Integer erwachsene2699) {
+  public GesuchsperiodeWithDatenDtoSpec erwachsene2599(Integer erwachsene2599) {
     
-    this.erwachsene2699 = erwachsene2699;
+    this.erwachsene2599 = erwachsene2599;
     return this;
   }
 
    /**
-   * Get erwachsene2699
-   * @return erwachsene2699
+   * Get erwachsene2599
+   * @return erwachsene2599
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
+  @JsonProperty(JSON_PROPERTY_ERWACHSENE2599)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getErwachsene2699() {
-    return erwachsene2699;
+  public Integer getErwachsene2599() {
+    return erwachsene2599;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
+  @JsonProperty(JSON_PROPERTY_ERWACHSENE2599)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setErwachsene2699(Integer erwachsene2699) {
-    this.erwachsene2699 = erwachsene2699;
+  public void setErwachsene2599(Integer erwachsene2599) {
+    this.erwachsene2599 = erwachsene2599;
   }
 
 
@@ -1626,6 +1630,32 @@ public class GesuchsperiodeWithDatenDtoSpec {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
 
+
+  public GesuchsperiodeWithDatenDtoSpec stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
+    
+    this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+    return this;
+  }
+
+   /**
+   * dd.MM.yyyy
+   * @return stichtagVolljaehrigkeitMedizinischeGrundversorgung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getStichtagVolljaehrigkeitMedizinischeGrundversorgung() {
+    return stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
+    this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1665,9 +1695,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.personen6, gesuchsperiodeWithDaten.personen6) &&
         Objects.equals(this.personen7, gesuchsperiodeWithDaten.personen7) &&
         Objects.equals(this.proWeiterePerson, gesuchsperiodeWithDaten.proWeiterePerson) &&
-        Objects.equals(this.kinder0018, gesuchsperiodeWithDaten.kinder0018) &&
-        Objects.equals(this.jugendlicheErwachsene1925, gesuchsperiodeWithDaten.jugendlicheErwachsene1925) &&
-        Objects.equals(this.erwachsene2699, gesuchsperiodeWithDaten.erwachsene2699) &&
+        Objects.equals(this.kinder0017, gesuchsperiodeWithDaten.kinder0017) &&
+        Objects.equals(this.jugendlicheErwachsene1824, gesuchsperiodeWithDaten.jugendlicheErwachsene1824) &&
+        Objects.equals(this.erwachsene2599, gesuchsperiodeWithDaten.erwachsene2599) &&
         Objects.equals(this.wohnkostenFam1pers, gesuchsperiodeWithDaten.wohnkostenFam1pers) &&
         Objects.equals(this.wohnkostenFam2pers, gesuchsperiodeWithDaten.wohnkostenFam2pers) &&
         Objects.equals(this.wohnkostenFam3pers, gesuchsperiodeWithDaten.wohnkostenFam3pers) &&
@@ -1687,12 +1717,13 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, gesuchsperiodeWithDaten.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
         Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeWithDaten.zweiterAuszahlungsterminMonat) &&
         Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeWithDaten.zweiterAuszahlungsterminTag) &&
-        Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeWithDaten.fristNachreichenDokumente);
+        Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeWithDaten.fristNachreichenDokumente) &&
+        Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeWithDaten.stichtagVolljaehrigkeitMedizinischeGrundversorgung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente);
+    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung);
   }
 
   @Override
@@ -1729,9 +1760,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    personen6: ").append(toIndentedString(personen6)).append("\n");
     sb.append("    personen7: ").append(toIndentedString(personen7)).append("\n");
     sb.append("    proWeiterePerson: ").append(toIndentedString(proWeiterePerson)).append("\n");
-    sb.append("    kinder0018: ").append(toIndentedString(kinder0018)).append("\n");
-    sb.append("    jugendlicheErwachsene1925: ").append(toIndentedString(jugendlicheErwachsene1925)).append("\n");
-    sb.append("    erwachsene2699: ").append(toIndentedString(erwachsene2699)).append("\n");
+    sb.append("    kinder0017: ").append(toIndentedString(kinder0017)).append("\n");
+    sb.append("    jugendlicheErwachsene1824: ").append(toIndentedString(jugendlicheErwachsene1824)).append("\n");
+    sb.append("    erwachsene2599: ").append(toIndentedString(erwachsene2599)).append("\n");
     sb.append("    wohnkostenFam1pers: ").append(toIndentedString(wohnkostenFam1pers)).append("\n");
     sb.append("    wohnkostenFam2pers: ").append(toIndentedString(wohnkostenFam2pers)).append("\n");
     sb.append("    wohnkostenFam3pers: ").append(toIndentedString(wohnkostenFam3pers)).append("\n");
@@ -1752,6 +1783,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
     sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
+    sb.append("    stichtagVolljaehrigkeitMedizinischeGrundversorgung: ").append(toIndentedString(stichtagVolljaehrigkeitMedizinischeGrundversorgung)).append("\n");
     sb.append("}");
     return sb.toString();
   }
