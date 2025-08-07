@@ -1,6 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+import { GesuchService, GesuchsperiodeService } from '@dv/shared/model/gesuch';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+
 import { ChangeGesuchsperiodeStore } from './shared-data-access-change-gesuchsperiode.store';
 
 describe('ChangeGesuchsperiodeStore', () => {
@@ -8,7 +12,24 @@ describe('ChangeGesuchsperiodeStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ChangeGesuchsperiodeStore, provideHttpClient()],
+      providers: [
+        ChangeGesuchsperiodeStore,
+        {
+          provide: GesuchsperiodeService,
+          useValue: {
+            getAllAssignableGesuchsperiode$: jest.fn(),
+          },
+        },
+        {
+          provide: GesuchService,
+          useValue: {
+            setGesuchsperiodeForGesuch$: jest.fn(),
+          },
+        },
+        provideHttpClient(),
+        provideSharedPatternJestTestSetup(),
+        provideHttpClient(),
+      ],
     });
     store = TestBed.inject(ChangeGesuchsperiodeStore);
   });

@@ -18,9 +18,13 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   SharedUiFormFieldDirective,
@@ -28,8 +32,6 @@ import {
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
-import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-dialog-change-gesuchsperiode',
@@ -106,6 +108,7 @@ export class SharedDialogChangeGesuchsperiodeComponent {
         this.globalNotificationStore.createSuccessNotification({
           messageKey: 'shared.dialog.change-gesuchsperiode.success',
         });
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
         this.dialogRef.close({ gesuchTrancheId });
       },
     });

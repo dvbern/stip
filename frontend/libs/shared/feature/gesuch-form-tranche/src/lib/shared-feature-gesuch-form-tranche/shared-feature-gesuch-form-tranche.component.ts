@@ -20,6 +20,8 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
@@ -27,6 +29,7 @@ import {
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -49,8 +52,6 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-tranche',

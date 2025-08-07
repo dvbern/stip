@@ -5,6 +5,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
 import {
   sharedDataAccessGesuchEffects,
   sharedDataAccessGesuchsFeature,
@@ -12,7 +13,6 @@ import {
 import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
 import { routes } from './app.routes';
-import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
 
 export const appConfig: ApplicationConfig = {
   providers: [
