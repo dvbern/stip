@@ -704,11 +704,9 @@ public class GesuchService {
             kommentarDto,
             false
         );
-        gesuchStatusService
-            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void changeGesuchStatusToNegativeVerfuegungManuell(
         final UUID gesuchId,
         final FileUpload fileUpload,
@@ -738,21 +736,23 @@ public class GesuchService {
             kommentarDto,
             false
         );
-        gesuchStatusService
-            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-            throw new CustomValidationsException(
-                "Required Unterschriftenblaetter are not uploaded",
-                new CustomConstraintViolation(
-                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                    "unterschriftenblaetter"
-                )
-            );
+        final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
+
+        if (!latestVerfuegung.isNegativeVerfuegung()) {
+            if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
+                throw new CustomValidationsException(
+                    "Required Unterschriftenblaetter are not uploaded",
+                    new CustomConstraintViolation(
+                        VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                        "unterschriftenblaetter"
+                    )
+                );
+            }
         }
 
         gesuchStatusService.triggerStateMachineEvent(
@@ -811,6 +811,14 @@ public class GesuchService {
             gesuchFormularToUse.getPersonInAusbildung().getNachname(),
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
         );
+    }
+
+    public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+            .orElseThrow(NotFoundException::new);
     }
 
     @Transactional

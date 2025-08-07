@@ -17,14 +17,12 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {
     private final VerfuegungService verfuegungService;
+    private final GesuchService gesuchService;
 
     @Override
     public void handle(Gesuch gesuch) {
-        final var latestVerfuegung = gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-            .orElseThrow(NotFoundException::new);
+        final var latestVerfuegung = gesuchService.getLatestVerfuegungForGesuch(gesuch.getId());
         if (Objects.nonNull(latestVerfuegung.getStipDecision())) {
             verfuegungService.createPdfForNegtativeVerfuegung(latestVerfuegung);
         }

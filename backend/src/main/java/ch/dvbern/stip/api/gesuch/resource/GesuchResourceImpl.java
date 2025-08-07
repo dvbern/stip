@@ -143,6 +143,7 @@ public class GesuchResourceImpl implements GesuchResource {
             gesuchId,
             ausgewaehlterGrundDto
         );
+        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -163,6 +164,7 @@ public class GesuchResourceImpl implements GesuchResource {
             fileUpload,
             kommentar
         );
+        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
