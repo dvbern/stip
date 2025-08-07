@@ -28,14 +28,7 @@
       "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#f85c05",
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic",
     "git.blame.statusBarItem.enabled": false,
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
-    "java.autobuild.enabled": false,
-    "java.import.maven.enabled": false,
-    "java.import.gradle.enabled": false,
-    "java.format.onType.enabled": false,
-    "java.format.comments.enabled": false,
   }
 }

@@ -79,7 +79,28 @@ export class DokumentsStore extends signalStore(
     });
   }
 
-  private getDcumentsToUploadByAppType$(gesuchTrancheId: string) {
+  private getGesuchDokumentByAppType$({
+    trancheId,
+    dokumentTyp,
+  }: {
+    trancheId: string;
+    dokumentTyp: DokumentTyp;
+  }) {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () =>
+        this.dokumentService.getGesuchDokumentForTypGS$({
+          gesuchTrancheId: trancheId,
+          dokumentTyp,
+        }),
+      'sachbearbeitung-app': () =>
+        this.dokumentService.getGesuchDokumentForTypSB$({
+          gesuchTrancheId: trancheId,
+          dokumentTyp,
+        }),
+    });
+  }
+
+  private getDocumentsToUploadByAppType$(gesuchTrancheId: string) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
         this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
@@ -91,6 +112,14 @@ export class DokumentsStore extends signalStore(
   setExpandedList(list: 'custom' | 'required' | undefined) {
     patchState(this, { expandedComponentList: list });
   }
+
+  resetGesuchDokumentStateToInitial = rxMethod(
+    tap(() => {
+      patchState(this, {
+        dokument: initial(),
+      });
+    }),
+  );
 
   dokumenteCanFlagsSig = computed(() => {
     const {
@@ -233,7 +262,7 @@ export class DokumentsStore extends signalStore(
     return hasDokumenteWithoutDocuments || hasRequiredDokumenteWithoutDokument;
   });
 
-  getRequiredGesuchDokument$ = rxMethod<{
+  getGesuchDokument$ = rxMethod<{
     trancheId: string;
     dokumentTyp: DokumentTyp;
   }>(
@@ -244,14 +273,8 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(({ trancheId, dokumentTyp }) => {
-        if (this.config.appType === 'gesuch-app') {
-          return this.dokumentService.getGesuchDokumentForTypGS$({
-            gesuchTrancheId: trancheId,
-            dokumentTyp,
-          });
-        }
-        return this.dokumentService.getGesuchDokumentForTypSB$({
-          gesuchTrancheId: trancheId,
+        return this.getGesuchDokumentByAppType$({
+          trancheId,
           dokumentTyp,
         });
       }),
@@ -264,12 +287,140 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  resetGesuchDokumentStateToInitial = rxMethod(
-    tap(() => {
-      patchState(this, {
-        dokument: initial(),
-      });
-    }),
+  /**
+   * Get all gesuch dokumente and documents to be uploaded
+   * @param gesuchTrancheId
+   * @param ignoreCache If true, the dokuments will ignore the cache when setting pending state
+   */
+  getGesuchDokumenteAndDocumentsToUpload$ = rxMethod<{
+    gesuchTrancheId: string;
+    ignoreCache?: boolean;
+  }>(
+    pipe(
+      tap(({ ignoreCache }) => {
+        patchState(this, (state) => ({
+          dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
+          documentsToUpload: cachedPending(state.documentsToUpload),
+        }));
+      }),
+      switchMap(({ gesuchTrancheId }) =>
+        combineLatest([
+          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
+          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+        ]),
+      ),
+      tapResponse({
+        next: ([dokuments, documentsToUpload]) => {
+          patchState(this, () => ({
+            // Patch both lists at the same time to avoid unecessary rerenders
+            dokuments: success(dokuments),
+            documentsToUpload: success(documentsToUpload),
+          }));
+        },
+        // Achtung! Dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
+        // vom combineLatest passiert!
+        error: (error) => {
+          patchState(this, () => ({
+            dokuments: failure(error),
+            documentsToUpload: failure(error),
+          }));
+        },
+      }),
+      catchRemoteDataError((error) => {
+        patchState(this, () => ({
+          dokuments: failure(error),
+          documentsToUpload: failure(error),
+        }));
+      }),
+    ),
+  );
+
+  // get Unterschriftenblaetter
+  getAdditionalDokumente$ = rxMethod<{
+    gesuchId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          additionalDokumente: cachedPending(state.additionalDokumente),
+        }));
+      }),
+      switchMap(({ gesuchId }) =>
+        this.dokumentService
+          .getUnterschriftenblaetterForGesuch$({ gesuchId })
+          .pipe(
+            handleApiResponse((additionalDokumente) =>
+              patchState(this, { additionalDokumente }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  // get Unterschriftenblaetter
+  getAdditionalDokumenteAndDocumentsToUpload$ = rxMethod<{
+    gesuchId: string;
+    gesuchTrancheId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          additionalDokumente: cachedPending(state.additionalDokumente),
+        }));
+      }),
+      switchMap(({ gesuchId, gesuchTrancheId }) =>
+        combineLatest([
+          this.dokumentService.getUnterschriftenblaetterForGesuch$({
+            gesuchId,
+          }),
+          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+        ]).pipe(
+          tapResponse({
+            next: ([additionalDokumente, documentsToUpload]) => {
+              patchState(this, () => ({
+                // Patch both lists at the same time to avoid unecessary rerenders
+                additionalDokumente: success(additionalDokumente),
+                documentsToUpload: success(documentsToUpload),
+              }));
+            },
+            // Achtung! Dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
+            // vom combineLatest passiert!
+            error: (error) => {
+              patchState(this, () => ({
+                additionalDokumente: failure(error),
+                documentsToUpload: failure(error),
+              }));
+            },
+          }),
+          catchRemoteDataError((error) => {
+            patchState(this, () => ({
+              additionalDokumente: failure(error),
+              documentsToUpload: failure(error),
+            }));
+          }),
+        ),
+      ),
+    ),
+  );
+
+  // get all missing documents that need to be uploaded
+  getDocumentsToUpload$ = rxMethod<{
+    gesuchTrancheId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          documentsToUpload: cachedPending(state.documentsToUpload),
+        }));
+      }),
+      switchMap(({ gesuchTrancheId }) =>
+        this.getDocumentsToUploadByAppType$(gesuchTrancheId).pipe(
+          handleApiResponse((documentsToUpload) =>
+            patchState(this, { documentsToUpload }),
+          ),
+        ),
+      ),
+    ),
   );
 
   getGesuchDokumentKommentare$ = rxMethod<{
@@ -304,6 +455,64 @@ export class DokumentsStore extends signalStore(
           ),
         );
       }),
+    ),
+  );
+
+  createCustomDokumentTyp$ = rxMethod<{
+    trancheId: string;
+    type: string;
+    description: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ trancheId, type, description, onSuccess }) =>
+        this.dokumentService
+          .createCustomDokumentTyp$({
+            customDokumentTypCreate: {
+              description,
+              trancheId,
+              type,
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'shared.dokumente.createCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
+      ),
+    ),
+  );
+
+  deleteCustomDokumentTyp$ = rxMethod<{
+    customDokumentTypId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ customDokumentTypId, onSuccess }) =>
+        this.dokumentService
+          .deleteCustomDokumentTyp$({
+            customDokumentTypId,
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'shared.dokumente.deleteCustomDokumentTyp.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
+      ),
     ),
   );
 
@@ -468,7 +677,7 @@ export class DokumentsStore extends signalStore(
         return serviceMap$[tranchenTyp]().pipe(
           tapResponse({
             next: () => {
-              this.getRequiredDocumentTypes$(trancheId);
+              this.getDocumentsToUploadByAppType$(trancheId);
               onSuccess();
             },
             error: (error) => {
@@ -483,162 +692,6 @@ export class DokumentsStore extends signalStore(
           }),
         );
       }),
-    ),
-  );
-
-  getDokumenteAndRequired$ = rxMethod<{
-    gesuchTrancheId: string;
-    ignoreCache?: boolean;
-  }>(
-    pipe(
-      tap(({ ignoreCache }) => {
-        patchState(this, (state) => ({
-          dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
-          documentsToUpload: cachedPending(state.documentsToUpload),
-        }));
-      }),
-      switchMap(({ gesuchTrancheId }) =>
-        combineLatest([
-          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
-          this.getDcumentsToUploadByAppType$(gesuchTrancheId),
-        ]),
-      ),
-      tapResponse({
-        next: ([dokuments, documentsToUpload]) => {
-          patchState(this, () => ({
-            // Patch both lists at the same time to avoid unecessary rerenders
-            dokuments: success(dokuments),
-            documentsToUpload: success(documentsToUpload),
-          }));
-        },
-        // @scph dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
-        // vom combineLatest passiert. Wie koennen wir das beheben?
-        error: (error) => {
-          patchState(this, () => ({
-            dokuments: failure(error),
-            documentsToUpload: failure(error),
-          }));
-        },
-      }),
-      catchRemoteDataError((error) => {
-        patchState(this, () => ({
-          dokuments: failure(error),
-          documentsToUpload: failure(error),
-        }));
-      }),
-    ),
-  );
-
-  getGesuchDokumente$ = rxMethod<{
-    gesuchTrancheId: string;
-    ignoreCache?: boolean;
-  }>(
-    pipe(
-      tap(({ ignoreCache }) => {
-        patchState(this, (state) => ({
-          dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
-        }));
-      }),
-      switchMap(({ gesuchTrancheId }) =>
-        this.getGesuchDokumenteByAppType$(gesuchTrancheId),
-      ),
-      handleApiResponse((dokuments) => patchState(this, { dokuments })),
-    ),
-  );
-
-  getAdditionalDokumente$ = rxMethod<{
-    gesuchId: string;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          additionalDokumente: cachedPending(state.additionalDokumente),
-        }));
-      }),
-      switchMap(({ gesuchId }) =>
-        this.dokumentService
-          .getUnterschriftenblaetterForGesuch$({ gesuchId })
-          .pipe(
-            handleApiResponse((additionalDokumente) =>
-              patchState(this, { additionalDokumente }),
-            ),
-          ),
-      ),
-    ),
-  );
-
-  getRequiredDocumentTypes$ = rxMethod<string>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          documentsToUpload: cachedPending(state.documentsToUpload),
-        }));
-      }),
-      switchMap((gesuchTrancheId) =>
-        this.getDcumentsToUploadByAppType$(gesuchTrancheId).pipe(
-          handleApiResponse((documentsToUpload) =>
-            patchState(this, { documentsToUpload }),
-          ),
-        ),
-      ),
-    ),
-  );
-
-  createCustomDokumentTyp$ = rxMethod<{
-    trancheId: string;
-    type: string;
-    description: string;
-    onSuccess: () => void;
-  }>(
-    pipe(
-      switchMap(({ trancheId, type, description, onSuccess }) =>
-        this.dokumentService
-          .createCustomDokumentTyp$({
-            customDokumentTypCreate: {
-              description,
-              trancheId,
-              type,
-            },
-          })
-          .pipe(
-            tapResponse({
-              next: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'shared.dokumente.createCustomDokumentTyp.success',
-                });
-                onSuccess();
-              },
-              error: () => undefined,
-            }),
-          ),
-      ),
-    ),
-  );
-
-  deleteCustomDokumentTyp$ = rxMethod<{
-    customDokumentTypId: string;
-    onSuccess: () => void;
-  }>(
-    pipe(
-      switchMap(({ customDokumentTypId, onSuccess }) =>
-        this.dokumentService
-          .deleteCustomDokumentTyp$({
-            customDokumentTypId,
-          })
-          .pipe(
-            tapResponse({
-              next: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'shared.dokumente.deleteCustomDokumentTyp.success',
-                });
-                onSuccess();
-              },
-              error: () => undefined,
-            }),
-          ),
-      ),
     ),
   );
 

@@ -149,7 +149,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
       if (gesuchTrancheId) {
-        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
+          gesuchTrancheId,
+        });
       }
     });
 
