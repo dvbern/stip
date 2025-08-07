@@ -682,7 +682,7 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void changeGesuchStatusToNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final AusgewaehlterGrundDto ausgewaehlterGrundDto
