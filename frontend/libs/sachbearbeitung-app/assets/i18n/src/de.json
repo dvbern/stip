@@ -197,6 +197,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status.INACTIVE": "Inaktiv",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.title": "Ausbildungsgang erstellen",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.success": "Der Ausbildungsgang wurde erfolgreich erstellt.",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.error.conflict": "Dieser Ausbildungsgang exisitiert bereits.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.title": "Ausbildungsgang archivieren",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.message": "Der Ausbildungsgang \"{{ bezeichnungDe }}\" wird archiviert. Möchten Sie fortfahren?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.archiveDialog.success": "Der Ausbildungsgang wurde erfolgreich archiviert.",

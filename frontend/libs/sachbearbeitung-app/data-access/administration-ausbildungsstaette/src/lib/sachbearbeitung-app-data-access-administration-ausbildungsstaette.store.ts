@@ -8,6 +8,7 @@ import {
   Abschluss,
   AbschlussSlim,
   Ausbildungsgang,
+  AusbildungsgangSlim,
   Ausbildungsstaette,
   AusbildungsstaetteService,
   AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams,
@@ -33,6 +34,7 @@ type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
 type AusbildungsstaetteState = {
   lastCreate: RemoteData<unknown>;
   availableAbschluesse: CachedRemoteData<AbschlussSlim[]>;
+  allAusbildungsgaenge: CachedRemoteData<AusbildungsgangSlim[]>;
   ausbildungsgaenge: CachedRemoteData<PaginatedAusbildungsgang>;
   ausbildungsstaetten: CachedRemoteData<PaginatedAusbildungsstaette>;
   abschluesse: CachedRemoteData<PaginatedAbschluss>;
@@ -41,6 +43,7 @@ type AusbildungsstaetteState = {
 const initialState: AusbildungsstaetteState = {
   lastCreate: initial(),
   availableAbschluesse: initial(),
+  allAusbildungsgaenge: initial(),
   ausbildungsgaenge: initial(),
   ausbildungsstaetten: initial(),
   abschluesse: initial(),
@@ -83,6 +86,25 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
           .pipe(
             handleApiResponse((availableAbschluesse) =>
               patchState(this, { availableAbschluesse }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  loadAllAusbildungsgaenge$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          allAusbildungsgaenge: cachedPending(state.allAusbildungsgaenge),
+        }));
+      }),
+      switchMap(() =>
+        this.ausbildungsstaetteService
+          .getAllAusbildungsgaengeForAuswahl$()
+          .pipe(
+            handleApiResponse((allAusbildungsgaenge) =>
+              patchState(this, { allAusbildungsgaenge }),
             ),
           ),
       ),

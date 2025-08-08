@@ -10,10 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface AusbildungsgangSlim { 
-    id: string;
-    abschlussId: string;
-    ausbildungsstaetteId: string;
-    aktiv: boolean;
+export interface RenameAusbildungsstaette { 
+    nameDe: string;
+    nameFr: string;
 }
 

@@ -9,12 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AusbildungsgangSlim } from './ausbildungsgangSlim';
+import { AusbildungsgangData } from './ausbildungsgangData';
 
 export interface AusbildungsstaetteSlim { 
     id: string;
     nameDe: string;
     nameFr: string;
-    ausbildungsgaenge: Array<AusbildungsgangSlim>;
+    ausbildungsgaenge: Array<AusbildungsgangData>;
 }
 

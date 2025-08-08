@@ -200,6 +200,7 @@ export class AusbildungsgangComponent
   constructor() {
     this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
     this.administrationAusbildungsstaetteStore.loadAvailableAbschluesse$();
+    this.administrationAusbildungsstaetteStore.loadAllAusbildungsgaenge$();
 
     limitPageToNumberOfEntriesEffect(
       this,
@@ -284,6 +285,9 @@ export class AusbildungsgangComponent
 
   createAusbildungsgang() {
     CreateAusbildungsgangDialogComponent.open(this.dialog, {
+      existingAusbildungsgaenge:
+        this.administrationAusbildungsstaetteStore.allAusbildungsgaenge()
+          .data ?? [],
       ausbildungsstaetten:
         this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
       abschluesse: sortListByText(

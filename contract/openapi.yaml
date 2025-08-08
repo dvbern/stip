@@ -3937,6 +3937,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllAbschluessForAuswahl
       summary: Returns all AbschlussSlim
+  /ausbildungsgang/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AusbildungsgangSlim'
+          description: Returns all AusbildungsgaengeSlim
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllAusbildungsgaengeForAuswahl
+      summary: Returns all AusbildungsgaengeSlim
   /ausbildungsgang:
     post:
       tags:
@@ -5733,6 +5754,22 @@ components:
           $ref: '#/components/schemas/Ausbildungsstaette'
         aktiv:
           type: boolean
+    AusbildungsgangSlim:
+      type: object
+      required:
+        - id
+        - abschlussId
+        - ausbildungsstaetteId
+        - aktiv
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        abschlussId:
+          $ref: '#/components/schemas/UUID'
+        ausbildungsstaetteId:
+          $ref: '#/components/schemas/UUID'
+        aktiv:
+          type: boolean
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -5751,7 +5788,7 @@ components:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-    AusbildungsgangSlim:
+    AusbildungsgangData:
       type: object
       required:
         - id
@@ -5788,7 +5825,7 @@ components:
         ausbildungsgaenge:
           type: array
           items:
-            $ref: '#/components/schemas/AusbildungsgangSlim'
+            $ref: '#/components/schemas/AusbildungsgangData'
     AbschlussSlim:
       type: object
       required:
@@ -5807,8 +5844,6 @@ components:
           $ref: '#/components/schemas/Ausbildungskategorie'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
-    Ausbildungsort:
-      type: string
     GesuchsperiodeWithDaten:
       required:
         - id

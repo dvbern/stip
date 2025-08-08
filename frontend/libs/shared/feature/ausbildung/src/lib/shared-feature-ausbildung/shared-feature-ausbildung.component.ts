@@ -42,7 +42,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
-  AusbildungsgangSlim,
+  AusbildungsgangData,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
 import {
@@ -157,7 +157,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       [Validators.required],
     ],
     ausbildungsgang: [
-      <AusbildungsgangSlim | undefined>undefined,
+      <AusbildungsgangData | undefined>undefined,
       [Validators.required],
     ],
     besuchtBMS: [false, []],

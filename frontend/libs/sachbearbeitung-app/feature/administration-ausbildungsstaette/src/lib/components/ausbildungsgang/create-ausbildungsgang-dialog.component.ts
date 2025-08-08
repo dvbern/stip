@@ -7,8 +7,10 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -25,6 +27,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   AbschlussSlim,
   AusbildungsgangCreate,
+  AusbildungsgangSlim,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
@@ -38,6 +41,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type CreateAbschlussData = {
+  existingAusbildungsgaenge: AusbildungsgangSlim[];
   ausbildungsstaetten: (AusbildungsstaetteSlim & LookupType)[];
   abschluesse: AbschlussSlim[];
   language: Language;
@@ -70,13 +74,20 @@ export class CreateAusbildungsgangDialogComponent {
   translate = inject(TranslateService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
-  form = this.formBuilder.group({
-    ausbildungsstaetteId: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
-    abschluss: [<AbschlussSlim | null>null, Validators.required],
-  });
+  form = this.formBuilder.group(
+    {
+      ausbildungsstaetteId: [
+        <string | undefined>undefined,
+        [Validators.required],
+      ],
+      abschluss: [<AbschlussSlim | null>null, [Validators.required]],
+    },
+    {
+      validators: validateUniqueCombination(
+        this.dialogData.existingAusbildungsgaenge,
+      ),
+    },
+  );
   formValueChangedSig = toSignal(this.form.valueChanges);
   ausbildungsstaetteIdChangedSig = toSignal(
     this.form.controls.ausbildungsstaetteId.valueChanges,
@@ -128,3 +139,32 @@ export class CreateAusbildungsgangDialogComponent {
     this.dialogRef.close();
   }
 }
+
+const validateUniqueCombination =
+  (existingAusbildungsgaenge: AusbildungsgangSlim[]): ValidatorFn =>
+  (
+    formGroup: AbstractControl<{
+      ausbildungsstaetteId: AbstractControl<string | undefined>;
+      abschluss: AbstractControl<AbschlussSlim | null>;
+    }>,
+  ) => {
+    const { id: abschlussId } = formGroup.getRawValue().abschluss ?? {};
+    const ausbildungsstaetteId = formGroup.getRawValue().ausbildungsstaetteId;
+
+    if (!ausbildungsstaetteId || !abschlussId) {
+      return null;
+    }
+
+    if (
+      existingAusbildungsgaenge.some(
+        (ausbildugnsgang) =>
+          ausbildugnsgang.aktiv &&
+          ausbildugnsgang.abschlussId === abschlussId &&
+          ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId,
+      )
+    ) {
+      return { conflict: true };
+    }
+
+    return null;
+  };

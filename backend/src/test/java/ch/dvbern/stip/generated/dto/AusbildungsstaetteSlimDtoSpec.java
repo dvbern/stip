@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDataDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -50,7 +50,7 @@ public class AusbildungsstaetteSlimDtoSpec {
   private String nameFr;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSGAENGE = "ausbildungsgaenge";
-  private List<AusbildungsgangSlimDtoSpec> ausbildungsgaenge;
+  private List<AusbildungsgangDataDtoSpec> ausbildungsgaenge;
 
   public AusbildungsstaetteSlimDtoSpec() {
   }
@@ -133,13 +133,13 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  public AusbildungsstaetteSlimDtoSpec ausbildungsgaenge(List<AusbildungsgangSlimDtoSpec> ausbildungsgaenge) {
+  public AusbildungsstaetteSlimDtoSpec ausbildungsgaenge(List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
     
     this.ausbildungsgaenge = ausbildungsgaenge;
     return this;
   }
 
-  public AusbildungsstaetteSlimDtoSpec addAusbildungsgaengeItem(AusbildungsgangSlimDtoSpec ausbildungsgaengeItem) {
+  public AusbildungsstaetteSlimDtoSpec addAusbildungsgaengeItem(AusbildungsgangDataDtoSpec ausbildungsgaengeItem) {
     if (this.ausbildungsgaenge == null) {
       this.ausbildungsgaenge = new ArrayList<>();
     }
@@ -155,14 +155,14 @@ public class AusbildungsstaetteSlimDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<AusbildungsgangSlimDtoSpec> getAusbildungsgaenge() {
+  public List<AusbildungsgangDataDtoSpec> getAusbildungsgaenge() {
     return ausbildungsgaenge;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsgaenge(List<AusbildungsgangSlimDtoSpec> ausbildungsgaenge) {
+  public void setAusbildungsgaenge(List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 

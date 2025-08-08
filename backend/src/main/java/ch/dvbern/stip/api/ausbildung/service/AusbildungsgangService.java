@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,6 +32,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -53,6 +55,14 @@ public class AusbildungsgangService {
 
         ausbildungsgangRepository.persist(ausbildungsgang);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
+    }
+
+    @Transactional
+    public List<AusbildungsgangSlimDto> getAllAusbildungsgangForAuswahl() {
+        return ausbildungsgangRepository.findAll()
+            .stream()
+            .map(ausbildungsgangMapper::toSlimDto)
+            .toList();
     }
 
     public PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(

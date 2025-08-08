@@ -21,11 +21,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungsgangSlimDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
-  private @Valid Boolean askForBerufsmaturitaet;
+  private @Valid UUID abschlussId;
+  private @Valid UUID ausbildungsstaetteId;
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -48,95 +46,59 @@ public class AusbildungsgangSlimDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangSlimDto bezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
+  public AusbildungsgangSlimDto abschlussId(UUID abschlussId) {
+    this.abschlussId = abschlussId;
     return this;
   }
 
   
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty("abschlussId")
   @NotNull
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
+  public UUID getAbschlussId() {
+    return abschlussId;
   }
 
-  @JsonProperty("bezeichnungDe")
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
+  @JsonProperty("abschlussId")
+  public void setAbschlussId(UUID abschlussId) {
+    this.abschlussId = abschlussId;
   }
 
   /**
    **/
-  public AusbildungsgangSlimDto bezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
+  public AusbildungsgangSlimDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
+    this.ausbildungsstaetteId = ausbildungsstaetteId;
     return this;
   }
 
   
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty("ausbildungsstaetteId")
   @NotNull
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
+  public UUID getAusbildungsstaetteId() {
+    return ausbildungsstaetteId;
   }
 
-  @JsonProperty("bezeichnungFr")
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
+  @JsonProperty("ausbildungsstaetteId")
+  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
+    this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
 
   /**
    **/
-  public AusbildungsgangSlimDto bildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
-    this.bildungskategorie = bildungskategorie;
+  public AusbildungsgangSlimDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
     return this;
   }
 
   
-  @JsonProperty("bildungskategorie")
+  @JsonProperty("aktiv")
   @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
-    return bildungskategorie;
+  public Boolean getAktiv() {
+    return aktiv;
   }
 
-  @JsonProperty("bildungskategorie")
-  public void setBildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
-    this.bildungskategorie = bildungskategorie;
-  }
-
-  /**
-   **/
-  public AusbildungsgangSlimDto zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
-    this.zusatzfrage = zusatzfrage;
-    return this;
-  }
-
-  
-  @JsonProperty("zusatzfrage")
-  public ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage getZusatzfrage() {
-    return zusatzfrage;
-  }
-
-  @JsonProperty("zusatzfrage")
-  public void setZusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
-    this.zusatzfrage = zusatzfrage;
-  }
-
-  /**
-   **/
-  public AusbildungsgangSlimDto askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
-    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
-    return this;
-  }
-
-  
-  @JsonProperty("askForBerufsmaturitaet")
-  public Boolean getAskForBerufsmaturitaet() {
-    return askForBerufsmaturitaet;
-  }
-
-  @JsonProperty("askForBerufsmaturitaet")
-  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
-    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
 
@@ -150,16 +112,14 @@ public class AusbildungsgangSlimDto  implements Serializable {
     }
     AusbildungsgangSlimDto ausbildungsgangSlim = (AusbildungsgangSlimDto) o;
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
-        Objects.equals(this.bezeichnungDe, ausbildungsgangSlim.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgangSlim.bezeichnungFr) &&
-        Objects.equals(this.bildungskategorie, ausbildungsgangSlim.bildungskategorie) &&
-        Objects.equals(this.zusatzfrage, ausbildungsgangSlim.zusatzfrage) &&
-        Objects.equals(this.askForBerufsmaturitaet, ausbildungsgangSlim.askForBerufsmaturitaet);
+        Objects.equals(this.abschlussId, ausbildungsgangSlim.abschlussId) &&
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangSlim.ausbildungsstaetteId) &&
+        Objects.equals(this.aktiv, ausbildungsgangSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage, askForBerufsmaturitaet);
+    return Objects.hash(id, abschlussId, ausbildungsstaetteId, aktiv);
   }
 
   @Override
@@ -168,11 +128,9 @@ public class AusbildungsgangSlimDto  implements Serializable {
     sb.append("class AusbildungsgangSlimDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
-    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
-    sb.append("    askForBerufsmaturitaet: ").append(toIndentedString(askForBerufsmaturitaet)).append("\n");
+    sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
+    sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -43,6 +43,7 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
             .where(
                 ausbildungsgang.ausbildungsstaette.id.eq(ausbildungsstaetteId)
                     .and(ausbildungsgang.abschluss.id.eq(abschlussId))
+                    .and(ausbildungsgang.aktiv)
             )
             .stream()
             .findFirst();

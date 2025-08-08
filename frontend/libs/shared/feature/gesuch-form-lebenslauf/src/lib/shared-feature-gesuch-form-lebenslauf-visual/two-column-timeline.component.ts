@@ -14,7 +14,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import {
   Ausbildung,
-  AusbildungsgangSlim,
+  AusbildungsgangData,
   AusbildungsstaetteSlim,
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
@@ -212,7 +212,7 @@ export class TwoColumnTimelineComponent {
   protected readonly printDateAsMonthYear = printDateAsMonthYear;
 
   private getTranslatedAusbildungsgangBezeichung(
-    ausbildungsgang: AusbildungsgangSlim | undefined,
+    ausbildungsgang: AusbildungsgangData | undefined,
   ): string | undefined {
     if (ausbildungsgang === undefined) {
       return undefined;

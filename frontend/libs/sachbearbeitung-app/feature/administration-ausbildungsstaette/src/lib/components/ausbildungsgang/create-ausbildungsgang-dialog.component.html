@@ -24,7 +24,7 @@
           disabled
         />
       </mat-form-field>
-      <div dvSharedUiFormField class="tw-w-full">
+      <div class="tw-w-full">
         <dv-shared-ui-select-search
           [formControl]="form.controls.ausbildungsstaetteId"
           [testIdSig]="'administration-ausbildungsstaette-select-aubildungsstaette'"
@@ -57,6 +57,16 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+
+      @if (form.errors?.['conflict'] && form.dirty) {
+        <div class="group-errors">
+          <mat-error>
+            {{
+              'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.error.conflict' | translate
+            }}
+          </mat-error>
+        </div>
+      }
     </div>
 
     <div class="tw-mt-5 tw-flex tw-justify-between">

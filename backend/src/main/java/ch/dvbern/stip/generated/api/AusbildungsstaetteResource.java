@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
@@ -59,6 +60,11 @@ public interface AusbildungsstaetteResource {
     @Path("/abschluss")
     @Produces({ "application/json", "text/plain" })
     PaginatedAbschlussDto getAllAbschlussForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("ausbildungskategorie")   ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie,@QueryParam("bildungsrichtung")   ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung,@QueryParam("bezeichnungDe")   String bezeichnungDe,@QueryParam("bezeichnungFr")   String bezeichnungFr,@QueryParam("aktiv")   Boolean aktiv);
+
+    @GET
+    @Path("/ausbildungsgang/slim")
+    @Produces({ "application/json", "text/plain" })
+    List<AusbildungsgangSlimDto> getAllAusbildungsgaengeForAuswahl();
 
     @GET
     @Path("/ausbildungsgang")

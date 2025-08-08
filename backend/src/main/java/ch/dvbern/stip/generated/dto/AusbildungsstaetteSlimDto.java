@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDataDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String nameDe;
   private @Valid String nameFr;
-  private @Valid List<AusbildungsgangSlimDto> ausbildungsgaenge = new ArrayList<>();
+  private @Valid List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
 
   /**
    **/
@@ -88,7 +88,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<AusbildungsgangSlimDto> ausbildungsgaenge) {
+  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
     return this;
   }
@@ -96,16 +96,16 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   
   @JsonProperty("ausbildungsgaenge")
   @NotNull
-  public List<AusbildungsgangSlimDto> getAusbildungsgaenge() {
+  public List<AusbildungsgangDataDto> getAusbildungsgaenge() {
     return ausbildungsgaenge;
   }
 
   @JsonProperty("ausbildungsgaenge")
-  public void setAusbildungsgaenge(List<AusbildungsgangSlimDto> ausbildungsgaenge) {
+  public void setAusbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 
-  public AusbildungsstaetteSlimDto addAusbildungsgaengeItem(AusbildungsgangSlimDto ausbildungsgaengeItem) {
+  public AusbildungsstaetteSlimDto addAusbildungsgaengeItem(AusbildungsgangDataDto ausbildungsgaengeItem) {
     if (this.ausbildungsgaenge == null) {
       this.ausbildungsgaenge = new ArrayList<>();
     }
@@ -114,7 +114,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     return this;
   }
 
-  public AusbildungsstaetteSlimDto removeAusbildungsgaengeItem(AusbildungsgangSlimDto ausbildungsgaengeItem) {
+  public AusbildungsstaetteSlimDto removeAusbildungsgaengeItem(AusbildungsgangDataDto ausbildungsgaengeItem) {
     if (ausbildungsgaengeItem != null && this.ausbildungsgaenge != null) {
       this.ausbildungsgaenge.remove(ausbildungsgaengeItem);
     }

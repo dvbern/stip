@@ -36,6 +36,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
@@ -115,6 +116,13 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
     public List<AbschlussSlimDto> getAllAbschluessForAuswahl() {
         ausbildungsstaetteAuthorizer.canRead();
         return abschlussService.getAllAbschlussForAuswahl();
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public List<AusbildungsgangSlimDto> getAllAusbildungsgaengeForAuswahl() {
+        ausbildungsstaetteAuthorizer.canRead();
+        return ausbildungsgangService.getAllAusbildungsgangForAuswahl();
     }
 
     @Override

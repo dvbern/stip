@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.AbschlussSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.AbschlussSortColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangSortColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungskategorieDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
@@ -80,6 +81,7 @@ public class AusbildungsstaetteApiSpec {
                 createAusbildungsstaette(),
                 getAllAbschluessForAuswahl(),
                 getAllAbschlussForUebersicht(),
+                getAllAusbildungsgaengeForAuswahl(),
                 getAllAusbildungsgangForUebersicht(),
                 getAllAusbildungsstaetteForAuswahl(),
                 getAllAusbildungsstaetteForUebersicht(),
@@ -109,6 +111,10 @@ public class AusbildungsstaetteApiSpec {
 
     public GetAllAbschlussForUebersichtOper getAllAbschlussForUebersicht() {
         return new GetAllAbschlussForUebersichtOper(createReqSpec());
+    }
+
+    public GetAllAusbildungsgaengeForAuswahlOper getAllAusbildungsgaengeForAuswahl() {
+        return new GetAllAusbildungsgaengeForAuswahlOper(createReqSpec());
     }
 
     public GetAllAusbildungsgangForUebersichtOper getAllAusbildungsgangForUebersicht() {
@@ -595,6 +601,67 @@ public class AusbildungsstaetteApiSpec {
          * @return operation
          */
         public GetAllAbschlussForUebersichtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all AusbildungsgaengeSlim
+     * 
+     *
+     * return List&lt;AusbildungsgangSlimDtoSpec&gt;
+     */
+    public static class GetAllAusbildungsgaengeForAuswahlOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/ausbildungsgang/slim";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAusbildungsgaengeForAuswahlOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /ausbildungsgang/slim
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /ausbildungsgang/slim
+         * @param handler handler
+         * @return List&lt;AusbildungsgangSlimDtoSpec&gt;
+         */
+        public List<AusbildungsgangSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AusbildungsgangSlimDtoSpec>> type = new TypeRef<List<AusbildungsgangSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgaengeForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgaengeForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
