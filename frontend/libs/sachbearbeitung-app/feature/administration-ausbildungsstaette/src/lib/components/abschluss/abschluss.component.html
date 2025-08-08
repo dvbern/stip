@@ -31,6 +31,7 @@
                 [formControl]="filterForm.controls.abschluss"
                 data-testid="cockpit-filter-fall"
                 (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
