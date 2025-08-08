@@ -351,6 +351,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
   resetControl() {
     this.form.controls.select.patchValue(undefined);
     this.form.controls.search.patchValue(undefined);
+    this.latestValueSig.set(undefined);
     this.onChange(undefined);
     this.markAsTouched();
   }
