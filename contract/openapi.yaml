@@ -2786,6 +2786,31 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchZurueckweisen
       summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchTrancheId}/manuelle-verfuegung':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManuelleVerfuegungCreate'
+      parameters:
+        - $ref: '#/components/parameters/gesuchTrancheId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch with changes in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createManuelleVerfuegung
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -4561,6 +4586,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+    ManuelleVerfuegungCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: "#/components/schemas/FileUpload"
     Gesuch:
       required:
         - fallId

@@ -20,7 +20,7 @@ export type Extends<T, U extends T> = T extends U ? T : never;
  * }
  */
 export function assertUnreachable(unreachable: never): never {
-  throw new Error('Not all cases were handled: ' + unreachable);
+  throw new Error(`Not all cases were handled: ${unreachable}`);
 }
 
 /**
