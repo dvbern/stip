@@ -260,6 +260,7 @@
   "shared.admin.sozialdienst.sozialdienstAktualisiert": "Sozialdienst wurde erfolgreich aktualisiert",
   "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
   "shared.admin.sozialdienstBenutzer.erstellt": "Sozialdienst Arbeiter wurde erfolgreich erfasst",
+  "shared.admin.sozialdienstBenutzer.error.emailExists": "E-Mail-Adresse bereits vorhanden.",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "Sozialdienst Arbeiter wurde erfolgreich aktualisiert",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",

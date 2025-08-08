@@ -256,6 +256,7 @@
   "shared.admin.sozialdienst.sozialdienstAktualisiert": "Le service social a été mis à jour avec succès",
   "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
   "shared.admin.sozialdienstBenutzer.erstellt": "L'employé du service social a été créé avec succès",
+  "shared.admin.sozialdienstBenutzer.error.emailExists": "L'adresse e-mail existe déjà.",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
