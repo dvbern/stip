@@ -68,6 +68,7 @@ import {
 } from '@dv/shared/util/table';
 
 import { CreateAusbildungsstaetteDialogComponent } from './create-ausbildungsstaette-dialog.component';
+import { EditAusbildungsstaetteDialogComponent } from './edit-ausbildungsstaette-dialog.component';
 
 type AusbildungsstaetteFilterFormKeys =
   | 'ausbildungsstaette'
@@ -283,6 +284,27 @@ export class AusbildungsstaetteComponent
         if (ausbildungsstaetteCreate) {
           this.administrationAusbildungsstaetteStore.createAusbildungsstaette$({
             values: { ausbildungsstaetteCreate },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
+  editAusbildungsstaette(ausbildungsstaette: Ausbildungsstaette) {
+    EditAusbildungsstaetteDialogComponent.open(this.dialog, {
+      nameDe: ausbildungsstaette.nameDe,
+      nameFr: ausbildungsstaette.nameFr,
+    })
+      .afterClosed()
+      .subscribe((renameAusbildungsstaette) => {
+        if (renameAusbildungsstaette) {
+          this.administrationAusbildungsstaetteStore.editAusbildungsstaette$({
+            values: {
+              ausbildungsstaetteId: ausbildungsstaette.id,
+              renameAusbildungsstaette,
+            },
             onSuccess: () => {
               this.reloadAbschluesseSig.set({});
             },

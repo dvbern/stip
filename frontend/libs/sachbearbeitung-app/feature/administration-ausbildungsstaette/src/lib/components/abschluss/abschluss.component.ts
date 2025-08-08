@@ -64,6 +64,7 @@ import {
 } from '@dv/shared/util/table';
 
 import { CreateAbschlussDialogComponent } from './create-abschluss-dialog.component';
+import { EditAbschlussDialogComponent } from './edit-abschluss-dialog.component';
 import { DataInfoDialogComponent } from '../data-info-dialog/data-info-dialog.component';
 
 type AbschlussFilterFormKeys =
@@ -255,6 +256,27 @@ export class AbschlussComponent
         if (brueckenangebotCreate) {
           this.administrationAusbildungsstaetteStore.createAbschluss$({
             values: { brueckenangebotCreate },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
+  editAbschluss(abschluss: Abschluss) {
+    EditAbschlussDialogComponent.open(this.dialog, {
+      bezeichnungDe: abschluss.bezeichnungDe,
+      bezeichnungFr: abschluss.bezeichnungFr,
+    })
+      .afterClosed()
+      .subscribe((renameAbschluss) => {
+        if (renameAbschluss) {
+          this.administrationAusbildungsstaetteStore.editAbschluss$({
+            values: {
+              abschlussId: abschluss.id,
+              renameAbschluss,
+            },
             onSuccess: () => {
               this.reloadAbschluesseSig.set({});
             },

@@ -180,7 +180,7 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-20 tw-whitespace-nowrap !tw-text-right">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-28 tw-whitespace-nowrap !tw-text-right">
           <button
             type="button"
             class="btn btn-outline-primary btn-sm"
@@ -192,6 +192,13 @@
         </th>
         <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-w-11">
           <div class="tw-flex tw-justify-end">
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+              (click)="editAbschluss(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-xl/none">edit</span>
+            </button>
             @if (abschluss.canArchive) {
               <button
                 type="button"
