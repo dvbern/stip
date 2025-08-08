@@ -5760,7 +5760,6 @@ components:
         - id
         - abschlussId
         - ausbildungsstaetteId
-        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5768,8 +5767,6 @@ components:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        aktiv:
-          type: boolean
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'

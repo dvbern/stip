@@ -14,6 +14,5 @@ export interface AusbildungsgangSlim {
     id: string;
     abschlussId: string;
     ausbildungsstaetteId: string;
-    aktiv: boolean;
 }
 

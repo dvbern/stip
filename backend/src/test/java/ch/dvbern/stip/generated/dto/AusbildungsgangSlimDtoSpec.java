@@ -30,8 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ID,
   AusbildungsgangSlimDtoSpec.JSON_PROPERTY_ABSCHLUSS_ID,
-  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID,
-  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_AKTIV
+  AusbildungsgangSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID
 })
 @JsonTypeName("AusbildungsgangSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -44,9 +43,6 @@ public class AusbildungsgangSlimDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
   private UUID ausbildungsstaetteId;
-
-  public static final String JSON_PROPERTY_AKTIV = "aktiv";
-  private Boolean aktiv;
 
   public AusbildungsgangSlimDtoSpec() {
   }
@@ -128,32 +124,6 @@ public class AusbildungsgangSlimDtoSpec {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
 
-
-  public AusbildungsgangSlimDtoSpec aktiv(Boolean aktiv) {
-    
-    this.aktiv = aktiv;
-    return this;
-  }
-
-   /**
-   * Get aktiv
-   * @return aktiv
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getAktiv() {
-    return aktiv;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AKTIV)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
-    this.aktiv = aktiv;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -165,13 +135,12 @@ public class AusbildungsgangSlimDtoSpec {
     AusbildungsgangSlimDtoSpec ausbildungsgangSlim = (AusbildungsgangSlimDtoSpec) o;
     return Objects.equals(this.id, ausbildungsgangSlim.id) &&
         Objects.equals(this.abschlussId, ausbildungsgangSlim.abschlussId) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangSlim.ausbildungsstaetteId) &&
-        Objects.equals(this.aktiv, ausbildungsgangSlim.aktiv);
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangSlim.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschlussId, ausbildungsstaetteId, aktiv);
+    return Objects.hash(id, abschlussId, ausbildungsstaetteId);
   }
 
   @Override
@@ -181,7 +150,6 @@ public class AusbildungsgangSlimDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
-    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

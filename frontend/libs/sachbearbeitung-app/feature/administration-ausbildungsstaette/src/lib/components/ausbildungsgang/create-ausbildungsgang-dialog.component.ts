@@ -159,13 +159,10 @@ const validateUniqueCombination =
     }
 
     if (
-      existingAusbildungsgaenge.some((ausbildugnsgang) => {
-        return (
-          ausbildugnsgang.aktiv &&
-          ausbildugnsgang.abschlussId === abschlussId &&
-          ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId
-        );
-      })
+      existingAusbildungsgaenge.some((ausbildugnsgang) => (
+        ausbildugnsgang.abschlussId === abschlussId &&
+        ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId
+      ))
     ) {
       return { conflict: true };
     }
