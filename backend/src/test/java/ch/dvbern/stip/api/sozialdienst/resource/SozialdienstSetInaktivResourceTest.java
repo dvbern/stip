@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -74,7 +73,7 @@ class SozialdienstSetInaktivResourceTest {
             sozialdienstApi.createSozialdienst().body(sozialdienst)
         );
 
-        assertThat(createdSozialdienst.getStatus(), is(SozialdienstStatusDtoSpec.AKTIV));
+        assertThat(createdSozialdienst.getAktiv(), is(true));
         sozialdienstId = createdSozialdienst.getId();
     }
 
@@ -108,9 +107,9 @@ class SozialdienstSetInaktivResourceTest {
     @TestAsSachbearbeiter
     void setSozialdienstToInaktivAsNonAdminFails() {
         TestUtil.executeAndAssert(
-            sozialdienstApi.setSozialdienstStatusTo()
+            sozialdienstApi.setSozialdienstAktivTo()
                 .sozialdienstIdPath(sozialdienstId)
-                .targetStatusPath(SozialdienstStatusDtoSpec.INAKTIV),
+                .aktivPath(false),
             Status.FORBIDDEN.getStatusCode()
         );
     }
@@ -121,12 +120,12 @@ class SozialdienstSetInaktivResourceTest {
     void setSozialdienstToInaktiv() {
         final var sozialdienst = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,
-            sozialdienstApi.setSozialdienstStatusTo()
+            sozialdienstApi.setSozialdienstAktivTo()
                 .sozialdienstIdPath(sozialdienstId)
-                .targetStatusPath(SozialdienstStatusDtoSpec.INAKTIV)
+                .aktivPath(false)
         );
 
-        assertThat(sozialdienst.getStatus(), is(SozialdienstStatusDtoSpec.INAKTIV));
+        assertThat(sozialdienst.getAktiv(), is(false));
     }
 
     @Order(6)

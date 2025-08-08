@@ -39,7 +39,6 @@ import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstStatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
@@ -103,12 +102,12 @@ class DelegierenResourceImplTest {
 
         inaktiverSozialdienst = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,
-            sozialdienstApi.setSozialdienstStatusTo()
+            sozialdienstApi.setSozialdienstAktivTo()
                 .sozialdienstIdPath(inaktiverSozialdienst.getId())
-                .targetStatusPath(SozialdienstStatusDtoSpec.INAKTIV)
+                .aktivPath(false)
         );
 
-        assertThat(inaktiverSozialdienst.getStatus(), is(SozialdienstStatusDtoSpec.INAKTIV));
+        assertThat(inaktiverSozialdienst.getAktiv(), is(false));
     }
 
     @Test
