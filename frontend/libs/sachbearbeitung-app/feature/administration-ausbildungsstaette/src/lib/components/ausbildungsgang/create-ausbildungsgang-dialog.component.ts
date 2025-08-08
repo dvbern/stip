@@ -11,6 +11,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -26,16 +27,20 @@ import {
   AusbildungsgangCreate,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
+import { Language } from '@dv/shared/model/language';
+import { LookupType } from '@dv/shared/model/select-search';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type CreateAbschlussData = {
-  ausbildungsstaetten: AusbildungsstaetteSlim[];
+  ausbildungsstaetten: (AusbildungsstaetteSlim & LookupType)[];
   abschluesse: AbschlussSlim[];
+  language: Language;
 };
 
 @Component({
@@ -47,9 +52,11 @@ type CreateAbschlussData = {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatAutocompleteModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     TranslatedPropertyPipe,
+    SharedUiSelectSearchComponent,
   ],
   templateUrl: './create-ausbildungsgang-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,15 +71,27 @@ export class CreateAusbildungsgangDialogComponent {
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
-    ausbildungsstaette: [
-      <AusbildungsstaetteSlim | null>null,
-      Validators.required,
+    ausbildungsstaetteId: [
+      <string | undefined>undefined,
+      [Validators.required],
     ],
     abschluss: [<AbschlussSlim | null>null, Validators.required],
   });
   formValueChangedSig = toSignal(this.form.valueChanges);
+  ausbildungsstaetteIdChangedSig = toSignal(
+    this.form.controls.ausbildungsstaetteId.valueChanges,
+  );
+  selectedAusbildungsstaetteSig = computed(() => {
+    const ausbildungsstaetteId = this.ausbildungsstaetteIdChangedSig();
+    const ausbildungsstaette = this.dialogData.ausbildungsstaetten.find(
+      (a) => a.id === ausbildungsstaetteId,
+    );
+
+    return ausbildungsstaette;
+  });
   ausbildungsgangNameSig = computed(() => {
-    const { ausbildungsstaette, abschluss } = this.formValueChangedSig() ?? {};
+    const ausbildungsstaette = this.selectedAusbildungsstaetteSig();
+    const { abschluss } = this.formValueChangedSig() ?? {};
     if (!ausbildungsstaette || !abschluss) {
       return {
         nameDe: '',
@@ -101,7 +120,7 @@ export class CreateAusbildungsgangDialogComponent {
     const values = convertTempFormToRealValues(this.form);
     this.dialogRef.close({
       abschlussId: values.abschluss.id,
-      ausbildungsstaetteId: values.ausbildungsstaette.id,
+      ausbildungsstaetteId: values.ausbildungsstaetteId,
     });
   }
 

@@ -3,7 +3,6 @@ import { Locator, Page } from '@playwright/test';
 import { LebenslaufItem } from '@dv/shared/model/gesuch';
 import {
   expectFormToBeValid,
-  fillAutoCompleteSelectFirst,
   selectMatOption,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -17,7 +16,7 @@ export class LebenslaufEditorPO {
 
     form: Locator;
 
-    abschlussAutocomplete: Locator;
+    abschlussSelect: Locator;
     fachrichtungBerufsbezeichnung: Locator;
     taetigkeitsartSelect: Locator;
     taetigkeitsBeschreibung: Locator;
@@ -37,9 +36,7 @@ export class LebenslaufEditorPO {
 
       form: page.getByTestId('form-lebenslauf-form'),
 
-      abschlussAutocomplete: page.getByTestId(
-        'lebenslauf-editor-abschluss-select',
-      ),
+      abschlussSelect: page.getByTestId('lebenslauf-editor-abschluss-select'),
       fachrichtungBerufsbezeichnung: page.getByTestId(
         'lebenslauf-editor-fachrichtungBerufsbezeichnung',
       ),
@@ -64,11 +61,7 @@ export class LebenslaufEditorPO {
 
   async addAusbildung(item: LebenslaufItemValues) {
     if (item.abschluss) {
-      await fillAutoCompleteSelectFirst(
-        this.elems.abschlussAutocomplete,
-        item.abschluss,
-        this.elems.page,
-      );
+      await selectMatOption(this.elems.abschlussSelect, item.abschluss);
     }
 
     await this.elems.fachrichtungBerufsbezeichnung.fill(

@@ -19,7 +19,7 @@
     </p>
   </div>
   @if (ausbildung.canDelete) {
-    <button type="button" class="btn btn-outline-primary tw-h-min" (click)="deleteAusbildung.emit(ausbildung)">
+    <button type="button" class="btn btn-outline-primary tw-ml-3 tw-h-min" (click)="deleteAusbildung.emit(ausbildung)">
       {{ 'shared.dashboard.ausbildung.delete' | translate }}
     </button>
   }

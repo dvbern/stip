@@ -9,7 +9,7 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="tw-mt-6 tw-grid tw-min-w-[640px] tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw-mt-6 tw-grid tw-min-w-[425px] tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-min-w-[640px] md:tw-grid-cols-2"
     [class.lg:tw-grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
@@ -20,44 +20,16 @@
     <div class="tw-flex tw-w-full tw-gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
-          <mat-label>
-            {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
-          </mat-label>
-
-          <input
-            id="typeahead-focus"
-            type="text"
-            formControlName="ausbildungsstaette"
-            data-testid="form-education-ausbildungsstaette"
-            matInput
-            dvMaxLength
-            [matAutocomplete]="staetten"
-            [placeholder]="'shared.form.select.empty' | translate"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          @if (form.controls.ausbildungsstaette.value && isEditableSig()) {
-            <button
-              type="button"
-              matSuffix
-              mat-icon-button
-              [attr.aria-label]="'shared.ui.clear' | translate"
-              (click)="form.controls.ausbildungsstaette.reset()"
-              data-testid="button-form-education-ausbildungsstaette-clear"
-            >
-              <span class="material-symbols-rounded align-middle">clear</span>
-            </button>
-          }
-          <mat-autocomplete #staetten="matAutocomplete">
-            @for (staette of ausbildungsstaettOptionsSig(); track $index) {
-              <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
-                {{ staette.translatedName }}
-              </mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
+        <div class="tw-w-full">
+          <dv-shared-ui-select-search
+            [formControl]="form.controls.ausbildungsstaetteId"
+            [testIdSig]="'form-education-ausbildungsstaette'"
+            [labelKeySig]="'shared.form.ausbildung.ausbildungsstaette.label'"
+            [valuesSig]="ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig()"
+            [sortByValueSig]="true"
+            [languageSig]="languageSig()"
+          ></dv-shared-ui-select-search>
+        </div>
       } @else {
         <!-- Alternative STAETTE -->
         <mat-form-field dvSharedUiFormField class="tw-w-full">
@@ -106,11 +78,12 @@
         @if (!form.value['ausbildungNichtGefunden']) {
           <!-- Ausbildungsgang Select -->
           <mat-select
-            formControlName="ausbildungsgang"
+            [formControl]="form.controls.ausbildungsgang"
             data-testid="form-education-ausbildungsgang"
             (valueChange)="handleGangChangedByUser()"
             [compareWith]="compareById"
             [placeholder]="'shared.form.select.empty' | translate"
+            [panelWidth]="null"
           >
             @for (ausbildungsgang of ausbildungsgangOptionsSig(); track $index) {
               <mat-option [value]="ausbildungsgang" [attr.data-testid]="ausbildungsgang.bezeichnungDe">

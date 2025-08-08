@@ -9,6 +9,7 @@ import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { Ausbildung, AusbildungService } from '@dv/shared/model/gesuch';
 import {
+  configureTestbedTranslateLanguage,
   provideSharedPatternJestTestAusbildungstaetten,
   provideSharedPatternJestTestSetup,
 } from '@dv/shared/pattern/jest-test-setup';
@@ -21,6 +22,7 @@ import {
 
 import { SharedFeatureAusbildungComponent } from './shared-feature-ausbildung.component';
 
+const language = 'de';
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
@@ -57,7 +59,7 @@ async function setup() {
               },
             },
           },
-          language: { language: 'de' },
+          language: { language },
           configs: {},
         },
       }),
@@ -70,6 +72,7 @@ async function setup() {
       AusbildungsstaetteStore,
       AusbildungStore,
     ],
+    configureTestBed: configureTestbedTranslateLanguage(language),
   });
 }
 

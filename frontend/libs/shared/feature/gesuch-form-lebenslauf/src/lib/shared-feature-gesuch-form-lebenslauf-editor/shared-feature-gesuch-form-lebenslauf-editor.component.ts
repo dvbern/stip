@@ -35,13 +35,11 @@ import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaet
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
-  AbschlussSlim,
   LebenslaufItemUpdate,
   Taetigkeitsart,
   WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
-import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -49,7 +47,12 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import {
+  SharedUiAutocompleteLabelDirective,
+  SharedUiSelectSearchComponent,
+} from '@dv/shared/ui/select-search';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -65,8 +68,6 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
-
-type EditingAbschlussSlim = AbschlussSlim | string | undefined;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
@@ -86,6 +87,9 @@ type EditingAbschlussSlim = AbschlussSlim | string | undefined;
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
+    SharedUiSelectSearchComponent,
+    SharedUiAutocompleteLabelDirective,
+    TranslatedPropertyPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
@@ -95,7 +99,6 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   private einreichenStore = inject(EinreichenStore);
   private translateService = inject(TranslateService);
 
@@ -110,6 +113,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
@@ -124,7 +128,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       <string | undefined>undefined,
       [Validators.required],
     ],
-    abschluss: [<EditingAbschlussSlim>undefined, [Validators.required]],
+    abschlussId: [<string | undefined>undefined, [Validators.required]],
     fachrichtungBerufsbezeichnung: [
       <string | undefined>undefined,
       [Validators.required],
@@ -141,50 +145,18 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     ausbildungAbgeschlossen: [false, [Validators.required]],
   });
 
-  abschlussSig = toSignal(this.form.controls.abschluss.valueChanges);
+  private abschlussIdSig = toSignal(
+    this.form.controls.abschlussId.valueChanges,
+  );
   selectedAbschlussSig = computed(() => {
-    const abschluss = this.abschlussSig();
-    if (!isAbschluss(abschluss)) {
-      return null;
-    }
-    return abschluss;
+    const abschlussId = this.abschlussIdSig();
+    const abschluesse = this.ausbildungsstatteStore.abschluesseViewSig();
+
+    return abschluesse.find((a) => a.id === abschlussId);
   });
   startChangedSig = toSignal(this.form.controls.von.valueChanges);
   endChangedSig = toSignal(this.form.controls.bis.valueChanges);
   kantonValues = this.prepareKantonValues();
-  abschlussOptionsSig = computed(() => {
-    const rawAbschluesse = this.ausbildungsstatteStore.abschluesseViewSig();
-    const language = this.languageSig();
-    let rawAbschluss = this.abschlussSig();
-    const abschluesse =
-      rawAbschluesse.map((abschluss) => ({
-        ...abschluss,
-        translatedName: getTranslatableProp(abschluss, 'bezeichnung', language),
-      })) ?? [];
-
-    if (!!rawAbschluss && typeof rawAbschluss !== 'string') {
-      rawAbschluss =
-        getTranslatableProp(rawAbschluss, 'bezeichnung', language) ?? undefined;
-    }
-
-    if (!rawAbschluss) {
-      return abschluesse;
-    }
-
-    return abschluesse.filter((abschluss) => {
-      const bezeichnung = getTranslatableProp(
-        abschluss,
-        'bezeichnung',
-        language,
-      );
-      const ausbildungskategorie = this.translateService.instant(
-        `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
-      );
-      return `${bezeichnung} - ${ausbildungskategorie}`
-        .toLocaleLowerCase()
-        .includes(rawAbschluss.toLocaleLowerCase());
-    });
-  });
 
   constructor() {
     this.ausbildungsstatteStore.loadAbschluesse$();
@@ -287,8 +259,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     effect(() => {
       const { abschlussId, ...item } = this.itemSig();
       if (item) {
-        this.form.controls.abschluss.clearValidators();
-        this.form.controls.abschluss.setValidators([
+        this.form.controls.abschlussId.clearValidators();
+        this.form.controls.abschlussId.setValidators([
           item.type === 'AUSBILDUNG'
             ? Validators.required
             : Validators.nullValidator,
@@ -303,11 +275,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
 
       this.form.patchValue({
         ...item,
-        abschluss: abschlussId
-          ? this.ausbildungsstatteStore
-              .abschluesseViewSig()
-              .find((a) => a.id === abschlussId)
-          : undefined,
+        abschlussId,
       });
 
       if (item.von && item.bis) {
@@ -320,12 +288,12 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
           this.form.controls.taetigkeitsBeschreibung,
           false,
         );
-        this.formUtils.setRequired(this.form.controls.abschluss, true);
+        this.formUtils.setRequired(this.form.controls.abschlussId, true);
       }
 
       if (item.type === 'TAETIGKEIT') {
-        this.form.controls.abschluss.clearValidators();
-        this.form.controls.abschluss.updateValueAndValidity();
+        this.form.controls.abschlussId.clearValidators();
+        this.form.controls.abschlussId.updateValueAndValidity();
         this.form.controls.taetigkeitsart.setValidators(Validators.required);
         this.form.controls.taetigkeitsart.updateValueAndValidity();
         this.form.controls.taetigkeitsBeschreibung.setValidators(
@@ -360,45 +328,18 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     this.onDateBlur(this.form.controls.von);
     this.onDateBlur(this.form.controls.bis);
     if (this.form.valid) {
-      const { abschluss, ...formValues } = convertTempFormToRealValues(
+      const { abschlussId, ...formValues } = convertTempFormToRealValues(
         this.form,
         this.itemSig().type === 'AUSBILDUNG'
-          ? ['abschluss', 'wohnsitz', 'ausbildungAbgeschlossen']
+          ? ['abschlussId', 'wohnsitz', 'ausbildungAbgeschlossen']
           : ['taetigkeitsart', 'taetigkeitsBeschreibung'],
       );
       this.saveTriggered.emit({
         id: this.itemSig().id,
         ...formValues,
-        abschlussId: isAbschluss(abschluss) ? abschluss.id : undefined,
+        abschlussId,
       });
       this.form.markAsPristine();
-    }
-  }
-
-  // clear the control if the value is not a valid Abschluss
-  onBlurAbschluss() {
-    const value = this.form.controls.abschluss.value;
-    if (!isAbschluss(value) && !this.abschluesseAutocompleteSig()?.isOpen) {
-      // find the abschluss from the current value
-      if (typeof value === 'string' && value.length > 0) {
-        const abschluss = this.ausbildungsstatteStore
-          .abschluesseViewSig()
-          .find((abschluss) => {
-            const translatedName = getTranslatableProp(
-              abschluss,
-              'bezeichnung',
-              this.languageSig(),
-            );
-            return (
-              translatedName?.toLocaleLowerCase() === value.toLocaleLowerCase()
-            );
-          });
-        if (abschluss) {
-          this.form.controls.abschluss.setValue(abschluss);
-        } else {
-          this.form.controls.abschluss.setValue(undefined);
-        }
-      }
     }
   }
 
@@ -418,17 +359,6 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     }
   }
 
-  displayAbschluss = (abschluss: EditingAbschlussSlim) => {
-    if (isAbschluss(abschluss)) {
-      return abschlussFullName(
-        abschluss,
-        this.translateService,
-        this.languageSig(),
-      );
-    }
-    return abschluss ?? '';
-  };
-
   onDateBlur(ctrl: FormControl) {
     return onMonthYearInputBlur(
       ctrl,
@@ -439,16 +369,3 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
 
   protected readonly taetigkeitsartValues = Object.values(Taetigkeitsart);
 }
-
-const isAbschluss = (value: EditingAbschlussSlim): value is AbschlussSlim =>
-  isDefined(value) && typeof value !== 'string';
-
-const abschlussFullName = (
-  abschluss: AbschlussSlim,
-  translate: TranslateService,
-  language: string,
-) => {
-  return `${getTranslatableProp(abschluss, 'bezeichnung', language)} - ${translate.instant(
-    `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
-  )}`;
-};

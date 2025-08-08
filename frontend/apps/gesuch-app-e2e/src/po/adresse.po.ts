@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Adresse } from '@dv/shared/model/gesuch';
-import { fillAutoComplete } from '@dv/shared/util-fn/e2e-util';
+import { selectMatOption } from '@dv/shared/util-fn/e2e-util';
 
 export class AddressPO {
   public elems: {
@@ -11,7 +11,7 @@ export class AddressPO {
     plz: Locator;
     ort: Locator;
     coAdresse: Locator;
-    landAutocomplete: Locator;
+    landSelect: Locator;
   };
 
   constructor(page: Page) {
@@ -22,7 +22,7 @@ export class AddressPO {
       plz: page.getByTestId('form-address-plz'),
       ort: page.getByTestId('form-address-ort'),
       coAdresse: page.getByTestId('form-address-coAdresse'),
-      landAutocomplete: page.getByTestId('form-address-land'),
+      landSelect: page.getByTestId('form-address-land'),
     };
   }
 
@@ -33,10 +33,6 @@ export class AddressPO {
     await this.elems.plz.fill(adresse.plz);
     await this.elems.ort.fill(adresse.ort);
 
-    await fillAutoComplete(
-      this.elems.landAutocomplete,
-      adresse.landId,
-      this.elems.page,
-    );
+    await selectMatOption(this.elems.landSelect, adresse.landId);
   }
 }

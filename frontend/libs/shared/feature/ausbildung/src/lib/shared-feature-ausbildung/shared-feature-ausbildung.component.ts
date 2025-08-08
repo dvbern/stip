@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  Signal,
   computed,
   effect,
   inject,
@@ -19,7 +18,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -45,7 +43,6 @@ import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
   AusbildungsgangSlim,
-  AusbildungsstaetteSlim,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
 import {
@@ -69,12 +66,14 @@ import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
   provideMaterialDefaultOptions,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
+import { sortListByText } from '@dv/shared/util/table';
 import {
   createDateDependencyValidator,
   maxDateValidatorForLocale,
@@ -106,7 +105,6 @@ const gesuchsPeriodenSelectErrorMap: Record<
     MatButtonModule,
     MatInputModule,
     MatCheckboxModule,
-    MatAutocompleteModule,
     MatSelectModule,
     SharedUiInfoDialogDirective,
     SharedUiFormReadonlyDirective,
@@ -117,6 +115,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
     SharedPatternDocumentUploadComponent,
+    SharedUiSelectSearchComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [
@@ -135,7 +134,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
   private globalNotificationStore = inject(GlobalNotificationStore);
-  private languageSig = this.store.selectSignal(selectLanguage);
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
   );
@@ -146,6 +144,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
+  languageSig = this.store.selectSignal(selectLanguage);
 
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
@@ -153,7 +152,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   form = this.formBuilder.group({
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
     isAusbildungAusland: [false, []],
-    ausbildungsstaette: [<string | undefined>undefined, [Validators.required]],
+    ausbildungsstaetteId: [
+      <string | undefined>undefined,
+      [Validators.required],
+    ],
     ausbildungsgang: [
       <AusbildungsgangSlim | undefined>undefined,
       [Validators.required],
@@ -184,8 +186,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ? { type: 'dialog' as const, fallId }
       : { type: 'gesuch-form' as const, fallId: gesuchFallId };
   });
-  private ausbildungsstaetteSig = toSignal(
-    this.form.controls.ausbildungsstaette.valueChanges,
+  private ausbildungsstaetteIdSig = toSignal(
+    this.form.controls.ausbildungsstaetteId.valueChanges,
   );
   private ausbildungNichtGefundenChangedSig = toSignal(
     this.form.controls.ausbildungNichtGefunden.valueChanges,
@@ -214,12 +216,11 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
     const language = this.languageSig();
 
-    return (
-      ausbildungsstaettes
+    const ausbildungsgaenge =
+      [...ausbildungsstaettes]
         .find(
           (ausbildungsstaette) =>
-            getTranslatableProp(ausbildungsstaette, 'name', language) ===
-            this.ausbildungsstaetteSig(),
+            ausbildungsstaette.id === this.ausbildungsstaetteIdSig(),
         )
         ?.ausbildungsgaenge?.map((ausbildungsgang) => {
           return {
@@ -230,8 +231,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               language,
             ),
           };
-        }) ?? []
-    );
+        }) ?? [];
+    return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
   });
 
   zusatzfrageSig = computed(() => {
@@ -257,31 +258,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
   );
 
-  ausbildungsstaettOptionsSig: Signal<
-    (AusbildungsstaetteSlim & { translatedName?: string })[]
-  > = computed(() => {
-    const currentAusbildungsstaette = this.ausbildungsstaetteSig();
-    const ausbildungstaetten =
-      this.ausbildungsstatteStore.ausbildungsstaetteViewSig() ?? [];
-    const language = this.languageSig();
-    const toReturn = currentAusbildungsstaette
-      ? ausbildungstaetten.filter((ausbildungsstaette) => {
-          return getTranslatableProp(ausbildungsstaette, 'name', language)
-            ?.toLowerCase()
-            .includes(currentAusbildungsstaette.toLowerCase());
-        })
-      : ausbildungstaetten;
-
-    return toReturn.map((ausbildungsstaette) => {
-      return {
-        ...ausbildungsstaette,
-        translatedName:
-          getTranslatableProp(ausbildungsstaette, 'name', language) ??
-          undefined,
-      };
-    });
-  });
-
   hiddenFieldsSetSig = signal(new Set<FormControl>());
   compareById = compareById;
 
@@ -302,10 +278,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         alternativeAusbildungsgang,
         alternativeAusbildungsstaette,
         ausbildungsgang,
-        ausbildungsstaette,
+        ausbildungsstaetteId,
       } = this.form.controls;
       this.formUtils.setRequired(ausbildungsgang, !value);
-      this.formUtils.setRequired(ausbildungsstaette, !value);
+      this.formUtils.setRequired(ausbildungsstaetteId, !value);
       this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
       this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
     });
@@ -400,25 +376,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             (ausbildungsgang) =>
               ausbildungsgang.id === currentAusbildungsgang.id,
           );
-          console.log(
-            'ausbildungsgang',
-            ausbildungsgang,
-            'ausbildungsstaette',
-            ausbildungsstaette,
-          );
           this.form.patchValue({
-            ausbildungsstaette:
-              getTranslatableProp(
-                ausbildungsstaette,
-                'name',
-                this.languageSig(),
-              ) ?? undefined,
+            ausbildungsstaetteId: ausbildungsstaette?.id,
             ausbildungsgang: ausbildungsgang,
           });
         }
       }
-
-      console.log('form value', this.form.controls.ausbildungsgang.value);
     });
 
     effect(() => {
@@ -434,7 +397,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         }
         this.formUtils.invalidateControlIfValidationFails(
           this.form,
-          ['ausbildungNichtGefunden', 'ausbildungsstaette'],
+          ['ausbildungNichtGefunden', 'ausbildungsstaetteId'],
           {
             specialValidationErrors:
               invalidFormularProps.specialValidationErrors,
@@ -471,8 +434,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     // When Staette null, disable gang
     const staetteSig = toSignal(
-      this.form.controls.ausbildungsstaette.valueChanges.pipe(
-        startWith(this.form.value.ausbildungsstaette),
+      this.form.controls.ausbildungsstaetteId.valueChanges.pipe(
+        startWith(this.form.value.ausbildungsstaetteId),
       ),
     );
     effect(() => {
@@ -540,7 +503,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   handleManuellChangedByUser() {
-    this.form.controls.ausbildungsstaette.reset();
+    this.form.controls.ausbildungsstaetteId.reset();
     this.form.controls.alternativeAusbildungsstaette.reset();
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
@@ -571,7 +534,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     const { ausbildungsgang: formAusbildungsgang, ...formValues } =
       convertTempFormToRealValues(this.form, ['pensum']);
-    delete formValues.ausbildungsstaette;
+    delete formValues.ausbildungsstaetteId;
 
     const ausbildungId =
       this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith

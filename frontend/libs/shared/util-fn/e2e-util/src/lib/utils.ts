@@ -107,30 +107,6 @@ export const selectMatRadio = async (
   return locator.getByTestId(value).getByRole('radio').click();
 };
 
-export const fillAutoComplete = async (
-  autocomplete: Locator,
-  value: string,
-  page: Page,
-) => {
-  await autocomplete.fill(value);
-
-  const option = page.getByTestId(value);
-
-  await option.click();
-};
-
-export const fillAutoCompleteSelectFirst = async (
-  autocomplete: Locator,
-  value: string,
-  page: Page,
-) => {
-  await autocomplete.fill(value);
-
-  const option = page.getByRole('option').first();
-
-  await option.click();
-};
-
 export const expectFormToBeValid = async (form: Locator) => {
   return expect(form).toHaveClass(/ng-valid/);
 };

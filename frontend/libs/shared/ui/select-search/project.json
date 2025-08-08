@@ -1,7 +1,7 @@
 {
-  "name": "shared-ui-land-autocomplete",
+  "name": "shared-ui-select-search",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/ui/land-autocomplete/src",
+  "sourceRoot": "libs/shared/ui/select-search/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
@@ -9,14 +9,14 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/ui/land-autocomplete/tsconfig.lib.json"
+        "tsConfig": "libs/shared/ui/select-search/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/ui/land-autocomplete/jest.config.ts"
+        "jestConfig": "libs/shared/ui/select-search/jest.config.ts"
       }
     },
     "lint": {

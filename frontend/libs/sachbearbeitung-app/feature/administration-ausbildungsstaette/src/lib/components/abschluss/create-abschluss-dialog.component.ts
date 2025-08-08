@@ -43,10 +43,9 @@ export class CreateAbschlussDialogComponent {
     inject<MatDialogRef<void, BrueckenangebotCreate>>(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
 
-  bildungsrichtungen = Object.values(Bildungsrichtung).map((richtung) => ({
-    value: richtung,
-    disabled: invalidBildungsrichtungen.includes(richtung),
-  }));
+  bildungsrichtungen = Object.values(Bildungsrichtung).filter(
+    (richtung) => !invalidBildungsrichtungen.includes(richtung),
+  );
   form = this.formBuilder.group({
     bildungsrichtung: [<Bildungsrichtung | null>null, Validators.required],
     bezeichnungDe: [<string | null>null, Validators.required],

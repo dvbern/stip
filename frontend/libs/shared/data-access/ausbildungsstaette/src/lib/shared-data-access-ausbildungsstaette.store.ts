@@ -33,7 +33,13 @@ export class AusbildungsstaetteStore extends signalStore(
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
   ausbildungsstaetteViewSig = computed(
-    () => this.ausbildungsstaetten.data() ?? [],
+    () =>
+      this.ausbildungsstaetten.data()?.map((ausbildungsstaette) => ({
+        ...ausbildungsstaette,
+        testId: ausbildungsstaette.nameDe,
+        displayValueDe: ausbildungsstaette.nameDe,
+        displayValueFr: ausbildungsstaette.nameFr,
+      })) ?? [],
   );
   ausbildungsstaettenWithAusbildungsgaengeViewSig = computed(() =>
     this.ausbildungsstaetteViewSig().filter(
@@ -41,7 +47,15 @@ export class AusbildungsstaetteStore extends signalStore(
     ),
   );
 
-  abschluesseViewSig = computed(() => this.abschluesse.data() ?? []);
+  abschluesseViewSig = computed(
+    () =>
+      this.abschluesse.data()?.map((abschluss) => ({
+        ...abschluss,
+        testId: abschluss.bezeichnungDe,
+        displayValueDe: abschluss.bezeichnungDe,
+        displayValueFr: abschluss.bezeichnungFr,
+      })) ?? [],
+  );
 
   loadAusbildungsstaetten$ = rxMethod<void>(
     pipe(

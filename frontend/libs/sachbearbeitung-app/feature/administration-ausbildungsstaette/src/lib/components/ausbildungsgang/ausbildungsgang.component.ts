@@ -39,6 +39,7 @@ import {
 import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   assertUnreachable,
+  capitalized,
   getCorrectPropertyName,
   getCurrentLanguageSig,
   type,
@@ -64,6 +65,7 @@ import {
   partiallyDebounceFormValueChangesSig,
   restrictNumberParam,
   sortList,
+  sortListByText,
 } from '@dv/shared/util/table';
 
 import { CreateAusbildungsgangDialogComponent } from './create-ausbildungsgang-dialog.component';
@@ -156,9 +158,9 @@ export class AusbildungsgangComponent
   } satisfies Record<AusbildungsgangFilterFormKeys, unknown>);
 
   displayedColumns = [
-    'ABSCHLUSS',
     'AUSBILDUNGSSTAETTE',
     'ABSCHLUSS_AUSBILDUNGSKATEGORIE',
+    'ABSCHLUSS',
     'AKTIV',
     'AKTIONEN',
   ] satisfies DisplayColumns[];
@@ -283,10 +285,13 @@ export class AusbildungsgangComponent
   createAusbildungsgang() {
     CreateAusbildungsgangDialogComponent.open(this.dialog, {
       ausbildungsstaetten:
-        this.ausbildungsstaetteStore.ausbildungsstaetten().data ?? [],
-      abschluesse:
+        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+      abschluesse: sortListByText(
         this.administrationAusbildungsstaetteStore.availableAbschluesse()
           .data ?? [],
+        (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
+      ),
+      language: this.currentLangSig(),
     })
       .afterClosed()
       .subscribe((ausbildungsgangCreate) => {

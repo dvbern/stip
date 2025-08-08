@@ -123,3 +123,25 @@ export const partiallyDebounceFormValueChangesSig = <
     .filter(isDefined);
   return toSignal(merge(...debouncedFields$), { equal: () => false });
 };
+
+export const sortListByText = <T>(
+  list: T[],
+  getter: (item: T) => string | null | undefined,
+  sortOrder: SortOrder = 'ASCENDING',
+): T[] => {
+  return [...list].sort((a, b) => {
+    const values = [a, b].map(getter);
+    const [aValue, bValue] =
+      sortOrder === 'ASCENDING' ? values : values.reverse();
+    if (aValue === bValue) {
+      return 0;
+    }
+    if (!isDefined(aValue)) {
+      return -1;
+    }
+    if (!isDefined(bValue)) {
+      return 1;
+    }
+    return aValue.localeCompare(bValue);
+  });
+};

@@ -70,6 +70,10 @@ $gesuch-app-theme: map.deep-merge(
     align-items: flex-start;
   }
 }
+.cdk-overlay-connected-position-bounding-box .cdk-overlay-pane {
+  max-width: 724px;
+  min-width: 254px;
+}
 
 .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid)
   .mdc-floating-label {
@@ -138,6 +142,11 @@ form .readonly {
 }
 .mat-mdc-paginator-page-size-label {
   align-self: center;
+}
+.clearable-select .mat-mdc-select:not(.mat-mdc-select-empty) {
+  .mat-mdc-select-arrow-wrapper {
+    display: none;
+  }
 }
 .mdc-radio .mdc-label {
   width: 100%;
@@ -280,6 +289,9 @@ $dv-all-colors: (
   .mat-mdc-dialog-surface {
     box-shadow: none;
   }
+}
+.dv-create-ausbildung-dialog {
+  --mat-dialog-container-min-width: 900px;
 }
 
 .mat-mdc-tab-links {

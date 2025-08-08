@@ -70,6 +70,8 @@
   "shared.language-selector.aria-label": "Sprachauswahl",
   "shared.form.optional.label": "Optional",
   "shared.form.select.empty": "Bitte wählen",
+  "shared.form.select.search": "Suche",
+  "shared.form.select.nothingFound": "Keine Ergebnisse gefunden",
   "shared.form.select.salutation.herr": "Herr",
   "shared.form.select.salutation.frau": "Frau",
   "shared.form.radio.yes": "Ja",

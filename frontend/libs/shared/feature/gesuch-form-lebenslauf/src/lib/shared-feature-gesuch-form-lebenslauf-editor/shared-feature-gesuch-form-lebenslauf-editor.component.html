@@ -10,47 +10,23 @@
   @if (itemSig().type === 'AUSBILDUNG') {
     <div class="row g-4 my-2">
       <!-- Abschluss -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>
-          {{ 'shared.form.lebenslauf.item.subtype.abschluss' | translate }}
-        </mat-label>
-
-        <input
-          id="typeahead-focus"
-          type="text"
-          formControlName="abschluss"
-          data-testid="lebenslauf-editor-abschluss-select"
-          matInput
-          dvMaxLength
-          [matAutocomplete]="abschluesseAutocomplete"
-          [placeholder]="'shared.form.select.empty' | translate"
-          (blur)="onBlurAbschluss()"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-        @if (form.controls.abschluss.value && !viewSig().readonly) {
-          <button
-            type="button"
-            matSuffix
-            mat-icon-button
-            [attr.aria-label]="'shared.ui.clear' | translate"
-            (click)="form.controls.abschluss.reset()"
-            data-testid="button-form-lebenslauf-abschluss-clear"
-          >
-            <span class="material-symbols-rounded align-middle">clear</span>
-          </button>
-        }
-        <mat-autocomplete #abschluesseAutocomplete="matAutocomplete" [displayWith]="displayAbschluss">
-          @for (abschluss of abschlussOptionsSig(); track $index) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <dv-shared-ui-select-search
+          [formControl]="form.controls.abschlussId"
+          [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
+          [valuesSig]="ausbildungsstatteStore.abschluesseViewSig()"
+          [sortByValueSig]="true"
+          [testIdSig]="'lebenslauf-editor-abschluss-select'"
+          [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
+          [languageSig]="languageSig()"
+        >
+          <ng-container *dvAutocompleteLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
             @let abschlussFullname =
-              `${abschluss.translatedName} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
-            <mat-option [value]="abschluss" [attr.data-testid]="abschluss.bezeichnungDe">
-              {{ abschlussFullname }}
-            </mat-option>
-          }
-        </mat-autocomplete>
-      </mat-form-field>
+              `${abschluss | translatedProp: 'bezeichnung' : languageSig()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
+            {{ abschlussFullname }}
+          </ng-container>
+        </dv-shared-ui-select-search>
+      </div>
 
       <!-- zusatzfrage (falls nötig) -->
       @if (selectedAbschlussSig()?.zusatzfrage; as zusatzfrage) {

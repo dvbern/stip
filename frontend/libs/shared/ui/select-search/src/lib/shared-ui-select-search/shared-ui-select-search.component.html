@@ -1,0 +1,54 @@
+<mat-form-field dvSharedUiFormField class="clearable-select tw-w-full">
+  <mat-label>{{ labelKeySig() | translate }}</mat-label>
+
+  @if (form.controls.select.value && form.controls.select.enabled) {
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      [attr.aria-label]="'shared.ui.clear' | translate"
+      (click)="resetControl()"
+      [attr.data-testid]="clearTestIdSig()"
+    >
+      <span class="material-symbols-rounded align-middle">clear</span>
+    </button>
+  }
+  <mat-select
+    [panelWidth]="panelWidthSig()"
+    [formControl]="form.controls.select"
+    s
+    [attr.data-testid]="testIdSig()"
+    [placeholder]="'shared.form.select.empty' | translate"
+  >
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="form.controls.search"
+        [placeholderLabel]="'shared.form.select.search' | translate"
+        [noEntriesFoundLabel]="'shared.form.select.nothingFound' | translate"
+      >
+        <span ngxMatSelectSearchClear class="material-symbols-rounded align-middle">clear</span>
+      </ngx-mat-select-search>
+    </mat-option>
+    @for (value of filteredValuesSig(); track $index) {
+      <mat-option [value]="value" [attr.data-testid]="value.testId" [disabled]="!isEntryValidSig()(value)">
+        @if (optionTemplateSig(); as optionTemplate) {
+          <ng-container *ngTemplateOutlet="optionTemplate.templateRef; context: { $implicit: value }"></ng-container>
+        } @else {
+          {{ value | translatedProp: 'displayValue' : translate.currentLang }}
+        }
+      </mat-option>
+    }
+  </mat-select>
+
+  @if (zuvorHintValueSig(); as zuvorValue) {
+    <mat-hint *dvZuvorHint="zuvorValue; testId: zuvorHintTestIdSig()"></mat-hint>
+  }
+  <mat-error *dvSharedUiFormMessageError="'required'">
+    {{ 'shared.form.error.required' | translate }}
+  </mat-error>
+  @if (invalidValueLabelKeySig(); as invalidValueLabelKey) {
+    <mat-error *dvSharedUiFormMessageError="'invalidValue'">
+      {{ invalidValueLabelKey | translate }}
+    </mat-error>
+  }
+</mat-form-field>

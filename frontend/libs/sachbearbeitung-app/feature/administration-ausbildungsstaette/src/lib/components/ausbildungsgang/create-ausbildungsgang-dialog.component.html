@@ -24,24 +24,19 @@
           disabled
         />
       </mat-form-field>
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette' | translate }}
-        </mat-label>
-        <mat-select
-          [formControl]="form.controls.ausbildungsstaette"
-          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette' | translate"
-        >
-          @for (ausbildungsstaette of dialogData.ausbildungsstaetten; track ausbildungsstaette) {
-            <mat-option [value]="ausbildungsstaette">{{
-              ausbildungsstaette | translatedProp: 'name' : translate.currentLang
-            }}</mat-option>
-          }
-        </mat-select>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <div dvSharedUiFormField class="tw-w-full">
+        <dv-shared-ui-select-search
+          [formControl]="form.controls.ausbildungsstaetteId"
+          [testIdSig]="'administration-ausbildungsstaette-select-aubildungsstaette'"
+          [labelKeySig]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette'"
+          [valuesSig]="dialogData.ausbildungsstaetten"
+          [invalidValueLabelKeySig]="
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.error.invalid'
+          "
+          [sortByValueSig]="true"
+          [languageSig]="dialogData.language"
+        ></dv-shared-ui-select-search>
+      </div>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss' | translate }}
@@ -49,6 +44,7 @@
         <mat-select
           [formControl]="form.controls.abschluss"
           [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss' | translate"
+          [panelWidth]="'fit-content'"
         >
           @for (abschluss of dialogData.abschluesse; track abschluss) {
             <mat-option [value]="abschluss">
