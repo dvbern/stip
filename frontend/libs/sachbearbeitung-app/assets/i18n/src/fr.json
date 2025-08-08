@@ -217,7 +217,6 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.title": "Archiver le centre de formation",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.message": "Le centre de formation \"{{ nameFr }}\" sera archivé. Voulez-vous continuer?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.success": "La formation a été archivée avec succès.",
-  "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.error.invalid": "Le centre de formation n'est pas valide.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.description": "Aperçu de tous les diplômes",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.abschluss": "Diplôme",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.ausbildungskategorie": "Catégorie de formation",

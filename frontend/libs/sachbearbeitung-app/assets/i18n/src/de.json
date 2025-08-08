@@ -217,7 +217,6 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.title": "Ausbildungsstätte archivieren",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.message": "Die Ausbildungsstätte \"{{ nameDe }}\" wird archiviert. Möchten Sie fortfahren?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.archiveDialog.success": "Die Ausbildungsstätte wurde erfolgreich archiviert.",
-  "sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.error.invalid": "Die Ausbildungsstätte ist ungültig.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.description": "Übersicht aller Abschlüsse",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.abschluss": "Abschluss",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.ausbildungskategorie": "Ausbildungskategorie",

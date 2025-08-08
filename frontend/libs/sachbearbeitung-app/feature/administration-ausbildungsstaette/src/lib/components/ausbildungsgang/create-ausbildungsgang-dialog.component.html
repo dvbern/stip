@@ -30,33 +30,20 @@
           [testIdSig]="'administration-ausbildungsstaette-select-aubildungsstaette'"
           [labelKeySig]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette'"
           [valuesSig]="dialogData.ausbildungsstaetten"
-          [invalidValueLabelKeySig]="
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.error.invalid'
-          "
           [sortByValueSig]="true"
           [languageSig]="dialogData.language"
         ></dv-shared-ui-select-search>
       </div>
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss' | translate }}
-        </mat-label>
-        <mat-select
-          [formControl]="form.controls.abschluss"
-          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss' | translate"
-          [panelWidth]="'fit-content'"
-        >
-          @for (abschluss of dialogData.abschluesse; track abschluss) {
-            <mat-option [value]="abschluss">
-              {{ abschluss | translatedProp: 'bezeichnung' : translate.currentLang }} -
-              {{ 'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | translate }}
-            </mat-option>
-          }
-        </mat-select>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <div class="tw-w-full">
+        <dv-shared-ui-select-search
+          [formControl]="form.controls.abschlussId"
+          [testIdSig]="'administration-ausbildungsstaette-select-abschluss'"
+          [labelKeySig]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss'"
+          [valuesSig]="dialogData.abschluesse"
+          [sortByValueSig]="true"
+          [languageSig]="dialogData.language"
+        ></dv-shared-ui-select-search>
+      </div>
 
       @if (form.errors?.['conflict'] && form.dirty) {
         <div class="group-errors">

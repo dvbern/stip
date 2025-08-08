@@ -32,10 +32,6 @@ import {
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { LookupType } from '@dv/shared/model/select-search';
-import {
-  SharedUiFormFieldDirective,
-  SharedUiFormMessageErrorDirective,
-} from '@dv/shared/ui/form';
 import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
@@ -43,7 +39,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 type CreateAbschlussData = {
   existingAusbildungsgaenge: AusbildungsgangSlim[];
   ausbildungsstaetten: (AusbildungsstaetteSlim & LookupType)[];
-  abschluesse: AbschlussSlim[];
+  abschluesse: (AbschlussSlim & LookupType)[];
   language: Language;
 };
 
@@ -57,8 +53,6 @@ type CreateAbschlussData = {
     MatInputModule,
     MatSelectModule,
     MatAutocompleteModule,
-    SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
     TranslatedPropertyPipe,
     SharedUiSelectSearchComponent,
   ],
@@ -80,7 +74,7 @@ export class CreateAusbildungsgangDialogComponent {
         <string | undefined>undefined,
         [Validators.required],
       ],
-      abschluss: [<AbschlussSlim | null>null, [Validators.required]],
+      abschlussId: [<string | undefined>undefined, [Validators.required]],
     },
     {
       validators: validateUniqueCombination(
@@ -92,6 +86,7 @@ export class CreateAusbildungsgangDialogComponent {
   ausbildungsstaetteIdChangedSig = toSignal(
     this.form.controls.ausbildungsstaetteId.valueChanges,
   );
+  abschlussIdChangedSig = toSignal(this.form.controls.abschlussId.valueChanges);
   selectedAusbildungsstaetteSig = computed(() => {
     const ausbildungsstaetteId = this.ausbildungsstaetteIdChangedSig();
     const ausbildungsstaette = this.dialogData.ausbildungsstaetten.find(
@@ -100,9 +95,17 @@ export class CreateAusbildungsgangDialogComponent {
 
     return ausbildungsstaette;
   });
+  selectedAbschlussSig = computed(() => {
+    const abschlussId = this.abschlussIdChangedSig();
+    const abschluss = this.dialogData.abschluesse.find(
+      (a) => a.id === abschlussId,
+    );
+
+    return abschluss;
+  });
   ausbildungsgangNameSig = computed(() => {
     const ausbildungsstaette = this.selectedAusbildungsstaetteSig();
-    const { abschluss } = this.formValueChangedSig() ?? {};
+    const abschluss = this.selectedAbschlussSig();
     if (!ausbildungsstaette || !abschluss) {
       return {
         nameDe: '',
@@ -130,7 +133,7 @@ export class CreateAusbildungsgangDialogComponent {
 
     const values = convertTempFormToRealValues(this.form);
     this.dialogRef.close({
-      abschlussId: values.abschluss.id,
+      abschlussId: values.abschlussId,
       ausbildungsstaetteId: values.ausbildungsstaetteId,
     });
   }
@@ -144,24 +147,25 @@ const validateUniqueCombination =
   (existingAusbildungsgaenge: AusbildungsgangSlim[]): ValidatorFn =>
   (
     formGroup: AbstractControl<{
-      ausbildungsstaetteId: AbstractControl<string | undefined>;
-      abschluss: AbstractControl<AbschlussSlim | null>;
+      ausbildungsstaetteId: string | undefined;
+      abschlussId: string | null;
     }>,
   ) => {
-    const { id: abschlussId } = formGroup.getRawValue().abschluss ?? {};
-    const ausbildungsstaetteId = formGroup.getRawValue().ausbildungsstaetteId;
+    const abschlussId = formGroup.value.abschlussId;
+    const ausbildungsstaetteId = formGroup.value.ausbildungsstaetteId;
 
     if (!ausbildungsstaetteId || !abschlussId) {
       return null;
     }
 
     if (
-      existingAusbildungsgaenge.some(
-        (ausbildugnsgang) =>
+      existingAusbildungsgaenge.some((ausbildugnsgang) => {
+        return (
           ausbildugnsgang.aktiv &&
           ausbildugnsgang.abschlussId === abschlussId &&
-          ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId,
-      )
+          ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId
+        );
+      })
     ) {
       return { conflict: true };
     }

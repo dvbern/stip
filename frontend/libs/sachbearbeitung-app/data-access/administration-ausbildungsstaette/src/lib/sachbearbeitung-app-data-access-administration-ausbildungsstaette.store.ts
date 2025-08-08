@@ -6,7 +6,6 @@ import { Observable, map, pipe, switchMap, tap } from 'rxjs';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Abschluss,
-  AbschlussSlim,
   Ausbildungsgang,
   AusbildungsgangSlim,
   Ausbildungsstaette,
@@ -36,7 +35,6 @@ type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
 type AusbildungsstaetteState = {
   lastCreate: RemoteData<unknown>;
   lastEdit: RemoteData<unknown>;
-  availableAbschluesse: CachedRemoteData<AbschlussSlim[]>;
   allAusbildungsgaenge: CachedRemoteData<AusbildungsgangSlim[]>;
   ausbildungsgaenge: CachedRemoteData<PaginatedAusbildungsgang>;
   ausbildungsstaetten: CachedRemoteData<PaginatedAusbildungsstaette>;
@@ -46,7 +44,6 @@ type AusbildungsstaetteState = {
 const initialState: AusbildungsstaetteState = {
   lastCreate: initial(),
   lastEdit: initial(),
-  availableAbschluesse: initial(),
   allAusbildungsgaenge: initial(),
   ausbildungsgaenge: initial(),
   ausbildungsstaetten: initial(),
@@ -76,25 +73,6 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
       canArchive: e.aktiv && !e.chShis,
     }));
   });
-
-  loadAvailableAbschluesse$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          availableAbschluesse: cachedPending(state.availableAbschluesse),
-        }));
-      }),
-      switchMap(() =>
-        this.ausbildungsstaetteService
-          .getAllAbschluessForAuswahl$()
-          .pipe(
-            handleApiResponse((availableAbschluesse) =>
-              patchState(this, { availableAbschluesse }),
-            ),
-          ),
-      ),
-    ),
-  );
 
   loadAllAusbildungsgaenge$ = rxMethod<void>(
     pipe(

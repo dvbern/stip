@@ -141,7 +141,7 @@ export class AusbildungsgangComponent
 
   addAusbildungsgangIsLoadingSig = computed(() => {
     const abschluesseLoading = isPending(
-      this.administrationAusbildungsstaetteStore.availableAbschluesse(),
+      this.administrationAusbildungsstaetteStore.abschluesse(),
     );
     const ausbildungsstaettenLoading = isPending(
       this.ausbildungsstaetteStore.ausbildungsstaetten(),
@@ -199,7 +199,7 @@ export class AusbildungsgangComponent
 
   constructor() {
     this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
-    this.administrationAusbildungsstaetteStore.loadAvailableAbschluesse$();
+    this.ausbildungsstaetteStore.loadAbschluesse$();
     this.administrationAusbildungsstaetteStore.loadAllAusbildungsgaenge$();
 
     limitPageToNumberOfEntriesEffect(
@@ -291,8 +291,7 @@ export class AusbildungsgangComponent
       ausbildungsstaetten:
         this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
       abschluesse: sortListByText(
-        this.administrationAusbildungsstaetteStore.availableAbschluesse()
-          .data ?? [],
+        this.ausbildungsstaetteStore.abschluesseViewSig(),
         (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
       ),
       language: this.currentLangSig(),

@@ -142,7 +142,7 @@ export class AusbildungsstaetteComponent
 
   addAusbildungsstaetteIsLoadingSig = computed(() => {
     const abschluesseLoading = isPending(
-      this.administrationAusbildungsstaetteStore.availableAbschluesse(),
+      this.administrationAusbildungsstaetteStore.abschluesse(),
     );
     const ausbildungsstaettenLoading = isPending(
       this.ausbildungsstaetteStore.ausbildungsstaetten(),
@@ -274,10 +274,8 @@ export class AusbildungsstaetteComponent
   createAusbildungsstaette() {
     CreateAusbildungsstaetteDialogComponent.open(this.dialog, {
       ausbildungsstaetten:
-        this.ausbildungsstaetteStore.ausbildungsstaetten().data ?? [],
-      abschluesse:
-        this.administrationAusbildungsstaetteStore.availableAbschluesse()
-          .data ?? [],
+        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+      abschluesse: this.ausbildungsstaetteStore.abschluesseViewSig(),
     })
       .afterClosed()
       .subscribe((ausbildungsstaetteCreate) => {
