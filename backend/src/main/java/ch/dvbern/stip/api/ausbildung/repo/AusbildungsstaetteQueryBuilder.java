@@ -82,11 +82,11 @@ public class AusbildungsstaetteQueryBuilder {
         };
 
         final var orderSpecifier = switch (sortOrder) {
-            case ASCENDING -> fieldSpecified.asc();
-            case DESCENDING -> fieldSpecified.desc();
+            case ASCENDING -> fieldSpecified.asc().nullsLast();
+            case DESCENDING -> fieldSpecified.desc().nullsFirst();
         };
 
-        query.orderBy(orderSpecifier.nullsLast());
+        query.orderBy(orderSpecifier);
     }
 
     public void defaultOrder(final JPAQuery<Ausbildungsstaette> query) {
