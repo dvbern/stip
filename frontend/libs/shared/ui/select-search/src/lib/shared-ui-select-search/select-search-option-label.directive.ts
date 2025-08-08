@@ -7,16 +7,16 @@ export interface SelectTemplateContext<T extends LookupType> {
 }
 
 @Directive({
-  selector: '[dvAutocompleteLabel]',
+  selector: '[dvSearchOptionLabel]',
   standalone: true,
 })
-export class SharedUiAutocompleteLabelDirective<T extends LookupType> {
-  dvAutocompleteLabel = input.required<T[]>();
+export class SharedUiSearchOptionLabelDirective<T extends LookupType> {
+  dvSearchOptionLabel = input.required<T[]>();
 
   public templateRef = inject(TemplateRef<T>);
 
   static ngTemplateContextGuard<T extends LookupType>(
-    dir: SharedUiAutocompleteLabelDirective<T>,
+    dir: SharedUiSearchOptionLabelDirective<T>,
     ctx: any,
   ): ctx is SelectTemplateContext<T> {
     // As before the guard body is not used at runtime, and included only to avoid

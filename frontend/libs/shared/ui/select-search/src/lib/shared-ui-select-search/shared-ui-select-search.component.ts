@@ -45,7 +45,7 @@ import {
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { sortListByText } from '@dv/shared/util/table';
 
-import { SharedUiAutocompleteLabelDirective } from './select-search-option-label.directive';
+import { SharedUiSearchOptionLabelDirective } from './select-search-option-label.directive';
 
 /**
  * A reusable select-search component for Angular applications.
@@ -175,7 +175,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     equal: (a, b) => a === b,
   });
 
-  optionTemplateSig = contentChild(SharedUiAutocompleteLabelDirective<T>);
+  optionTemplateSig = contentChild(SharedUiSearchOptionLabelDirective<T>);
   valueId: string | undefined;
   /**
    * Internal autocomplete control - works with Land objects and searchstrings

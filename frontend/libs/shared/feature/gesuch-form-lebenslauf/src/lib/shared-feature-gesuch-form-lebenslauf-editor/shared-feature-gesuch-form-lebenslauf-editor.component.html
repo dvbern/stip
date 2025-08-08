@@ -20,7 +20,7 @@
           [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
           [languageSig]="languageSig()"
         >
-          <ng-container *dvAutocompleteLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
+          <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
             @let abschlussFullname =
               `${abschluss | translatedProp: 'bezeichnung' : languageSig()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
             {{ abschlussFullname }}

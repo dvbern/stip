@@ -48,7 +48,7 @@ import {
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
-  SharedUiAutocompleteLabelDirective,
+  SharedUiSearchOptionLabelDirective,
   SharedUiSelectSearchComponent,
 } from '@dv/shared/ui/select-search';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -88,7 +88,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
     SharedUiSelectSearchComponent,
-    SharedUiAutocompleteLabelDirective,
+    SharedUiSearchOptionLabelDirective,
     TranslatedPropertyPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
