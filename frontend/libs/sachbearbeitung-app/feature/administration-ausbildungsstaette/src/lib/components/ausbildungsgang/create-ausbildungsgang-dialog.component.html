@@ -42,7 +42,13 @@
           [valuesSig]="dialogData.abschluesse"
           [sortByValueSig]="true"
           [languageSig]="dialogData.language"
-        ></dv-shared-ui-select-search>
+        >
+          <ng-container *dvSearchOptionLabel="dialogData.abschluesse; let abschluss">
+            @let abschlussFullname =
+              `${abschluss | translatedProp: 'bezeichnung' : dialogData.language} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
+            {{ abschlussFullname }}
+          </ng-container>
+        </dv-shared-ui-select-search>
       </div>
 
       @if (form.errors?.['conflict'] && form.dirty) {

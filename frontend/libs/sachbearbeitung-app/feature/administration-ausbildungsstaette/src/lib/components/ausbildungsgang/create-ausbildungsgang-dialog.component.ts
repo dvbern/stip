@@ -32,7 +32,10 @@ import {
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { LookupType } from '@dv/shared/model/select-search';
-import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
+import {
+  SharedUiSearchOptionLabelDirective,
+  SharedUiSelectSearchComponent,
+} from '@dv/shared/ui/select-search';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
@@ -55,6 +58,7 @@ type CreateAbschlussData = {
     MatAutocompleteModule,
     TranslatedPropertyPipe,
     SharedUiSelectSearchComponent,
+    SharedUiSearchOptionLabelDirective,
   ],
   templateUrl: './create-ausbildungsgang-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -159,10 +163,11 @@ const validateUniqueCombination =
     }
 
     if (
-      existingAusbildungsgaenge.some((ausbildugnsgang) => (
-        ausbildugnsgang.abschlussId === abschlussId &&
-        ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId
-      ))
+      existingAusbildungsgaenge.some(
+        (ausbildugnsgang) =>
+          ausbildugnsgang.abschlussId === abschlussId &&
+          ausbildugnsgang.ausbildungsstaetteId === ausbildungsstaetteId,
+      )
     ) {
       return { conflict: true };
     }
