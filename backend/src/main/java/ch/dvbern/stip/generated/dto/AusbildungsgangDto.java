@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BildungskategorieDto;
+import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -22,10 +23,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungsgangDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid BildungskategorieDto bildungskategorie;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid UUID ausbildungsstaetteId;
+  private @Valid AbschlussDto abschluss;
+  private @Valid AusbildungsstaetteDto ausbildungsstaette;
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -48,75 +48,59 @@ public class AusbildungsgangDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangDto bildungskategorie(BildungskategorieDto bildungskategorie) {
-    this.bildungskategorie = bildungskategorie;
+  public AusbildungsgangDto abschluss(AbschlussDto abschluss) {
+    this.abschluss = abschluss;
     return this;
   }
 
   
-  @JsonProperty("bildungskategorie")
+  @JsonProperty("abschluss")
   @NotNull
-  public BildungskategorieDto getBildungskategorie() {
-    return bildungskategorie;
+  public AbschlussDto getAbschluss() {
+    return abschluss;
   }
 
-  @JsonProperty("bildungskategorie")
-  public void setBildungskategorie(BildungskategorieDto bildungskategorie) {
-    this.bildungskategorie = bildungskategorie;
-  }
-
-  /**
-   **/
-  public AusbildungsgangDto bezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-    return this;
-  }
-
-  
-  @JsonProperty("bezeichnungDe")
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
-  }
-
-  @JsonProperty("bezeichnungDe")
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
+  @JsonProperty("abschluss")
+  public void setAbschluss(AbschlussDto abschluss) {
+    this.abschluss = abschluss;
   }
 
   /**
    **/
-  public AusbildungsgangDto bezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
+  public AusbildungsgangDto ausbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
+    this.ausbildungsstaette = ausbildungsstaette;
     return this;
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
+  @JsonProperty("ausbildungsstaette")
+  @NotNull
+  public AusbildungsstaetteDto getAusbildungsstaette() {
+    return ausbildungsstaette;
   }
 
-  @JsonProperty("bezeichnungFr")
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
+  @JsonProperty("ausbildungsstaette")
+  public void setAusbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
+    this.ausbildungsstaette = ausbildungsstaette;
   }
 
   /**
    **/
-  public AusbildungsgangDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
+  public AusbildungsgangDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsstaetteId")
-  public UUID getAusbildungsstaetteId() {
-    return ausbildungsstaetteId;
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
   }
 
-  @JsonProperty("ausbildungsstaetteId")
-  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
 
@@ -130,15 +114,14 @@ public class AusbildungsgangDto  implements Serializable {
     }
     AusbildungsgangDto ausbildungsgang = (AusbildungsgangDto) o;
     return Objects.equals(this.id, ausbildungsgang.id) &&
-        Objects.equals(this.bildungskategorie, ausbildungsgang.bildungskategorie) &&
-        Objects.equals(this.bezeichnungDe, ausbildungsgang.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgang.bezeichnungFr) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgang.ausbildungsstaetteId);
+        Objects.equals(this.abschluss, ausbildungsgang.abschluss) &&
+        Objects.equals(this.ausbildungsstaette, ausbildungsgang.ausbildungsstaette) &&
+        Objects.equals(this.aktiv, ausbildungsgang.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bildungskategorie, bezeichnungDe, bezeichnungFr, ausbildungsstaetteId);
+    return Objects.hash(id, abschluss, ausbildungsstaette, aktiv);
   }
 
   @Override
@@ -147,10 +130,9 @@ public class AusbildungsgangDto  implements Serializable {
     sb.append("class AusbildungsgangDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
+    sb.append("    abschluss: ").append(toIndentedString(abschluss)).append("\n");
+    sb.append("    ausbildungsstaette: ").append(toIndentedString(ausbildungsstaette)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -19,10 +19,11 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,9 +49,12 @@ class AntragsstellerV1StichdatenTest {
         var endOfAusbildungsjahr = gesuch.getLatestGesuchTranche().getGueltigkeit().getGueltigBis();
 
         // pia has at least 1 abgeschlossene Ausbildung in Lebenslauf
-        var bildungsart = LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS;
         var lebenslaufitem = new LebenslaufItem();
-        lebenslaufitem.setBildungsart(bildungsart);
+        lebenslaufitem.setAbschluss(
+            new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG)
+                .setAskForBerufsmaturitaet(true)
+                .setBerufsbefaehigenderAbschluss(true)
+        );
         lebenslaufitem.setBis(ausbildung.getAusbildungBegin().minusMonths(1));
         lebenslaufitem.setVon(ausbildung.getAusbildungBegin().minusYears(1));
         lebenslaufitem.setAusbildungAbgeschlossen(true);

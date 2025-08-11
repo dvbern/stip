@@ -25,10 +25,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -49,7 +51,6 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
@@ -262,7 +263,8 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang());
+            .setAusbildungsgang(new Ausbildungsgang())
+            .setFachrichtungBerufsbezeichnung("test");
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
         assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
 
@@ -273,24 +275,16 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .setBildungskategorie(new Bildungskategorie());
+            .setAbschluss(
+                new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG).setAskForBerufsmaturitaet(true)
+            );
         // Test Ausbildung Validation for BFS value = 4: both true/false valid
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(4);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
-        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
-        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
-
-        // Test Ausbildung Validation for BFS value = 5: both true/false valid
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
-            .getAusbildung()
-            .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(5);
+            .getAbschluss()
+            .setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II)
+            .setBfsKategorie(4);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
         assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
@@ -300,8 +294,10 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .getAusbildungsgang()
-            .getBildungskategorie()
-            .setBfs(0);
+            .getAbschluss()
+            .setBfsKategorie(0)
+            .setAskForBerufsmaturitaet(false)
+            .setZusatzfrage(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
         assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
@@ -447,7 +443,7 @@ class GesuchValidatorTest {
     void testLebenslaufItemArtValidationError() {
 
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
+        lebenslaufItem.setAbschluss(new Abschluss());
         lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
@@ -498,7 +494,7 @@ class GesuchValidatorTest {
     @Test
     void testGesuchEinreichenValidationLebenslauf() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
+        lebenslaufItem.setAbschluss(new Abschluss());
         lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
         lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));

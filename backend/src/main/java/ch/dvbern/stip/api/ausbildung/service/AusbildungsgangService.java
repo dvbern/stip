@@ -17,83 +17,135 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
-import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungsgangService {
     private final AusbildungsgangRepository ausbildungsgangRepository;
-    private final BildungskategorieRepository bildungskategorieRepository;
-    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
+    private final AusbildungsgangQueryBuilder ausbildungsgangQueryBuilder;
     private final AusbildungsgangMapper ausbildungsgangMapper;
-
-    public AusbildungsgangDto findById(UUID ausbildungsgangId) {
-        return ausbildungsgangMapper.toDto(ausbildungsgangRepository.requireById(ausbildungsgangId));
-    }
+    private final ConfigService configService;
 
     @Transactional
-    public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangDto) {
-        Ausbildungsgang ausbildungsgang = persistsAusbildungsgang(ausbildungsgangDto);
+    public AusbildungsgangDto createAusbildungsgang(final AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        final var ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
+        validateAusbildungsgangUniqueness(ausbildungsgang);
+
+        ausbildungsgangRepository.persist(ausbildungsgang);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
 
     @Transactional
-    public AusbildungsgangDto updateAusbildungsgang(
-        UUID ausbildungsgangId,
-        AusbildungsgangUpdateDto ausbildungsgangUpdateDto
+    public List<AusbildungsgangSlimDto> getAllAusbildungsgangForAuswahl() {
+        return ausbildungsgangRepository.findAllAktive()
+            .map(ausbildungsgangMapper::toSlimDto)
+            .toList();
+    }
+
+    public PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(
+        final Integer page,
+        final Integer pageSize,
+        final AusbildungsgangSortColumn sortColumn,
+        final SortOrder sortOrder,
+        final String abschlussBezeichnungDe,
+        final String abschlussBezeichnungFr,
+        final Ausbildungskategorie ausbildungskategorie,
+        final String ausbildungsstaetteNameDe,
+        final String ausbildungsstaetteNameFr,
+        final Boolean aktiv
     ) {
-        var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
-        persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
-        return ausbildungsgangMapper.toDto(ausbildungsgangToUpdate);
+        if (pageSize > configService.getMaxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+
+        final var baseQuery = ausbildungsgangQueryBuilder.baseQuery();
+
+        if (Objects.nonNull(abschlussBezeichnungDe)) {
+            ausbildungsgangQueryBuilder.abschlussBezeichnungDeFilter(baseQuery, abschlussBezeichnungDe);
+        }
+        if (Objects.nonNull(abschlussBezeichnungFr)) {
+            ausbildungsgangQueryBuilder.abschlussBezeichnungFrFilter(baseQuery, abschlussBezeichnungFr);
+        }
+        if (Objects.nonNull(ausbildungskategorie)) {
+            ausbildungsgangQueryBuilder.ausbildungskategorieFilter(baseQuery, ausbildungskategorie);
+        }
+        if (Objects.nonNull(ausbildungsstaetteNameDe)) {
+            ausbildungsgangQueryBuilder.ausbildungsstaetteNameDeFilter(baseQuery, ausbildungsstaetteNameDe);
+        }
+        if (Objects.nonNull(ausbildungsstaetteNameFr)) {
+            ausbildungsgangQueryBuilder.ausbildungsstaetteNameFrFilter(baseQuery, ausbildungsstaetteNameFr);
+        }
+        if (Objects.nonNull(aktiv)) {
+            ausbildungsgangQueryBuilder.aktivFilter(baseQuery, aktiv);
+        }
+
+        // Creating the count query must happen before ordering,
+        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
+        final var countQuery = ausbildungsgangQueryBuilder.getCountQuery(baseQuery);
+
+        if (sortColumn != null && sortOrder != null) {
+            ausbildungsgangQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        } else {
+            ausbildungsgangQueryBuilder.defaultOrder(baseQuery);
+        }
+
+        ausbildungsgangQueryBuilder.paginate(baseQuery, page, pageSize);
+
+        final var results = baseQuery.stream()
+            .map(ausbildungsgangMapper::toDto)
+            .toList();
+
+        return new PaginatedAusbildungsgangDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
+        );
     }
 
     @Transactional
-    public void deleteAusbildungsgang(UUID ausbildungsgangId) {
-        var ausbildungsgang = ausbildungsgangRepository.requireById(ausbildungsgangId);
-        ausbildungsgangRepository.delete(ausbildungsgang);
+    public AusbildungsgangDto setAusbildungsgangInaktiv(final UUID ausbildungsgangId) {
+        final var ausbildungsgang = ausbildungsgangRepository.requireById(ausbildungsgangId);
+        ausbildungsgang.setAktiv(false);
+        return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
 
-    private void persistsAusbildungsgang(
-        AusbildungsgangUpdateDto ausbildungsgangUpdate,
-        Ausbildungsgang ausbildungsgangToUpdate
-    ) {
-        ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
-        ausbildungsgangToUpdate
-            .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaetteId()));
-        ausbildungsgangToUpdate.setBildungskategorie(loadBildungsart(ausbildungsgangUpdate.getBildungskategorieId()));
-        ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
-    }
+    private void validateAusbildungsgangUniqueness(final Ausbildungsgang ausbildungsgang) {
+        final var duplicate = ausbildungsgangRepository.findByAusbildungsstaetteAndAbschluss(
+            ausbildungsgang.getAusbildungsstaette().getId(),
+            ausbildungsgang.getAbschluss().getId()
+        );
 
-    private Ausbildungsgang persistsAusbildungsgang(
-        AusbildungsgangCreateDto ausbildungsgangCreateDto
-    ) {
-        Ausbildungsgang ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
-        ausbildungsgang
-            .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangCreateDto.getAusbildungsstaetteId()));
-        ausbildungsgang.setBildungskategorie(loadBildungsart(ausbildungsgangCreateDto.getBildungskategorieId()));
-        ausbildungsgangRepository.persist(ausbildungsgang);
-        return ausbildungsgang;
-    }
-
-    private Ausbildungsstaette loadAusbildungsstaetteIfExists(UUID ausbildungsstaetteId) {
-        return ausbildungsstaetteId != null ? ausbildungsstaetteRepository.requireById(ausbildungsstaetteId)
-            : new Ausbildungsstaette();
-    }
-
-    private Bildungskategorie loadBildungsart(UUID bildungsartId) {
-        return bildungskategorieRepository.requireById(bildungsartId);
+        if (duplicate.isPresent()) {
+            throw new CustomValidationsException(
+                "The combination of Ausbildungsstaette and Abschluss must be unique",
+                new CustomConstraintViolation(
+                    VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE,
+                    ""
+                )
+            );
+        }
     }
 }

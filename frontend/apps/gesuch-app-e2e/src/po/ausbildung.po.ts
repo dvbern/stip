@@ -76,7 +76,11 @@ export class AusbildungPO {
       ausbildung.ausbildungsgangText,
     );
 
-    await this.elems.fachrichtung.fill(ausbildung.fachrichtung);
+    if (ausbildung.fachrichtungBerufsbezeichnung) {
+      await this.elems.fachrichtung.fill(
+        ausbildung.fachrichtungBerufsbezeichnung,
+      );
+    }
 
     await this.elems.ausbildungsort.fill(ausbildung.ausbildungsort);
 

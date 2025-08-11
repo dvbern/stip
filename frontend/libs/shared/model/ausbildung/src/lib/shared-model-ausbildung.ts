@@ -29,6 +29,8 @@ export type SharedModelGsAusbildungView = Modify<
     status: AusbildungsStatus;
     canDelete: boolean;
     gesuchs: SharedModelGsGesuchView[];
+    bezeichnungDe: string;
+    bezeichnungFr: string;
   }
 >;
 export type SharedModelGsDashboardView = Omit<
@@ -40,3 +42,5 @@ export type SharedModelGsDashboardView = Omit<
   activeAusbildungen: SharedModelGsAusbildungView[];
   inactiveAusbildungen: SharedModelGsAusbildungView[];
 };
+
+export type StatusType = 'ACTIVE' | 'INACTIVE' | undefined;

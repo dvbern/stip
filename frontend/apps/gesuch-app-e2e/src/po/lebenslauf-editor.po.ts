@@ -6,16 +6,18 @@ import {
   selectMatOption,
 } from '@dv/shared/util-fn/e2e-util';
 
+export type LebenslaufItemValues = LebenslaufItem & {
+  abschluss?: string;
+};
+
 export class LebenslaufEditorPO {
   public elems: {
     page: Page;
 
     form: Locator;
 
-    ausbildungsartSelect: Locator;
-    berufsbezeichnung: Locator;
-    fachrichtung: Locator;
-    titelDesAbschlusses: Locator;
+    abschlussSelect: Locator;
+    fachrichtungBerufsbezeichnung: Locator;
     taetigkeitsartSelect: Locator;
     taetigkeitsBeschreibung: Locator;
     beginn: Locator;
@@ -34,15 +36,9 @@ export class LebenslaufEditorPO {
 
       form: page.getByTestId('form-lebenslauf-form'),
 
-      ausbildungsartSelect: page.getByTestId(
-        'lebenslauf-editor-ausbildungsart-select',
-      ),
-      berufsbezeichnung: page.getByTestId(
-        'lebenslauf-editor-berufsbezeichnung',
-      ),
-      fachrichtung: page.getByTestId('lebenslauf-editor-fachrichtung'),
-      titelDesAbschlusses: page.getByTestId(
-        'lebenslauf-editor-titelDesAbschlusses',
+      abschlussSelect: page.getByTestId('lebenslauf-editor-abschluss-select'),
+      fachrichtungBerufsbezeichnung: page.getByTestId(
+        'lebenslauf-editor-fachrichtungBerufsbezeichnung',
       ),
       taetigkeitsartSelect: page.getByTestId(
         'lebenslauf-editor-taetigkeitsart-select',
@@ -63,10 +59,13 @@ export class LebenslaufEditorPO {
     };
   }
 
-  async addAusbildung(item: LebenslaufItem) {
-    await selectMatOption(
-      this.elems.ausbildungsartSelect,
-      item.bildungsart ?? 'FACHMATURITAET',
+  async addAusbildung(item: LebenslaufItemValues) {
+    if (item.abschluss) {
+      await selectMatOption(this.elems.abschlussSelect, item.abschluss);
+    }
+
+    await this.elems.fachrichtungBerufsbezeichnung.fill(
+      item.fachrichtungBerufsbezeichnung ?? '',
     );
 
     await this.elems.beginn.fill(item.von);

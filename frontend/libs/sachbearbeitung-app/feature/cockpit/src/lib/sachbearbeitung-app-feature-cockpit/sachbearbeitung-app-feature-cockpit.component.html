@@ -47,7 +47,7 @@
               data-testid="cockpit-table"
               mat-table
               matSort
-              (matSortChange)="sortData($event)"
+              (matSortChange)="sortList($event)"
               tabindex="0"
             >
               <caption class="cdk-visually-hidden">
@@ -71,6 +71,7 @@
                         formControlName="fallNummer"
                         data-testid="cockpit-filter-fall"
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
@@ -142,6 +143,7 @@
                         dvMaxLength
                         formControlName="piaNachname"
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
@@ -175,6 +177,7 @@
                         dvMaxLength
                         formControlName="piaVorname"
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
@@ -216,6 +219,7 @@
                         formControlName="piaGeburtsdatum"
                         [matDatepicker]="geburtsdatumDatepicker"
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                       <button
                         matIconSuffix
@@ -292,6 +296,7 @@
                         dvMaxLength
                         formControlName="bearbeiter"
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
@@ -332,6 +337,7 @@
                         [value]="letzteAktivitaetRangeSig()"
                         disabled
                         (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
                       />
                       <button
                         matIconSuffix
@@ -410,7 +416,7 @@
               [pageSize]="pageSize() ?? defaultPageSize"
               [pageIndex]="page() ?? 0"
               [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
-              (page)="paginate($event)"
+              (page)="paginateList($event)"
             ></mat-paginator>
           </div>
           @if (gesuchStore.cockpitViewSig().loading) {

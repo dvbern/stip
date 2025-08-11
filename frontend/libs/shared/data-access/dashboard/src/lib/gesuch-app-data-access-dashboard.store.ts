@@ -13,6 +13,7 @@ import {
 import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
+  Ausbildungsgang,
   FallDashboardItem,
   GesuchDashboardItem,
   GesuchService,
@@ -80,12 +81,24 @@ export class DashboardStore extends signalStore(
           rolesMap,
           fallDashboardItem.delegierung,
         );
+        const alternativeBezeichnung = `${ausbildung.alternativeAusbildungsstaette} - ${ausbildung.alternativeAusbildungsgang}`;
+        const getBezeichnung = (
+          lang: 'De' | 'Fr',
+          ausbildungsgang?: Ausbildungsgang,
+        ) =>
+          `${ausbildungsgang?.ausbildungsstaette?.[`name${lang}`]} - ${ausbildungsgang?.abschluss?.[`bezeichnung${lang}`]}`;
 
         (ausbildung.status !== 'AKTIV'
           ? inactiveAusbildungen
           : activeAusbildungen
         ).push({
           ...ausbildung,
+          bezeichnungDe: ausbildung.ausbildungNichtGefunden
+            ? alternativeBezeichnung
+            : getBezeichnung('De', ausbildung.ausbildungsgang),
+          bezeichnungFr: ausbildung.ausbildungNichtGefunden
+            ? alternativeBezeichnung
+            : getBezeichnung('Fr', ausbildung.ausbildungsgang),
           canDelete: canEditAusbildung && canCurrentlyEditAusbildung,
           ausbildungBegin: dateFromMonthYearString(ausbildung.ausbildungBegin),
           ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
@@ -209,8 +222,8 @@ const toGesuchDashboardItemView =
       canEdit,
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
       canCreateAenderung:
-        (gesuch.gesuchStatus == 'STIPENDIENANSPRUCH' ||
-          gesuch.gesuchStatus == 'KEIN_STIPENDIENANSPRUCH') &&
+        (gesuch.gesuchStatus === 'STIPENDIENANSPRUCH' ||
+          gesuch.gesuchStatus === 'KEIN_STIPENDIENANSPRUCH') &&
         !gesuch.offeneAenderung &&
         canCurrentlyEditGesuch,
       canDeleteAenderung:

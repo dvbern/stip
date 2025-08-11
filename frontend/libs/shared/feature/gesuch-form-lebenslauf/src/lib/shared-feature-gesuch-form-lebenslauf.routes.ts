@@ -10,10 +10,7 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // ausbildungsstaette needed for the planned ausbildung at the bottom of lebenslauf
-      AusbildungsstaetteStore,
-    ],
+    providers: [AusbildungsstaetteStore],
     children: [
       ...idAndTrancheIdRoutes(
         routeWithUnsavedChangesGuard({

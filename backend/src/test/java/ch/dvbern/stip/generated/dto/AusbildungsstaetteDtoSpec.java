@@ -15,17 +15,11 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteAnyOfDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -34,16 +28,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AusbildungsstaetteDtoSpec
  */
 @JsonPropertyOrder({
-  AusbildungsstaetteDtoSpec.JSON_PROPERTY_AUSBILDUNGSGAENGE,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_ID,
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_NAME_DE,
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_NAME_FR,
-  AusbildungsstaetteDtoSpec.JSON_PROPERTY_ID
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_CH_SHIS,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_BUR_NO,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_CT_NO,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Ausbildungsstaette")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AusbildungsstaetteDtoSpec {
-  public static final String JSON_PROPERTY_AUSBILDUNGSGAENGE = "ausbildungsgaenge";
-  private List<AusbildungsgangDtoSpec> ausbildungsgaenge;
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
 
   public static final String JSON_PROPERTY_NAME_DE = "nameDe";
   private String nameDe;
@@ -51,43 +48,44 @@ public class AusbildungsstaetteDtoSpec {
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
   private String nameFr;
 
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
+  public static final String JSON_PROPERTY_CH_SHIS = "chShis";
+  private String chShis;
+
+  public static final String JSON_PROPERTY_BUR_NO = "burNo";
+  private String burNo;
+
+  public static final String JSON_PROPERTY_CT_NO = "ctNo";
+  private String ctNo;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public AusbildungsstaetteDtoSpec() {
   }
 
-  public AusbildungsstaetteDtoSpec ausbildungsgaenge(List<AusbildungsgangDtoSpec> ausbildungsgaenge) {
+  public AusbildungsstaetteDtoSpec id(UUID id) {
     
-    this.ausbildungsgaenge = ausbildungsgaenge;
-    return this;
-  }
-
-  public AusbildungsstaetteDtoSpec addAusbildungsgaengeItem(AusbildungsgangDtoSpec ausbildungsgaengeItem) {
-    if (this.ausbildungsgaenge == null) {
-      this.ausbildungsgaenge = new ArrayList<>();
-    }
-    this.ausbildungsgaenge.add(ausbildungsgaengeItem);
+    this.id = id;
     return this;
   }
 
    /**
-   * Get ausbildungsgaenge
-   * @return ausbildungsgaenge
+   * Get id
+   * @return id
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<AusbildungsgangDtoSpec> getAusbildungsgaenge() {
-    return ausbildungsgaenge;
+  public UUID getId() {
+    return id;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsgaenge(List<AusbildungsgangDtoSpec> ausbildungsgaenge) {
-    this.ausbildungsgaenge = ausbildungsgaenge;
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
   }
 
 
@@ -143,29 +141,107 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  public AusbildungsstaetteDtoSpec id(UUID id) {
+  public AusbildungsstaetteDtoSpec chShis(String chShis) {
     
-    this.id = id;
+    this.chShis = chShis;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get chShis
+   * @return chShis
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_CH_SHIS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public UUID getId() {
-    return id;
+  public String getChShis() {
+    return chShis;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_CH_SHIS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
-    this.id = id;
+  public void setChShis(String chShis) {
+    this.chShis = chShis;
+  }
+
+
+  public AusbildungsstaetteDtoSpec burNo(String burNo) {
+    
+    this.burNo = burNo;
+    return this;
+  }
+
+   /**
+   * Get burNo
+   * @return burNo
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUR_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getBurNo() {
+    return burNo;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BUR_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBurNo(String burNo) {
+    this.burNo = burNo;
+  }
+
+
+  public AusbildungsstaetteDtoSpec ctNo(String ctNo) {
+    
+    this.ctNo = ctNo;
+    return this;
+  }
+
+   /**
+   * Get ctNo
+   * @return ctNo
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CT_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getCtNo() {
+    return ctNo;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CT_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCtNo(String ctNo) {
+    this.ctNo = ctNo;
+  }
+
+
+  public AusbildungsstaetteDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
   @Override
@@ -177,25 +253,31 @@ public class AusbildungsstaetteDtoSpec {
       return false;
     }
     AusbildungsstaetteDtoSpec ausbildungsstaette = (AusbildungsstaetteDtoSpec) o;
-    return Objects.equals(this.ausbildungsgaenge, ausbildungsstaette.ausbildungsgaenge) &&
+    return Objects.equals(this.id, ausbildungsstaette.id) &&
         Objects.equals(this.nameDe, ausbildungsstaette.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaette.nameFr) &&
-        Objects.equals(this.id, ausbildungsstaette.id);
+        Objects.equals(this.chShis, ausbildungsstaette.chShis) &&
+        Objects.equals(this.burNo, ausbildungsstaette.burNo) &&
+        Objects.equals(this.ctNo, ausbildungsstaette.ctNo) &&
+        Objects.equals(this.aktiv, ausbildungsstaette.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungsgaenge, nameDe, nameFr, id);
+    return Objects.hash(id, nameDe, nameFr, chShis, burNo, ctNo, aktiv);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsstaetteDtoSpec {\n");
-    sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    chShis: ").append(toIndentedString(chShis)).append("\n");
+    sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
+    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

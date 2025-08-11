@@ -80,11 +80,16 @@
 
   <!-- Land -->
   <div class="col-12 col-md-6">
-    <dv-shared-ui-land-autocomplete
-      data-testid="form-address-land-autocomplete-component"
+    <dv-shared-ui-select-search
       formControlName="landId"
-      [zuvorHintValueSig]="changes?.landId"
+      [testIdSig]="'form-address-land'"
+      [labelKeySig]="'shared.form.shared.address.country.label'"
+      [valuesSig]="laenderSig()"
       [languageSig]="languageSig()"
-    ></dv-shared-ui-land-autocomplete>
+      [isEntryValidSig]="isValidLandEntry"
+      [panelWidthSig]="'auto'"
+      [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
+      [zuvorValueSig]="changes?.landId"
+    ></dv-shared-ui-select-search>
   </div>
 </div>

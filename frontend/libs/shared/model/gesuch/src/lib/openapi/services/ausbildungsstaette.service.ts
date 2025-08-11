@@ -18,30 +18,101 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { Abschluss } from '../model/abschluss';
+import { AbschlussSlim } from '../model/abschlussSlim';
+import { AbschlussSortColumn } from '../model/abschlussSortColumn';
+import { Ausbildungsgang } from '../model/ausbildungsgang';
+import { AusbildungsgangCreate } from '../model/ausbildungsgangCreate';
+import { AusbildungsgangSlim } from '../model/ausbildungsgangSlim';
+import { AusbildungsgangSortColumn } from '../model/ausbildungsgangSortColumn';
+import { Ausbildungskategorie } from '../model/ausbildungskategorie';
 import { Ausbildungsstaette } from '../model/ausbildungsstaette';
 import { AusbildungsstaetteCreate } from '../model/ausbildungsstaetteCreate';
-import { AusbildungsstaetteUpdate } from '../model/ausbildungsstaetteUpdate';
-import { ValidationReport } from '../model/validationReport';
+import { AusbildungsstaetteSlim } from '../model/ausbildungsstaetteSlim';
+import { AusbildungsstaetteSortColumn } from '../model/ausbildungsstaetteSortColumn';
+import { Bildungsrichtung } from '../model/bildungsrichtung';
+import { BrueckenangebotCreate } from '../model/brueckenangebotCreate';
+import { PaginatedAbschluss } from '../model/paginatedAbschluss';
+import { PaginatedAusbildungsgang } from '../model/paginatedAusbildungsgang';
+import { PaginatedAusbildungsstaette } from '../model/paginatedAusbildungsstaette';
+import { RenameAbschluss } from '../model/renameAbschluss';
+import { RenameAusbildungsstaette } from '../model/renameAusbildungsstaette';
+import { SortOrder } from '../model/sortOrder';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
+export interface AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams {
+    brueckenangebotCreate: BrueckenangebotCreate;
+}
+
+export interface AusbildungsstaetteServiceCreateAusbildungsgangRequestParams {
+    ausbildungsgangCreate: AusbildungsgangCreate;
+}
+
 export interface AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams {
-    ausbildungsstaetteCreate?: AusbildungsstaetteCreate;
+    ausbildungsstaetteCreate: AusbildungsstaetteCreate;
 }
 
-export interface AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams {
-    ausbildungsstaetteId: string;
+export interface AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams {
+    sortColumn?: AbschlussSortColumn;
+    page: number;
+    pageSize: number;
+    sortOrder?: SortOrder;
+    ausbildungskategorie?: Ausbildungskategorie;
+    bildungsrichtung?: Bildungsrichtung;
+    bezeichnungDe?: string;
+    bezeichnungFr?: string;
+    aktiv?: boolean;
 }
 
-export interface AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams {
-    ausbildungsstaetteId: string;
+export interface AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams {
+    sortColumn?: AusbildungsgangSortColumn;
+    page: number;
+    pageSize: number;
+    sortOrder?: SortOrder;
+    abschlussBezeichnungDe?: string;
+    abschlussBezeichnungFr?: string;
+    ausbildungskategorie?: Ausbildungskategorie;
+    ausbildungsstaetteNameDe?: string;
+    ausbildungsstaetteNameFr?: string;
+    aktiv?: boolean;
 }
 
-export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams {
+export interface AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams {
+    sortColumn?: AusbildungsstaetteSortColumn;
+    page: number;
+    pageSize: number;
+    sortOrder?: SortOrder;
+    nameDe?: string;
+    nameFr?: string;
+    chShis?: string;
+    burNo?: string;
+    ctNo?: string;
+    aktiv?: boolean;
+}
+
+export interface AusbildungsstaetteServiceRenameAbschlussRequestParams {
+    abschlussId: string;
+    renameAbschluss: RenameAbschluss;
+}
+
+export interface AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams {
     ausbildungsstaetteId: string;
-    ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
+    renameAusbildungsstaette: RenameAusbildungsstaette;
+}
+
+export interface AusbildungsstaetteServiceSetAbschlussInaktivRequestParams {
+    abschlussId: string;
+}
+
+export interface AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams {
+    ausbildungsgangId: string;
+}
+
+export interface AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams {
+    ausbildungsstaetteId: string;
 }
 
 
@@ -109,6 +180,173 @@ export class AusbildungsstaetteService {
     }
 
     /**
+     * Create an Abschluss for a Brueckenangebot
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createAbschlussBrueckenangebot$(requestParameters: AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Abschluss>;
+     public createAbschlussBrueckenangebot$(requestParameters: AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Abschluss>>;
+     public createAbschlussBrueckenangebot$(requestParameters: AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Abschluss>>;
+     public createAbschlussBrueckenangebot$(requestParameters: AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const brueckenangebotCreate = requestParameters.brueckenangebotCreate;
+        if (brueckenangebotCreate === null || brueckenangebotCreate === undefined) {
+            throw new Error('Required parameter brueckenangebotCreate was null or undefined when calling createAbschlussBrueckenangebot$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/abschluss`;
+        return this.httpClient.request<Abschluss>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: brueckenangebotCreate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create anAusbildungsgang
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createAusbildungsgang$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsgangRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsgang>;
+     public createAusbildungsgang$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsgangRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsgang>>;
+     public createAusbildungsgang$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsgangRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsgang>>;
+     public createAusbildungsgang$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsgangRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungsgangCreate = requestParameters.ausbildungsgangCreate;
+        if (ausbildungsgangCreate === null || ausbildungsgangCreate === undefined) {
+            throw new Error('Required parameter ausbildungsgangCreate was null or undefined when calling createAusbildungsgang$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsgang`;
+        return this.httpClient.request<Ausbildungsgang>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: ausbildungsgangCreate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create an Ausbildungsstaette
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -118,6 +356,9 @@ export class AusbildungsstaetteService {
      public createAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsstaette>>;
      public createAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const ausbildungsstaetteCreate = requestParameters.ausbildungsstaetteCreate;
+        if (ausbildungsstaetteCreate === null || ausbildungsstaetteCreate === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteCreate was null or undefined when calling createAusbildungsstaette$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -188,19 +429,14 @@ export class AusbildungsstaetteService {
     }
 
     /**
-     * Delete Ausbildungsstaette
-     * @param requestParameters
+     * Returns all AbschlussSlim
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public deleteAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public deleteAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public deleteAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public deleteAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
-        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
-            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling deleteAusbildungsstaette$.');
-        }
+     public getAllAbschluessForAuswahl$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<AbschlussSlim>>;
+     public getAllAbschluessForAuswahl$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<AbschlussSlim>>>;
+     public getAllAbschluessForAuswahl$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<AbschlussSlim>>>;
+     public getAllAbschluessForAuswahl$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -221,6 +457,7 @@ export class AusbildungsstaetteService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json',
                 'text/plain'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -246,8 +483,8 @@ export class AusbildungsstaetteService {
             }
         }
 
-        const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/abschluss/slim`;
+        return this.httpClient.request<Array<AbschlussSlim>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -260,18 +497,67 @@ export class AusbildungsstaetteService {
     }
 
     /**
-     * returns a Ausbildungsstaette with the given id
+     * Returns all Abschluesse
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsstaette>;
-     public getAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsstaette>>;
-     public getAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsstaette>>;
-     public getAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
-            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling getAusbildungsstaette$.');
+     public getAllAbschlussForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedAbschluss>;
+     public getAllAbschlussForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedAbschluss>>;
+     public getAllAbschlussForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedAbschluss>>;
+     public getAllAbschlussForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAbschlussForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAbschlussForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const ausbildungskategorie = requestParameters.ausbildungskategorie;
+        const bildungsrichtung = requestParameters.bildungsrichtung;
+        const bezeichnungDe = requestParameters.bezeichnungDe;
+        const bezeichnungFr = requestParameters.bezeichnungFr;
+        const aktiv = requestParameters.aktiv;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
+        }
+        if (ausbildungskategorie !== undefined && ausbildungskategorie !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>ausbildungskategorie, 'ausbildungskategorie');
+        }
+        if (bildungsrichtung !== undefined && bildungsrichtung !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>bildungsrichtung, 'bildungsrichtung');
+        }
+        if (bezeichnungDe !== undefined && bezeichnungDe !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>bezeichnungDe, 'bezeichnungDe');
+        }
+        if (bezeichnungFr !== undefined && bezeichnungFr !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>bezeichnungFr, 'bezeichnungFr');
+        }
+        if (aktiv !== undefined && aktiv !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>aktiv, 'aktiv');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -319,8 +605,77 @@ export class AusbildungsstaetteService {
             }
         }
 
-        const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Ausbildungsstaette>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/abschluss`;
+        return this.httpClient.request<PaginatedAbschluss>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all AusbildungsgaengeSlim
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAllAusbildungsgaengeForAuswahl$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<AusbildungsgangSlim>>;
+     public getAllAusbildungsgaengeForAuswahl$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<AusbildungsgangSlim>>>;
+     public getAllAusbildungsgaengeForAuswahl$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<AusbildungsgangSlim>>>;
+     public getAllAusbildungsgaengeForAuswahl$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsgang/slim`;
+        return this.httpClient.request<Array<AusbildungsgangSlim>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -333,14 +688,269 @@ export class AusbildungsstaetteService {
     }
 
     /**
-     * Returniert alle Ausbildungsstaette zur Verfuegung.
+     * Returns allAusbildungsgang
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAusbildungsstaetten$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Ausbildungsstaette>>;
-     public getAusbildungsstaetten$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Ausbildungsstaette>>>;
-     public getAusbildungsstaetten$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Ausbildungsstaette>>>;
-     public getAusbildungsstaetten$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getAllAusbildungsgangForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedAusbildungsgang>;
+     public getAllAusbildungsgangForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedAusbildungsgang>>;
+     public getAllAusbildungsgangForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedAusbildungsgang>>;
+     public getAllAusbildungsgangForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAusbildungsgangForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAusbildungsgangForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const abschlussBezeichnungDe = requestParameters.abschlussBezeichnungDe;
+        const abschlussBezeichnungFr = requestParameters.abschlussBezeichnungFr;
+        const ausbildungskategorie = requestParameters.ausbildungskategorie;
+        const ausbildungsstaetteNameDe = requestParameters.ausbildungsstaetteNameDe;
+        const ausbildungsstaetteNameFr = requestParameters.ausbildungsstaetteNameFr;
+        const aktiv = requestParameters.aktiv;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
+        }
+        if (abschlussBezeichnungDe !== undefined && abschlussBezeichnungDe !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>abschlussBezeichnungDe, 'abschlussBezeichnungDe');
+        }
+        if (abschlussBezeichnungFr !== undefined && abschlussBezeichnungFr !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>abschlussBezeichnungFr, 'abschlussBezeichnungFr');
+        }
+        if (ausbildungskategorie !== undefined && ausbildungskategorie !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>ausbildungskategorie, 'ausbildungskategorie');
+        }
+        if (ausbildungsstaetteNameDe !== undefined && ausbildungsstaetteNameDe !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>ausbildungsstaetteNameDe, 'ausbildungsstaetteNameDe');
+        }
+        if (ausbildungsstaetteNameFr !== undefined && ausbildungsstaetteNameFr !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>ausbildungsstaetteNameFr, 'ausbildungsstaetteNameFr');
+        }
+        if (aktiv !== undefined && aktiv !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>aktiv, 'aktiv');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsgang`;
+        return this.httpClient.request<PaginatedAusbildungsgang>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all AusbildungsstaetteSlim
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAllAusbildungsstaetteForAuswahl$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<AusbildungsstaetteSlim>>;
+     public getAllAusbildungsstaetteForAuswahl$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<AusbildungsstaetteSlim>>>;
+     public getAllAusbildungsstaetteForAuswahl$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<AusbildungsstaetteSlim>>>;
+     public getAllAusbildungsstaetteForAuswahl$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsstaette/slim`;
+        return this.httpClient.request<Array<AusbildungsstaetteSlim>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all Ausbildungsstaette
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAllAusbildungsstaetteForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedAusbildungsstaette>;
+     public getAllAusbildungsstaetteForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedAusbildungsstaette>>;
+     public getAllAusbildungsstaetteForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedAusbildungsstaette>>;
+     public getAllAusbildungsstaetteForUebersicht$(requestParameters: AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAusbildungsstaetteForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAusbildungsstaetteForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const nameDe = requestParameters.nameDe;
+        const nameFr = requestParameters.nameFr;
+        const chShis = requestParameters.chShis;
+        const burNo = requestParameters.burNo;
+        const ctNo = requestParameters.ctNo;
+        const aktiv = requestParameters.aktiv;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
+        }
+        if (nameDe !== undefined && nameDe !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>nameDe, 'nameDe');
+        }
+        if (nameFr !== undefined && nameFr !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>nameFr, 'nameFr');
+        }
+        if (chShis !== undefined && chShis !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>chShis, 'chShis');
+        }
+        if (burNo !== undefined && burNo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>burNo, 'burNo');
+        }
+        if (ctNo !== undefined && ctNo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>ctNo, 'ctNo');
+        }
+        if (aktiv !== undefined && aktiv !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>aktiv, 'aktiv');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -388,9 +998,10 @@ export class AusbildungsstaetteService {
         }
 
         const localVarPath = `/ausbildungsstaette`;
-        return this.httpClient.request<Array<Ausbildungsstaette>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PaginatedAusbildungsstaette>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -401,19 +1012,23 @@ export class AusbildungsstaetteService {
     }
 
     /**
+     * Renames a specified Abschluss
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsstaette>;
-     public updateAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsstaette>>;
-     public updateAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsstaette>>;
-     public updateAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
-            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling updateAusbildungsstaette$.');
+     public renameAbschluss$(requestParameters: AusbildungsstaetteServiceRenameAbschlussRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Abschluss>;
+     public renameAbschluss$(requestParameters: AusbildungsstaetteServiceRenameAbschlussRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Abschluss>>;
+     public renameAbschluss$(requestParameters: AusbildungsstaetteServiceRenameAbschlussRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Abschluss>>;
+     public renameAbschluss$(requestParameters: AusbildungsstaetteServiceRenameAbschlussRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const abschlussId = requestParameters.abschlussId;
+        if (abschlussId === null || abschlussId === undefined) {
+            throw new Error('Required parameter abschlussId was null or undefined when calling renameAbschluss$.');
         }
-        const ausbildungsstaetteUpdate = requestParameters.ausbildungsstaetteUpdate;
+        const renameAbschluss = requestParameters.renameAbschluss;
+        if (renameAbschluss === null || renameAbschluss === undefined) {
+            throw new Error('Required parameter renameAbschluss was null or undefined when calling renameAbschluss$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -469,11 +1084,317 @@ export class AusbildungsstaetteService {
             }
         }
 
-        const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/abschluss/rename/${this.configuration.encodeParam({name: "abschlussId", value: abschlussId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Abschluss>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: renameAbschluss,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Renames a specified Ausbildungsstaette
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public renameAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsstaette>;
+     public renameAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsstaette>>;
+     public renameAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsstaette>>;
+     public renameAusbildungsstaette$(requestParameters: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
+        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling renameAusbildungsstaette$.');
+        }
+        const renameAusbildungsstaette = requestParameters.renameAusbildungsstaette;
+        if (renameAusbildungsstaette === null || renameAusbildungsstaette === undefined) {
+            throw new Error('Required parameter renameAusbildungsstaette was null or undefined when calling renameAusbildungsstaette$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsstaette/rename/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Ausbildungsstaette>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: ausbildungsstaetteUpdate,
+                body: renameAusbildungsstaette,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set an Abschluss to Inaktiv
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public setAbschlussInaktiv$(requestParameters: AusbildungsstaetteServiceSetAbschlussInaktivRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Abschluss>;
+     public setAbschlussInaktiv$(requestParameters: AusbildungsstaetteServiceSetAbschlussInaktivRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Abschluss>>;
+     public setAbschlussInaktiv$(requestParameters: AusbildungsstaetteServiceSetAbschlussInaktivRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Abschluss>>;
+     public setAbschlussInaktiv$(requestParameters: AusbildungsstaetteServiceSetAbschlussInaktivRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const abschlussId = requestParameters.abschlussId;
+        if (abschlussId === null || abschlussId === undefined) {
+            throw new Error('Required parameter abschlussId was null or undefined when calling setAbschlussInaktiv$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/abschluss/inaktiv/${this.configuration.encodeParam({name: "abschlussId", value: abschlussId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Abschluss>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set an Ausbildungsgang to Inaktiv
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public setAusbildungsgangInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsgang>;
+     public setAusbildungsgangInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsgang>>;
+     public setAusbildungsgangInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsgang>>;
+     public setAusbildungsgangInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungsgangId = requestParameters.ausbildungsgangId;
+        if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
+            throw new Error('Required parameter ausbildungsgangId was null or undefined when calling setAusbildungsgangInaktiv$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsgang/inaktiv/${this.configuration.encodeParam({name: "ausbildungsgangId", value: ausbildungsgangId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Ausbildungsgang>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set an Ausbildungsstaette to Inaktiv
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public setAusbildungsstaetteInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Ausbildungsstaette>;
+     public setAusbildungsstaetteInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Ausbildungsstaette>>;
+     public setAusbildungsstaetteInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Ausbildungsstaette>>;
+     public setAusbildungsstaetteInaktiv$(requestParameters: AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
+        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling setAusbildungsstaetteInaktiv$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildungsstaette/inaktiv/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Ausbildungsstaette>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

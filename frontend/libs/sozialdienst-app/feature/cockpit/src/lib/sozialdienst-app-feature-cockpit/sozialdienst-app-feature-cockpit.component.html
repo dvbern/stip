@@ -78,7 +78,7 @@
                 data-testid="cockpit-table"
                 mat-table
                 matSort
-                (matSortChange)="sortData($event)"
+                (matSortChange)="sortList($event)"
                 tabindex="0"
               >
                 <caption class="cdk-visually-hidden">
@@ -102,6 +102,7 @@
                           formControlName="fallNummer"
                           data-testid="cockpit-filter-fall"
                           (click)="$event.stopPropagation()"
+                          (keydown)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
@@ -136,6 +137,7 @@
                           dvMaxLength
                           formControlName="nachname"
                           (click)="$event.stopPropagation()"
+                          (keydown)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
@@ -169,6 +171,7 @@
                           dvMaxLength
                           formControlName="vorname"
                           (click)="$event.stopPropagation()"
+                          (keydown)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
@@ -210,6 +213,7 @@
                           formControlName="geburtsdatum"
                           [matDatepicker]="geburtsdatumDatepicker"
                           (click)="$event.stopPropagation()"
+                          (keydown)="$event.stopPropagation()"
                         />
                         <button
                           matIconSuffix
@@ -249,6 +253,7 @@
                           dvMaxLength
                           formControlName="wohnort"
                           (click)="$event.stopPropagation()"
+                          (keydown)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
@@ -349,7 +354,7 @@
             [pageSize]="pageSize() ?? defaultPageSize"
             [pageIndex]="page() ?? 0"
             [length]="delegationStore.cockpitViewSig().paginatedSozDashboard?.totalEntries ?? 0"
-            (page)="paginate($event)"
+            (page)="paginateList($event)"
           ></mat-paginator>
         </div>
       </div>

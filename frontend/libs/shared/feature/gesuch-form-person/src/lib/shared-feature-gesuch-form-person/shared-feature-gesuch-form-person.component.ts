@@ -65,9 +65,9 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
-import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -98,6 +98,7 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
+import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
 
@@ -159,12 +160,13 @@ const berechtigteNiederlassungsstatus = {
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
-    SharedUiLandAutocompleteComponent,
+    SharedUiSelectSearchComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormPersonComponent implements OnInit {
+  private landLookupService = inject(LandLookupService);
   private elementRef = inject(ElementRef);
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
@@ -183,6 +185,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly zustaendigerKantonValues = Object.values(ZustaendigerKanton);
   readonly zustaendigeKESBValues = Object.values(ZustaendigeKESB);
 
+  laenderSig = this.landLookupService.getCachedLandLookup();
+  isValidLandEntry = this.landLookupService.isValidLandEntry;
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   gotReenabled$ = new Subject<object>();
@@ -484,6 +488,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         return null;
       }
     };
+
+    (window as any).__form = this.form;
 
     // patch form value
     effect(() => {
