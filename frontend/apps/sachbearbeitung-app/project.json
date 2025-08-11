@@ -6,6 +6,7 @@
   "sourceRoot": "apps/sachbearbeitung-app/src",
   "tags": ["type:app", "scope:sachbearbeitung-app"],
   "implicitDependencies": [
+    "libs/sachbearbeitung-app/assets/i18n",
     "libs/shared/assets/i18n",
     "libs/shared/assets/images",
     "libs/shared/styles/theme",
@@ -41,6 +42,11 @@
         "assets": [
           {
             "glob": "**/*",
+            "input": "libs/sachbearbeitung-app/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",
             "output": "assets/i18n"
           },
@@ -53,8 +59,7 @@
             "glob": "**/*",
             "input": "libs/shared/assets/auth/src",
             "output": "assets/auth/"
-          },
-          "apps/sachbearbeitung-app/src/assets"
+          }
         ],
         "styles": [
           "apps/sachbearbeitung-app/src/styles.scss",

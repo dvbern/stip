@@ -1,6 +1,7 @@
-import { APIRequestContext, APIResponse, expect } from '@playwright/test';
+import { APIRequestContext, expect } from '@playwright/test';
 
 import {
+  AbschlussSlim,
   AuszahlungUpdate,
   GesuchFormularUpdate,
   Land,
@@ -10,6 +11,7 @@ import { DeepNullable, SetupFn } from '@dv/shared/util-fn/e2e-util';
 export const setupGesuchWithApi: (
   createFomularUpdateFn: (
     seed: string,
+    abschluesse: AbschlussSlim[],
     landId: string,
   ) => DeepNullable<GesuchFormularUpdate>,
   createZahlungsverbindungUpdate: (landId: string) => AuszahlungUpdate,
@@ -18,14 +20,20 @@ export const setupGesuchWithApi: (
   async ({ contexts, gesuchId, trancheId, fallId, seed }) => {
     const { api } = contexts;
 
-    const response: APIResponse = await api.get('/api/v1/land');
-    const res: Land[] = await response.json();
+    const landResponse = await api.get('/api/v1/land');
+    const laender: Land[] = await landResponse.json();
 
-    const schweizId = res.find((land) => land.laendercodeBfs === '8100')
+    const abschlussResponse = await api.get('/api/v1/abschluss/slim');
+    const abschluesse: AbschlussSlim[] = await abschlussResponse.json();
+
+    const schweizId = laender.find((land) => land.laendercodeBfs === '8100')
       ?.id as string;
 
     if (!schweizId) {
       throw new Error('Schweiz landId not found');
+    }
+    if (abschluesse.length === 0) {
+      throw new Error('No Abschluesse found');
     }
 
     await setGesuchApi(
@@ -34,7 +42,7 @@ export const setupGesuchWithApi: (
       trancheId,
       fallId,
       createZahlungsverbindungUpdateFn(schweizId),
-      createFomularUpdateFn(seed, schweizId),
+      createFomularUpdateFn(seed, abschluesse, schweizId),
     );
   };
 

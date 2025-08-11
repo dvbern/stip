@@ -120,7 +120,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     // // hotfix for flaky test of Einnahmen & Kosten form
     const ausbildungPromise = gsPage.waitForResponse(
-      '**/api/v1/ausbildungsstaette',
+      '**/api/v1/ausbildungsstaette/slim',
     );
 
     await auszahlungPO.elems.buttonSave.click();

@@ -233,4 +233,43 @@ export class GesuchStore extends signalStore(
       ),
     ),
   } satisfies Record<StatusUebergang, unknown>;
+
+  createManuelleVerfuegung$ = rxMethod<{
+    gesuchTrancheId: string;
+    fileUpload: File;
+    kommentar?: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          lastStatusChange: pending(),
+        }));
+      }),
+      switchMap(({ gesuchTrancheId, fileUpload, kommentar }) =>
+        this.gesuchService
+          .createManuelleVerfuegung$({
+            gesuchTrancheId,
+            fileUpload,
+            kommentar,
+          })
+          .pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, { lastStatusChange: success(null) });
+              },
+              {
+                onSuccess: (data) => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.gesuchSetReturned({
+                      gesuch: data,
+                    }),
+                  );
+                  this.loadGesuchInfo$({ gesuchId: data.id });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
 }

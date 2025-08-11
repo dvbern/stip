@@ -25,6 +25,7 @@
                     type="text"
                     data-testid="benutzer-overview-filter-name"
                     (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()"
                   />
                 </mat-form-field>
 
@@ -78,6 +79,7 @@
                     formControlName="roles"
                     data-testid="benutzer-overview-filter-roles"
                     (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()"
                   />
                 </mat-form-field>
                 <dv-shared-ui-clear-button

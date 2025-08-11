@@ -40,7 +40,7 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setAusbildungEnd(gueltigkeitsRange.getGueltigBis().format(DATE_TIME_FORMATTER));
             model.setAusbildungNichtGefunden(false);
             model.setAusbildungsgangId(TestConstants.TEST_AUSBILDUNGSGANG_ID);
-            model.setFachrichtung("Informatik");
+            model.setFachrichtungBerufsbezeichnung("Informatik");
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");
@@ -60,7 +60,7 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setAusbildungNichtGefunden(true);
             model.setAlternativeAusbildungsstaette("University Gold");
             model.setAlternativeAusbildungsgang("Silver");
-            model.setFachrichtung("Informatik");
+            model.setFachrichtungBerufsbezeichnung("Informatik");
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");

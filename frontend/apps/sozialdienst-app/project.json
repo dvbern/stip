@@ -41,6 +41,11 @@
         "assets": [
           {
             "glob": "**/*",
+            "input": "libs/sozialdienst-app/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",
             "output": "assets/i18n"
           },
@@ -53,8 +58,7 @@
             "glob": "**/*",
             "input": "libs/shared/assets/auth/src",
             "output": "assets/auth/"
-          },
-          "apps/sozialdienst-app/src/assets"
+          }
         ],
         "styles": [
           "apps/sozialdienst-app/src/styles.scss",

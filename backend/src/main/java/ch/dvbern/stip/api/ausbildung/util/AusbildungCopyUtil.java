@@ -31,7 +31,7 @@ public class AusbildungCopyUtil {
         copy.setAusbildungsgang(other.getAusbildungsgang());
         copy.setAlternativeAusbildungsgang(other.getAlternativeAusbildungsgang());
         copy.setAlternativeAusbildungsstaette(other.getAlternativeAusbildungsstaette());
-        copy.setFachrichtung(other.getFachrichtung());
+        copy.setFachrichtungBerufsbezeichnung(other.getFachrichtungBerufsbezeichnung());
         copy.setAusbildungNichtGefunden(other.isAusbildungNichtGefunden());
         copy.setAusbildungBegin(other.getAusbildungBegin());
         copy.setAusbildungEnd(other.getAusbildungEnd());

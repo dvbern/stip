@@ -33,14 +33,13 @@ public class LebenslaufItemCopyUtil {
     }
 
     private void copyValues(final LebenslaufItem source, final LebenslaufItem target) {
-        target.setBildungsart(source.getBildungsart());
+        target.setAbschluss(source.getAbschluss());
         target.setVon(source.getVon());
         target.setBis(source.getBis());
         target.setTaetigkeitsart(source.getTaetigkeitsart());
         target.setTaetigkeitsBeschreibung(source.getTaetigkeitsBeschreibung());
-        target.setBerufsbezeichnung(source.getBerufsbezeichnung());
-        target.setFachrichtung(source.getFachrichtung());
-        target.setTitelDesAbschlusses(source.getTitelDesAbschlusses());
+        target.setFachrichtungBerufsbezeichnung(source.getFachrichtungBerufsbezeichnung());
+        target.setFachrichtungBerufsbezeichnung(source.getFachrichtungBerufsbezeichnung());
         target.setAusbildungAbgeschlossen(source.isAusbildungAbgeschlossen());
         target.setWohnsitz(source.getWohnsitz());
     }

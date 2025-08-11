@@ -33,6 +33,17 @@ export class LandStore extends signalStore(
     return fromCachedDataSig(this.laender);
   });
 
+  autocompleteLandListViewSig = computed(() => {
+    return (
+      fromCachedDataSig(this.laender)?.map((land) => ({
+        ...land,
+        testId: land.deKurzform,
+        displayValueDe: land.deKurzform,
+        displayValueFr: land.frKurzform,
+      })) ?? []
+    );
+  });
+
   landAdminViewSig = computed(() => {
     return fromCachedDataSig(this.laender);
   });

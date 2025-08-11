@@ -20,19 +20,37 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.authorization.AusbildungsstaetteAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
+import ch.dvbern.stip.generated.dto.AbschlussDto;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
+import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
+import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE;
 
@@ -42,42 +60,171 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_
 public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResource {
     private final AusbildungsstaetteAuthorizer ausbildungsstaetteAuthorizer;
     private final AusbildungsstaetteService ausbildungsstaetteService;
+    private final AbschlussService abschlussService;
+    private final AusbildungsgangService ausbildungsgangService;
 
     @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_CREATE)
-    public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaette) {
+    public AbschlussDto createAbschlussBrueckenangebot(BrueckenangebotCreateDto brueckenangebotCreateDto) {
         ausbildungsstaetteAuthorizer.canCreate();
-        return ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaette);
+        return abschlussService.createAbschlussBrueckenangebot(brueckenangebotCreateDto);
     }
 
     @Override
-    @RolesAllowed(AUSBILDUNGSSTAETTE_DELETE)
-    public void deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
-        ausbildungsstaetteAuthorizer.canDelete();
-        ausbildungsstaetteService.deleteAusbildungsstaette(ausbildungsstaetteId);
+    @RolesAllowed(AUSBILDUNGSSTAETTE_CREATE)
+    public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        ausbildungsstaetteAuthorizer.canCreate();
+        return ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_CREATE)
+    public AusbildungsstaetteDto createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto) {
+        ausbildungsstaetteAuthorizer.canCreate();
+        return ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaetteCreateDto);
     }
 
     @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
-    public AusbildungsstaetteDto getAusbildungsstaette(UUID ausbildungsstaetteId) {
+    public PaginatedAbschlussDto getAllAbschlussForUebersicht(
+        Integer page,
+        Integer pageSize,
+        AbschlussSortColumn sortColumn,
+        SortOrder sortOrder,
+        Ausbildungskategorie ausbildungskategorie,
+        Bildungsrichtung bildungsrichtung,
+        String bezeichnungDe,
+        String bezeichnungFr,
+        Boolean aktiv
+    ) {
         ausbildungsstaetteAuthorizer.canRead();
-        return ausbildungsstaetteService.findById(ausbildungsstaetteId);
+        return abschlussService.getAllAbschlussForUebersicht(
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder,
+            ausbildungskategorie,
+            bildungsrichtung,
+            bezeichnungDe,
+            bezeichnungFr,
+            aktiv
+        );
     }
 
     @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
-    public List<AusbildungsstaetteDto> getAusbildungsstaetten() {
+    public List<AbschlussSlimDto> getAllAbschluessForAuswahl() {
         ausbildungsstaetteAuthorizer.canRead();
-        return ausbildungsstaetteService.getAusbildungsstaetten();
+        return abschlussService.getAllAbschlussForAuswahl();
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public List<AusbildungsgangSlimDto> getAllAusbildungsgaengeForAuswahl() {
+        ausbildungsstaetteAuthorizer.canRead();
+        return ausbildungsgangService.getAllAusbildungsgangForAuswahl();
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(
+        Integer page,
+        Integer pageSize,
+        AusbildungsgangSortColumn sortColumn,
+        SortOrder sortOrder,
+        String abschlussBezeichnungDe,
+        String abschlussBezeichnungFr,
+        Ausbildungskategorie ausbildungskategorie,
+        String ausbildungsstaetteNameDe,
+        String ausbildungsstaetteNameFr,
+        Boolean aktiv
+    ) {
+        ausbildungsstaetteAuthorizer.canRead();
+        return ausbildungsgangService.getAllAusbildungsgangForUebersicht(
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder,
+            abschlussBezeichnungDe,
+            abschlussBezeichnungFr,
+            ausbildungskategorie,
+            ausbildungsstaetteNameDe,
+            ausbildungsstaetteNameFr,
+            aktiv
+        );
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl() {
+        ausbildungsstaetteAuthorizer.canRead();
+        return ausbildungsstaetteService.getAllAusbildungsstaetteForAuswahl();
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(
+        Integer page,
+        Integer pageSize,
+        AusbildungsstaetteSortColumn sortColumn,
+        SortOrder sortOrder,
+        String nameDe,
+        String nameFr,
+        String chShis,
+        String burNo,
+        String ctNo,
+        Boolean aktiv
+    ) {
+        ausbildungsstaetteAuthorizer.canRead();
+        return ausbildungsstaetteService.getAllAusbildungsstaetteForUebersicht(
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder,
+            nameDe,
+            nameFr,
+            chShis,
+            burNo,
+            ctNo,
+            aktiv
+        );
     }
 
     @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
-    public AusbildungsstaetteDto updateAusbildungsstaette(
+    public AbschlussDto renameAbschluss(UUID abschlussId, RenameAbschlussDto renameAbschlussDto) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return abschlussService.renameAbschluss(abschlussId, renameAbschlussDto);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AusbildungsstaetteDto renameAusbildungsstaette(
         UUID ausbildungsstaetteId,
-        AusbildungsstaetteUpdateDto ausbildungsstaette
+        RenameAusbildungsstaetteDto renameAusbildungsstaetteDto
     ) {
         ausbildungsstaetteAuthorizer.canUpdate();
-        return ausbildungsstaetteService.updateAusbildungsstaette(ausbildungsstaetteId, ausbildungsstaette);
+        return ausbildungsstaetteService.renameAusbildungsstaette(ausbildungsstaetteId, renameAusbildungsstaetteDto);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AbschlussDto setAbschlussInaktiv(UUID abschlussId) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return abschlussService.setAbschlussInaktiv(abschlussId);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AusbildungsgangDto setAusbildungsgangInaktiv(UUID ausbildungsgangId) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return ausbildungsgangService.setAusbildungsgangInaktiv(ausbildungsgangId);
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_UPDATE)
+    public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(UUID ausbildungsstaetteId) {
+        ausbildungsstaetteAuthorizer.canUpdate();
+        return ausbildungsstaetteService.setAusbildungsstaetteInaktiv(ausbildungsstaetteId);
     }
 }

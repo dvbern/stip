@@ -6,6 +6,7 @@
   "sourceRoot": "apps/gesuch-app/src",
   "tags": ["type:app", "scope:gesuch-app"],
   "implicitDependencies": [
+    "libs/gesuch-app/assets/i18n",
     "libs/shared/assets/i18n",
     "libs/shared/assets/images",
     "libs/shared/styles/theme",
@@ -41,6 +42,11 @@
         "assets": [
           {
             "glob": "**/*",
+            "input": "libs/gesuch-app/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",
             "output": "assets/i18n"
           },
@@ -53,8 +59,7 @@
             "glob": "**/*",
             "input": "libs/shared/assets/auth/src",
             "output": "assets/auth/"
-          },
-          "apps/gesuch-app/src/assets"
+          }
         ],
         "styles": [
           "apps/gesuch-app/src/styles.scss",

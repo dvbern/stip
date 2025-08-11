@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,9 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -54,7 +58,6 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
-import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -134,6 +137,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -150,7 +154,6 @@ public class GesuchService {
     private final GesuchsperiodenService gesuchsperiodeService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
@@ -342,6 +345,7 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
+
         return Pair.of(
             gesuchMapperUtil.mapWithTranche(
                 gesuch,
@@ -680,8 +684,8 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
-    @Transactional
-    public void changeGesuchStatusToNegativeVerfuegung(
+    @Transactional(TxType.REQUIRES_NEW)
+    public void changeGesuchStatusToNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final AusgewaehlterGrundDto ausgewaehlterGrundDto
     ) {
@@ -689,7 +693,11 @@ public class GesuchService {
         final var decisionId = ausgewaehlterGrundDto.getDecisionId();
         var decision = stipDecisionTextRepository.requireById(decisionId);
         verfuegungService
-            .createNegativeVerfuegung(gesuchId, decisionId, Optional.ofNullable(ausgewaehlterGrundDto.getKanton()));
+            .createNegativeVerfuegungWithDecision(
+                gesuchId,
+                decisionId,
+                Optional.ofNullable(ausgewaehlterGrundDto.getKanton())
+            );
         var kommentarTxt = decision.getTitleDe();
         var kommentarDto = new KommentarDto(kommentarTxt);
         gesuchStatusService.triggerStateMachineEventWithComment(
@@ -698,21 +706,55 @@ public class GesuchService {
             kommentarDto,
             false
         );
-        gesuchStatusService
-            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT, kommentarDto, false);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
+    public void changeGesuchStatusToNegativeVerfuegungManuell(
+        final UUID gesuchId,
+        final FileUpload fileUpload,
+        final String kommentar
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+
+        KommentarDto kommentarDto;
+        if (kommentar.isBlank()) {
+            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell"));
+        } else {
+            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell") + ", " + kommentar);
+        }
+
+        verfuegungService.createNegativeVerfuegungManuell(gesuchId, fileUpload);
+
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
+            kommentarDto,
+            false
+        );
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
     public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-            throw new CustomValidationsException(
-                "Required Unterschriftenblaetter are not uploaded",
-                new CustomConstraintViolation(
-                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                    "unterschriftenblaetter"
-                )
-            );
+        final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
+
+        if (!latestVerfuegung.isNegativeVerfuegung()) {
+            if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
+                throw new CustomValidationsException(
+                    "Required Unterschriftenblaetter are not uploaded",
+                    new CustomConstraintViolation(
+                        VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                        "unterschriftenblaetter"
+                    )
+                );
+            }
         }
 
         gesuchStatusService.triggerStateMachineEvent(
@@ -771,6 +813,14 @@ public class GesuchService {
             gesuchFormularToUse.getPersonInAusbildung().getNachname(),
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
         );
+    }
+
+    public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
+            .orElseThrow(NotFoundException::new);
     }
 
     @Transactional

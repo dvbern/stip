@@ -22,9 +22,9 @@ import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -89,7 +89,7 @@ class EinnahmenKostenValidatorTest {
         Gesuch gesuch = new Gesuch();
         gesuch.setAusbildung(new Ausbildung());
         gesuch.getAusbildung().setAusbildungsgang(new Ausbildungsgang());
-        gesuch.getAusbildung().getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(1));
+        gesuch.getAusbildung().getAusbildungsgang().setAbschluss(new Abschluss().setBfsKategorie(1));
         GesuchTranche gesuchTranche = new GesuchTranche();
         gesuchTranche.setGesuch(gesuch);
         gesuch.setGesuchTranchen(List.of(gesuchTranche));
@@ -101,7 +101,7 @@ class EinnahmenKostenValidatorTest {
         gesuchFormular.getEinnahmenKosten().setAusbildungskosten(1);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
-        gesuchFormular.getAusbildung().getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(10));
+        gesuchFormular.getAusbildung().getAusbildungsgang().setAbschluss(new Abschluss().setBfsKategorie(10));
         assertThat(
             ausbildungskostenStufeRequiredConstraintValidator.isValid(
                 gesuchFormular,

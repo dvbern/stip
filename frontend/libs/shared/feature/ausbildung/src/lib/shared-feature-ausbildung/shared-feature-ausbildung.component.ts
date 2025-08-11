@@ -3,12 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  Signal,
   computed,
   effect,
   inject,
   input,
   output,
+  signal,
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -18,7 +18,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -43,10 +42,14 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
-  Ausbildungsstaette,
+  AusbildungsgangData,
   GesuchsperiodeSelectErrorType,
 } from '@dv/shared/model/gesuch';
-import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
+import {
+  capitalized,
+  compareById,
+  getTranslatableProp,
+} from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -63,11 +66,14 @@ import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
   provideMaterialDefaultOptions,
+  updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
+import { sortListByText } from '@dv/shared/util/table';
 import {
   createDateDependencyValidator,
   maxDateValidatorForLocale,
@@ -99,7 +105,6 @@ const gesuchsPeriodenSelectErrorMap: Record<
     MatButtonModule,
     MatInputModule,
     MatCheckboxModule,
-    MatAutocompleteModule,
     MatSelectModule,
     SharedUiInfoDialogDirective,
     SharedUiFormReadonlyDirective,
@@ -110,6 +115,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
     SharedPatternDocumentUploadComponent,
+    SharedUiSelectSearchComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [
@@ -128,7 +134,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
   private globalNotificationStore = inject(GlobalNotificationStore);
-  private languageSig = this.store.selectSignal(selectLanguage);
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
   );
@@ -139,6 +144,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
+  languageSig = this.store.selectSignal(selectLanguage);
 
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
@@ -146,10 +152,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   form = this.formBuilder.group({
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
     isAusbildungAusland: [false, []],
-    ausbildungsstaette: [<string | undefined>undefined, [Validators.required]],
-    ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
+    ausbildungsstaetteId: [
+      <string | undefined>undefined,
+      [Validators.required],
+    ],
+    ausbildungsgang: [
+      <AusbildungsgangData | undefined>undefined,
+      [Validators.required],
+    ],
     besuchtBMS: [false, []],
-    fachrichtung: [<string | null>null, [Validators.required]],
+    fachrichtungBerufsbezeichnung: [
+      <string | undefined>undefined,
+      [Validators.required],
+    ],
     ausbildungNichtGefunden: [false, []],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
@@ -171,8 +186,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ? { type: 'dialog' as const, fallId }
       : { type: 'gesuch-form' as const, fallId: gesuchFallId };
   });
-  private ausbildungsstaetteSig = toSignal(
-    this.form.controls.ausbildungsstaette.valueChanges,
+  private ausbildungsstaetteIdSig = toSignal(
+    this.form.controls.ausbildungsstaetteId.valueChanges,
   );
   private ausbildungNichtGefundenChangedSig = toSignal(
     this.form.controls.ausbildungNichtGefunden.valueChanges,
@@ -198,15 +213,14 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   ausbildungsgangOptionsSig = computed(() => {
     const ausbildungsstaettes =
-      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+      this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
     const language = this.languageSig();
 
-    return (
-      ausbildungsstaettes
+    const ausbildungsgaenge =
+      [...ausbildungsstaettes]
         .find(
           (ausbildungsstaette) =>
-            getTranslatableProp(ausbildungsstaette, 'name', language) ===
-            this.ausbildungsstaetteSig(),
+            ausbildungsstaette.id === this.ausbildungsstaetteIdSig(),
         )
         ?.ausbildungsgaenge?.map((ausbildungsgang) => {
           return {
@@ -217,53 +231,35 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               language,
             ),
           };
-        }) ?? []
-    );
+        }) ?? [];
+    return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
+  });
+
+  zusatzfrageSig = computed(() => {
+    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    if (!newAusbildungsgang) return undefined;
+
+    return newAusbildungsgang.zusatzfrage;
   });
 
   showBesuchtBMS = computed(() => {
-    const ausbildungsgangId = this.ausbildungsgangChangedSig();
-    if (!ausbildungsgangId) return false;
+    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    if (!newAusbildungsgang) return false;
 
     const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
     const gang = ausbildungsgange.find(
-      (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
+      (ausbildungsgang) => ausbildungsgang.id === newAusbildungsgang.id,
     );
-    if (!gang) return false;
 
-    const bfs = gang.bildungskategorie.bfs;
-
-    return bfs === 4 || bfs === 5;
+    return gang?.askForBerufsmaturitaet;
   });
 
   ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
     () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
   );
 
-  ausbildungsstaettOptionsSig: Signal<
-    (Ausbildungsstaette & { translatedName?: string })[]
-  > = computed(() => {
-    const currentAusbildungsstaette = this.ausbildungsstaetteSig();
-    const ausbildungstaetten =
-      this.ausbildungsstatteStore.ausbildungsstaetteViewSig() ?? [];
-    const language = this.languageSig();
-    const toReturn = currentAusbildungsstaette
-      ? ausbildungstaetten.filter((ausbildungsstaette) => {
-          return getTranslatableProp(ausbildungsstaette, 'name', language)
-            ?.toLowerCase()
-            .includes(currentAusbildungsstaette.toLowerCase());
-        })
-      : ausbildungstaetten;
-
-    return toReturn.map((ausbildungsstaette) => {
-      return {
-        ...ausbildungsstaette,
-        translatedName:
-          getTranslatableProp(ausbildungsstaette, 'name', language) ??
-          undefined,
-      };
-    });
-  });
+  hiddenFieldsSetSig = signal(new Set<FormControl>());
+  compareById = compareById;
 
   constructor() {
     this.ausbildungsstatteStore.loadAusbildungsstaetten$();
@@ -282,10 +278,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         alternativeAusbildungsgang,
         alternativeAusbildungsstaette,
         ausbildungsgang,
-        ausbildungsstaette,
+        ausbildungsstaetteId,
       } = this.form.controls;
       this.formUtils.setRequired(ausbildungsgang, !value);
-      this.formUtils.setRequired(ausbildungsstaette, !value);
+      this.formUtils.setRequired(ausbildungsstaetteId, !value);
       this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
       this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
     });
@@ -381,13 +377,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               ausbildungsgang.id === currentAusbildungsgang.id,
           );
           this.form.patchValue({
-            ausbildungsstaette:
-              getTranslatableProp(
-                ausbildungsstaette,
-                'name',
-                this.languageSig(),
-              ) ?? undefined,
-            ausbildungsgang: ausbildungsgang?.id,
+            ausbildungsstaetteId: ausbildungsstaette?.id,
+            ausbildungsgang: ausbildungsgang,
           });
         }
       }
@@ -406,7 +397,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         }
         this.formUtils.invalidateControlIfValidationFails(
           this.form,
-          ['ausbildungNichtGefunden', 'ausbildungsstaette'],
+          ['ausbildungNichtGefunden', 'ausbildungsstaetteId'],
           {
             specialValidationErrors:
               invalidFormularProps.specialValidationErrors,
@@ -443,8 +434,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     // When Staette null, disable gang
     const staetteSig = toSignal(
-      this.form.controls.ausbildungsstaette.valueChanges.pipe(
-        startWith(this.form.value.ausbildungsstaette),
+      this.form.controls.ausbildungsstaetteId.valueChanges.pipe(
+        startWith(this.form.value.ausbildungsstaetteId),
       ),
     );
     effect(() => {
@@ -460,7 +451,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         this.form.controls.ausbildungsgang.reset();
         this.form.controls.besuchtBMS.reset();
         if (!this.form.controls.ausbildungNichtGefunden) {
-          this.form.controls.fachrichtung.reset();
+          this.form.controls.fachrichtungBerufsbezeichnung.reset();
           this.form.controls.ausbildungsort.reset();
         }
       }
@@ -480,10 +471,22 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     effect(() => {
       const isWritable = this.isEditableSig();
       this.formUtils.setDisabledState(
-        this.form.controls.fachrichtung,
+        this.form.controls.fachrichtungBerufsbezeichnung,
         !isWritable || (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
         isWritable,
       );
+    });
+
+    effect(() => {
+      const { readonly } = this.cachedGesuchViewSig();
+      const ausbildungsgang = ausbildungsgangSig();
+      updateVisbilityAndDisbledState({
+        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+        formControl: this.form.controls.fachrichtungBerufsbezeichnung,
+        visible: !!ausbildungsgang?.zusatzfrage,
+        disabled: readonly,
+      });
+      this.form.controls.fachrichtungBerufsbezeichnung.updateValueAndValidity();
     });
   }
 
@@ -494,17 +497,17 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   handleGangChangedByUser() {
-    this.form.controls.fachrichtung.reset();
+    this.form.controls.fachrichtungBerufsbezeichnung.reset();
     this.form.controls.ausbildungsort.reset();
     this.form.controls.besuchtBMS.reset();
   }
 
   handleManuellChangedByUser() {
-    this.form.controls.ausbildungsstaette.reset();
+    this.form.controls.ausbildungsstaetteId.reset();
     this.form.controls.alternativeAusbildungsstaette.reset();
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
-    this.form.controls.fachrichtung.reset();
+    this.form.controls.fachrichtungBerufsbezeichnung.reset();
     this.form.controls.ausbildungsort.reset();
     this.form.controls.besuchtBMS.reset();
   }
@@ -529,14 +532,16 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
-    const { ausbildungsgang: ausbildungsgangId, ...formValues } =
-      convertTempFormToRealValues(this.form, ['fachrichtung', 'pensum']);
-    delete formValues.ausbildungsstaette;
+    const { ausbildungsgang: formAusbildungsgang, ...formValues } =
+      convertTempFormToRealValues(this.form, ['pensum']);
+    delete formValues.ausbildungsstaetteId;
 
     const ausbildungId =
       this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
         .gesuchFormular?.ausbildung.id;
-    const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
+    const ausbildungsgang = formAusbildungsgang
+      ? { ausbildungsgangId: formAusbildungsgang.id }
+      : {};
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {

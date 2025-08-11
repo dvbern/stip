@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
+  private @Valid String burNo;
 
   /**
    **/
@@ -60,6 +61,24 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     this.nameFr = nameFr;
   }
 
+  /**
+   **/
+  public AusbildungsstaetteCreateDto burNo(String burNo) {
+    this.burNo = burNo;
+    return this;
+  }
+
+  
+  @JsonProperty("burNo")
+  public String getBurNo() {
+    return burNo;
+  }
+
+  @JsonProperty("burNo")
+  public void setBurNo(String burNo) {
+    this.burNo = burNo;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -71,12 +90,13 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     }
     AusbildungsstaetteCreateDto ausbildungsstaetteCreate = (AusbildungsstaetteCreateDto) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
-        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr);
+        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
+        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr);
+    return Objects.hash(nameDe, nameFr, burNo);
   }
 
   @Override
@@ -86,6 +106,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
+    sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

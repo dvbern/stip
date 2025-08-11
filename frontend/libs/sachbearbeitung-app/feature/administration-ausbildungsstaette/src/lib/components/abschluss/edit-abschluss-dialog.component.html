@@ -1,0 +1,45 @@
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.title' | translate }}
+  </h1>
+
+  <form [formGroup]="form" class="tw-mt-5" novalidate>
+    <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe' | translate }}
+        </mat-label>
+        <input matInput [formControl]="form.controls.bezeichnungDe" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr' | translate }}
+        </mat-label>
+        <input matInput [formControl]="form.controls.bezeichnungFr" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="tw-mt-5 tw-flex tw-justify-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

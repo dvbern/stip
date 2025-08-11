@@ -1,0 +1,12 @@
+{
+  "name": "sozialdienst-app-assets-i18n",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sozialdienst-app/assets/i18n/src",
+  "tags": ["scope:sozialdienst-app", "type:assets"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import {
+  AbschlussSlim,
   AuszahlungUpdate,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
@@ -18,8 +19,8 @@ export const ausbildungValues: AusbildungValues = {
   editable: true,
   ausbildungsort: 'Bern',
   ausbildungsstaetteText: 'Universität Bern',
-  ausbildungsgangText: 'Master',
-  fachrichtung: 'Kunstgeschichte',
+  ausbildungsgangText: 'Bachelor',
+  fachrichtungBerufsbezeichnung: 'Kunstgeschichte',
   ausbildungBegin: `${fruehlingOrHerbst()}.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
@@ -45,6 +46,7 @@ export const createZahlungsverbindungUpdateFn = (
 
 export const gesuchFormularUpdateFn = (
   seed: string,
+  abschluesse: AbschlussSlim[],
   landId: string,
 ): DeepNullable<GesuchFormularUpdate> => ({
   personInAusbildung: {
@@ -74,7 +76,6 @@ export const gesuchFormularUpdateFn = (
     wohnsitz: 'EIGENER_HAUSHALT',
     sozialhilfebeitraege: false,
     korrespondenzSprache: 'DEUTSCH',
-    zustaendigerKanton: null,
   },
   familiensituation: {
     elternVerheiratetZusammen: false,
@@ -97,11 +98,14 @@ export const gesuchFormularUpdateFn = (
       von: `01.${specificYearsAgo(4)}`,
       bis: `08.${specificYearsAgo(1)}`,
       wohnsitz: 'AG',
-      bildungsart: 'VORLEHRE',
+      abschlussId: abschluesse.find(
+        (abschluss) =>
+          abschluss.bezeichnungDe.includes('Eidg. Berufsattest') &&
+          abschluss.ausbildungskategorie ===
+            'BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE',
+      )?.id,
       ausbildungAbgeschlossen: false,
-      berufsbezeichnung: null,
-      fachrichtung: null,
-      titelDesAbschlusses: null,
+      fachrichtungBerufsbezeichnung: 'Informatik',
       taetigkeitsart: null,
       taetigkeitsBeschreibung: null,
     },

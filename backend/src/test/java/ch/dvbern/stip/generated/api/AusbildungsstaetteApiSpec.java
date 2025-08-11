@@ -13,11 +13,27 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AbschlussDtoSpec;
+import ch.dvbern.stip.generated.dto.AbschlussSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.AbschlussSortColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSortColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungskategorieDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSortColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
+import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedAbschlussDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDtoSpec;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,32 +76,77 @@ public class AusbildungsstaetteApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                createAbschlussBrueckenangebot(),
+                createAusbildungsgang(),
                 createAusbildungsstaette(),
-                deleteAusbildungsstaette(),
-                getAusbildungsstaette(),
-                getAusbildungsstaetten(),
-                updateAusbildungsstaette()
+                getAllAbschluessForAuswahl(),
+                getAllAbschlussForUebersicht(),
+                getAllAusbildungsgaengeForAuswahl(),
+                getAllAusbildungsgangForUebersicht(),
+                getAllAusbildungsstaetteForAuswahl(),
+                getAllAusbildungsstaetteForUebersicht(),
+                renameAbschluss(),
+                renameAusbildungsstaette(),
+                setAbschlussInaktiv(),
+                setAusbildungsgangInaktiv(),
+                setAusbildungsstaetteInaktiv()
         );
+    }
+
+    public CreateAbschlussBrueckenangebotOper createAbschlussBrueckenangebot() {
+        return new CreateAbschlussBrueckenangebotOper(createReqSpec());
+    }
+
+    public CreateAusbildungsgangOper createAusbildungsgang() {
+        return new CreateAusbildungsgangOper(createReqSpec());
     }
 
     public CreateAusbildungsstaetteOper createAusbildungsstaette() {
         return new CreateAusbildungsstaetteOper(createReqSpec());
     }
 
-    public DeleteAusbildungsstaetteOper deleteAusbildungsstaette() {
-        return new DeleteAusbildungsstaetteOper(createReqSpec());
+    public GetAllAbschluessForAuswahlOper getAllAbschluessForAuswahl() {
+        return new GetAllAbschluessForAuswahlOper(createReqSpec());
     }
 
-    public GetAusbildungsstaetteOper getAusbildungsstaette() {
-        return new GetAusbildungsstaetteOper(createReqSpec());
+    public GetAllAbschlussForUebersichtOper getAllAbschlussForUebersicht() {
+        return new GetAllAbschlussForUebersichtOper(createReqSpec());
     }
 
-    public GetAusbildungsstaettenOper getAusbildungsstaetten() {
-        return new GetAusbildungsstaettenOper(createReqSpec());
+    public GetAllAusbildungsgaengeForAuswahlOper getAllAusbildungsgaengeForAuswahl() {
+        return new GetAllAusbildungsgaengeForAuswahlOper(createReqSpec());
     }
 
-    public UpdateAusbildungsstaetteOper updateAusbildungsstaette() {
-        return new UpdateAusbildungsstaetteOper(createReqSpec());
+    public GetAllAusbildungsgangForUebersichtOper getAllAusbildungsgangForUebersicht() {
+        return new GetAllAusbildungsgangForUebersichtOper(createReqSpec());
+    }
+
+    public GetAllAusbildungsstaetteForAuswahlOper getAllAusbildungsstaetteForAuswahl() {
+        return new GetAllAusbildungsstaetteForAuswahlOper(createReqSpec());
+    }
+
+    public GetAllAusbildungsstaetteForUebersichtOper getAllAusbildungsstaetteForUebersicht() {
+        return new GetAllAusbildungsstaetteForUebersichtOper(createReqSpec());
+    }
+
+    public RenameAbschlussOper renameAbschluss() {
+        return new RenameAbschlussOper(createReqSpec());
+    }
+
+    public RenameAusbildungsstaetteOper renameAusbildungsstaette() {
+        return new RenameAusbildungsstaetteOper(createReqSpec());
+    }
+
+    public SetAbschlussInaktivOper setAbschlussInaktiv() {
+        return new SetAbschlussInaktivOper(createReqSpec());
+    }
+
+    public SetAusbildungsgangInaktivOper setAusbildungsgangInaktiv() {
+        return new SetAusbildungsgangInaktivOper(createReqSpec());
+    }
+
+    public SetAusbildungsstaetteInaktivOper setAusbildungsstaetteInaktiv() {
+        return new SetAusbildungsstaetteInaktivOper(createReqSpec());
     }
 
     /**
@@ -99,10 +160,154 @@ public class AusbildungsstaetteApiSpec {
     }
 
     /**
-     * 
+     * Create an Abschluss for a Brueckenangebot
      * 
      *
-     * @see #body  (optional)
+     * @see #body  (required)
+     * return AbschlussDtoSpec
+     */
+    public static class CreateAbschlussBrueckenangebotOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/abschluss";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateAbschlussBrueckenangebotOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /abschluss
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /abschluss
+         * @param handler handler
+         * @return AbschlussDtoSpec
+         */
+        public AbschlussDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AbschlussDtoSpec> type = new TypeRef<AbschlussDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param brueckenangebotCreateDtoSpec (BrueckenangebotCreateDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateAbschlussBrueckenangebotOper body(BrueckenangebotCreateDtoSpec brueckenangebotCreateDtoSpec) {
+            reqSpec.setBody(brueckenangebotCreateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateAbschlussBrueckenangebotOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateAbschlussBrueckenangebotOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Create anAusbildungsgang
+     * 
+     *
+     * @see #body  (required)
+     * return AusbildungsgangDtoSpec
+     */
+    public static class CreateAusbildungsgangOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/ausbildungsgang";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /ausbildungsgang
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /ausbildungsgang
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param ausbildungsgangCreateDtoSpec (AusbildungsgangCreateDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateAusbildungsgangOper body(AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec) {
+            reqSpec.setBody(ausbildungsgangCreateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateAusbildungsgangOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateAusbildungsgangOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Create an Ausbildungsstaette
+     * 
+     *
+     * @see #body  (required)
      * return AusbildungsstaetteDtoSpec
      */
     public static class CreateAusbildungsstaetteOper implements Oper {
@@ -142,7 +347,7 @@ public class AusbildungsstaetteApiSpec {
         }
 
          /**
-         * @param ausbildungsstaetteCreateDtoSpec (AusbildungsstaetteCreateDtoSpec)  (optional)
+         * @param ausbildungsstaetteCreateDtoSpec (AusbildungsstaetteCreateDtoSpec)  (required)
          * @return operation
          */
         public CreateAusbildungsstaetteOper body(AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec) {
@@ -171,90 +376,27 @@ public class AusbildungsstaetteApiSpec {
         }
     }
     /**
-     * Delete Ausbildungsstaette
+     * Returns all AbschlussSlim
      * 
      *
-     * @see #ausbildungsstaetteIdPath  (required)
+     * return List&lt;AbschlussSlimDtoSpec&gt;
      */
-    public static class DeleteAusbildungsstaetteOper implements Oper {
-
-        public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/ausbildungsstaette/{ausbildungsstaetteId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DeleteAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * DELETE /ausbildungsstaette/{ausbildungsstaetteId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String AUSBILDUNGSSTAETTE_ID_PATH = "ausbildungsstaetteId";
-
-        /**
-         * @param ausbildungsstaetteId (UUID)  (required)
-         * @return operation
-         */
-        public DeleteAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
-            reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DeleteAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DeleteAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * returns a Ausbildungsstaette with the given id
-     * 
-     *
-     * @see #ausbildungsstaetteIdPath  (required)
-     * return AusbildungsstaetteDtoSpec
-     */
-    public static class GetAusbildungsstaetteOper implements Oper {
+    public static class GetAllAbschluessForAuswahlOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/ausbildungsstaette/{ausbildungsstaetteId}";
+        public static final String REQ_URI = "/abschluss/slim";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+        public GetAllAbschluessForAuswahlOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /ausbildungsstaette/{ausbildungsstaetteId}
+         * GET /abschluss/slim
          * @param handler handler
          * @param <T> type
          * @return type
@@ -265,24 +407,13 @@ public class AusbildungsstaetteApiSpec {
         }
 
         /**
-         * GET /ausbildungsstaette/{ausbildungsstaetteId}
+         * GET /abschluss/slim
          * @param handler handler
-         * @return AusbildungsstaetteDtoSpec
+         * @return List&lt;AbschlussSlimDtoSpec&gt;
          */
-        public AusbildungsstaetteDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AusbildungsstaetteDtoSpec> type = new TypeRef<AusbildungsstaetteDtoSpec>(){};
+        public List<AbschlussSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AbschlussSlimDtoSpec>> type = new TypeRef<List<AbschlussSlimDtoSpec>>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String AUSBILDUNGSSTAETTE_ID_PATH = "ausbildungsstaetteId";
-
-        /**
-         * @param ausbildungsstaetteId (UUID)  (required)
-         * @return operation
-         */
-        public GetAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
-            reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
-            return this;
         }
 
         /**
@@ -290,7 +421,7 @@ public class AusbildungsstaetteApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllAbschluessForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -300,18 +431,500 @@ public class AusbildungsstaetteApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllAbschluessForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
     }
     /**
-     * Returniert alle Ausbildungsstaette zur Verfuegung.
+     * Returns all Abschluesse
      * 
      *
-     * return List&lt;AusbildungsstaetteDtoSpec&gt;
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * @see #ausbildungskategorieQuery  (optional)
+     * @see #bildungsrichtungQuery  (optional)
+     * @see #bezeichnungDeQuery  (optional)
+     * @see #bezeichnungFrQuery  (optional)
+     * @see #aktivQuery  (optional)
+     * return PaginatedAbschlussDtoSpec
      */
-    public static class GetAusbildungsstaettenOper implements Oper {
+    public static class GetAllAbschlussForUebersichtOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/abschluss";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAbschlussForUebersichtOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /abschluss
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /abschluss
+         * @param handler handler
+         * @return PaginatedAbschlussDtoSpec
+         */
+        public PaginatedAbschlussDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedAbschlussDtoSpec> type = new TypeRef<PaginatedAbschlussDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (AbschlussSortColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSKATEGORIE_QUERY = "ausbildungskategorie";
+
+        /**
+         * @param ausbildungskategorie (AusbildungskategorieDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper ausbildungskategorieQuery(Object... ausbildungskategorie) {
+            reqSpec.addQueryParam(AUSBILDUNGSKATEGORIE_QUERY, ausbildungskategorie);
+            return this;
+        }
+
+        public static final String BILDUNGSRICHTUNG_QUERY = "bildungsrichtung";
+
+        /**
+         * @param bildungsrichtung (BildungsrichtungDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper bildungsrichtungQuery(Object... bildungsrichtung) {
+            reqSpec.addQueryParam(BILDUNGSRICHTUNG_QUERY, bildungsrichtung);
+            return this;
+        }
+
+        public static final String BEZEICHNUNG_DE_QUERY = "bezeichnungDe";
+
+        /**
+         * @param bezeichnungDe (String)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper bezeichnungDeQuery(Object... bezeichnungDe) {
+            reqSpec.addQueryParam(BEZEICHNUNG_DE_QUERY, bezeichnungDe);
+            return this;
+        }
+
+        public static final String BEZEICHNUNG_FR_QUERY = "bezeichnungFr";
+
+        /**
+         * @param bezeichnungFr (String)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper bezeichnungFrQuery(Object... bezeichnungFr) {
+            reqSpec.addQueryParam(BEZEICHNUNG_FR_QUERY, bezeichnungFr);
+            return this;
+        }
+
+        public static final String AKTIV_QUERY = "aktiv";
+
+        /**
+         * @param aktiv (Boolean)  (optional)
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper aktivQuery(Object... aktiv) {
+            reqSpec.addQueryParam(AKTIV_QUERY, aktiv);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschlussForUebersichtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all AusbildungsgaengeSlim
+     * 
+     *
+     * return List&lt;AusbildungsgangSlimDtoSpec&gt;
+     */
+    public static class GetAllAusbildungsgaengeForAuswahlOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/ausbildungsgang/slim";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAusbildungsgaengeForAuswahlOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /ausbildungsgang/slim
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /ausbildungsgang/slim
+         * @param handler handler
+         * @return List&lt;AusbildungsgangSlimDtoSpec&gt;
+         */
+        public List<AusbildungsgangSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AusbildungsgangSlimDtoSpec>> type = new TypeRef<List<AusbildungsgangSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgaengeForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgaengeForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns allAusbildungsgang
+     * 
+     *
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * @see #abschlussBezeichnungDeQuery  (optional)
+     * @see #abschlussBezeichnungFrQuery  (optional)
+     * @see #ausbildungskategorieQuery  (optional)
+     * @see #ausbildungsstaetteNameDeQuery  (optional)
+     * @see #ausbildungsstaetteNameFrQuery  (optional)
+     * @see #aktivQuery  (optional)
+     * return PaginatedAusbildungsgangDtoSpec
+     */
+    public static class GetAllAusbildungsgangForUebersichtOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/ausbildungsgang";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAusbildungsgangForUebersichtOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /ausbildungsgang
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /ausbildungsgang
+         * @param handler handler
+         * @return PaginatedAusbildungsgangDtoSpec
+         */
+        public PaginatedAusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedAusbildungsgangDtoSpec> type = new TypeRef<PaginatedAusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (AusbildungsgangSortColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        public static final String ABSCHLUSS_BEZEICHNUNG_DE_QUERY = "abschlussBezeichnungDe";
+
+        /**
+         * @param abschlussBezeichnungDe (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper abschlussBezeichnungDeQuery(Object... abschlussBezeichnungDe) {
+            reqSpec.addQueryParam(ABSCHLUSS_BEZEICHNUNG_DE_QUERY, abschlussBezeichnungDe);
+            return this;
+        }
+
+        public static final String ABSCHLUSS_BEZEICHNUNG_FR_QUERY = "abschlussBezeichnungFr";
+
+        /**
+         * @param abschlussBezeichnungFr (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper abschlussBezeichnungFrQuery(Object... abschlussBezeichnungFr) {
+            reqSpec.addQueryParam(ABSCHLUSS_BEZEICHNUNG_FR_QUERY, abschlussBezeichnungFr);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSKATEGORIE_QUERY = "ausbildungskategorie";
+
+        /**
+         * @param ausbildungskategorie (AusbildungskategorieDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper ausbildungskategorieQuery(Object... ausbildungskategorie) {
+            reqSpec.addQueryParam(AUSBILDUNGSKATEGORIE_QUERY, ausbildungskategorie);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSSTAETTE_NAME_DE_QUERY = "ausbildungsstaetteNameDe";
+
+        /**
+         * @param ausbildungsstaetteNameDe (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper ausbildungsstaetteNameDeQuery(Object... ausbildungsstaetteNameDe) {
+            reqSpec.addQueryParam(AUSBILDUNGSSTAETTE_NAME_DE_QUERY, ausbildungsstaetteNameDe);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSSTAETTE_NAME_FR_QUERY = "ausbildungsstaetteNameFr";
+
+        /**
+         * @param ausbildungsstaetteNameFr (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper ausbildungsstaetteNameFrQuery(Object... ausbildungsstaetteNameFr) {
+            reqSpec.addQueryParam(AUSBILDUNGSSTAETTE_NAME_FR_QUERY, ausbildungsstaetteNameFr);
+            return this;
+        }
+
+        public static final String AKTIV_QUERY = "aktiv";
+
+        /**
+         * @param aktiv (Boolean)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper aktivQuery(Object... aktiv) {
+            reqSpec.addQueryParam(AKTIV_QUERY, aktiv);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsgangForUebersichtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all AusbildungsstaetteSlim
+     * 
+     *
+     * return List&lt;AusbildungsstaetteSlimDtoSpec&gt;
+     */
+    public static class GetAllAusbildungsstaetteForAuswahlOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/ausbildungsstaette/slim";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAusbildungsstaetteForAuswahlOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /ausbildungsstaette/slim
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /ausbildungsstaette/slim
+         * @param handler handler
+         * @return List&lt;AusbildungsstaetteSlimDtoSpec&gt;
+         */
+        public List<AusbildungsstaetteSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AusbildungsstaetteSlimDtoSpec>> type = new TypeRef<List<AusbildungsstaetteSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all Ausbildungsstaette
+     * 
+     *
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * @see #nameDeQuery  (optional)
+     * @see #nameFrQuery  (optional)
+     * @see #chShisQuery  (optional)
+     * @see #burNoQuery  (optional)
+     * @see #ctNoQuery  (optional)
+     * @see #aktivQuery  (optional)
+     * return PaginatedAusbildungsstaetteDtoSpec
+     */
+    public static class GetAllAusbildungsstaetteForUebersichtOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/ausbildungsstaette";
@@ -319,7 +932,7 @@ public class AusbildungsstaetteApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAusbildungsstaettenOper(RequestSpecBuilder reqSpec) {
+        public GetAllAusbildungsstaetteForUebersichtOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -339,11 +952,121 @@ public class AusbildungsstaetteApiSpec {
         /**
          * GET /ausbildungsstaette
          * @param handler handler
-         * @return List&lt;AusbildungsstaetteDtoSpec&gt;
+         * @return PaginatedAusbildungsstaetteDtoSpec
          */
-        public List<AusbildungsstaetteDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<AusbildungsstaetteDtoSpec>> type = new TypeRef<List<AusbildungsstaetteDtoSpec>>(){};
+        public PaginatedAusbildungsstaetteDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedAusbildungsstaetteDtoSpec> type = new TypeRef<PaginatedAusbildungsstaetteDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (AusbildungsstaetteSortColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        public static final String NAME_DE_QUERY = "nameDe";
+
+        /**
+         * @param nameDe (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper nameDeQuery(Object... nameDe) {
+            reqSpec.addQueryParam(NAME_DE_QUERY, nameDe);
+            return this;
+        }
+
+        public static final String NAME_FR_QUERY = "nameFr";
+
+        /**
+         * @param nameFr (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper nameFrQuery(Object... nameFr) {
+            reqSpec.addQueryParam(NAME_FR_QUERY, nameFr);
+            return this;
+        }
+
+        public static final String CH_SHIS_QUERY = "chShis";
+
+        /**
+         * @param chShis (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper chShisQuery(Object... chShis) {
+            reqSpec.addQueryParam(CH_SHIS_QUERY, chShis);
+            return this;
+        }
+
+        public static final String BUR_NO_QUERY = "burNo";
+
+        /**
+         * @param burNo (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper burNoQuery(Object... burNo) {
+            reqSpec.addQueryParam(BUR_NO_QUERY, burNo);
+            return this;
+        }
+
+        public static final String CT_NO_QUERY = "ctNo";
+
+        /**
+         * @param ctNo (String)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper ctNoQuery(Object... ctNo) {
+            reqSpec.addQueryParam(CT_NO_QUERY, ctNo);
+            return this;
+        }
+
+        public static final String AKTIV_QUERY = "aktiv";
+
+        /**
+         * @param aktiv (Boolean)  (optional)
+         * @return operation
+         */
+        public GetAllAusbildungsstaetteForUebersichtOper aktivQuery(Object... aktiv) {
+            reqSpec.addQueryParam(AKTIV_QUERY, aktiv);
+            return this;
         }
 
         /**
@@ -351,7 +1074,7 @@ public class AusbildungsstaetteApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAusbildungsstaettenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllAusbildungsstaetteForUebersichtOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -361,28 +1084,28 @@ public class AusbildungsstaetteApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAusbildungsstaettenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllAusbildungsstaetteForUebersichtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
     }
     /**
-     * 
+     * Renames a specified Abschluss
      * 
      *
-     * @see #ausbildungsstaetteIdPath  (required)
-     * @see #body  (optional)
-     * return AusbildungsstaetteDtoSpec
+     * @see #abschlussIdPath  (required)
+     * @see #body  (required)
+     * return AbschlussDtoSpec
      */
-    public static class UpdateAusbildungsstaetteOper implements Oper {
+    public static class RenameAbschlussOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/ausbildungsstaette/{ausbildungsstaetteId}";
+        public static final String REQ_URI = "/abschluss/rename/{abschlussId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public UpdateAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+        public RenameAbschlussOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -390,7 +1113,7 @@ public class AusbildungsstaetteApiSpec {
         }
 
         /**
-         * PATCH /ausbildungsstaette/{ausbildungsstaetteId}
+         * PATCH /abschluss/rename/{abschlussId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -401,7 +1124,91 @@ public class AusbildungsstaetteApiSpec {
         }
 
         /**
-         * PATCH /ausbildungsstaette/{ausbildungsstaetteId}
+         * PATCH /abschluss/rename/{abschlussId}
+         * @param handler handler
+         * @return AbschlussDtoSpec
+         */
+        public AbschlussDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AbschlussDtoSpec> type = new TypeRef<AbschlussDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param renameAbschlussDtoSpec (RenameAbschlussDtoSpec)  (required)
+         * @return operation
+         */
+        public RenameAbschlussOper body(RenameAbschlussDtoSpec renameAbschlussDtoSpec) {
+            reqSpec.setBody(renameAbschlussDtoSpec);
+            return this;
+        }
+
+        public static final String ABSCHLUSS_ID_PATH = "abschlussId";
+
+        /**
+         * @param abschlussId (UUID)  (required)
+         * @return operation
+         */
+        public RenameAbschlussOper abschlussIdPath(Object abschlussId) {
+            reqSpec.addPathParam(ABSCHLUSS_ID_PATH, abschlussId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public RenameAbschlussOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public RenameAbschlussOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Renames a specified Ausbildungsstaette
+     * 
+     *
+     * @see #ausbildungsstaetteIdPath  (required)
+     * @see #body  (required)
+     * return AusbildungsstaetteDtoSpec
+     */
+    public static class RenameAusbildungsstaetteOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/ausbildungsstaette/rename/{ausbildungsstaetteId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public RenameAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/rename/{ausbildungsstaetteId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/rename/{ausbildungsstaetteId}
          * @param handler handler
          * @return AusbildungsstaetteDtoSpec
          */
@@ -411,11 +1218,11 @@ public class AusbildungsstaetteApiSpec {
         }
 
          /**
-         * @param ausbildungsstaetteUpdateDtoSpec (AusbildungsstaetteUpdateDtoSpec)  (optional)
+         * @param renameAusbildungsstaetteDtoSpec (RenameAusbildungsstaetteDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAusbildungsstaetteOper body(AusbildungsstaetteUpdateDtoSpec ausbildungsstaetteUpdateDtoSpec) {
-            reqSpec.setBody(ausbildungsstaetteUpdateDtoSpec);
+        public RenameAusbildungsstaetteOper body(RenameAusbildungsstaetteDtoSpec renameAusbildungsstaetteDtoSpec) {
+            reqSpec.setBody(renameAusbildungsstaetteDtoSpec);
             return this;
         }
 
@@ -425,7 +1232,7 @@ public class AusbildungsstaetteApiSpec {
          * @param ausbildungsstaetteId (UUID)  (required)
          * @return operation
          */
-        public UpdateAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
+        public RenameAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
             reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
             return this;
         }
@@ -435,7 +1242,7 @@ public class AusbildungsstaetteApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public UpdateAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public RenameAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -445,7 +1252,226 @@ public class AusbildungsstaetteApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public UpdateAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public RenameAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Set an Abschluss to Inaktiv
+     * 
+     *
+     * @see #abschlussIdPath  (required)
+     * return AbschlussDtoSpec
+     */
+    public static class SetAbschlussInaktivOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/abschluss/inaktiv/{abschlussId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetAbschlussInaktivOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /abschluss/inaktiv/{abschlussId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /abschluss/inaktiv/{abschlussId}
+         * @param handler handler
+         * @return AbschlussDtoSpec
+         */
+        public AbschlussDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AbschlussDtoSpec> type = new TypeRef<AbschlussDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String ABSCHLUSS_ID_PATH = "abschlussId";
+
+        /**
+         * @param abschlussId (UUID)  (required)
+         * @return operation
+         */
+        public SetAbschlussInaktivOper abschlussIdPath(Object abschlussId) {
+            reqSpec.addPathParam(ABSCHLUSS_ID_PATH, abschlussId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetAbschlussInaktivOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetAbschlussInaktivOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Set an Ausbildungsgang to Inaktiv
+     * 
+     *
+     * @see #ausbildungsgangIdPath  (required)
+     * return AusbildungsgangDtoSpec
+     */
+    public static class SetAusbildungsgangInaktivOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/ausbildungsgang/inaktiv/{ausbildungsgangId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetAusbildungsgangInaktivOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /ausbildungsgang/inaktiv/{ausbildungsgangId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /ausbildungsgang/inaktiv/{ausbildungsgangId}
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AUSBILDUNGSGANG_ID_PATH = "ausbildungsgangId";
+
+        /**
+         * @param ausbildungsgangId (UUID)  (required)
+         * @return operation
+         */
+        public SetAusbildungsgangInaktivOper ausbildungsgangIdPath(Object ausbildungsgangId) {
+            reqSpec.addPathParam(AUSBILDUNGSGANG_ID_PATH, ausbildungsgangId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetAusbildungsgangInaktivOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetAusbildungsgangInaktivOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Set an Ausbildungsstaette to Inaktiv
+     * 
+     *
+     * @see #ausbildungsstaetteIdPath  (required)
+     * return AusbildungsstaetteDtoSpec
+     */
+    public static class SetAusbildungsstaetteInaktivOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/ausbildungsstaette/inaktiv/{ausbildungsstaetteId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetAusbildungsstaetteInaktivOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/inaktiv/{ausbildungsstaetteId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/inaktiv/{ausbildungsstaetteId}
+         * @param handler handler
+         * @return AusbildungsstaetteDtoSpec
+         */
+        public AusbildungsstaetteDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsstaetteDtoSpec> type = new TypeRef<AusbildungsstaetteDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AUSBILDUNGSSTAETTE_ID_PATH = "ausbildungsstaetteId";
+
+        /**
+         * @param ausbildungsstaetteId (UUID)  (required)
+         * @return operation
+         */
+        public SetAusbildungsstaetteInaktivOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
+            reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetAusbildungsstaetteInaktivOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetAusbildungsstaetteInaktivOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

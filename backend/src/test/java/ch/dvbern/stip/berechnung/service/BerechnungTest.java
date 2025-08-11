@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -131,9 +133,12 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(10)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(
+                                    Bildungsrichtung.HOCHSCHULE
+                                )
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -193,9 +198,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II)
+                                .setBildungsrichtung(Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG)
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -292,9 +298,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -405,9 +412,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(6)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(6)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -569,9 +577,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(9)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(9)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -714,9 +723,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(5)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setAusbildungBegin(LocalDate.now().plusMonths(3))
@@ -856,9 +866,10 @@ class BerechnungTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(8)
+                        .setAbschluss(
+                            new Abschluss().setBfsKategorie(10)
+                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
                 .setPensum(AusbildungsPensum.TEILZEIT)

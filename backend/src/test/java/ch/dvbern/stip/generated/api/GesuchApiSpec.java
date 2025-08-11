@@ -94,6 +94,7 @@ public class GesuchApiSpec {
                 createBeschwerdeEntscheid(),
                 createBeschwerdeVerlaufEntry(),
                 createGesuch(),
+                createManuelleVerfuegung(),
                 deleteGesuch(),
                 einreichedatumManuellAendern(),
                 gesuchEinreichenGs(),
@@ -166,6 +167,10 @@ public class GesuchApiSpec {
 
     public CreateGesuchOper createGesuch() {
         return new CreateGesuchOper(createReqSpec());
+    }
+
+    public CreateManuelleVerfuegungOper createManuelleVerfuegung() {
+        return new CreateManuelleVerfuegungOper(createReqSpec());
     }
 
     public DeleteGesuchOper deleteGesuch() {
@@ -1143,6 +1148,104 @@ public class GesuchApiSpec {
          * @return operation
          */
         public CreateGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
+     * @see #fileUploadMultiPart  (required)
+     * @see #kommentarForm  (optional)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class CreateManuelleVerfuegungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/manuelle-verfuegung";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateManuelleVerfuegungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/{gesuchTrancheId}/manuelle-verfuegung
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/{gesuchTrancheId}/manuelle-verfuegung
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
+         * @return operation
+         */
+        public CreateManuelleVerfuegungOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+         public static final String KOMMENTAR_FORM = "kommentar";
+
+         /**
+         * @param kommentar (String)  (optional)
+         * @return operation
+         */
+         public CreateManuelleVerfuegungOper kommentarForm(Object... kommentar) {
+            reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
+            return this;
+         }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public CreateManuelleVerfuegungOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateManuelleVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateManuelleVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

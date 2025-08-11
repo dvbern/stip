@@ -48,7 +48,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
         {
           provide: MatDialog,
           useValue: {
-            open: () => ({ afterClosed: () => of({}) }),
+            open: () => ({ afterClosed: () => of({ type: 'grund' }) }),
           },
         },
       ],

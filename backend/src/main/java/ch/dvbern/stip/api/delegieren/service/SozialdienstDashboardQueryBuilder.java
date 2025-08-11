@@ -66,7 +66,7 @@ public class SozialdienstDashboardQueryBuilder {
         query.where(qDelegierung.persoenlicheAngaben.adresse.ort.containsIgnoreCase(wohnort));
     }
 
-    public void geburtsdtaum(final JPAQuery<Delegierung> query, final LocalDate geburtsdatum) {
+    public void geburtsdatum(final JPAQuery<Delegierung> query, final LocalDate geburtsdatum) {
         query.where(qDelegierung.persoenlicheAngaben.geburtsdatum.eq(geburtsdatum));
     }
 

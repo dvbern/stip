@@ -98,38 +98,53 @@ public class KeycloakBenutzerService {
 
         final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
 
+        String keycloakUserId;
         try (
             Response response = keycloakUsersResource.create(userRep)
         ) {
-            response.bufferEntity();
-            if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
-                Log.error("Failed to create Keycloak user");
-                throw new WebApplicationException(response);
-            }
-            final var locationHeaderParts = response.getHeaderString("location").split("/");
-            final var keycloakUserId = locationHeaderParts[locationHeaderParts.length - 1];
-            final var keycloakUserResource = keycloakUsersResource.get(keycloakUserId);
-            var rolesToAddList = new ArrayList<>(
-                keycloakUserResource.roles()
-                    .realmLevel()
-                    .listAvailable()
-                    .stream()
-                    .filter(
-                        roleRepresentation -> roles.contains(roleRepresentation.getName())
-                    )
-                    .toList()
-            );
-            try {
-                keycloakUserResource.roles().realmLevel().add(rolesToAddList);
-            } catch (Exception e) {
-                deleteKeycloakBenutzer(keycloakUserId);
-                throw new WebApplicationException(
-                    "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
-                );
+            if (response.getStatus() != Status.CREATED.getStatusCode()) {
+                if (response.getStatus() == Status.CONFLICT.getStatusCode()) {
+                    LOG.info("Tried to create a Keycloak user with a duplicate username");
+                    throw new WebApplicationException(response.getStatus());
+                }
+
+                LOG.error("Keycloak did not return a successful response: {}", response.getStatus());
+                throw new WebApplicationException(response.toString());
             }
 
-            return keycloakUserId;
+            final var locationHeaderParts = response.getHeaderString("location").split("/");
+            keycloakUserId = locationHeaderParts[locationHeaderParts.length - 1];
         }
+
+        // This is only a sanity check, it should never be triggered
+        if (keycloakUserId == null) {
+            final var message = "Failed to get Keycloak user ID from response";
+            LOG.error(message);
+            throw new WebApplicationException(message);
+        }
+
+        final var keycloakUserResource = keycloakUsersResource.get(keycloakUserId);
+        var rolesToAddList = new ArrayList<>(
+            keycloakUserResource.roles()
+                .realmLevel()
+                .listAvailable()
+                .stream()
+                .filter(
+                    roleRepresentation -> roles.contains(roleRepresentation.getName())
+                )
+                .toList()
+        );
+
+        try {
+            keycloakUserResource.roles().realmLevel().add(rolesToAddList);
+        } catch (Exception e) {
+            deleteKeycloakBenutzer(keycloakUserId);
+            throw new WebApplicationException(
+                "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
+            );
+        }
+
+        return keycloakUserId;
     }
 
     public void updateKeycloakBenutzer(

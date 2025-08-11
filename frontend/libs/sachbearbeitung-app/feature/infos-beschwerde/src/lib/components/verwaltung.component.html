@@ -1,0 +1,37 @@
+@let beschwerdeHaengig = gesuchStore.gesuchInfo.data()?.beschwerdeHaengig ?? null;
+@if (beschwerdeHaengig !== null) {
+  <!-- Beschwerde Hängig -->
+  <h3 class="tw-mb-6">
+    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate }}
+  </h3>
+
+  <p>
+    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text.' + beschwerdeHaengig | translate }}
+  </p>
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    data-testid="button-beschwerde-create"
+    (click)="setBeschwerdeTo(beschwerdeHaengig)"
+  >
+    {{ 'sachbearbeitung-app.infos.beschwerde.create.' + beschwerdeHaengig | translate }}
+  </button>
+
+  <!-- Beschwerde Entscheid hochladen -->
+  <h3 class="tw-mb-6 tw-mt-10">
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+  </h3>
+  <p>
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | translate }}
+  </p>
+  <button
+    class="btn btn-primary"
+    type="button"
+    data-testid="button-beschwerde-entscheid-upload"
+    (click)="entscheidHochladen()"
+    [disabled]="!canCreateEntscheidSig()"
+  >
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload' | translate }}
+  </button>
+}

@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapper;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
@@ -42,7 +43,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = AusbildungsgangMapper.class)
 public abstract class AusbildungDashboardItemMapper {
     @Inject
     GesuchDashboardItemMapper gesuchDashboardItemMapper;
