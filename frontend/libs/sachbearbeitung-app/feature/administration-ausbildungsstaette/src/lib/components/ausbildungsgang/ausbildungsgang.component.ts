@@ -229,6 +229,7 @@ export class AusbildungsgangComponent
 
       this.reloadAbschluesseSig();
       const active = this.status();
+      this.administrationAusbildungsstaetteStore.loadAllAusbildungsgaenge$();
       this.administrationAusbildungsstaetteStore.loadAusbildungsgaenge$({
         filter: {
           [getCorrectPropertyName(
