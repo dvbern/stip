@@ -11,12 +11,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { map, startWith } from 'rxjs';
 
+import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import { map, startWith } from 'rxjs';
 
 const ALL_TABS = ['verlauf', 'verwaltung'] as const;
 @Component({
@@ -36,10 +38,10 @@ const ALL_TABS = ['verlauf', 'verwaltung'] as const;
 export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   private router = inject(Router);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
+  private gesuchInfoStore = inject(GesuchInfoStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
 
-  gesuchStore = inject(GesuchStore);
   activeTabSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map(() => this.wndw?.location.pathname),
@@ -63,7 +65,7 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
         return;
       }
 
-      this.gesuchStore.loadGesuchInfo$({ gesuchId });
+      this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
     });
   }
 }

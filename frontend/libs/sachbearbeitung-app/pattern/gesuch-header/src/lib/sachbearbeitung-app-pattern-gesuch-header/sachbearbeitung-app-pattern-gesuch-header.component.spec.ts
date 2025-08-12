@@ -7,6 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import { success } from '@dv/shared/util/remote-data';
@@ -32,6 +33,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SachbearbeitungAppPatternGesuchHeaderComponent],
       providers: [
+        GesuchInfoStore,
         provideRouter([]),
         provideHttpClient(),
         provideMockStore({

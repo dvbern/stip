@@ -10,6 +10,7 @@ import {
   sharedDataAccessGesuchEffects,
   sharedDataAccessGesuchsFeature,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
 import { routes } from './app.routes';
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideEffects(sharedDataAccessGesuchEffects),
     provideAnimations(),
     GesuchStore,
+    GesuchInfoStore,
     ChangeGesuchsperiodeStore,
   ],
 };

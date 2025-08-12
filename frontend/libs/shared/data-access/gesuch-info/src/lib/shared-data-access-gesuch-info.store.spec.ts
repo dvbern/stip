@@ -1,16 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { ChangeGesuchsperiodeStore } from './shared-data-access-change-gesuchsperiode.store';
+import { GesuchInfoStore } from './shared-data-access-gesuch-info.store';
 
-describe('ChangeGesuchsperiodeStore', () => {
-  let store: ChangeGesuchsperiodeStore;
+describe('GesuchInfoStore', () => {
+  let store: GesuchInfoStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ChangeGesuchsperiodeStore, provideHttpClient()],
+      providers: [GesuchInfoStore, provideHttpClient()],
     });
-    store = TestBed.inject(ChangeGesuchsperiodeStore);
+    store = TestBed.inject(GesuchInfoStore);
   });
 
   it('is initializable', () => {
@@ -18,7 +18,7 @@ describe('ChangeGesuchsperiodeStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.changeGesuchsperiode()).toEqual({
+    expect(store.gesuchInfo()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

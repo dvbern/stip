@@ -2,11 +2,11 @@ import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { Observable, exhaustMap, map, pipe, switchMap, tap } from 'rxjs';
+import { Observable, map, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
-  GesuchInfo,
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
   Kanton,
@@ -27,13 +27,11 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type GesuchState = {
-  gesuchInfo: CachedRemoteData<GesuchInfo>;
   gesuche: CachedRemoteData<PaginatedSbDashboard>;
   lastStatusChange: RemoteData<null>;
 };
 
 const initialState: GesuchState = {
-  gesuchInfo: initial(),
   gesuche: initial(),
   lastStatusChange: initial(),
 };
@@ -44,6 +42,7 @@ export class GesuchStore extends signalStore(
   withState(initialState),
 ) {
   private store = inject(Store);
+  private gesuchInfoStore = inject(GesuchInfoStore);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
     <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
@@ -63,7 +62,7 @@ export class GesuchStore extends signalStore(
                       gesuch: data,
                     }),
                   );
-                  this.loadGesuchInfo$({ gesuchId: data.id });
+                  this.gesuchInfoStore.loadGesuchInfo$({ gesuchId: data.id });
                   onSuccess?.(data);
                 },
               },
@@ -79,23 +78,6 @@ export class GesuchStore extends signalStore(
       loading: isPending(this.gesuche()),
     };
   });
-
-  loadGesuchInfo$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          gesuchInfo: cachedPending(state.gesuchInfo),
-        }));
-      }),
-      exhaustMap(({ gesuchId }) =>
-        this.gesuchService
-          .getGesuchInfo$({ gesuchId })
-          .pipe(
-            handleApiResponse((gesuchInfo) => patchState(this, { gesuchInfo })),
-          ),
-      ),
-    ),
-  );
 
   loadGesuche$ = rxMethod<GesuchServiceGetGesucheSbRequestParams>(
     pipe(

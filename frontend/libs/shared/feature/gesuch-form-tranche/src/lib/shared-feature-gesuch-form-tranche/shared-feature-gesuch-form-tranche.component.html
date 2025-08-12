@@ -76,7 +76,7 @@
       <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
     </mat-form-field>
     <!-- change gesuchsPeriode Button -->
-    @if (isSbApp && gesuchStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
+    @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
       <button
         type="button"
         class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"

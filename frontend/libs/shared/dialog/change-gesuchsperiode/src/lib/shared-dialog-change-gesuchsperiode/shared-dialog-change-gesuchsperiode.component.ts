@@ -26,6 +26,7 @@ import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { capitalized } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -67,12 +68,13 @@ export class SharedDialogChangeGesuchsperiodeComponent {
   languageSig = this.store.selectSignal(selectLanguage);
 
   gesuchsperiodenViewSig = computed(() => {
-    const p = this.changeGesuchsperiodeStore.assignableGesuchsperioden().data;
+    const periods =
+      this.changeGesuchsperiodeStore.assignableGesuchsperioden().data;
     const lang = this.languageSig();
 
-    return p?.map((period) => ({
-      id: period.id,
-      displayName: lang === 'de' ? period.bezeichnungDe : period.bezeichnungFr,
+    return periods?.map((p) => ({
+      id: p.id,
+      displayName: p[`bezeichnung${capitalized(lang)}`],
     }));
   });
 

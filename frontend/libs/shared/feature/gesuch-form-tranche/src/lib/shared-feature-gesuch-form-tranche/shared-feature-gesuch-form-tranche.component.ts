@@ -20,14 +20,13 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
   AenderungChangeState,
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
@@ -84,7 +83,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  gesuchStore = inject(GesuchStore, {
+  gesuchInfoStore = inject(GesuchInfoStore, {
     optional: true,
   });
 
@@ -147,6 +146,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
+        // if header will always load info, delete...
+        this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }
     });

@@ -36,6 +36,7 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -81,7 +82,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private permissionStore = inject(PermissionStore);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
-  private einreichnenStore = inject(EinreichenStore);
+  private gesuchInfoStore = inject(GesuchInfoStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   private deploymentConfigSig = this.store.selectSignal(
@@ -116,18 +117,18 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
-      this.gesuchStore.gesuchInfo().data?.canGetBerechnung;
+      this.gesuchInfoStore.gesuchInfo().data?.canGetBerechnung;
 
     return canViewBerechnung;
   });
   isBeschwerdeHaengigSig = computed(() => {
     const beschwerdeHaengig =
-      this.gesuchStore.gesuchInfo().data?.beschwerdeHaengig;
+      this.gesuchInfoStore.gesuchInfo().data?.beschwerdeHaengig;
     return beschwerdeHaengig;
   });
   isLoadingSig = computed(() => {
     return (
-      isPending(this.gesuchStore.gesuchInfo()) ||
+      isPending(this.gesuchInfoStore.gesuchInfo()) ||
       isPending(this.gesuchStore.lastStatusChange())
     );
   });
@@ -146,7 +147,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
-        this.gesuchStore.loadGesuchInfo$({ gesuchId });
+        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       }
     });
@@ -164,8 +165,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       const gesuch = this.otherGesuchInfoSourceSig();
 
       if (gesuch?.id) {
-        this.gesuchStore.loadGesuchInfo$({ gesuchId: gesuch.id });
-        this.einreichnenStore.validateSteps$({
+        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId: gesuch.id });
+        this.einreichenStore.validateSteps$({
           gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
         });
       }
@@ -174,7 +175,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   availableTrancheInteractionSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
 
     if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
@@ -185,17 +186,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchInfo = this.gesuchStore.gesuchInfo().data;
+    const gesuchInfo = this.gesuchInfoStore.gesuchInfo().data;
     const gesuchStatus = gesuchInfo?.gesuchStatus;
 
     const sbCanBearbeitungAbschliessen =
       this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
     const validations =
-      this.einreichnenStore.validationViewSig().invalidFormularProps
-        .validations;
+      this.einreichenStore.validationViewSig().invalidFormularProps.validations;
 
     const canTriggerManuellPruefen =
-      this.gesuchStore.gesuchInfo().data?.canTriggerManuellPruefen;
+      this.gesuchInfoStore.gesuchInfo().data?.canTriggerManuellPruefen;
 
     if (!gesuchStatus) {
       return {};
@@ -350,7 +350,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   createTranche() {
     const id = this.gesuchIdSig();
-    const periode = this.gesuchStore.gesuchInfo().data;
+    const periode = this.gesuchInfoStore.gesuchInfo().data;
     if (!id || !periode) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
