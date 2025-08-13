@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.sap.service;
+package ch.dvbern.stip.api.buchhaltung.service;
 
 import java.math.BigDecimal;
 
