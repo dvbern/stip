@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.buchhaltung.resource;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -187,7 +188,7 @@ class BuchhaltungResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelle
     @Order(7)
     void gesuchVerfuegen() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
