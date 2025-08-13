@@ -115,4 +115,15 @@ export const PERMISSION_ROLE_LIST = [
     'STAMMDATEN_DELETE',
     'SEND_EMAIL',
   ],
+  [
+    ['Freigabestelle'],
+    'GESUCH_UPDATE_FREIGABESTELLE',
+    'NOTIZ_READ',
+    'GESUCH_READ_SB',
+    'STAMMDATEN_READ',
+    'AUSBILDUNGSSTAETTE_READ',
+    'CUSTOM_DOKUMENT_READ',
+    'DOKUMENT_READ',
+    'FALL_READ',
+  ],
 ] as const satisfies [Role[], ...string[]][];
