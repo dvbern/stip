@@ -524,7 +524,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(
         UUID gesuchTrancheId,
         KommentarDto kommentarDto
