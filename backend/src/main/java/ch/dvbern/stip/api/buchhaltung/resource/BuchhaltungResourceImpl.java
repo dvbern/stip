@@ -63,15 +63,17 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     }
 
     @Override
+    @RolesAllowed(BUCHHALTUNG_ENTRY_READ)
     public PaginatedFailedAuszahlungBuchhaltungDto getFailedAuszahlungBuchhaltungEntrys(
         Integer page,
         Integer pageSize
     ) {
         buchhaltungAuthorizer.canGetFailedAuszahlungBuchhaltungEntrys();
-        return null;
+        return buchhaltungService.getPaginatedFailedAuszahlungBuchhaltung(page, pageSize);
     }
 
     @Override
+    @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public BuchhaltungEntryDto retryFailedAuszahlungBuchhaltungForGesuch(UUID gesuchId) {
         buchhaltungAuthorizer.canRetryFailedAuszahlungBuchhaltung(gesuchId);
         return buchhaltungMapper.toDto(sapService.retryAuszahlungBuchhaltung(gesuchId));

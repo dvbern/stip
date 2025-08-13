@@ -332,6 +332,7 @@ public class BuchhaltungService {
         );
     }
 
+    @Transactional
     public PaginatedFailedAuszahlungBuchhaltungDto getPaginatedFailedAuszahlungBuchhaltung(
         final Integer page,
         final Integer pageSize
@@ -344,5 +345,4 @@ public class BuchhaltungService {
         );
         return dto;
     }
-
 }

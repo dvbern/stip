@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.entity.QBuchhaltung;
+import ch.dvbern.stip.api.buchhaltung.entity.SapDeliverysLengthConstraintValidator;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -66,7 +67,13 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
             .where(Q_BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
             .join(sapDelivery)
             .on(Q_BUCHHALTUNG.sapDeliverys.any().id.eq(sapDelivery.id))
-            .where(sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS).or(Q_BUCHHALTUNG.sapDeliverys.size().lt(3)))
+            .where(
+                sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS)
+                    .or(
+                        Q_BUCHHALTUNG.sapDeliverys.size()
+                            .lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
+                    )
+            )
             .orderBy(Q_BUCHHALTUNG.timestampErstellt.desc());
         return query.stream().findFirst();
     }
@@ -90,6 +97,21 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
                     .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_REMAINDER))
             )
             .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS))
+            .stream();
+    }
+
+    public Stream<Buchhaltung> findAuszahlungBuchhaltungWithFailedSapDelivery() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_BUCHHALTUNG)
+            .where(
+                Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_INITIAL)
+                    .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.AUSZAHLUNG_REMAINDER))
+            )
+            .where(
+                Q_BUCHHALTUNG.sapDeliverys.size().lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
+            )
+            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS).not())
+            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS).not())
             .stream();
     }
 }

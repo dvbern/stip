@@ -1,0 +1,4 @@
+Eine Stipendienauszahlung ist Fehlgeschlagen.
+Die Ursache dafür sind wahrscheinlich fehlerhafte Auszahlungsangaben.
+Sie können die Angaben aktualisieren und es wird eine erneute Auszahlung versucht.
+Alternativ setzen sie sich mit ihrem Sachbearbeiter in Verbindung.

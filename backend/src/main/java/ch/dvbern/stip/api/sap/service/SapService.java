@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
@@ -32,10 +33,13 @@ import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
@@ -44,6 +48,7 @@ import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +68,9 @@ public class SapService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final AdresseRepository adresseRepository;
+    private final NotificationService notificationService;
+    private final MailService mailService;
 
     // @Transactional
     // public void doOrReadChangeBusinessPartner(final Zahlungsverbindung zahlungsverbindung) {
@@ -174,6 +182,9 @@ public class SapService {
 
         sapDelivery
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+
+        // Debugging/Live testing
+        sapDelivery.setSapStatus(SapStatus.FAILURE);
         return sapDelivery.getSapStatus();
     }
 
@@ -200,13 +211,13 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        final var lastSapDelivery = sapDeliverys.stream().min(Comparator.comparing(SapDelivery::getTimestampErstellt));
+        final var lastSapDelivery = sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
 
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
             final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
             && lastSapDelivery.get()
-                .getTimestampMutiert()
+                .getTimestampErstellt()
                 .plusHours(HOURS_BETWEEN_SAP_TRIES)
                 .isBefore(LocalDateTime.now());
 
@@ -226,12 +237,18 @@ public class SapService {
                         buchhaltung.getBetrag(),
                         deliveryid,
                         getQrIbanAddlInfoString(gesuch),
-                        String.valueOf(Math.abs(buchhaltung.getId().getMostSignificantBits()))
+                        String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                     );
                 SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
             }
         }
-        return getVendorPostingCreateStatus(buchhaltung);
+        final var vendorPostingCreateStatus = getVendorPostingCreateStatus(buchhaltung);
+        if (buchhaltung.getSapStatus() == SapStatus.FAILURE) {
+            gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(buchhaltung.getBuchhaltungType());
+            notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        }
+        return vendorPostingCreateStatus;
     }
 
     public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
@@ -249,14 +266,30 @@ public class SapService {
             )
             .findFirst()
             .get();
-        createInitialAuszahlungOrGetStatus(gesuch.getId());
+
+        switch (fall.getFailedBuchhaltungAuszahlungType()) {
+            case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuch.getId());
+            case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuch.getId());
+            case null, default -> throw new BadRequestException();
+        }
+
         return buchhaltungService.getLatestBuchhaltungEntry(fall.getId());
     }
 
+    @Transactional
     public Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId) {
-        createInitialAuszahlungOrGetStatus(gesuchId);
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        return buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+
+        switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
+            case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
+            case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
+            default -> throw new BadRequestException();
+        }
+
+        final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+        buchhaltung.getZahlungsverbindung()
+            .setAdresse(adresseRepository.requireById(buchhaltung.getZahlungsverbindung().getAdresse().getId()));
+        return buchhaltung;
     }
 
     public boolean isPastSecondPaymentDate(final Gesuch gesuch) {
@@ -277,6 +310,7 @@ public class SapService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
         final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
+        fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
             final var createBusinessPartnerStatus = getStatusOfOrCreateBusinessPartner(gesuch);
@@ -327,6 +361,7 @@ public class SapService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
         final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
+        fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
             final var createBusinessPartnerStatus = getStatusOfOrCreateBusinessPartner(gesuch);
@@ -480,6 +515,33 @@ public class SapService {
                     );
                 }
             }
+            );
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    void retryOngoingBuchhaltungAuszahlungWithFailures(final Buchhaltung buchhaltung) {
+        assert buchhaltung.getZahlungsverbindung() != null;
+        createVendorPostingOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getZahlungsverbindung(), buchhaltung);
+    }
+
+    @Transactional
+    public void processRetryFailedAuszahlungsBuchhaltung() {
+        buchhaltungRepository.findAuszahlungBuchhaltungWithFailedSapDelivery()
+            .toList()
+            .forEach(
+                buchhaltung -> {
+                    try {
+                        retryOngoingBuchhaltungAuszahlungWithFailures(buchhaltung);
+                    } catch (Exception e) {
+                        LOG.error(
+                            String.format(
+                                "processRetryFailedAuszahlungsBuchhaltung: Error during processing of buchhaltung %s",
+                                buchhaltung.getId()
+                            ),
+                            e
+                        );
+                    }
+                }
             );
     }
 }

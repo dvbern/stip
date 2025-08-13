@@ -63,7 +63,7 @@ public class FallRepository implements BaseRepository<Fall> {
     public Stream<Fall> findAllFallsWithFailedAuszahlungBuchhaltung(final Integer page, final Integer pageSize) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_FALL)
-            .where(Q_FALL.hasFailedBuchhaltungAuszahlung.isTrue())
+            .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull())
             .offset((long) page * pageSize)
             .limit(pageSize)
             .stream();

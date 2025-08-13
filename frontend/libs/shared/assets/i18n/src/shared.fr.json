@@ -249,6 +249,7 @@
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Changement de statut avec commentaire",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Documents manquants non soumis",
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
+  "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Retrait échoué",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",

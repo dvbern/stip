@@ -6302,6 +6302,7 @@ components:
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
         - NEUE_VERFUEGUNG
+        - FAILED_AUSZAHLUNG
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

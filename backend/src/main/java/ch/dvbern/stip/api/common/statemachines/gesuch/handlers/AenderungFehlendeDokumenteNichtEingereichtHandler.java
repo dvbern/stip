@@ -39,7 +39,7 @@ public class AenderungFehlendeDokumenteNichtEingereichtHandler implements Gesuch
         if (!gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
-        notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
+        notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuch);
         gesuch.setNachfristDokumente(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);

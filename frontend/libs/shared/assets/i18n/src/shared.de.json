@@ -253,6 +253,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Fehlende Dokumente nicht eingereicht",
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Frist für Dokumente geändert",
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Neue Verfügung",
+  "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Auszahlung fehlgeschlagen",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
