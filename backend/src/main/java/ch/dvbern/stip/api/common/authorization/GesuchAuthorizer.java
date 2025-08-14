@@ -147,8 +147,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void gsSbOrJuristCanRead(final UUID gesuchId) {
-        if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
+    public void gsSbOrFreigabestelleOrJuristCanRead(final UUID gesuchId) {
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
         gsCanRead(gesuchId);

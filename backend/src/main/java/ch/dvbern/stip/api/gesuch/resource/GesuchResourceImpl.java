@@ -331,7 +331,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
+        gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
         return gesuchService.getGesuchInfo(gesuchId);
     }
 
@@ -403,7 +403,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
-        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
+        gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
         return gesuchHistoryService.getStatusprotokoll(gesuchId);
     }
 
