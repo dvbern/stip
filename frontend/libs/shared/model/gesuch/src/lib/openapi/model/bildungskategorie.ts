@@ -9,15 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Bildungsstufe } from './bildungsstufe';
 
-export interface Bildungskategorie { 
-    bezeichnungDe: string;
-    bezeichnungFr: string;
-    bildungsstufe: Bildungsstufe;
-    bfs: number;
-    id: string;
-}
+export type Bildungskategorie = 'TERTIAERSTUFE_A' | 'TERTIAERSTUFE_B' | 'SEKUNDARSTUFE_I' | 'SEKUNDARSTUFE_II';
 
-
+export const Bildungskategorie = {
+    TERTIAERSTUFE_A: 'TERTIAERSTUFE_A' as Bildungskategorie,
+    TERTIAERSTUFE_B: 'TERTIAERSTUFE_B' as Bildungskategorie,
+    SEKUNDARSTUFE_I: 'SEKUNDARSTUFE_I' as Bildungskategorie,
+    SEKUNDARSTUFE_II: 'SEKUNDARSTUFE_II' as Bildungskategorie
+};
 

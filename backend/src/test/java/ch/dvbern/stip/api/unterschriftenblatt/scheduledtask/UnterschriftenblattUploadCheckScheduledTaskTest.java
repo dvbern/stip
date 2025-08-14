@@ -22,11 +22,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.service.seeding.GesuchTestSeeding;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -112,12 +113,12 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
         gesuch.setGesuchsperiode(gesuchperiode);
 
         var ausbildung = new Ausbildung();
+        var abschluss = new Abschluss();
+        abschluss.setBezeichnungDe("test");
+        abschluss.setBezeichnungFr("test");
+        abschluss.setAusbildungskategorie(Ausbildungskategorie.BERUFS_UND_HOEHERE_FACHSCHULE);
         var ausbildungsgang = new Ausbildungsgang();
-        ausbildungsgang.setBezeichnungDe("test");
-        ausbildungsgang.setBezeichnungFr("test");
-        var ausbildungskategorie = new Bildungskategorie();
-        ausbildungskategorie.setBfs(Bildungskategorie.LEHRE_BFS);
-        ausbildungsgang.setBildungskategorie(ausbildungskategorie);
+        ausbildungsgang.setAbschluss(abschluss);
         ausbildung.setAusbildungsgang(ausbildungsgang);
 
         var ausbildungsstaette = new Ausbildungsstaette();

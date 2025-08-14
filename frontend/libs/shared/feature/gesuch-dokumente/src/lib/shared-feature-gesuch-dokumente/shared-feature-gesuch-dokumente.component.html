@@ -6,7 +6,7 @@
 <div class="tw-mt-6" *dvIfSachbearbeiter>
   @let additonalDokumente = additionalDokumenteViewSig();
   @if (additonalDokumente.showList) {
-    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
+    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente" class="tw-relative"></dv-additional-dokumente>
 
     @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
       <div class="tw-relative tw-mt-6 tw-flex">

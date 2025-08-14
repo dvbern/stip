@@ -101,6 +101,12 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
+    @POST
+    @Path("/{gesuchTrancheId}/manuelle-verfuegung")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto createManuelleVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "kommentar")  String kommentar);
+
     @DELETE
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })

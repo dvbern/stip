@@ -70,6 +70,12 @@ $gesuch-app-theme: map.deep-merge(
     align-items: flex-start;
   }
 }
+.cdk-overlay-connected-position-bounding-box
+  .cdk-overlay-pane
+  .mat-mdc-select-panel {
+  max-width: 724px;
+  min-width: 254px;
+}
 
 .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid)
   .mdc-floating-label {
@@ -138,6 +144,11 @@ form .readonly {
 }
 .mat-mdc-paginator-page-size-label {
   align-self: center;
+}
+.clearable-select .mat-mdc-select:not(.mat-mdc-select-empty) {
+  .mat-mdc-select-arrow-wrapper {
+    display: none;
+  }
 }
 .mdc-radio .mdc-label {
   width: 100%;
@@ -281,7 +292,33 @@ $dv-all-colors: (
     box-shadow: none;
   }
 }
+.dv-create-ausbildung-dialog {
+  --mat-dialog-container-min-width: 900px;
+}
 
-.btn.active:not(:hover) {
-  --mat-menu-item-label-text-color: white;
+.mat-mdc-tab-links {
+  gap: 0 24px;
+  padding-bottom: 6px;
+
+  .mat-mdc-tab-link:not(.active) {
+    background: white;
+  }
+  .mat-mdc-tab-link {
+    -webkit-font-smoothing: initial;
+  }
+}
+
+.btn.active {
+  --mat-tab-header-active-focus-label-text-color: white;
+  --mat-tab-header-active-focus-indicator-color: transparent;
+
+  &:not(:hover) {
+    --mat-menu-item-label-text-color: white;
+    --mat-tab-header-active-label-text-color: white;
+    --mdc-tab-indicator-active-indicator-color: transparent;
+  }
+  &:hover {
+    --mat-tab-header-active-hover-label-text-color: white;
+    --mat-tab-header-active-hover-indicator-color: transparent;
+  }
 }

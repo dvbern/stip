@@ -280,16 +280,16 @@ export class UploadStore {
           patchState(this.state, createGenericError());
         },
         next: (dokumentModel) =>
-          patchState(this.state, {
+          patchState(this.state, (state) => ({
             dokumentModel,
             dokuments: [
               ...(dokumentModel.gesuchDokument?.dokumente.map((file) => ({
                 file,
                 progress: 100,
               })) ?? []),
-              ...this.state.dokuments().filter(notCompletedOrError),
+              ...state.dokuments.filter(notCompletedOrError),
             ],
-          }),
+          })),
       });
 
     this.removeDocument$
@@ -340,11 +340,11 @@ export class UploadStore {
           patchState(this.state, createGenericError());
         },
         next: (action) => {
-          patchState(this.state, {
-            dokuments: this.state
-              .dokuments()
-              .filter(({ file }) => file.id !== action.dokumentId),
-          });
+          patchState(this.state, (state) => ({
+            dokuments: state.dokuments.filter(
+              ({ file }) => file.id !== action.dokumentId,
+            ),
+          }));
         },
       });
 
@@ -359,10 +359,9 @@ export class UploadStore {
         },
         next: ({ event, action, tempDokumentId }) => {
           if ('error' in event) {
-            const state = this.state();
             const parsedError = sharedUtilFnErrorTransformer(event.error);
             const status = parsedError.status;
-            patchState(this.state, {
+            patchState(this.state, (state) => ({
               dokuments: state.dokuments.map((d) =>
                 d.file.id === createTempId(action.fileUpload)
                   ? {
@@ -376,14 +375,14 @@ export class UploadStore {
                     }
                   : d,
               ),
-            });
+            }));
             return;
           }
           switch (event.type) {
             case HttpEventType.Sent: {
-              patchState(this.state, {
+              patchState(this.state, (state) => ({
                 dokuments: [
-                  ...this.state.dokuments(),
+                  ...state.dokuments,
                   {
                     file: {
                       id: tempDokumentId,
@@ -397,17 +396,17 @@ export class UploadStore {
                     progress: 0,
                   },
                 ],
-              });
+              }));
               break;
             }
             case HttpEventType.UploadProgress: {
-              patchState(this.state, {
+              patchState(this.state, (state) => ({
                 dokuments: updateProgressFor(
-                  this.state.dokuments(),
+                  state.dokuments,
                   tempDokumentId,
                   (event.loaded / action.fileUpload.size) * 100,
                 ),
-              });
+              }));
               break;
             }
             // On cancel (User event), remove the temporary document from the state
@@ -420,13 +419,13 @@ export class UploadStore {
               break;
             }
             case HttpEventType.Response: {
-              patchState(this.state, {
+              patchState(this.state, (state) => ({
                 dokuments: updateProgressFor(
-                  this.state.dokuments(),
+                  state.dokuments,
                   tempDokumentId,
                   100,
                 ),
-              });
+              }));
               this.loadDocuments(action);
               break;
             }

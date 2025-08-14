@@ -8,6 +8,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
 import {
+  configureTestbedTranslateLanguage,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
@@ -16,12 +17,13 @@ import {
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import {
   checkMatCheckbox,
-  clickAutocompleteOption,
+  clickMatSelectOption,
   provideLandLookupMock,
 } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner.component';
 
+const language = 'de';
 async function setup() {
   return await render(SharedFeatureGesuchFormPartnerComponent, {
     imports: [
@@ -37,7 +39,7 @@ async function setup() {
             } satisfies RolesMap,
           },
           language: {
-            language: 'de',
+            language,
           },
           gesuchs: mockedGesuchAppWritableGesuchState({
             formular: {
@@ -57,6 +59,7 @@ async function setup() {
       provideHttpClientTesting(),
       provideCompileTimeConfig(),
     ],
+    configureTestBed: configureTestbedTranslateLanguage(language),
   });
 }
 
@@ -175,7 +178,7 @@ const fillBasicForm = async () => {
   await user.type(screen.getByTestId('form-address-plz'), '3000');
   await user.type(screen.getByTestId('form-address-ort'), 'Bern');
 
-  await clickAutocompleteOption('form-address-land', 'Sch', 'Schweiz');
+  await clickMatSelectOption('form-address-land', 'Schweiz');
 
   fireEvent.input(screen.getByTestId('form-partner-geburtsdatum'), {
     target: { value: '01.01.1990' },

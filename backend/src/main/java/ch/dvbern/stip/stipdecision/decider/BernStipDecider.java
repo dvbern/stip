@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -98,7 +99,7 @@ public class BernStipDecider extends BaseStipDecider {
             .getLebenslaufItems()
             .stream()
             .anyMatch(
-                lebenslaufItem -> lebenslaufItem.getBildungsart() != null
+                LebenslaufItem::isAusbildung
             );
     }
 
@@ -109,7 +110,7 @@ public class BernStipDecider extends BaseStipDecider {
             .stream()
             .mapToInt(
                 lebenslaufItem -> {
-                    if (lebenslaufItem.getBildungsart() != null) {
+                    if (lebenslaufItem.isAusbildung()) {
                         return DateUtil.getMonthsBetween(lebenslaufItem.getVon(), lebenslaufItem.getBis());
                     }
                     return 0;
@@ -290,8 +291,8 @@ public class BernStipDecider extends BaseStipDecider {
                 .getLebenslaufItems()
                 .stream()
                 .anyMatch(
-                    item -> item.getBildungsart() != null
-                    && item.getBildungsart().isBerufsbefaehigenderAbschluss()
+                    item -> item.isAusbildung()
+                    && item.getAbschluss().isBerufsbefaehigenderAbschluss()
                     && item.isAusbildungAbgeschlossen()
                 );
         }
@@ -302,7 +303,10 @@ public class BernStipDecider extends BaseStipDecider {
                     .getPersonInAusbildung()
                     .getNiederlassungsstatus()
             )
-            || gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet().is(WellKnownLand.STATELESS);
+            || gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNationalitaet()
+                .is(WellKnownLand.STATELESS);
         }
 
         private static boolean elternlosOderElternImAusland(final GesuchTranche gesuchTranche) {

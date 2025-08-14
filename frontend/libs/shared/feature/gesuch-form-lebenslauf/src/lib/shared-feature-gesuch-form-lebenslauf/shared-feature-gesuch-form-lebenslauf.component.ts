@@ -95,7 +95,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   });
 
   ausbildungenSig: Signal<LebenslaufItemUpdate[]> = computed(() => {
-    return this.viewSig().lebenslaufItems.filter((l) => l.bildungsart);
+    return this.viewSig().lebenslaufItems.filter((l) => l.abschlussId);
   });
 
   editedItem?: SharedModelLebenslauf;
@@ -123,7 +123,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   public handleEditItem(ge: LebenslaufItemUpdate): void {
     this.editedItem = {
-      type: ge.bildungsart ? 'AUSBILDUNG' : 'TAETIGKEIT',
+      type: ge.abschlussId ? 'AUSBILDUNG' : 'TAETIGKEIT',
       ...ge,
     };
   }

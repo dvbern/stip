@@ -10,12 +10,11 @@
  * Do not edit the class manually.
  */
 import { WohnsitzKanton } from './wohnsitzKanton';
-import { LebenslaufAusbildungsArt } from './lebenslaufAusbildungsArt';
 import { Taetigkeitsart } from './taetigkeitsart';
 
 export interface LebenslaufItemUpdate { 
     id?: string;
-    bildungsart?: LebenslaufAusbildungsArt;
+    abschlussId?: string;
     /**
      * Datum im Format mm.YYYY
      */
@@ -27,17 +26,9 @@ export interface LebenslaufItemUpdate {
     wohnsitz: WohnsitzKanton;
     ausbildungAbgeschlossen?: boolean;
     /**
-     * Requierd wenn bildungsart = \'EIDGENOESSISCHES_BERUFSATTEST\' oder \'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS\'
+     * Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
      */
-    berufsbezeichnung?: string;
-    /**
-     * Required wenn bildungsart = \"BACHELOR_HOCHSCHULE_UNI\" oder \"BACHELOR_FACHHOCHSCHULE\" oder \"MASTER\"
-     */
-    fachrichtung?: string;
-    /**
-     * Required wenn bildungsart = \"ANDERER_AUSBILDUNGSABSCHLUSS\"
-     */
-    titelDesAbschlusses?: string;
+    fachrichtungBerufsbezeichnung?: string;
     taetigkeitsart?: Taetigkeitsart;
     /**
      * Required wenn taetigkeitsart != null

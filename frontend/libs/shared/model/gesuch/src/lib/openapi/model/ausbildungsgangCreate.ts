@@ -11,9 +11,7 @@
  */
 
 export interface AusbildungsgangCreate { 
-    bezeichnungDe: string;
-    bezeichnungFr: string;
-    bildungskategorieId: string;
-    ausbildungsstaetteId?: string;
+    abschlussId: string;
+    ausbildungsstaetteId: string;
 }
 

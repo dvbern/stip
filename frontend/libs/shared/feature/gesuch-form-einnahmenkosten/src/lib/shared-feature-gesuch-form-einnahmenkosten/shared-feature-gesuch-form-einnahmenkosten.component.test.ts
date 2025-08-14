@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
-import { default as userEvent } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -347,13 +347,15 @@ function createEmptyAusbildung(): Ausbildung {
     pensum: 'VOLLZEIT',
     ausbildungsgang: {
       id: '',
-      bildungskategorie: {
-        id: '',
-        bfs: -1,
-        bezeichnungDe: '',
-        bezeichnungFr: '',
-        bildungsstufe: 'SEKUNDAR_2',
-      },
+      bezeichnungDe: '',
+      bezeichnungFr: '',
+      abschlussId: '',
+      abschlussBezeichnungDe: '',
+      abschlussBezeichnungFr: '',
+      ausbildungsstaetteId: '',
+      ausbildungsstaetteNameDe: '',
+      ausbildungsstaetteNameFr: '',
+      aktiv: false,
     },
     editable: true,
     status: 'AKTIV',
@@ -363,10 +365,10 @@ function createEmptyAusbildung(): Ausbildung {
 function createEmptyPersonInAusbildung(): PersonInAusbildung {
   return {
     adresse: {
-      land: 'CH',
       strasse: '',
       ort: '',
       plz: '',
+      landId: '',
     },
     sozialversicherungsnummer: '',
     anrede: 'FRAU',
@@ -377,7 +379,7 @@ function createEmptyPersonInAusbildung(): PersonInAusbildung {
     email: '',
     telefonnummer: '',
     wohnsitz: 'FAMILIE',
-    nationalitaet: 'CH',
+    nationalitaetId: '',
     heimatort: '',
     sozialhilfebeitraege: false,
     korrespondenzSprache: 'DEUTSCH',

@@ -91,18 +91,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.obhut.berechnung.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_NOTNULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.notnull.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.null.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NOTNULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.notnull.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.null.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NOTNULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.notnull.message}";
-    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE =
-        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.null.message}";
+    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE =
+        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtungBerufsbezeichnung.null.message}";
+    public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_BERUFSBEZEICHNUNG_NOT_NULL_MESSAGE =
+        "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtungBerufsbezeichnung.notnull.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
     public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
@@ -215,6 +207,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.formular.land.ungueltig}";
     public static final String VALIDATION_ZAHLUNGSVERBINDUNG_ISO2CODE_MUST_BE_SET =
         "{jakarta.validation.constraints.zahlungsverbindung.iso2code.must.be.set}";
+    public static final String VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE =
+        "{jakarta.validation.constraints.ausbildungsstaette.name.notunique}";
+    public static final String VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE =
+        "{jakarta.validation.constraints.ausbildungsgang.ausbildungsstaetteAbschluss.notunique}";
     public static final String VALIDATION_SAP_DELIVERYS_LENGTH_VIOLATION =
         "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
 

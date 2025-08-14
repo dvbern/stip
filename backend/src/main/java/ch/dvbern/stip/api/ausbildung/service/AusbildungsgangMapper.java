@@ -17,43 +17,57 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
-import ch.dvbern.stip.api.common.service.EntityIdReference;
-import ch.dvbern.stip.api.common.service.EntityReferenceMapper;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDataDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
-import org.mapstruct.BeanMapping;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
+import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class, uses = BildungskategorieMapper.class)
-public interface AusbildungsgangMapper {
-    @Mapping(
-        target = "bildungskategorie",
-        source = "bildungskategorieId",
-        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
-    )
-    Ausbildungsgang toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
+@Mapper(config = MappingConfig.class)
+public abstract class AusbildungsgangMapper {
+    @Inject
+    AbschlussService abschlussService;
 
-    @Mapping(
-        target = "ausbildungsstaetteId",
-        source = "ausbildungsstaette.id"
-    )
-    AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
+    @Inject
+    AusbildungsstaetteService ausbildungsstaetteService;
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(
-        target = "bildungskategorie",
-        source = "bildungskategorieId",
-        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
-    )
-    Ausbildungsgang partialUpdate(
-        AusbildungsgangUpdateDto ausbildungsgangDto,
-        @MappingTarget Ausbildungsgang ausbildungsgang
-    );
+    @Mapping(target = "ausbildungsstaette", source = "ausbildungsstaetteId", qualifiedByName = "mapAusbildungsstaette")
+    @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    public abstract Ausbildungsgang toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
+
+    @Named("mapAbschluss")
+    protected Abschluss mapAbschluss(final UUID abschlussId) {
+        if (abschlussId == null) {
+            return null;
+        }
+        return abschlussService.requireById(abschlussId);
+    }
+
+    @Named("mapAusbildungsstaette")
+    protected Ausbildungsstaette mapAusbildungsstaette(final UUID ausbildungsstaetteId) {
+        if (ausbildungsstaetteId == null) {
+            return null;
+        }
+        return ausbildungsstaetteService.requireById(ausbildungsstaetteId);
+    }
+
+    public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
+
+    @Mapping(target = "abschlussId", source = "abschluss.id")
+    @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
+    public abstract AusbildungsgangSlimDto toSlimDto(Ausbildungsgang ausbildungsgang);
+
+    @Mapping(target = "bezeichnungDe", source = "abschluss.bezeichnungDe")
+    @Mapping(target = "bezeichnungFr", source = "abschluss.bezeichnungFr")
+    @Mapping(target = "zusatzfrage", source = "abschluss.zusatzfrage")
+    public abstract AusbildungsgangDataDto toDataDto(Ausbildungsgang ausbildungsgang);
 }

@@ -23,16 +23,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class LebenslaufItemMapperTest {
 
     LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl();
+    Abschluss abschlussToMap;
+    static final String ABSCHLUSS_BEZEICHNUNG_DE = "abschlussBezeichnungDe";
+
+    @BeforeEach
+    void setUp() {
+        final var abschlussServiceMock = Mockito.mock(AbschlussService.class);
+        abschlussToMap = new Abschluss();
+        abschlussToMap.setBezeichnungDe(ABSCHLUSS_BEZEICHNUNG_DE);
+
+        Mockito.when(abschlussServiceMock.requireById(Mockito.any())).thenReturn(abschlussToMap);
+        lebenslaufItemMapper.abschlussService = abschlussServiceMock;
+    }
 
     @Test
     void testLebenslaufMapperMapAddDelete() {
@@ -65,9 +80,18 @@ class LebenslaufItemMapperTest {
         Assertions.assertEquals(0, neulebenslaufItemSet.size());
     }
 
+    @Test
+    void testLebenslaufMapperMapsAbschluss() {
+        LebenslaufItemUpdateDto lebenslaufItemUpdateDto = prepareData();
+        lebenslaufItemUpdateDto.setAbschlussId(UUID.randomUUID());
+        final var lebenslaufItem = lebenslaufItemMapper.toEntity(lebenslaufItemUpdateDto);
+        Assertions.assertNotNull(lebenslaufItem.getAbschluss());
+        Assertions.assertEquals(abschlussToMap, lebenslaufItem.getAbschluss());
+        Assertions.assertEquals(ABSCHLUSS_BEZEICHNUNG_DE, lebenslaufItem.getAbschluss().getBezeichnungDe());
+    }
+
     private LebenslaufItemUpdateDto prepareData() {
         var lebenslaufItem = new LebenslaufItemUpdateDto();
-        lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BERUFSVORBEREITENDES_SCHULJAHR);
         lebenslaufItem.setBis("02.2022");
         lebenslaufItem.setVon("01.2022");
         lebenslaufItem.setWohnsitz(WohnsitzKanton.BE);

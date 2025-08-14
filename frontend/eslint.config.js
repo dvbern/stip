@@ -69,6 +69,7 @@ module.exports = [
             {
               sourceTag: 'type:feature',
               onlyDependOnLibsWithTags: [
+                'type:assets',
                 'type:feature',
                 'type:pattern',
                 'type:data-access',
@@ -76,6 +77,7 @@ module.exports = [
                 'type:dialog',
                 'type:ui',
                 'type:util',
+                'type:util-data-access',
                 'type:util-fn',
                 'type:model',
                 'type:global',

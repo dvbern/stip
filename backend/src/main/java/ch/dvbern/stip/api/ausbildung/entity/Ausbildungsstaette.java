@@ -17,16 +17,19 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.util.Constants;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -35,18 +38,10 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(
-    name = "ausbildungsstaette",
-    indexes = {
-        @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant")
-    }
-)
+@Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant"))
 @Getter
 @Setter
 public class Ausbildungsstaette extends AbstractMandantEntity {
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
-    private List<Ausbildungsgang> ausbildungsgaenge;
-
     @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "name_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
@@ -56,4 +51,31 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "name_fr", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameFr;
+
+    @Nullable
+    @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "ch_shis", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String chShis;
+
+    @Nullable
+    @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "bur_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String burNo;
+
+    @Nullable
+    @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "ct_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String ctNo;
+
+    @NotNull
+    @Column(name = "aktiv", nullable = false)
+    private boolean aktiv = true;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
+    private List<Ausbildungsgang> ausbildungsgaenge = new ArrayList<>();
+
+    @Transient
+    public List<Ausbildungsgang> getAktiveAusbildungsgaenge() {
+        return ausbildungsgaenge.stream().filter(Ausbildungsgang::isAktiv).toList();
+    }
 }

@@ -83,7 +83,9 @@ export class SozialdienstMitarbeiterDetailComponent
         return;
       }
 
-      this.form.controls.email.disable();
+      if (benutzer.data.id !== 'new') {
+        this.form.controls.email.disable();
+      }
       this.form.patchValue(benutzer.data);
     });
   }

@@ -37,7 +37,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
-import { restrictNumberParam } from '@dv/shared/util-fn/filter-util';
+import { restrictNumberParam } from '@dv/shared/util/table';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-fehlgeschlagene-zahlungen',
