@@ -80,7 +80,7 @@ public class BernStipDecider extends BaseStipDecider {
             case ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
-            case ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
+            case ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG_DURCH_PRUEFUNG;
             case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDeciderResult: " + decision);
         };
     }
