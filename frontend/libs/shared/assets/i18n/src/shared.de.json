@@ -142,6 +142,8 @@
   "shared.dialog.change-gesuchsperiode.title": "Gesuchsperiode ändern",
   "shared.dialog.change-gesuchsperiode.text": "Bitte wählen Sie die neue Gesuchsperiode aus.",
   "shared.dialog.change-gesuchsperiode.gesuchsperiode.label": "Gesuchsperioden",
+  "shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error": "Bevor Sie diese Gesuchsperiode auswählen, müssen Sie die Steuerjahre der auf den unten aufgelisteten Seiten anpassen. Das Steuerjahr muss in der Vergangenheit liegen.",
+  "shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error.toast": "Steuerjahr Felder müssen in der Vergangenheit liegen.",
   "shared.dialog.change-gesuchsperiode.success": "Die Gesuchsperiode wurde erfolgreich geändert",
   "shared.dokumente.nachfrist.label": "Frist zum Einreichen der Dokumente",
   "shared.dokumente.nachfrist.edit": "Frist bearbeiten",

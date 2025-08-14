@@ -142,6 +142,8 @@
   "shared.dialog.change-gesuchsperiode.title": "Modifier la période de demande",
   "shared.dialog.change-gesuchsperiode.text": "Veuillez sélectionner la nouvelle période de demande.",
   "shared.dialog.change-gesuchsperiode.gesuchsperiode.label": "Périodes de demande",
+  "shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error": "Avant de sélectionner cette période de demande, vous devez ajuster les années fiscales des pages répertoriées ci-dessous. L'année fiscale doit être dans le passé.",
+  "shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error.toast": "L'année fiscale doit être dans le passé.",
   "shared.dialog.change-gesuchsperiode.success": "La période de demande a été modifiée avec succès.",
   "shared.dokumente.nachfrist.label": "Délai pour soumettre les documents",
   "shared.dokumente.nachfrist.edit": "Modifier le délai",

@@ -105,12 +105,13 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   currentTrancheNumberSig = computed(() => {
-    const { tranche: currentTranche, gesuchUrlTyp } = this.viewSig();
+    const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
     if (!currentTranche) {
       return '…';
     }
 
+    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
     const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
     const initialTranchen = this.gesuchAenderungStore.initialTranchenViewSig();
@@ -258,12 +259,19 @@ export class SharedFeatureGesuchFormTrancheComponent {
   }
 
   changeGesuchsperiode(gesuchTrancheId: string | undefined) {
-    if (!gesuchTrancheId) {
+    const { gesuchId, trancheSetting } = this.viewSig();
+    const gesuchFormular =
+      this.viewSig().gesuch?.gesuchTrancheToWorkWith.gesuchFormular;
+
+    if (!gesuchTrancheId || !gesuchFormular || !gesuchId || !trancheSetting) {
       return;
     }
 
     SharedDialogChangeGesuchsperiodeComponent.open(this.dialog, {
       gesuchTrancheId,
+      gesuchId,
+      trancheSetting,
+      gesuchFormular,
     })
       .afterClosed()
       .subscribe();

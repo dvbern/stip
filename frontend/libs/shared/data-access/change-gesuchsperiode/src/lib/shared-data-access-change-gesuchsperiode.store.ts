@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Gesuch,
   GesuchService,
@@ -33,6 +34,13 @@ export class ChangeGesuchsperiodeStore extends signalStore(
 ) {
   private gesuchsperiodeService = inject(GesuchsperiodeService);
   private gesuchService = inject(GesuchService);
+  private globalNotificationStore = inject(GlobalNotificationStore);
+
+  resetErrors() {
+    patchState(this, () => ({
+      changeGesuchsperiode: initial(),
+    }));
+  }
 
   getAllAssignableGesuchsperiode$ = rxMethod<void>(
     pipe(
@@ -74,7 +82,16 @@ export class ChangeGesuchsperiodeStore extends signalStore(
             handleApiResponse(
               (changeGesuchsperiode) =>
                 patchState(this, { changeGesuchsperiode }),
-              { onSuccess },
+              {
+                onSuccess,
+                onFailure: () => {
+                  this.globalNotificationStore.createNotification({
+                    type: 'WARNING',
+                    messageKey:
+                      'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error.toast',
+                  });
+                },
+              },
             ),
           ),
       ),

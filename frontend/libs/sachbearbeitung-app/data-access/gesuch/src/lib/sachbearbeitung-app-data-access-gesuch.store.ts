@@ -246,7 +246,7 @@ export class GesuchStore extends signalStore(
                       gesuch: data,
                     }),
                   );
-                  this.loadGesuchInfo$({ gesuchId: data.id });
+                  this.gesuchInfoStore.loadGesuchInfo$({ gesuchId: data.id });
                 },
               },
             ),

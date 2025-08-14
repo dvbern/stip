@@ -16,22 +16,40 @@
     {{ 'shared.dialog.change-gesuchsperiode.title' | translate }}
   </h3>
   <div class="tw-mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | translate"></div>
-  <div class="row">
-    <div class="tw-w-full">
-      <!-- gesuchsperiode select -->
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | translate }}</mat-label>
-        <mat-select formControlName="gesuchsperiodeId" data-testid="form-change-gesuchsperiode-dialog-gesuchsperiode">
-          @for (gesuchsperiode of gesuchsperiodenViewSig(); track gesuchsperiode.id) {
-            <mat-option [value]="gesuchsperiode.id">{{ gesuchsperiode.displayName }}</mat-option>
-          }
-        </mat-select>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+
+  <div class="tw-w-full">
+    <!-- gesuchsperiode select -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | translate }}</mat-label>
+      <mat-select formControlName="gesuchsperiodeId" data-testid="form-change-gesuchsperiode-dialog-gesuchsperiode">
+        @for (gesuchsperiode of gesuchsperiodenViewSig(); track gesuchsperiode.id) {
+          <mat-option [value]="gesuchsperiode.id">{{ gesuchsperiode.displayName }}</mat-option>
+        }
+      </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
   </div>
+
+  @if (changeGesuchsperiodeErrorSig()?.length) {
+    <dv-shared-ui-info-container class="d-block" [type]="'warning'" data-testid="alert-warning">
+      <div class="d-flex gap-2">
+        <span class="text-warning material-symbols-rounded me-3">warning</span>
+        <span [innerHTML]="'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error' | translate"></span>
+      </div>
+
+      <ul class="mt-4">
+        @for (step of changeGesuchsperiodeErrorSig(); track step) {
+          <li>
+            @if (step.routeParts; as link) {
+              <a (click)="cancel()" [routerLink]="link">{{ step.translationKey | translate }}</a>
+            }
+          </li>
+        }
+      </ul>
+    </dv-shared-ui-info-container>
+  }
 
   <div class="tw-mt-10 tw-flex tw-justify-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
