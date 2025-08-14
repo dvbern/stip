@@ -73,6 +73,15 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
+const bildungskategorieMap = {
+  SEKUNDARSTUFE_I: 'SEKUNDAR_2',
+  SEKUNDARSTUFE_II: 'SEKUNDAR_2',
+  TERTIAERSTUFE_A: 'TERTIAER',
+  TERTIAERSTUFE_B: 'TERTIAER',
+} satisfies Record<Bildungskategorie, 'SEKUNDAR_2' | 'TERTIAER'>;
+type MainBildungskategorie =
+  (typeof bildungskategorieMap)[keyof typeof bildungskategorieMap];
+
 @Component({
   standalone: true,
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
@@ -220,13 +229,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
 
+    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie
+      ? bildungskategorieMap[ausbildungsgang.bildungskategorie]
+      : undefined;
     const aubildungsKostenMap = {
-      SEKUNDARSTUFE_I: gesuch?.gesuchsperiode.ausbKosten_SekII,
-      SEKUNDARSTUFE_II: gesuch?.gesuchsperiode.ausbKosten_SekII,
-      TERTIAERSTUFE_A: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
-      TERTIAERSTUFE_B: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
-    } satisfies Record<Bildungskategorie, unknown>;
-    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie;
+      SEKUNDAR_2: gesuch?.gesuchsperiode.ausbKosten_SekII,
+      TERTIAER: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
+    } satisfies Record<MainBildungskategorie, unknown>;
     const ausbildungsKostenLimit =
       ausbiludungsStufe && aubildungsKostenMap[ausbiludungsStufe];
 
