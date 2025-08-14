@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_END,
@@ -59,8 +59,8 @@ public class AusbildungDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
 
-  public static final String JSON_PROPERTY_FACHRICHTUNG = "fachrichtung";
-  private String fachrichtung;
+  public static final String JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG = "fachrichtungBerufsbezeichnung";
+  private String fachrichtungBerufsbezeichnung;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN = "ausbildungNichtGefunden";
   private Boolean ausbildungNichtGefunden;
@@ -178,29 +178,29 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
-  public AusbildungDashboardItemDtoSpec fachrichtung(String fachrichtung) {
+  public AusbildungDashboardItemDtoSpec fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
     
-    this.fachrichtung = fachrichtung;
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
    /**
-   * Get fachrichtung
-   * @return fachrichtung
+   * Get fachrichtungBerufsbezeichnung
+   * @return fachrichtungBerufsbezeichnung
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getFachrichtung() {
-    return fachrichtung;
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
+  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
 
@@ -289,7 +289,7 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
    /**
-   * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+   * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
    * @return besuchtBMS
   **/
   @jakarta.annotation.Nullable
@@ -449,7 +449,7 @@ public class AusbildungDashboardItemDtoSpec {
     return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
+        Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
         Objects.equals(this.ausbildungBegin, ausbildungDashboardItem.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
@@ -463,7 +463,7 @@ public class AusbildungDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(gesuchs, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -473,7 +473,7 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
+    sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");

@@ -59,6 +59,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanCreateManuelleVerfuegung(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    }
+
+    @Transactional
     public void sbCanChangeGesuchStatusToVersandbereit(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSANDBEREIT);
     }
@@ -156,6 +161,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public void sbCanGesuchManuellPruefen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK);
     }
 
     @Transactional

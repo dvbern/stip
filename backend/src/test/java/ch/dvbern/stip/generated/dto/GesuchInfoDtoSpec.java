@@ -36,7 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG,
-  GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG
+  GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -61,6 +62,9 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
   private Boolean beschwerdeHaengig;
+
+  public static final String JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN = "canTriggerManuellPruefen";
+  private Boolean canTriggerManuellPruefen;
 
   public GesuchInfoDtoSpec() {
   }
@@ -246,6 +250,32 @@ public class GesuchInfoDtoSpec {
     this.beschwerdeHaengig = beschwerdeHaengig;
   }
 
+
+  public GesuchInfoDtoSpec canTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
+    
+    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
+    return this;
+  }
+
+   /**
+   * Get canTriggerManuellPruefen
+   * @return canTriggerManuellPruefen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanTriggerManuellPruefen() {
+    return canTriggerManuellPruefen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
+    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -261,12 +291,13 @@ public class GesuchInfoDtoSpec {
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
         Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
-        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig);
+        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
+        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen);
   }
 
   @Override
@@ -280,6 +311,7 @@ public class GesuchInfoDtoSpec {
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
+    sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

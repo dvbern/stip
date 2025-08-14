@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
-import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -91,7 +91,7 @@ public class AntragsstellerV1 {
         builder
             .piaWohntInElternHaushalt(piaWohntInElternHaushalt)
             .tertiaerstufe(
-                ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe() == Bildungsstufe.TERTIAER
+                ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()
             )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
@@ -165,7 +165,7 @@ public class AntragsstellerV1 {
             getAusbildungskosten(
                 einnahmenKosten,
                 gesuchsperiode,
-                ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe()
+                ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie()
             )
         );
         builder.steuern(
@@ -176,12 +176,14 @@ public class AntragsstellerV1 {
         builder.verpflegung(Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0));
         builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
         // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
-        builder.lehre(
-            gesuchFormular.getAusbildung()
-                .getAusbildungsgang()
-                .getBildungskategorie()
-                .getBfs() == Bildungskategorie.LEHRE_BFS
-        );
+        final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
+
+        final boolean isLehre = abschluss.getBildungsrichtung()
+            .equals(
+                Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
+            )
+        && abschluss.isBerufsbefaehigenderAbschluss();
+        builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
         builder.halbierungElternbeitrag(
@@ -209,18 +211,18 @@ public class AntragsstellerV1 {
     private static int getAusbildungskosten(
         final EinnahmenKosten einnahmenKosten,
         final Gesuchsperiode gesuchsperiode,
-        final Bildungsstufe bildungsstufe
+        final Bildungskategorie bildungskategorie
     ) {
-        return switch (bildungsstufe) {
-            case SEKUNDAR_2 -> Integer.min(
-                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskosten(), 0),
-                gesuchsperiode.getAusbKostenSekII()
-            );
-            case TERTIAER -> Integer.min(
+        if (bildungskategorie.isTertiaerstufe()) {
+            return Integer.min(
                 Objects.requireNonNullElse(einnahmenKosten.getAusbildungskosten(), 0),
                 gesuchsperiode.getAusbKostenTertiaer()
             );
-        };
+        }
+        return Integer.min(
+            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskosten(), 0),
+            gesuchsperiode.getAusbKostenSekII()
+        );
     }
 
     static int getAlterForMedizinischeGrundversorgung(
@@ -247,8 +249,8 @@ public class AntragsstellerV1 {
 
         final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
             .filter(
-                lebenslaufItem -> lebenslaufItem.getBildungsart() != null
-                && lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+                lebenslaufItem -> lebenslaufItem.isAusbildung()
+                && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
             )
             .findFirst();

@@ -24,11 +24,9 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   private @Valid String bis;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
   private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt bildungsart;
+  private @Valid UUID abschlussId;
   private @Valid Boolean ausbildungAbgeschlossen;
-  private @Valid String berufsbezeichnung;
-  private @Valid String fachrichtung;
-  private @Valid String titelDesAbschlusses;
+  private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
 
@@ -111,20 +109,20 @@ public class LebenslaufItemUpdateDto  implements Serializable {
 
   /**
    **/
-  public LebenslaufItemUpdateDto bildungsart(ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt bildungsart) {
-    this.bildungsart = bildungsart;
+  public LebenslaufItemUpdateDto abschlussId(UUID abschlussId) {
+    this.abschlussId = abschlussId;
     return this;
   }
 
   
-  @JsonProperty("bildungsart")
-  public ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt getBildungsart() {
-    return bildungsart;
+  @JsonProperty("abschlussId")
+  public UUID getAbschlussId() {
+    return abschlussId;
   }
 
-  @JsonProperty("bildungsart")
-  public void setBildungsart(ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt bildungsart) {
-    this.bildungsart = bildungsart;
+  @JsonProperty("abschlussId")
+  public void setAbschlussId(UUID abschlussId) {
+    this.abschlussId = abschlussId;
   }
 
   /**
@@ -146,60 +144,22 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
   /**
-   * Requierd wenn bildungsart &#x3D; &#39;EIDGENOESSISCHES_BERUFSATTEST&#39; oder &#39;EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS&#39;
+   * Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
    **/
-  public LebenslaufItemUpdateDto berufsbezeichnung(String berufsbezeichnung) {
-    this.berufsbezeichnung = berufsbezeichnung;
+  public LebenslaufItemUpdateDto fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
   
-  @JsonProperty("berufsbezeichnung")
-  public String getBerufsbezeichnung() {
-    return berufsbezeichnung;
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
   }
 
-  @JsonProperty("berufsbezeichnung")
-  public void setBerufsbezeichnung(String berufsbezeichnung) {
-    this.berufsbezeichnung = berufsbezeichnung;
-  }
-
-  /**
-   * Required wenn bildungsart &#x3D; \&quot;BACHELOR_HOCHSCHULE_UNI\&quot; oder \&quot;BACHELOR_FACHHOCHSCHULE\&quot; oder \&quot;MASTER\&quot;
-   **/
-  public LebenslaufItemUpdateDto fachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
-    return this;
-  }
-
-  
-  @JsonProperty("fachrichtung")
-  public String getFachrichtung() {
-    return fachrichtung;
-  }
-
-  @JsonProperty("fachrichtung")
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
-  }
-
-  /**
-   * Required wenn bildungsart &#x3D; \&quot;ANDERER_AUSBILDUNGSABSCHLUSS\&quot;
-   **/
-  public LebenslaufItemUpdateDto titelDesAbschlusses(String titelDesAbschlusses) {
-    this.titelDesAbschlusses = titelDesAbschlusses;
-    return this;
-  }
-
-  
-  @JsonProperty("titelDesAbschlusses")
-  public String getTitelDesAbschlusses() {
-    return titelDesAbschlusses;
-  }
-
-  @JsonProperty("titelDesAbschlusses")
-  public void setTitelDesAbschlusses(String titelDesAbschlusses) {
-    this.titelDesAbschlusses = titelDesAbschlusses;
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
   /**
@@ -253,18 +213,16 @@ public class LebenslaufItemUpdateDto  implements Serializable {
         Objects.equals(this.bis, lebenslaufItemUpdate.bis) &&
         Objects.equals(this.wohnsitz, lebenslaufItemUpdate.wohnsitz) &&
         Objects.equals(this.id, lebenslaufItemUpdate.id) &&
-        Objects.equals(this.bildungsart, lebenslaufItemUpdate.bildungsart) &&
+        Objects.equals(this.abschlussId, lebenslaufItemUpdate.abschlussId) &&
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItemUpdate.ausbildungAbgeschlossen) &&
-        Objects.equals(this.berufsbezeichnung, lebenslaufItemUpdate.berufsbezeichnung) &&
-        Objects.equals(this.fachrichtung, lebenslaufItemUpdate.fachrichtung) &&
-        Objects.equals(this.titelDesAbschlusses, lebenslaufItemUpdate.titelDesAbschlusses) &&
+        Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItemUpdate.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItemUpdate.taetigkeitsart) &&
         Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, bildungsart, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung);
   }
 
   @Override
@@ -276,11 +234,9 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     sb.append("    bis: ").append(toIndentedString(bis)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    bildungsart: ").append(toIndentedString(bildungsart)).append("\n");
+    sb.append("    abschlussId: ").append(toIndentedString(abschlussId)).append("\n");
     sb.append("    ausbildungAbgeschlossen: ").append(toIndentedString(ausbildungAbgeschlossen)).append("\n");
-    sb.append("    berufsbezeichnung: ").append(toIndentedString(berufsbezeichnung)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
-    sb.append("    titelDesAbschlusses: ").append(toIndentedString(titelDesAbschlusses)).append("\n");
+    sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
     sb.append("}");

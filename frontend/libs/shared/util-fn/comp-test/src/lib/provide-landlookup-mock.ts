@@ -6,7 +6,7 @@ import { Land } from '@dv/shared/model/gesuch';
 import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 // Mock land data
-const mockLaender: Land[] = [
+const mockLaender = [
   {
     id: 'uuid1',
     deKurzform: 'Schweiz',
@@ -40,11 +40,24 @@ const mockLaender: Land[] = [
     eintragGueltig: true,
     isEuEfta: true,
   },
-];
+].map((land) => ({
+  ...land,
+  testId: land.deKurzform,
+  displayValueDe: land.deKurzform,
+  displayValueFr: land.frKurzform,
+})) satisfies Land[];
 
 // Mock LandLookupService
 const mockLandLookupService = {
   getCachedLandLookup: jest.fn().mockReturnValue(signal(mockLaender)),
+
+  isValidLandEntry(land: Land | undefined): boolean {
+    if (!land) {
+      return false;
+    }
+
+    return land.eintragGueltig;
+  },
 };
 
 export function provideLandLookupMock() {

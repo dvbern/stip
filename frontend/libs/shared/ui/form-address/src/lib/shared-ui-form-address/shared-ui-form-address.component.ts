@@ -4,6 +4,7 @@ import {
   Component,
   DoCheck,
   Input,
+  inject,
   input,
   signal,
 } from '@angular/core';
@@ -29,10 +30,11 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
-import { SharedUiLandAutocompleteComponent } from '@dv/shared/ui/land-autocomplete';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 type AddresseFormGroup = FormGroup<{
   coAdresse: FormControl<string | undefined>;
@@ -61,17 +63,20 @@ type AddresseFormGroup = FormGroup<{
     SharedUiPlzOrtAutocompleteDirective,
     SharedUiZuvorHintDirective,
     SharedUiMaxLengthDirective,
-    SharedUiLandAutocompleteComponent,
+    SharedUiSelectSearchComponent,
   ],
   templateUrl: './shared-ui-form-address.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck {
+  private landLookupService = inject(LandLookupService);
   @Input({ required: true }) group!: AddresseFormGroup;
   languageSig = input.required<Language>();
   @Input() changes?: Partial<Adresse>;
   plzValues?: Plz[];
 
+  laenderSig = this.landLookupService.getCachedLandLookup();
+  isValidLandEntry = this.landLookupService.isValidLandEntry;
   touchedSig = signal(false);
 
   static buildAddressFormGroup(

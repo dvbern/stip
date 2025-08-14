@@ -17,44 +17,60 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
-import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
+import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
+import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.stream.Streams;
 
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
 public class AusbildungSeeding extends Seeder {
+    private final AbschlussRepository abschlussRepository;
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
-    private final BildungskategorieRepository bildungskategorieRepository;
     private final ConfigService configService;
+
+    private static final String PATH_TO_CSV_ABSCHLUSS = "/seeding/ausbildung/abschluss.csv";
+    private static final String PATH_TO_CSV_AUSBILDUNGSSTAETTE = "/seeding/ausbildung/ausbildungsstaette.csv";
+    private static final String PATH_TO_CSV_AUSBILDUNGSGANG = "/seeding/ausbildung/ausbildungsgang.csv";
 
     @Override
     protected void seed() {
         if (ausbildungsstaetteRepository.count() == 0) {
-            LOG.info("Seeding Uni and FH");
+            LOG.info("Seeding Abschluss, Ausbildungsstaette and Ausbildungsgang");
 
-            final var bildungskategorien = getBildungskategorien();
-            bildungskategorieRepository.persist(bildungskategorien);
-            bildungskategorieRepository.flush();
+            final var abschluesse = getAbschluesseToSeed();
+            abschlussRepository.persist(abschluesse);
+            abschlussRepository.flush();
 
-            final var ausbildungsstaetten = getAusbildungsstaetten();
+            final var ausbildungsstaetten = getAusbildungsstaettenToSeed();
             ausbildungsstaetteRepository.persist(ausbildungsstaetten);
             ausbildungsstaetteRepository.flush();
 
-            final var ausbildunggaenge = getAusbildungsgaenge(
-                ausbildungsstaetten,
-                bildungskategorien
+            final var ausbildunggaenge = getAusbildungsgaengeToSeed(
+                abschluesse,
+                ausbildungsstaetten
             );
 
             ausbildungsgangRepository.persist(ausbildunggaenge);
@@ -67,111 +83,125 @@ public class AusbildungSeeding extends Seeder {
         return configService.getSeedOnProfile();
     }
 
-    private static List<Bildungskategorie> getBildungskategorien() {
-        return List.of(
-            // Keep this order, or update dependencies as well
-            createBildungskategorie("Gymnasiale Maturitätsschulen", "Ecoles de maturité gymnasiale", 2),
-            createBildungskategorie("Schulen für Allgemeinbildung (Andere)", "Autres formations générales", 3),
-            createBildungskategorie("Vollzeitberufsschulen", "Ecoles prof. à plein temps", 4),
-            createBildungskategorie(
-                "Berufslehren und Anlehren",
-                "Apprentissages et form. professionelles pratiques",
-                5
-            ),
-            createBildungskategorie(
-                "Nach Berufslehre erworbene Berufsmaturitäten",
-                "Maturités professionnelles accomplies après l'app.",
-                6
-            ),
-            createBildungskategorie(
-                "Höhere (nicht universitäre) Berufsbildung",
-                "Formations professionelles supérieures",
-                7
-            ),
-            createBildungskategorie("Fachhochschulen", "Hautes écoles spécialisées", 8),
-            createBildungskategorie(
-                "Universitäten und Eidg. Technische Hochschulen",
-                "Universités et Ecoles polytechniques fédérales",
-                9
-            )
-        );
+    @SneakyThrows
+    private List<Abschluss> getAbschluesseToSeed() {
+        try (final var resource = getClass().getResourceAsStream(PATH_TO_CSV_ABSCHLUSS)) {
+            if (resource == null) {
+                throw new FileNotFoundException("Could not load CSV to seed abschluesse: " + PATH_TO_CSV_ABSCHLUSS);
+            }
+
+            try (
+                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                    .withSkipLines(1)
+                    .withCSVParser(
+                        new CSVParserBuilder()
+                            .withSeparator(';')
+                            .build()
+                    )
+                    .build();
+            ) {
+                return Streams.of(reader.iterator())
+                    .map(
+                        abschlussLine -> new Abschluss()
+                            .setBezeichnungDe(abschlussLine[0])
+                            .setBezeichnungFr(abschlussLine[1])
+                            .setAusbildungskategorie(Ausbildungskategorie.valueOf(abschlussLine[2]))
+                            .setBildungskategorie(Bildungskategorie.valueOf(abschlussLine[3]))
+                            .setBildungsrichtung(Bildungsrichtung.valueOf(abschlussLine[4]))
+                            .setBfsKategorie(Integer.valueOf(abschlussLine[5]))
+                            .setBerufsbefaehigenderAbschluss(Boolean.valueOf(abschlussLine[6]))
+                            .setFerien(FerienTyp.valueOf(abschlussLine[7]))
+                            .setZusatzfrage(
+                                abschlussLine[8].isEmpty() ? null : AbschlussZusatzfrage.valueOf(abschlussLine[8])
+                            )
+                            .setAskForBerufsmaturitaet(Boolean.valueOf(abschlussLine[9]))
+                    )
+                    .toList();
+            }
+        }
     }
 
-    private static Bildungskategorie createBildungskategorie(
-        final String bezeichnungDe,
-        final String bezeichnungFr,
-        final int bfs
+    @SneakyThrows
+    private List<Ausbildungsstaette> getAusbildungsstaettenToSeed() {
+        try (final var resource = getClass().getResourceAsStream(PATH_TO_CSV_AUSBILDUNGSSTAETTE)) {
+            if (resource == null) {
+                throw new FileNotFoundException(
+                    "Could not load CSV to seed ausbildungsstaette: " + PATH_TO_CSV_AUSBILDUNGSSTAETTE
+                );
+            }
+
+            try (
+                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                    .withSkipLines(1)
+                    .withCSVParser(
+                        new CSVParserBuilder()
+                            .withSeparator(';')
+                            .build()
+                    )
+                    .build();
+            ) {
+                return Streams.of(reader.iterator())
+                    .map(
+                        ausbildungsstaetteLine -> new Ausbildungsstaette()
+                            .setNameDe(ausbildungsstaetteLine[0])
+                            .setNameFr(ausbildungsstaetteLine[1])
+                            .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
+                            .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
+                            .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
+                    )
+                    .toList();
+            }
+        }
+    }
+
+    @SneakyThrows
+    private List<Ausbildungsgang> getAusbildungsgaengeToSeed(
+        final List<Abschluss> abschluesse,
+        final List<Ausbildungsstaette> ausbildungsstaetten
     ) {
-        return new Bildungskategorie()
-            .setBezeichnungDe(bezeichnungDe)
-            .setBezeichnungFr(bezeichnungFr)
-            .setBfs(bfs);
-    }
-
-    private static List<Ausbildungsstaette> getAusbildungsstaetten() {
-        return List.of(
-            // Keep this order, or update dependencies as well
-            createAusbildungsstaette("Berner Fachhochschule", "Haute école spécialisée bernoise"),
-            createAusbildungsstaette("Universität Bern", "Université de Berne"),
-            createAusbildungsstaette("Lehrbetrieb", "Établissement"),
-            createAusbildungsstaette("Gymnasium Lebermatt", "Lycée Lebermatt"),
-            createAusbildungsstaette("BFF Bern", "BFF Berne"),
-            createAusbildungsstaette("Universität Lausanne", "Université Lausanne")
-        );
-    }
-
-    private static Ausbildungsstaette createAusbildungsstaette(final String nameDe, final String nameFr) {
-        return new Ausbildungsstaette()
-            .setNameDe(nameDe)
-            .setNameFr(nameFr);
-    }
-
-    private static List<Ausbildungsgang> getAusbildungsgaenge(
-        final List<Ausbildungsstaette> ausbildungsstaetten,
-        final List<Bildungskategorie> bildungskategorien
-    ) {
-        return List.of(
-            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(0), bildungskategorien.get(6)),
-            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
-            createAusbildungsgang("Master", "Master", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
-            createAusbildungsgang(
-                "Lehre EBA",
-                "Apprentissage AFP",
-                ausbildungsstaetten.get(2),
-                bildungskategorien.get(3)
-            ),
-            createAusbildungsgang(
-                "Vorlehre",
-                "Préapprentissage",
-                ausbildungsstaetten.get(2),
-                bildungskategorien.get(3)
-            ),
-            createAusbildungsgang("Maturität", "Maturité", ausbildungsstaetten.get(3), bildungskategorien.get(0)),
-            createAusbildungsgang(
-                "Lehre EFZ",
-                "Apprentissage CFC",
-                ausbildungsstaetten.get(2),
-                bildungskategorien.get(3)
-            ),
-            createAusbildungsgang(
-                "Berufsvorbereitendes Schuljahr",
-                "Année scolaire de préparation professionnelle",
-                ausbildungsstaetten.get(4),
-                bildungskategorien.get(2)
-            )
-        );
-    }
-
-    private static Ausbildungsgang createAusbildungsgang(
-        final String bezeichnungDe,
-        final String bezeichnungFr,
-        final Ausbildungsstaette ausbildungsstaette,
-        final Bildungskategorie bildungskategorie
-    ) {
-        return new Ausbildungsgang()
-            .setBezeichnungDe(bezeichnungDe)
-            .setBezeichnungFr(bezeichnungFr)
-            .setAusbildungsstaette(ausbildungsstaette)
-            .setBildungskategorie(bildungskategorie);
+        try (final var resource = getClass().getResourceAsStream(PATH_TO_CSV_AUSBILDUNGSGANG)) {
+            if (resource == null) {
+                throw new FileNotFoundException(
+                    "Could not load CSV to seed ausbildungsgang: " + PATH_TO_CSV_AUSBILDUNGSGANG
+                );
+            }
+            try (
+                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                    .withSkipLines(1)
+                    .withCSVParser(
+                        new CSVParserBuilder()
+                            .withSeparator(';')
+                            .build()
+                    )
+                    .build();
+            ) {
+                return Streams.of(reader.iterator())
+                    .map(
+                        ausbildungsgangLine -> {
+                            final var abschlussBezeichnungDe = ausbildungsgangLine[0];
+                            final var ausbildungskategorie = Ausbildungskategorie.valueOf(ausbildungsgangLine[1]);
+                            final var ausbildungsstaetteNameDe = ausbildungsgangLine[2];
+                            final var abschluss = abschluesse.stream()
+                                .filter(
+                                    abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
+                                    && abschluss1.getAusbildungskategorie() == ausbildungskategorie
+                                )
+                                .findFirst()
+                                .get();
+                            final var ausbildungsstaette = ausbildungsstaetten.stream()
+                                .filter(
+                                    ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
+                                        .equalsIgnoreCase(ausbildungsstaetteNameDe)
+                                )
+                                .findFirst()
+                                .get();
+                            return new Ausbildungsgang()
+                                .setAbschluss(abschluss)
+                                .setAusbildungsstaette(ausbildungsstaette);
+                        }
+                    )
+                    .toList();
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { DokumentTyp } from '@dv/shared/model/gesuch';
+import { Bildungskategorie, DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
@@ -221,10 +221,12 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
 
     const aubildungsKostenMap = {
-      SEKUNDAR_2: gesuch?.gesuchsperiode.ausbKosten_SekII,
-      TERTIAER: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
-    };
-    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie.bildungsstufe;
+      SEKUNDARSTUFE_I: gesuch?.gesuchsperiode.ausbKosten_SekII,
+      SEKUNDARSTUFE_II: gesuch?.gesuchsperiode.ausbKosten_SekII,
+      TERTIAERSTUFE_A: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
+      TERTIAERSTUFE_B: gesuch?.gesuchsperiode.ausbKosten_Tertiaer,
+    } satisfies Record<Bildungskategorie, unknown>;
+    const ausbiludungsStufe = ausbildungsgang?.bildungskategorie;
     const ausbildungsKostenLimit =
       ausbiludungsStufe && aubildungsKostenMap[ausbiludungsStufe];
 

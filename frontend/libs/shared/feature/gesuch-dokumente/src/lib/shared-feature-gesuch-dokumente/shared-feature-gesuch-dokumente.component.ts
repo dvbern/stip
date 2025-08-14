@@ -34,7 +34,6 @@ import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
 } from '@dv/shared/ui/if-app-type';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
@@ -61,7 +60,6 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
     AdditionalDokumenteComponent,
     CustomDokumenteComponent,
     SharedUiStepFormButtonsComponent,
-    SharedUiLoadingComponent,
     SharedUiIfGesuchstellerDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiRdIsPendingPipe,
@@ -221,7 +219,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
-        this.dokumentsStore.getDokumenteAndRequired$({
+        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
           gesuchTrancheId,
           ignoreCache: true,
         });
@@ -247,7 +245,9 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: dokument?.gesuchDokument.id,
       onSuccess: () => {
-        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
+          gesuchTrancheId,
+        });
       },
     });
   }
@@ -274,7 +274,9 @@ export class SharedFeatureGesuchDokumenteComponent {
             kommentar: result.kommentar,
             gesuchDokumentId,
             onSuccess: () => {
-              this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+              this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
+                gesuchTrancheId,
+              });
             },
           });
         }
@@ -308,7 +310,7 @@ export class SharedFeatureGesuchDokumenteComponent {
           this.dokumentsStore.deleteCustomDokumentTyp$({
             customDokumentTypId: dokument.dokumentTyp.id,
             onSuccess: () => {
-              this.dokumentsStore.getDokumenteAndRequired$({
+              this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
                 gesuchTrancheId: trancheId,
               });
             },
@@ -328,7 +330,7 @@ export class SharedFeatureGesuchDokumenteComponent {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           // Also load the required documents again
-          this.dokumentsStore.getDokumenteAndRequired$({
+          this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
             gesuchTrancheId: trancheId,
           });
         },
@@ -347,7 +349,9 @@ export class SharedFeatureGesuchDokumenteComponent {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
           // Also load the required documents again
-          this.dokumentsStore.getRequiredDocumentTypes$(trancheId);
+          this.dokumentsStore.getDocumentsToUpload$({
+            gesuchTrancheId: trancheId,
+          });
         },
       });
     }
@@ -378,7 +382,7 @@ export class SharedFeatureGesuchDokumenteComponent {
               type: result.name,
               description: result.kommentar,
               onSuccess: () => {
-                this.dokumentsStore.getDokumenteAndRequired$({
+                this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
                   gesuchTrancheId: trancheId,
                 });
               },

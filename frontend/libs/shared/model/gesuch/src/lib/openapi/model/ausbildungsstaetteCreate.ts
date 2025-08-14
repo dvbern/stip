@@ -13,5 +13,6 @@
 export interface AusbildungsstaetteCreate { 
     nameDe: string;
     nameFr: string;
+    burNo?: string;
 }
 

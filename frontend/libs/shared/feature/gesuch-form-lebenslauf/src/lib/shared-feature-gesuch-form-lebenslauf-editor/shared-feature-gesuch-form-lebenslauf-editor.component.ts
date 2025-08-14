@@ -8,6 +8,7 @@ import {
   effect,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -17,6 +18,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -25,10 +31,10 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
-  LebenslaufAusbildungsArt,
   LebenslaufItemUpdate,
   Taetigkeitsart,
   WohnsitzKanton,
@@ -41,7 +47,12 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import {
+  SharedUiSearchOptionLabelDirective,
+  SharedUiSelectSearchComponent,
+} from '@dv/shared/ui/select-search';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -69,11 +80,16 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    SharedUiStepFormButtonsComponent,
+    MatButtonModule,
+    MatAutocompleteModule,
     MatCheckboxModule,
+    SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
+    SharedUiSelectSearchComponent,
+    SharedUiSearchOptionLabelDirective,
+    TranslatedPropertyPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
@@ -97,24 +113,26 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
   gotReenabled$ = new Subject<object>();
   private gotReenabledSig = toSignal(this.gotReenabled$);
+  abschluesseAutocompleteSig = viewChild<MatAutocomplete>(
+    'abschluesseAutocomplete',
+  );
 
   form = this.formBuilder.group({
     taetigkeitsBeschreibung: [
       <string | undefined>undefined,
       [Validators.required],
     ],
-    bildungsart: [
-      <LebenslaufAusbildungsArt | undefined>undefined,
+    abschlussId: [<string | undefined>undefined, [Validators.required]],
+    fachrichtungBerufsbezeichnung: [
+      <string | undefined>undefined,
       [Validators.required],
     ],
-    berufsbezeichnung: [<string | undefined>undefined, [Validators.required]],
-    fachrichtung: [<string | undefined>undefined, [Validators.required]],
-    titelDesAbschlusses: [<string | undefined>undefined, [Validators.required]],
     taetigkeitsart: [
       <Taetigkeitsart | undefined>undefined,
       [Validators.required],
@@ -127,26 +145,21 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     ausbildungAbgeschlossen: [false, [Validators.required]],
   });
 
-  bildungsartSig = toSignal(this.form.controls.bildungsart.valueChanges);
+  private abschlussIdSig = toSignal(
+    this.form.controls.abschlussId.valueChanges,
+  );
+  selectedAbschlussSig = computed(() => {
+    const abschlussId = this.abschlussIdSig();
+    const abschluesse = this.ausbildungsstatteStore.abschluesseViewSig();
+
+    return abschluesse.find((a) => a.id === abschlussId);
+  });
   startChangedSig = toSignal(this.form.controls.von.valueChanges);
   endChangedSig = toSignal(this.form.controls.bis.valueChanges);
-  showBerufsbezeichnungSig = computed(
-    () =>
-      this.bildungsartSig() === 'EIDGENOESSISCHES_BERUFSATTEST' ||
-      this.bildungsartSig() === 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS',
-  );
-  showFachrichtungSig = computed(
-    () =>
-      this.bildungsartSig() === 'BACHELOR_FACHHOCHSCHULE' ||
-      this.bildungsartSig() === 'BACHELOR_HOCHSCHULE_UNI' ||
-      this.bildungsartSig() === 'MASTER',
-  );
-  showTitelDesAbschlussesSig = computed(
-    () => this.bildungsartSig() === 'ANDERER_BILDUNGSABSCHLUSS',
-  );
   kantonValues = this.prepareKantonValues();
 
   constructor() {
+    this.ausbildungsstatteStore.loadAbschluesse$();
     this.formIsUnsaved = observeUnsavedChanges(
       this.form,
       this.saveTriggered,
@@ -170,24 +183,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     effect(() => {
       this.gotReenabledSig();
       this.formUtils.setDisabledState(
-        this.form.controls.berufsbezeichnung,
-        this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
-        true,
-      );
-    });
-    effect(() => {
-      this.gotReenabledSig();
-      this.formUtils.setDisabledState(
-        this.form.controls.fachrichtung,
-        this.viewSig().readonly || !this.showFachrichtungSig(),
-        true,
-      );
-    });
-    effect(() => {
-      this.gotReenabledSig();
-      this.formUtils.setDisabledState(
-        this.form.controls.titelDesAbschlusses,
-        this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
+        this.form.controls.fachrichtungBerufsbezeichnung,
+        this.viewSig().readonly || !this.selectedAbschlussSig()?.zusatzfrage,
         true,
       );
     });
@@ -260,10 +257,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       }
     });
     effect(() => {
-      const item = this.itemSig();
+      const { abschlussId, ...item } = this.itemSig();
       if (item) {
-        this.form.controls.bildungsart.clearValidators();
-        this.form.controls.bildungsart.setValidators([
+        this.form.controls.abschlussId.clearValidators();
+        this.form.controls.abschlussId.setValidators([
           item.type === 'AUSBILDUNG'
             ? Validators.required
             : Validators.nullValidator,
@@ -276,7 +273,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         ]);
       }
 
-      this.form.patchValue(item);
+      this.form.patchValue({
+        ...item,
+        abschlussId,
+      });
 
       if (item.von && item.bis) {
         this.form.controls.bis.markAsTouched();
@@ -288,12 +288,12 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
           this.form.controls.taetigkeitsBeschreibung,
           false,
         );
-        this.formUtils.setRequired(this.form.controls.bildungsart, true);
+        this.formUtils.setRequired(this.form.controls.abschlussId, true);
       }
 
       if (item.type === 'TAETIGKEIT') {
-        this.form.controls.bildungsart.clearValidators();
-        this.form.controls.bildungsart.updateValueAndValidity();
+        this.form.controls.abschlussId.clearValidators();
+        this.form.controls.abschlussId.updateValueAndValidity();
         this.form.controls.taetigkeitsart.setValidators(Validators.required);
         this.form.controls.taetigkeitsart.updateValueAndValidity();
         this.form.controls.taetigkeitsBeschreibung.setValidators(
@@ -309,13 +309,13 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
 
     // remove Ausland befor sort
     const indexAusland = kantonValues.indexOf(WohnsitzKanton.AUSLAND);
-    if (indexAusland != -1) {
+    if (indexAusland !== -1) {
       kantonValues.splice(indexAusland, 1);
     }
     kantonValues.sort((a, b) =>
       this.translateService
-        .instant('shared.kanton.' + a)
-        .localeCompare(this.translateService.instant('shared.kanton.' + b)),
+        .instant(`shared.kanton.${a}`)
+        .localeCompare(this.translateService.instant(`shared.kanton.${b}`)),
     );
     //add Ausland after sort
     kantonValues.push(WohnsitzKanton.AUSLAND);
@@ -328,14 +328,16 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     this.onDateBlur(this.form.controls.von);
     this.onDateBlur(this.form.controls.bis);
     if (this.form.valid) {
+      const { abschlussId, ...formValues } = convertTempFormToRealValues(
+        this.form,
+        this.itemSig().type === 'AUSBILDUNG'
+          ? ['abschlussId', 'wohnsitz', 'ausbildungAbgeschlossen']
+          : ['taetigkeitsart', 'taetigkeitsBeschreibung'],
+      );
       this.saveTriggered.emit({
         id: this.itemSig().id,
-        ...convertTempFormToRealValues(
-          this.form,
-          this.itemSig().type === 'AUSBILDUNG'
-            ? ['bildungsart', 'wohnsitz', 'ausbildungAbgeschlossen']
-            : ['taetigkeitsart', 'taetigkeitsBeschreibung'],
-        ),
+        ...formValues,
+        abschlussId,
       });
       this.form.markAsPristine();
     }
@@ -365,8 +367,5 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     );
   }
 
-  protected readonly bildungsartValues = Object.values(
-    LebenslaufAusbildungsArt,
-  );
   protected readonly taetigkeitsartValues = Object.values(Taetigkeitsart);
 }

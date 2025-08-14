@@ -26,6 +26,7 @@ import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
@@ -82,6 +83,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private gesuchStore = inject(GesuchStore);
   private einreichnenStore = inject(EinreichenStore);
   private config = inject(SharedModelCompileTimeConfig);
+
+  private deploymentConfigSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
   route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -149,7 +154,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
       if (gesuchTrancheId) {
-        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
+          gesuchTrancheId,
+        });
       }
     });
 
@@ -187,6 +194,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       this.einreichnenStore.validationViewSig().invalidFormularProps
         .validations;
 
+    const canTriggerManuellPruefen =
+      this.gesuchStore.gesuchInfo().data?.canTriggerManuellPruefen;
+
     if (!gesuchStatus) {
       return {};
     }
@@ -200,6 +210,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
     const list = StatusUebergaengeMap[gesuchStatus]
+      ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
           permissions,
@@ -230,6 +241,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'SET_TO_BEARBEITUNG':
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
+      case 'STATUS_PRUEFUNG_AUSLOESEN':
       case 'VERFUEGT':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
@@ -253,7 +265,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
+              this.gesuchStore.setStatus$.BEREIT_FUER_BEARBEITUNG({
                 gesuchTrancheId,
                 text: result.kommentar,
               });
@@ -272,7 +284,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$['ZURUECKWEISEN']({
+              this.gesuchStore.setStatus$.ZURUECKWEISEN({
                 gesuchTrancheId,
                 text: result.kommentar,
                 onSuccess: (newGesuchTrancheId) => {
@@ -301,16 +313,33 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           labelKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.label`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.message`,
           confirmKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.confirm`,
+          allowedTypes:
+            this.deploymentConfigSig().deploymentConfig?.allowedMimeTypes,
         })
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$[nextStatus]({
-                gesuchTrancheId,
-                grundId: result.entityId,
-                kanton: result.kanton,
-              });
+              switch (result.type) {
+                case 'manuell': {
+                  this.gesuchStore.createManuelleVerfuegung$({
+                    gesuchTrancheId,
+                    fileUpload: result.verfuegungUpload,
+                    kommentar: result.kommentar,
+                  });
+                  break;
+                }
+                case 'grund': {
+                  this.gesuchStore.setStatus$[nextStatus]({
+                    gesuchTrancheId,
+                    grundId: result.entityId,
+                    kanton: result.kanton,
+                  });
+                  break;
+                }
+                default:
+                  assertUnreachable(result);
+              }
             }
           });
         break;

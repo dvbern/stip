@@ -338,13 +338,17 @@
       <div class="row g-4 mt-1">
         <!-- NATIONALITAET -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <dv-shared-ui-land-autocomplete
+          <dv-shared-ui-select-search
+            formControlName="nationalitaetId"
             [testIdSig]="'form-person-nationalitaet'"
             [labelKeySig]="'shared.form.person.nationality.label'"
-            formControlName="nationalitaetId"
-            [zuvorHintValueSig]="view.formChanges?.nationalitaetId"
+            [valuesSig]="laenderSig()"
             [languageSig]="languageSig()"
-          ></dv-shared-ui-land-autocomplete>
+            [isEntryValidSig]="isValidLandEntry"
+            [panelWidthSig]="'auto'"
+            [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
+            [zuvorValueSig]="view.formChanges?.nationalitaetId"
+          ></dv-shared-ui-select-search>
         </div>
 
         <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->

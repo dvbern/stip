@@ -17,28 +17,42 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
-import org.mapstruct.BeanMapping;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Named;
 
 @Mapper(
     config = MappingConfig.class,
     uses = AusbildungsgangMapper.class
 )
-public interface AusbildungsstaetteMapper {
-    Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
+public abstract class AusbildungsstaetteMapper {
+    @Mapping(target = "ctNo", source = ".", qualifiedByName = "getCtNo")
+    abstract Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
 
-    AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
+    @Named("getCtNo")
+    String getCtNo(AusbildungsstaetteCreateDto ausbildungsstaetteDto) {
+        if (Objects.isNull(ausbildungsstaetteDto.getBurNo())) {
+            return "CT.BE";
+        }
+        return null;
+    }
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Ausbildungsstaette partialUpdate(
-        AusbildungsstaetteUpdateDto ausbildungsstaetteDto,
-        @MappingTarget Ausbildungsstaette ausbildungsstaette
+    abstract AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
+
+    @Mapping(source = "aktiveAusbildungsgaenge", target = "ausbildungsgaenge")
+    abstract AusbildungsstaetteSlimDto toSlimDto(Ausbildungsstaette ausbildungsstaette);
+
+    abstract void partialUpdate(
+        RenameAusbildungsstaetteDto renameAbschlussDto,
+        @MappingTarget Ausbildungsstaette abschluss
     );
 }

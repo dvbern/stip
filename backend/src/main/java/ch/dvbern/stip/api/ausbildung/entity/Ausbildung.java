@@ -96,10 +96,10 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "alternative_ausbildungsstaette", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsstaette;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "fachrichtung", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String fachrichtung;
+    @Column(name = "fachrichtung_berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String fachrichtungBerufsbezeichnung;
 
     @Column(name = "ausbildung_nicht_gefunden", nullable = false)
     private boolean ausbildungNichtGefunden = false;
@@ -148,8 +148,8 @@ public class Ausbildung extends AbstractMandantEntity {
             return getAlternativeAusbildungsgang();
         } else {
             return locale.getLanguage().equals("de")
-                ? getAusbildungsgang().getBezeichnungDe()
-                : getAusbildungsgang().getBezeichnungFr();
+                ? getAusbildungsgang().getAbschluss().getBezeichnungDe()
+                : getAusbildungsgang().getAbschluss().getBezeichnungFr();
         }
     }
 }

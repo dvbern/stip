@@ -36,7 +36,7 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
-        path: BESCHWERDEN_ROUTE.route + '/:id',
+        path: BESCHWERDEN_ROUTE.route,
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-beschwerde').then(
             (m) => m.sachbearbeitungAppFeatureInfosBeschwerdeRoutes,

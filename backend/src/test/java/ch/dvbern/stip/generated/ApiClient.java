@@ -39,9 +39,6 @@ public class ApiClient {
     public AusbildungApiSpec ausbildung() {
         return AusbildungApiSpec.ausbildung(config.reqSpecSupplier);
     }
-    public AusbildungsgangApiSpec ausbildungsgang() {
-        return AusbildungsgangApiSpec.ausbildungsgang(config.reqSpecSupplier);
-    }
     public AusbildungsstaetteApiSpec ausbildungsstaette() {
         return AusbildungsstaetteApiSpec.ausbildungsstaette(config.reqSpecSupplier);
     }
@@ -50,9 +47,6 @@ public class ApiClient {
     }
     public BenutzerApiSpec benutzer() {
         return BenutzerApiSpec.benutzer(config.reqSpecSupplier);
-    }
-    public BildungskategorieApiSpec bildungskategorie() {
-        return BildungskategorieApiSpec.bildungskategorie(config.reqSpecSupplier);
     }
     public BuchhaltungApiSpec buchhaltung() {
         return BuchhaltungApiSpec.buchhaltung(config.reqSpecSupplier);

@@ -1,0 +1,240 @@
+<div class="tw-dv-table tw-my-3">
+  <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+    @if (viewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+    <table
+      [dataSource]="abschluesseDataSourceSig()"
+      (matSortChange)="sortList($event)"
+      data-testid="cockpit-table"
+      mat-table
+      matSort
+      class="tw-w-full !tw-table-fixed"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.description' | translate
+        }}
+      </caption>
+
+      <ng-container matColumnDef="ABSCHLUSS">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="abschluss">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.abschluss' | translate
+          }}</label>
+          <div class="tw-relative tw-flex">
+            <mat-form-field>
+              <input
+                matInput
+                id="abschluss"
+                class="tw-w-full"
+                [formControl]="filterForm.controls.abschluss"
+                data-testid="cockpit-filter-fall"
+                (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
+              />
+            </mat-form-field>
+            <dv-shared-ui-clear-button
+              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+              (clear)="filterForm.controls.abschluss.reset()"
+              [valueSig]="filterForm.controls.abschluss.value"
+            ></dv-shared-ui-clear-button>
+          </div>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+        >
+          {{ abschluss | translatedProp: 'bezeichnung' : translate.currentLang }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="AUSBILDUNGSKATEGORIE">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="ausbildungskategorie">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.ausbildungskategorie'
+              | translate
+          }}</label>
+          <mat-form-field class="tw-w-full">
+            <mat-select
+              [aria-label]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.ausbildungskategorie'
+                  | translate
+              "
+              [formControl]="filterForm.controls.ausbildungskategorie"
+              (click)="$event.stopPropagation()"
+              class="!tw-font-normal"
+              [placeholder]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
+                  | translate
+              "
+              panelClass="table-select"
+            >
+              <mat-option [value]="undefined">
+                {{
+                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
+                    | translate
+                }}
+              </mat-option>
+
+              @for (ausbildungskategorie of ausbildungskategorieValues; track ausbildungskategorie) {
+                <mat-option [value]="ausbildungskategorie">
+                  {{ 'shared.ausbildungskategorie.' + ausbildungskategorie | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | translate"
+        >
+          {{ 'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | translate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="BILDUNGSRICHTUNG">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+          <label class="pe-none" for="bildungsrichtung">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.bildungsrichtung' | translate
+          }}</label>
+          <mat-form-field class="tw-w-full">
+            <mat-select
+              [aria-label]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.bildungsrichtung'
+                  | translate
+              "
+              [formControl]="filterForm.controls.bildungsrichtung"
+              (click)="$event.stopPropagation()"
+              class="!tw-font-normal"
+              [placeholder]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.bildungsrichtung' | translate
+              "
+              panelClass="table-select"
+            >
+              <mat-option [value]="undefined">
+                {{
+                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.bildungsrichtung' | translate
+                }}
+              </mat-option>
+
+              @for (bildungsrichtung of bildungsrichtungValues; track bildungsrichtung) {
+                <mat-option [value]="bildungsrichtung">
+                  {{ 'shared.bildungsrichtung.' + bildungsrichtung | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
+          class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="'shared.bildungsrichtung.' + abschluss.bildungsrichtung | translate"
+        >
+          {{ 'shared.bildungsrichtung.' + abschluss.bildungsrichtung | translate }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="AKTIV">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.status' | translate }}
+          <mat-form-field class="tw-w-full">
+            <mat-select
+              [aria-label]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.status' | translate
+              "
+              [formControl]="filterForm.controls.status"
+              (click)="$event.stopPropagation()"
+              class="!tw-font-normal"
+              [placeholder]="
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate
+              "
+              panelClass="table-select"
+            >
+              <mat-option [value]="undefined">
+                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate }}
+              </mat-option>
+
+              @for (status of statusValues; track status) {
+                <mat-option [value]="status">
+                  {{
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.status.' + status
+                      | translate
+                  }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </th>
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-whitespace-nowrap">
+          @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.status.' + key | translate
+          }}
+        </td>
+      </ng-container>
+
+      <!-- aktionen -->
+      <ng-container matColumnDef="AKTIONEN">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-28 tw-whitespace-nowrap !tw-text-right">
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm"
+            [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+            (click)="createAbschluss()"
+          >
+            <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+          </button>
+        </th>
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-w-11">
+          <div class="tw-flex tw-justify-end">
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+              (click)="editAbschluss(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-xl/none">edit</span>
+            </button>
+            @if (abschluss.canArchive) {
+              <button
+                type="button"
+                class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+                (click)="archive(abschluss); $event.stopPropagation()"
+              >
+                <span class="material-symbols-rounded !tw-text-2xl/none">cancel</span>
+              </button>
+            }
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md text-info"
+              (click)="showInfo(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-2xl/none">info</span>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *dvMatRowDef="let abschluss; dataSource: abschluesseDataSourceSig(); columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | translate }}
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="pageSize() ?? defaultPageSize"
+    [pageIndex]="page() ?? 0"
+    [length]="viewSig().totalEntries"
+    (page)="paginateList($event)"
+  ></mat-paginator>
+</div>

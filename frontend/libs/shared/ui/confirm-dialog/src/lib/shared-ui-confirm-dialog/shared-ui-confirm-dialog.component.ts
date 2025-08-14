@@ -7,9 +7,9 @@ import {
 } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 
-export interface ConfirmDialogData {
-  title?: string;
-  message?: string;
+export interface ConfirmDialogData<T extends string> {
+  title?: T;
+  message?: T;
   confirmText?: string;
   cancelText?: string;
   translationObject?: unknown;
@@ -22,16 +22,21 @@ export interface ConfirmDialogData {
   styleUrl: './shared-ui-confirm-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiConfirmDialogComponent {
+export class SharedUiConfirmDialogComponent<T extends string = string> {
   dialogRef = inject(MatDialogRef);
-  dialogData = inject<ConfirmDialogData>(MAT_DIALOG_DATA, { optional: true });
+  dialogData = inject<ConfirmDialogData<T>>(MAT_DIALOG_DATA, {
+    optional: true,
+  });
 
-  static open(dialog: MatDialog, data: ConfirmDialogData) {
+  static open<T extends string = string>(
+    dialog: MatDialog,
+    data: ConfirmDialogData<T>,
+  ) {
     return dialog.open<
       SharedUiConfirmDialogComponent,
-      ConfirmDialogData,
+      ConfirmDialogData<T>,
       boolean
-    >(SharedUiConfirmDialogComponent, { data });
+    >(SharedUiConfirmDialogComponent, { data, maxWidth: '724px' });
   }
 
   confirm() {

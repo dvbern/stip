@@ -4,23 +4,25 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
-  Ausbildungsstaette,
+  AbschlussSlim,
   AusbildungsstaetteService,
+  AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
-  fromCachedDataSig,
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungsstaetteState = {
-  ausbildungsstaetten: CachedRemoteData<Ausbildungsstaette[]>;
+  ausbildungsstaetten: CachedRemoteData<AusbildungsstaetteSlim[]>;
+  abschluesse: CachedRemoteData<AbschlussSlim[]>;
 };
 
 const initialState: AusbildungsstaetteState = {
   ausbildungsstaetten: initial(),
+  abschluesse: initial(),
 };
 
 @Injectable()
@@ -30,9 +32,30 @@ export class AusbildungsstaetteStore extends signalStore(
 ) {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
-  ausbildungsstaetteViewSig = computed(() => {
-    return fromCachedDataSig(this.ausbildungsstaetten) ?? [];
-  });
+  ausbildungsstaetteViewSig = computed(
+    () =>
+      this.ausbildungsstaetten.data()?.map((ausbildungsstaette) => ({
+        ...ausbildungsstaette,
+        testId: ausbildungsstaette.nameDe,
+        displayValueDe: ausbildungsstaette.nameDe,
+        displayValueFr: ausbildungsstaette.nameFr,
+      })) ?? [],
+  );
+  ausbildungsstaettenWithAusbildungsgaengeViewSig = computed(() =>
+    this.ausbildungsstaetteViewSig().filter(
+      (a) => a.ausbildungsgaenge.length > 0,
+    ),
+  );
+
+  abschluesseViewSig = computed(
+    () =>
+      this.abschluesse.data()?.map((abschluss) => ({
+        ...abschluss,
+        testId: abschluss.bezeichnungDe,
+        displayValueDe: abschluss.bezeichnungDe,
+        displayValueFr: abschluss.bezeichnungFr,
+      })) ?? [],
+  );
 
   loadAusbildungsstaetten$ = rxMethod<void>(
     pipe(
@@ -43,10 +66,29 @@ export class AusbildungsstaetteStore extends signalStore(
       }),
       switchMap(() =>
         this.ausbildungsstaetteService
-          .getAusbildungsstaetten$()
+          .getAllAusbildungsstaetteForAuswahl$()
           .pipe(
-            handleApiResponse((ausbildungsstaette) =>
-              patchState(this, { ausbildungsstaetten: ausbildungsstaette }),
+            handleApiResponse((ausbildungsstaetten) =>
+              patchState(this, { ausbildungsstaetten }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  loadAbschluesse$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          abschluesse: cachedPending(state.abschluesse),
+        }));
+      }),
+      switchMap(() =>
+        this.ausbildungsstaetteService
+          .getAllAbschluessForAuswahl$()
+          .pipe(
+            handleApiResponse((abschluesse) =>
+              patchState(this, { abschluesse }),
             ),
           ),
       ),

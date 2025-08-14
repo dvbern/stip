@@ -116,7 +116,7 @@ public class DelegierenService {
         }
 
         if (geburtsdatum != null) {
-            sozDashboardQueryBuilder.geburtsdtaum(baseQuery, geburtsdatum);
+            sozDashboardQueryBuilder.geburtsdatum(baseQuery, geburtsdatum);
         }
 
         if (wohnort != null) {

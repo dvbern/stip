@@ -28,8 +28,30 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
     children: [
       {
         path: '',
+        pathMatch: 'prefix',
         component: GesuchsperiodeOverviewComponent,
-        title: 'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
+        children: [
+          {
+            path: 'gesuchsperiode',
+            pathMatch: 'full',
+            loadComponent: () =>
+              import('./gesuchsperiode-overview/gesuchsperiode.component').then(
+                (m) => m.GesuchsperiodeComponent,
+              ),
+          },
+          {
+            path: 'jahr',
+            loadComponent: () =>
+              import('./gesuchsperiode-overview/gesuchsjahr.component').then(
+                (m) => m.GesuchsjahrComponent,
+              ),
+          },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'gesuchsperiode',
+          },
+        ],
       },
       routeWithUnsavedChangesGuard({
         data: {
@@ -37,7 +59,7 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
             'sachbearbeitung-app.admin.gesuchsperiode.route.create',
           ),
         },
-        path: 'create',
+        path: 'gesuchsperiode/create',
         resolve: resetResolver,
         component: GesuchsperiodeDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsperiode.route.create',
@@ -48,7 +70,7 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
             'sachbearbeitung-app.admin.gesuchsperiode.route.detail',
           ),
         },
-        path: ':id',
+        path: 'gesuchsperiode/:id',
         resolve: resetResolver,
         component: GesuchsperiodeDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsperiode.route.detail',

@@ -5,9 +5,9 @@ import {
   FallWithDelegierung,
   GetDelegierungSozQueryType,
   PersoenlicheAngaben,
-  SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 
 export type PersoehnelicheAngabenKeys = keyof Omit<
   PersoenlicheAngaben,
@@ -47,12 +47,9 @@ export type SozCockpitFilterInputs = Record<
   InputSignal<string | undefined>
 >;
 
-export interface SozCockpitBaseFilterInputs {
+export interface SozCockpitBaseFilterInputs
+  extends SortAndPageInputs<SozDashboardColumn> {
   show: InputSignal<GetDelegierungSozQueryType | undefined>;
-  sortColumn: InputSignal<SozDashboardColumn | undefined>;
-  sortOrder: InputSignal<SortOrder | undefined>;
-  page: InputSignalWithTransform<number | undefined, string | undefined>;
-  pageSize: InputSignalWithTransform<number | undefined, string | undefined>;
 }
 
 export interface SozCockitComponentInputs

@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -950,7 +949,7 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
+            .setAusbildungsgang(new Ausbildungsgang());
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(
@@ -1001,7 +1000,7 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
+            .setAusbildungsgang(new Ausbildungsgang());
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.setGesuchDokuments(

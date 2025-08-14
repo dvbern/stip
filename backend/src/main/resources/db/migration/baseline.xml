@@ -1442,7 +1442,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="copy_of_id" type="UUID"/>
-            <column name="fachrichtung" type="VARCHAR(255)"/>
+            <column name="fachrichtungBerufsbezeichnung" type="VARCHAR(255)"/>
             <column name="taetigkeits_beschreibung" type="VARCHAR(255)"/>
             <column name="taetigkeitsart" type="VARCHAR(255)"/>
             <column name="titel_des_abschlusses" type="VARCHAR(255)"/>

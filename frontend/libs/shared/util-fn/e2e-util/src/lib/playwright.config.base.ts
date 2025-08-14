@@ -1,4 +1,5 @@
 import { defineConfig } from '@playwright/test';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
