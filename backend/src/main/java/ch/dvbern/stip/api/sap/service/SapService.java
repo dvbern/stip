@@ -183,8 +183,6 @@ public class SapService {
         sapDelivery
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
 
-        // Debugging/Live testing
-        sapDelivery.setSapStatus(SapStatus.FAILURE);
         return sapDelivery.getSapStatus();
     }
 
