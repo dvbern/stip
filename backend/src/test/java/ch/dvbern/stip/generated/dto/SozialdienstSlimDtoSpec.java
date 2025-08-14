@@ -29,7 +29,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SozialdienstSlimDtoSpec.JSON_PROPERTY_ID,
-  SozialdienstSlimDtoSpec.JSON_PROPERTY_NAME
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_NAME,
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("SozialdienstSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -39,6 +40,9 @@ public class SozialdienstSlimDtoSpec {
 
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public SozialdienstSlimDtoSpec() {
   }
@@ -94,6 +98,32 @@ public class SozialdienstSlimDtoSpec {
     this.name = name;
   }
 
+
+  public SozialdienstSlimDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +134,13 @@ public class SozialdienstSlimDtoSpec {
     }
     SozialdienstSlimDtoSpec sozialdienstSlim = (SozialdienstSlimDtoSpec) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
-        Objects.equals(this.name, sozialdienstSlim.name);
+        Objects.equals(this.name, sozialdienstSlim.name) &&
+        Objects.equals(this.aktiv, sozialdienstSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, aktiv);
   }
 
   @Override
@@ -118,6 +149,7 @@ public class SozialdienstSlimDtoSpec {
     sb.append("class SozialdienstSlimDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

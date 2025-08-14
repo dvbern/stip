@@ -56,13 +56,13 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
             .orElseThrow(NotFoundException::new);
     }
 
-    public Stream<Sozialdienst> getAktiveSozialdiensteWithMitarbeiter() {
+    public Stream<Sozialdienst> getSozialdiensteWithMitarbeiter() {
         final var sozialdienst = QSozialdienst.sozialdienst;
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(sozialdienst)
             .where(
-                sozialdienst.sozialdienstBenutzers.isNotEmpty().and(sozialdienst.aktiv)
+                sozialdienst.sozialdienstBenutzers.isNotEmpty()
             )
             .stream();
     }

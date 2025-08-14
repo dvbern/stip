@@ -6437,11 +6437,14 @@ components:
       required:
         - id
         - name
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
+        aktiv:
+          type: boolean
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'

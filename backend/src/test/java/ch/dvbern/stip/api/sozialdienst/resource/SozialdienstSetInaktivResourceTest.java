@@ -47,7 +47,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -131,7 +130,7 @@ class SozialdienstSetInaktivResourceTest {
     @Order(6)
     @Test
     @TestAsGesuchsteller
-    void getAllForDelegationDoesNotReturnNewSozialdienst() {
+    void getAllForDelegationDoesReturnsInaktivSozialdienst() {
         final var sozialdienste = TestUtil.executeAndExtract(
             SozialdienstSlimDtoSpec[].class,
             sozialdienstApi.getAllSozialdiensteForDelegation()
@@ -141,9 +140,9 @@ class SozialdienstSetInaktivResourceTest {
         final var created = Arrays.stream(sozialdienste)
             .filter(x -> x.getId().equals(sozialdienstId))
             .findFirst()
-            .orElse(null);
+            .get();
 
-        assertThat(created, is(nullValue()));
+        assertThat(created.getAktiv(), is(false));
     }
 
     @Order(7)
