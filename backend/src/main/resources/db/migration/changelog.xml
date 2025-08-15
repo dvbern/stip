@@ -185,4 +185,8 @@
   <include file="/db/migration/0.49/0.49.0-KSTIP-2381.xml" />
   <!--  </editor-fold> -->
 
+  <!-- <editor-fold desc="v0.51" defaultstate="collapsed" -->
+  <include file="/db/migration/0.51/liquibase.quartz.init.xml" />
+  <!--  </editor-fold> -->
+  
 </databaseChangeLog>
