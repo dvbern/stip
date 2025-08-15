@@ -41,11 +41,11 @@
 
       <ul class="mt-4">
         @for (step of changeGesuchsperiodeErrorSig(); track step) {
-          <li>
-            @if (step.routeParts; as link) {
+          @if (step.routeParts; as link) {
+            <li>
               <a (click)="cancel()" [routerLink]="link">{{ step.translationKey | translate }}</a>
-            }
-          </li>
+            </li>
+          }
         }
       </ul>
     </dv-shared-ui-info-container>

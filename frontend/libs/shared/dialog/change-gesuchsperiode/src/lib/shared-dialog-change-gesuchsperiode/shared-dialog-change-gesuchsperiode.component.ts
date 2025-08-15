@@ -23,10 +23,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   GesuchFormularType,
   TrancheSetting,
@@ -86,7 +83,6 @@ export class SharedDialogChangeGesuchsperiodeComponent {
         ChangeGesuchsperiodeDialogResult
       >
     >(MatDialogRef);
-  private globalNotificationStore = inject(GlobalNotificationStore);
   dialogData = inject<ChangeGesuchsperiodeDialogData>(MAT_DIALOG_DATA);
   changeGesuchsperiodeStore = inject(ChangeGesuchsperiodeStore);
   languageSig = this.store.selectSignal(selectLanguage);
@@ -114,10 +110,7 @@ export class SharedDialogChangeGesuchsperiodeComponent {
     // Fix: Ensure hasDocuments is undefined, not null
     const parsedErrorFixed: ValidationReport = {
       ...parsedError,
-      hasDocuments:
-        parsedError.hasDocuments === null
-          ? undefined
-          : parsedError.hasDocuments,
+      hasDocuments: parsedError.hasDocuments ?? undefined,
     };
 
     return transformValidationReportToFormSteps(
@@ -159,10 +152,6 @@ export class SharedDialogChangeGesuchsperiodeComponent {
       gesuchsperiodeId,
       gesuchTrancheId,
       onSuccess: () => {
-        this.globalNotificationStore.createSuccessNotification({
-          messageKey: 'shared.dialog.change-gesuchsperiode.success',
-        });
-        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
         this.dialogRef.close({ gesuchsperiodeId });
       },
     });

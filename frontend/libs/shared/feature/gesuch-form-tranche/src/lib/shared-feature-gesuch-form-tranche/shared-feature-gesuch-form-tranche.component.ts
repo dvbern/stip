@@ -147,7 +147,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
-        // if header will always load info, delete...
         this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }

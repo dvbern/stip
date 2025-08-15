@@ -1,5 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 
 import { ChangeGesuchsperiodeStore } from './shared-data-access-change-gesuchsperiode.store';
 
@@ -8,7 +11,12 @@ describe('ChangeGesuchsperiodeStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ChangeGesuchsperiodeStore, provideHttpClient()],
+      providers: [
+        ChangeGesuchsperiodeStore,
+        provideMockStore(),
+        GlobalNotificationStore,
+        provideHttpClient(),
+      ],
     });
     store = TestBed.inject(ChangeGesuchsperiodeStore);
   });

@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Gesuch,
@@ -35,6 +37,7 @@ export class ChangeGesuchsperiodeStore extends signalStore(
   private gesuchsperiodeService = inject(GesuchsperiodeService);
   private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private store = inject(Store);
 
   resetErrors() {
     patchState(this, () => ({
@@ -83,7 +86,15 @@ export class ChangeGesuchsperiodeStore extends signalStore(
               (changeGesuchsperiode) =>
                 patchState(this, { changeGesuchsperiode }),
               {
-                onSuccess,
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.dialog.change-gesuchsperiode.success',
+                  });
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.loadGesuch(),
+                  );
+                  onSuccess?.();
+                },
                 onFailure: () => {
                   this.globalNotificationStore.createNotification({
                     type: 'WARNING',
