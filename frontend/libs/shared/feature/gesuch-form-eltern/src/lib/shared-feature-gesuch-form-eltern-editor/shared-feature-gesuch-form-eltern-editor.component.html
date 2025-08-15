@@ -126,7 +126,14 @@
     <div class="row g-4 mt-1">
       <div class="col-12 col-xl-8">
         <label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</label>
-        <div class="row g-4 mt-1">
+        @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
+        <div
+          class="row g-4 mt-1"
+          dvPlzOrtAutocomplete
+          [autocompleteSig]="plzAutocomplete"
+          [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
+          (plzLookupValuesSig)="plzValues = $event"
+        >
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
@@ -134,13 +141,21 @@
               matInput
               [dvMaxLength]="'small'"
               type="text"
-              formControlName="identischerZivilrechtlicherWohnsitzPLZ"
+              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
+              [matAutocomplete]="plzAutocomplete"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
             />
             <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
+            <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+              @for (lookup of plzValues; track $index) {
+                <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                  {{ lookup.plz }} {{ lookup.ort }}
+                </mat-option>
+              }
+            </mat-autocomplete>
           </mat-form-field>
 
           <!-- Ort -->
@@ -150,7 +165,7 @@
               matInput
               dvMaxLength
               type="text"
-              formControlName="identischerZivilrechtlicherWohnsitzOrt"
+              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
             />
             <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
