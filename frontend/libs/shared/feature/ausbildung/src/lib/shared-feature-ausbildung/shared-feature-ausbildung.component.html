@@ -171,21 +171,51 @@
       >
     }
 
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-      <mat-label>
-        {{ 'shared.form.ausbildung.ausbildungsort.label' | translate }}
-      </mat-label>
-      <input
-        type="text"
-        matInput
-        dvMaxLength
-        formControlName="ausbildungsort"
-        data-testid="form-education-ausbildungsort"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
+    <div
+      class="tw-col-start-1 tw-flex tw-gap-2"
+      dvPlzOrtAutocomplete
+      [autocompleteSig]="plzAutocomplete"
+      [plzFormSig]="form.controls.ausbildungsPlzOrt"
+      (plzLookupValuesSig)="plzValues = $event"
+    >
+      <!-- PLZ -->
+      <mat-form-field dvSharedUiFormField class="tw-basis-auto">
+        <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+        <input
+          type="text"
+          matInput
+          [dvMaxLength]="'small'"
+          [formControl]="form.controls.ausbildungsPlzOrt.controls.plz"
+          [matAutocomplete]="plzAutocomplete"
+          data-testid="form-education-ausbildungs-plz"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.requiredShort' | translate }}
+        </mat-error>
+        <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+          @for (lookup of plzValues; track $index) {
+            <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+              {{ lookup.plz }} {{ lookup.ort }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Ort -->
+      <mat-form-field dvSharedUiFormField class="tw-basis-11/12">
+        <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | translate }} </mat-label>
+        <input
+          type="text"
+          matInput
+          dvMaxLength
+          [formControl]="form.controls.ausbildungsPlzOrt.controls.ort"
+          data-testid="form-education-ausbildungs-ort"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
     <!-- isAusbildungAusland -->
     <mat-checkbox formControlName="isAusbildungAusland" data-testid="form-education-isAusbildungAusland">{{

@@ -18,6 +18,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,6 +45,7 @@ import {
   AusbildungsPensum,
   AusbildungsgangData,
   GesuchsperiodeSelectErrorType,
+  Plz,
 } from '@dv/shared/model/gesuch';
 import {
   capitalized,
@@ -62,6 +64,7 @@ import {
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -104,6 +107,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    MatAutocompleteModule,
     MatCheckboxModule,
     MatSelectModule,
     SharedUiInfoDialogDirective,
@@ -116,6 +120,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     SharedUiMaxLengthDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiSelectSearchComponent,
+    SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [
@@ -150,7 +155,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
 
   form = this.formBuilder.group({
-    ausbildungsort: [<string | undefined>undefined, [Validators.required]],
+    ausbildungsPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     isAusbildungAusland: [false, []],
     ausbildungsstaetteId: [
       <string | undefined>undefined,
@@ -202,6 +210,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.controls.ausbildungsgang.valueChanges,
   );
 
+  plzValues?: Plz[];
   isEditableSig = computed(() => {
     const { type } = this.usageTypeSig();
     const {
@@ -362,6 +371,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         this.form.patchValue({
           ...ausbildung,
           ausbildungsgang: undefined,
+          ausbildungsPlzOrt: {
+            plz: ausbildung.ausbildungsPLZ,
+            ort: ausbildung.ausbildungsort,
+          },
         });
         const currentAusbildungsgang = ausbildung.ausbildungsgang;
         if (currentAusbildungsgang) {
@@ -422,11 +435,18 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const isAusbildungAusland = !!isAusbildungAuslandSig();
 
       if (isAusbildungAusland) {
-        this.form.controls.ausbildungsort.reset();
+        this.form.controls.ausbildungsPlzOrt.controls.plz.reset();
+        this.form.controls.ausbildungsPlzOrt.controls.ort.reset();
       }
 
       this.formUtils.setDisabledState(
-        this.form.controls.ausbildungsort,
+        this.form.controls.ausbildungsPlzOrt.controls.plz,
+        !this.isEditableSig() || isAusbildungAusland,
+        false,
+      );
+
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsPlzOrt.controls.ort,
         !this.isEditableSig() || isAusbildungAusland,
         false,
       );
@@ -452,7 +472,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         this.form.controls.besuchtBMS.reset();
         if (!this.form.controls.ausbildungNichtGefunden) {
           this.form.controls.fachrichtungBerufsbezeichnung.reset();
-          this.form.controls.ausbildungsort.reset();
+          this.form.controls.ausbildungsPlzOrt.controls.plz.reset();
+          this.form.controls.ausbildungsPlzOrt.controls.ort.reset();
         }
       }
     });
@@ -498,7 +519,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   handleGangChangedByUser() {
     this.form.controls.fachrichtungBerufsbezeichnung.reset();
-    this.form.controls.ausbildungsort.reset();
+    this.form.controls.ausbildungsPlzOrt.controls.plz.reset();
+    this.form.controls.ausbildungsPlzOrt.controls.ort.reset();
     this.form.controls.besuchtBMS.reset();
   }
 
@@ -508,7 +530,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
     this.form.controls.fachrichtungBerufsbezeichnung.reset();
-    this.form.controls.ausbildungsort.reset();
+    this.form.controls.ausbildungsPlzOrt.controls.plz.reset();
+    this.form.controls.ausbildungsPlzOrt.controls.ort.reset();
     this.form.controls.besuchtBMS.reset();
   }
 
@@ -532,9 +555,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
-    const { ausbildungsgang: formAusbildungsgang, ...formValues } =
-      convertTempFormToRealValues(this.form, ['pensum']);
-    delete formValues.ausbildungsstaetteId;
+    const {
+      ausbildungsgang: formAusbildungsgang,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ausbildungsstaetteId: _,
+      ausbildungsPlzOrt,
+      ...formValues
+    } = convertTempFormToRealValues(this.form, ['pensum']);
 
     const ausbildungId =
       this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
@@ -551,6 +578,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             fallId: fallId,
             ...formValues,
             ...ausbildungsgang,
+            ausbildungsort: ausbildungsPlzOrt.ort,
+            // ausbildungsPLZ: ausbildungsPlzOrt.plz,
           },
           onSuccess: (response) => {
             if (response.ausbildung) {
@@ -571,6 +600,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             id: ausbildungId,
             fallId: fallId,
             ...ausbildungsgang,
+            ausbildungsort: ausbildungsPlzOrt.ort,
+            // ausbildungsPLZ: ausbildungsPlzOrt.plz,
           },
           onSuccess: () => {
             this.globalNotificationStore.createSuccessNotification({
