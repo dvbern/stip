@@ -275,6 +275,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
         const value = values?.find((l) => l.id === valueId);
         if (value && valueId !== this.form.controls.select.value?.id) {
           this.form.controls.select.patchValue(value, { emitEvent: false });
+          this.ngControl?.control?.updateValueAndValidity();
 
           // Mark the control as touched if the entry is invalid
           if (!this.isEntryValidSig()(value)) {
