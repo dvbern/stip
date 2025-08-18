@@ -102,11 +102,20 @@ public class AusbildungService {
     @Transactional
     public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
         var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        final var oldAusbildungsGangId = ausbildung.getAusbildungsgang().getId();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
 
         if (ausbildung.getAusbildungsgang() != null) {
+            final var newAusbildungsGang =
+                ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId());
+            if (!newAusbildungsGang.isAktiv()) {
+                if (!newAusbildungsGang.getId().equals(oldAusbildungsGangId)) {
+                    throw new BadRequestException("Ausbildungsgang ist nicht aktiv");
+                }
+            }
+
             ausbildung
-                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+                .setAusbildungsgang(newAusbildungsGang);
         }
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {

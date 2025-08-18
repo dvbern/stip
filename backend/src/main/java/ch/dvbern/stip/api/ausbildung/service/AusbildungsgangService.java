@@ -59,8 +59,7 @@ public class AusbildungsgangService {
 
     @Transactional
     public List<AusbildungsgangSlimDto> getAllAusbildungsgangForAuswahl() {
-        return ausbildungsgangRepository.findAll()
-            .stream()
+        return ausbildungsgangRepository.findAllAktiv()
             .map(ausbildungsgangMapper::toSlimDto)
             .toList();
     }
