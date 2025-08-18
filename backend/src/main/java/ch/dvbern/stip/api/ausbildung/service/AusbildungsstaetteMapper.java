@@ -39,11 +39,12 @@ public abstract class AusbildungsstaetteMapper {
 
     @BeforeMapping
     protected void ensureOnlyOneNoIsSet(AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto) {
-        if (
-            !(Objects.isNull(ausbildungsstaetteCreateDto.getCtNo())
-            || Objects.isNull(ausbildungsstaetteCreateDto.getBurNo()))
-        ) {
-            throw new BadRequestException("Only/One of CtNo and BurNo must be set");
+        final boolean ctIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getCtNo());
+        final boolean burIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getBurNo());
+
+        // !XOR
+        if (ctIsNull == burIsNull) {
+            throw new BadRequestException("(Only) One of CtNo and BurNo must be set");
         }
     }
 
