@@ -196,7 +196,9 @@ public class SapService {
             throw new IllegalStateException("Cannot create vendor posting without existing businessPartnerId");
         }
         if (buchhaltung.getSapStatus() != SapStatus.IN_PROGRESS) {
-            throw new IllegalStateException("buchhaltung status is not IN_PROGRESS");
+            throw new IllegalStateException(
+                String.format("buchhaltung status is not IN_PROGRESS but %s", buchhaltung.getSapStatus())
+            );
         }
 
         final var sapDeliverys = buchhaltung.getSapDeliverys();

@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.buchhaltung.entity.SapDeliverysLengthConstraintValidat
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.sap.entity.QSapDelivery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -38,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     private final EntityManager entityManager;
     static final QBuchhaltung Q_BUCHHALTUNG = QBuchhaltung.buchhaltung;
-    static final QSapDelivery Q_SAP_DELIVERY = QSapDelivery.sapDelivery;
 
     public Stream<Buchhaltung> findAllForFallId(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
@@ -59,20 +57,14 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
         final BuchhaltungType buchhaltungType
     ) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var sapDelivery = QSapDelivery.sapDelivery;
 
         final var query = queryFactory
             .selectFrom(Q_BUCHHALTUNG)
             .where(Q_BUCHHALTUNG.fall.id.eq(fallId))
             .where(Q_BUCHHALTUNG.buchhaltungType.eq(buchhaltungType))
-            .join(sapDelivery)
-            .on(Q_BUCHHALTUNG.sapDeliverys.any().id.eq(sapDelivery.id))
+            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS).not())
             .where(
-                sapDelivery.sapStatus.eq(SapStatus.IN_PROGRESS)
-                    .or(
-                        Q_BUCHHALTUNG.sapDeliverys.size()
-                            .lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
-                    )
+                Q_BUCHHALTUNG.sapDeliverys.size().lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
             )
             .orderBy(Q_BUCHHALTUNG.timestampErstellt.desc());
         return query.stream().findFirst();

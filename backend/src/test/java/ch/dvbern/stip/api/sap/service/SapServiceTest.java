@@ -307,6 +307,7 @@ public class SapServiceTest {
         );
 
         // Arrange
+        sapEndpointServiceMock.setImportStatusReadResponse(SapEndpointServiceMock.SUCCESS_STRING, SapStatus.FAILURE);
         sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
         final var relevantBuchhaltung = gesuch.getAusbildung()
             .getFall()
