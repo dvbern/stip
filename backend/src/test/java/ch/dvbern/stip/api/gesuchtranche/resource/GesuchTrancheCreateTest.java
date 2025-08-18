@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -292,7 +293,7 @@ class GesuchTrancheCreateTest {
         assertThat(dokumentsOfTranche1.length, is(greaterThan(dokumentsOfTranche2.length)));
     }
 
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelleAndSachbearbeiter
     @Order(12)
     @Test
     void makeGesuchVerfuegt() {

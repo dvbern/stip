@@ -850,6 +850,7 @@
   "shared.role.V0_Sachbearbeiter-Admin": "Admin",
   "shared.role.V0_Jurist": "Juriste",
   "shared.role.V0_Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.V0_Freigabestelle": "Service de validation",
   "shared.role.V0_Gesuchsteller": "Requérant",
 
   "shared.bildungsrichtung.HOEHERE_BERUFSBILDUNG": "Formation professionnelle supérieure",

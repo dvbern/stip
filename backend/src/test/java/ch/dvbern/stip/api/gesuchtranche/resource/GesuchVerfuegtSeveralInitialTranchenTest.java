@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -95,7 +96,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelleAndSachbearbeiter
     @Order(6)
     @Test
     void makeGesuchVerfuegt() {

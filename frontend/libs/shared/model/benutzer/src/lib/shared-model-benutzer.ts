@@ -8,6 +8,7 @@ export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
 export const BENUTZER_ROLES = [
   'V0_Sachbearbeiter-Admin',
   'V0_Sachbearbeiter',
+  'V0_Freigabestelle',
   'V0_Jurist',
 ] as const;
 
