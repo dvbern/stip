@@ -5878,6 +5878,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - ausbildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5889,6 +5890,8 @@ components:
           $ref: '#/components/schemas/Ausbildungskategorie'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
+        aktiv:
+          type: boolean
     GesuchsperiodeWithDaten:
       required:
         - id
